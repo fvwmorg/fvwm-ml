@@ -1,0 +1,3815 @@
+From owner-fvwm-workers@hpc.uh.edu  Mon Jul  1 10:29:45 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id KAA28600; Mon, 1 Jul 1996 10:29:45 -0500 (CDT)
+Received: from shogun.tdktca.com ([206.26.1.21]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id KAA28594 for <fvwm-workers@hpc.uh.edu>; Mon, 1 Jul 1996 10:29:39 -0500 (CDT)
+Received: from shogun.tdktca.com (daemon@localhost) by shogun.tdktca.com (8.7.2/8.7.2) with ESMTP id KAA25929 for <fvwm-workers@hpc.uh.edu>; Mon, 1 Jul 1996 10:31:03 -0500 (CDT)
+Received: from fa.tdktca.com (bsd.fa.tdktca.com [163.49.131.129]) by shogun.tdktca.com (8.7.2/8.7.2) with ESMTP id KAA25923 for <fvwm-workers@hpc.uh.edu>; Mon, 1 Jul 1996 10:31:03 -0500 (CDT)
+Received: from rubberneck.fa.tdktca.com (rubberneck.fa.tdktca.com [163.49.136.90]) by fa.tdktca.com (8.7.5/8.6.12) with SMTP id KAA17731; Mon, 1 Jul 1996 10:31:58 -0500 (CDT)
+Message-ID: <31D7EE3A.4D7FADD7@fa.tdktca.com>
+Date: Mon, 01 Jul 1996 10:26:50 -0500
+From: Steve Price <stevep@fa.tdktca.com>
+Organization: TDK Corporation of America
+X-Mailer: Mozilla 2.02 (X11; I; Linux 1.2.13 i586)
+MIME-Version: 1.0
+To: Todd Tyrone Fries <todd@davidalan.com>
+CC: fvwm-workers@hpc.uh.edu
+Subject: Re: Ok, it's time (was Re: Just a heads up)
+References: <ML-2.2.835392483.3021.tfries@lighthouse.umr.edu>
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: bulk
+X-Majordomo: 1.94-alpha7-jlt2
+
+Todd Tyrone Fries wrote:
+>
+> ...
+>
+> I guess when there is autoconf we can say '--name=fvwm' or '--name\fvwm2'
+> or something similar and it can automatically update the man pages.  If not,
+> it can be in the Makefiles to sed the man pages or something.  Or we
+> can do something like that now.
+> 
+> ...
+>
+
+I grabbed fvwm-2.0.43-almost.tar.gz this weekend and incorporated autoconf,
+if anyone is interested.
+
+Todd, I actually used '--execname=fvwm2' to change the name, but that's easily
+changed.
+
+It's very rough and has the following problems, as I see it:
+
+	1) Doesn't handle the XPM stuff very well.  Like it shouldn't build
+           xpmroot if -lXpm is not available, etc.
+
+	2) It's just a first cut and I only spent enough time to get it to
+           compile on my machine (a Dell P5-90 running Linux). I tried to
+           change as little of the code as possible, but had to make some
+           minor changes.  I apologize profusely if my changes have broken
+           anybody else's build, but they should be relatively easy to fix.
+
+	3) I didn't spend a whole lot of time on the programs in the extras
+           directory.  I did put Makefile.in file in each directory, but did
+	   not worry about them compiling without warnings (all of them at
+	   least).
+
+	4) No 'depend' target.  I suppose I could have added the following
+           to the Makefile.in files:
+
+           ifneq (.depend,$(wilcard .depend))
+           all: depend $(PROJECT)
+           else
+           all: $(PROJECT)
+           include .depend
+           endif
+
+           depend:
+               $(CC) -M $(INCS) $(DEFS) $(SRCS) > .depend
+
+           but I didn't know if this would work on everybody's machine.
+           Will it?  That is, are there still compilers out there that
+           don't accept the '-M' switch?
+
+	5) There seems to be proliferation of #ifdef's, that with a little
+	   effort could be culled out.
+
+	6) Probably some other problems...
+
+On the other hand, with these changes I was able to get it to compile
+with nary a warning message using gcc 2.7.2 and the '-ansi -pedantic'
+command line switches on my machine.  I would have tried it on some other
+machines, but I didn't have the time.
+
+Anybody that is interested can drop me a line and let me know the best
+way to get it to you.
+
+On a lighter note, fvwm is the *best* window manager available (IMHO).
+To all those that have contributed, many thanks.
+
+
+Steve
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Thu Jul  4 00:35:22 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id AAA29355; Thu, 4 Jul 1996 00:35:21 -0500 (CDT)
+Received: (from tibbs@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id AAA29351; Thu, 4 Jul 1996 00:35:18 -0500 (CDT)
+To: fvwm@hpc.uh.edu, fvwm-workers@hpc.uh.edu
+Subject: Lists on autopilot
+From: Jason L Tibbitts III <tibbs@hpc.uh.edu>
+Date: 04 Jul 1996 00:35:18 -0500
+Message-ID: <ufa3f3860o9.fsf@sina.hpc.uh.edu>
+Lines: 8
+X-Mailer: Gnus v5.2.32/Emacs 19.30
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: bulk
+X-Majordomo: 1.94-alpha7-jlt2
+
+I am leaving the state in a few hours so the list will be running on
+autopilot.  Everything that doesn't require my intervention will run in my
+absence, but messages and subscription requests which require my approval
+will be held.  I will return next Thursday.
+-- 
+      Jason L. Tibbitts III - tibbs@uh.edu - 713/743-8684 - 221SR1
+System Manager:  University of Houston High Performance Computing Center
+                1994 PC800 "Kuroneko"      DoD# 1723
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Thu Jul  4 06:04:52 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id GAA05347; Thu, 4 Jul 1996 06:04:51 -0500 (CDT)
+Received: from karon.his.se (karon.his.se [193.10.176.23]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id GAA05342 for <fvwm-workers@hpc.uh.edu>; Thu, 4 Jul 1996 06:04:47 -0500 (CDT)
+Received: from ida.his.se (mhost.ida.his.se) by karon.his.se (5.0/his.se-931126)
+	id AA15953; Thu, 4 Jul 1996 13:08:08 +0200
+Received: from august.ida.his.se by ida.his.se (5.x/SMI-SVR4-ida-2)
+	id AA19667; Thu, 4 Jul 1996 13:04:50 +0200
+Received: by august.ida.his.se (SMI-8.6/SMI-SVR4-ida-2)
+	id NAA25412; Thu, 4 Jul 1996 13:05:41 +0200
+Date: Thu, 4 Jul 1996 13:05:41 +0200
+Message-Id: <199607041105.NAA25412@august.ida.his.se>
+To: fvwm-workers@hpc.uh.edu
+Subject: New functionality
+From: "Stefan 'Stetson' Skoglund" <sp2stes1@ida.his.se>
+Reply-To: "Stefan 'Stetson' Skoglund" <sp2stes1@ida.his.se>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: bulk
+X-Majordomo: 1.94-alpha7-jlt2
+
+I would very much like the ability to differ
+between mouse-click in different part of the window-frame.
+Simple being able to bind one function to a button-click
+in the vertical frame and one other to click on the horizontal lower
+one for example.
+
+Something like this :
+Mouse 1 L  A ...
+
+L=left window border
+R=right window border
+
+and so on.
+This i think should be possible.
+
+-- 
+---------------------------------------------------------------------
+Stefan 'Stetson' Skoglund          I               |
+sp2stes1@ida.his.se                I               |
+<http://www.his.se/ida/~sp2stes1/> I         _____/0\_____
+                                   I ____________O(.)O___________
+H\"ogskolan i Sk\"ovde, Sverige    I      I-+-I    O    I-+-I
+                                   I
+                                   I      Viggen with two Rb04
+---------------------------------------------------------------------
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Thu Jul  4 06:41:46 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id GAA05710; Thu, 4 Jul 1996 06:41:45 -0500 (CDT)
+Received: from umr.edu (hermes.cc.umr.edu [131.151.1.68]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id GAA05706 for <fvwm-workers@hpc.uh.edu>; Thu, 4 Jul 1996 06:41:39 -0500 (CDT)
+Received: from lighthouse.umr.edu (dialup-pkr-4-2.network.umr.edu [131.151.253.54]) via ESMTP by hermes.cc.umr.edu (8.7.5/R.4.16) id GAA08483; Thu, 4 Jul 1996 06:41:36 -0500 (CDT)
+Received: from localhost (tfries@localhost [127.0.0.1]) by lighthouse.umr.edu (8.7.5/8.6.9) with SMTP id LAA15250 for <fvwm-workers@hpc.uh.edu>; Thu, 4 Jul 1996 11:29:24 GMT
+Posted-Date: Thu, 4 Jul 1996 11:29:24 GMT
+Date: Thu, 4 Jul 1996 06:29:22 -0500 (CDT)
+From: Todd Tyrone Fries <todd@miango.com>
+Reply-To: Todd Tyrone Fries <todd@miango.com>
+Subject: Re: New functionality
+To: fvwm-workers@hpc.uh.edu
+In-Reply-To: <199607041105.NAA25412@august.ida.his.se>
+Message-ID: <ML-2.2.836479762.5031.tfries@lighthouse.umr.edu>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; CHARSET=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: bulk
+X-Majordomo: 1.94-alpha7-jlt2
+
+> I would very much like the ability to differ
+> between mouse-click in different part of the window-frame.
+> Simple being able to bind one function to a button-click
+> in the vertical frame and one other to click on the horizontal lower
+> one for example.
+> 
+> Something like this :
+> Mouse 1 L  A ...
+> 
+> L=left window border
+> R=right window border
+> 
+> and so on.
+> This i think should be possible.
+
+Possible, certainly.
+
+I have a feeling that after the 'Great Style Flag Re-write(tm :-)' this will
+be much more easily implemented.  I would remember to mention this after
+2.1 is released and Chuck feels like 'getting messy again' and allows more
+'upsetting changes' to occur.. :-)
+
+--
+Todd Fries .. todd@miango.com
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Jul  8 13:55:04 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id NAA02206; Mon, 8 Jul 1996 13:55:04 -0500 (CDT)
+Received: from VNET.IBM.COM (vnet.ibm.com [199.171.26.4]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id NAA02189 for <fvwm-workers@hpc.uh.edu>; Mon, 8 Jul 1996 13:54:50 -0500 (CDT)
+Received: from FISHKILL by VNET.IBM.COM (IBM VM SMTP V2R3) with BSMTP id 2880;
+   Mon, 08 Jul 96 14:54:56 EDT
+Received: by FISHKILL (XAGENTA 4.0) id 3293; Mon, 8 Jul 1996 14:54:10 -0400 
+Received: by cold.fishkill.ibm.com (AIX 3.2/UCB 5.64/4.03)
+          id AA21734; Mon, 8 Jul 1996 14:53:54 -0400
+Date: Mon, 8 Jul 1996 14:53:54 -0400
+Message-Id: <9607081853.AA21734@cold.fishkill.ibm.com>
+From: "Charles Hines" <chuck_hines@VNET.IBM.COM>
+To: The FVWM Discussion List <fvwm@hpc.uh.edu>,
+        The FVWM Announce List <fvwm-announce@hpc.uh.edu>,
+        The FVWM Workers List <fvwm-workers@hpc.uh.edu>
+Subject: beta 2.0.43 ready
+X-Face: 'pn"gAx+&w4-=-}\z>*.Y*@(lC;t1<P);@iwiv';)vn3H2\/.x#;>J[a,/Q.Yv0^Wwc6_"H]}}-"?%)ETS`1v[]P`w4,E.9Bgf*XI4<H{C}Mf@'Ms)z?Bqzf"8v/oY\9K){w}\pw
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: bulk
+X-Majordomo: 1.94-alpha7-jlt3
+
+
+Howdy all.
+
+Ok, I'm back from vacation (none too happy about that, I might add - I
+need a vacation to rest up from my vacation) and I finally finished up
+beta 2.0.43.  It's now at ftp.hpc.uh.edu in /pub/fvwm/version-2/ and
+here's what it looks like:
+
+  -rw-rw-r--   1 chines   fvwm      548968 Jul  8 13:23 fvwm-2.0.43.tar.gz
+
+And here's the rather sizeable ChangeLog entry:
+
+2.0.43
+       1. More man page updates & Imake fixes
+       2. Simple patch to help take care of some timing bugs
+       3. Patch to fix resize oddities when hitting 'hard' edge introduced
+          by EdgeScroll loop patch
+       4. Fixed startup w/ no rc bug, plus added more defaults, so if
+          started without an rc file, things should run ok.  Plus it now
+          outputs error messages if Read fails, then tries to Read
+          system.fvwm2rc (after first read fails).
+       5. Patch to fix UseStyle problem w/ BackColor
+       6. More FAQ updates
+       7. Created an 'extras' dir, and moved some of the existing modules
+          in there (the ones that aren't being built by default).
+       8. More potential speedups in event processing
+       9.  Decoupled warp from Focus, adding WarpToWindow function.
+       10. Added SendToModule builtin to send arbitrary strings to modules
+           to help implement more complex dynamic module abilities and
+           allow for module to module communication
+       11. Put old FvwmButtons back as FvwmGoodStuff, for people who
+           prefer the simpler older version (in extras dir).  Also made it
+           able to be passed in the name parameter on invocation so it
+           doesn't have to be symbolically linked to the new names any
+           more.
+       12. Adding a new module FvwmForm2 in the extras directory,
+           contributed by Frederic Cordier.  Based on FvwmForm but
+           completely rewritten apparently.  It uses scripts, has a new
+           more complex syntax (Pascal like) and adds RadioButtons.  I
+           would like to eventually combine aspects of the two versions
+           (and more) to make one killer module, perhaps.
+       13. Made fvwm_msg send errors to modules, so FvwmTalk sees them
+           like it used to (and any other module that looks for M_ERROR
+           in the future)
+       14. Added DestroyModuleConfig, based on patch from Toshi Isogai
+       15. Modules can now send module config commands to fvwm (eg FvwmTalk)
+       16. Removed implicit Exec exec stuff for the time being, until I
+           come up with a better way to do it (back to old behavior)
+       17. More mini icons added and some icons removed
+       18. Added "KillMe" command that modules can send to fvwm asking for
+           an assisted suicide (almost called this Kevorkian :)).  Mark
+           Crimmins wanted this for probs with TkGoodStuff.
+       19. Fixed RaiseWindow bug under some servers when no icon pixmap.
+       20. Fixed one prob w/ FvwmAuto and menus being hidden (under click
+           to focus - still needs work for other focus policies, but not
+           entirely sure how to approach this yet).
+       21. Added ExitFunction, to be executed on exit (before restarts too).
+           Useful for explicitly killing modules, etc.
+       22. Changed behavior of '-f' to just specify config file (now use
+           -cmd to perform an actual command, like -cmd 'FvwmM4 .fvwm2rc')
+       23. Updates to FvwmSaveDesk from Carsten Paeth so it should now
+           actually work under 2.xx, plus some other bugfixes too I
+           believe.
+       24. Added PipeRead function, which executes a program and Read's
+           it's output.  Useful for making dynamic menus and such.
+       25. Security fix for FvwmM4 & FvwmCpp from Austin Donnelly
+       26. Added strerror for SunOS 4.1.x
+       27. Added ability to remove mouse and key bindings without restart
+           (do the binding but specify '-' as the function).  Probably
+           needs more checking for removing mouse bindings from title bar
+           buttons correctly, though.
+       28. Updates to FvwmIconMan from Brady Montz.
+       29. Updates to FvwmIconBox from Nobutaka Suzuki.
+       30. Patch from Austin Donnelly for multi-keypress required for
+           WindowList problem.
+       31. Patch to center text on left pixmaps in menus.
+       32. Patch to allow menus to pop up left if not enough room on right
+           (currently in ifdef -> define LEFT_MENUS to enable when compiling).
+
+Oh, and I forgot to update fvwm2.man to go with #22, which of course I
+didn't notice until after I had uploaded the tar file.  Obviously not
+vital so I put this patch for it in the LATEST_NEWS section of the WWW
+docs:
+
+----------------------------------------------------------------------
+--- fvwm2.man~  Wed Jun 19 22:55:43 1996
++++ fvwm2.man   Mon Jul  8 14:23:25 1996
+@@ -276,7 +276,7 @@
+ your .fvwm2rc file (if it appears at all), and start fvwm with the
+ command
+ .EX
+-fvwm -f "FvwmM4 .fvwm2rc"
++fvwm -cmd "FvwmM4 .fvwm2rc"
+ .EE
+
+ .SH CPP PREPROCESSING
+@@ -293,7 +293,10 @@
+
+ .SH OPTIONS
+ These are the command line options that are recognized by \fIfvwm\fP:
+-.IP "\fB-f\fP \fIconfig_command\fP"
++.IP "\fB-f\fP \fIconfig_file\fP"
++Causes \fIfvwm\fP to Read \fIconfig_file\fP instead of ".fvwm2rc"
++as its initialization file.
++.IP "\fB-cmd\fP \fIconfig_command\fP"
+ Causes \fIfvwm\fP to use \fIconfig_command\fP instead of "Read .fvwm2rc"
+ as its initialization command.
+ .IP "\fB-debug\fP"
+----------------------------------------------------------------------
+
+I'd like to make this the last beta before the first official release
+(2.1.0).  So let me know what other problems you find with it so I can
+clean it up (especially build and doc problems).  Bear in mind that I
+can't fix ALL of it's bugs, especially the one's I can't reproduce...
+
+Hopefully 2.1.0 will be out in just a few weeks, and then I can begin
+with the long awaited semi mythical Great Style Flag Rewrite, which I
+know many people are awaiting with baited breath...
+
+Chuck
+
+ps - I'm still wading through all of the email I got while I was gone,
+so I haven't had a chance to reply to a lot of the mail that hit the
+lists (and sent directly to me) while I was gone.  I should get to it
+all eventually (and if I don't, ping me again in a few days).
+
+*******************************************************************************
+Charles K. Hines <chuck_hines@vnet.ibm.com>
+IBM Logic Synthesis Developer [BooleDozer (TM)]
+Martial Arts Instructor [Modern Arnis, Presas Style Filipino Martial Arts]
+
+         "Go back to sleep, Chuck.  You're just havin' a nightmare
+             -- of course, we ARE still in Hell." (Gary Larson)
+*******************************************************************************
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Tue Jul  9 04:48:44 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id EAA29083; Tue, 9 Jul 1996 04:48:43 -0500 (CDT)
+Received: from aliboron.emi.u-bordeaux.fr (root@aliboron.emi.u-bordeaux.fr [147.210.12.128]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id EAA29079 for <fvwm-workers@hpc.uh.edu>; Tue, 9 Jul 1996 04:48:38 -0500 (CDT)
+Received: from edwood.emi.u-bordeaux.fr by aliboron.emi.u-bordeaux.fr; Tue, 9 Jul 1996 11:48:18 +0200 (MET DST)
+Received: by edwood.emi.u-bordeaux.fr; Tue, 9 Jul 1996 11:48:15 +0200 (MET DST)
+Date: Tue, 9 Jul 1996 11:48:15 +0200 (MET DST)
+Message-Id: <199607090948.LAA09023@edwood.emi.u-bordeaux.fr>
+From: Patrice Fortier <Patrice.Fortier@emi.u-bordeaux.fr>
+To: chuck_hines@vnet.ibm.com
+CC: fvwm-workers@hpc.uh.edu
+Subject: FVWM: button pixmap bug
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: bulk
+X-Majordomo: 1.94-alpha7-jlt3
+
+
+  I just tried the fvwm-2.0.43 beta version and found a bug which was
+already in the 2.0.42 release:
+  Titlebar pixmap buttons are not drawn correctly if the size of the
+button and the size of the pixmap are different.
+
+  A patch was made by Andrew Velia to correct this for the fvwm-2.0.42
+and can be found at:
+http://www.rpi.edu/~veliaa/projects/fvwm_patches/dist/fvwm-2.0.42.pxp8a.diff.gz
+It worked for me.
+
+If I made a mistake in this address (I hope I did not :)), here is the
+URL where you can find the patch.
+
+http://www.rpi.edu/~veliaa/projects/fvwm_patches/fvwm_pixmap_buttons.html
+
+
+Lokh.
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Tue Jul  9 13:05:55 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id NAA13771; Tue, 9 Jul 1996 13:05:54 -0500 (CDT)
+Received: from chutney.ini.cmu.edu (ANNEX-V34BIS-06.SLIP.ANDREW.CMU.EDU [128.2.120.179]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id NAA13766 for <fvwm-workers@hpc.uh.edu>; Tue, 9 Jul 1996 13:05:49 -0500 (CDT)
+Received: from localhost (manojk@localhost) by chutney.ini.cmu.edu (8.7.5/8.7.3) with SMTP id OAA05286 for <fvwm-workers@hpc.uh.edu>; Tue, 9 Jul 1996 14:05:53 -0400
+X-Authentication-Warning: chutney.ini.cmu.edu: manojk owned process doing -bs
+Date: Tue, 9 Jul 1996 14:05:52 -0400 (EDT)
+From: Manoj Kasichainula <manojk@andrew.cmu.edu>
+X-Sender: manojk@chutney.ini.cmu.edu
+To: fvwm-workers@hpc.uh.edu
+Subject: Fvwm 2.0.43 bugs
+Message-ID: <Pine.LNX.3.94.960709133700.3938D-100000@chutney.ini.cmu.edu>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: bulk
+X-Majordomo: 1.94-alpha7-jlt3
+
+These bugs were present in fvwm 2.0.42, but I don't know if they were
+present before then. They are present on both HP-UX 9 and Red Hat Linux
+3.0.3 upgraded to kernel version 2.0.4. Both versions were compiled with
+all the standard compile options. My fvwm2rc can be found at
+http://dosa.ini.cmu.edu/~manojk/fvwm2rc
+
+1. Panning between pages on a virtual desktop is disabled until you click
+anywhere on the pager or try to move a window to another page.
+
+2. A window with a specific Style for itself that is running before fvwm
+is started (in my case rxvt and xterm) does not get any Style attributes -
+those of itself or the global Style options. Running rxvt & before fvwm
+gives it no Style attributes, while running (sleep 1; rxvt) & before fvwm
+works. On Restarts, all attributes are given correctly.
+
+3. I have narrowed down the problem with iconifying a window and it
+deiconifying to a different page. It actually seems to be two bugs.
+
+SmartPlacement seems to have an off-by-1 error with the left and top edges
+of the screen, so that windows placed on the edge of the screen are
+actually placed one pixel off screen. As a result, the geometry of the
+first window placed is "-1-1". Now, when the window is deiconified, the
+negative geometries are interpreted as distance from the right and bottom
+of the screen!
+
+So, a possible solution would be to skip the negative number
+interpretation for everything except initial placement. The problem with
+this, I've just noticed, is that windows placeed with negative geometries
+keep their negative geometries after placement (according to FvwmIdent,
+anyway).
+
+So, there are two possible solutions (after fixing the off-by-one problem
+with SmartPlacement). Fvwm could either note with the geometry whether the
+negative numbers mean partially off-screen or the normal meaning. Or,
+after a window is placed, its geometry would be converted to a geometry
+with positive numbers. (i.e. -8-10 could be converted to +1272+1014 on a
+1280x1024 screen). The second solution sounds cleaner to me.
+
+
+_______________________________________________________________________
+Manoj Kasichainula - manojk@andrew.cmu.edu | "Some people have entirely
+http://dosa.ini.cmu.edu/~manojk/           |  too much free time on
+Linux: 0% of the GPFs at 0% of the price   |  their hands."
+Finger for PGP public key & Geek Code      |   - spaf
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Tue Jul  9 18:59:11 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id SAA26476; Tue, 9 Jul 1996 18:59:11 -0500 (CDT)
+Received: from mail1.its.rpi.edu (mail1.its.rpi.edu [128.113.100.7]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id SAA26471 for <fvwm-workers@hpc.uh.edu>; Tue, 9 Jul 1996 18:58:57 -0500 (CDT)
+Received: from pluto.ss.com (rts3p1.xyp.rpi.edu [128.113.29.50]) by mail1.its.rpi.edu (8.6.9/8.6.4) with ESMTP id TAA18908; Tue, 9 Jul 1996 19:57:12 -0400
+Received: (from drewvel@localhost) by pluto.ss.com (not real) (8.7.5/8.7.1) id TAA03730; Tue, 9 Jul 1996 19:55:48 -0400
+Date: Tue, 9 Jul 1996 19:55:48 -0400
+Message-Id: <199607092355.TAA03730@pluto.ss.com>
+From: "Andrew Veliath <Andrew Veliath" <veliaa@rpi.edu>
+To: Patrice Fortier <Patrice.Fortier@emi.u-bordeaux.fr>
+Cc: fvwm-workers@hpc.uh.edu
+Subject: FVWM: button pixmap bug
+In-Reply-To: <199607090948.LAA09023@edwood.emi.u-bordeaux.fr>
+References: <199607090948.LAA09023@edwood.emi.u-bordeaux.fr>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: bulk
+X-Majordomo: 1.94-alpha7-jlt3
+
+>>>>> Regarding FVWM: button pixmap bug; Patrice Fortier
+>>>>> <Patrice.Fortier@emi.u-bordeaux.fr> adds:
+
+    Patrice>   I just tried the fvwm-2.0.43 beta version and found a
+    Patrice> bug which was already in the 2.0.42 release: Titlebar
+    Patrice> pixmap buttons are not drawn correctly if the size of the
+    Patrice> button and the size of the pixmap are different.
+
+    Patrice>   A patch was made by Andrew Velia to correct this for
+    Patrice> the fvwm-2.0.42 and can be found at:
+    Patrice> http://www.rpi.edu/~veliaa/projects/fvwm_patches/dist/fvwm-2.0.42.pxp8a.diff.gz
+    Patrice> It worked for me.
+
+I put a new patch there today.  It is a context diff from 2.0.43.
+
+http://www.rpi.edu/~veliaa/projects/fvwm_patches/dist/fvwm-2.0.43.pxp9.diff.gz
+
+Andrew
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Tue Jul  9 20:28:53 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id UAA28119; Tue, 9 Jul 1996 20:28:53 -0500 (CDT)
+Received: from mail1.its.rpi.edu (mail1.its.rpi.edu [128.113.100.7]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id UAA28115; Tue, 9 Jul 1996 20:28:47 -0500 (CDT)
+Received: from pluto.ss.com (rts3p1.xyp.rpi.edu [128.113.29.50]) by mail1.its.rpi.edu (8.6.9/8.6.4) with ESMTP id VAA27690; Tue, 9 Jul 1996 21:27:03 -0400
+Received: (from drewvel@localhost) by pluto.ss.com (not real) (8.7.5/8.7.1) id VAA05574; Tue, 9 Jul 1996 21:25:42 -0400
+Date: Tue, 9 Jul 1996 21:25:42 -0400
+Message-Id: <199607100125.VAA05574@pluto.ss.com>
+From: "Andrew Veliath <Andrew Veliath" <veliaa@rpi.edu>
+To: fvwm@hpc.uh.edu
+Cc: fvwm-workers@hpc.uh.edu
+Subject: Title-bar Decoration Patch
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: bulk
+X-Majordomo: 1.94-alpha7-jlt3
+
+A version of my title-bar patch which allows various effects including
+putting and/or tiling pixmaps on fvwm titlebars and updated for 2.0.43
+is available at (context diff):
+
+http://www.rpi.edu/~veliaa/projects/fvwm_patches/fvwm_title_picture.html
+
+...the latest patch itself is the following link off of the above page:
+
+http://www.rpi.edu/~veliaa/projects/fvwm_patches/dist/fvwm-2.0.43.tbp4.diff.gz
+
+Please note problems to me so I can fix them.
+
+Andrew
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Wed Jul 10 07:12:20 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id HAA07713; Wed, 10 Jul 1996 07:12:19 -0500 (CDT)
+Received: from gate.ti.com (news.ti.com [192.94.94.33]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id HAA07709 for <fvwm-workers@hpc.uh.edu>; Wed, 10 Jul 1996 07:12:15 -0500 (CDT)
+Received: from tilde.csc.ti.com ([128.247.160.56]) by gate.ti.com (8.6.13/ac3i.dseg.ti.com) with ESMTP id HAA17523 for <fvwm-workers@hpc.uh.edu>; Wed, 10 Jul 1996 07:11:53 -0500
+Received: from tiuk.ti.com (@.tiuk.ti.com [134.183.11.102]) by tilde.csc.ti.com (8.7.5/8.7.3) with SMTP id HAA04232 for <fvwm-workers@hpc.uh.edu>; Wed, 10 Jul 1996 07:11:20 -0500 (CDT)
+Received: from getafix by tiuk.ti.com (4.1/SMI-4.1)
+	id AA01592; Wed, 10 Jul 96 13:10:47 BST
+Date: Wed, 10 Jul 96 13:10:47 BST
+Message-Id: <9607101210.AA01592@tiuk.ti.com>
+To: fvwm-workers@hpc.uh.edu
+In-Reply-To: <9603151444.AA28015@tiuk.ti.com> from Graham Barr on Fri,
+    15 Mar 96 14:44:19 GMT
+References: <9603151444.AA28015@tiuk.ti.com>
+Reply-To: <bodg@tiuk.ti.com>
+From: Graham Barr <bodg@tiuk.ti.com>
+Organization: Texas Instruments Ltd.
+Subject: PATCH: 2.0.43 (was: Another Bug in fvwm 2.0.41)
+X-Mailer: Perl5 Mail::Internet v1.17
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: bulk
+X-Majordomo: 1.94-alpha7-jlt3
+
+
+Back in March I posted 2 patches for fvwm 2.0.41, the details are listed
+below. I have just pulled and built fvwm 2.0.43 and noticed that these patches
+were not included, so I am posting them again.
+
+This patch was created on 2.0.41 and still applies cleanly to 2.0.43
+
+Graham Barr <bodg@tiuk.ti.com> writes:
+>Hi,
+>   I have just started looking at convering to fvwm2 and I am very please
+>with it. But I do have a small bug to report. It happens when I try to
+>start an application iconic and also specify where to place the icon
+>
+>For example
+>
+> xterm  -xrm  '*iconGeometry: +940+0' -iconic 
+>
+>
+>fvwm2 first places the icon ar (0,0) then moves it to the required location
+>(940,0). However if the location (0,0) is completely obscured by another
+>window fvwm2 does not move the icon to the required location until the
+>icon at (0,0) is exposed in some way, like closing the window which
+>is obscuring it.
+>
+>I tracked this to a line of code in events.c, here is a patch which fixes
+>the problem by initially placing the icon at the wmhints location instead of
+>(0,0)
+
+Graham Barr <bodg@tiuk.ti.com> writes:
+>I have found another bug/problem with fvwm 2.0.41. The problem lies in
+>fvwm.c when it opens,closes and then opens the dispaly again. Below
+>is a patch which fixes the problem
+
+--- events.c.orig	Thu Mar 14 13:50:44 1996
++++ events.c	Thu Mar 14 13:52:58 1996
+@@ -765,7 +765,14 @@
+ 	  break;
+ 	  
+ 	case IconicState:
+-	  Iconify(Tmp_win, 0, 0);
++	  if (Tmp_win->wmhints)
++	    {
++	      Iconify(Tmp_win, Tmp_win->wmhints->icon_x, Tmp_win->wmhints->icon_y);
++	    }
++	  else
++	    {
++	      Iconify(Tmp_win, 0, 0);
++	    }
+ 	  break;
+ 	}
+       if(!PPosOverride)
+--- fvwm.c.orig	Mon Feb 19 14:57:42 1996
++++ fvwm.c	Fri Mar 15 14:41:55 1996
+@@ -220,31 +220,31 @@
+ 
+     strcpy(message, XDisplayString(dpy));
+ 
+-    XCloseDisplay(dpy);
+-
+-    for(i=1;i<Scr.NumberOfScreens;i++)
++    for(i=0;i<Scr.NumberOfScreens;i++)
+     {
+-      if (fork() == 0)
++      if (i != Scr.screen && fork() == 0)
+       {
+         myscreen = i;
++
++        /*
++         * Truncate the string 'whatever:n.n' to 'whatever:n',
++         * and then append the screen number.
++         */
++        cp = strchr(message, ':');
++        if (cp != NULL)
++        {
++          cp = strchr(cp, '.');
++          if (cp != NULL)
++            *cp = '\0';		/* truncate at display part */
++        }
++        sprintf(message + strlen(message), ".%d", myscreen);
++        dpy = XOpenDisplay(message);
++        Scr.screen = myscreen;
++        Scr.NumberOfScreens = ScreenCount(dpy);
++
+         break;
+       }
+     }
+-    /*
+-     * Truncate the string 'whatever:n.n' to 'whatever:n',
+-     * and then append the screen number.
+-     */
+-    cp = strchr(message, ':');
+-    if (cp != NULL)
+-    {
+-      cp = strchr(cp, '.');
+-      if (cp != NULL)
+-        *cp = '\0';		/* truncate at display part */
+-    }
+-    sprintf(message + strlen(message), ".%d", myscreen);
+-    dpy = XOpenDisplay(message);
+-    Scr.screen = myscreen;
+-    Scr.NumberOfScreens = ScreenCount(dpy);
+   }
+ 
+   x_fd = XConnectionNumber(dpy);
+--
+Graham Barr <bodg@tiuk.ti.com>   | There is no ultimate answer.
+Texas Instruments Ltd.           | Only more revealing ways
+                                 | of looking at the question.
+
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Wed Jul 10 07:56:40 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id HAA08399; Wed, 10 Jul 1996 07:56:39 -0500 (CDT)
+Received: from VNET.IBM.COM (vnet.ibm.com [199.171.26.4]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id HAA08392 for <fvwm-workers@hpc.uh.edu>; Wed, 10 Jul 1996 07:56:34 -0500 (CDT)
+Received: from FISHKILL by VNET.IBM.COM (IBM VM SMTP V2R3) with BSMTP id 7738;
+   Wed, 10 Jul 96 08:56:47 EDT
+Received: by FISHKILL (XAGENTA 4.0) id 3635; Wed, 10 Jul 1996 08:56:38 -0400 
+Received: by cold.fishkill.ibm.com (AIX 3.2/UCB 5.64/4.03)
+          id AA36580; Wed, 10 Jul 1996 08:56:27 -0400
+Date: Wed, 10 Jul 1996 08:56:27 -0400
+Message-Id: <9607101256.AA36580@cold.fishkill.ibm.com>
+From: "Charles Hines" <chuck_hines@VNET.IBM.COM>
+To: <bodg@tiuk.ti.com>
+Cc: fvwm-workers@hpc.uh.edu
+Subject: Re: PATCH: 2.0.43 (was: Another Bug in fvwm 2.0.41)
+In-Reply-To: <9607101210.AA01592@tiuk.ti.com>
+References: <9603151444.AA28015@tiuk.ti.com>
+        <9607101210.AA01592@tiuk.ti.com>
+X-Face: 'pn"gAx+&w4-=-}\z>*.Y*@(lC;t1<P);@iwiv';)vn3H2\/.x#;>J[a,/Q.Yv0^Wwc6_"H]}}-"?%)ETS`1v[]P`w4,E.9Bgf*XI4<H{C}Mf@'Ms)z?Bqzf"8v/oY\9K){w}\pw
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: bulk
+X-Majordomo: 1.94-alpha7-jlt3
+
+>>>>> "Graham" == Graham Barr <bodg@tiuk.ti.com> writes:
+
+Graham> Back in March I posted 2 patches for fvwm 2.0.41, the details
+Graham> are listed below. I have just pulled and built fvwm 2.0.43 and
+Graham> noticed that these patches were not included, so I am posting
+Graham> them again.
+
+I had meant to get those into 2.0.43, but it slipped my mind in my
+final rush to get it out the door.  These will be in 2.1.0.
+
+Chuck
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Thu Jul 11 10:41:43 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id KAA02004; Thu, 11 Jul 1996 10:41:39 -0500 (CDT)
+Received: from Post-Office.UH.EDU (Post-Office.UH.EDU [129.7.1.20]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id KAA01968 for <fvwm-workers@hpc.uh.edu>; Thu, 11 Jul 1996 10:41:33 -0500 (CDT)
+Received: from mailgate.aist-nara.ac.jp (fsb1.aist-nara.ac.jp)
+ by Post-Office.UH.EDU (PMDF V5.0-7 #8380)
+ id <01I6XPLE8VV0000BDV@Post-Office.UH.EDU> for fvwm-workers@hpc.uh.edu; Thu,
+ 11 Jul 1996 05:58:40 -0500 (CDT)
+Received: from te.aist-nara.ac.jp by mailgate.aist-nara.ac.jp
+ (8.6.10+2.5Wb1/2.8Wb/NAIST-1.6[gate]) id TAA01306; Thu,
+ 11 Jul 1996 19:57:20 +0900
+Received: from localhost by te.aist-nara.ac.jp (5.65v3.2/2.7W-KASA/1.5)
+ id AA19726; Thu, 11 Jul 1996 19:56:29 +0900
+Date: Thu, 11 Jul 1996 19:56:29 +0900
+From: Nobutaka Suzuki <nobuta-s@is.aist-nara.ac.jp>
+Subject: WindowList
+To: fvwm-workers@hpc.uh.edu
+Message-id: <9607111056.AA19726@te.aist-nara.ac.jp>
+MIME-version: 1.0
+X-Mailer: Mew version 1.06 on Emacs 19.28.1, Mule 2.3
+Content-type: Multipart/Mixed;
+ boundary="--Next_Part(Thu_Jul_11_19:56:09_1996)--"
+Content-transfer-encoding: 7BIT
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: bulk
+X-Majordomo: 1.94-alpha7-jlt3
+
+----Next_Part(Thu_Jul_11_19:56:09_1996)--
+Content-Type: Text/Plain; charset=us-ascii
+
+
+As the behavior of FocusOn() has changed since 2.0.43, perhaps
+WarpOn() would be required in raise_it_func() which is called the
+builtin windowlist, otherwise the pointer will not warp to the
+selected window.
+
+Regards,
+----
+Nobutaka Suzuki <nobuta-s@is.aist-nara.ac.jp> 
+ Graduate School of Information Science
+ Nara Institute of Science and Technology
+
+
+----Next_Part(Thu_Jul_11_19:56:09_1996)--
+Content-Type: Text/Plain; charset=us-ascii
+
+--- builtins.c.orig	Wed Jul 10 13:55:05 1996
++++ builtins.c	Wed Jul 10 15:48:44 1996
+@@ -837,12 +837,13 @@
+ 
+   if(val1 != 0)
+   {
+-    FocusOn((FvwmWindow *)val1,0);
+     if (((FvwmWindow *)(val1))->flags & ICONIFIED)
+     {
+       DeIconify((FvwmWindow *)val1);
+-      FocusOn((FvwmWindow *)val1,0);
+     }
++    WarpOn((FvwmWindow *)val1, 0, 0, 0, 0);
++    if (((FvwmWindow *)(val1))->flags & ClickToFocus)
++      FocusOn((FvwmWindow *)val1,0);
+   }
+ }
+       
+
+----Next_Part(Thu_Jul_11_19:56:09_1996)----
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Jul 15 08:55:28 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id IAA21980; Mon, 15 Jul 1996 08:55:28 -0500 (CDT)
+Received: from nukkekoti.cs.hut.fi (root@nukkekoti.cs.hut.fi [130.233.40.128]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id IAA21973 for <fvwm-workers@hpc.uh.edu>; Mon, 15 Jul 1996 08:55:22 -0500 (CDT)
+Received: from torvi.cs.hut.fi (pema@torvi.cs.hut.fi [130.233.40.149]) by nukkekoti.cs.hut.fi (8.7.5/8.7.3) with ESMTP id QAA29439; Mon, 15 Jul 1996 16:55:29 +0300 (EET DST)
+Received: (from pema@localhost) by torvi.cs.hut.fi (8.7.5/8.7.3) id QAA06424; Mon, 15 Jul 1996 16:55:28 +0300 (EETDST)
+To: Charles Hines <chuck_hines@VNET.IBM.COM>
+Cc: fvwm-workers@hpc.uh.edu
+Subject: Relative movement patch to WindowsDesk
+From: Pekka Marjola <pema@iki.fi>
+X-Face: 8>EVnZ'MSz2dI{N`dzbBND,clpk$+(a>y[d"rnI,}HfS4x!)hp+1H&ha6Rj93tVlirvJ;Z@@MSpFN[;;X)aF\mDDlk6N&0t*B^C\]|<z,S8:j26ZbN:WmvgP-DV?l|'C<(|DacsbwYal'dmuMifMOXszyo]J:k{BSASbF-R
+X-Attribution: PeMa
+Mime-Version: 1.0 (generated by tm-edit 7.71)
+Content-Type: multipart/mixed;
+ boundary="Multipart_Mon_Jul_15_16:55:27_1996-1"
+Content-Transfer-Encoding: 7bit
+Date: 15 Jul 1996 16:55:27 +0300
+Message-ID: <k9wpw5x4o4w.fsf@torvi.cs.hut.fi>
+Lines: 118
+X-Mailer: Gnus v5.2.35/XEmacs 19.14
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: bulk
+X-Majordomo: 1.94-alpha7-jlt4
+
+--Multipart_Mon_Jul_15_16:55:27_1996-1
+Content-Type: text/plain; charset=US-ASCII
+
+
+Here's a simple patch to allow desktops to be specified relatively in
+WindowsDesk command (just like in Desk command), something I have
+wanted to do for a long time (but never bothered to make a patch). It
+also corrects the problem of not repositioning the icon if the icon is
+moved to another (not current) desk.
+
+This will break the old syntax, but I think it's clearer to have the
+same syntax with both commands than to try support old syntax, too.
+
+Although it's a bit late, I think it would be useful to add this
+before 2.1.0...
+
+
+
+--Multipart_Mon_Jul_15_16:55:27_1996-1
+Content-Type: application/octet-stream; type=patch
+Content-Disposition: attachment; filename="WindowsDesk.patch"
+Content-Transfer-Encoding: 7bit
+
+
+--- virtual.c.orig      Mon Jul 15 15:30:33 1996
++++ virtual.c   Mon Jul 15 16:21:27 1996
+@@ -523,8 +523,7 @@
+ void changeWindowsDesk(XEvent *eventp,Window w,FvwmWindow *t,
+                       unsigned long context,char *action, int *Module)
+ {
+-  long val1;
+-  int val1_unit,n;
++  int n, val1, val2, val1_unit, val2_unit, newDesk;
+   
+   if (DeferExecution(eventp,&w,&t,&context,SELECT,ButtonRelease))
+     return;
+@@ -532,9 +531,18 @@
+   if(t == NULL)
+     return;
+ 
+-  n = GetOneArgument(action, &val1, &val1_unit);
++  n = GetTwoArguments(action, &val1, &val2, &val1_unit, &val2_unit);
+ 
+-  if(val1 == t->Desk)
++  if(val1 != 0)
++    {
++      newDesk = val1 + t->Desk;
++    }
++  else
++    {
++      newDesk = val2;
++    }
++  
++  if(newDesk == t->Desk)
+     return;
+ 
+   /* Scan the window list, mapping windows on the new Desk,
+@@ -545,20 +553,25 @@
+     {
+       if(t->Desk == Scr.CurrentDesk)
+        {
+-         t->Desk = val1;
++         t->Desk = newDesk;
+          UnmapIt(t);
++         /* If its an icon, auto-place it */
++         if(t->flags & ICONIFIED)
++           AutoPlace(t);
+        }
+-      else if(val1 == Scr.CurrentDesk)
++      else if(newDesk == Scr.CurrentDesk)
+        {
+-         t->Desk = val1;
+-         /* If its an icon, auto-place it */
++         t->Desk = newDesk;
+          if(t->flags & ICONIFIED)
+            AutoPlace(t);
+          MapIt(t);
+        }
+       else
+-       t->Desk = val1;
+-      
++       {
++         t->Desk = newDesk;
++         if(t->flags & ICONIFIED)
++           AutoPlace(t);
++       }
+     }
+   BroadcastConfig(M_CONFIGURE_WINDOW,t);
+ }
+--- fvwm.man.orig       Mon Jul 15 16:22:37 1996
++++ fvwm.man    Mon Jul 15 16:25:02 1996
+@@ -1341,8 +1341,14 @@
+ title-bars.
+ 
+ 
+-.IP "WindowsDesk \fInew_desk\fP"
+-Moves the selected window the the desktop specified as \fInew_desk\fP.
++.IP "WindowsDesk \fIarg1 arg2\fP"
++Moves the selected window to another desktop (workspace, room). 
++
++If \fIarg1\fP is non zero then the next desktop number will be the
++current desktop number plus \fIarg1\fP.  Desktop numbers can be
++negative.
++
++If \fIarg1\fP is zero then the new desktop number will be \fIarg2\fP.
+ 
+ 
+ .IP "XORvalue \fInumber\fP"
+
+--Multipart_Mon_Jul_15_16:55:27_1996-1
+Content-Type: text/plain; charset=US-ASCII
+
+-- 
+Pekka Marjola * pema@iki.fi * http://www.iki.fi/pema/ * +358-40-551 4842
+PGP: 0x2865206D/C46E6452206FDB42A87D44F4E0E54E65 * GCS U+++$ L+++ E++...
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Quidquid latine dictum sit, altum viditur.
+
+--Multipart_Mon_Jul_15_16:55:27_1996-1--
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Jul 15 19:30:03 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id TAA20039; Mon, 15 Jul 1996 19:30:02 -0500 (CDT)
+Received: from darkstar (root@krispy.kreme.donet.com [205.133.113.153]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id TAA20032; Mon, 15 Jul 1996 19:29:45 -0500 (CDT)
+Received: from darkstar (dmahurin@localhost [127.0.0.1]) by darkstar (8.6.12/8.6.9) with SMTP id TAA00168; Mon, 15 Jul 1996 19:34:17 -0400
+Message-ID: <31EAD577.36165F77@donet.com>
+Date: Mon, 15 Jul 1996 19:34:15 -0400
+From: Don Mahurin <dmahurin@donet.com>
+Organization: Home (via Dayton Ohio Net)
+X-Mailer: Mozilla 3.0b4Gold (X11; I; Linux 2.0.0 i486)
+MIME-Version: 1.0
+To: fvwm-workers@hpc.uh.edu
+CC: fvwm@hpc.uh.edu
+Subject: Mini-Icons on as Title button again.
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: bulk
+X-Majordomo: 1.94-alpha7-jlt4
+
+I know there are more important issues, but .....
+
+In Fvwm95, a mini icon that is on the Title is described as a TitleIcon
+and is defined the same way as the Icon is (with Style ... ).
+Internally, it is M_TITLE_ICON.
+But it is not only used with the Title of the Window.  It is used in the
+FvwmTaskBar, and in the FvwmWinList(I did this, along with other
+enhancements).
+
+I propose that we do it a little differently in Fvwm2:
+
+
+-- A new Button Style Flag
+
+ButtonStyle 1 UseAppMiniIcon
+
+-- and a new Application Style flag:
+
+Style "xpaint"    MiniIcon mini-paint.xpm
+
+
+
+Then I could change my FvwmWinList from using TitleIcon to
+MiniIcon(Internally from M_TITLE_ICON to M_MINI_ICON), and hopefully
+I/we could Convince the FvwmTaskBar and Fvwm95 authors to do the same.
+Then Modules are compatible between the two. Then world peace will
+occur.
+
+Or instead of above, we could just use the Fvwm95 names.(though I dont
+like them)
+
+
+Don Mahurin
+dmahurin@donet.com
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Tue Jul 16 07:14:35 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id HAA04156; Tue, 16 Jul 1996 07:14:35 -0500 (CDT)
+Received: from cray (root@cray.tuug.utu.fi [130.232.72.65]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id HAA04141; Tue, 16 Jul 1996 07:14:27 -0500 (CDT)
+Received: by cray (Linux Smail3.1.28.1 #4)
+	id m0ug90T-000gGaC; Tue, 16 Jul 96 15:13 EET DST
+Date: Tue, 16 Jul 1996 15:13:36 +0300 (EET DST)
+From: Kim Lassila <slash@cray.tuug.utu.fi>
+To: chuck_hines@VNET.IBM.COM
+cc: The FVWM Discussion List <fvwm@hpc.uh.edu>,
+        The FVWM Announce list <fvwm-announce@hpc.uh.edu>,
+        The FVWM Workers List <fvwm-workers@hpc.uh.edu>
+Subject: Re: delay in beta 2.0.43
+In-Reply-To: <9606301745.AA37292@cold.fishkill.ibm.com>
+Message-ID: <Pine.LNX.3.91.960716151326.19406D-100000@cray.tuug.utu.fi>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: bulk
+X-Majordomo: 1.94-alpha7-jlt4
+
+Hello,
+
+Could you please tell me how I can set the Next function in my .fvwm2rc so
+that all iconic windows and windows whose name are "desktop icon" are not
+affected. I have tried the following (without success):
+
+Key	Tab	A	M	Next [!iconic !"desktop icon"] Focus
+
+This doesn't work!
+I'm using fvwm-2.0.42.
+
+
+  - ---- --------------------------------------------------- ---- -- -
+ .       |\      _,,,---,,_       Kim Lassila    a.k.a   _/ .  _//    .
+ . ZZZzz /,`.-'`'    -.  ;-;;,_ Juhannuskatu 18         (  )|\( />'   .
+ :      |,4-  ) )-,_. ,\ (  `'-'  20300 Turku           _)/_'-\)(     :
+ |     '---''(_/--'  `-'\_)        -FiNLAND-           '      '       |
+ |     ...studying Computer Science at the University of Turku...     |
+ `-----------------------> pekila@utu.fi \/ slash@cray.tuug.utu.fi <--'
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Fri Jul 19 10:56:29 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id KAA25946; Fri, 19 Jul 1996 10:56:28 -0500 (CDT)
+Received: from VNET.IBM.COM (vnet.ibm.com [199.171.26.4]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id KAA25940 for <fvwm-workers@hpc.uh.edu>; Fri, 19 Jul 1996 10:56:21 -0500 (CDT)
+Received: from RCHLAND by VNET.IBM.COM (IBM VM SMTP V2R3) with BSMTP id 9962;
+   Fri, 19 Jul 96 11:56:31 EDT
+Reply-To: "Bill Oswald" <wamo@VNET.IBM.COM>
+Received: by po1 (AIX 3.2/UCB 5.64/4.7) id <AA17901> for fvwm-workers@hpc.uh.edu; Fri, 19 Jul 1996 10:38:56 -0500
+Received: via switchmail; Fri, 19 Jul 1996 10:38:56 -0500 (CDT)
+Received: from penfold.rchland.ibm.com via qmail
+          ID </afs/rchland.ibm.com/service/mailqs/q000/QF.4lvuk:s91Gl=QpxkAB>;
+          Fri, 19 Jul 1996 10:38:51 -0500 (CDT)
+Received: from penfold.rchland.ibm.com via qmail
+          ID </afs/rchland.ibm.com/usr1/wamo/.Outgoing/QF.slvuk8o91Gl=JdUTR8>;
+          Fri, 19 Jul 1996 10:38:48 -0500 (CDT)
+Received: from Messages.8.5.N.CUILIB.3.45.SNAP.NOT.LINKED.penfold.rchland.ibm.com.rs.aix32
+          via MS.5.6.penfold.rchland.ibm.com.rs_aix32;
+          Fri, 19 Jul 1996 10:38:48 -0500 (CDT)
+Message-Id: <olvuk8I91Gl=1dUTFt@rchland.ibm.com>
+Date: Fri, 19 Jul 1996 10:38:48 -0500 (CDT)
+From: Bill Oswald <wamo@VNET.IBM.COM>
+To: fvwm-workers@hpc.uh.edu
+Subject: New version of fvwmrc-convert
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-alpha7-jlt4
+
+
+Greetings,
+
+Attached is an updated version of the fvwmrc-convert program.  Sorry for
+the length of the post but after all of the updates pretty much every
+line was changed.  It was shorter to just post the entire file than
+making a patch.
+
+There are lots of changes, the biggest being:
+	1) All of the keywords from fvwm1.24r are now recognized in some way.
+(hopefully 
+	   I got them all
+	2) Leading spaces in the old .fvwmrc file are ok for the most part.
+	3) Several bugs fixed.
+
+I'll be the first to admit there are a couple of hacks (there's actually
+a "hack:" comment that identifies these) so if any one has any better
+ideas, have at it.
+
+There are 350+ users on our site and we've been using fvwm for over 3
+years.  It would be impossible to get them to migrate to fvwm2 without a
+program like this.  In fact I'm having a bit of trouble getting them to
+migrate with it!  8*)
+
+Thanks to Martin Kraemer and Grant McDorman for making a great start. 
+Hopefully these additional changes will help those folks who are holding
+off upgrading until the official 2.0 release becomes available.
+
+-Bill
+
+PS to Chuck:  if one of the mailers garbles the script let me know and
+I'll send it internally
+
+#!/bin/sh 
+
+# Some time ago, Martin Kraemer <Martin.Kraemer@mch.sni.de> posted an
+# incomplete script to convert fvwm-1 'rc' files to fvwm-2. I've just
+# recently fixed and enhanced that script; it's complete (or nearly
+# so) now. This should help if you choose to convert.
+#
+# I've also made a couple of other minor changes to make life easier
+# for our users here: I changed the default initialization from "Read
+# .fvwmrc" to "Read .fvwm2rc" (in fvwm/fvwmc), and I installed fvwm 2
+# as "fvwm2". With these changes, users can easily convert at their
+# leisure.
+#
+# Herewith the script. It's using GNU awk (gawk), but will run with
+# any "new" awk (nawk on Suns (SunOS 4, Solaris), awk on most other
+# systems). If you do not use gawk, it will be case-sensitive (the
+# case of the fvwm commands must match those in the script
+# exactly). With gawk, it'll be case-insensitive.
+
+#
+# Convert fvwm 1.x configuration file to 2.0
+#
+# Originally written by Martin Kraemer <Martin.Kraemer@mch.sni.de>
+# Corrected, extended, and modified by Grant McDorman <grant@isgtec.com>
+# 24 May 95
+# Addtional corrections and extensions by Bill Oswald <wamo@vnet.ibm.com>
+# 8 Mar 96 thru 18 Jul 96
+
+echo "fvwmrc-to-2.0.43"
+if [ ! -x /usr/local/bin/gawk ];then
+   echo "gawk (/usr/local/contrib/bin/gnu/gawk) missing, cannot run"
+   exit 1
+fi
+source=${1:-$HOME/.fvwmrc}
+dest=${2:-$HOME/.fvwm2rc}
+if [ "$dest" != "-" ] ;then
+	echo "Output to $dest"
+	if [ -f $dest ] ; then
+	  mv $dest $dest.bak
+	  echo "Saving existing $dest as $dest.bak"
+	fi
+	exec >$dest
+fi
+AWK=gawk
+cat $source | $AWK '
+BEGIN   {
+        printf ("# Trying to compile an old .fvwrc to the  new fvwm-2.0
+Format\n");
+	TRUE=1; FALSE=0;
+
+	IGNORECASE=TRUE;
+
+	hiforecolor="";             dflt["hiforecolor"] = "black";
+	hibackcolor="";             dflt["hibackcolor"] = "CadetBlue";
+	hilightcolor = FALSE;
+
+	stdforecolor="";            dflt["stdforecolor"] = "black";
+	stdbackcolor="";            dflt["stdbackcolor"] = "grey70";
+
+	menuforecolor="";           dflt["menuforecolor"] = "black";
+	menubackcolor="";           dflt["menubackcolor"] = "grey70";
+	menustipplecolor="";        dflt["menustipplecolor"] = "grey40";
+	font="";                    dflt["font"] =
+"-adobe-helvetica-medium-r-*-*-18-*-*-*-*-*-iso8859-1";
+	mwmmenus="";                dflt["mwmmenus"] = "fvwm";
+	menustyle=FALSE;
+
+	inpopup=FALSE;
+	infunction=FALSE;
+	prefix="";
+
+        placement = FALSE;           dflt["placement"] =
+"ActivePlacement, DumbPlacement"
+}
+
+/^[ \t]*#/			{   # Comment, pass it thru
+        print $0;
+	next;
+}
+
+/^$/                            {   # Empty line, pass it thru
+	print $0;
+	next;
+}
+	
+################ Rename common items ##############
+/Restart/ && /fvwm/             { gsub("fvwm", "fvwm2"); } # try and
+leave paths alone
+/GoodStuff/                     { gsub("GoodStuff", "FvwmButtons"); }
+
+################ Highlight Colors ##############
+/^[ \t]*HiBackColor[ \t]*/	{
+        dflt["hibackcolor"]=hibackcolor=$2;
+	printf ("#!%s (new command=HilightColor)\n", $0);
+	if (hibackcolor != "" && hiforecolor != "" && !hilightcolor) {
+           printf ("\n#Set the foreground and background color for
+selected windows\n");
+	   printf ("HilightColor   %s %s\n", hiforecolor, hibackcolor);
+	   hilightcolor=TRUE;
+        } else
+	   hilightcolor=FALSE;
+        next;
+}
+
+/^[ \t]*HiForeColor[ \t]*/	{
+        dflt["hiforecolor"]=hiforecolor=$2;
+	printf ("#!%s (new command=HilightColor)\n", $0);
+	if (hibackcolor != "" && hiforecolor != "" && !hilightcolor) {
+           printf ("\n#Set the foreground and background color for
+selected windows\n");
+	   printf ("HilightColor   %s %s\n", hiforecolor, hibackcolor);
+	   hilightcolor=TRUE;
+        } else
+	   hilightcolor=FALSE;
+        next;
+}
+
+
+########## Menu Colors, Style and Font ###########
+/^[ \t]*MenuForeColor[ \t]*/	{
+        dflt["menuforecolor"]=menuforecolor=$2;
+	printf ("#!%s (new command=MenuStyle)\n", $0);
+	if (menubackcolor != "" && menuforecolor != "" && menustipplecolor !=
+"" && font != "" && mwmmenus != "" && !menustyle) {
+           printf ("\n#Set the foreground, background and stipple color
+and font for menus\n");
+	   printf ("MenuStyle   %s %s %s %s %s\n", menuforecolor,
+menubackcolor, menustipplecolor, font, mwmmenus);
+	   menustyle=TRUE;
+	} else
+	   menustyle=FALSE;
+        next;
+}
+
+/^[ \t]*MenuBackColor[ \t]*/	{
+        dflt["menubackcolor"]=menubackcolor=$2;
+	printf ("#!%s (new command=MenuStyle)\n", $0);
+	if (menubackcolor != "" && menuforecolor != "" && menustipplecolor !=
+"" && font != "" && mwmmenus != "" && !menustyle) {
+           printf ("\n#Set the foreground, background and stipple color
+and font for menus\n");
+	   printf ("MenuStyle   %s %s %s %s %s\n", menuforecolor,
+menubackcolor, menustipplecolor, font, mwmmenus);
+	   menustyle=TRUE;
+        } else
+	   menustyle=FALSE;
+        next;
+}
+
+/^[ \t]*MenuStippleColor[ \t]*/	{
+        dflt["menustipplecolor"]=menustipplecolor=$2;
+	printf ("#!%s (new command=MenuStyle)\n", $0);
+	if (menubackcolor != "" && menuforecolor != "" && menustipplecolor !=
+"" && font != "" && mwmmenus != "" && !menustyle) {
+           printf ("\n#Set the foreground, background and stipple color
+and font for menus\n");
+	   printf ("MenuStyle   %s %s %s %s %s\n", menuforecolor,
+menubackcolor, menustipplecolor, font, mwmmenus);
+	   menustyle=TRUE;
+        } else
+	   menustyle=FALSE;
+        next;
+}
+
+/^[ \t]*MWMMenus[ \t]*/		{
+        dflt["mwmmenus"]=mwmmenus="mwm";
+	printf ("#!%s (new command=MenuStyle)\n", $0);
+	if (menubackcolor != "" && menuforecolor != "" && menustipplecolor !=
+"" && font != "" && mwmmenus != "" && !menustyle) {
+           printf ("\n#Set the foreground, background and stipple color
+and font for menus\n");
+	   printf ("MenuStyle   %s %s %s %s %s\n", menuforecolor,
+menubackcolor, menustipplecolor, font, mwmmenus);
+	   menustyle=TRUE;
+	} else
+	   menustyle=FALSE;
+	next;
+}
+
+/^[ \t]*Font[ \t]*/		{
+        dflt["font"]=font=$2;
+	printf ("#!%s (new command=MenuStyle)\n", $0);
+	if (menubackcolor != "" && menuforecolor != "" && menustipplecolor !=
+"" && font != "" && mwmmenus != "" && !menustyle) {
+           printf ("\n#Set the foreground, background and stipple color
+and font for menus\n");
+	   printf ("MenuStyle   %s %s %s %s %s\n", menuforecolor,
+menubackcolor, menustipplecolor, font, mwmmenus);
+	   menustyle=TRUE;
+	} else
+	   menustyle=FALSE;
+	next;
+}
+
+
+# Translate both old ButtonStyle formats to the new format:
+/^[ \t]*ButtonStyle[ \t]*/	{
+        if ($2 == ":") {  # new style already
+           if (NF != $4+4)
+	       print "ERROR: ButtonStyle command incorrect" >"/dev/stderr";
+	   printf ("%s %d %d", $1, $3, $4);
+	   for (i=5; i<=NF; ++i)
+	       printf (" %s", $i);
+	   printf ("\n");
+	} else {
+           print "Note: Conversion of old ButtonStyle; values rounded" \
+			>"/dev/stderr"
+	   printf ("#!         Old line was: %s\n", $0);
+	   p=index ($3,"x");
+	   x=substr($3,1,p-1)/2;
+	   y=substr($3,p+1)/2;
+	   printf ("%s %s 5 %dx%d@0 %dx%d@0 %dx%d@0 %dx%d@1 %dx%d@1\n",
+		    $1, $2, 50-x,50+y, 50+x,50+y, 50-x,50-y, 50+x,50-y,
+		    50-x,50+y);
+	}
+	next;
+}
+
+########## Standard Colors ###########
+/^[ \t]*StdForeColor[ \t]*/	{
+        dflt["stdforecolor"]=stdforecolor=$2;
+	printf ("#!%s (new command=Style \"*\" Color f/b)\n", $0);
+	print "Style \"*\" ForeColor " $2;
+	next;
+}
+
+/^[ \t]*StdBackColor[ \t]*/	{
+	dflt["stdbackcolor"]=stdbackcolor=$2;
+	printf ("#!%s (new command=Style \"*\" Color f/b)\n", $0);
+	print "Style \"*\" BackColor " $2;
+	next;
+}
+
+########## Icon Related Stuff ##########
+/^[ \t]*IconBox[ \t]*/		{ print "Style \"*\" " $0; next; }
+/^[ \t]*IconFont[ \t]*/		{ print $0; next; }
+/^[ \t]*SuppressIcons[ \t]*/	{ print "Style \"*\" NoIcon"; next; }
+/^[ \t]*StickyIcons[ \t]*/	{ print "Style \"*\" StickyIcon"; next; }
+/^[ \t]*ModulePath[ \t]*/	{ gsub("/fvwm", "/fvwm2"); print $0; next; }
+/^[ \t]*PixmapPath[ \t]*/	{ gsub("/fvwm", "/fvwm2"); print $0; next; }
+/^[ \t]*IconPath[ \t]*/		{ gsub("/fvwm", "/fvwm2"); print $0; next; }
+# note: Icon must be followed by some white space
+/^[ \t]*Icon[ \t]+/		{ printf "Style %s Icon %s\n", $2, $3; next; }
+
+########## MWM hints ##########
+/^[ \t]*MWMFunctionHints[ \t]*/	{ printf ("Style \"*\" MWMFunctions\n");
+next; }
+/^[ \t]*MWMDecor[ \t]*/		{ printf ("Style \"*\" MWMDecor\n"); next; }
+/^[ \t]*MWMDecorHints[ \t]*/	{ printf ("Style \"*\" MWMDecor\n"); next; }
+/^[ \t]*MWMBorders[ \t]*/	{ printf ("Style \"*\" MWMBorder\n"); next; }
+/^[ \t]*MWMButtons[ \t]*/	{ printf ("Style \"*\" MWMButtons\n"); next; }
+/^[ \t]*MWMHintOverride[ \t]*/	{ printf ("Style \"*\" HintOverride\n"); next; }
+
+########## Placement & Focus styles ##########
+/^[ \t]*RandomPlacement[ \t]*/	{ print "Style \"*\" " $0; placement =
+TRUE; next; }
+/^[ \t]*SmartPlacement[ \t]*/	{ print "Style \"*\" " $0; placement =
+TRUE; next; }
+/^[ \t]*Sticky[ \t]*/		{ printf "Style \"%s\" Sticky\n", $2; next; }
+/^[ \t]*NoPPosition[ \t]*/	{ print "Style \"*\" " $0; next; }
+/^[ \t]*ClickToFocus[ \t]*/	{ print "Style \"*\" " $0; next; }
+/^[ \t]*SloppyFocus[ \t]*/	{ print "Style \"*\" " $0; next; }
+/^[ \t]*StaysOnTop[ \t]*/	{ printf "Style \"%s\" StaysOnTop\n", $2; next; }
+/^[ \t]*AutoRaise[ \t]*/		{
+        print "#! " $0 " (use Module FvwmAuto)";
+	print "AddToFunc \"InitFunction\" \"I\" Module FvwmAuto " $2;
+	print "AddToFunc \"RestartFunction\" \"I\" Module FvwmAuto " $2;
+	next;
+}
+
+########## Decoration styles ##########
+/^[ \t]*BorderWidth[ \t]*/	{ print "Style \"*\" " $0; next; }
+/^[ \t]*HandleWidth[ \t]*/	{ print "Style \"*\" " $0; next; }
+/^[ \t]*DecorateTransients[ \t]*/ { print "Style \"*\"
+DecorateTransient"; next; }
+/^[ \t]*XORvalue[ \t]*/		{ print $0; next; }
+/^[ \t]*BoundaryWidth[ \t]*/	{ printf "Style \"*\" HandleWidth %s\n",
+$2; next; }
+/^[ \t]*NoBoundaryWidth[ \t]*/	{ print "Style \"*\" BorderWidth " $2; next; }
+/^[ \t]*NoTitle[ \t]*/		{ print "Style \"*\" " $0; next; }
+/^[ \t]*NoBorder[ \t]*/		{ print "Style \"*\" " $0; next; }
+
+
+
+########## Etc ##########
+/^[ \t]*Lenience[ \t]*/		{ print "Style \"*\" " $0; next; }
+/^[ \t]*Style[ \t]*/		{ print $0; next; }
+/^[ \t]*Key[ \t]*/		{ print $0; next; }
+/^[ \t]*Mouse[ \t]*/		{
+	if (sub("[ 	]Pop[uU]p[ 	]", " Menu ")) {
+	    if (!warn["Mouse"]) {
+		print "Note: Setting mouse bindings to sticky menus">"/dev/stderr";
+		warn["Mouse"] = TRUE;
+	    }
+	    if (index($6, "\"") == 1) {
+	       gsub("\"", "")
+	       if (NF > 6) {
+	          for (i = 6; i <= NF; i++)
+                    sub($i " ", $i)
+	       }
+	    } 
+	    sub("$", " Nop");
+ 	}
+	print $0; next;
+}
+
+/^[ \t]*WindowListSkip[ \t]*/	{ printf "Style %s WindowListSkip", $2; next; }
+/^[ \t]*WindowFont[ \t]*/	{ print $0; next; }
+/^[ \t]*ClickTime[ \t]*/		{ print $0; next; }
+/^[ \t]*OpaqueMove[ \t]*/	{ print "OpaqueMoveSize " $2; next; }
+/^[ \t]*EdgeScroll[ \t]*/	{ print $0; next; }
+/^[ \t]*EdgeResistance[ \t]*/	{ print $0; next; }
+/^[ \t]*DeskTopSize[ \t]*/	{ print $0; next; }
+/^[ \t]*DeskTopScale[ \t]*/	{
+	printf ("#!%s (new command=*FvwmPagerDeskTopScale <scale>)\n", $0);
+	print "*FvwmPagerDeskTopScale " $2;
+	next;
+}
+
+/^[ \t]**FvwmButtons[ \t]*/	{
+	sub("[ 	]Swallow[ 	]*[^ 	]*", "& Exec");
+	print $0;
+	if (length($0) > 199)
+	{
+	    print "Warning: line too long" >"/dev/stderr";
+	    print ">> " $0 >"/dev/stderr";
+	}
+	if (!warn["GoodStuff"])
+	{
+	    print "Note: GoodStuff renamed to FvwmButtons" >"/dev/stderr";
+	    warn["GoodStuff"]=TRUE;
+	}
+	next;
+}
+
+/^\*/				{
+        # other Module Configuration commands are passed thru
+	print $0;
+	next;
+}
+
+# hack: Modules spawned outside of a function, menu, or popup cannot
+have leading whitespace.
+# add these to the initfunction
+/^Module[ \t]*/                 { printf "AddToFunc \"InitFunction\"
+\"I\" %s \n", $0; next; }
+
+# hack: function declarations cannot have leading whitespace
+/^Function[ \t]*/		{
+	if (inpopup)
+	   print "ERROR: EndPopup missing\n" NR $0 >"/dev/stderr";
+	inpopup=FALSE;
+	if (infunction)
+	   print "ERROR: EndFunction missing\n" NR $0 >"/dev/stderr";
+	infunction=TRUE;
+	prefix="AddToFunc " $2;
+	next;
+}
+
+/^[ \t]*EndFunction[ \t]*/	{
+        if (!infunction)
+           print "ERROR: EndFunction outside of function" >"/dev/stderr";
+	infunction=FALSE;
+	prefix="";
+	next;
+}
+
+# hack: popup declarations cannot have leading whitespace
+/^Popup/                        {
+        if (inpopup) 
+	   print "ERROR: EndPopup missing\n" NR $0 >"/dev/stderr";
+        if (infunction)
+	   print "ERROR: EndFunction missing\n" NR $0 >"/dev/stderr";
+        infunction=FALSE;
+	inpopup=TRUE;
+
+	if (index($2, "\"") == 1) {
+	   tstr = ""
+	   for (i = 2; index(substr($i, 2), "\"") < length($i) && i <= NF; i++)
+              tstr = sprintf("%s%s", tstr, $i);
+	   prefix = "AddToMenu " substr(tstr, 2, length(tstr) - 2)
+        } else
+	   prefix="AddToMenu " $2;
+	next;
+}
+
+/^[ \t]*EndPopup[ \t]*/		{
+        if (!inpopup)
+	   print "ERROR: EndPopup outside of popup" >"/dev/stderr";
+        inpopup=FALSE;
+	prefix="";
+	next;
+}
+
+
+
+########## Deleted Commands ##########
+/^[ \t]*DontMoveOff[ \t]*/	||
+/^[ \t]*BackingStore[ \t]*/	||
+/^[ \t]*AppsBackingStore[ \t]*/	||
+/^[ \t]*SaveUnders[ \t]*/	||
+/^[ \t]*StubbornIcons[ \t]*/	||
+/^[ \t]*StubbornIconPlacement[ \t]*/ ||
+/^[ \t]*StubbornPlacement[ \t]*/     ||
+/^[ \t]*Cursor[ \t]*/		{ 
+	print "#! " $0 " [deleted]";
+	if (warned[$1]==FALSE) {
+	   print "Warning: " $1 " not in Fvwm2, command dropped" >"/dev/stderr";
+	   warned[$1] = TRUE;
+	}
+	next;
+}
+
+/^[ \t]*Pager[ \t]*/		{
+        print "#! " $0 " [deleted]";
+	if (warned[$1]==FALSE) {
+           print "Warning: " $1 " omitted, internal pager is obsolete
+(use FvwmPager)" >"/dev/stderr";
+	   warned[$1] = TRUE;
+	}
+	next;
+}
+
+/^[ \t]*PagingDefault[ \t]*/	||
+/^[ \t]*TogglePage[ \t]*/	{
+        print "#! " $0 " (use EdgeScroll 0 0)"; next;
+	print "Warning: " $1 " not in Fvwm2, use EdgeScroll">"/dev/stderr";
+}
+
+########## Old Internal Pager Colors ###########
+/^[ \t]*PagerForeColor[ \t]*/	||
+/^[ \t]*PagerBackColor[ \t]*/	{
+	printf ("#!%s (new command=Style FvwmPager Color
+fore_color/back_color)\n", $0);
+	if (warned[$1]==FALSE) {
+           print "Warning: " $1 " omitted, internal pager is obsolete
+(use FvwmPager)" >"/dev/stderr";
+	   warned[$1] = TRUE;
+	}
+	next;
+}
+
+########## Sticky Colors ###########
+/^[ \t]*StickyForeColor[ \t]*/	{
+	printf ("#!%s (no sticky foreground color in fvwm2)\n", $0);
+	if (warned[$1]==FALSE) {
+	   print "Warning: StickyForeColor not in fvwm2, omitted" > "/dev/stderr"
+           print "         Use the Style command to assign each sticky
+window the same ForeColor" > "/dev/stderr"
+        }
+	next;
+}
+
+/^[ \t]*StickyBackColor[ \t]*/	{
+	printf ("#!%s (no sticky background color in fvwm2)\n", $0);
+	if (warned[$1]==FALSE) {
+	   print "Warning: StickyBackColor not in fvwm2, omitted" >"/dev/stderr"
+           print "         Use the Style command to assign each sticky
+window the same BackColor" > "/dev/stderr"
+        }
+	next;
+}
+
+
+{
+    if (infunction) {
+        #gsub("[ 	]PopUp[ 	]", " "); }
+	if ($2 == "\"Motion\"")
+	    context="\"M\"";
+	else if ($2 == "\"Click\"")
+	    context="\"C\"";
+	else if ($2 == "\"DoubleClick\"")
+	    context="\"D\"";
+	else if ($2 == "\"Immediate\"")
+	    context="\"I\"";
+	else context=$2;
+		printf "%s", prefix " " context " " $1;
+	for (i=3; i<=NF; ++i)
+	    printf (" %s", $i);
+	printf ("\n");
+	prefix="+             ";
+	next;
+    } else if (inpopup) {
+	# not going to handle escaped quotes
+	label=$2;
+	first=3;
+	quoted=substr(label, 1, 1)=="\"" &&
+		substr(label, length(label), 1)!="\"";
+	for (i=3;i<=NF && quoted;i++) {
+	    label=label " " $i;
+	    quoted=substr(label, length(label), 1)!="\"";
+	    first=i + 1;
+	}
+	printf ("%s %s %s", prefix, label, $1);
+	for (i=first; i<=NF; ++i)
+	    printf (" %s", $i);
+	printf ("\n");
+	prefix="+             ";
+	next;
+    }
+
+    if (warned[$1]==FALSE) {
+	printf ("#!Warning: Keyword \"%s\" not handled yet\n", $1);
+	warned[$1]=TRUE;
+	print "Warning: Unknown keyword "$1" passed through">"/dev/stderr";
+    }
+    print $0;
+    next;
+}
+
+END {
+    if (!menustyle) {
+	printf ("\n#Set the foreground, background and stipple color and font
+for menus\n");
+	printf ("MenuStyle   %s %s %s %s %s\n", dflt["menuforecolor"],
+dflt["menubackcolor"], dflt["menustipplecolor"], dflt["font"],
+dflt["mwmmenus"]);
+    }
+    if (!hilightcolor) {
+	printf ("\n#Set the foreground and background color for selected windows\n");
+	printf ("HilightColor   %s %s\n", dflt["hiforecolor"], dflt["hibackcolor"]);
+    }
+    if (!placement) {
+        printf "# overide default RandomPlacement and SmartPlacement Styles\n";
+        printf "Style \"*\" %s\n", dflt["placement"];
+    }
+}
+'
+exit
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Fri Jul 19 13:40:03 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id NAA03430; Fri, 19 Jul 1996 13:40:02 -0500 (CDT)
+Received: from VNET.IBM.COM (vnet.ibm.com [199.171.26.4]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id NAA03422 for <fvwm-workers@hpc.uh.edu>; Fri, 19 Jul 1996 13:39:49 -0500 (CDT)
+Received: from RCHLAND by VNET.IBM.COM (IBM VM SMTP V2R3) with BSMTP id 5531;
+   Fri, 19 Jul 96 14:39:57 EDT
+Reply-To: "Bill Oswald" <wamo@VNET.IBM.COM>
+Received: by po1 (AIX 3.2/UCB 5.64/4.7) id <AA29842> for fvwm-workers@hpc.uh.edu; Fri, 19 Jul 1996 13:37:15 -0500
+Received: via switchmail; Fri, 19 Jul 1996 13:37:15 -0500 (CDT)
+Received: from penfold.rchland.ibm.com via qmail
+          ID </afs/rchland.ibm.com/service/mailqs/q000/QF.YlvxKyU91Gl=8pxkIB>;
+          Fri, 19 Jul 1996 13:36:48 -0500 (CDT)
+Received: from penfold.rchland.ibm.com via qmail
+          ID </afs/rchland.ibm.com/usr1/wamo/.Outgoing/QF.4lvxKyA91Gl=NdUGhh>;
+          Fri, 19 Jul 1996 13:36:46 -0500 (CDT)
+Received: from Messages.8.5.N.CUILIB.3.45.SNAP.NOT.LINKED.penfold.rchland.ibm.com.rs.aix32
+          via MS.5.6.penfold.rchland.ibm.com.rs_aix32;
+          Fri, 19 Jul 1996 13:36:46 -0500 (CDT)
+Message-Id: <slvxKy891Gl=NdUGZs@rchland.ibm.com>
+Date: Fri, 19 Jul 1996 13:36:46 -0500 (CDT)
+From: Bill Oswald <wamo@VNET.IBM.COM>
+To: fvwm-workers@hpc.uh.edu
+Subject: uuencoded version of fvwmrc-convert
+In-Reply-To: <olvuk8I91Gl=1dUTFt@rchland.ibm.com>
+References: <olvuk8I91Gl=1dUTFt@rchland.ibm.com>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-alpha7-jlt4
+
+Excerpts from fvwm-workers: 19-Jul-96 New version of fvwmrc-convert Bill
+Oswald@VNET.IBM.COM (17969)
+
+> PS to Chuck:  if one of the mailers garbles the script let me know and
+> I'll send it internally
+
+Well I can see for myself that it's pretty badly garbled.  Here's the
+uuencoded version:
+
+begin 700 fvwmrc-convert
+M(R$O8FEN+W-H(`H*(R!3;VUE('1I;64@86=O+"!-87)T:6X@2W)A96UE<B`\
+M36%R=&EN+DMR865M97)`;6-H+G-N:2YD93X@<&]S=&5D(&%N"B,@:6YC;VUP
+M;&5T92!S8W)I<'0@=&\@8V]N=F5R="!F=G=M+3$@)W)C)R!F:6QE<R!T;R!F
+M=G=M+3(N($DG=F4@:G5S=`HC(')E8V5N=&QY(&9I>&5D(&%N9"!E;FAA;F-E
+M9"!T:&%T('-C<FEP=#L@:70G<R!C;VUP;&5T92`H;W(@;F5A<FQY"B,@<V\I
+M(&YO=RX@5&AI<R!S:&]U;&0@:&5L<"!I9B!Y;W4@8VAO;W-E('1O(&-O;G9E
+M<G0N"B,@"B,@22=V92!A;'-O(&UA9&4@82!C;W5P;&4@;V8@;W1H97(@;6EN
+M;W(@8VAA;F=E<R!T;R!M86ME(&QI9F4@96%S:65R"B,@9F]R(&]U<B!U<V5R
+M<R!H97)E.B!)(&-H86YG960@=&AE(&1E9F%U;'0@:6YI=&EA;&EZ871I;VX@
+M9G)O;2`B4F5A9`HC("YF=G=M<F,B('1O(")296%D("YF=G=M,G)C(B`H:6X@
+M9G9W;2]F=G=M8RDL(&%N9"!)(&EN<W1A;&QE9"!F=G=M(#(*(R!A<R`B9G9W
+M;3(B+B!7:71H('1H97-E(&-H86YG97,L('5S97)S(&-A;B!E87-I;'D@8V]N
+M=F5R="!A="!T:&5I<@HC(&QE:7-U<F4N"B,@"B,@2&5R97=I=&@@=&AE('-C
+M<FEP="X@270G<R!U<VEN9R!'3E4@87=K("AG87=K*2P@8G5T('=I;&P@<G5N
+M('=I=&@*(R!A;GD@(FYE=R(@87=K("AN87=K(&]N(%-U;G,@*%-U;D]3(#0L
+M(%-O;&%R:7,I+"!A=VL@;VX@;6]S="!O=&AE<@HC('-Y<W1E;7,I+B!)9B!Y
+M;W4@9&\@;F]T('5S92!G87=K+"!I="!W:6QL(&)E(&-A<V4M<V5N<VET:79E
+M("AT:&4*(R!C87-E(&]F('1H92!F=G=M(&-O;6UA;F1S(&UU<W0@;6%T8V@@
+M=&AO<V4@:6X@=&AE('-C<FEP=`HC(&5X86-T;'DI+B!7:71H(&=A=VLL(&ET
+M)VQL(&)E(&-A<V4M:6YS96YS:71I=F4N"@HC"B,@0V]N=F5R="!F=G=M(#$N
+M>"!C;VYF:6=U<F%T:6]N(&9I;&4@=&\@,BXP"B,*(R!/<FEG:6YA;&QY('=R
+M:71T96X@8GD@36%R=&EN($MR865M97(@/$UA<G1I;BY+<F%E;65R0&UC:"YS
+M;FDN9&4^"B,@0V]R<F5C=&5D+"!E>'1E;F1E9"P@86YD(&UO9&EF:65D(&)Y
+M($=R86YT($UC1&]R;6%N(#QG<F%N=$!I<V=T96,N8V]M/@HC(#(T($UA>2`Y
+M-0HC($%D9'1I;VYA;"!C;W)R96-T:6]N<R!A;F0@97AT96YS:6]N<R!B>2!"
+M:6QL($]S=V%L9"`\=V%M;T!V;F5T+FEB;2YC;VT^"B,@."!-87(@.38@=&AR
+M=2`Q."!*=6P@.38*"GAL<W5S86=E("UJ(&9V=VUR8RUC;VYV97)T(#X@+V1E
+M=B]N=6QL"@IE8VAO(")F=G=M<F,M=&\M,BXP+C0S(@II9B!;("$@+7@@+W5S
+M<B]L;V-A;"]B:6XO9V%W:R!=.W1H96X*("`@96-H;R`B9V%W:R`H+W5S<B]L
+M;V-A;"]C;VYT<FEB+V)I;B]G;G4O9V%W:RD@;6ES<VEN9RP@8V%N;F]T(')U
+M;B(*("`@97AI="`Q"F9I"G-O=7)C93TD>S$Z+21(3TU%+RYF=G=M<F-]"F1E
+M<W0])'LR.BTD2$]-12\N9G9W;3)R8WT*:68@6R`B)&1E<W0B("$]("(M(B!=
+M(#MT:&5N"@EE8VAO(")/=71P=70@=&\@)&1E<W0B"@EI9B!;("UF("1D97-T
+M(%T@.R!T:&5N"@D@(&UV("1D97-T("1D97-T+F)A:PH)("!E8VAO(")3879I
+M;F<@97AI<W1I;F<@)&1E<W0@87,@)&1E<W0N8F%K(@H)9FD*"65X96,@/B1D
+M97-T"F9I"D%72SUG87=K"F-A="`D<V]U<F-E('P@)$%72R`G"D)%1TE.("`@
+M>PH@("`@("`@('!R:6YT9B`H(B,@5')Y:6YG('1O(&-O;7!I;&4@86X@;VQD
+M("YF=G=R8R!T;R!T:&4@(&YE=R!F=G=M+3(N,"!&;W)M871<;B(I.PH)5%)5
+M13TQ.R!&04Q313TP.PH*"4E'3D]214-!4T4]5%)513L*"@EH:69O<F5C;VQO
+M<CTB(CL@("`@("`@("`@("`@9&9L=%LB:&EF;W)E8V]L;W(B72`](")B;&%C
+M:R(["@EH:6)A8VMC;VQO<CTB(CL@("`@("`@("`@("`@9&9L=%LB:&EB86-K
+M8V]L;W(B72`](")#861E=$)L=64B.PH):&EL:6=H=&-O;&]R(#T@1D%,4T4[
+M"@H)<W1D9F]R96-O;&]R/2(B.R`@("`@("`@("`@(&1F;'1;(G-T9&9O<F5C
+M;VQO<B)=(#T@(F)L86-K(CL*"7-T9&)A8VMC;VQO<CTB(CL@("`@("`@("`@
+M("!D9FQT6R)S=&1B86-K8V]L;W(B72`](")G<F5Y-S`B.PH*"6UE;G5F;W)E
+M8V]L;W(](B([("`@("`@("`@("!D9FQT6R)M96YU9F]R96-O;&]R(ET@/2`B
+M8FQA8VLB.PH);65N=6)A8VMC;VQO<CTB(CL@("`@("`@("`@(&1F;'1;(FUE
+M;G5B86-K8V]L;W(B72`](")G<F5Y-S`B.PH);65N=7-T:7!P;&5C;VQO<CTB
+M(CL@("`@("`@(&1F;'1;(FUE;G5S=&EP<&QE8V]L;W(B72`](")G<F5Y-#`B
+M.PH)9F]N=#TB(CL@("`@("`@("`@("`@("`@("`@(&1F;'1;(F9O;G0B72`]
+M("(M861O8F4M:&5L=F5T:6-A+6UE9&EU;2UR+2HM*BTQ."TJ+2HM*BTJ+2HM
+M:7-O.#@U.2TQ(CL*"6UW;6UE;G5S/2(B.R`@("`@("`@("`@("`@("!D9FQT
+M6R)M=VUM96YU<R)=(#T@(F9V=VTB.PH);65N=7-T>6QE/49!3%-%.PH*"6EN
+M<&]P=7`]1D%,4T4["@EI;F9U;F-T:6]N/49!3%-%.PH)<')E9FEX/2(B.PH*
+M("`@("`@("!P;&%C96UE;G0@/2!&04Q313L@("`@("`@("`@(&1F;'1;(G!L
+M86-E;65N=")=(#T@(D%C=&EV95!L86-E;65N="P@1'5M8E!L86-E;65N="(*
+M?0H*+UY;(%QT72HC+PD)"7L@("`C($-O;6UE;G0L('!A<W,@:70@=&AR=0H@
+M("`@("`@('!R:6YT("0P.PH);F5X=#L*?0H*+UXD+R`@("`@("`@("`@("`@
+M("`@("`@("`@("`@("![("`@(R!%;7!T>2!L:6YE+"!P87-S(&ET('1H<G4*
+M"7!R:6YT("0P.PH);F5X=#L*?0H)"B,C(R,C(R,C(R,C(R,C(R,@4F5N86UE
+M(&-O;6UO;B!I=&5M<R`C(R,C(R,C(R,C(R,C(PHO4F5S=&%R="\@)B8@+V9V
+M=VTO("`@("`@("`@("`@('L@9W-U8B@B9G9W;2(L(")F=G=M,B(I.R!](",@
+M=')Y(&%N9"!L96%V92!P871H<R!A;&]N90HO1V]O9%-T=69F+R`@("`@("`@
+M("`@("`@("`@("`@('L@9W-U8B@B1V]O9%-T=69F(BP@(D9V=VU"=71T;VYS
+M(BD[('T*"B,C(R,C(R,C(R,C(R,C(R,@2&EG:&QI9VAT($-O;&]R<R`C(R,C
+M(R,C(R,C(R,C(PHO7EL@7'1=*DAI0F%C:T-O;&]R6R!<=%TJ+PE["B`@("`@
+M("`@9&9L=%LB:&EB86-K8V]L;W(B73UH:6)A8VMC;VQO<CTD,CL*"7!R:6YT
+M9B`H(B,A)7,@*&YE=R!C;VUM86YD/4AI;&EG:'1#;VQO<BE<;B(L("0P*3L*
+M"6EF("AH:6)A8VMC;VQO<B`A/2`B(B`F)B!H:69O<F5C;VQO<B`A/2`B(B`F
+M)B`A:&EL:6=H=&-O;&]R*2!["B`@("`@("`@("`@<')I;G1F("@B7&XC4V5T
+M('1H92!F;W)E9W)O=6YD(&%N9"!B86-K9W)O=6YD(&-O;&]R(&9O<B!S96QE
+M8W1E9"!W:6YD;W=S7&XB*3L*"2`@('!R:6YT9B`H(DAI;&EG:'1#;VQO<B`@
+M("5S("5S7&XB+"!H:69O<F5C;VQO<BP@:&EB86-K8V]L;W(I.PH)("`@:&EL
+M:6=H=&-O;&]R/512544["B`@("`@("`@?2!E;'-E"@D@("!H:6QI9VAT8V]L
+M;W(]1D%,4T4["B`@("`@("`@;F5X=#L*?0H*+UY;(%QT72I(:49O<F5#;VQO
+M<EL@7'1=*B\)>PH@("`@("`@(&1F;'1;(FAI9F]R96-O;&]R(ET]:&EF;W)E
+M8V]L;W(])#(["@EP<FEN=&8@*"(C(25S("AN97<@8V]M;6%N9#U(:6QI9VAT
+M0V]L;W(I7&XB+"`D,"D["@EI9B`H:&EB86-K8V]L;W(@(3T@(B(@)B8@:&EF
+M;W)E8V]L;W(@(3T@(B(@)B8@(6AI;&EG:'1C;VQO<BD@>PH@("`@("`@("`@
+M('!R:6YT9B`H(EQN(U-E="!T:&4@9F]R96=R;W5N9"!A;F0@8F%C:V=R;W5N
+M9"!C;VQO<B!F;W(@<V5L96-T960@=VEN9&]W<UQN(BD["@D@("!P<FEN=&8@
+M*")(:6QI9VAT0V]L;W(@("`E<R`E<UQN(BP@:&EF;W)E8V]L;W(L(&AI8F%C
+M:V-O;&]R*3L*"2`@(&AI;&EG:'1C;VQO<CU44E5%.PH@("`@("`@('T@96QS
+M90H)("`@:&EL:6=H=&-O;&]R/49!3%-%.PH@("`@("`@(&YE>'0["GT*"@HC
+M(R,C(R,C(R,C($UE;G4@0V]L;W)S+"!3='EL92!A;F0@1F]N="`C(R,C(R,C
+M(R,C(PHO7EL@7'1=*DUE;G5&;W)E0V]L;W);(%QT72HO"7L*("`@("`@("!D
+M9FQT6R)M96YU9F]R96-O;&]R(ET];65N=69O<F5C;VQO<CTD,CL*"7!R:6YT
+M9B`H(B,A)7,@*&YE=R!C;VUM86YD/4UE;G53='EL92E<;B(L("0P*3L*"6EF
+M("AM96YU8F%C:V-O;&]R("$]("(B("8F(&UE;G5F;W)E8V]L;W(@(3T@(B(@
+M)B8@;65N=7-T:7!P;&5C;VQO<B`A/2`B(B`F)B!F;VYT("$]("(B("8F(&UW
+M;6UE;G5S("$]("(B("8F("%M96YU<W1Y;&4I('L*("`@("`@("`@("!P<FEN
+M=&8@*")<;B-3970@=&AE(&9O<F5G<F]U;F0L(&)A8VMG<F]U;F0@86YD('-T
+M:7!P;&4@8V]L;W(@86YD(&9O;G0@9F]R(&UE;G5S7&XB*3L*"2`@('!R:6YT
+M9B`H(DUE;G53='EL92`@("5S("5S("5S("5S("5S7&XB+"!M96YU9F]R96-O
+M;&]R+"!M96YU8F%C:V-O;&]R+"!M96YU<W1I<'!L96-O;&]R+"!F;VYT+"!M
+M=VUM96YU<RD["@D@("!M96YU<W1Y;&4]5%)513L*"7T@96QS90H)("`@;65N
+M=7-T>6QE/49!3%-%.PH@("`@("`@(&YE>'0["GT*"B]>6R!<=%TJ365N=4)A
+M8VM#;VQO<EL@7'1=*B\)>PH@("`@("`@(&1F;'1;(FUE;G5B86-K8V]L;W(B
+M73UM96YU8F%C:V-O;&]R/20R.PH)<')I;G1F("@B(R$E<R`H;F5W(&-O;6UA
+M;F0]365N=5-T>6QE*5QN(BP@)#`I.PH):68@*&UE;G5B86-K8V]L;W(@(3T@
+M(B(@)B8@;65N=69O<F5C;VQO<B`A/2`B(B`F)B!M96YU<W1I<'!L96-O;&]R
+M("$]("(B("8F(&9O;G0@(3T@(B(@)B8@;7=M;65N=7,@(3T@(B(@)B8@(6UE
+M;G5S='EL92D@>PH@("`@("`@("`@('!R:6YT9B`H(EQN(U-E="!T:&4@9F]R
+M96=R;W5N9"P@8F%C:V=R;W5N9"!A;F0@<W1I<'!L92!C;VQO<B!A;F0@9F]N
+M="!F;W(@;65N=7-<;B(I.PH)("`@<')I;G1F("@B365N=5-T>6QE("`@)7,@
+M)7,@)7,@)7,@)7-<;B(L(&UE;G5F;W)E8V]L;W(L(&UE;G5B86-K8V]L;W(L
+M(&UE;G5S=&EP<&QE8V]L;W(L(&9O;G0L(&UW;6UE;G5S*3L*"2`@(&UE;G5S
+M='EL93U44E5%.PH@("`@("`@('T@96QS90H)("`@;65N=7-T>6QE/49!3%-%
+M.PH@("`@("`@(&YE>'0["GT*"B]>6R!<=%TJ365N=5-T:7!P;&5#;VQO<EL@
+M7'1=*B\)>PH@("`@("`@(&1F;'1;(FUE;G5S=&EP<&QE8V]L;W(B73UM96YU
+M<W1I<'!L96-O;&]R/20R.PH)<')I;G1F("@B(R$E<R`H;F5W(&-O;6UA;F0]
+M365N=5-T>6QE*5QN(BP@)#`I.PH):68@*&UE;G5B86-K8V]L;W(@(3T@(B(@
+M)B8@;65N=69O<F5C;VQO<B`A/2`B(B`F)B!M96YU<W1I<'!L96-O;&]R("$]
+M("(B("8F(&9O;G0@(3T@(B(@)B8@;7=M;65N=7,@(3T@(B(@)B8@(6UE;G5S
+M='EL92D@>PH@("`@("`@("`@('!R:6YT9B`H(EQN(U-E="!T:&4@9F]R96=R
+M;W5N9"P@8F%C:V=R;W5N9"!A;F0@<W1I<'!L92!C;VQO<B!A;F0@9F]N="!F
+M;W(@;65N=7-<;B(I.PH)("`@<')I;G1F("@B365N=5-T>6QE("`@)7,@)7,@
+M)7,@)7,@)7-<;B(L(&UE;G5F;W)E8V]L;W(L(&UE;G5B86-K8V]L;W(L(&UE
+M;G5S=&EP<&QE8V]L;W(L(&9O;G0L(&UW;6UE;G5S*3L*"2`@(&UE;G5S='EL
+M93U44E5%.PH@("`@("`@('T@96QS90H)("`@;65N=7-T>6QE/49!3%-%.PH@
+M("`@("`@(&YE>'0["GT*"B]>6R!<=%TJ35=-365N=7-;(%QT72HO"0E["B`@
+M("`@("`@9&9L=%LB;7=M;65N=7,B73UM=VUM96YU<STB;7=M(CL*"7!R:6YT
+M9B`H(B,A)7,@*&YE=R!C;VUM86YD/4UE;G53='EL92E<;B(L("0P*3L*"6EF
+M("AM96YU8F%C:V-O;&]R("$]("(B("8F(&UE;G5F;W)E8V]L;W(@(3T@(B(@
+M)B8@;65N=7-T:7!P;&5C;VQO<B`A/2`B(B`F)B!F;VYT("$]("(B("8F(&UW
+M;6UE;G5S("$]("(B("8F("%M96YU<W1Y;&4I('L*("`@("`@("`@("!P<FEN
+M=&8@*")<;B-3970@=&AE(&9O<F5G<F]U;F0L(&)A8VMG<F]U;F0@86YD('-T
+M:7!P;&4@8V]L;W(@86YD(&9O;G0@9F]R(&UE;G5S7&XB*3L*"2`@('!R:6YT
+M9B`H(DUE;G53='EL92`@("5S("5S("5S("5S("5S7&XB+"!M96YU9F]R96-O
+M;&]R+"!M96YU8F%C:V-O;&]R+"!M96YU<W1I<'!L96-O;&]R+"!F;VYT+"!M
+M=VUM96YU<RD["@D@("!M96YU<W1Y;&4]5%)513L*"7T@96QS90H)("`@;65N
+M=7-T>6QE/49!3%-%.PH);F5X=#L*?0H*+UY;(%QT72I&;VYT6R!<=%TJ+PD)
+M>PH@("`@("`@(&1F;'1;(F9O;G0B73UF;VYT/20R.PH)<')I;G1F("@B(R$E
+M<R`H;F5W(&-O;6UA;F0]365N=5-T>6QE*5QN(BP@)#`I.PH):68@*&UE;G5B
+M86-K8V]L;W(@(3T@(B(@)B8@;65N=69O<F5C;VQO<B`A/2`B(B`F)B!M96YU
+M<W1I<'!L96-O;&]R("$]("(B("8F(&9O;G0@(3T@(B(@)B8@;7=M;65N=7,@
+M(3T@(B(@)B8@(6UE;G5S='EL92D@>PH@("`@("`@("`@('!R:6YT9B`H(EQN
+M(U-E="!T:&4@9F]R96=R;W5N9"P@8F%C:V=R;W5N9"!A;F0@<W1I<'!L92!C
+M;VQO<B!A;F0@9F]N="!F;W(@;65N=7-<;B(I.PH)("`@<')I;G1F("@B365N
+M=5-T>6QE("`@)7,@)7,@)7,@)7,@)7-<;B(L(&UE;G5F;W)E8V]L;W(L(&UE
+M;G5B86-K8V]L;W(L(&UE;G5S=&EP<&QE8V]L;W(L(&9O;G0L(&UW;6UE;G5S
+M*3L*"2`@(&UE;G5S='EL93U44E5%.PH)?2!E;'-E"@D@("!M96YU<W1Y;&4]
+M1D%,4T4["@EN97AT.PI]"@H*(R!4<F%N<VQA=&4@8F]T:"!O;&0@0G5T=&]N
+M4W1Y;&4@9F]R;6%T<R!T;R!T:&4@;F5W(&9O<FUA=#H*+UY;(%QT72I"=71T
+M;VY3='EL95L@7'1=*B\)>PH@("`@("`@(&EF("@D,B`]/2`B.B(I('L@(",@
+M;F5W('-T>6QE(&%L<F5A9'D*("`@("`@("`@("!I9B`H3D8@(3T@)#0K-"D*
+M"2`@("`@("!P<FEN="`B15)23U(Z($)U='1O;E-T>6QE(&-O;6UA;F0@:6YC
+M;W)R96-T(B`^(B]D978O<W1D97)R(CL*"2`@('!R:6YT9B`H(B5S("5D("5D
+M(BP@)#$L("0S+"`D-"D["@D@("!F;W(@*&D]-3L@:3P]3D8[("LK:2D*"2`@
+M("`@("!P<FEN=&8@*"(@)7,B+"`D:2D["@D@("!P<FEN=&8@*")<;B(I.PH)
+M?2!E;'-E('L*("`@("`@("`@("!P<FEN="`B3F]T93H@0V]N=F5R<VEO;B!O
+M9B!O;&0@0G5T=&]N4W1Y;&4[('9A;'5E<R!R;W5N9&5D(B!<"@D)"3XB+V1E
+M=B]S=&1E<G(B"@D@("!P<FEN=&8@*"(C(2`@("`@("`@($]L9"!L:6YE('=A
+M<SH@)7-<;B(L("0P*3L*"2`@('`]:6YD97@@*"0S+")X(BD["@D@("!X/7-U
+M8G-T<B@D,RPQ+'`M,2DO,CL*"2`@('D]<W5B<W1R*"0S+'`K,2DO,CL*"2`@
+M('!R:6YT9B`H(B5S("5S(#4@)61X)61`,"`E9'@E9$`P("5D>"5D0#`@)61X
+M)61`,2`E9'@E9$`Q7&XB+`H)"2`@("`D,2P@)#(L(#4P+7@L-3`K>2P@-3`K
+M>"PU,"MY+"`U,"UX+#4P+7DL(#4P*W@L-3`M>2P*"0D@("`@-3`M>"PU,"MY
+M*3L*"7T*"6YE>'0["GT*"B,C(R,C(R,C(R,@4W1A;F1A<F0@0V]L;W)S(",C
+M(R,C(R,C(R,C"B]>6R!<=%TJ4W1D1F]R94-O;&]R6R!<=%TJ+PE["B`@("`@
+M("`@9&9L=%LB<W1D9F]R96-O;&]R(ET]<W1D9F]R96-O;&]R/20R.PH)<')I
+M;G1F("@B(R$E<R`H;F5W(&-O;6UA;F0]4W1Y;&4@7"(J7"(@0V]L;W(@9B]B
+M*5QN(BP@)#`I.PH)<')I;G0@(E-T>6QE(%PB*EPB($9O<F5#;VQO<B`B("0R
+M.PH);F5X=#L*?0H*+UY;(%QT72I3=&1"86-K0V]L;W);(%QT72HO"7L*"61F
+M;'1;(G-T9&)A8VMC;VQO<B)=/7-T9&)A8VMC;VQO<CTD,CL*"7!R:6YT9B`H
+M(B,A)7,@*&YE=R!C;VUM86YD/5-T>6QE(%PB*EPB($-O;&]R(&8O8BE<;B(L
+M("0P*3L*"7!R:6YT(")3='EL92!<(BI<(B!"86-K0V]L;W(@(B`D,CL*"6YE
+M>'0["GT*"B,C(R,C(R,C(R,@26-O;B!296QA=&5D(%-T=69F(",C(R,C(R,C
+M(R,*+UY;(%QT72I)8V]N0F]X6R!<=%TJ+PD)>R!P<FEN="`B4W1Y;&4@7"(J
+M7"(@(B`D,#L@;F5X=#L@?0HO7EL@7'1=*DEC;VY&;VYT6R!<=%TJ+PD)>R!P
+M<FEN="`D,#L@;F5X=#L@?0HO7EL@7'1=*E-U<'!R97-S26-O;G-;(%QT72HO
+M"7L@<')I;G0@(E-T>6QE(%PB*EPB($YO26-O;B([(&YE>'0[('T*+UY;(%QT
+M72I3=&EC:WE)8V]N<UL@7'1=*B\)>R!P<FEN="`B4W1Y;&4@7"(J7"(@4W1I
+M8VMY26-O;B([(&YE>'0[('T*+UY;(%QT72I-;V1U;&50871H6R!<=%TJ+PE[
+M(&=S=6(H(B]F=G=M(BP@(B]F=G=M,B(I.R!P<FEN="`D,#L@;F5X=#L@?0HO
+M7EL@7'1=*E!I>&UA<%!A=&A;(%QT72HO"7L@9W-U8B@B+V9V=VTB+"`B+V9V
+M=VTR(BD[('!R:6YT("0P.R!N97AT.R!]"B]>6R!<=%TJ26-O;E!A=&A;(%QT
+M72HO"0E[(&=S=6(H(B]F=G=M(BP@(B]F=G=M,B(I.R!P<FEN="`D,#L@;F5X
+M=#L@?0HC(&YO=&4Z($EC;VX@;75S="!B92!F;VQL;W=E9"!B>2!S;VUE('=H
+M:71E('-P86-E"B]>6R!<=%TJ26-O;EL@7'1=*R\)"7L@<')I;G1F(")3='EL
+M92`E<R!)8V]N("5S7&XB+"`D,BP@)#,[(&YE>'0[('T*"B,C(R,C(R,C(R,@
+M35=-(&AI;G1S(",C(R,C(R,C(R,*+UY;(%QT72I-5TU&=6YC=&EO;DAI;G1S
+M6R!<=%TJ+PE[('!R:6YT9B`H(E-T>6QE(%PB*EPB($U7349U;F-T:6]N<UQN
+M(BD[(&YE>'0[('T*+UY;(%QT72I-5TU$96-O<EL@7'1=*B\)"7L@<')I;G1F
+M("@B4W1Y;&4@7"(J7"(@35=-1&5C;W)<;B(I.R!N97AT.R!]"B]>6R!<=%TJ
+M35=-1&5C;W)(:6YT<UL@7'1=*B\)>R!P<FEN=&8@*")3='EL92!<(BI<(B!-
+M5TU$96-O<EQN(BD[(&YE>'0[('T*+UY;(%QT72I-5TU";W)D97)S6R!<=%TJ
+M+PE[('!R:6YT9B`H(E-T>6QE(%PB*EPB($U734)O<F1E<EQN(BD[(&YE>'0[
+M('T*+UY;(%QT72I-5TU"=71T;VYS6R!<=%TJ+PE[('!R:6YT9B`H(E-T>6QE
+M(%PB*EPB($U734)U='1O;G-<;B(I.R!N97AT.R!]"B]>6R!<=%TJ35=-2&EN
+M=$]V97)R:61E6R!<=%TJ+PE[('!R:6YT9B`H(E-T>6QE(%PB*EPB($AI;G1/
+M=F5R<FED95QN(BD[(&YE>'0[('T*"B,C(R,C(R,C(R,@4&QA8V5M96YT("8@
+M1F]C=7,@<W1Y;&5S(",C(R,C(R,C(R,*+UY;(%QT72I286YD;VU0;&%C96UE
+M;G1;(%QT72HO"7L@<')I;G0@(E-T>6QE(%PB*EPB("(@)#`[('!L86-E;65N
+M="`](%12544[(&YE>'0[('T*+UY;(%QT72I3;6%R=%!L86-E;65N=%L@7'1=
+M*B\)>R!P<FEN="`B4W1Y;&4@7"(J7"(@(B`D,#L@<&QA8V5M96YT(#T@5%)5
+M13L@;F5X=#L@?0HO7EL@7'1=*E-T:6-K>5L@7'1=*B\)"7L@<')I;G1F(")3
+M='EL92!<(B5S7"(@4W1I8VMY7&XB+"`D,CL@;F5X=#L@?0HO7EL@7'1=*DYO
+M4%!O<VET:6]N6R!<=%TJ+PE[('!R:6YT(")3='EL92!<(BI<(B`B("0P.R!N
+M97AT.R!]"B]>6R!<=%TJ0VQI8VM4;T9O8W5S6R!<=%TJ+PE[('!R:6YT(")3
+M='EL92!<(BI<(B`B("0P.R!N97AT.R!]"B]>6R!<=%TJ4VQO<'!Y1F]C=7-;
+M(%QT72HO"7L@<')I;G0@(E-T>6QE(%PB*EPB("(@)#`[(&YE>'0[('T*+UY;
+M(%QT72I3=&%Y<T]N5&]P6R!<=%TJ+PE[('!R:6YT9B`B4W1Y;&4@7"(E<UPB
+M(%-T87ES3VY4;W!<;B(L("0R.R!N97AT.R!]"B]>6R!<=%TJ075T;U)A:7-E
+M6R!<=%TJ+PD)>PH@("`@("`@('!R:6YT("(C(2`B("0P("(@*'5S92!-;V1U
+M;&4@1G9W;4%U=&\I(CL*"7!R:6YT(")!9&14;T9U;F,@7"));FET1G5N8W1I
+M;VY<(B!<(DE<(B!-;V1U;&4@1G9W;4%U=&\@(B`D,CL*"7!R:6YT(")!9&14
+M;T9U;F,@7")297-T87)T1G5N8W1I;VY<(B!<(DE<(B!-;V1U;&4@1G9W;4%U
+M=&\@(B`D,CL*"6YE>'0["GT*"B,C(R,C(R,C(R,@1&5C;W)A=&EO;B!S='EL
+M97,@(R,C(R,C(R,C(PHO7EL@7'1=*D)O<F1E<E=I9'1H6R!<=%TJ+PE[('!R
+M:6YT(")3='EL92!<(BI<(B`B("0P.R!N97AT.R!]"B]>6R!<=%TJ2&%N9&QE
+M5VED=&A;(%QT72HO"7L@<')I;G0@(E-T>6QE(%PB*EPB("(@)#`[(&YE>'0[
+M('T*+UY;(%QT72I$96-O<F%T951R86YS:65N='-;(%QT72HO('L@<')I;G0@
+M(E-T>6QE(%PB*EPB($1E8V]R871E5')A;G-I96YT(CL@;F5X=#L@?0HO7EL@
+M7'1=*EA/4G9A;'5E6R!<=%TJ+PD)>R!P<FEN="`D,#L@;F5X=#L@?0HO7EL@
+M7'1=*D)O=6YD87)Y5VED=&A;(%QT72HO"7L@<')I;G1F(")3='EL92!<(BI<
+M(B!(86YD;&57:61T:"`E<UQN(BP@)#([(&YE>'0[('T*+UY;(%QT72I.;T)O
+M=6YD87)Y5VED=&A;(%QT72HO"7L@<')I;G0@(E-T>6QE(%PB*EPB($)O<F1E
+M<E=I9'1H("(@)#([(&YE>'0[('T*+UY;(%QT72I.;U1I=&QE6R!<=%TJ+PD)
+M>R!P<FEN="`B4W1Y;&4@7"(J7"(@(B`D,#L@;F5X=#L@?0HO7EL@7'1=*DYO
+M0F]R9&5R6R!<=%TJ+PD)>R!P<FEN="`B4W1Y;&4@7"(J7"(@(B`D,#L@;F5X
+M=#L@?0H*"@HC(R,C(R,C(R,C($5T8R`C(R,C(R,C(R,C"B]>6R!<=%TJ3&5N
+M:65N8V5;(%QT72HO"0E[('!R:6YT(")3='EL92!<(BI<(B`B("0P.R!N97AT
+M.R!]"B]>6R!<=%TJ4W1Y;&5;(%QT72HO"0E[('!R:6YT("0P.R!N97AT.R!]
+M"B]>6R!<=%TJ2V5Y6R!<=%TJ+PD)>R!P<FEN="`D,#L@;F5X=#L@?0HO7EL@
+M7'1=*DUO=7-E6R!<=%TJ+PD)>PH):68@*'-U8B@B6R`)75!O<%MU55UP6R`)
+M72(L("(@365N=2`B*2D@>PH)("`@(&EF("@A=V%R;ELB36]U<V4B72D@>PH)
+M"7!R:6YT(").;W1E.B!3971T:6YG(&UO=7-E(&)I;F1I;F=S('1O('-T:6-K
+M>2!M96YU<R(^(B]D978O<W1D97)R(CL*"0EW87)N6R)-;W5S92)=(#T@5%)5
+M13L*"2`@("!]"@D@("`@:68@*&EN9&5X*"0V+"`B7"(B*2`]/2`Q*2!["@D@
+M("`@("`@9W-U8B@B7"(B+"`B(BD*"2`@("`@("!I9B`H3D8@/B`V*2!["@D@
+M("`@("`@("`@9F]R("AI(#T@-CL@:2`\/2!.1CL@:2LK*0H@("`@("`@("`@
+M("`@("`@("`@('-U8B@D:2`B("(L("1I*0H)("`@("`@('T*"2`@("!](`H)
+M("`@('-U8B@B)"(L("(@3F]P(BD["B`)?0H)<')I;G0@)#`[(&YE>'0["GT*
+M"B]>6R!<=%TJ5VEN9&]W3&ES=%-K:7!;(%QT72HO"7L@<')I;G1F(")3='EL
+M92`E<R!7:6YD;W=,:7-T4VMI<"(L("0R.R!N97AT.R!]"B]>6R!<=%TJ5VEN
+M9&]W1F]N=%L@7'1=*B\)>R!P<FEN="`D,#L@;F5X=#L@?0HO7EL@7'1=*D-L
+M:6-K5&EM95L@7'1=*B\)"7L@<')I;G0@)#`[(&YE>'0[('T*+UY;(%QT72I/
+M<&%Q=65-;W9E6R!<=%TJ+PE[('!R:6YT(")/<&%Q=65-;W9E4VEZ92`B("0R
+M.R!N97AT.R!]"B]>6R!<=%TJ161G95-C<F]L;%L@7'1=*B\)>R!P<FEN="`D
+M,#L@;F5X=#L@?0HO7EL@7'1=*D5D9V5297-I<W1A;F-E6R!<=%TJ+PE[('!R
+M:6YT("0P.R!N97AT.R!]"B]>6R!<=%TJ1&5S:U1O<%-I>F5;(%QT72HO"7L@
+M<')I;G0@)#`[(&YE>'0[('T*+UY;(%QT72I$97-K5&]P4V-A;&5;(%QT72HO
+M"7L*"7!R:6YT9B`H(B,A)7,@*&YE=R!C;VUM86YD/2I&=G=M4&%G97)$97-K
+M5&]P4V-A;&4@/'-C86QE/BE<;B(L("0P*3L*"7!R:6YT("(J1G9W;5!A9V5R
+M1&5S:U1O<%-C86QE("(@)#(["@EN97AT.PI]"@HO7EL@7'1=*BI&=G=M0G5T
+M=&]N<UL@7'1=*B\)>PH)<W5B*");(`E=4W=A;&QO=UL@"5TJ6UX@"5TJ(BP@
+M(B8@17AE8R(I.PH)<')I;G0@)#`["@EI9B`H;&5N9W1H*"0P*2`^(#$Y.2D*
+M"7L*"2`@("!P<FEN="`B5V%R;FEN9SH@;&EN92!T;V\@;&]N9R(@/B(O9&5V
+M+W-T9&5R<B(["@D@("`@<')I;G0@(CX^("(@)#`@/B(O9&5V+W-T9&5R<B([
+M"@E]"@EI9B`H(7=A<FY;(D=O;V13='5F9B)=*0H)>PH)("`@('!R:6YT(").
+M;W1E.B!';V]D4W1U9F8@<F5N86UE9"!T;R!&=G=M0G5T=&]N<R(@/B(O9&5V
+M+W-T9&5R<B(["@D@("`@=V%R;ELB1V]O9%-T=69F(ET]5%)513L*"7T*"6YE
+M>'0["GT*"B]>7"HO"0D)"7L*("`@("`@("`C(&]T:&5R($UO9'5L92!#;VYF
+M:6=U<F%T:6]N(&-O;6UA;F1S(&%R92!P87-S960@=&AR=0H)<')I;G0@)#`[
+M"@EN97AT.PI]"@HC(&AA8VLZ($UO9'5L97,@<W!A=VYE9"!O=71S:61E(&]F
+M(&$@9G5N8W1I;VXL(&UE;G4L(&]R('!O<'5P(&-A;FYO="!H879E(&QE861I
+M;F<@=VAI=&5S<&%C92X*(R!A9&0@=&AE<V4@=&\@=&AE(&EN:71F=6YC=&EO
+M;@HO7DUO9'5L95L@7'1=*B\@("`@("`@("`@("`@("`@('L@<')I;G1F(")!
+M9&14;T9U;F,@7"));FET1G5N8W1I;VY<(B!<(DE<(B`E<R!<;B(L("0P.R!N
+M97AT.R!]"@HC(&AA8VLZ(&9U;F-T:6]N(&1E8VQA<F%T:6]N<R!C86YN;W0@
+M:&%V92!L96%D:6YG('=H:71E<W!A8V4*+UY&=6YC=&EO;EL@7'1=*B\)"7L*
+M"6EF("AI;G!O<'5P*0H)("`@<')I;G0@(D524D]2.B!%;F10;W!U<"!M:7-S
+M:6YG7&XB($Y2("0P(#XB+V1E=B]S=&1E<G(B.PH):6YP;W!U<#U&04Q313L*
+M"6EF("AI;F9U;F-T:6]N*0H)("`@<')I;G0@(D524D]2.B!%;F1&=6YC=&EO
+M;B!M:7-S:6YG7&XB($Y2("0P(#XB+V1E=B]S=&1E<G(B.PH):6YF=6YC=&EO
+M;CU44E5%.PH)<')E9FEX/2)!9&14;T9U;F,@(B`D,CL*"6YE>'0["GT*"B]>
+M6R!<=%TJ16YD1G5N8W1I;VY;(%QT72HO"7L*("`@("`@("!I9B`H(6EN9G5N
+M8W1I;VXI"B`@("`@("`@("`@<')I;G0@(D524D]2.B!%;F1&=6YC=&EO;B!O
+M=71S:61E(&]F(&9U;F-T:6]N(B`^(B]D978O<W1D97)R(CL*"6EN9G5N8W1I
+M;VX]1D%,4T4["@EP<F5F:7@](B(["@EN97AT.PI]"@HC(&AA8VLZ('!O<'5P
+M(&1E8VQA<F%T:6]N<R!C86YN;W0@:&%V92!L96%D:6YG('=H:71E<W!A8V4*
+M+UY0;W!U<"\@("`@("`@("`@("`@("`@("`@("`@("!["B`@("`@("`@:68@
+M*&EN<&]P=7`I(`H)("`@<')I;G0@(D524D]2.B!%;F10;W!U<"!M:7-S:6YG
+M7&XB($Y2("0P(#XB+V1E=B]S=&1E<G(B.PH@("`@("`@(&EF("AI;F9U;F-T
+M:6]N*0H)("`@<')I;G0@(D524D]2.B!%;F1&=6YC=&EO;B!M:7-S:6YG7&XB
+M($Y2("0P(#XB+V1E=B]S=&1E<G(B.PH@("`@("`@(&EN9G5N8W1I;VX]1D%,
+M4T4["@EI;G!O<'5P/512544["@H):68@*&EN9&5X*"0R+"`B7"(B*2`]/2`Q
+M*2!["@D@("!T<W1R(#T@(B(*"2`@(&9O<B`H:2`](#([(&EN9&5X*'-U8G-T
+M<B@D:2P@,BDL(")<(B(I(#P@;&5N9W1H*"1I*2`F)B!I(#P]($Y&.R!I*RLI
+M"B`@("`@("`@("`@("`@='-T<B`]('-P<FEN=&8H(B5S)7,B+"!T<W1R+"`D
+M:2D["@D@("!P<F5F:7@@/2`B061D5&]-96YU("(@<W5B<W1R*'1S='(L(#(L
+M(&QE;F=T:"AT<W1R*2`M(#(I"B`@("`@("`@?2!E;'-E"@D@("!P<F5F:7@]
+M(D%D9%1O365N=2`B("0R.PH);F5X=#L*?0H*+UY;(%QT72I%;F10;W!U<%L@
+M7'1=*B\)"7L*("`@("`@("!I9B`H(6EN<&]P=7`I"@D@("!P<FEN="`B15)2
+M3U(Z($5N9%!O<'5P(&]U='-I9&4@;V8@<&]P=7`B(#XB+V1E=B]S=&1E<G(B
+M.PH@("`@("`@(&EN<&]P=7`]1D%,4T4["@EP<F5F:7@](B(["@EN97AT.PI]
+M"@H*"B,C(R,C(R,C(R,@1&5L971E9"!#;VUM86YD<R`C(R,C(R,C(R,C"B]>
+M6R!<=%TJ1&]N=$UO=F5/9F9;(%QT72HO"7Q\"B]>6R!<=%TJ0F%C:VEN9U-T
+M;W)E6R!<=%TJ+PE\?`HO7EL@7'1=*D%P<'-"86-K:6YG4W1O<F5;(%QT72HO
+M"7Q\"B]>6R!<=%TJ4V%V955N9&5R<UL@7'1=*B\)?'P*+UY;(%QT72I3='5B
+M8F]R;DEC;VYS6R!<=%TJ+PE\?`HO7EL@7'1=*E-T=6)B;W)N26-O;E!L86-E
+M;65N=%L@7'1=*B\@?'P*+UY;(%QT72I3='5B8F]R;E!L86-E;65N=%L@7'1=
+M*B\@("`@('Q\"B]>6R!<=%TJ0W5R<V]R6R!<=%TJ+PD)>R`*"7!R:6YT("(C
+M(2`B("0P("(@6V1E;&5T961=(CL*"6EF("AW87)N961;)#%=/3U&04Q312D@
+M>PH)("`@<')I;G0@(E=A<FYI;F<Z("(@)#$@(B!N;W0@:6X@1G9W;3(L(&-O
+M;6UA;F0@9')O<'!E9"(@/B(O9&5V+W-T9&5R<B(["@D@("!W87)N961;)#%=
+M(#T@5%)513L*"7T*"6YE>'0["GT*"B]>6R!<=%TJ4&%G97);(%QT72HO"0E[
+M"B`@("`@("`@<')I;G0@(B,A("(@)#`@(B!;9&5L971E9%TB.PH):68@*'=A
+M<FYE9%LD,5T]/49!3%-%*2!["B`@("`@("`@("`@<')I;G0@(E=A<FYI;F<Z
+M("(@)#$@(B!O;6ET=&5D+"!I;G1E<FYA;"!P86=E<B!I<R!O8G-O;&5T92`H
+M=7-E($9V=VU086=E<BDB(#XB+V1E=B]S=&1E<G(B.PH)("`@=V%R;F5D6R0Q
+M72`](%12544["@E]"@EN97AT.PI]"@HO7EL@7'1=*E!A9VEN9T1E9F%U;'1;
+M(%QT72HO"7Q\"B]>6R!<=%TJ5&]G9VQE4&%G95L@7'1=*B\)>PH@("`@("`@
+M('!R:6YT("(C(2`B("0P("(@*'5S92!%9&=E4V-R;VQL(#`@,"DB.R!N97AT
+M.PH)<')I;G0@(E=A<FYI;F<Z("(@)#$@(B!N;W0@:6X@1G9W;3(L('5S92!%
+M9&=E4V-R;VQL(CXB+V1E=B]S=&1E<G(B.PI]"@HC(R,C(R,C(R,C($]L9"!)
+M;G1E<FYA;"!086=E<B!#;VQO<G,@(R,C(R,C(R,C(R,*+UY;(%QT72I086=E
+M<D9O<F5#;VQO<EL@7'1=*B\)?'P*+UY;(%QT72I086=E<D)A8VM#;VQO<EL@
+M7'1=*B\)>PH)<')I;G1F("@B(R$E<R`H;F5W(&-O;6UA;F0]4W1Y;&4@1G9W
+M;5!A9V5R($-O;&]R(&9O<F5?8V]L;W(O8F%C:U]C;VQO<BE<;B(L("0P*3L*
+M"6EF("AW87)N961;)#%=/3U&04Q312D@>PH@("`@("`@("`@('!R:6YT(")7
+M87)N:6YG.B`B("0Q("(@;VUI='1E9"P@:6YT97)N86P@<&%G97(@:7,@;V)S
+M;VQE=&4@*'5S92!&=G=M4&%G97(I(B`^(B]D978O<W1D97)R(CL*"2`@('=A
+M<FYE9%LD,5T@/2!44E5%.PH)?0H);F5X=#L*?0H*(R,C(R,C(R,C(R!3=&EC
+M:WD@0V]L;W)S(",C(R,C(R,C(R,C"B]>6R!<=%TJ4W1I8VMY1F]R94-O;&]R
+M6R!<=%TJ+PE["@EP<FEN=&8@*"(C(25S("AN;R!S=&EC:WD@9F]R96=R;W5N
+M9"!C;VQO<B!I;B!F=G=M,BE<;B(L("0P*3L*"6EF("AW87)N961;)#%=/3U&
+M04Q312D@>PH)("`@<')I;G0@(E=A<FYI;F<Z(%-T:6-K>49O<F5#;VQO<B!N
+M;W0@:6X@9G9W;3(L(&]M:71T960B(#X@(B]D978O<W1D97)R(@H@("`@("`@
+M("`@('!R:6YT("(@("`@("`@("!5<V4@=&AE(%-T>6QE(&-O;6UA;F0@=&\@
+M87-S:6=N(&5A8V@@<W1I8VMY('=I;F1O=R!T:&4@<V%M92!&;W)E0V]L;W(B
+M(#X@(B]D978O<W1D97)R(@H@("`@("`@('T*"6YE>'0["GT*"B]>6R!<=%TJ
+M4W1I8VMY0F%C:T-O;&]R6R!<=%TJ+PE["@EP<FEN=&8@*"(C(25S("AN;R!S
+M=&EC:WD@8F%C:V=R;W5N9"!C;VQO<B!I;B!F=G=M,BE<;B(L("0P*3L*"6EF
+M("AW87)N961;)#%=/3U&04Q312D@>PH)("`@<')I;G0@(E=A<FYI;F<Z(%-T
+M:6-K>4)A8VM#;VQO<B!N;W0@:6X@9G9W;3(L(&]M:71T960B(#XB+V1E=B]S
+M=&1E<G(B"B`@("`@("`@("`@<')I;G0@(B`@("`@("`@(%5S92!T:&4@4W1Y
+M;&4@8V]M;6%N9"!T;R!A<W-I9VX@96%C:"!S=&EC:WD@=VEN9&]W('1H92!S
+M86UE($)A8VM#;VQO<B(@/B`B+V1E=B]S=&1E<G(B"B`@("`@("`@?0H);F5X
+M=#L*?0H*"GL*("`@(&EF("AI;F9U;F-T:6]N*2!["B`@("`@("`@(V=S=6(H
+M(EL@"5U0;W!5<%L@"5TB+"`B("(I.R!]"@EI9B`H)#(@/3T@(EPB36]T:6]N
+M7"(B*0H)("`@(&-O;G1E>'0](EPB35PB(CL*"65L<V4@:68@*"0R(#T](")<
+M(D-L:6-K7"(B*0H)("`@(&-O;G1E>'0](EPB0UPB(CL*"65L<V4@:68@*"0R
+M(#T](")<(D1O=6)L94-L:6-K7"(B*0H)("`@(&-O;G1E>'0](EPB1%PB(CL*
+M"65L<V4@:68@*"0R(#T](")<(DEM;65D:6%T95PB(BD*"2`@("!C;VYT97AT
+M/2)<(DE<(B(["@EE;'-E(&-O;G1E>'0])#(["@D)<')I;G1F("(E<R(L('!R
+M969I>"`B("(@8V]N=&5X="`B("(@)#$["@EF;W(@*&D],SL@:3P]3D8[("LK
+M:2D*"2`@("!P<FEN=&8@*"(@)7,B+"`D:2D["@EP<FEN=&8@*")<;B(I.PH)
+M<')E9FEX/2(K("`@("`@("`@("`@("(["@EN97AT.PH@("`@?2!E;'-E(&EF
+M("AI;G!O<'5P*2!["@DC(&YO="!G;VEN9R!T;R!H86YD;&4@97-C87!E9"!Q
+M=6]T97,*"6QA8F5L/20R.PH)9FER<W0],SL*"7%U;W1E9#US=6)S='(H;&%B
+M96PL(#$L(#$I/3TB7"(B("8F"@D)<W5B<W1R*&QA8F5L+"!L96YG=&@H;&%B
+M96PI+"`Q*2$](EPB(CL*"69O<B`H:3TS.VD\/4Y&("8F('%U;W1E9#MI*RLI
+M('L*"2`@("!L86)E;#UL86)E;"`B("(@)&D["@D@("`@<75O=&5D/7-U8G-T
+M<BAL86)E;"P@;&5N9W1H*&QA8F5L*2P@,2DA/2)<(B(["@D@("`@9FER<W0]
+M:2`K(#$["@E]"@EP<FEN=&8@*"(E<R`E<R`E<R(L('!R969I>"P@;&%B96PL
+M("0Q*3L*"69O<B`H:3UF:7)S=#L@:3P]3D8[("LK:2D*"2`@("!P<FEN=&8@
+M*"(@)7,B+"`D:2D["@EP<FEN=&8@*")<;B(I.PH)<')E9FEX/2(K("`@("`@
+M("`@("`@("(["@EN97AT.PH@("`@?0H*("`@(&EF("AW87)N961;)#%=/3U&
+M04Q312D@>PH)<')I;G1F("@B(R%787)N:6YG.B!+97EW;W)D(%PB)7-<(B!N
+M;W0@:&%N9&QE9"!Y971<;B(L("0Q*3L*"7=A<FYE9%LD,5T]5%)513L*"7!R
+M:6YT(")787)N:6YG.B!5;FMN;W=N(&ME>7=O<F0@(B0Q(B!P87-S960@=&AR
+M;W5G:"(^(B]D978O<W1D97)R(CL*("`@('T*("`@('!R:6YT("0P.PH@("`@
+M;F5X=#L*?0H*14Y$('L*("`@(&EF("@A;65N=7-T>6QE*2!["@EP<FEN=&8@
+M*")<;B-3970@=&AE(&9O<F5G<F]U;F0L(&)A8VMG<F]U;F0@86YD('-T:7!P
+M;&4@8V]L;W(@86YD(&9O;G0@9F]R(&UE;G5S7&XB*3L*"7!R:6YT9B`H(DUE
+M;G53='EL92`@("5S("5S("5S("5S("5S7&XB+"!D9FQT6R)M96YU9F]R96-O
+M;&]R(ETL(&1F;'1;(FUE;G5B86-K8V]L;W(B72P@9&9L=%LB;65N=7-T:7!P
+M;&5C;VQO<B)=+"!D9FQT6R)F;VYT(ETL(&1F;'1;(FUW;6UE;G5S(ETI.PH@
+M("`@?0H@("`@:68@*"%H:6QI9VAT8V]L;W(I('L*"7!R:6YT9B`H(EQN(U-E
+M="!T:&4@9F]R96=R;W5N9"!A;F0@8F%C:V=R;W5N9"!C;VQO<B!F;W(@<V5L
+M96-T960@=VEN9&]W<UQN(BD["@EP<FEN=&8@*")(:6QI9VAT0V]L;W(@("`E
+M<R`E<UQN(BP@9&9L=%LB:&EF;W)E8V]L;W(B72P@9&9L=%LB:&EB86-K8V]L
+M;W(B72D["B`@("!]"B`@("!I9B`H(7!L86-E;65N="D@>PH@("`@("`@('!R
+M:6YT9B`B(R!O=F5R:61E(&1E9F%U;'0@4F%N9&]M4&QA8V5M96YT(&%N9"!3
+M;6%R=%!L86-E;65N="!3='EL97-<;B(["B`@("`@("`@<')I;G1F(")3='EL
+M92!<(BI<(B`E<UQN(BP@9&9L=%LB<&QA8V5M96YT(ET["B`@("!]"GT*)PIE
+%>&ET"@I<
+`
+end
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Sat Jul 20 03:18:29 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id DAA27093; Sat, 20 Jul 1996 03:18:28 -0500 (CDT)
+Received: from ns2.dreamcom.net (ns2.dreamcom.net [207.152.136.3]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id DAA27088 for <fvwm-workers@hpc.uh.edu>; Sat, 20 Jul 1996 03:18:20 -0500 (CDT)
+Received: from gauss (ppp121.dreamcom.net [207.152.136.150]) by ns2.dreamcom.net (8.7.4/8.7.3/dreamcom) with SMTP id EAA01126 for <fvwm-workers@hpc.uh.edu>; Sat, 20 Jul 1996 04:17:40 -0400
+Message-ID: <31F09673.2323681C@dreamcom.com>
+Date: Sat, 20 Jul 1996 04:18:59 -0400
+From: Chris Laas <chris@dreamcom.net>
+Organization: Dream Communications
+X-Mailer: Mozilla 3.0b4Gold (X11; I; Linux 2.0.5 i586)
+MIME-Version: 1.0
+To: Fvwm-Workers Mailing List <fvwm-workers@hpc.uh.edu>
+Subject: TrueColor bug in FvwmForm (patch included).
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-alpha7-jlt4
+
+Hi, I'm new to this list, so if I'm really off-topic, just send me to /dev/null.
+
+I noticed a very annoying bug in FvwmForm where it only comes up in monochrome
+on any static-colormap visuals (i.e. TrueColor, StaticColor, and StaticGray).
+The bug was trivial to locate and fix; FvwmForm used to assume a read-write
+colormap.  I have included a patch after my signature to fix this.
+
+Is there someone else I should mail this patch to in order to get it in the next
+fvwm beta?
+
+--Chris Laas
+
+-- 
+"If A equals success, then the formula is A = X + Y + Z.  X is work.  Y is
+play.  Z is keep your mouth shut." -- Albert Einstein
+
+"I'm not like John Lennon, who thought he was the Almighty.  I just think I'm
+John Lennon." -- Noel Gallagher, lead singer, guitarist, and songwriter of
+Oasis, on the importance of remaining humble despite great fame.
+
+Chris "Xris" Laas (that's me!) can be found lurking at chris@dreamcom.net or
+chrisl@cybercom.net.  If I say something wrong, don't hold Dream Communications
+responsible; however, if I have an idea inspired by genius, Dreamcom owns it.
+
+-------patch.FvwmForm.c begin---------------cut here--------------------------
+603a604
+>   Visual* visual = DefaultVisual(dpy, screen);
+610,611c611,671
+<   } else if (!XAllocColorCells(dpy, d_cmap, 0,
+<                              NULL, 0, colors, 6)) {
+---
+>   } else if (visual->class == TrueColor ||
+>                        visual->class == StaticColor ||
+>                        visual->class == StaticGray) {
+>     if (XParseColor(dpy, d_cmap, color_names[c_fore], &xc_item) &&
+>               XAllocColor(dpy, d_cmap, &xc_item))
+>         colors[c_fore] = xc_item.pixel;
+>       else
+>         colors[c_fore] = BlackPixel(dpy, screen);
+> 
+>     if (XParseColor(dpy, d_cmap, color_names[c_back], &xc_item) &&
+>               XAllocColor(dpy, d_cmap, &xc_item))
+>         colors[c_back] = xc_item.pixel;
+>       else
+>         colors[c_back] = WhitePixel(dpy, screen);
+> 
+>     if (XParseColor(dpy, d_cmap, color_names[c_itemfore], &xc_item) &&
+>               XAllocColor(dpy, d_cmap, &xc_item))
+>         colors[c_itemfore] = xc_item.pixel;
+>       else
+>         colors[c_itemfore] = BlackPixel(dpy, screen);
+> 
+>     if (XParseColor(dpy, d_cmap, color_names[c_itemback], &xc_item) &&
+>               XAllocColor(dpy, d_cmap, &xc_item))
+>         colors[c_itemback] = xc_item.pixel;
+>       else
+>         colors[c_itemback] = WhitePixel(dpy, screen);
+> 
+>     if (XParseColor(dpy, d_cmap, color_names[c_itemback], &xc_item)) {
+>         red = (int) xc_item.red ;
+>         green = (int) xc_item.green ;
+>         blue = (int) xc_item.blue ;
+>         xc_item.red = (60 * red) / 100 ;
+>         xc_item.green = (60 * green) / 100 ;
+>         xc_item.blue = (60 * blue) / 100 ;
+>         if (XAllocColor(dpy, d_cmap, &xc_item))
+>               colors[c_itemlo] = xc_item.pixel;
+>         else
+>               colors[c_itemlo] = BlackPixel(dpy, screen);
+>       } else
+>         colors[c_itemlo] = BlackPixel(dpy, screen);
+> 
+>     if (XParseColor(dpy, d_cmap, color_names[c_itemback], &xc_item)) {
+>         tmp1 = (14 * red) / 10 ;
+>         if (tmp1 > MAX_INTENSITY) tmp1 = MAX_INTENSITY ;
+>         tmp2 = (MAX_INTENSITY + red) / 2 ;
+>         xc_item.red = (tmp1 > tmp2) ? tmp1 : tmp2 ;
+>         tmp1 = (14 * green) / 10 ;
+>         if (tmp1 > MAX_INTENSITY) tmp1 = MAX_INTENSITY ;
+>         tmp2 = (MAX_INTENSITY + green) / 2 ;
+>         xc_item.green = (tmp1 > tmp2) ? tmp1 : tmp2 ;
+>         tmp1 = (14 * blue) / 10 ;
+>         if (tmp1 > MAX_INTENSITY) tmp1 = MAX_INTENSITY ;
+>         tmp2 = (MAX_INTENSITY + blue) / 2 ;
+>         xc_item.blue = (tmp1 > tmp2) ? tmp1 : tmp2 ;
+>         if (XAllocColor(dpy, d_cmap, &xc_item))
+>               colors[c_itemhi] = xc_item.pixel;
+>         else
+>               colors[c_itemhi] = BlackPixel(dpy, screen);
+>       } else
+>         colors[c_itemhi] = BlackPixel(dpy, screen);
+>   } else if (!XAllocColorCells(dpy, d_cmap, 0, NULL, 0, colors, 6)) {
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Sun Jul 21 11:02:11 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id LAA20377; Sun, 21 Jul 1996 11:02:10 -0500 (CDT)
+Received: (from tibbs@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id KAA20226; Sun, 21 Jul 1996 10:56:07 -0500 (CDT)
+To: Chris Laas <chris@dreamcom.net>
+Cc: Fvwm-Workers Mailing List <fvwm-workers@hpc.uh.edu>
+Subject: Re: TrueColor bug in FvwmForm (patch included).
+References: <31F09673.2323681C@dreamcom.com>
+From: Jason L Tibbitts III <tibbs@hpc.uh.edu>
+Date: 21 Jul 1996 10:56:06 -0500
+In-Reply-To: Chris Laas's message of Sat, 20 Jul 1996 04:18:59 -0400
+Message-ID: <ufa3f2lmwh5.fsf@sina.hpc.uh.edu>
+Lines: 14
+X-Mailer: Gnus v5.2.36/Emacs 19.30
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-alpha7-jlt4
+
+>>>>> "CL" == Chris Laas <chris@dreamcom.net> writes:
+
+CL> Is there someone else I should mail this patch to in order to get it in
+CL> the next fvwm beta?
+
+This should do it, but when you submit a patch, please use either a context
+diff or a unified diff (diff -c or diff -u).  Your patch as submitted will
+probably not apply if the line numbers don't match up.  Context and unified
+diffs include a few lines before and after each changed blocks so that
+patch can locate the modified section even if the line numbers have changed.
+-- 
+      Jason L. Tibbitts III - tibbs@uh.edu - 713/743-8684 - 221SR1
+System Manager:  University of Houston High Performance Computing Center
+                1994 PC800 "Kuroneko"      DoD# 1723
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Jul 22 14:59:57 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id OAA04914; Mon, 22 Jul 1996 14:59:57 -0500 (CDT)
+Received: from mail1.its.rpi.edu (mail1.its.rpi.edu [128.113.100.7]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id OAA04907 for <fvwm-workers@hpc.uh.edu>; Mon, 22 Jul 1996 14:59:51 -0500 (CDT)
+Received: from vccnorth06.its.rpi.edu (vccnorth06.its.rpi.edu [128.113.69.116]) by mail1.its.rpi.edu (8.6.9/8.6.4) with ESMTP id PAA29103 for <fvwm-workers@hpc.uh.edu>; Mon, 22 Jul 1996 15:59:57 -0400
+From: Andrew Veliath <veliaa@rpi.edu>
+Received: (veliaa@localhost) by vccnorth06.its.rpi.edu (8.6.9/8.6.4) id PAA15524 for fvwm-workers@hpc.uh.edu; Mon, 22 Jul 1996 15:59:58 -0400
+Date: Mon, 22 Jul 1996 15:59:58 -0400
+Message-Id: <199607221959.PAA15524@vccnorth06.its.rpi.edu>
+To: fvwm-workers@hpc.uh.edu
+Subject: Fvwm.tmpl
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-alpha7-jlt4
+
+
+The () after InstallNonExecFile in Fvwm.tmpl (#ifndef InstallNonExecFile())
+gave a slight problem on AIX 4.14 when running xmkmf.  It worked fine under
+AIX 3 and SunOS.  I don't know if this was mentioned before, but just wanted
+to make sure.  I just removed it and it was dandy :).
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Jul 22 16:40:37 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id QAA08801; Mon, 22 Jul 1996 16:40:36 -0500 (CDT)
+Received: from ns2.dreamcom.net (ns2.dreamcom.net [207.152.136.3]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id QAA08797 for <fvwm-workers@hpc.uh.edu>; Mon, 22 Jul 1996 16:40:30 -0500 (CDT)
+Received: from gauss (ppp100.dreamcom.net [207.152.136.129]) by ns2.dreamcom.net (8.7.4/8.7.3/dreamcom) with SMTP id RAA13744 for <fvwm-workers@hpc.uh.edu>; Mon, 22 Jul 1996 17:37:25 -0400
+Message-ID: <31F3F566.2D4F9C20@dreamcom.com>
+Date: Mon, 22 Jul 1996 17:40:54 -0400
+From: Chris Laas <chris@dreamcom.net>
+Organization: Dream Communications
+X-Mailer: Mozilla 3.0b4Gold (X11; I; Linux 2.0.5 i586)
+MIME-Version: 1.0
+To: Fvwm-Workers Mailing List <fvwm-workers@hpc.uh.edu>
+Subject: Re: TrueColor bug in FvwmForm (patch included).
+References: <31F09673.2323681C@dreamcom.com> <ufa3f2lmwh5.fsf@sina.hpc.uh.edu>
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-alpha7-jlt4
+
+Jason L Tibbitts III wrote:
+> This should do it, but when you submit a patch, please use either a context
+> diff or a unified diff (diff -c or diff -u).
+
+Thanks for correcting that bit of stupidity on my part.  That is especially true
+in light of the fact that I was patching 2.0.42, while the current is 2.0.43.
+In case it's necessary, I have attached a unified patch after my signature.
+
+--Xris
+
+-- 
+"If A equals success, then the formula is A = X + Y + Z.  X is work.  Y is
+play.  Z is keep your mouth shut." -- Albert Einstein
+
+"I'm not like John Lennon, who thought he was the Almighty.  I just think I'm
+John Lennon." -- Noel Gallagher, lead singer, guitarist, and songwriter of
+Oasis, on the importance of remaining humble despite great fame.
+
+Chris "Xris" Laas (that's me!) can be found lurking at chris@dreamcom.net or
+chrisl@cybercom.net.  If I say something wrong, don't hold Dream Communications
+responsible; however, if I have an idea inspired by genius, Dreamcom owns it.
+
+---------begin patch.FvwmForm.c-----------cut here---------------------------
+--- FvwmForm.c.orig     Fri Jul 19 02:50:26 1996
++++ FvwmForm.c  Mon Jul 22 17:29:08 1996
+@@ -601,14 +601,74 @@
+ /* allocate color cells */
+ void GetColors ()
+ {
++  Visual* visual = DefaultVisual(dpy, screen);
+   XColor xc_item;
+   int red, green, blue, tmp1, tmp2 ;
+   if (scr_depth < 8) {
+     colors[c_back] = colors[c_itemback] = WhitePixel(dpy, screen);
+     colors[c_fore] = colors[c_itemfore] = colors[c_itemlo] = colors[c_itemhi]
+       = BlackPixel(dpy, screen);
+-  } else if (!XAllocColorCells(dpy, d_cmap, 0,
+-                              NULL, 0, colors, 6)) {
++  } else if (visual->class == TrueColor ||
++                        visual->class == StaticColor ||
++                        visual->class == StaticGray) {
++    if (XParseColor(dpy, d_cmap, color_names[c_fore], &xc_item) &&
++               XAllocColor(dpy, d_cmap, &xc_item))
++         colors[c_fore] = xc_item.pixel;
++       else
++         colors[c_fore] = BlackPixel(dpy, screen);
++
++    if (XParseColor(dpy, d_cmap, color_names[c_back], &xc_item) &&
++               XAllocColor(dpy, d_cmap, &xc_item))
++         colors[c_back] = xc_item.pixel;
++       else
++         colors[c_back] = WhitePixel(dpy, screen);
++
++    if (XParseColor(dpy, d_cmap, color_names[c_itemfore], &xc_item) &&
++               XAllocColor(dpy, d_cmap, &xc_item))
++         colors[c_itemfore] = xc_item.pixel;
++       else
++         colors[c_itemfore] = BlackPixel(dpy, screen);
++
++    if (XParseColor(dpy, d_cmap, color_names[c_itemback], &xc_item) &&
++               XAllocColor(dpy, d_cmap, &xc_item))
++         colors[c_itemback] = xc_item.pixel;
++       else
++         colors[c_itemback] = WhitePixel(dpy, screen);
++
++    if (XParseColor(dpy, d_cmap, color_names[c_itemback], &xc_item)) {
++         red = (int) xc_item.red ;
++         green = (int) xc_item.green ;
++         blue = (int) xc_item.blue ;
++         xc_item.red = (60 * red) / 100 ;
++         xc_item.green = (60 * green) / 100 ;
++         xc_item.blue = (60 * blue) / 100 ;
++         if (XAllocColor(dpy, d_cmap, &xc_item))
++               colors[c_itemlo] = xc_item.pixel;
++         else
++               colors[c_itemlo] = BlackPixel(dpy, screen);
++       } else
++         colors[c_itemlo] = BlackPixel(dpy, screen);
++
++    if (XParseColor(dpy, d_cmap, color_names[c_itemback], &xc_item)) {
++         tmp1 = (14 * red) / 10 ;
++         if (tmp1 > MAX_INTENSITY) tmp1 = MAX_INTENSITY ;
++         tmp2 = (MAX_INTENSITY + red) / 2 ;
++         xc_item.red = (tmp1 > tmp2) ? tmp1 : tmp2 ;
++         tmp1 = (14 * green) / 10 ;
++         if (tmp1 > MAX_INTENSITY) tmp1 = MAX_INTENSITY ;
++         tmp2 = (MAX_INTENSITY + green) / 2 ;
++         xc_item.green = (tmp1 > tmp2) ? tmp1 : tmp2 ;
++         tmp1 = (14 * blue) / 10 ;
++         if (tmp1 > MAX_INTENSITY) tmp1 = MAX_INTENSITY ;
++         tmp2 = (MAX_INTENSITY + blue) / 2 ;
++         xc_item.blue = (tmp1 > tmp2) ? tmp1 : tmp2 ;
++         if (XAllocColor(dpy, d_cmap, &xc_item))
++               colors[c_itemhi] = xc_item.pixel;
++         else
++               colors[c_itemhi] = BlackPixel(dpy, screen);
++       } else
++         colors[c_itemhi] = BlackPixel(dpy, screen);
++  } else if (!XAllocColorCells(dpy, d_cmap, 0, NULL, 0, colors, 6)) {
+     colors[c_back] = colors[c_itemback] = WhitePixel(dpy, screen);
+     colors[c_fore] = colors[c_itemfore] = colors[c_itemlo] = colors[c_itemhi]
+       = BlackPixel(dpy, screen);
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Wed Jul 24 16:52:42 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id QAA11111; Wed, 24 Jul 1996 16:52:42 -0500 (CDT)
+Received: from skylark.ics.es.osaka-u.ac.jp (root@skylark.ics.es.osaka-u.ac.jp [133.1.240.35]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id QAA11107 for <fvwm-workers@hpc.uh.edu>; Wed, 24 Jul 1996 16:52:36 -0500 (CDT)
+Received: from localhost (matusita@localhost [127.0.0.1]) by skylark.ics.es.osaka-u.ac.jp (8.7.5+2.6Wbeta7/3.5Wbeta/ICS-2.1Wv6-SKYLARK) with ESMTP id GAA09615 for <fvwm-workers@hpc.uh.edu>; Thu, 25 Jul 1996 06:52:37 +0900 (JST)
+To: fvwm-workers@hpc.uh.edu
+Subject: [2.0.43] Manual of FvwmAuto: wrong formatting
+X-Mailer: Mew version 1.06 on Emacs 19.28.1, Mule 2.3
+X-FaceAnim: (-O_O-)(O_O- )(_O-  )(O-   )(-   -)(   -O)(  -O_)( -O_O)(-O_O-)
+X-Fingerprint: 0C AC 93 FC E3 9D 9E 5B  3D B8 AC 5C 4A 79 D8 A6
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Message-Id: <19960725065235O/matusita@ics.es.osaka-u.ac.jp>
+Date: Thu, 25 Jul 1996 06:52:35 +0900
+From: Makoto MATSUSHITA <matusita@ics.es.osaka-u.ac.jp>
+X-Dispatcher: impost version 0.91 (Jun 5,1996)
+Lines: 19
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-alpha7-jlt4
+
+
+Here is a patch for the manual of FvwmAuto. This patch fixes wrong formatting.
+
+BTW, is there any plan to release 2.1.0-almost ?
+
+- -
+Makoto `MAR_kun' MATSUSHITA
+
+--- modules/FvwmAuto/FvwmAuto.man.dist	Thu Jul 25 06:45:23 1996
++++ modules/FvwmAuto/FvwmAuto.man	Thu Jul 25 06:47:55 1996
+@@ -13,6 +13,8 @@
+ .sp
+ .fi
+ or, from a menu:
++.nf
++.sp
+ AddToMenu Module-Popup "Modules"      Title
+ +                      "Audio"        Module FvwmAudio
+ +                      "Auto"         Module FvwmAuto 200
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Thu Jul 25 07:33:46 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id HAA24836; Thu, 25 Jul 1996 07:33:45 -0500 (CDT)
+Received: from VNET.IBM.COM (vnet.ibm.com [199.171.26.4]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id HAA24832 for <fvwm-workers@hpc.uh.edu>; Thu, 25 Jul 1996 07:33:41 -0500 (CDT)
+Received: from FISHKILL by VNET.IBM.COM (IBM VM SMTP V2R3) with BSMTP id 2160;
+   Thu, 25 Jul 96 08:33:47 EDT
+Received: by FISHKILL (XAGENTA 4.0) id 6266; Thu, 25 Jul 1996 08:33:42 -0400 
+Received: by cold.fishkill.ibm.com (AIX 3.2/UCB 5.64/4.03)
+          id AA45023; Thu, 25 Jul 1996 08:33:35 -0400
+Date: Thu, 25 Jul 1996 08:33:35 -0400
+Message-Id: <9607251233.AA45023@cold.fishkill.ibm.com>
+From: "Charles Hines" <chuck_hines@VNET.IBM.COM>
+To: Makoto MATSUSHITA <matusita@ics.es.osaka-u.ac.jp>
+Cc: fvwm-workers@hpc.uh.edu
+Subject: Re: [2.0.43] Manual of FvwmAuto: wrong formatting
+In-Reply-To: <19960725065235O/matusita@ics.es.osaka-u.ac.jp>
+References: <19960725065235O/matusita@ics.es.osaka-u.ac.jp>
+X-Face: 'pn"gAx+&w4-=-}\z>*.Y*@(lC;t1<P);@iwiv';)vn3H2\/.x#;>J[a,/Q.Yv0^Wwc6_"H]}}-"?%)ETS`1v[]P`w4,E.9Bgf*XI4<H{C}Mf@'Ms)z?Bqzf"8v/oY\9K){w}\pw
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-alpha7-jlt4
+
+>>>>> "Makoto" == Makoto MATSUSHITA <matusita@ics.es.osaka-u.ac.jp> writes:
+
+Makoto> BTW, is there any plan to release 2.1.0-almost ?
+
+Yup.
+
+Chuck
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Thu Jul 25 11:09:14 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id LAA29455; Thu, 25 Jul 1996 11:09:13 -0500 (CDT)
+Received: from mail1.its.rpi.edu (mail1.its.rpi.edu [128.113.100.7]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id LAA29451 for <fvwm-workers@hpc.uh.edu>; Thu, 25 Jul 1996 11:08:48 -0500 (CDT)
+Received: from pluto.ss.com (rts1p15.xyp.rpi.edu [128.113.29.24]) by mail1.its.rpi.edu (8.6.9/8.6.4) with ESMTP id MAA15647; Thu, 25 Jul 1996 12:07:00 -0400
+Received: (from drewvel@localhost) by pluto.ss.com (not real) (8.7.5/8.7.1) id MAA03852; Thu, 25 Jul 1996 12:06:21 -0400
+Date: Thu, 25 Jul 1996 12:06:21 -0400
+Message-Id: <199607251606.MAA03852@pluto.ss.com>
+From: Andrew Veliath <veliaa@rpi.edu>
+To: fvwm-workers@hpc.uh.edu
+Cc: "Charles Hines" <chuck_hines@VNET.IBM.COM>
+Subject: Pixmap Button fix for Large Pixmaps in 2.0.43
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-alpha7-jlt4
+
+This fixes the problem with pixmaps larger than buttons on pixmaps
+under 2.0.4[23].  The fix has been in my pxp patches which among other
+things adds some other features, so this only fixes that problem and
+is pretty small.  I hope this gets into 2.1.0.
+
+*** ../orig/fvwm-2.0.43/fvwm/borders.c	Thu Apr 11 11:27:10 1996
+--- fvwm-2.0.43/fvwm/borders.c	Thu Jul 25 11:54:01 1996
+***************
+*** 210,217 ****
+  	    {
+  	      /* button face max width/height */
+  	      a = t->title_height;
+! 	      x=(a - pbf.width) / 2; if (x < 0) x = 0; 
+! 	      y=(a - pbf.height) / 2; if (y < 0) y = 0;
+  	      if (pbf.width > a) pbf.width = a; 
+  	      if (pbf.height > a) pbf.height = a;
+  	      XClearArea(dpy, t->left_w[i], 0, 0, a + 2, a + 2, False);
+--- 210,217 ----
+  	    {
+  	      /* button face max width/height */
+  	      a = t->title_height;
+! 	      x=(int)(a - pbf.width) / 2; if (x < 0) x = 0; 
+! 	      y=(int)(a - pbf.height) / 2; if (y < 0) y = 0;
+  	      if (pbf.width > a) pbf.width = a; 
+  	      if (pbf.height > a) pbf.height = a;
+  	      XClearArea(dpy, t->left_w[i], 0, 0, a + 2, a + 2, False);
+***************
+*** 220,227 ****
+  	    {
+  	      /* button face max width/height */
+  	      a = t->title_height - 2;
+! 	      x=(a - pbf.width) / 2 + 1; if (x < 1) x = 1; 
+! 	      y=(a - pbf.height) / 2 + 1; if (y < 1) y = 1;
+  	      if (pbf.width >= a) pbf.width = a - 1; 
+  	      if (pbf.height >= a) pbf.height = a - 1;
+  	      XClearArea(dpy, t->left_w[i], 1, 1, a - 1, a - 1, False);
+--- 220,227 ----
+  	    {
+  	      /* button face max width/height */
+  	      a = t->title_height - 2;
+! 	      x=(int)(a - pbf.width) / 2 + 1; if (x < 1) x = 1; 
+! 	      y=(int)(a - pbf.height) / 2 + 1; if (y < 1) y = 1;
+  	      if (pbf.width >= a) pbf.width = a - 1; 
+  	      if (pbf.height >= a) pbf.height = a - 1;
+  	      XClearArea(dpy, t->left_w[i], 1, 1, a - 1, a - 1, False);
+***************
+*** 302,309 ****
+  	    {
+  	      /* button face max width/height */
+  	      a = t->title_height;
+! 	      x=(a - pbf.width) / 2; if (x < 0) x = 0; 
+! 	      y=(a - pbf.height) / 2; if (y < 0) y = 0;
+  	      if (pbf.width > a) pbf.width = a; 
+  	      if (pbf.height > a) pbf.height = a;
+  	      XClearArea(dpy, t->right_w[i], 0, 0, a + 2, a + 2, False);
+--- 302,309 ----
+  	    {
+  	      /* button face max width/height */
+  	      a = t->title_height;
+! 	      x=(int)(a - pbf.width) / 2; if (x < 0) x = 0; 
+! 	      y=(int)(a - pbf.height) / 2; if (y < 0) y = 0;
+  	      if (pbf.width > a) pbf.width = a; 
+  	      if (pbf.height > a) pbf.height = a;
+  	      XClearArea(dpy, t->right_w[i], 0, 0, a + 2, a + 2, False);
+***************
+*** 312,319 ****
+  	    {
+  	      /* button face max width/height */
+  	      a = t->title_height - 2;
+! 	      x=(a - pbf.width) / 2 + 1; if (x < 1) x = 1; 
+! 	      y=(a - pbf.height) / 2 + 1; if (y < 1) y = 1;
+  	      if (pbf.width >= a) pbf.width = a - 1; 
+  	      if (pbf.height >= a) pbf.height = a - 1;
+  	      XClearArea(dpy, t->right_w[i], 1, 1, a - 1, a - 1, False);
+--- 312,319 ----
+  	    {
+  	      /* button face max width/height */
+  	      a = t->title_height - 2;
+! 	      x=(int)(a - pbf.width) / 2 + 1; if (x < 1) x = 1; 
+! 	      y=(int)(a - pbf.height) / 2 + 1; if (y < 1) y = 1;
+  	      if (pbf.width >= a) pbf.width = a - 1; 
+  	      if (pbf.height >= a) pbf.height = a - 1;
+  	      XClearArea(dpy, t->right_w[i], 1, 1, a - 1, a - 1, False);
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Thu Jul 25 11:50:15 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id LAA02023; Thu, 25 Jul 1996 11:50:14 -0500 (CDT)
+Received: from VNET.IBM.COM (vnet.ibm.com [199.171.26.4]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id LAA02019 for <fvwm-workers@hpc.uh.edu>; Thu, 25 Jul 1996 11:50:09 -0500 (CDT)
+Received: from FISHKILL by VNET.IBM.COM (IBM VM SMTP V2R3) with BSMTP id 3335;
+   Thu, 25 Jul 96 12:50:10 EDT
+Received: by FISHKILL (XAGENTA 4.0) id 6336; Thu, 25 Jul 1996 12:50:07 -0400 
+Received: by cold.fishkill.ibm.com (AIX 3.2/UCB 5.64/4.03)
+          id AA38804; Thu, 25 Jul 1996 12:50:01 -0400
+Date: Thu, 25 Jul 1996 12:50:01 -0400
+Message-Id: <9607251650.AA38804@cold.fishkill.ibm.com>
+From: "Charles Hines" <chuck_hines@VNET.IBM.COM>
+To: Andrew Veliath <veliaa@rpi.edu>
+Cc: fvwm-workers@hpc.uh.edu
+Subject: Re: Pixmap Button fix for Large Pixmaps in 2.0.43
+In-Reply-To: <199607251606.MAA03852@pluto.ss.com>
+References: <199607251606.MAA03852@pluto.ss.com>
+X-Face: 'pn"gAx+&w4-=-}\z>*.Y*@(lC;t1<P);@iwiv';)vn3H2\/.x#;>J[a,/Q.Yv0^Wwc6_"H]}}-"?%)ETS`1v[]P`w4,E.9Bgf*XI4<H{C}Mf@'Ms)z?Bqzf"8v/oY\9K){w}\pw
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-alpha7-jlt4
+
+>>>>> "Andrew" == Andrew Veliath <veliaa@rpi.edu> writes:
+
+Andrew> This fixes the problem with pixmaps larger than buttons on pixmaps
+Andrew> under 2.0.4[23].  The fix has been in my pxp patches which among other
+Andrew> things adds some other features, so this only fixes that problem and
+Andrew> is pretty small.  I hope this gets into 2.1.0.
+
+I just added it right now.
+
+Chuck
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Thu Jul 25 13:07:05 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id NAA08624; Thu, 25 Jul 1996 13:07:04 -0500 (CDT)
+Received: from VNET.IBM.COM (vnet.ibm.com [199.171.26.4]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id NAA08561 for <fvwm-workers@hpc.uh.edu>; Thu, 25 Jul 1996 13:06:46 -0500 (CDT)
+Received: from FISHKILL by VNET.IBM.COM (IBM VM SMTP V2R3) with BSMTP id 6687;
+   Thu, 25 Jul 96 14:06:50 EDT
+Received: by FISHKILL (XAGENTA 4.0) id 6348; Thu, 25 Jul 1996 14:06:44 -0400 
+Received: by cold.fishkill.ibm.com (AIX 3.2/UCB 5.64/4.03)
+          id AA47041; Thu, 25 Jul 1996 14:06:35 -0400
+Date: Thu, 25 Jul 1996 14:06:35 -0400
+Message-Id: <9607251806.AA47041@cold.fishkill.ibm.com>
+From: "Charles Hines" <chuck_hines@VNET.IBM.COM>
+To: The FVWM Discussion List <fvwm@hpc.uh.edu>,
+        The FVWM Woerkers List <fvwm-workers@hpc.uh.edu>
+Subject: (long) startup timing bug patch to test
+X-Face: 'pn"gAx+&w4-=-}\z>*.Y*@(lC;t1<P);@iwiv';)vn3H2\/.x#;>J[a,/Q.Yv0^Wwc6_"H]}}-"?%)ETS`1v[]P`w4,E.9Bgf*XI4<H{C}Mf@'Ms)z?Bqzf"8v/oY\9K){w}\pw
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-alpha7-jlt4
+
+
+Howdy all.
+
+Could those of you who are experiencing the troubles with windows
+started before fvwm in your .xinitrc not getting style attributes set
+correctly please try the enclosed patch and let me know how well it
+works for you?
+
+There is miscellaneous other stuff in there too that will be in 2.1.0
+as well, but just ignore that for now.
+
+Thanks,
+Chuck
+
+--------------->8 '2.0.43-startup-timing-bug-patch' cut here 8<---------------
+diff -N -u -r fvwm/add_window.c fvwm/add_window.c
+--- fvwm/add_window.c.orig      Thu Apr 11 11:25:58 1996
++++ fvwm/add_window.c   Thu Jul 25 13:11:07 1996
+@@ -237,13 +237,13 @@
+    * reparented, so we'll get a DestroyNotify for it.  We won't have
+    * gotten one for anything up to here, however.
+    */
+-  XGrabServer(dpy);
++  MyXGrabServer(dpy);
+   if(XGetGeometry(dpy, w, &JunkRoot, &JunkX, &JunkY,
+                  &JunkWidth, &JunkHeight,
+                  &JunkBW,  &JunkDepth) == 0)
+     {
+       free((char *)tmp_win);
+-      XUngrabServer(dpy);
++      MyXUngrabServer(dpy);
+       return(NULL);
+     }
+
+@@ -484,7 +484,7 @@
+     }
+   RaiseWindow(tmp_win);
+   KeepOnTop();
+-  XUngrabServer(dpy);
++  MyXUngrabServer(dpy);
+
+   XGetGeometry(dpy, tmp_win->w, &JunkRoot, &JunkX, &JunkY,
+                   &JunkWidth, &JunkHeight, &JunkBW, &JunkDepth);
+diff -N -u -r fvwm/builtins.c fvwm/builtins.c
+--- fvwm/builtins.c.orig        Thu Jun 27 10:34:19 1996
++++ fvwm/builtins.c     Thu Jul 25 13:11:08 1996
+@@ -766,9 +766,16 @@
+ {
+   XSetWindowAttributes attributes;
+   unsigned long valuemask;
+-
++
++#if 0
+   valuemask = (CWBackPixel);
+   attributes.background_pixel = 0;
++#else /* CKH - i'd like to try this a little differently (clear window)*/
++  valuemask = CWOverrideRedirect | CWBackingStore | CWSaveUnder | CWBackPixmap;
++  attributes.override_redirect = True;
++  attributes.save_under = False;
++  attributes.background_pixmap = None;
++#endif
+   attributes.backing_store = NotUseful;
+   w = XCreateWindow (dpy, Scr.Root, 0, 0,
+                     (unsigned int) Scr.MyDisplayWidth,
+@@ -847,6 +854,38 @@
+ }
+
+
++void flip_focus_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
++               unsigned long context, char *action, int *Module)
++{
++
++  FvwmWindow *scratch;
++
++  if (DeferExecution(eventp,&w,&tmp_win,&context,SELECT,ButtonRelease))
++    return;
++
++  /* Reorder the window list */
++  if( Scr.Focus ){
++    if( Scr.Focus->next ) Scr.Focus->next->prev = Scr.Focus->prev;
++    if( Scr.Focus->prev ) Scr.Focus->prev->next = Scr.Focus->next;
++    Scr.Focus->next = Scr.FvwmRoot.next;
++    Scr.Focus->prev = &Scr.FvwmRoot;
++    if(Scr.FvwmRoot.next)Scr.FvwmRoot.next->prev = Scr.Focus;
++    Scr.FvwmRoot.next = Scr.Focus;
++  }
++  if( tmp_win != Scr.Focus ){
++    if( tmp_win->next ) tmp_win->next->prev = tmp_win->prev;
++    if( tmp_win->prev ) tmp_win->prev->next = tmp_win->next;
++    tmp_win->next = Scr.FvwmRoot.next;
++    tmp_win->prev = &Scr.FvwmRoot;
++    if(Scr.FvwmRoot.next)Scr.FvwmRoot.next->prev = tmp_win;
++    Scr.FvwmRoot.next = tmp_win;
++  }
++
++  FocusOn(tmp_win,0);
++
++}
++
++
+ void focus_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+                unsigned long context, char *action, int *Module)
+ {
+@@ -1762,7 +1801,7 @@
+   Bool needsIconic = 0;
+   Bool needsNormal = 0;
+   Bool needsCurrentDesk = 0;
+-  Bool needsCurrentScreen = 0;
++  Bool needsCurrentPage = 0;
+   Bool needsVisible = 0;
+   Bool needsInvisible = 0;
+   char *AnyWindow = "*";
+@@ -1807,12 +1846,18 @@
+         needsNormal = 1;
+       else if(mystrcasecmp(condition,"CurrentDesk")==0)
+         needsCurrentDesk = 1;
++      else if(mystrcasecmp(condition,"CurrentPage")==0)
++      {
++        needsCurrentDesk = 1;
++        needsCurrentPage = 1;
++      }
+       else if(mystrcasecmp(condition,"Visible")==0)
+         needsVisible = 1;
+       else if(mystrcasecmp(condition,"!Visible")==0)
+         needsInvisible = 1;
+-      else if(mystrcasecmp(condition,"CurrentScreen")==0)
+-        needsCurrentScreen = 1;
++      else if(mystrcasecmp(condition,"CurrentPageAnyDesk")==0 ||
++              mystrcasecmp(condition,"CurrentScreen")==0)
++        needsCurrentPage = 1;
+       else if(mystrcasecmp(condition,"CirculateHit")==0)
+         useCirculateHit = 1;
+       else if(mystrcasecmp(condition,"CirculateHitIcon")==0)
+@@ -1866,10 +1911,10 @@
+            ((!needsCurrentDesk)||(fw->Desk == Scr.CurrentDesk))&&
+            ((!needsVisible)||(fw->flags & VISIBLE))&&
+            ((!needsInvisible)||(!(fw->flags & VISIBLE)))&&
+-           ((!needsCurrentScreen)||((fw->frame_x < Scr.MyDisplayWidth)&&
+-                                    (fw->frame_y < Scr.MyDisplayHeight)&&
+-                                    (fw->frame_x+fw->frame_width > 0)&&
+-                                    (fw->frame_y+fw->frame_height > 0)))))
++           ((!needsCurrentPage)||((fw->frame_x < Scr.MyDisplayWidth)&&
++                                  (fw->frame_y < Scr.MyDisplayHeight)&&
++                                  (fw->frame_x+fw->frame_width > 0)&&
++                                  (fw->frame_y+fw->frame_height > 0)))))
+         found = fw;
+       else
+       {
+@@ -1986,7 +2031,7 @@
+
+   PPosOverride = True;
+   /* put a border back around all windows */
+-  XGrabServer (dpy);
++  MyXGrabServer(dpy);
+   tmp = Scr.FvwmRoot.next;
+   for(i=0;i<nchildren;i++)
+   {
+@@ -2027,7 +2072,7 @@
+     XFree((char *)children);
+   PPosOverride = False;
+   KeepOnTop();
+-  XUngrabServer (dpy);
++  MyXUngrabServer(dpy);
+   XSync(dpy,0);
+
+ }
+diff -N -u -r fvwm/events.c fvwm/events.c
+--- fvwm/events.c.orig  Mon May 27 15:33:26 1996
++++ fvwm/events.c       Thu Jul 25 13:11:09 1996
+@@ -745,7 +745,7 @@
+       if(isIconicState != DontCareState)
+        state = isIconicState;
+
+-      XGrabServer (dpy);
++      MyXGrabServer(dpy);
+       switch (state)
+        {
+        case DontCareState:
+@@ -772,12 +772,19 @@
+          break;
+
+        case IconicState:
+-         Iconify(Tmp_win, 0, 0);
++         if (Tmp_win->wmhints)
++           {
++             Iconify(Tmp_win, Tmp_win->wmhints->icon_x, Tmp_win->wmhints->icon_y);
++           }
++         else
++           {
++             Iconify(Tmp_win, 0, 0);
++           }
+          break;
+        }
+       if(!PPosOverride)
+        XSync(dpy,0);
+-      XUngrabServer(dpy);
++      MyXUngrabServer(dpy);
+     }
+   /* If no hints, or currently an icon, just "deiconify" */
+   else
+@@ -819,7 +826,7 @@
+    * the client would think that the window has a chance of being viewable
+    * when it really isn't.
+    */
+-  XGrabServer (dpy);
++  MyXGrabServer (dpy);
+   if (Tmp_win->icon_w)
+     XUnmapWindow(dpy, Tmp_win->icon_w);
+   if(Tmp_win->icon_pixmap_w != None)
+@@ -850,7 +857,7 @@
+       SetBorder(Tmp_win,False,True,True,Tmp_win->frame);
+     }
+   XSync(dpy,0);
+-  XUngrabServer (dpy);
++  MyXUngrabServer (dpy);
+   XFlush (dpy);
+   Tmp_win->flags |= MAPPED;
+   Tmp_win->flags &= ~MAP_PENDING;
+@@ -924,12 +931,12 @@
+       return;
+     }
+
+-  XGrabServer(dpy);
++  MyXGrabServer(dpy);
+
+   if(XCheckTypedWindowEvent (dpy, Event.xunmap.window, DestroyNotify,&dummy))
+     {
+       Destroy(Tmp_win);
+-      XUngrabServer (dpy);
++      MyXUngrabServer (dpy);
+       return;
+     }
+
+@@ -975,7 +982,7 @@
+                              EnterWindowMask | LeaveWindowMask, &dummy));
+       */
+     } /* else window no longer exists and we'll get a destroy notify */
+-  XUngrabServer (dpy);
++  MyXUngrabServer(dpy);
+
+   XFlush (dpy);
+ }
+diff -N -u -r fvwm/functions.c fvwm/functions.c
+--- fvwm/functions.c.orig       Wed Jun 19 20:01:56 1996
++++ fvwm/functions.c    Thu Jul 25 13:11:09 1996
+@@ -55,6 +55,7 @@
+   {"EdgeResistance",SetEdgeResistance,F_EDGE_RES,           FUNC_NO_WINDOW},
+   {"Exec",         exec_function,    F_EXEC,                FUNC_NO_WINDOW},
+   {"ExecUseSHELL", exec_setup,       F_EXEC_SETUP,          FUNC_NO_WINDOW},
++  {"FlipFocus",    flip_focus_func,  F_FLIP_FOCUS,          FUNC_NEEDS_WINDOW},
+   {"Focus",        focus_func,       F_FOCUS,               FUNC_NEEDS_WINDOW},
+   {"Function",     ComplexFunction,  F_FUNCTION,            FUNC_NO_WINDOW},
+   {"GotoPage",     goto_page_func,   F_GOTO_PAGE,           FUNC_NO_WINDOW},
+diff -N -u -r fvwm/fvwm.c fvwm/fvwm.c
+--- fvwm/fvwm.c.orig    Thu Jun 27 10:08:08 1996
++++ fvwm/fvwm.c Thu Jul 25 13:11:09 1996
+@@ -227,31 +227,31 @@
+
+     strcpy(message, XDisplayString(dpy));
+
+-    XCloseDisplay(dpy);
+-
+-    for(i=1;i<Scr.NumberOfScreens;i++)
++    for(i=0;i<Scr.NumberOfScreens;i++)
+     {
+-      if (fork() == 0)
++      if (i != Scr.screen && fork() == 0)
+       {
+         myscreen = i;
++
++        /*
++         * Truncate the string 'whatever:n.n' to 'whatever:n',
++         * and then append the screen number.
++         */
++        cp = strchr(message, ':');
++        if (cp != NULL)
++        {
++          cp = strchr(cp, '.');
++          if (cp != NULL)
++            *cp = '\0';                /* truncate at display part */
++        }
++        sprintf(message + strlen(message), ".%d", myscreen);
++        dpy = XOpenDisplay(message);
++        Scr.screen = myscreen;
++        Scr.NumberOfScreens = ScreenCount(dpy);
++
+         break;
+       }
+     }
+-    /*
+-     * Truncate the string 'whatever:n.n' to 'whatever:n',
+-     * and then append the screen number.
+-     */
+-    cp = strchr(message, ':');
+-    if (cp != NULL)
+-    {
+-      cp = strchr(cp, '.');
+-      if (cp != NULL)
+-        *cp = '\0';            /* truncate at display part */
+-    }
+-    sprintf(message + strlen(message), ".%d", myscreen);
+-    dpy = XOpenDisplay(message);
+-    Scr.screen = myscreen;
+-    Scr.NumberOfScreens = ScreenCount(dpy);
+   }
+
+   x_fd = XConnectionNumber(dpy);
+@@ -330,6 +330,8 @@
+
+   XSetErrorHandler((XErrorHandler)FvwmErrorHandler);
+
++  MyXGrabServer(dpy);
++
+   BlackoutScreen();
+
+   CreateCursors();
+@@ -436,12 +438,10 @@
+   initPanFrames();
+ #endif
+
+-  XGrabServer(dpy);
+-
+ #ifndef NON_VIRTUAL
+   checkPanFrames();
+ #endif
+-  XUngrabServer(dpy);
++  MyXUngrabServer(dpy);
+   UnBlackoutScreen();
+   DBUG("main","Entering HandleEvents loop...");
+   HandleEvents();
+@@ -1034,7 +1034,7 @@
+   FvwmWindow *tmp;                     /* temp fvwm window structure */
+
+   /* put a border back around all windows */
+-  XGrabServer (dpy);
++  MyXGrabServer (dpy);
+
+   InstallWindowColormaps (&Scr.FvwmRoot);      /* force reinstall */
+   for (tmp = Scr.FvwmRoot.next; tmp != NULL; tmp = tmp->next)
+@@ -1044,7 +1044,7 @@
+     XDestroyWindow(dpy,tmp->frame);
+   }
+
+-  XUngrabServer (dpy);
++  MyXUngrabServer (dpy);
+   XSetInputFocus (dpy, PointerRoot, RevertToPointerRoot,CurrentTime);
+   XSync(dpy,0);
+
+diff -N -u -r fvwm/misc.h fvwm/misc.h
+--- fvwm/misc.h.orig    Wed Jun 19 21:31:15 1996
++++ fvwm/misc.h Thu Jul 25 13:11:10 1996
+@@ -384,6 +384,8 @@
+               unsigned long context,char *action, int *Module);
+ void raise_it_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+                   unsigned long context, char *action, int *Module);
++void flip_focus_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
++               unsigned long context, char *action, int *Module);
+ void focus_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+                unsigned long context, char *action, int *Module);
+ void warp_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+diff -N -u -r fvwm/move.c fvwm/move.c
+--- fvwm/move.c.orig    Fri Jun 30 11:06:01 1995
++++ fvwm/move.c Thu Jul 25 13:11:10 1996
+@@ -111,7 +111,7 @@
+ {
+   Bool finished = False;
+   Bool done;
+-  int xl,yt,delta_x,delta_y;
++  int xl,yt,delta_x,delta_y,paged;
+
+   XQueryPointer(dpy, Scr.Root, &JunkRoot, &JunkChild,&xl, &yt,
+                &JunkX, &JunkY, &JunkMask);
+@@ -202,8 +202,8 @@
+        case MotionNotify:
+          xl = Event.xmotion.x_root;
+          yt = Event.xmotion.y_root;
+-         HandlePaging(Scr.MyDisplayWidth,Scr.MyDisplayHeight,&xl,&yt,
+-                      &delta_x,&delta_y,False);
++/*       HandlePaging(Scr.MyDisplayWidth,Scr.MyDisplayHeight,&xl,&yt,
++                      &delta_x,&delta_y,False);  mab */
+          /* redraw the rubberband */
+          xl += XOffset;
+          yt += YOffset;
+@@ -220,6 +220,11 @@
+          if((yt <= 0)&&(yt > -Scr.MoveResistance))
+            yt = 0;
+
++       /* check Paging request once and only once after outline redrawn */
++       /* redraw after paging if needed - mab */
++       paged=0;
++       while(paged<=1)
++        {
+          if(!opaque_move)
+            MoveOutline(Scr.Root, xl, yt, Width,Height);
+          else
+@@ -242,6 +247,21 @@
+                XMoveWindow(dpy,tmp_win->frame,xl,yt);
+            }
+          DisplayPosition(tmp_win,xl+Scr.Vx,yt+Scr.Vy,False);
++
++/* prevent window from lagging behind mouse when paging - mab */
++         if(paged==0)
++           {
++           xl = Event.xmotion.x_root;
++           yt = Event.xmotion.y_root;
++           HandlePaging(Scr.MyDisplayWidth,Scr.MyDisplayHeight,&xl,&yt,
++                      &delta_x,&delta_y,False);
++           xl += XOffset;
++           yt += YOffset;
++           if ( (delta_x==0) && (delta_y==0)) break; /* break from while paged */
++           }
++         paged++;
++        }  /* end while paged */
++
+          done = TRUE;
+          break;
+
+@@ -420,7 +440,7 @@
+      (Scr.OpaqueSize*Scr.MyDisplayWidth*Scr.MyDisplayHeight)/100)
+     opaque_move = True;
+   else
+-    XGrabServer(dpy);
++    MyXGrabServer(dpy);
+
+   if((!opaque_move)&&(tmp_win->flags & ICONIFIED))
+     XUnmapWindow(dpy,w);
+@@ -437,7 +457,7 @@
+   UninstallRootColormap();
+
+   if(!opaque_move)
+-    XUngrabServer(dpy);
++    MyXUngrabServer(dpy);
+   UngrabEm();
+
+ }
+diff -N -u -r fvwm/parse.h fvwm/parse.h
+--- fvwm/parse.h.orig   Thu May 30 14:03:10 1996
++++ fvwm/parse.h        Thu Jul 25 13:11:10 1996
+@@ -89,6 +89,7 @@
+ #define F_SEND_STRING           112
+ #define F_ADD_MOD               113
+ #define F_DESTROY_MOD           114
++#define F_FLIP_FOCUS            115
+
+ /* Functions for use by modules only! */
+ #define F_SEND_WINDOW_LIST     1000
+diff -N -u -r fvwm/placement.c fvwm/placement.c
+--- fvwm/placement.c.orig       Mon Apr 24 14:14:08 1995
++++ fvwm/placement.c    Thu Jul 25 13:11:11 1996
+@@ -230,14 +230,14 @@
+              if(GrabEm(POSITION))
+                {
+                  /* Grabbed the pointer - continue */
+-                 XGrabServer(dpy);
++                 MyXGrabServer(dpy);
+                  if(XGetGeometry(dpy, tmp_win->w, &JunkRoot, &JunkX, &JunkY,
+                                  (unsigned int *)&DragWidth,
+                                  (unsigned int *)&DragHeight,
+                                  &JunkBW,  &JunkDepth) == 0)
+                    {
+                      free((char *)tmp_win);
+-                     XUngrabServer(dpy);
++                     MyXUngrabServer(dpy);
+                      return False;
+                    }
+                  DragWidth = tmp_win->frame_width;
+@@ -247,7 +247,7 @@
+                  moveLoop(tmp_win,0,0,DragWidth,DragHeight,
+                           &xl,&yt,False,True);
+                  XUnmapWindow(dpy,Scr.SizeWindow);
+-                 XUngrabServer(dpy);
++                 MyXUngrabServer(dpy);
+                  UngrabEm();
+                }
+              else
+diff -N -u -r fvwm/resize.c fvwm/resize.c
+--- fvwm/resize.c.orig  Fri Jun 30 11:07:23 1995
++++ fvwm/resize.c       Thu Jul 25 13:11:11 1996
+@@ -108,7 +108,7 @@
+       return;
+     }
+
+-  XGrabServer(dpy);
++  MyXGrabServer(dpy);
+
+
+   /* handle problems with edge-wrapping while resizing */
+@@ -214,15 +214,21 @@
+        case MotionNotify:
+          x = Event.xmotion.x_root;
+          y = Event.xmotion.y_root;
++         /* resize before paging request to prevent resize from lagging mouse - mab */
++         DoResize(x, y, tmp_win);
+          /* need to move the viewport */
+          HandlePaging(Scr.EdgeScrollX,Scr.EdgeScrollY,&x,&y,
+                       &delta_x,&delta_y,False);
++       /* redraw outline if we paged - mab */
++       if ( (delta_x != 0) || (delta_y != 0) )
++         {
+          origx -= delta_x;
+          origy -= delta_y;
+          dragx -= delta_x;
+          dragy -= delta_y;
+
+          DoResize(x, y, tmp_win);
++         }
+          done = TRUE;
+        default:
+          break;
+@@ -253,7 +259,7 @@
+     }
+   UninstallRootColormap();
+   ResizeWindow = None;
+-  XUngrabServer(dpy);
++  MyXUngrabServer(dpy);
+   UngrabEm();
+   xmotion = 0;
+   ymotion = 0;
+diff -N -u -r fvwm/virtual.c fvwm/virtual.c
+--- fvwm/virtual.c.orig Wed Apr 24 11:45:27 1996
++++ fvwm/virtual.c      Thu Jul 25 13:11:12 1996
+@@ -42,6 +42,10 @@
+     {
+       sleep_a_little(10000);
+       total+=10;
++
++  XQueryPointer(dpy, Scr.Root, &JunkRoot, &JunkChild,
++               &x, &y, &JunkX, &JunkY, &JunkMask);
++
+       if(XCheckWindowEvent(dpy,Scr.PanFrameTop.win,
+                           LeaveWindowMask,&Event))
+        {
+@@ -66,6 +70,11 @@
+          StashEventTime(&Event);
+          return;
+        }
++      /* check actual pointer location since PanFrames can get buried under
++         a window being moved or resized - mab */
++      if(( x >= SCROLL_REGION )&&( x < Scr.MyDisplayWidth-SCROLL_REGION )&&
++         ( y >= SCROLL_REGION )&&( y < Scr.MyDisplayHeight-SCROLL_REGION ))
++           return ;
+     }
+
+   XQueryPointer(dpy, Scr.Root, &JunkRoot, &JunkChild,
+@@ -162,13 +171,13 @@
+   if((*delta_x != 0)||(*delta_y!=0))
+     {
+       if(Grab)
+-       XGrabServer(dpy);
++       MyXGrabServer(dpy);
+       XWarpPointer(dpy,None,Scr.Root,0,0,0,0,*xl,*yt);
+       MoveViewport(Scr.Vx + *delta_x,Scr.Vy + *delta_y,False);
+       XQueryPointer(dpy, Scr.Root, &JunkRoot, &JunkChild,
+                    xl, yt, &JunkX, &JunkY, &JunkMask);
+       if(Grab)
+-       XUngrabServer(dpy);
++       MyXUngrabServer(dpy);
+     }
+ }
+
+@@ -344,7 +353,7 @@
+   int deltax,deltay;
+
+   if(grab)
+-    XGrabServer(dpy);
++    MyXGrabServer(dpy);
+
+
+   if(newx > Scr.VxMax)
+@@ -412,7 +421,7 @@
+   while(XCheckTypedEvent(dpy,MotionNotify,&Event))
+     StashEventTime(&Event);
+   if(grab)
+-    XUngrabServer(dpy);
++    MyXUngrabServer(dpy);
+ }
+
+
+@@ -452,7 +461,7 @@
+   Broadcast(M_NEW_DESK,1,Scr.CurrentDesk,0,0,0,0,0,0);
+   /* Scan the window list, mapping windows on the new Desk,
+    * unmapping windows on the old Desk */
+-  XGrabServer(dpy);
++  MyXGrabServer(dpy);
+   for (t = Scr.FvwmRoot.next; t != NULL; t = t->next)
+     {
+       /* Only change mapping for non-sticky windows */
+@@ -487,7 +496,7 @@
+            }
+        }
+     }
+-  XUngrabServer(dpy);
++  MyXUngrabServer(dpy);
+   for (t = Scr.FvwmRoot.next; t != NULL; t = t->next)
+     {
+       /* If its an icon, and its sticking, autoplace it so
+diff -N -u -r libs/Grab.c libs/Grab.c
+--- libs/Grab.c.orig    Wed Dec 31 19:00:00 1969
++++ libs/Grab.c Thu Jul 25 13:13:21 1996
+@@ -0,0 +1,30 @@
++/*
++** MyXGrabServer & MyXUngrabServer - to handle nested grab server calls
++*/
++
++#include <X11/Xlib.h>
++
++static int xgrabcount = 0;
++
++void MyXGrabServer(Display *disp)
++{
++  if (xgrabcount == 0)
++  {
++    XGrabServer(disp);
++  }
++  ++xgrabcount;
++}
++
++void MyXUngrabServer(Display *disp)
++{
++  if (--xgrabcount < 0) /* should never happen */
++  {
++    /* fvwm_msg(ERR,"MyXUngrabServer","too many ungrabs!\n"); */
++    xgrabcount = 0;
++  }
++  if (xgrabcount == 0)
++  {
++    XUngrabServer(disp);
++  }
++}
++
+diff -N -u -r libs/Imakefile libs/Imakefile
+--- libs/Imakefile.orig Fri Feb 16 20:17:27 1996
++++ libs/Imakefile      Thu Jul 25 13:11:56 1996
+@@ -10,6 +10,7 @@
+        GetFdWidth.c \
+        GetFont.c \
+        GetLine.c \
++       Grab.c \
+        Picture.c \
+        ReadPacket.c \
+        SendInfo.c \
+@@ -31,6 +32,7 @@
+        GetFdWidth.o \
+        GetFont.o \
+        GetLine.o \
++       Grab.o \
+        Picture.o \
+        ReadPacket.o \
+        SendInfo.o \
+diff -N -u -r libs/fvwmlib.h libs/fvwmlib.h
+--- libs/fvwmlib.h.orig Fri Mar 22 15:32:33 1996
++++ libs/fvwmlib.h      Thu Jul 25 13:11:24 1996
+@@ -39,4 +39,7 @@
+
+ XFontStruct *GetFontOrFixed(Display *disp, char *fontname);
+
++void MyXGrabServer(Display *disp);
++void MyXUngrabServer(Display *disp);
++
+ #endif
+diff -N -u -r version.h version.h
+--- version.h.orig      Tue Apr 16 16:11:51 1996
++++ version.h   Thu Jul 25 13:17:42 1996
+@@ -1,2 +1,2 @@
+-#define VERSION "2.0.43"
++#define VERSION "2.0.43a"
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Thu Jul 25 15:36:28 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id PAA03131; Thu, 25 Jul 1996 15:36:28 -0500 (CDT)
+Received: from chutney.ini.cmu.edu (ANNEX-V34BIS-01.SLIP.ANDREW.CMU.EDU [128.2.120.174]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id PAA03117; Thu, 25 Jul 1996 15:36:18 -0500 (CDT)
+Received: from localhost (manojk@localhost) by chutney.ini.cmu.edu (8.7.5/8.7.3) with SMTP id QAA22001; Thu, 25 Jul 1996 16:36:23 -0400
+Date: Thu, 25 Jul 1996 16:36:22 -0400 (EDT)
+From: Manoj Kasichainula <manojk@andrew.cmu.edu>
+X-Sender: manojk@chutney.ini.cmu.edu
+To: fvwm@hpc.uh.edu, fvwm-workers@hpc.uh.edu
+Subject: Re: FVWM: (long) startup timing bug patch to test
+In-Reply-To: <9607251806.AA47041@cold.fishkill.ibm.com>
+Message-ID: <Pine.LNX.3.95.960725162951.21937B-100000@chutney.ini.cmu.edu>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-alpha7-jlt4
+
+First, to apply this patch, you'll need to use the flag on patch to ignore
+whitespace. Using GNU patch, this is -l (ell, not one)
+
+Now, I've applied this patch, but I'm still getting the same timing
+problem with a window not getting Style flags. :(
+
+I do have an addition to report. I've noticed that other WM functions
+don't seem to work inside the Style-less window. For examle, I have
+Meta-F1 bound to restart the WM everywhere, including inside windows.
+However, when I was focused in and my mouse was in the Styleless window,
+Meta-F1 wasn't caught by fvwm, but passed to the window (an rxvt). In an
+rxvt with all it's Style attributes, however, the restart with Meta-F1
+succeeds.
+
+Again, for debugging purposes, my fvwm2rc can be found at
+http://dosa.ini.cmu.edu/~manojk/fvwm2rc. 
+
+_________________________________________________________________________
+Manoj Kasichainula - manojk@andrew.cmu.edu | "Violence is the first refuge
+http://dosa.ini.cmu.edu/~manojk/           |  of the violent."
+Finger for PGP public key & Geek Code      |     - Aaron Allston
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Thu Jul 25 15:38:50 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id PAA03325; Thu, 25 Jul 1996 15:38:49 -0500 (CDT)
+Received: from chutney.ini.cmu.edu (ANNEX-V34BIS-01.SLIP.ANDREW.CMU.EDU [128.2.120.174]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id PAA03296; Thu, 25 Jul 1996 15:38:39 -0500 (CDT)
+Received: from localhost (manojk@localhost) by chutney.ini.cmu.edu (8.7.5/8.7.3) with SMTP id QAA22008; Thu, 25 Jul 1996 16:38:43 -0400
+Date: Thu, 25 Jul 1996 16:38:43 -0400 (EDT)
+From: Manoj Kasichainula <manojk@andrew.cmu.edu>
+X-Sender: manojk@chutney.ini.cmu.edu
+To: fvwm@hpc.uh.edu, fvwm-workers@hpc.uh.edu
+Subject: Re: FVWM: (long) startup timing bug patch to test
+In-Reply-To: <Pine.LNX.3.95.960725162951.21937B-100000@chutney.ini.cmu.edu>
+Message-ID: <Pine.LNX.3.95.960725163751.21937C-100000@chutney.ini.cmu.edu>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-alpha7-jlt4
+
+On Thu, 25 Jul 1996, Manoj Kasichainula wrote:
+
+> I do have an addition to report. I've noticed that other WM functions
+> don't seem to work inside the Style-less window. For examle, I have
+> Meta-F1 bound to restart the WM everywhere, including inside windows.
+> However, when I was focused in and my mouse was in the Styleless window,
+> Meta-F1 wasn't caught by fvwm, but passed to the window (an rxvt). In an
+> rxvt with all it's Style attributes, however, the restart with Meta-F1
+> succeeds.
+
+
+Acck. Just reread the message. The addition is to myu previous bug
+reports. I don't think this new behavior started with the posted patch.  
+
+
+_________________________________________________________________________
+Manoj Kasichainula - manojk@andrew.cmu.edu | "Violence is the first refuge
+http://dosa.ini.cmu.edu/~manojk/           |  of the violent."
+Finger for PGP public key & Geek Code      |     - Aaron Allston
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Thu Jul 25 16:19:34 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id QAA04915; Thu, 25 Jul 1996 16:19:34 -0500 (CDT)
+Received: from VNET.IBM.COM (vnet.ibm.com [199.171.26.4]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id QAA04886 for <fvwm-workers@hpc.uh.edu>; Thu, 25 Jul 1996 16:19:25 -0500 (CDT)
+Received: from FISHKILL by VNET.IBM.COM (IBM VM SMTP V2R3) with BSMTP id 4401;
+   Thu, 25 Jul 96 17:19:26 EDT
+Received: by FISHKILL (XAGENTA 4.0) id 6414; Thu, 25 Jul 1996 17:02:15 -0400 
+Received: by cold.fishkill.ibm.com (AIX 3.2/UCB 5.64/4.03)
+          id AA36382; Thu, 25 Jul 1996 17:02:07 -0400
+Date: Thu, 25 Jul 1996 17:02:07 -0400
+Message-Id: <9607252102.AA36382@cold.fishkill.ibm.com>
+From: "Charles Hines" <chuck_hines@VNET.IBM.COM>
+To: Manoj Kasichainula <manojk@andrew.cmu.edu>
+Cc: fvwm@hpc.uh.edu, fvwm-workers@hpc.uh.edu
+Subject: Re: FVWM: (long) startup timing bug patch to test
+In-Reply-To: <Pine.LNX.3.95.960725162951.21937B-100000@chutney.ini.cmu.edu>
+References: <9607251806.AA47041@cold.fishkill.ibm.com>
+        <Pine.LNX.3.95.960725162951.21937B-100000@chutney.ini.cmu.edu>
+X-Face: 'pn"gAx+&w4-=-}\z>*.Y*@(lC;t1<P);@iwiv';)vn3H2\/.x#;>J[a,/Q.Yv0^Wwc6_"H]}}-"?%)ETS`1v[]P`w4,E.9Bgf*XI4<H{C}Mf@'Ms)z?Bqzf"8v/oY\9K){w}\pw
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-alpha7-jlt4
+
+>>>>> "Manoj" == Manoj Kasichainula <manojk@andrew.cmu.edu> writes:
+
+Manoj> First, to apply this patch, you'll need to use the flag on
+Manoj> patch to ignore whitespace. Using GNU patch, this is -l (ell,
+Manoj> not one)
+
+Odd.  I didn't have to when I checked it before I sent it out.
+
+Manoj> Now, I've applied this patch, but I'm still getting the same
+Manoj> timing problem with a window not getting Style flags. :(
+
+Damn.  Not what I wanted to hear...
+
+Just out of curiousity, when are these windows popping up?  Is it
+while fvwm is rebordering the windows (which shouldn't be happening
+now, but what I had suspected of being the original problem), or
+before or after that seems to start/stop?
+
+Chuck
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Fri Jul 26 04:16:55 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id EAA05432; Fri, 26 Jul 1996 04:16:54 -0500 (CDT)
+Received: from chutney.ini.cmu.edu (ANNEX-V34BIS-04.SLIP.ANDREW.CMU.EDU [128.2.120.177]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id EAA05419; Fri, 26 Jul 1996 04:16:38 -0500 (CDT)
+Received: from localhost (manojk@localhost) by chutney.ini.cmu.edu (8.7.5/8.7.3) with SMTP id FAA01662; Fri, 26 Jul 1996 05:16:40 -0400
+Date: Fri, 26 Jul 1996 05:16:39 -0400 (EDT)
+From: Manoj Kasichainula <manojk@andrew.cmu.edu>
+X-Sender: manojk@chutney.ini.cmu.edu
+Reply-To: Manoj Kasichainula <manojk@andrew.cmu.edu>
+To: Charles Hines <chuck_hines@VNET.IBM.COM>
+cc: fvwm@hpc.uh.edu, fvwm-workers@hpc.uh.edu
+Subject: Re: FVWM: (long) startup timing bug patch to test
+In-Reply-To: <9607252102.AA36382@cold.fishkill.ibm.com>
+Message-ID: <Pine.LNX.3.95.960726045822.1403A-100000@chutney.ini.cmu.edu>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-alpha7-jlt4
+
+On Thu, 25 Jul 1996, Charles Hines wrote:
+
+> Manoj> Now, I've applied this patch, but I'm still getting the same
+> Manoj> timing problem with a window not getting Style flags. :(
+> 
+> Damn.  Not what I wanted to hear...
+
+Me neither. :)
+
+> 
+> Just out of curiousity, when are these windows popping up?  Is it
+> while fvwm is rebordering the windows (which shouldn't be happening
+> now, but what I had suspected of being the original problem), or
+> before or after that seems to start/stop?
+
+Here's a sequence of events that I have found so far. My startup is pretty
+fast at home (Yay Linux!), but I'll try this on a slow school machine if I
+get a chance, to get more detail on the seq. of events and try different
+combinations. 
+
+0. There is an xconsole open on the screen while xdm is waiting for login.
+
+1. I login. xconsole is not killed.
+
+2. rxvt pops up with minimal dark-gray decorations.
+
+3. xconsole is iconified (StartIconic in fvwm2rc)
+
+4. modules pop up
+
+Here are all the details I've come up with on this poor unloved window:
+
+- Titlebar has no buttons.
+
+- Dark gray decorations
+
+- mouse bindings (Meta-mouse3) seem to work on unloved window decorations
+
+- key bindings (Meta-F1) fail with focus on the unloved window itself (W
+in fvwm2rc) 
+
+- Restart fixes all problems
+
+I think this covers all the symptoms. Once again, my fvwm2rc:
+
+http://dosa.ini.cmu.edu/~manojk/fvwm2rc
+
+_________________________________________________________________________
+Manoj Kasichainula - manojk@andrew.cmu.edu | "Life is like an analogy."
+http://dosa.ini.cmu.edu/~manojk/           |
+Finger for PGP public key & Geek Code      |     - Aaron Allston
+
+
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Fri Jul 26 07:57:32 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id HAA08008; Fri, 26 Jul 1996 07:57:32 -0500 (CDT)
+Received: from gatekeeper.ray.com (gatekeeper.ray.com [138.125.162.1]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id HAA08004 for <fvwm-workers@hpc.uh.edu>; Fri, 26 Jul 1996 07:57:28 -0500 (CDT)
+Received: (mailer@localhost) by gatekeeper.ray.com (8.7.5/8.7.3) id IAA21792 for <fvwm-workers@hpc.uh.edu>; Fri, 26 Jul 1996 08:56:46 -0400
+Received: from tahiti.ed.ray.com by gatekeeper.ray.com; Fri Jul 26 08:55:58 1996
+Received: from tif417.ed.ray.com.ED.RAY.COM (TIF417.ED.RAY.COM [138.125.86.100]) by tahiti.ed.ray.com (8.6.9/8.6.9) with ESMTP id IAA29192 for <fvwm-workers@hpc.uh.edu>; Fri, 26 Jul 1996 08:56:00 -0400
+Received: by tif417.ed.ray.com.ED.RAY.COM (SMI-8.6/SMI-SVR4)
+	id IAA14909; Fri, 26 Jul 1996 08:54:12 -0400
+Date: Fri, 26 Jul 1996 08:54:12 -0400
+From: tle@tif417.ed.ray.com (Tuan Le)
+Message-Id: <199607261254.IAA14909@tif417.ed.ray.com.ED.RAY.COM>
+To: fvwm-workers@hpc.uh.edu
+Subject: problem when complied in SunOS and Open Win
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Content-MD5: +Fwtcdx0azImY1I7KIggBA==
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-alpha7-jlt4
+
+Hi every one
+
+	I try to complied fvwm 2.043 in SunOS I can make the make file
+	but when I try to run make Makefiles, it gave me and error
+	even when I try to run a simple test like make clean
+	I this get an error
+	This is the state past by imake
+	imake -I/usr/lib/X11/config
+	and here is the error
+
+[tif531]%@>make clean
+rm -f *.CKP *.ln *.BAK *.bak *.o core errs ,* *~ *.a .emacs_* tags TAGS make.log 
+MakeOut "#"*
+cleaning in ./libs...
+make: Fatal error: Don't know how to make target `clean'
+Current working directory /tmp_mnt/home/tif252/tle/temp/fvwm-2.0.43/libs
+*** Error code 1
+make: Fatal error: Command failed for target `clean'
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Fri Jul 26 08:47:36 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id IAA09244; Fri, 26 Jul 1996 08:47:35 -0500 (CDT)
+Received: from VNET.IBM.COM (vnet.ibm.com [199.171.26.4]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id IAA09240 for <fvwm-workers@hpc.uh.edu>; Fri, 26 Jul 1996 08:47:32 -0500 (CDT)
+Received: from FISHKILL by VNET.IBM.COM (IBM VM SMTP V2R3) with BSMTP id 2417;
+   Fri, 26 Jul 96 09:47:38 EDT
+Received: by FISHKILL (XAGENTA 4.0) id 6479; Fri, 26 Jul 1996 09:47:34 -0400 
+Received: by cold.fishkill.ibm.com (AIX 3.2/UCB 5.64/4.03)
+          id AA40622; Fri, 26 Jul 1996 09:47:24 -0400
+Date: Fri, 26 Jul 1996 09:47:24 -0400
+Message-Id: <9607261347.AA40622@cold.fishkill.ibm.com>
+From: "Charles Hines" <chuck_hines@VNET.IBM.COM>
+To: tle@tif417.ed.ray.com (Tuan Le)
+Cc: fvwm-workers@hpc.uh.edu
+Subject: Re: problem when complied in SunOS and Open Win
+In-Reply-To: <199607261254.IAA14909@tif417.ed.ray.com.ED.RAY.COM>
+References: <199607261254.IAA14909@tif417.ed.ray.com.ED.RAY.COM>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-alpha7-jlt4
+
+>>>>> "Tuan" == Tuan Le <tle@tif417.ed.ray.com> writes:
+
+Tuan> Hi every one
+Tuan>   I try to complied fvwm 2.043 in SunOS I can make the make file
+Tuan>   but when I try to run make Makefiles, it gave me and error
+Tuan>   even when I try to run a simple test like make clean
+Tuan>   I this get an error
+Tuan>   This is the state past by imake
+Tuan>   imake -I/usr/lib/X11/config
+Tuan>   and here is the error
+
+Tuan> [tif531]%@>make clean
+Tuan> rm -f *.CKP *.ln *.BAK *.bak *.o core errs ,* *~ *.a .emacs_* tags TAGS make.log
+Tuan> MakeOut "#"*
+Tuan> cleaning in ./libs...
+Tuan> make: Fatal error: Don't know how to make target `clean'
+Tuan> Current working directory /tmp_mnt/home/tif252/tle/temp/fvwm-2.0.43/libs
+Tuan> *** Error code 1
+Tuan> make: Fatal error: Command failed for target `clean'
+
+Hm.  Someone else reported to me that they were having similiar
+troubles with 'make Makefiles'.  I normally just run the MakeMakefiles
+shell script myself, but I just tried 'make Makefiles' and it worked
+fine for me, and so did 'make' and 'make clean' in libs...
+
+Perhaps something in your Imake setup is messed up.  Is 'make
+Makefiles' producing correct makefiles for everyone else?
+
+Chuck
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Fri Jul 26 12:41:08 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id MAA16447; Fri, 26 Jul 1996 12:41:08 -0500 (CDT)
+Received: from jolt.eng.umd.edu (jolt.eng.umd.edu [129.2.102.5]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id MAA16443 for <fvwm-workers@hpc.uh.edu>; Fri, 26 Jul 1996 12:41:02 -0500 (CDT)
+Received: from atlantis.csc.umd.edu (atlantis.csc.umd.edu [129.2.8.129]) by jolt.eng.umd.edu (8.7.5/8.7.3) with SMTP id NAA02072; Fri, 26 Jul 1996 13:41:00 -0400 (EDT)
+Date: Fri, 26 Jul 1996 13:40:50 -0400 (EDT)
+From: "Randall S. Winchester" <rsw@Glue.umd.edu>
+To: Charles Hines <chuck_hines@VNET.IBM.COM>
+cc: Tuan Le <tle@tif417.ed.ray.com>, fvwm-workers@hpc.uh.edu
+Subject: Re: problem when complied in SunOS and Open Win
+In-Reply-To: <9607261347.AA40622@cold.fishkill.ibm.com>
+Message-ID: <Pine.SOL.3.95.960726133923.15476I-100000@atlantis.csc.umd.edu>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-alpha7-jlt4
+
+
+I just ran the following on SunOS 4.1.4 and X11R6 with no problems.
+xmkmf
+make Makefiles
+make clean
+make
+make install
+make clean
+
+I did not have any problems.
+
+Randall
+
+
+On Fri, 26 Jul 1996, Charles Hines wrote:
+
+: >>>>> "Tuan" == Tuan Le <tle@tif417.ed.ray.com> writes:
+: 
+: Tuan> Hi every one
+: Tuan>   I try to complied fvwm 2.043 in SunOS I can make the make file
+: Tuan>   but when I try to run make Makefiles, it gave me and error
+: Tuan>   even when I try to run a simple test like make clean
+: Tuan>   I this get an error
+: Tuan>   This is the state past by imake
+: Tuan>   imake -I/usr/lib/X11/config
+: Tuan>   and here is the error
+: 
+: Tuan> [tif531]%@>make clean
+: Tuan> rm -f *.CKP *.ln *.BAK *.bak *.o core errs ,* *~ *.a .emacs_* tags TAGS make.log
+: Tuan> MakeOut "#"*
+: Tuan> cleaning in ./libs...
+: Tuan> make: Fatal error: Don't know how to make target `clean'
+: Tuan> Current working directory /tmp_mnt/home/tif252/tle/temp/fvwm-2.0.43/libs
+: Tuan> *** Error code 1
+: Tuan> make: Fatal error: Command failed for target `clean'
+: 
+: Hm.  Someone else reported to me that they were having similiar
+: troubles with 'make Makefiles'.  I normally just run the MakeMakefiles
+: shell script myself, but I just tried 'make Makefiles' and it worked
+: fine for me, and so did 'make' and 'make clean' in libs...
+: 
+: Perhaps something in your Imake setup is messed up.  Is 'make
+: Makefiles' producing correct makefiles for everyone else?
+: 
+: Chuck
+: --
+: Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+: To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+: body of a message to majordomo@hpc.uh.edu.
+: To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+: 
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Fri Jul 26 12:56:59 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id MAA16862; Fri, 26 Jul 1996 12:56:58 -0500 (CDT)
+Received: from mail1.its.rpi.edu (mail1.its.rpi.edu [128.113.100.7]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id MAA16849 for <fvwm-workers@hpc.uh.edu>; Fri, 26 Jul 1996 12:56:54 -0500 (CDT)
+Received: from marcus.its.rpi.edu (marcus.its.rpi.edu [128.113.113.16]) by mail1.its.rpi.edu (8.6.9/8.6.4) with ESMTP id NAA22420 for <fvwm-workers@hpc.uh.edu>; Fri, 26 Jul 1996 13:56:24 -0400
+From: Andrew Veliath <veliaa@rpi.edu>
+Received: (veliaa@localhost) by marcus.its.rpi.edu (8.6.9/8.6.4) id NAA65145; Fri, 26 Jul 1996 13:56:26 -0400
+Date: Fri, 26 Jul 1996 13:56:26 -0400
+Message-Id: <199607261756.NAA65145@marcus.its.rpi.edu>
+To: fvwm-workers@hpc.uh.edu
+Subject: Re: problem when complied in SunOS and Open Win
+In-Reply-To: <9607261347.AA40622@cold.fishkill.ibm.com>
+References: <199607261254.IAA14909@tif417.ed.ray.com.ED.RAY.COM>
+	<9607261347.AA40622@cold.fishkill.ibm.com>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-alpha7-jlt4
+
+    Tuan> Hi every one I try to complied fvwm 2.043 in SunOS I can
+    Tuan> make the make file but when I try to run make Makefiles, it
+    Tuan> gave me and error even when I try to run a simple test like
+    Tuan> make clean I this get an error This is the state past by
+    Tuan> imake imake -I/usr/lib/X11/config and here is the error
+...
+    Charles> Perhaps something in your Imake setup is messed up.  Is
+    Charles> 'make Makefiles' producing correct makefiles for everyone
+    Charles> else?
+
+I think at some point, I forget which, make Makefiles ceased to work
+on my machine and on the school machines :(.  I'll see what I can
+look into why it happens / what the chnage was here...
+
+Andrew
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Jul 29 00:14:44 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id AAA14788; Mon, 29 Jul 1996 00:14:43 -0500 (CDT)
+Received: from JATO.hackvan.com (hackvan.com [206.80.31.242]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id AAA14782 for <fvwm-workers@hpc.uh.edu>; Mon, 29 Jul 1996 00:14:36 -0500 (CDT)
+Received: from jato by JATO.hackvan.com  with smtp
+	(Linux Smail3.1.29.1 #27) id m0ukkeT-000HE9C; Sun, 28 Jul 96 22:13 PDT
+Message-ID: <31FC4895.2E6F865F@hackvan.com>
+Date: Sun, 28 Jul 1996 22:13:57 -0700
+From: Stig <stig@hackvan.com>
+X-Mailer: Mozilla 3.0b5a (X11; U; Linux 2.0.4 i586)
+MIME-Version: 1.0
+To: fvwm-workers@hpc.uh.edu
+Subject: Warp does(did)n't de-iconify windows
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-alpha8
+
+Last time I tried out fvwm, it didn't properly de-iconify windows when
+you tried to warp to them.  I've seen mention of this recently on the
+linux.x newsgroup and so it still seems to be a problem.
+
+	Stig
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Tue Jul 30 06:16:07 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id GAA25310; Tue, 30 Jul 1996 06:16:07 -0500 (CDT)
+Received: from email.aston.ac.uk (email.aston.ac.uk [134.151.79.13]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id GAA25303 for <fvwm-workers@hpc.uh.edu>; Tue, 30 Jul 1996 06:15:53 -0500 (CDT)
+Received: from sun.aston.ac.uk (actually host dirac.aston.ac.uk) 
+          by email.aston.ac.uk with SMTP (PP); Tue, 30 Jul 1996 12:17:17 +0100
+Message-Id: <6403.199607301113@sun.aston.ac.uk>
+To: fvwm-workers@hpc.uh.edu
+Subject: dynamic icon title width
+X-Mailer: Mew version 1.02 on Emacs 19.29.2
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Date: Tue, 30 Jul 1996 12:12:59 +0100
+From: Richard Lister <listerrj@helios.aston.ac.uk>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-alpha9-jlt1
+
+
+Hi Chuck
+
+A couple of months ago I sent the following patch to recalculate icon
+width for every Iconify when using icons with no pixmap (in case the
+icon title has changed).
+
+The patch didn't get into 2.0.43. Any chance it'll make it into 2.1, or
+is there some reason not to use it?
+
+Cheers
+Ric
+
+
+--- fvwm/icons.c.orig	Sun Jun  9 20:57:11 1996
++++ fvwm/icons.c	Thu Jun 13 10:55:51 1996
+@@ -809,6 +809,15 @@
+     else
+       CreateIconWindow(tmp_win, def_x, def_y);
+ 
++  /* if no pixmap we want icon width to change to text width every iconify */
++  if( (tmp_win->icon_w != None) && (tmp_win->icon_pixmap_w == None) ) {
++    tmp_win->icon_t_width =
++      XTextWidth(Scr.IconFont.font,tmp_win->icon_name, 
++                 strlen(tmp_win->icon_name));
++    tmp_win->icon_p_width = tmp_win->icon_t_width+6;
++    tmp_win->icon_w_width = tmp_win->icon_p_width; 
++  }
++
+   AutoPlace(tmp_win);
+   tmp_win->flags |= ICONIFIED;
+   tmp_win->flags &= ~ICON_UNMAPPED;
+
+
+ ~~~~~~~~~~~~~~ Richard J. Lister    r.j.lister@aston.ac.uk ~~~~~~~~~~~~~~~~
+            Research Assistant, Neural Computing Research Group
+                  Aston University, Birmingham B4 7ET, UK
+ ~~~~~~~~~~~~~~~~~ http://www.ncrg.aston.ac.uk/~listerrj/ ~~~~~~~~~~~~~~~~~~
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+

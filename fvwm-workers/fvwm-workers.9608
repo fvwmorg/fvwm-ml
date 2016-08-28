@@ -1,0 +1,1386 @@
+From owner-fvwm-workers@hpc.uh.edu  Thu Aug  1 15:31:26 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id PAA00599; Thu, 1 Aug 1996 15:31:25 -0500 (CDT)
+Received: from duke.cs.duke.edu (duke.cs.duke.edu [152.3.140.1]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id PAA00595 for <fvwm-workers@hpc.uh.edu>; Thu, 1 Aug 1996 15:31:21 -0500 (CDT)
+Received: from moa.cs.duke.edu
+	by duke.cs.duke.edu (5.65/3.10G/4.1.3)
+	id AA03252; Thu, 1 Aug 96 16:31:28 -0400
+Received: from localhost by moa.cs.duke.edu (SMI-8.6/SMI-SVR4)
+	id QAA23726; Thu, 1 Aug 1996 16:29:47 -0400
+Date: Thu, 1 Aug 1996 16:29:46 -0400 (EDT)
+From: "Greg J. Badros" <gjb@moa.cs.duke.edu>
+To: fvwm-workers@hpc.uh.edu
+Subject: PipeRead
+Message-Id: <Pine.SOL.3.93.960801161619.23656D-100000@moa.cs.duke.edu>
+Mime-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-alpha9-jlt1
+
+Hi,
+  Two requests that I'd love to see, but don't have time right now to do
+(and couldn't do as well as someone more familiar with FVWM than I am).
+
+* A mechanism to print out an arbitrary message to stderr... this could
+  be used to aid in debugging in order to see where FVWM gets upset in 
+  its initialization files.  Something like:
+
+Trace "Parsing menu definitions..."
+
+  Would just write the message to stderr.  Currently I hack this by
+something like:
+
+Parsing_menu_definitions...
+
+  And fvwm gives me an error message about not being able to find that
+module.  The underscores are so I get the whole message in the error file.
+
+* PipeRead is a great addition, but I'd love to see it work better with
+FvwmM4.  Specifically, I used to do something like this:
+
+define(`m4_hosts_list_file',maketemp(`TMPDIR/xhostsXXXXXX'))
+syscmd(`awk </etc/hosts "/localhost/ {next}\
+/^[^#]*[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/ {print \"AddHostToMenu(\"\$2\
+\",Hosts)\" }" > 'm4_hosts_list_file)
+include(m4_hosts_list_file)
+syscmd(rm m4_hosts_list_file)'
+
+To simulate something like PipeRead.  Though I can certainly create a
+macro to do this more cleanly, it'd be nice if:
+
+PipeRead awk </etc/hosts "/localhost/ {next}\
+/^[^#]*[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/ {print \"AddHostToMenu(\"\$2\
+\",Hosts)\" }"
+
+Would work. Currently, I don't think the args after the executable name
+get passed to the executable.  Also, the input doesn't get handed off to
+FvwmM4 to be parsed before FVWM gets it.  This may be not worth the
+trouble, given that I'm really asking for a new feature in m4 (but to
+ensure compatibility across platforms, I don't want to just add an
+extension to GNU m4).  Passing the args to PipeRead would really help in
+eliminating the need for separate executables passed along with FVWM
+configurations, thus increasing security and reducing setup difficulties.
+
+Greg J. Badros
+gjb@cs.duke.edu
+http://www.cs.duke.edu/~gjb
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Aug  5 08:25:17 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id IAA27975; Mon, 5 Aug 1996 08:25:17 -0500 (CDT)
+Received: from VNET.IBM.COM (vnet.ibm.com [199.171.26.4]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id IAA27958 for <fvwm-workers@hpc.uh.edu>; Mon, 5 Aug 1996 08:25:08 -0500 (CDT)
+Received: from FISHKILL by VNET.IBM.COM (IBM VM SMTP V2R3) with BSMTP id 8974;
+   Mon, 05 Aug 96 09:25:03 EDT
+Received: by FISHKILL (XAGENTA 4.0) id 7734; Mon, 5 Aug 1996 09:25:02 -0400 
+Received: by cold.fishkill.ibm.com (AIX 3.2/UCB 5.64/4.03)
+          id AA33509; Mon, 5 Aug 1996 09:24:51 -0400
+Date: Mon, 5 Aug 1996 09:24:51 -0400
+Message-Id: <9608051324.AA33509@cold.fishkill.ibm.com>
+From: "Charles Hines" <chuck_hines@VNET.IBM.COM>
+To: Manoj Kasichainula <manojk@andrew.cmu.edu>
+Cc: fvwm@hpc.uh.edu, fvwm-workers@hpc.uh.edu
+Subject: Re: FVWM: (long) startup timing bug patch to test
+In-Reply-To: <Pine.LNX.3.95.960725162951.21937B-100000@chutney.ini.cmu.edu>
+References: <9607251806.AA47041@cold.fishkill.ibm.com>
+        <Pine.LNX.3.95.960725162951.21937B-100000@chutney.ini.cmu.edu>
+X-Face: 'pn"gAx+&w4-=-}\z>*.Y*@(lC;t1<P);@iwiv';)vn3H2\/.x#;>J[a,/Q.Yv0^Wwc6_"H]}}-"?%)ETS`1v[]P`w4,E.9Bgf*XI4<H{C}Mf@'Ms)z?Bqzf"8v/oY\9K){w}\pw
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-alpha9-jlt1
+
+>>>>> "Manoj" == Manoj Kasichainula <manojk@andrew.cmu.edu> writes:
+
+....
+Manoj> Now, I've applied this patch, but I'm still getting the same timing
+Manoj> problem with a window not getting Style flags. :(
+
+I know it's been a few weeks, but getting back to this problem - I
+think I missed one little thing that could cause the timing bug if
+you're starting w/ FvwmM4 or FvwmCpp, which I don't know since I
+couldn't access the URL which you specified as containing your
+..fvwm2rc file.
+
+I've really got to walk through all the code and verify all of the
+server grabs and ungrabs too, but I think this is the last big
+problem...  Whoops!  Spoke too soon - just found one more potential
+problem.
+
+Ok, please try applying this patch on top of the one I already sent:
+
+----------------------------------------------------------------------
+--- fvwm.c-patch1      Mon Aug  5 09:02:23 1996
++++ fvwm.c    Mon Aug  5 08:58:53 1996
+@@ -492,10 +492,15 @@
+   unsigned int nchildren;
+   Window root, parent, *children;
+
++  MyXGrabServer(dpy);
++
+   PPosOverride = TRUE;
+
+   if(!XQueryTree(dpy, Scr.Root, &root, &parent, &children, &nchildren))
++  {
++    MyXUngrabServer(dpy);
+     return;
++  }
+
+   /*
+    * weed out icon windows
+@@ -546,7 +551,7 @@
+   PPosOverride = FALSE;
+   Scr.flags |= WindowsCaptured;
+   KeepOnTop();
+-
++  MyXUngrabServer(dpy);
+ }
+
+ /*
+--- builtins.c-patch1  Mon Aug  5 09:02:21 1996
++++ builtins.c        Mon Aug  5 09:00:34 1996
+@@ -987,6 +987,15 @@
+   Done(0,NULL);
+ }
+
++void echo_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
++               unsigned long context, char *action,int *Module)
++{
++  if (action && *action)
++  {
++    fvwm_msg(INFO,"Echo",action);
++  }
++}
++
+ void raiselower_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+                     unsigned long context, char *action,int *Module)
+ {
+@@ -2024,14 +2033,19 @@
+   unsigned long nitems, bytes_remain;
+   Window root, parent, *children;
+
++  MyXGrabServer(dpy);
++
+   if(!XQueryTree(dpy, Scr.Root, &root, &parent, &children, &nchildren))
++  {
++    MyXUngrabServer(dpy);
+     return;
++  }
+
+   BlackoutScreen();
+
+   PPosOverride = True;
++
+   /* put a border back around all windows */
+-  MyXGrabServer(dpy);
+   tmp = Scr.FvwmRoot.next;
+   for(i=0;i<nchildren;i++)
+   {
+@@ -2074,5 +2088,4 @@
+   KeepOnTop();
+   MyXUngrabServer(dpy);
+   XSync(dpy,0);
+-
+ }
+----------------------------------------------------------------------
+
+Let me know if this helps.  If it does then I may be able to move
+around some of the other grabs that I put in.
+
+Thanks,
+Chuck
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Aug  5 13:31:05 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id NAA09897; Mon, 5 Aug 1996 13:31:04 -0500 (CDT)
+Received: from chutney.ini.cmu.edu (ANNEX-V34BIS-21.SLIP.ANDREW.CMU.EDU [128.2.120.194]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id NAA09863; Mon, 5 Aug 1996 13:30:48 -0500 (CDT)
+Received: from localhost (manojk@localhost) by chutney.ini.cmu.edu (8.7.5/8.7.3) with SMTP id OAA05054; Mon, 5 Aug 1996 14:29:51 -0400
+Date: Mon, 5 Aug 1996 14:29:49 -0400 (EDT)
+From: Manoj Kasichainula <manojk@andrew.cmu.edu>
+X-Sender: manojk@chutney.ini.cmu.edu
+To: Charles Hines <chuck_hines@VNET.IBM.COM>
+cc: fvwm@hpc.uh.edu, fvwm-workers@hpc.uh.edu
+Subject: Re: FVWM: (long) startup timing bug patch to test
+In-Reply-To: <9608051324.AA33509@cold.fishkill.ibm.com>
+Message-ID: <Pine.LNX.3.95.960805142159.4946A-100000@chutney.ini.cmu.edu>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-alpha9-jlt1
+
+On Mon, 5 Aug 1996, Charles Hines wrote:
+
+> I know it's been a few weeks, but getting back to this problem - I
+> think I missed one little thing that could cause the timing bug if
+> you're starting w/ FvwmM4 or FvwmCpp, which I don't know since I
+> couldn't access the URL which you specified as containing your
+> ..fvwm2rc file.
+
+Hmmm. My web server was down for about a day a couple of weeks ago, and
+the fvwm2rc file was missing for a few days after that, but it is there
+now. Just in case I put the URL down incorrectly, here it is again
+
+http://dosa.ini.cmu.edu/~manojk/fvwm2rc
+
+I just verified this in Lynx, so you should be able to access it. I am
+using FvwmCpp. 
+
+> 
+> I've really got to walk through all the code and verify all of the
+> server grabs and ungrabs too, but I think this is the last big
+> problem...  Whoops!  Spoke too soon - just found one more potential
+> problem.
+
+No luck... Still getting the same Style problems as before with the
+starting rxvt. :(
+
+If I get a chance, I will try to reformat the fvwm2rc so it doesn't need
+FvwmCpp, and report on what happens.
+
+_________________________________________________________________________
+Manoj Kasichainula - manojk@andrew.cmu.edu | "Violence is the first refuge
+http://dosa.ini.cmu.edu/~manojk/           |  of the violent."
+Finger for PGP public key & Geek Code      |     - Aaron Allston
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Wed Aug  7 17:42:31 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id RAA11801; Wed, 7 Aug 1996 17:42:30 -0500 (CDT)
+Received: from newton.auto.tuwien.ac.at (newton.auto.tuwien.ac.at [128.130.41.13]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id RAA11769; Wed, 7 Aug 1996 17:42:15 -0500 (CDT)
+Received: from vta_host.auto.tuwien.ac.at by newton.auto.tuwien.ac.at with SMTP id AA07296
+  (5.65c/IDA-1.4.4); Thu, 8 Aug 1996 00:42:14 +0200
+Received: by vta_host.auto.tuwien.ac.at (4.1/JK-0.4.5a)
+	id AA05088; Thu, 8 Aug 96 00:42:13 +0200
+Date: Thu, 8 Aug 96 00:42:13 +0200
+From: albrecht@auto.tuwien.ac.at (Albrecht Kadlec)
+Message-Id: <9608072242.AA05088@vta_host.auto.tuwien.ac.at>
+To: fvwm@hpc.uh.edu, fvwm-workers@hpc.uh.edu, boyns@sdsu.edu
+In-Reply-To: <x0ohlpe7dj.fsf@doctor.sdsu.edu> (message from Mark Boyns on 09 Jul 1996 09:09:12 -0700)
+Subject: Re: FVWM: [2.0.43] FvwmAudio patch (long)
+X-Attribution: A
+Reply-To: albrecht@auto.tuwien.ac.at (Albrecht Kadlec)
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-alpha9-jlt1
+
+
+hello all,
+
+after requests for rsynth support (needs spaces between words)
+I've made a small patch for 2.0.43 and posted it to the list 
+(it included the "string" patch). 
+
+Now I found Mark Boyns patch for 2.0.43.
+I reapplied my patches after his patch, and reworked some tiny bits so
+that FvwmAudio now supports quoted parameters.
+
+for details, see the ChangeLog.
+I post the whole source file, since the context diff was just
+marginally smaller, and I didn't want to send patches for plain 2.0.43
+and 2.0.43 with Mark Boyns patch.
+
+PS: Chuck: have a look at the WIBNI in the code.
+
+I'll go and get some sleep now,
+albrecht
+
+/* 
+ * Copyright (C) 1994 Mark Boyns (boyns@sdsu.edu) and
+ *                    Mark Scott (mscott@mcd.mot.com)
+ *
+ * FvwmAudio version 1.1
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
+
+/* ChangeLog
+
+ * made FvwmAudio insensitive to its name -> can be symlinked.
+   corrected some error message deficiencies, code for quoted 'sound' 
+   parameters shamelessly stolen from FvwmButtons/parse.c (with minimal
+   adjustments)
+   FvwmAudio now supports rsynth's say command:
+   *FvwmAudioPlayCmd say
+   *FvwmAudio add_window	   "add window"      
+   *FvwmAudio raise_window	   'raise window'
+               -- 08/07/96 Albrecht Kadlec (albrecht@auto.tuwien.ac.at)
+
+ * Fixed FvwmAudio to reflect the changes made to the module protocol.
+
+ * Szijarto Szabolcs <saby@sch.bme.hu> provided FvwmSound code that used
+ $HOSTDISPLAY for the rplay host.  The code has been added to FvwmAudio.
+
+ * Fixed bugs reported by beta testers, thanks!
+
+ * Builtin rplay support has been added to FvwmAudio.  This support is
+ enabled when FvwmAudio is compiled with HAVE_RPLAY defined and when
+ FvwmAudioPlayCmd is set to builtin-rplay.  I guess it's safe to say
+ that FvwmSound is now obsolete. -- Mark Boyns 5/7/94
+ 
+ * FvwmAudio is based heavily on an Fvwm module "FvwmSound" by Mark Boyns
+ and the real credit for this really goes to him for the concept.
+ I just stripped out the "rplay" library dependencies to allow generic
+ audio play command support.
+
+ */
+
+/*
+ * This module is based on FvwmModuleDebugger which has the following
+ * copyright:
+ *
+ * This module, and the entire ModuleDebugger program, and the concept for
+ * interfacing this module to the Window Manager, are all original work
+ * by Robert Nation
+ *
+ * Copyright 1994, Robert Nation. No guarantees or warantees or anything
+ * are provided or implied in any way whatsoever. Use this program at your
+ * own risk. Permission to use this program for any purpose is given,
+ * as long as the copyright is kept intact.
+ */
+
+/*
+ * fvwm includes:
+ */
+#include <stdio.h>
+#include <signal.h>
+#include <fcntl.h>
+#include <string.h>
+#include <sys/wait.h>
+#include <sys/time.h>
+#include <unistd.h>
+#include <ctype.h>
+#include <stdlib.h>
+
+/*
+ * rplay includes:
+ */
+#ifdef HAVE_RPLAY
+#include <rplay.h>
+#undef M_ERROR /* Solaris fix */
+#endif
+
+#include "../../configure.h"
+#include "../../fvwm/module.h"
+#include "../../version.h"
+#include "../../libs/fvwmlib.h"     
+
+#define BUILTIN_STARTUP		MAX_MESSAGES
+#define BUILTIN_SHUTDOWN	MAX_MESSAGES+1
+#define BUILTIN_UNKNOWN		MAX_MESSAGES+2
+#define MAX_BUILTIN		3
+
+#define BUFSIZE			512
+
+/* globals */
+char	*MyName;
+int	MyNameLen;
+int	fd_width;
+int	fd[2];
+char	audio_play_cmd_line[BUFSIZE], audio_play_dir[BUFSIZE];
+time_t	audio_delay = 0;	/* seconds */
+#ifdef HAVE_RPLAY
+int	rplay_fd = -1;
+#endif
+
+/* ----------- shamelessly stolen from FvwmButtons/parse.c 
+  sorry, had to change trimright(), use safemalloc, MyName+1 
+  WIBNI this was in libfvwm(2).a - or fvwm just piped tokens? ------------ */
+
+#define mymalloc safemalloc
+
+#define trimleft(s) {while(*s==' '||*s=='\t'||*s=='\n')(s)++;}
+#define trimright(s) {                                                        \
+  register char *t=(s);while(*t) t++;                                         \
+  --t; while(t>=s && (*t==' '||*t=='\t'||*t=='\n')) t--;                      \
+  t[1]=0;}
+
+/**
+*** seekright()
+***
+*** split off the first continous section of the string into a new allocated
+*** string and move the old pointer forward. Accepts and strips quoting with
+*** '," or `, and the current quote q can be escaped inside the string with \q.
+**/
+char *seekright(char **s)
+{
+  char *b,*t,*r,q;
+  trimleft(*s);
+  q=**s;
+  if(q=='"' || q=='`' || q=='\'')
+    {
+      b=t=(*s)++;
+      while(**s && (**s!=q || (*(*s-1)=='\\' && t--)))
+	*t++=*((*s)++);
+      if(!**s)
+	fprintf(stderr,"%s: Unterminated %c quote found\n",MyName+1,q);
+      else (*s)++;
+    }
+  else
+    {
+      b=t=*s;
+      while(**s && !isspace(**s) && **s!=')' && **s!=',')
+	(*s)++;
+      t=*s;
+    }
+  if(t<=b)
+    return NULL;
+  r=mymalloc(t-b+1);
+  strncpy(r,b,t-b);
+  r[t-b]=0;
+  return r;
+}
+/* ---------------------- end of borrowed section ----------------------- */
+
+/* prototypes */
+void	Loop(int *);
+void	process_message(unsigned long,unsigned long *);
+void	DeadPipe(int);
+void	config(void);
+void	done(int);
+int     audio_play(short); 
+
+/* define the message table */
+char	*messages[MAX_MESSAGES+MAX_BUILTIN] =
+{
+	"new_page",
+	"new_desk",
+	"add_window",
+	"raise_window",
+	"lower_window",
+	"configure_window",
+	"focus_change",
+	"destroy_window",
+	"iconify",
+	"deiconify",
+	"window_name",
+	"icon_name",
+	"res_class",
+	"res_name",
+	"end_windowlist",
+	"icon_location",
+	"map",
+	"error",
+	"config_info",
+	"end_config_info",
+	"icon_file",
+	"default_icon",
+	"string",
+/* add builtins here */
+	"startup",
+	"shutdown",
+	"unknown"
+};
+
+/* define the sound table  */
+char	*sound_table[MAX_MESSAGES+MAX_BUILTIN];
+
+#ifdef HAVE_RPLAY
+/* define the rplay table */
+RPLAY	*rplay_table[MAX_MESSAGES+MAX_BUILTIN];
+#endif
+
+main(int argc, char **argv)
+{
+	char *temp, *s;
+
+	/* Save our program  name - for error messages */
+	temp = argv[0];
+	s=strrchr(argv[0], '/');
+	if (s != NULL)
+		temp = s + 1;
+
+	MyNameLen=strlen(temp)+1;	/* acoount for '*' */
+	MyName = safemalloc(MyNameLen+1); /* account for \0 */
+	strcpy(MyName,"*");
+	strcat(MyName, temp);
+
+	if ((argc != 6)&&(argc != 7))	/* Now Myname is defined */
+	{
+		fprintf(stderr,"%s Version %s should only be executed by fvwm!\n",
+			MyName+1 /* without '*'!!! */, VERSION);
+		exit(1);
+	}
+
+	/* Dead pipe == Fvwm died */
+	signal (SIGPIPE, DeadPipe);  
+  
+	fd[0] = atoi(argv[1]);
+	fd[1] = atoi(argv[2]);
+
+	audio_play_dir[0] = '\0';
+	audio_play_cmd_line[0] = '\0';
+
+	/*
+	 * Read the sound configuration.
+	 */
+	config();
+
+	/*
+	 * Play the startup sound.
+	 */
+	audio_play(BUILTIN_STARTUP);
+	SendText(fd,"Nop",0);
+	Loop(fd);
+}
+
+/***********************************************************************
+ *
+ *  Procedure:
+ *	config - read the sound configuration file.
+ *
+ ***********************************************************************/
+void	config(void)
+{
+  char	*buf;
+  char	*message;
+  char	*sound;
+  char	*p;
+  int	i, found;
+#ifdef HAVE_RPLAY
+  int	volume = RPLAY_DEFAULT_VOLUME;
+  int	priority = RPLAY_DEFAULT_PRIORITY;
+  char	host[128];
+
+  strcpy(host, rplay_default_host());
+#endif
+  
+  /*
+   * Intialize all the sounds.
+   */
+  for (i = 0; i < MAX_MESSAGES+MAX_BUILTIN; i++) {
+    sound_table[i] = NULL;
+#ifdef HAVE_RPLAY
+    rplay_table[i] = NULL;
+#endif
+  }
+  
+  
+  GetConfigLine(fd,&buf);
+  while (buf != NULL)
+    {
+      if (buf[0] == '*')		/* this check is obsolete */
+					/* - included in the next if */
+	{
+	  buf[strlen(buf)-1] = '\0';	/* strip off \n */
+	  /*
+	   * Search for MyName (normally *FvwmAudio)
+	   */
+	  if (mystrncasecmp(buf, MyName, MyNameLen) == 0)
+	    {
+	      p = strtok(buf+MyNameLen, " \t");	
+	  
+	      if (mystrcasecmp(p, "PlayCmd") == 0) {
+		p = strtok(NULL, "\n"); /* allow parameters */
+		if (p && *p) {
+		  strcpy(audio_play_cmd_line, p);
+		}
+	      }
+	      else if (mystrcasecmp(p, "Dir") == 0) {
+		p = strtok(NULL, " \t");
+		if (p && *p) {
+		  strcpy(audio_play_dir, p);
+		}
+	      }
+	      else if (mystrcasecmp(p, "Delay") == 0) {
+		p = strtok(NULL, " \t");
+		if (p && *p) {
+		  audio_delay = atoi(p);
+		}
+	      }
+	  
+#ifdef HAVE_RPLAY
+	      /*
+	       * Check for rplay configuration options.
+	       */
+	      else if (mystrcasecmp(p, "RplayHost") == 0)
+		{
+		  p = strtok(NULL, " \t");
+		  if (p && *p)
+		    {
+		      /*
+		       * Check for environment variables like $HOSTDISPLAY.
+		       */
+		      if (*p == '$')
+			{
+			  char	*c1, *c2;
+			  c2 = host;
+			  for (c1 = (char *)getenv(p+1); *c1 && (*c1 != ':'); c1++)
+			    {
+			      *c2++ = *c1;
+			    }
+			  *c2 = '\0';
+			}
+		      else
+			{
+			  strcpy(host, p);
+			}
+		    }
+		}
+	      else if (mystrcasecmp(p, "RplayVolume") == 0)
+		{
+		  p = strtok(NULL, " \t");
+		  if (p && *p) {
+		    volume = atoi(p);
+		  }
+		}
+	      else if (mystrcasecmp(p, "RplayPriority") == 0)
+		{
+		  p = strtok(NULL, " \t");
+		  if (p && *p) {
+		    priority = atoi(p);
+		  }
+		}
+#endif
+	      /*
+               * *FvwmAudio <message_type> <audio_file>
+	       * for builtin rplay
+	       *
+	       *  or
+	       *
+	       * *FvwmAudio <message_type> <"any quoted parameters">
+	       * can be (mis)used to call FvwmAudioPlayCmd
+	       * with arbitrary parameters e.g: rsynth/say "window raised"
+	       *
+	       * can even be used to call arbitrary commands,
+	       * if the following wrapper is used as FvwmAudioPlayCmd
+	       * 
+	       *	#!/bin/tcsh
+	       *	${argv[1-]}
+	       */
+	      else  {
+		message = p;
+		p=strtok(NULL, "");	/* get rest of line */
+		sound = seekright(&p);	/* extract next parameter */
+	    
+		if (!message || !*message || !sound || !*sound)
+		  {
+		    fprintf(stderr,"%s: incomplete event definition %s\n",
+			    MyName+1, buf);
+		    GetConfigLine(fd,&buf);
+		    continue;
+		  }
+	    
+		found = 0;
+
+	    	for (i = 0; !found && i < MAX_MESSAGES+MAX_BUILTIN; i++)
+		  {
+		    if (mystrcasecmp(message, messages[i]) == 0) {
+#ifdef HAVE_RPLAY
+		      rplay_table[i] = rplay_create(RPLAY_PLAY);
+		      rplay_set(rplay_table[i], RPLAY_APPEND,
+				RPLAY_SOUND,	sound,
+				RPLAY_PRIORITY,	priority,
+				RPLAY_VOLUME,	volume,
+				NULL);
+#endif
+		      sound_table[i]=sound;
+		      found++;
+		    }
+		  }
+		if (!found) fprintf(stderr,"%s: unknown message type: %s\n",
+				    MyName+1, message);
+	      }
+	   }
+	}
+      GetConfigLine(fd,&buf);
+    }
+  
+#ifdef HAVE_RPLAY
+  /*
+   * Builtin rplay support is enabled when FvwmAudioPlayCmd == builtin-rplay.
+   */
+  if (mystrcasecmp(audio_play_cmd_line, "builtin-rplay") == 0)
+    {
+      rplay_fd = rplay_open(host);
+      if (rplay_fd < 0)
+	{
+	  rplay_perror("rplay_open");
+	  done(1);
+	}
+    }
+#endif
+}
+
+/***********************************************************************
+ *
+ *  Procedure:
+ *	Loop - wait for data to process
+ *
+ ***********************************************************************/
+void Loop(int *fd)
+{
+	unsigned long	header[HEADER_SIZE], *body;
+	char		*cbody;
+	int		body_length,count,count2=0, total;
+	time_t 		now, last_time = 0;
+	unsigned long	code;
+	
+	while (1)
+	{
+		if ((count = read(fd[1],header,
+				  HEADER_SIZE*sizeof(unsigned long))) > 0)
+		{
+			/*
+			 * Ignore messages that occur during the delay
+			 * period.
+			 */
+			now = time(0);
+			if (now < (last_time + audio_delay))
+			{
+				continue;
+			}
+			last_time = now;
+			
+			if(header[0] == START_FLAG)
+			{
+				body_length = header[2]-HEADER_SIZE;
+				body = (unsigned long *)
+					safemalloc(body_length * sizeof(unsigned long));
+				cbody = (char *)body;
+				total = 0;
+				while(total < body_length*sizeof(unsigned long))
+				{
+					if((count2=read(fd[1],&cbody[total],
+						body_length*sizeof(unsigned long)-total)) >0)
+						total += count2;
+					else if(count2 < 0)
+						DeadPipe(0);
+				}
+
+				/*
+				 * code will equal the number of shifts in the
+				 * base-2 header[1] number.  Could use log here
+				 * but this should be fast enough.
+				 */
+				code = -1;
+				while (header[1])
+				{
+					code++;
+					header[1] >>= 1;
+				}
+				
+				/*
+				 * Play the sound.
+				 */
+				if (code >= 0 && code < MAX_MESSAGES)
+				{
+					audio_play(code);
+				}
+				else
+				{
+					audio_play(BUILTIN_UNKNOWN);
+				}
+				
+				free(body);
+			}
+		}
+		if(count <= 0)
+			DeadPipe(1);
+	}
+}
+
+
+/***********************************************************************
+ *
+ *  Procedure:
+ *	SIGPIPE handler - SIGPIPE means fvwm is dying
+ *
+ ***********************************************************************/
+void DeadPipe(int nonsense)
+{
+	done(0);
+}
+
+/***********************************************************************
+ *
+ *  Procedure:
+ *	done - common exit point for FvwmAudio.
+ *
+ ***********************************************************************/
+void	done(int n)
+{
+	audio_play(BUILTIN_SHUTDOWN);
+	exit(n);
+}
+
+/***********************************************************************
+ *
+ * Procedure:
+ *
+ *    audio_play - actually plays sound from lookup table
+ *
+ **********************************************************************/
+int audio_play(short sound) 
+{
+	static char buf[BUFSIZE];
+
+#ifdef HAVE_RPLAY
+	if (rplay_fd != -1)
+	{
+		if (rplay_table[sound])
+		{
+			if (rplay(rplay_fd, rplay_table[sound]) < 0)
+			{
+				rplay_perror("rplay");
+			}
+		}
+		return 0;
+	}
+#endif
+	if (sound_table[sound])
+	{
+		memset(buf,0,BUFSIZE);
+
+		/*
+		 * Don't use audio_play_dir if it's NULL or if the sound file
+		 * is an absolute pathname.
+		 */
+		if (audio_play_dir[0] == '\0' || sound_table[sound][0] == '/')
+		{
+			sprintf(buf,"%s %s", audio_play_cmd_line, sound_table[sound]);
+		}
+		else
+		{
+			sprintf(buf,"%s %s/%s &", audio_play_cmd_line, audio_play_dir,
+				sound_table[sound]);
+		}
+		return system(buf);
+	}  
+
+	return 1;
+}
+
+
+-- 
+We all know Santa as a fat, jolly old man. Well, he may be fat and he
+may be old, but he ain't always jolly. There was this one year when
+Mrs. Claus decided she wanted to be a feminist, the reindeer went on
+strike, and the elves sued because they wanted to be called
+"vertically challenged toy manufacturers".
+So Santa retreated to his office to rest, when an angel entered and
+said, "Santa..."
+"What do you want?" was the reply.
+"Well," the angel answered,"The Christmas Tree arrived today."
+"So?" Santa said.
+"Well, I was wondering where you wanted me to put it."
+And that, my friends, is why Angels sit on top of trees.
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Thu Aug 15 07:28:20 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id HAA29763; Thu, 15 Aug 1996 07:28:19 -0500 (CDT)
+Received: from peanuts.Informatik.Uni-Tuebingen.De (peanuts.Informatik.Uni-Tuebingen.De [134.2.14.1]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id HAA29755 for <fvwm-workers@hpc.uh.edu>; Thu, 15 Aug 1996 07:27:32 -0500 (CDT)
+Received: from peanuts.informatik.uni-tuebingen.de (ti-ibm03 [134.2.14.49]) by peanuts.Informatik.Uni-Tuebingen.De (8.6.12/8.6.12) with SMTP id OAA17629 for <fvwm-workers@hpc.uh.edu>; Thu, 15 Aug 1996 14:27:34 +0200
+Received: by peanuts.informatik.uni-tuebingen.de (AIX 3.2/UCB 5.64/4.03)
+          id AA18355; Thu, 15 Aug 1996 14:27:30 +0200
+From: ettrich@peanuts.informatik.uni-tuebingen.de
+Message-Id: <9608151227.AA18355@peanuts.informatik.uni-tuebingen.de>
+Subject: new module FvwmPipe: Control Fvwm from outside
+To: fvwm-workers@hpc.uh.edu
+Date: Thu, 15 Aug 1996 14:27:22 +0200 (METDST)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-alpha9-jlt2
+
+
+Hello,
+
+I just subscribed to the mailing list. So please excuse if this is
+an already existing or discussed topic/module.
+(Didn't find anything in the archive though)
+
+I remember there was a few time ago a question in c.o.l.d.a how
+another program could control fvwm from outside.  As far as I know
+there wasn't a solution yet.
+
+Well yesterday I wanted to do some pipe-hacking for personal
+experiences and wrote a little module FvwmPipe to solve the above
+mentioned problem.
+
+When invoked this module creates a pipe "$HOME/.fvwmpipe.in".
+Whatever you write to this pipe will be passed through to fvwm.
+
+   For example: 
+         echo "restart" > $HOME/.fvwmpipe.in
+	 (restarts fvwm)
+   or
+         echo "AddtoMenu \"StartMenu\" \"Emacs\" Exec emacs " > $HOME/.fvwmpipe.in
+	 (adds emacs to the StartMenu)
+   or
+         echo "DestroyMenu \"StartMenu\" " > $HOME/.fvwmpipe.in
+	 (destroys the StartMenu)
+
+The module makes it possible to write config-tools for fvwm in any
+language, for example TCL/TK.
+
+The code is somewhat based on the FvwmTalk module.
+
+You can download the module from 
+          ftp://fiwi02.wiwi.uni-tuebingen.de/pub/People/Ettrich/FvwmPipe.tgz
+
+What do you think?
+
+Regards,
+
+   Matthias 
+   (ettrich@informatik.uni-tuebingen.de)
+
+
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Thu Aug 15 07:59:55 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id HAA00851; Thu, 15 Aug 1996 07:59:55 -0500 (CDT)
+Received: from VNET.IBM.COM (vnet.ibm.com [199.171.26.4]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id HAA00842 for <fvwm-workers@hpc.uh.edu>; Thu, 15 Aug 1996 07:59:49 -0500 (CDT)
+Received: from FISHKILL by VNET.IBM.COM (IBM VM SMTP V2R3) with BSMTP id 9157;
+   Thu, 15 Aug 96 08:59:52 EDT
+Received: by FISHKILL (XAGENTA 4.0) id 9280; Thu, 15 Aug 1996 08:59:35 -0400 
+Received: by cold.fishkill.ibm.com (AIX 3.2/UCB 5.64/4.03)
+          id AA34491; Thu, 15 Aug 1996 08:57:45 -0400
+Date: Thu, 15 Aug 1996 08:57:45 -0400
+Message-Id: <9608151257.AA34491@cold.fishkill.ibm.com>
+From: "Charles Hines" <chuck_hines@VNET.IBM.COM>
+To: ettrich@peanuts.informatik.uni-tuebingen.de
+Cc: fvwm-workers@hpc.uh.edu
+Subject: Re: new module FvwmPipe: Control Fvwm from outside
+In-Reply-To: <9608151227.AA18355@peanuts.informatik.uni-tuebingen.de>
+References: <9608151227.AA18355@peanuts.informatik.uni-tuebingen.de>
+X-Face: 'pn"gAx+&w4-=-}\z>*.Y*@(lC;t1<P);@iwiv';)vn3H2\/.x#;>J[a,/Q.Yv0^Wwc6_"H]}}-"?%)ETS`1v[]P`w4,E.9Bgf*XI4<H{C}Mf@'Ms)z?Bqzf"8v/oY\9K){w}\pw
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-alpha9-jlt2
+
+>>>>> "Matthias" == ettrich  <ettrich@peanuts.informatik.uni-tuebingen.de> writes:
+
+Matthias> Hello,
+
+Guten Tag, Matthias.
+
+Matthias> I just subscribed to the mailing list. So please excuse if this is
+Matthias> an already existing or discussed topic/module.
+Matthias> (Didn't find anything in the archive though)
+
+Matthias> I remember there was a few time ago a question in c.o.l.d.a how
+Matthias> another program could control fvwm from outside.  As far as I know
+Matthias> there wasn't a solution yet.
+
+In the next release, in the extras dir, will be two modules written by
+Toshi Isogai, the second of which covers what you'd like:
+
+  FvwmConsole - a FvwmTalk replacement
+  FvwmCommand - to send commands to fvwm from a shell script or whatever
+
+I haven't really played with them much yet, honestly, but they seem
+promising.
+
+Matthias> Well yesterday I wanted to do some pipe-hacking for personal
+Matthias> experiences and wrote a little module FvwmPipe to solve the above
+Matthias> mentioned problem.
+
+Matthias> When invoked this module creates a pipe "$HOME/.fvwmpipe.in".
+Matthias> Whatever you write to this pipe will be passed through to fvwm.
+....
+Matthias> What do you think?
+
+Well, it sounds pretty interesting.  A different way to approach the
+problem.  I just grabbed it (pretty small) and will give it a try
+later, if I get a chance.  If you'd like I can include it in the
+extras directory for the next release (especially since it's so
+small).
+
+Chuck
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Fri Aug 16 07:02:11 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id HAA19110; Fri, 16 Aug 1996 07:02:10 -0500 (CDT)
+Received: from email.aston.ac.uk (email.aston.ac.uk [134.151.79.13]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id HAA19105 for <fvwm-workers@hpc.uh.edu>; Fri, 16 Aug 1996 07:02:01 -0500 (CDT)
+Received: from sun.aston.ac.uk (actually host dirac.aston.ac.uk) 
+          by email.aston.ac.uk with SMTP (PP); Fri, 16 Aug 1996 13:04:20 +0100
+Message-Id: <10384.199608161159@sun.aston.ac.uk>
+To: fvwm-workers@hpc.uh.edu
+Subject: trivial patch
+X-Mailer: Mew version 1.06 on Emacs 19.33.3
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Date: Fri, 16 Aug 1996 12:59:55 +0100
+From: Richard Lister <listerrj@helios.aston.ac.uk>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-alpha9-jlt2
+
+
+Chuck, any chance of including the following trivial patch? It's
+just that the unmatched quote inside a comment screws up hilighting
+in emacs :-)
+
+--- fvwm/misc.c.orig	Fri Aug 16 11:14:03 1996
++++ fvwm/misc.c	Fri Aug 16 12:55:36 1996
+@@ -280,7 +280,7 @@
+        * gpw -- 11/11/93
+        *
+        * Unfortunately, this does horrendous things during re-starts, 
+-       * hence the "if(restart) clause (RN) 
++       * hence the "if(restart)" clause (RN) 
+        *
+        * Also, fixed so that it only does this stuff if a window is more than
+        * half off the screen. (RN)
+
+
+Cheers
+Ric
+
+Richard J. Lister, Research Assistant    
+Neural Computing Research Group, Aston University
+r.j.lister@aston.ac.uk 
+http://www.ncrg.aston.ac.uk/~listerrj/ 
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Fri Aug 16 07:34:34 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id HAA19515; Fri, 16 Aug 1996 07:34:33 -0500 (CDT)
+Received: from VNET.IBM.COM (vnet.ibm.com [199.171.26.4]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id HAA19509 for <fvwm-workers@hpc.uh.edu>; Fri, 16 Aug 1996 07:34:28 -0500 (CDT)
+Received: from FISHKILL by VNET.IBM.COM (IBM VM SMTP V2R3) with BSMTP id 1343;
+   Fri, 16 Aug 96 08:34:29 EDT
+Received: by FISHKILL (XAGENTA 4.0) id 9541; Fri, 16 Aug 1996 08:34:29 -0400 
+Received: by cold.fishkill.ibm.com (AIX 3.2/UCB 5.64/4.03)
+          id AA46276; Fri, 16 Aug 1996 08:34:20 -0400
+Date: Fri, 16 Aug 1996 08:34:20 -0400
+Message-Id: <9608161234.AA46276@cold.fishkill.ibm.com>
+From: "Charles Hines" <chuck_hines@VNET.IBM.COM>
+To: Richard Lister <listerrj@helios.aston.ac.uk>
+Cc: fvwm-workers@hpc.uh.edu
+Subject: Re: trivial patch
+In-Reply-To: <10384.199608161159@sun.aston.ac.uk>
+References: <10384.199608161159@sun.aston.ac.uk>
+X-Face: 'pn"gAx+&w4-=-}\z>*.Y*@(lC;t1<P);@iwiv';)vn3H2\/.x#;>J[a,/Q.Yv0^Wwc6_"H]}}-"?%)ETS`1v[]P`w4,E.9Bgf*XI4<H{C}Mf@'Ms)z?Bqzf"8v/oY\9K){w}\pw
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-alpha9-jlt2
+
+>>>>> "Ric" == Richard Lister <listerrj@helios.aston.ac.uk> writes:
+
+Ric> Chuck, any chance of including the following trivial patch? It's
+Ric> just that the unmatched quote inside a comment screws up
+Ric> hilighting in emacs :-)
+
+Sure - just "fixed" it.  :)
+
+Chuck
+
+BTW - it doesn't screw up my fontification -> since it's in a comment,
+that takes precidence in my setup.
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Fri Aug 16 10:44:25 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id KAA23960; Fri, 16 Aug 1996 10:44:24 -0500 (CDT)
+Received: from email.aston.ac.uk (email.aston.ac.uk [134.151.79.13]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id KAA23954 for <fvwm-workers@hpc.uh.edu>; Fri, 16 Aug 1996 10:44:14 -0500 (CDT)
+Received: from sun.aston.ac.uk (actually host dirac.aston.ac.uk) 
+          by email.aston.ac.uk with SMTP (PP); Fri, 16 Aug 1996 16:46:30 +0100
+Message-Id: <10652.199608161542@sun.aston.ac.uk>
+To: chuck_hines@vnet.ibm.com
+Cc: fvwm-workers@hpc.uh.edu
+Subject: Re: trivial patch
+In-Reply-To: Your message of "Fri, 16 Aug 1996 08:34:20 -0400"
+References: <9608161234.AA46276@cold.fishkill.ibm.com>
+X-Mailer: Mew version 1.06 on Emacs 19.33.3
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Date: Fri, 16 Aug 1996 16:42:07 +0100
+From: Richard Lister <listerrj@helios.aston.ac.uk>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-alpha9-jlt2
+
+On Fri, 16 Aug 1996 08:34:20 -0400
+Charles Hines <chuck_hines@VNET.IBM.COM> 
+wrote concerning 'Re: trivial patch':
+> >>>>> "Ric" == Richard Lister <listerrj@helios.aston.ac.uk> writes:
+> 
+> Ric> Chuck, any chance of including the following trivial patch? It's
+> Ric> just that the unmatched quote inside a comment screws up
+> Ric> hilighting in emacs :-)
+> 
+> Sure - just "fixed" it.  :)
+
+Cheers. 
+
+> BTW - it doesn't screw up my fontification -> since it's in a comment,
+> that takes precidence in my setup.
+
+Probably inept configuration on my part using hilit19. The comment
+is hilighted correctly, but the odd quote causes everything after the
+comment to be hilighted as a string. <shrug> I need to clean up all my
+emacs code someday soon anyway ... it's hacksville in there :-)
+
+Ric
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Sat Aug 17 14:15:36 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id OAA06035; Sat, 17 Aug 1996 14:15:36 -0500 (CDT)
+Received: from chutney.ini.cmu.edu (ANNEX-TEST2-35.SLIP.ANDREW.CMU.EDU [128.2.120.35]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id OAA06031 for <fvwm-workers@hpc.uh.edu>; Sat, 17 Aug 1996 14:15:31 -0500 (CDT)
+Received: from localhost (manojk@localhost) by chutney.ini.cmu.edu (8.7.5/8.7.3) with SMTP id PAA05896 for <fvwm-workers@hpc.uh.edu>; Sat, 17 Aug 1996 15:15:27 -0400
+Date: Sat, 17 Aug 1996 15:15:26 -0400 (EDT)
+From: Manoj Kasichainula <manojk@andrew.cmu.edu>
+X-Sender: manojk@chutney.ini.cmu.edu
+To: fvwm-workers@hpc.uh.edu
+Subject: More info on Panning problems
+Message-ID: <Pine.LNX.3.95.960817150729.5614A-100000@chutney.ini.cmu.edu>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-alpha9-jlt2
+
+
+I've menioned a problem before where I cannot pan between pages on my
+virtual desktop without moving a window into another page or clicking on
+the pager module. I tried looking through the fvwm source to find
+something, and failed miserably. :) But, I have more info on this bug,
+which may be helpful to someone who _does_ understand the source. 
+
+It seems that until a window is moved _in any way_ or the pager is
+clicked, any cursor movement outside the current page will fail.
+
+Interactive move fixes things.
+Move 100 100 fixes things
+Panning using the cursor fails
+CursorMove 100 100 fails
+clicking anywhere on FvwmPager (including on the current page) fixes
+things
+GotoPage 1 0 fixes things. 
+
+So it seems that in the section of code that handles cursor movement,
+there's some variable that isn't initialized correctly until window
+movement, GotoPage, or a click on FvwmPager
+
+_________________________________________________________________________
+Manoj Kasichainula - manojk@andrew.cmu.edu | "Violence is the first refuge
+http://dosa.ini.cmu.edu/~manojk/           |  of the violent."
+Finger for PGP public key & Geek Code      |     - Aaron Allston
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Sat Aug 17 14:20:43 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id OAA06158; Sat, 17 Aug 1996 14:20:43 -0500 (CDT)
+Received: from chutney.ini.cmu.edu (ANNEX-TEST2-35.SLIP.ANDREW.CMU.EDU [128.2.120.35]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id OAA06154 for <fvwm-workers@hpc.uh.edu>; Sat, 17 Aug 1996 14:20:39 -0500 (CDT)
+Received: from localhost (manojk@localhost) by chutney.ini.cmu.edu (8.7.5/8.7.3) with SMTP id PAA05979 for <fvwm-workers@hpc.uh.edu>; Sat, 17 Aug 1996 15:20:42 -0400
+Date: Sat, 17 Aug 1996 15:20:41 -0400 (EDT)
+From: Manoj Kasichainula <manojk@andrew.cmu.edu>
+X-Sender: manojk@chutney.ini.cmu.edu
+To: fvwm-workers@hpc.uh.edu
+Subject: Re: More info on Panning problems
+In-Reply-To: <Pine.LNX.3.95.960817150729.5614A-100000@chutney.ini.cmu.edu>
+Message-ID: <Pine.LNX.3.95.960817151926.5614B-100000@chutney.ini.cmu.edu>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-alpha9-jlt2
+
+
+Oops. forgot to mention where to get my fvwm2rc for testing purposes:
+
+http://dosa.ini.cmu.edu/~manojk/fvwm2rc
+
+It requires FvwmCpp.
+
+_________________________________________________________________________
+Manoj Kasichainula - manojk@andrew.cmu.edu | "Violence is the first refuge
+http://dosa.ini.cmu.edu/~manojk/           |  of the violent."
+Finger for PGP public key & Geek Code      |     - Aaron Allston
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Sun Aug 18 21:14:10 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id VAA09547; Sun, 18 Aug 1996 21:14:10 -0500 (CDT)
+Received: from mail.handrade.pt ([194.65.39.102]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id VAA09543 for <fvwm-workers@hpc.uh.edu>; Sun, 18 Aug 1996 21:14:04 -0500 (CDT)
+Received: from JOAO by mail.handrade.pt; (NTMail 3.01.00) id ra000407; Mon, 19 Aug 96 02:08:56 +0000
+Message-ID: <3217C0E1.70A3@handrade.pt>
+Date: Mon, 19 Aug 1996 03:18:25 +0200
+From: João Miguel Custodio Mateus <joaomateus@handrade.pt>
+X-Mailer: Mozilla 3.0b5aGold (Win95; I)
+MIME-Version: 1.0
+To: fvwm-workers@hpc.uh.edu
+Subject: suscribe
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-alpha9-jlt2
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Wed Aug 28 11:53:21 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id LAA15685; Wed, 28 Aug 1996 11:53:20 -0500 (CDT)
+Received: (from tibbs@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id LAA15680 for fvwm-workers@hpc.uh.edu; Wed, 28 Aug 1996 11:53:17 -0500 (CDT)
+Received: from relay.mod.uk (relay.mod.uk [192.5.29.50]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id DAA05454 for <fvwm-workers@hpc.uh.edu>; Wed, 28 Aug 1996 03:58:05 -0500 (CDT)
+Received: from hermes.dra.hmg.gb by relay.mod.uk with local SMTP id <g.02023-0@relay.mod.uk>; Wed, 28 Aug 1996 09:57:41 +0100
+Received: from taz.dra.hmg.gb by hermes.dra.hmg.gb (MX V4.1 VAX) with SMTP;
+          Wed, 28 Aug 1996 09:57:37 GMT
+Received: from cutlas ([146.80.12.96]) by taz.dra.hmg.gb (MX V4.1 AXP) with
+          SMTP; Wed, 28 Aug 1996 09:58:21 GMT
+Message-ID: <322408C4.2394C405@dra.hmg.gb>
+Date: Wed, 28 Aug 1996 09:52:21 +0100
+From: Nicholas Sydenham <nsydenham@dra.hmg.gb>
+Organization: DRA Malvern
+X-Mailer: Mozilla 3.0 (X11; I; Linux 2.0.10 i586)
+MIME-Version: 1.0
+To: fvwm-workers@hpc.uh.edu
+Subject: Menu lengths
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-alpha9-jlt3
+
+If a menu has a lot of items in it, then there should be a (More >)
+sub-menu at the bottom to show the rest of the items. At the moment
+the list goes off the bottom of the page and is unreadable. If Motif
+can do it why can't fvwm?
+
+Increasing the screen size isn't much use either when you're already
+running at the maximum resolution.
+-- 
+---------------------------------------------------
+Nicholas Sydenham <nsydenham@dra.hmg.gb>
+DRA Malvern
++44 1684 895830
+Sublety is the art of saying what you think...
+and getting out of the way before it is understood.
+----------------------------------------------------
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Thu Aug 29 13:08:49 1996
+Received: (from lists@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id NAA05629; Thu, 29 Aug 1996 13:08:48 -0500 (CDT)
+Received: from skylark.ics.es.osaka-u.ac.jp (root@skylark.ics.es.osaka-u.ac.jp [133.1.240.35]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id NAA05625 for <fvwm-workers@hpc.uh.edu>; Thu, 29 Aug 1996 13:08:39 -0500 (CDT)
+Received: from localhost (matusita@localhost [127.0.0.1]) by skylark.ics.es.osaka-u.ac.jp (8.7.5+2.6Wbeta7/3.5Wbeta/ICS-2.1Wv6-SKYLARK) with ESMTP id DAA12585 for <fvwm-workers@hpc.uh.edu>; Fri, 30 Aug 1996 03:08:29 +0900 (JST)
+To: fvwm-workers@hpc.uh.edu
+Subject: [2.0.43] PATCH: Do NOT sort WindowList
+X-Mailer: Mew version 1.06 on Emacs 19.28.1, Mule 2.3
+X-FaceAnim: (-O_O-)(O_O- )(_O-  )(O-   )(-   -)(   -O)(  -O_)( -O_O)(-O_O-)
+X-Fingerprint: 0C AC 93 FC E3 9D 9E 5B  3D B8 AC 5C 4A 79 D8 A6
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Message-Id: <19960830030828G/matusita@ics.es.osaka-u.ac.jp>
+Date: Fri, 30 Aug 1996 03:08:28 +0900
+From: Makoto MATSUSHITA <matusita@ics.es.osaka-u.ac.jp>
+X-Dispatcher: impost version 0.92+ (Aug. 9, 1996)
+Lines: 42
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-alpha9-jlt3
+
+
+Here is a patch for plain 2.0.43. It enables 'NOT sorted' WindowList.
+This patch DOES NOT CHANGE current behavior of WindowList which is
+written in manual page (it is just a little enhancement of WindowList).
+
+To use the effect of this patch, simply say:
+	WindowList 6
+or if you want to show iconname instead of windowname, say:
+	WindowList 7
+
+I hope it'll be included in the next release. Sorry that this patch
+does not include the addtional manual entry of this feature.
+
+- -
+Makoto `MAR_kun' MATSUSHITA
+
+--- fvwm/windows.c.dist	Thu Jun 27 22:39:25 1996
++++ fvwm/windows.c	Fri Aug 30 02:52:05 1996
+@@ -75,17 +75,21 @@
+ 	  else
+ 	    next_desk = MY_INT_MAX;
+ 	}
+-      else 
++      else if((val1 < 6)&&(val1 > -6))
+ 	{
+ 	  if(last_desk_done  == MY_INT_MIN)
+ 	    next_desk = val2;
+ 	  else
+ 	    next_desk = MY_INT_MAX;
+ 	}
++      else
++	{
++	  next_desk = MY_INT_MAX;
++	}
+       last_desk_done = next_desk;
+       for (t = Scr.FvwmRoot.next; t != NULL; t = t->next)
+ 	{
+-	  if((t->Desk == next_desk)&&
++	  if(((next_desk == MY_INT_MAX) || (t->Desk == next_desk))&&
+ 	    (!(t->flags & WINDOWLISTSKIP)))
+ 	    {
+ 	      if (++scut == ('9' + 1)) scut = 'A';	/* Next shortcut key */
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+

@@ -1,0 +1,1215 @@
+From owner-fvwm-workers@hpc.uh.edu  Thu May  1 15:17:06 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Thu, 01 May 1997 15:17:06 -0500 (CDT)
+Received: from ny.frontiercomm.net (ny.frontiercomm.net [206.28.158.2]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id PAA29966; Thu, 1 May 1997 15:11:18 -0500 (CDT)
+Received: from pluto.solarsystem.org (monroe-30.dialup.frontiercomm.net [206.28.158.34]) by ny.frontiercomm.net (8.8.3/8.8.3) with ESMTP id QAA10512; Thu, 1 May 1997 16:08:27 -0400 (EDT)
+Received: (from veliaa@localhost)
+	by pluto.solarsystem.org (8.8.5/8.8.5) id QAA00575;
+	Thu, 1 May 1997 16:11:19 -0400
+Date: Thu, 1 May 1997 16:11:19 -0400
+Message-Id: <199705012011.QAA00575@pluto.solarsystem.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+From: Andrew Veliath <veliaa@ny.frontiercomm.net>
+To: Bela Lubkin <belal@sco.COM>
+Cc: chuck_hines@VNET.IBM.COM, maxwell@clark.net, fvwm@hpc.uh.edu,
+        fvwm-workers@hpc.uh.edu
+Subject: FVWM: Re: Compiling fvwm2 on SCO 5.0.2 - cpp problems
+Newsgroups: comp.unix.sco.programmer
+In-Reply-To: <9704302247.aa18045@father.pdev.sco.com>
+References: <3367881E.660A@clark.net>
+	<9704302247.aa18045@father.pdev.sco.com>
+X-Mailer: VM 6.22 under 19.15p2 XEmacs Lucid
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+
+    Bela> Here's the problem.  Those token-paste operators ("##") are
+    Bela> wrong.  ANSI C requires that in a ## b, all three of "a",
+    Bela> "b", and the resulting pasted token, be valid preprocessor
+    Bela> tokens.  "->TitleHeight" is not a valid token (it's *two*
+    Bela> valid tokens).  Token pasting is not wanted here.  The
+    Bela> macros should read:
+
+    Bela>   #ifdef USEDECOR /* THIS IS WHAT i WANT TO USE */ #define
+    Bela> GetDecor(window,part) ((window)->fl->part) #else #define
+    Bela> GetDecor(window,part) (Scr.DefaultDecor.part) #endif
+
+    Bela> The AT&T/USL/SCO compiler differs from gcc in this matter.
+    Bela> It is not wrong.  gcc is interpreting the ANSI standard more
+    Bela> loosely than SCO cc.
+
+Bela: thanks for this solution.  Sorry, this was my blunder.
+
+Chuck: please make sure this change below gets into the next release.
+
+Regards,
+Andrew
+
+--- screen.h.orig	Thu May  1 16:03:09 1997
++++ screen.h	Thu May  1 16:03:34 1997
+@@ -329,9 +329,9 @@
+    the UseDecor mechanism.
+  */
+ #ifdef USEDECOR
+-#define GetDecor(window,part) ((window)->fl->##part)
++#define GetDecor(window,part) ((window)->fl->part)
+ #else
+-#define GetDecor(window,part) (Scr.DefaultDecor.##part)
++#define GetDecor(window,part) (Scr.DefaultDecor.part)
+ #endif
+ 
+ /* some protos for the decoration structures */
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Sat May  3 18:04:35 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sat, 03 May 1997 18:04:35 -0500 (CDT)
+Received: from mercury.elmailer.net (mercury.elmailer.net [195.224.76.4]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id SAA12787 for <fvwm-workers@hpc.uh.edu>; Sat, 3 May 1997 18:04:23 -0500 (CDT)
+Received: from sfere.greenend.org.uk (sfere.greenend.org.uk [195.224.38.1])
+    by mercury.elmailer.net with ESMTP
+    id AAA19449 for <fvwm-workers@hpc.uh.edu> (2.2-8.8.5/3.1.13);
+    Sun, 4 May 1997 00:03:21 +0100 (BST)
+Received: from valour.greenend.org.uk (valour.greenend.org.uk [195.224.38.2])
+          by sfere.greenend.org.uk with ESMTP
+          id TAA03452 for <fvwm-workers@hpc.uh.edu>
+          (2.1.1h-8.8.5/2.1b-greenend); Sat, 3 May 1997 19:13:27 +0100
+Received: by valour.greenend.org.uk
+	id m0wNjJc-000qFPC
+	(Debian Smail-3.2 1996-Jul-4 #2); Sat, 3 May 1997 19:13:48 +0100 (BST)
+Message-Id: <m0wNjJc-000qFPC@valour.greenend.org.uk>
+Date: Sat, 3 May 1997 19:13:48 +0100 (BST)
+From: Austin Donnelly <austin@greenend.org.uk>
+To: fvwm-workers@hpc.uh.edu
+Subject: feature request: athena programs are not movable by static interface components
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+Yet another feature request from a Debian user I'm required to forward
+on to you good folk.
+
+Austin
+------- start of forwarded message (RFC 934 encapsulation) -------
+From: karlheg@inetarena.com
+To: submit@bugs.debian.org
+Subject: Bug#8785: fvwm2: Athena is not movable by static interface components
+Date: Wed, 16 Apr 1997 09:42:30 -0700
+
+Package: fvwm2
+Version: 2.0.45-BETA-1
+
+Under GWM and GWM++, `gv` and other programs that utilize the
+under-rated Athena widgets can be moved about by dragging on the
+static (otherwise inactive) parts of the interface.  The fvwm2 window
+manager is apparently ignoring this wonderful feature, and should be
+made aware of it.
+------- end -------
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Sat May  3 18:04:37 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sat, 03 May 1997 18:04:37 -0500 (CDT)
+Received: from mercury.elmailer.net (mercury.elmailer.net [195.224.76.4]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id SAA12789 for <fvwm-workers@hpc.uh.edu>; Sat, 3 May 1997 18:04:25 -0500 (CDT)
+Received: from sfere.greenend.org.uk (sfere.greenend.org.uk [195.224.38.1])
+    by mercury.elmailer.net with ESMTP
+    id AAA19452 for <fvwm-workers@hpc.uh.edu> (2.2-8.8.5/3.1.13);
+    Sun, 4 May 1997 00:03:24 +0100 (BST)
+Received: from valour.greenend.org.uk (valour.greenend.org.uk [195.224.38.2])
+          by sfere.greenend.org.uk with ESMTP
+          id UAA04707 for <fvwm-workers@hpc.uh.edu>
+          (2.1.1h-8.8.5/2.1b-greenend); Sat, 3 May 1997 20:15:23 +0100
+Received: by valour.greenend.org.uk
+	id m0wNkHX-000qFPC
+	(Debian Smail-3.2 1996-Jul-4 #2); Sat, 3 May 1997 20:15:43 +0100 (BST)
+Message-Id: <m0wNkHX-000qFPC@valour.greenend.org.uk>
+Date: Sat, 3 May 1997 20:15:43 +0100 (BST)
+From: Austin Donnelly <austin@greenend.org.uk>
+To: fvwm-workers@hpc.uh.edu
+Subject: window titles with '*' in them
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+Debian bug number 8774 is quite interesting:
+
+A user was using emacs with multiple frames, and so happened to have a
+window called "emacs: *scratch*"
+
+The fvwm2 window list sees this "*scratch*", and attempts to replace
+it with a pixmap centered above the entry, as is the case for any
+other menu.
+
+This unfortunate user happened to have a scratch.xpm on his pixmap
+path, and was thus a little bewildered!  :)
+
+Is this "feature" one which anyone is relying on?  If not, it should
+probably disappear.
+
+I may have time to look at adding a flag to specify whether '*' and
+'%' should be honoured.
+
+The original Debian bug report can by found at:
+    http://www.cl.cam.ac.uk/users/iwj10/debian-bugs/db/8774.html
+It includes a base64 encoded gif of the offending WindowList menu.
+
+Austin
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Sun May  4 03:50:39 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sun, 04 May 1997 03:50:39 -0500 (CDT)
+Received: from uswgco3.uswc.uswest.com (uswgco3.uswest.com [206.196.133.82]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id DAA19096; Sun, 4 May 1997 03:44:26 -0500 (CDT)
+Received: from egate2.mnet.uswest.com (egate.mnet.uswest.com [151.117.138.135])
+	by uswgco3.uswc.uswest.com (8.8.5/8.8.5) with ESMTP id CAA03626;
+	Sun, 4 May 1997 02:43:57 -0600 (MDT)
+Received: from smokey.ecte.uswc.uswest.com (smokey.ecte.uswc.uswest.com [151.116.109.68]) by egate2.mnet.uswest.com (8.7.1/8.7.1) with ESMTP id DAA16754; Sun, 4 May 1997 03:43:47 -0500 (CDT)
+Received: from snakepit.ecte.uswc.uswest.com (snakepit.ecte.uswc.uswest.com [151.116.111.62]) by smokey.ecte.uswc.uswest.com (8.6.11/uswc-hub.950320) with ESMTP id CAA23708; Sun, 4 May 1997 02:43:47 -0600
+Received: (from rjray@localhost) by snakepit.ecte.uswc.uswest.com (8.6.11/uswc-server.950313) id CAA20000; Sun, 4 May 1997 02:43:50 -0600
+Date: Sun, 4 May 1997 02:43:50 -0600
+From: "Randy J. Ray" <rjray@uswest.com>
+Subject: Patch: Expand the M_MINI_ICON packet
+To: fvwm@hpc.uh.edu, fvwm-workers@hpc.uh.edu
+Message-Id: <rjray-9704040843.AA000119943@snakepit.ecte.uswc.uswest.com>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+As promised, here is a patch to expand the M_MINI_ICON packet type to include
+the normal window-identification triple, as well as tack the filename of the
+icon itself at the end. Apply this patch from the *root* of your fvwm 2.0.45
+source tree (my patch to the windowshade packets was relative to the fvwm
+subdir; however, this patch also affects modules/FvwmIconMan) with:
+
+patch -p -N < this_file
+
+This patch does the following:
+
+* Cause M_MINI_ICON packets to use their own send routines: SendMiniIcon and
+  BroadcastMiniIcon
+
+* Updates add_window.c to use these routines, as well as later in module.c
+
+* Updates the struct used in modules/FvwmIconMan/fvwm.c to recognize the new
+  format. The code itself needed no update, since it doesn't use any of the
+  added fields
+
+The new structure for packets of type M_MINI_ICON is:
+
+word	meaning
+0	0xffffffff
+1	packet type (M_MINI_ICON)
+2	length of packet
+3	timestamp
+4	X window ID
+5	X ID of frame encompassing window
+6	Fvwm internal database pointer
+7	Width of mini-icon
+8	Height of mini-icon
+9	Depth (number of planes) of mini-icon
+10	X Pixmap ID (not to confuse with XPM) of the mini-icon
+11	X Pixmap ID of the mask
+12+	Name cast into longs as per other textual packets, null-padded
+
+I do not update the modules.tex file, because it doesn't yet mention these
+packets, and it needs heavy revision anyway.
+
+Release 0.4 of my Perl module X11::Fvwm will support this format, and will
+also bundle this patch along with the code. Any code utilizing these packets
+will need to be updated after this patch is applied.
+
+Randy
+- --
+===============================================================================
+Randy J. Ray -- U S WEST Technologies IAD/CSS/DPDS         Phone: (303)595-2869
+                Denver, CO                                     rjray@uswest.com
+"It's not denial. I'm just very selective about the reality I accept." --Calvin
+===============================================================================
+
+(patch begins here)
+
+Index: ./modules/FvwmIconMan/fvwm.c
+*** ./modules/FvwmIconMan/fvwm.c.orig	Tue Apr 29 14:58:16 1997
+--- ./modules/FvwmIconMan/fvwm.c	Tue Apr 29 15:32:58 1997
+***************
+*** 64,70 ****
+  
+  #ifdef MINI_ICONS
+  typedef struct {
+!   Ulong app_id, picture, mask, width, height, depth;
+  } m_mini_icon_data;
+  #endif
+  
+--- 64,75 ----
+  
+  #ifdef MINI_ICONS
+  typedef struct {
+!   Ulong app_id, frame_id, dbase_entry;
+!   Ulong width, height, depth, picture, mask;
+!   union {
+!     Ulong name_long[1];
+!     Uchar name[4];
+!   } name;
+  } m_mini_icon_data;
+  #endif
+  
+
+Index: ./fvwm/module.c
+*** ./fvwm/module.c.orig	Sun May  4 01:20:28 1997
+--- ./fvwm/module.c	Sun May  4 01:42:33 1997
+***************
+*** 533,538 ****
+--- 533,589 ----
+      SendName(i,event_type,data1,data2,data3,name);
+  }
+  
++ #ifdef MINI_ICONS
++ void SendMiniIcon(int module, unsigned long event_type,
++ 		  unsigned long data1, unsigned long data2, 
++ 		  unsigned long data3, unsigned long data4,
++ 		  unsigned long data5, unsigned long data6,
++ 		  unsigned long data7, unsigned long data8,
++ 		  char *name)
++ {
++   int l;
++   unsigned long *body;
++   extern Time lastTimestamp;
++ 
++   if ((name == NULL) || (event_type != M_MINI_ICON))
++     return;
++   l = strlen(name)/(sizeof(unsigned long))+HEADER_SIZE+9;
++   body = (unsigned long *)safemalloc(l*sizeof(unsigned long));
++ 
++   body[0] = START_FLAG;
++   body[1] = event_type;
++   body[2] = l;
++   body[3] = lastTimestamp;
++ 
++   body[HEADER_SIZE] = data1;
++   body[HEADER_SIZE+1] = data2;
++   body[HEADER_SIZE+2] = data3; 
++   body[HEADER_SIZE+3] = data4; 
++   body[HEADER_SIZE+4] = data5; 
++   body[HEADER_SIZE+5] = data6; 
++   body[HEADER_SIZE+6] = data7; 
++   body[HEADER_SIZE+7] = data8; 
++   strcpy((char *)&body[HEADER_SIZE+8],name);
++ 
++   PositiveWrite(module,(unsigned long *)body, l*sizeof(unsigned long));
++ 
++   free(body);
++ }
++ 
++ void BroadcastMiniIcon(unsigned long event_type,
++ 		       unsigned long data1, unsigned long data2, 
++ 		       unsigned long data3, unsigned long data4,
++ 		       unsigned long data5, unsigned long data6,
++ 		       unsigned long data7, unsigned long data8,
++ 		       char *name)
++ {
++   int i;
++ 
++   for(i=0;i<npipes;i++)
++     SendMiniIcon(i, event_type,
++ 		 data1, data2, data3, data4, data5, data6, data7, data8, name);
++ }
++ #endif /* MINI_ICONS */
+  
+  /*
+  ** send an arbitrary string to all instances of a module
+***************
+*** 696,708 ****
+  		       (unsigned long)t,0,0,0,0);
+  #ifdef MINI_ICONS
+  	  if (t->mini_icon != NULL) 
+! 	    SendPacket(*Module, M_MINI_ICON, 6,
+!                        t->w,
+!                        t->mini_icon->picture,
+!                        t->mini_icon->mask,
+!                        t->mini_icon->width,
+!                        t->mini_icon->height,
+!                        t->mini_icon->depth, 0);
+  #endif
+  	}
+        if(Scr.Hilite == NULL)
+--- 747,760 ----
+  		       (unsigned long)t,0,0,0,0);
+  #ifdef MINI_ICONS
+  	  if (t->mini_icon != NULL) 
+!             SendMiniIcon(*Module, M_MINI_ICON,
+!                          t->w, t->frame, (unsigned long)t,
+!                          t->mini_icon->width,
+!                          t->mini_icon->height,
+!                          t->mini_icon->depth,
+!                          t->mini_icon->picture,
+!                          t->mini_icon->mask,
+!                          t->mini_pixmap_file);
+  #endif
+  	}
+        if(Scr.Hilite == NULL)
+
+
+Index: ./fvwm/add_window.c
+*** ./fvwm/add_window.c.orig	Sun May  4 01:20:42 1997
+--- ./fvwm/add_window.c	Sun May  4 02:24:18 1997
+***************
+*** 684,696 ****
+  		(unsigned long)tmp_win,tmp_win->class.res_name);
+  #ifdef MINI_ICONS
+    if (tmp_win->mini_icon != NULL)
+!     Broadcast(M_MINI_ICON, 6,
+!               tmp_win->w, /* Watch Out ! : I reduced the set of infos... */
+!               tmp_win->mini_icon->picture,
+!               tmp_win->mini_icon->mask,
+!               tmp_win->mini_icon->width,
+!               tmp_win->mini_icon->height,
+!               tmp_win->mini_icon->depth, 0);
+  #endif
+  
+    FetchWmProtocols (tmp_win);
+--- 684,697 ----
+  		(unsigned long)tmp_win,tmp_win->class.res_name);
+  #ifdef MINI_ICONS
+    if (tmp_win->mini_icon != NULL)
+!     BroadcastMiniIcon(M_MINI_ICON,
+!                       tmp_win->w, tmp_win->frame, (unsigned long)tmp_win,
+!                       tmp_win->mini_icon->width,
+!                       tmp_win->mini_icon->height,
+!                       tmp_win->mini_icon->depth,
+!                       tmp_win->mini_icon->picture,
+!                       tmp_win->mini_icon->mask,
+!                       tmp_win->mini_pixmap_file);
+  #endif
+  
+    FetchWmProtocols (tmp_win);
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Tue May  6 14:45:17 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 06 May 1997 14:45:17 -0500 (CDT)
+Received: from plutus.colorado.edu (tarrall@plutus.Colorado.EDU [128.138.188.18]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id OAA12183 for <fvwm-workers@hpc.uh.edu>; Tue, 6 May 1997 14:45:02 -0500 (CDT)
+Received: from plutus (tarrall@localhost)
+	by plutus.colorado.edu (8.8.5/8.8.5) with ESMTP id NAA13663
+	for <fvwm-workers@hpc.uh.edu>; Tue, 6 May 1997 13:44:55 -0600 (MDT)
+Message-Id: <199705061944.NAA13663@plutus.colorado.edu>
+To: fvwm-workers@hpc.uh.edu
+Subject: Is this an fvwm bug, or a Tk bug?
+X-Face: ,&g{C{J{,Oh!AUDA}P##~YzMwv}ZMYB*it[#wet@lzjsZBLa[Sf%hA,Ac+}%09{U*<HZhb0
+ $iXLm@{)Jm|??'ZW\{}!smY=W5m`}X9S"%#B`H#-Sp#C~s#L{MKD?R!+<>O}Sni.;45~eDB>ZJGG@!
+ 78XpJYtr7l@stk4mo]7-d-N
+X-url: http://lcd-www.Colorado.EDU/tarrall
+Date: Tue, 06 May 1997 13:44:54 -0600
+From: Robert Tarrall <tarrall@solarz.Colorado.EDU>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+
+[fvwm 2.0.43, Tcl 8.0a2, Tk 8.0a2, IRIX 6.2]
+
+I'm having problems with input focus when using Tcl/Tk 8.0a2 and fvwm2.0.43
+together.  Things worked fine with pre-8.0 versions of Tcl/Tk, so I suspect
+this is a Tcl/Tk bug rather than an fvwm bug, but I thought I'd run it by
+you folks and see what people think.
+
+I'm using MouseFocus, have "DeskTopSize 2x4", and have bound some keypad
+keys to go to various pages on my desktop, i.e.:
+
+Key KP_Home     A       N       GoToPage 0 0
+Key KP_Up       A       N       GoToPage 1 0
+[etc]
+
+Now, say I have a wish window open on Page 0,0 and an xterm in approximately
+the same position on Page 1,0, and I move the mouse into the wish window.
+That window gets the input focus, as is appropriate.  If I now switch to
+Page 1,0 using KP_Up, the mouse pointer is in the xterm... but input focus
+is still in the (no longer visible) wish window.  Wish is the only
+application I've found with this annoying habit of retaining the input
+focus.
+
+A little playing around with "xev" shows that in this situation the wish
+window is probably receiving a FocusOut event, but not a LeaveNotify event...
+whereas both events are generated if I switch desktops by moving the
+mouse.   I'm guessing that wish is ignoring FocusOut events and only
+obeying LeaveNotify events...
+
+I've pretty much reached the limit of my meager X knowledge here.  Should
+wish be smart enough to relinquish the input focus on the basis of a
+FocusOut event?  Or is this an fvwm bug - should fvwm be sending LeaveNotify
+to the current window when I switch to a different desktop page with a
+GotoPage function?
+
+                       -Robert Tarrall.-
+                       Unix System/Network Admin
+                       Laboratory for Computational Dynamics
+                       CU - Boulder
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Thu May  8 14:56:24 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Thu, 08 May 1997 14:56:24 -0500 (CDT)
+Received: from tolt.cs.washington.edu (tolt.cs.washington.edu [128.95.1.155]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id OAA08602 for <fvwm-workers@hpc.uh.edu>; Thu, 8 May 1997 14:56:16 -0500 (CDT)
+Received: (gjb@localhost) by tolt.cs.washington.edu (8.8.5+CS/7.2ws+) id MAA27677; Thu, 8 May 1997 12:52:43 -0700 (PDT)
+To: Austin Donnelly <austin@greenend.org.uk>
+Cc: fvwm-workers@hpc.uh.edu
+Subject: Re: window titles with '*' in them
+References: <m0wNkHX-000qFPC@valour.greenend.org.uk>
+From: Greg Badros <gjb@cs.washington.edu>
+Date: 08 May 1997 12:52:42 -0700
+In-Reply-To: Austin Donnelly's message of Sat, 3 May 1997 20:15:43 +0100 (BST)
+Message-ID: <qrrvi4toi5x.fsf@tolt.cs.washington.edu>
+Lines: 263
+X-Mailer: Gnus v5.4.11/Emacs 19.33
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+Austin Donnelly <austin@greenend.org.uk> writes:
+
+> Debian bug number 8774 is quite interesting:
+> 
+> A user was using emacs with multiple frames, and so happened to have a
+> window called "emacs: *scratch*"
+> 
+> The fvwm2 window list sees this "*scratch*", and attempts to replace
+> it with a pixmap centered above the entry, as is the case for any
+> other menu.
+> 
+> This unfortunate user happened to have a scratch.xpm on his pixmap
+> path, and was thus a little bewildered!  :)
+> 
+> Is this "feature" one which anyone is relying on?  If not, it should
+> probably disappear.
+
+Sounds like a bug to me.  Anyone who is using it probably shouldn't be.
+
+> I may have time to look at adding a flag to specify whether '*' and
+> '%' should be honoured.
+
+I've got a patch that fixes this.  I actually noticed the problem too
+for a different reason-- when you get a window list, the menu is
+actually made on the fly-- making a menu when you've got a long pixmap
+path takes some time (if you are scanning the window title for pixmaps,
+and your disk is slow, e.g. NFS mounted).  There was an unacceptable
+delay when my window list had multiple windows with titles with special
+characters in them.
+
+Patch is included below. Note that it applies *on top of* the menu
+improvements I posted a couple of weeks ago.  Both of these are
+available from my web page.
+
+http://www.cs.washington.edu/homes/gjb/patches
+
+
+Greg J. Badros
+gjb@cs.washington.edu
+Seattle, WA  USA
+http://www.cs.washington.edu/homes/gjb
+
+
+
+Index: fvwm/builtins.c
+===================================================================
+RCS file: /homes/gws/gjb/.CVS/fvwm/fvwm/builtins.c,v
+retrieving revision 1.15
+retrieving revision 1.16
+diff -u -c -r1.15 -r1.16
+/uns/gnu/bin/diff: conflicting specifications of output style
+*** builtins.c	1997/04/21 22:59:01	1.15
+--- builtins.c	1997/05/07 23:09:15	1.16
+***************
+*** 488,494 ****
+    last_menu = mr;
+    rest = GetNextToken(rest,&item);
+  
+!   AddToMenu(mr, item,rest);
+    free(item);
+    
+    MakeMenu(mr);
+--- 488,494 ----
+    last_menu = mr;
+    rest = GetNextToken(rest,&item);
+  
+!   AddToMenu(mr, item,rest, TRUE /* fPixmapScan */);
+    free(item);
+    
+    MakeMenu(mr);
+***************
+*** 514,520 ****
+  	  return;
+        rest = GetNextToken(action,&item);
+        
+!       AddToMenu(mr, item,rest);
+        free(item);
+        
+        MakeMenu(mr);
+--- 514,520 ----
+  	  return;
+        rest = GetNextToken(action,&item);
+        
+!       AddToMenu(mr, item,rest, TRUE /* fPixmapScan */);
+        free(item);
+        
+        MakeMenu(mr);
+***************
+*** 568,574 ****
+    last_menu = mr;
+    rest = GetNextToken(rest,&item);
+  
+!   AddToMenu(mr, item,rest);
+    free(item);
+    
+    return;
+--- 568,574 ----
+    last_menu = mr;
+    rest = GetNextToken(rest,&item);
+  
+!   AddToMenu(mr, item,rest, FALSE);
+    free(item);
+    
+    return;
+Index: fvwm/menus.c
+===================================================================
+RCS file: /homes/gws/gjb/.CVS/fvwm/fvwm/menus.c,v
+retrieving revision 1.26
+retrieving revision 1.27
+diff -u -c -r1.26 -r1.27
+/uns/gnu/bin/diff: conflicting specifications of output style
+*** menus.c	1997/04/21 22:59:20	1.26
+--- menus.c	1997/05/07 23:10:14	1.27
+***************
+*** 1557,1563 ****
+  	cur = cur_prev;
+  
+  	/* And add the entry pointing to the new menu */
+! 	AddToMenu(mr,"More&...",szMenuContinuationActionAndName);
+  	MakeMenu(menuContinuation);
+  
+  	}
+--- 1557,1563 ----
+  	cur = cur_prev;
+  
+  	/* And add the entry pointing to the new menu */
+! 	AddToMenu(mr,"More&...",szMenuContinuationActionAndName,FALSE /* no pixmap scan */);
+  	MakeMenu(menuContinuation);
+  
+  	}
+***************
+*** 1820,1826 ****
+   *       so built in window list can handle windows w/ * and % in title.
+   *
+   ***********************************************************************/
+! void AddToMenu(MenuRoot *menu, char *item, char *action)
+  {
+    MenuItem *tmp;
+    char *start,*end;
+--- 1820,1826 ----
+   *       so built in window list can handle windows w/ * and % in title.
+   *
+   ***********************************************************************/
+! void AddToMenu(MenuRoot *menu, char *item, char *action, Bool fPixmapsOk)
+  {
+    MenuItem *tmp;
+    char *start,*end;
+***************
+*** 1875,1882 ****
+    if (item != (char *)0)
+      {
+        char ch;
+!       scanForPixmap(tmp->item,&tmp->picture,'*');
+!       scanForPixmap(tmp->item,&tmp->lpicture,'%');
+        ch = scanForHotkeys(tmp, 1);	/* pete@tecc.co.uk */
+        if (ch != '\0')
+  	{
+--- 1875,1885 ----
+    if (item != (char *)0)
+      {
+        char ch;
+!       if (fPixmapsOk)
+! 	{
+! 	scanForPixmap(tmp->item,&tmp->picture,'*');
+! 	scanForPixmap(tmp->item,&tmp->lpicture,'%');
+! 	}
+        ch = scanForHotkeys(tmp, 1);	/* pete@tecc.co.uk */
+        if (ch != '\0')
+  	{
+***************
+*** 1898,1907 ****
+  
+    if (tmp->item2 != (char *)0)
+      {
+!       if(!tmp->picture)
+!         scanForPixmap(tmp->item2,&tmp->picture,'*');
+!       if(!tmp->lpicture)
+!         scanForPixmap(tmp->item2,&tmp->lpicture,'%');
+        if (tmp->hotkey == 0) {
+          char ch = scanForHotkeys(tmp, -1);	/* pete@tecc.co.uk */
+  	if (ch != '\0')
+--- 1901,1912 ----
+  
+    if (tmp->item2 != (char *)0)
+      {
+!       if (fPixmapsOk) {
+!         if(!tmp->picture)
+! 	  scanForPixmap(tmp->item2,&tmp->picture,'*');
+! 	if(!tmp->lpicture)
+! 	  scanForPixmap(tmp->item2,&tmp->lpicture,'%');
+!       }
+        if (tmp->hotkey == 0) {
+          char ch = scanForHotkeys(tmp, -1);	/* pete@tecc.co.uk */
+  	if (ch != '\0')
+Index: fvwm/misc.h
+===================================================================
+RCS file: /homes/gws/gjb/.CVS/fvwm/fvwm/misc.h,v
+retrieving revision 1.9
+retrieving revision 1.10
+diff -u -c -r1.9 -r1.10
+/uns/gnu/bin/diff: conflicting specifications of output style
+*** misc.h	1997/04/21 22:10:31	1.9
+--- misc.h	1997/05/07 23:11:16	1.10
+***************
+*** 225,231 ****
+  extern Bool       GrabEm(int);
+  extern void       UngrabEm(void);
+  extern MenuRoot   *NewMenuRoot(char *name, int function_or_popup);
+! extern void       AddToMenu(MenuRoot *, char *, char *);
+  extern void       MakeMenu(MenuRoot *);
+  extern void       CaptureAllWindows(void);
+  extern void       SetTimer(int);
+--- 225,231 ----
+  extern Bool       GrabEm(int);
+  extern void       UngrabEm(void);
+  extern MenuRoot   *NewMenuRoot(char *name, int function_or_popup);
+! extern void       AddToMenu(MenuRoot *, char *, char *, Bool fPixmapsOk);
+  extern void       MakeMenu(MenuRoot *);
+  extern void       CaptureAllWindows(void);
+  extern void       SetTimer(int);
+Index: fvwm/windows.c
+===================================================================
+RCS file: /homes/gws/gjb/.CVS/fvwm/fvwm/windows.c,v
+retrieving revision 1.5
+retrieving revision 1.6
+diff -u -c -r1.5 -r1.6
+/uns/gnu/bin/diff: conflicting specifications of output style
+*** windows.c	1997/04/21 22:10:35	1.5
+--- windows.c	1997/05/07 23:11:40	1.6
+***************
+*** 135,141 ****
+      sprintf(tlabel,"Desk: %d",desk);
+    }
+    mr=NewMenuRoot(tlabel,0);
+!   AddToMenu(mr, tlabel, "TITLE");      
+  
+    next_desk = 0;
+    while(next_desk != INT_MAX)
+--- 135,141 ----
+      sprintf(tlabel,"Desk: %d",desk);
+    }
+    mr=NewMenuRoot(tlabel,0);
+!   AddToMenu(mr, tlabel, "TITLE", FALSE /* no pixmap scan */);
+  
+    next_desk = 0;
+    while(next_desk != INT_MAX)
+***************
+*** 227,233 ****
+            sprintf(tlabel,"%s %ld",func,t->w);
+          else
+            sprintf(tlabel,"WindowListFunc %ld",t->w);
+!         AddToMenu(mr, t_hot, tlabel);
+  #ifdef MINI_ICONS
+          /* Add the title pixmap */
+          if (t->mini_icon) {
+--- 227,233 ----
+            sprintf(tlabel,"%s %ld",func,t->w);
+          else
+            sprintf(tlabel,"WindowListFunc %ld",t->w);
+!         AddToMenu(mr, t_hot, tlabel, FALSE /* no pixmap scan */);
+  #ifdef MINI_ICONS
+          /* Add the title pixmap */
+          if (t->mini_icon) {
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Wed May 14 16:39:15 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Wed, 14 May 1997 16:39:15 -0500 (CDT)
+Received: from mercury.elmailer.net (mercury.elmailer.net [195.224.76.4]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id QAA23402 for <fvwm-workers@hpc.uh.edu>; Wed, 14 May 1997 16:38:56 -0500 (CDT)
+Received: from sfere.greenend.org.uk (sfere.greenend.org.uk [195.224.38.1])
+    by mercury.elmailer.net with ESMTP
+    id WAA10340 for <fvwm-workers@hpc.uh.edu> (2.2-8.8.5/3.1.13);
+    Wed, 14 May 1997 22:37:08 +0100 (BST)
+Received: from valour.greenend.org.uk (valour.greenend.org.uk [195.224.38.2])
+          by sfere.greenend.org.uk with ESMTP
+          id VAA07334 for <fvwm-workers@hpc.uh.edu>
+          (2.1.1h-8.8.5/2.1b-greenend); Wed, 14 May 1997 21:09:53 +0100
+Received: by valour.greenend.org.uk
+	id m0wRkMy-000qFOC
+	(Debian Smail-3.2 1996-Jul-4 #2); Wed, 14 May 1997 21:09:52 +0100 (BST)
+Message-Id: <m0wRkMy-000qFOC@valour.greenend.org.uk>
+Date: Wed, 14 May 1997 21:09:52 +0100 (BST)
+From: Austin Donnelly <austin@greenend.org.uk>
+To: fvwm-workers@hpc.uh.edu
+Subject: SkipMapping loses current focus
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+------- start of forwarded message (RFC 934 encapsulation) -------
+From: Roderick Schertler <roderick@argon.org>
+To: submit@bugs.debian.org
+Subject: Bug#9769: fvwm2: SkipMapping loses current focus
+Date: Mon, 12 May 1997 20:40:05 -0400
+
+Package: fvwm2
+Version: 2.0.45-BETA-1
+
+The ClickToFocus and SkipMapping styles don't interact properly.  Replace
+your ~/.fvwm2rc with these two lines
+
+    Style *     ClickToFocus
+    Style test  StartsOnDesk 1, SkipMapping
+
+then start an xterm as "xterm -name test".  The display stays at desk 0
+as it should, but the current window loses focus.
+
+------- end -------
+
+I have verified the bug report above, and have been able to reproduce
+it.
+
+Austin
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Wed May 21 11:26:48 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Wed, 21 May 1997 11:26:48 -0500 (CDT)
+Received: from palrel1.hp.com (palrel1.hp.com [156.153.255.235]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id LAA18197 for <fvwm-workers@hpc.uh.edu>; Wed, 21 May 1997 11:26:35 -0500 (CDT)
+Received: from computer.hpl.hp.com (computer.hpl.hp.com [15.144.62.127]) by palrel1.hp.com with ESMTP (8.7.5/8.7.3) id JAA17229 for <fvwm-workers@hpc.uh.edu>; Wed, 21 May 1997 09:26:11 -0700 (PDT)
+Received: (from timbo@localhost) by computer.hpl.hp.com (8.7.1/8.7.1) id RAA13667 for fvwm-workers@hpc.uh.edu; Wed, 21 May 1997 17:26:08 +0100 (BST)
+Date: Wed, 21 May 1997 17:26:08 +0100 (BST)
+From: Tim Phipps <timbo@computer.hpl.hp.com>
+Message-Id: <199705211626.RAA13667@computer.hpl.hp.com>
+To: fvwm-workers@hpc.uh.edu
+Subject: Patch: New functions If & IfNot
+Reply-To: Tim_Phipps@HP.com
+Mime-Version: 1.0
+Content-Type: multipart/mixed;boundary=59e2_1cfb-3f54_ff6-abd_31df
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+
+--59e2_1cfb-3f54_ff6-abd_31df
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+Content-MD5: y5M2VgdmJHen8vrPx0UrPQ==
+
+Hello workers,
+	Here's a patch to add Two new functions If and IfNot.  They work like 
+Next except that the conditions are only tested on the current window.  The 
+patch should apply to 2.0.45 and include a patch to the fvwm.man man page.
+	
+	This is my first venture into the fvwm code so I would like others to do 
+some testing.  I've tried it out on an HP700 10.20 with only one screen.
+	
+	Cheers,
+	Tim Phipps.
+
+PS Chuck:  If you don't like the names If & IfNot please feel free to rename 
+them
+
+--59e2_1cfb-3f54_ff6-abd_31df
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: 7bit
+Content-MD5: RH1QHcObvXWk/WKd/mjsrA==
+Content-Description: If_patch
+X-Content-Name: If_patch
+
+*** builtins.c.orig	Wed Jan 22 13:37:28 1997
+--- builtins.c	Wed May 21 17:01:35 1997
+***************
+*** 2839,2844 ****
+--- 2839,2845 ----
+   *
+   * Direction = 1 ==> "Next" operation
+   * Direction = -1 ==> "Previous" operation 
++  * Direction = 0 ==> operation on current window (returns pass or fail)
+   *
+   **************************************************************************/
+  FvwmWindow *Circulate(char *action, int Direction, char **restofline)
+***************
+*** 2935,2942 ****
+    {
+      if(Direction == 1)
+        fw = Scr.Focus->prev;
+!     else
+        fw = Scr.Focus->next;
+    }
+    else
+      fw = Scr.FvwmRoot.prev;  
+--- 2936,2945 ----
+    {
+      if(Direction == 1)
+        fw = Scr.Focus->prev;
+!     else if(Direction == -1)
+        fw = Scr.Focus->next;
++     else
++       fw = Scr.Focus;
+    }
+    else
+      fw = Scr.FvwmRoot.prev;  
+***************
+*** 2972,2977 ****
+--- 2975,2982 ----
+          else
+            fw = fw->next;
+        }
++       if (Direction == 0)
++         return found;
+      }
+      if((fw == NULL)||(fw == &Scr.FvwmRoot))
+      {
+***************
+*** 3037,3042 ****
+--- 3042,3073 ----
+    if(found == NULL)
+    {
+      ExecuteFunction(restofline,NULL,eventp,C_ROOT,*Module);
++   }
++ }
++ 
++ void IfFunc(XEvent *eventp,Window junk,FvwmWindow *tmp_win,
++               unsigned long context, char *action,int* Module)
++ {
++   FvwmWindow *found;
++   char *restofline;
++ 
++   found = Circulate(action, 0, &restofline);
++   if(found != NULL)
++   {
++     ExecuteFunction(restofline,found,eventp,C_WINDOW,*Module);
++   }
++ }
++ 
++ void IfNotFunc(XEvent *eventp,Window junk,FvwmWindow *tmp_win,
++               unsigned long context, char *action,int* Module)
++ {
++   FvwmWindow *found;
++   char *restofline;
++ 
++   found = Circulate(action, 0, &restofline);
++   if(found == NULL && Scr.Focus != NULL)
++   {
++     ExecuteFunction(restofline,Scr.Focus,eventp,C_WINDOW,*Module);
+    }
+  }
+  
+*** functions.c.orig	Tue Jan 14 14:06:33 1997
+--- functions.c	Wed May 21 14:38:40 1997
+***************
+*** 83,88 ****
+--- 83,90 ----
+    {"Iconify",      iconify_function, F_ICONIFY,             FUNC_NEEDS_WINDOW},
+    {"IconFont",     LoadIconFont,     F_ICONFONT,            FUNC_NO_WINDOW},
+    {"IconPath",     setIconPath,      F_ICON_PATH,           FUNC_NO_WINDOW},
++   {"If",           IfFunc,           F_IF,                  FUNC_NO_WINDOW},
++   {"IfNot",        IfNotFunc,        F_IFNOT,               FUNC_NO_WINDOW},
+    {"Key",          ParseKeyEntry,    F_KEY,                 FUNC_NO_WINDOW},
+    {"Lower",        lower_function,   F_LOWER,               FUNC_NEEDS_WINDOW},
+    {"Maximize",     Maximize,         F_MAXIMIZE,            FUNC_NEEDS_WINDOW},
+*** fvwm.man.orig	Wed May 21 14:47:03 1997
+--- fvwm.man	Wed May 21 14:51:32 1997
+***************
+*** 1054,1059 ****
+--- 1054,1079 ----
+  \fIFvwmM4\fP man page).
+  
+  
++ .IP "If [\fIconditions\fP] \fIcommand\fP"
++ Performs \fIcommand\fP on the current window if it
++ satisfies all \fIconditions\fP.  Conditions include "iconic",
++ "!iconic", "Visible", "!Visible", "CurrentDesk", "CurrentPage", and
++ "CurrentPageAnyDesk".  In addition, the condition may include a window
++ name to match to.  The window name may include the wildcards * and ?.
++ The window name, class, and resource will be considered when
++ attempting to find a match.
++ 
++ 
++ .IP "IfNot [\fIarguments\fP] \fIcommand\fP"
++ Performs \fIcommand\fP if the current window does not satisfy all
++ \fIconditions\fP.  Conditions include "iconic", "!iconic",
++ "Visible", "!Visible", "CurrentDesk", "CurrentPage", and
++ "CurrentPageAnyDesk".  In addition, the condition may include a window
++ name to match to.  The window name may include the wildcards * and ?.
++ The window name, class, and resource will be considered when
++ attempting to find a match.
++ 
++ 
+  .IP "Key \fIkeyname Context Modifiers Function\fP"
+  Binds a keyboard key to a specified \fIfvwm\fP built-in function, or
+  removes the binding if \fIFunction\fP is '-'.  Definition is the same
+*** misc.h.orig	Mon Dec 23 22:07:47 1996
+--- misc.h	Wed May 21 14:38:40 1997
+***************
+*** 522,527 ****
+--- 522,531 ----
+  	      unsigned long context, char *action,int* Module);
+  void NoneFunc(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+  	      unsigned long context, char *action,int* Module);
++ void IfFunc(XEvent *eventp,Window w,FvwmWindow *tmp_win,
++ 	      unsigned long context, char *action,int* Module);
++ void IfNotFunc(XEvent *eventp,Window w,FvwmWindow *tmp_win,
++ 	      unsigned long context, char *action,int* Module);
+  void WindowIdFunc(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+                    unsigned long context, char *action,int* Module);
+  void ReadFile(XEvent *eventp,Window junk,FvwmWindow *tmp_win,
+*** parse.h.orig	Mon Dec 23 22:07:47 1996
+--- parse.h	Wed May 21 14:38:40 1997
+***************
+*** 73,78 ****
+--- 73,80 ----
+  #define F_COLORMAP_FOCUS        55
+  #define F_TITLESTYLE            56
+  #define F_EXEC_SETUP            57
++ #define F_IF                    58
++ #define F_IFNOT                 59
+  /* Functions which require a target window */
+  #define F_RESIZE		100
+  #define F_RAISE			101
+--59e2_1cfb-3f54_ff6-abd_31df--
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Wed May 28 15:39:41 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Wed, 28 May 1997 15:39:41 -0500 (CDT)
+Received: from rzcomm1.rz.tu-bs.de (rzcomm1.rz.tu-bs.de [134.169.9.107]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id PAA07168 for <fvwm-workers@hpc.uh.edu>; Wed, 28 May 1997 15:39:35 -0500 (CDT)
+Received: from ida.ing.tu-bs.de (horaz.ida.ing.tu-bs.de [134.169.29.1]) by rzcomm1.rz.tu-bs.de with SMTP (8.7.6/8.7.3) id WAA16849 for <fvwm-workers@hpc.uh.edu>; Wed, 28 May 1997 22:39:03 +0200 (METDST)
+Received: from localhost by epikur.ida.ing.tu-bs.de (SMI-8.6/SMI-SVR4)
+	id WAA15799; Wed, 28 May 1997 22:39:01 +0200
+Date: Wed, 28 May 1997 22:39:00 +0200 (MET DST)
+From: Armin Richter <armin@ida.ing.tu-bs.de>
+X-Sender: armin@epikur
+To: fvwm-workers@hpc.uh.edu
+Subject: FVWM2: Fast Move and Resize?
+Message-Id: <Pine.SOL.3.95.970528223603.15590B-100000@epikur>
+Mime-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+Nice Greetings to everyone.
+
+Maybe someone can help me:
+
+I take part in a Project that develops
+a module for fvwm2 2.0.43.
+
+This module has to heavily move and resize windows.
+In fact, several windows simultaniously
+The resize shall be done in several smaller steps 
+(for outlook reasons)
+As the resize process takes much time
+(at least too much for the project's needs)
+here's my question:
+
+Is there a possibility to temporarily stop
+X or fvwm from sending refresh messages to
+windows (until the resize process has completed entirely)?
+To make it clear: the resizing and moving is done by the module,
+not by hand, so switching OpaqueResize doesn't change anything.
+
+Of course I could patch fvwm, but maybe there's
+a possibility without changing it.
+
+I tried to temporarily disable XMapWindow in events.c:
+
+        default:
+          if (Tmp_win->Desk == Scr.CurrentDesk)
+            {
+/*            XMapWindow(dpy, Tmp_win->w);*/
+/* This should at least keep the borders been redrawn, but in fact it*/
+/* doesn't. Any comments? */
+
+              XMapWindow(dpy, Tmp_win->frame);
+              Tmp_win->flags |= MAP_PENDING;
+              SetMapStateProp(Tmp_win, NormalState);
+              if((Tmp_win->flags & ClickToFocus)&&
+                 ((!Scr.Focus)||(Scr.Focus->flags & ClickToFocus)))
+                {
+                  SetFocus(Tmp_win->w,Tmp_win,1);
+                }
+            }
+          else
+            {
+/*            XMapWindow(dpy, Tmp_win->w);*/
+              SetMapStateProp(Tmp_win, NormalState);
+            }
+          break;
+
+But that disables nearly everything.
+The borders should be redrawn as always, however, the client's windows
+shall only be moved, not resized, as long as the window has not
+reached its final destination.
+
+Thank you very much for every hint.
+
+Yours sincerely,
+Armin Richter
+
+--
+K. Armin Richter              
+     Studying at TU Carolo-Wilhelmina Braunschweig
+                 Lower Saxony, Germany
+          Support University of Hildesheim !
+              Key fingerprint: 1997/02/02
+   0E 0A D2 9B A6 4E 3F B4  B7 6D F1 D8 F0 23 0F E5
+
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Fri May 30 12:40:02 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Fri, 30 May 1997 12:40:02 -0500 (CDT)
+Received: from foxhound.cisco.com (foxhound.cisco.com [171.69.192.161]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id MAA27719; Fri, 30 May 1997 12:39:47 -0500 (CDT)
+Received: from vanzant.cisco.com (vanzant.cisco.com [171.69.200.28]) by foxhound.cisco.com (8.8.4-Cisco.1/8.6.5) with ESMTP id KAA02746; Fri, 30 May 1997 10:38:48 -0700 (PDT)
+From: Yehuda Bamnolker <ybamnolk@cisco.com>
+Received: (ybamnolk@localhost) by vanzant.cisco.com (8.6.8+c/CISCO.WS.1.1) id KAA19700; Fri, 30 May 1997 10:37:20 -0700
+Date: Fri, 30 May 1997 10:37:20 -0700
+Message-Id: <199705301737.KAA19700@vanzant.cisco.com>
+To: owner-fvwm@hpc.uh.edu, fvwm-workers@hpc.uh.edu
+Subject: fvwm 2.0.45 and Xcoral
+Cc: ybamnolk@cisco.com
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+
+I'm re-sending since my mail had some problems last night and I couldn't
+find the previous mail I sent in the archive.
+
+My apologies if you got it twice.
+
+Thanks,
+Yehuda.
+
+P.S: I took a look at fvwm/module.c where it crashed:
+
+     void SendName(int module, unsigned long event_type,
+          unsigned long data1,unsigned long data2,
+          unsigned long data3, char *name)
+    {
+      int l;
+      unsigned long *body;
+      extern Time lastTimestamp;
+ 
+      if(name == NULL)
+       return;
+ 
+     l=(strlen(name))/(sizeof(unsigned long))+HEADER_SIZE+4;
+     
+      The SendName function to check that name isn't NULL but looking at the
+      stack trace from GDB it's 0xffffffff (name=0xffffffff <Address 0xffffffff
+      out of bounds>) at module.c:509) and strlen crashed while walking over
+      this corrupted pointer.
+      
+
+
+----- Begin Included Message -----
+
+From ybamnolk Thu May 29 15:25:19 1997
+To: owner-fvwm@hpc.uh.edu
+Subject: fvwm 2.0.45 and Xcoral
+Cc: ybamnolk
+Status: RO
+
+
+Hi.
+
+I'm using Fvwm Version 2.0.45 for months now and I'm very happy. In fact
+it's the best window manager I ever used.
+
+I compiled a new version of xcoral for the first time (xcoral-3.1, got
+it from ftp.x.org (contrib/editors)).
+
+I compiled it on the same SUNOS 4.1.4 box I used to compile fvwm2 and
+when I start xcoral, fvwm2 crashes :-(
+
+I tried to run the same application with olwm (SUN's Open Look Window
+Manager) and it worked with no problem.
+
+Attached a stack trace from the core file.
+
+Any ideas?
+
+Thanks in advance,
+Yehuda.
+
+
+
+15:15 vanzant:> gdb fvwm2/bin/fvwm2 core
+ 
+GDB is free software and you are welcome to distribute copies of it
+ under certain conditions; type "show copying" to see the conditions.
+There is absolutely no warranty for GDB; type "show warranty" for details.
+GDB 4.14.1 (sparc-sun-sunos4.1.3), 
+Copyright 1995 Free Software Foundation, Inc...
+Core was generated by `fvwm2'.
+Program terminated with signal 11, Segmentation fault.
+Reading symbols from /usr/openwin/lib/libX11.so.4.3...done.
+Reading symbols from /usr/lib/libc.so.1.9.1...done.
+Reading symbols from /usr/lib/libdl.so.1.0...done.
+#0  0xef73935c in strlen ()
+(gdb) where
+#0  0xef73935c in strlen ()
+#1  0x2db2c in SendName (module=0, event_type=2048, data1=16777432, 
+    data2=7340310, data3=362624, 
+    name=0xffffffff <Address 0xffffffff out of bounds>) at module.c:509
+#2  0x2dc80 in BroadcastName (event_type=2048, data1=16777432, data2=7340310, 
+    data3=362624, name=0xffffffff <Address 0xffffffff out of bounds>)
+    at module.c:533
+#3  0x3e7c in AddWindow (w=16777432) at add_window.c:674
+#4  0x1bd08 in HandleMapRequestKeepRaised (KeepRaised=0) at events.c:667
+#5  0x1bc58 in HandleMapRequest () at events.c:647
+#6  0x1a6a0 in DispatchEvent () at events.c:156
+#7  0x1a6fc in HandleEvents () at events.c:177
+#8  0x20420 in main (argc=1, argv=0xeffff864) at fvwm.c:464
+(gdb) 
+
+
+
+----- End Included Message -----
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+

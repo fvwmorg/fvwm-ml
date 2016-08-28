@@ -1,0 +1,3852 @@
+From owner-fvwm@hpc.uh.edu  Sun Jul  1 11:43:46 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sun, 01 Jul 2001 11:43:46 -0500 (CDT)
+Received: from darkstar.darkdomain (IDENT:sna@linea119.mediacom.it [212.34.251.125])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id LAA09870
+	for <fvwm@hpc.uh.edu>; Sun, 1 Jul 2001 11:43:36 -0500 (CDT)
+Received: (from sna@localhost)
+	by darkstar.darkdomain (8.9.3/8.9.3) id SAA19571
+	for fvwm@hpc.uh.edu; Sun, 1 Jul 2001 18:42:26 +0200
+X-Authentication-Warning: darkstar.darkdomain: sna set sender to sna@mediacom.it using -f
+Date: Sun, 1 Jul 2001 18:42:26 +0200
+From: Sergio Nasi <sna@mediacom.it>
+To: fvwm@hpc.uh.edu
+Subject: FVWM: Maximum Window Size
+Message-ID: <20010701184226.A14697@darkstar.darkdomain>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+X-Mailer: Mutt 1.0i
+X-Religion: linux vim mutt slrn WindowMaker
+X-URL: http://www.mediacom.it/~sna
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Hello together,
+I'm new to this pretty intriguing WM.
+
+I'm tinkering with the configuration file and I have a question for you:
+I configured FvwmButton region at the top of the screen having the
+StaysOnTop property  and I'd like to have all the windows use only the
+region of the screen not covered by the FvwmButtons module.
+
+Now, if I maximize the windows, the title bar falls under the button region
+and it is unaccessible, so that I always have to move each window down and
+resize it.
+
+Is there a way to specify a Style for this? Or using the X resources is the
+only solution?
+
+Thanks a lot in advance.
+
+Sergio Nasi 
+
+-- 
+-----BEGIN GEEK CODE BLOCK-----
+Version: 3.12
+GE d- s 0xa-- C++ UL++ P+ L++ E--- W++($) N++ !o K- w--- O? M?>+ V-- PS+>++
+PE- Y PGP-- t+ 5? X R tv- b++ DI++ D+ G e h-- r+++ y+
+------END GEEK CODE BLOCK------
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Mon Jul  2 05:34:16 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 02 Jul 2001 05:34:16 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id FAA17001
+	for <fvwm@hpc.uh.edu>; Mon, 2 Jul 2001 05:34:04 -0500 (CDT)
+Received: from barloo ([193.193.194.126])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id FAA02293
+	for <fvwm@fvwm.org>; Mon, 2 Jul 2001 05:34:28 -0500 (CDT)
+Received: from max by barloo with local (Exim 3.16 #1)
+	id 15H11q-0000PZ-00; Mon, 02 Jul 2001 13:34:06 +0300
+Date: Mon, 2 Jul 2001 13:34:06 +0300
+From: Max Ischenko <max@malva.com.ua>
+To: Dominik Vogt <fvwm@fvwm.org>, fvwm@fvwm.org
+Subject: FVWM: WindowList with very long titles
+Message-ID: <20010702133406.B3380@malva.com.ua>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.3.19i
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+
+Some of the apps (Galeon) used to have veery long titles that force
+WindowList to look ugly. Is it possible to implement some kind of
+title folding/cutting?
+
+This is very cumsy snapshot:
+
+Index: ./fvwm/windowlist.c
+===================================================================
+RCS file: /home/cvs/fvwm/fvwm/fvwm/windowlist.c,v
+retrieving revision 1.43
+diff -u -r1.43 windowlist.c
+--- ./fvwm/windowlist.c 2001/04/05 11:54:10     1.43
++++ ./fvwm/windowlist.c 2001/07/02 10:30:24
+@@ -389,6 +389,13 @@
+ 
+         if (!name)
+           name = "NULL_NAME";
++               else {
++             int max_label_size = 60;
++                 if (strlen(name) > max_label_size) {
++                         strncpy(name, name, max_label_size);
++                         name[max_label_size] = '\0';
++                 }
++               }
+ 
+         t_hot = safemalloc(strlen(name) + 48);
+        if (use_hotkey)
+
+
+
+-- 
+Best regards, Maxim F. Ischenko.
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Mon Jul  2 23:50:54 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 02 Jul 2001 23:50:54 -0500 (CDT)
+Received: from darkstar.darkdomain (IDENT:sna@linea74.mediacom.it [212.34.251.80])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id XAA23417
+	for <fvwm@hpc.uh.edu>; Mon, 2 Jul 2001 23:50:39 -0500 (CDT)
+Received: (from sna@localhost)
+	by darkstar.darkdomain (8.9.3/8.9.3) id GAA10300
+	for fvwm@hpc.uh.edu; Tue, 3 Jul 2001 06:49:25 +0200
+X-Authentication-Warning: darkstar.darkdomain: sna set sender to sna@mediacom.it using -f
+Date: Tue, 3 Jul 2001 06:49:24 +0200
+From: Sergio Nasi <sna@mediacom.it>
+To: Fvwm Users <fvwm@hpc.uh.edu>
+Subject: Re: FVWM: Maximum Window Size
+Message-ID: <20010703064924.A9239@darkstar.darkdomain>
+Mail-Followup-To: Sergio Nasi <sna@mediacom.it>,
+	Fvwm Users <fvwm@hpc.uh.edu>
+References: <20010701184226.A14697@darkstar.darkdomain>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.2.5i
+In-Reply-To: <20010701184226.A14697@darkstar.darkdomain>; from sna@mediacom.it on Sun, Jul 01, 2001 at 06:42:26PM +0200
+X-Religion: linux vim mutt slrn WindowMaker
+X-URL: http://www.mediacom.it/~sna
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Here I am again,
+I found out about the problem I wrote about below that fvwm provides a
+Style command named "MaxWindowSize" that could do the job.
+I'm using fvwm 2.2.5 and the parser gives me a "Bad Style parameter" error
+when I use it in my .fvwmrc file like this:
+Style "*" MaxWindowSize 800 500
+(even tried 800p 500p).
+
+Any hints?
+
+Thank you
+
+Regards
+
+Sergio
+
+
+
+
+
+On Sun, Jul 01, 2001 at 06:42:26PM +0200, Sergio Nasi wrote:
+> Hello together,
+> I'm new to this pretty intriguing WM.
+> 
+> I'm tinkering with the configuration file and I have a question for you:
+> I configured FvwmButton region at the top of the screen having the
+> StaysOnTop property  and I'd like to have all the windows use only the
+> region of the screen not covered by the FvwmButtons module.
+> 
+> Now, if I maximize the windows, the title bar falls under the button region
+> and it is unaccessible, so that I always have to move each window down and
+> resize it.
+> 
+> Is there a way to specify a Style for this? Or using the X resources is the
+> only solution?
+> 
+> Thanks a lot in advance.
+> 
+> Sergio Nasi 
+> 
+> -- 
+> -----BEGIN GEEK CODE BLOCK-----
+> Version: 3.12
+> GE d- s 0xa-- C++ UL++ P+ L++ E--- W++($) N++ !o K- w--- O? M?>+ V-- PS+>++
+> PE- Y PGP-- t+ 5? X R tv- b++ DI++ D+ G e h-- r+++ y+
+> ------END GEEK CODE BLOCK------
+> --
+> Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+> To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+> message to majordomo@fvwm.org.
+> To report problems, send mail to fvwm-owner@fvwm.org.
+
+-- 
+-----BEGIN GEEK CODE BLOCK-----
+Version: 3.12
+GE d- s 0xa-- C++ UL++ P+ L++ E--- W++($) N++ !o K- w--- O? M?>+ V-- PS+>++
+PE- Y PGP-- t+ 5? X R tv- b++ DI++ D+ G e h-- r+++ y+
+------END GEEK CODE BLOCK------
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Tue Jul  3 04:25:23 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 03 Jul 2001 04:25:23 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id EAA25317
+	for <fvwm@hpc.uh.edu>; Tue, 3 Jul 2001 04:25:12 -0500 (CDT)
+Received: from sdf.lonestar.org (migo@t3-d-static-237.adsl.directlink.net [63.68.131.237])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id EAA24244
+	for <fvwm@fvwm.org>; Tue, 3 Jul 2001 04:25:40 -0500 (CDT)
+Received: (from migo@localhost)
+	by sdf.lonestar.org (8.11.0/8.11.0) id f639OVr13532;
+	Tue, 3 Jul 2001 09:24:31 GMT
+Date: Tue, 3 Jul 2001 09:24:31 +0000
+From: Mikhael Goikhman <migo@homemail.com>
+To: Sergio Nasi <sna@mediacom.it>
+Cc: FVWM <fvwm@fvwm.org>
+Subject: Re: FVWM: Maximum Window Size
+Message-ID: <20010703092431.A6208@homemail.com>
+Mail-Followup-To: Mikhael Goikhman <migo@homemail.com>,
+	Sergio Nasi <sna@mediacom.it>, FVWM <fvwm@fvwm.org>
+References: <20010701184226.A14697@darkstar.darkdomain> <20010703064924.A9239@darkstar.darkdomain>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.2.4i
+In-Reply-To: <20010703064924.A9239@darkstar.darkdomain>; from sna@mediacom.it on Tue, Jul 03, 2001 at 06:49:24AM +0200
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+On 03 Jul 2001 06:49:24 +0200, Sergio Nasi wrote:
+> 
+> Here I am again,
+> I found out about the problem I wrote about below that fvwm provides a
+> Style command named "MaxWindowSize" that could do the job.
+> I'm using fvwm 2.2.5 and the parser gives me a "Bad Style parameter" error
+> when I use it in my .fvwmrc file like this:
+> Style "*" MaxWindowSize 800 500
+> (even tried 800p 500p).
+> 
+> Any hints?
+
+Style option MaxWindowSize was added in 2.3.3, it is not available in
+2.2.5.
+
+> On Sun, Jul 01, 2001 at 06:42:26PM +0200, Sergio Nasi wrote:
+> > Hello together,
+> > I'm new to this pretty intriguing WM.
+> > 
+> > I'm tinkering with the configuration file and I have a question for you:
+> > I configured FvwmButton region at the top of the screen having the
+> > StaysOnTop property  and I'd like to have all the windows use only the
+> > region of the screen not covered by the FvwmButtons module.
+> > 
+> > Now, if I maximize the windows, the title bar falls under the button region
+> > and it is unaccessible, so that I always have to move each window down and
+> > resize it.
+> > 
+> > Is there a way to specify a Style for this? Or using the X resources is the
+> > only solution?
+
+You may use (don't forget 'p' if you want size in pixels):
+
+  Style "*" MaxWindowSize 800p 500p
+
+But this does not prevent any window to overlap FvwmButtons.
+Or another (almost the same) solution is to give parameters to Maximize:
+
+  Maximize 800p 500p
+
+Since your FvwmButtons is at the top, there is no acceptable solution for
+you in the latest version. If it was at the bottom, the solutions with
+limitting a size above would be ok for you.
+
+You may highly reduce chances of overlapping by having your FvwmButtons
+some layers up:
+
+  Style FvwmButtons StaysOnTop
+  Style "*" MinOverlapPlacement
+
+I think fvwm-ewmh patch at http://fvwm-ewmh.sourcefourge.net/ enables to
+define a working area, something that you want, but I don't know for sure.
+
+Regards,
+Mikhael.
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Tue Jul  3 09:20:32 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 03 Jul 2001 09:20:32 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id JAA27565
+	for <fvwm@hpc.uh.edu>; Tue, 3 Jul 2001 09:20:21 -0500 (CDT)
+Received: from postfix2-1.free.fr (postfix2-1.free.fr [213.228.0.9])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id JAA28903
+	for <fvwm@fvwm.org>; Tue, 3 Jul 2001 09:20:49 -0500 (CDT)
+Received: from snoopy.parislyon (nas-cbv-6-8-214.dial.proxad.net [213.228.8.214])
+	by postfix2-1.free.fr (Postfix) with ESMTP id 401B4C120
+	for <fvwm@fvwm.org>; Tue,  3 Jul 2001 16:20:47 +0200 (CEST)
+Received: by snoopy.parislyon (Postfix, from userid 501)
+	id 9F7A7244E5; Tue,  3 Jul 2001 13:35:45 +0200 (CEST)
+Date: Tue, 3 Jul 2001 13:35:45 +0200
+From: Olivier Chapuis <olivier.chapuis@free.fr>
+To: FVWM <fvwm@fvwm.org>
+Subject: Re: FVWM: Maximum Window Size
+Message-ID: <20010703133545.A28313@snoopy.parislyon>
+Mail-Followup-To: FVWM <fvwm@fvwm.org>
+References: <20010701184226.A14697@darkstar.darkdomain> <20010703064924.A9239@darkstar.darkdomain> <20010703092431.A6208@homemail.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20010703092431.A6208@homemail.com>
+User-Agent: Mutt/1.3.19i
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+On Tue, Jul 03, 2001 at 09:24:31AM +0000, Mikhael Goikhman wrote:
+> 
+> > On Sun, Jul 01, 2001 at 06:42:26PM +0200, Sergio Nasi wrote:
+> > > Hello together,
+> > > I'm new to this pretty intriguing WM.
+> > > 
+> > > I'm tinkering with the configuration file and I have a question for you:
+> > > I configured FvwmButton region at the top of the screen having the
+> > > StaysOnTop property  and I'd like to have all the windows use only the
+> > > region of the screen not covered by the FvwmButtons module.
+> > > 
+> > > Now, if I maximize the windows, the title bar falls under the button region
+> > > and it is unaccessible, so that I always have to move each window down and
+> > > resize it.
+> > > 
+> > > Is there a way to specify a Style for this? Or using the X resources is the
+> > > only solution?
+> 
+> You may use (don't forget 'p' if you want size in pixels):
+> 
+>   Style "*" MaxWindowSize 800p 500p
+> 
+> But this does not prevent any window to overlap FvwmButtons.
+> Or another (almost the same) solution is to give parameters to Maximize:
+> 
+>   Maximize 800p 500p
+> 
+> Since your FvwmButtons is at the top, there is no acceptable solution for
+> you in the latest version. If it was at the bottom, the solutions with
+> limitting a size above would be ok for you.
+> 
+> You may highly reduce chances of overlapping by having your FvwmButtons
+> some layers up:
+> 
+>   Style FvwmButtons StaysOnTop
+>   Style "*" MinOverlapPlacement
+> 
+> I think fvwm-ewmh patch at http://fvwm-ewmh.sourcefourge.net/ enables to
+> define a working area, something that you want, but I don't know for sure.
+> 
+
+Yes, you can do something like that
+
+*FvwmNetHints: MyStrut left right top bottom
+
+Where  left,  right, top and bottom are positive or
+null integer (pixels) which defined 4 bands:
+
+One on the left of your screen of width left
+One on the right of your screen of width right
+One on the top of your screen of height top
+One on the bottom of your screen of height bottom
+
+Then, if you replace the fvwm Maximize command by the FvwmNetHints
+one (SendToModule FvwmNetHints Maximize [options]), when you maximize
+it is assumed that your screen is your real screen minus the 4 bands,
+the so called "Working Area".
+
+You may also use the experimental option:
+
+*FvwmNetHints: UseWorkingAreaPlacement True
+
+which causes new windows to be placed again to respect
+the "Working Area" (you should not use any manual placement).
+
+Olivier
+
+PS: Wait 24 hours before performing any fvwm-ewmh download,
+version 0.3 is on the road :o)
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Tue Jul  3 09:31:58 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 03 Jul 2001 09:31:58 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id JAA27750
+	for <fvwm@hpc.uh.edu>; Tue, 3 Jul 2001 09:31:47 -0500 (CDT)
+Received: from southpass.baynetworks.com (ns2.BayNetworks.COM [134.177.3.16])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id JAA29177
+	for <fvwm@fvwm.org>; Tue, 3 Jul 2001 09:32:14 -0500 (CDT)
+Received: from mailhost.BayNetworks.COM (ns4.baynetworks.com [132.245.135.84])
+	by southpass.baynetworks.com (8.9.1/8.9.1) with ESMTP id HAA11932
+	for <fvwm@fvwm.org>; Tue, 3 Jul 2001 07:21:14 -0700 (PDT)
+Received: from pobox.engeast.BayNetworks.COM (pobox.engeast.baynetworks.com [192.32.61.6])
+	by mailhost.BayNetworks.COM (8.9.1/8.8.8) with ESMTP id KAA11363
+	for <fvwm@fvwm.org>; Tue, 3 Jul 2001 10:31:42 -0400 (EDT)
+Received: from lemming.engeast.baynetworks.com (lemming [192.32.150.127])
+	by pobox.engeast.BayNetworks.COM (SMI-8.6/BNET-97/04/24-S) with ESMTP
+	id KAA28075; Tue, 3 Jul 2001 10:31:42 -0400
+	for <fvwm@fvwm.org>
+Received: from psmith by lemming.engeast.baynetworks.com with local (Exim 3.22 #1 (Debian))
+	id 15HRDG-0003h0-00
+	for <fvwm@fvwm.org>; Tue, 03 Jul 2001 10:31:38 -0400
+To: FVWM <fvwm@fvwm.org>
+Subject: Re: FVWM: Maximum Window Size
+References: <20010701184226.A14697@darkstar.darkdomain>
+	<20010703064924.A9239@darkstar.darkdomain>
+	<20010703092431.A6208@homemail.com>
+	<20010703133545.A28313@snoopy.parislyon>
+From: "Paul D. Smith" <pausmith@nortelnetworks.com>
+In-Reply-To: <20010703133545.A28313@snoopy.parislyon>
+Reply-To: pausmith@nortelnetworks.com
+Date: 03 Jul 2001 10:31:30 -0400
+Message-ID: <p58zi69j99.fsf@lemming.engeast.baynetworks.com>
+Lines: 17
+User-Agent: Gnus/5.0808 (Gnus v5.8.8) Emacs/20.7
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+%% Olivier Chapuis <olivier.chapuis@free.fr> writes:
+
+  >> I think fvwm-ewmh patch at http://fvwm-ewmh.sourcefourge.net/ enables to
+                                                        ^^^
+
+FYI, I _really_ don't recommend that anyone click on the above URL :-/.
+
+Try this one instead:
+
+  http://fvwm-ewmh.sourceforge.net/
+                          ^^
+-- 
+-------------------------------------------------------------------------------
+ Paul D. Smith <psmith@baynetworks.com>    HASMAT--HA Software Methods & Tools
+ "Please remain calm...I may be mad, but I am a professional." --Mad Scientist
+-------------------------------------------------------------------------------
+   These are my opinions---Nortel Networks takes no responsibility for them.
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Tue Jul  3 11:31:42 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 03 Jul 2001 11:31:42 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id LAA28998
+	for <fvwm@hpc.uh.edu>; Tue, 3 Jul 2001 11:31:33 -0500 (CDT)
+Received: from sdf.lonestar.org (root@t3-d-static-237.adsl.directlink.net [63.68.131.237])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id LAA02516
+	for <fvwm@fvwm.org>; Tue, 3 Jul 2001 11:32:00 -0500 (CDT)
+Received: (from migo@localhost)
+	by sdf.lonestar.org (8.11.0/8.11.0) id f63ErmE16769
+	for fvwm@fvwm.org; Tue, 3 Jul 2001 14:53:48 GMT
+Date: Tue, 3 Jul 2001 14:53:48 +0000
+From: Mikhael Goikhman <migo@homemail.com>
+To: FVWM <fvwm@fvwm.org>
+Subject: Re: FVWM: Maximum Window Size
+Message-ID: <20010703145347.A29349@homemail.com>
+Mail-Followup-To: Mikhael Goikhman <migo@homemail.com>,
+	FVWM <fvwm@fvwm.org>
+References: <20010701184226.A14697@darkstar.darkdomain> <20010703064924.A9239@darkstar.darkdomain> <20010703092431.A6208@homemail.com> <20010703133545.A28313@snoopy.parislyon> <p58zi69j99.fsf@lemming.engeast.baynetworks.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.2.4i
+In-Reply-To: <p58zi69j99.fsf@lemming.engeast.baynetworks.com>; from pausmith@nortelnetworks.com on Tue, Jul 03, 2001 at 10:31:30AM -0400
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+On 03 Jul 2001 10:31:30 -0400, Paul D. Smith wrote:
+> 
+> FYI, I _really_ don't recommend that anyone click on the above URL :-/.
+> 
+> Try this one instead:
+> 
+>   http://fvwm-ewmh.sourceforge.net/
+>                           ^^
+
+I failed this trap several times. It is not much harmful for me, because
+their javascript does nothing to my browser, but I can see what it does...
+
+I guess I should use sf.net alias to reduce typos.
+
+Regards,
+Mikhael.
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Thu Jul  5 02:27:53 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Thu, 05 Jul 2001 02:27:53 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id CAA21322
+	for <fvwm@hpc.uh.edu>; Thu, 5 Jul 2001 02:27:43 -0500 (CDT)
+Received: from mail.worldonline.se ([213.204.128.156])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with SMTP id CAA04661
+	for <fvwm@fvwm.org>; Thu, 5 Jul 2001 02:28:11 -0500 (CDT)
+From: bagarnx@worldonline.se
+Message-Id: <200107050728.CAA04661@karazm.math.uh.edu>
+Received: (qmail 2891 invoked from network); 5 Jul 2001 07:28:08 -0000
+Received: from unknown (HELO fe080.worldonline.se) (213.204.128.158)
+  by smtp.worldonline.se with SMTP; 5 Jul 2001 07:28:08 -0000
+Content-Type: text/plain
+Content-Disposition: inline
+Content-Transfer-Encoding: binary
+To: fvwm@fvwm.org
+X-Originating-Ip: 194.17.115.5
+MIME-Version: 1.0
+Reply-To: bagarnx@worldonline.se
+Date: Tor, 05 Jul 2001 8:26:50 MET
+X-Mailer: EMUmail 4.5
+Subject: FVWM: Error when trying to start fvwm
+X-Webmail-User: bagarnx@worldonline.se
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Hi. I tried to start fvwm, but there was an error message:;
+'cannot open display'.
+
+I know it's not much, but I'm a new linux-user, so I would appreciate any help.
+
+I'm using redhat 7.1 with kernel 2.4.5
+
+Thank you
+/Anders
+
+Detta meddelande är skickat via http://www.worldonline.se
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Thu Jul  5 03:26:10 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Thu, 05 Jul 2001 03:26:10 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id DAA22191
+	for <fvwm@hpc.uh.edu>; Thu, 5 Jul 2001 03:26:01 -0500 (CDT)
+Received: from gatesrv.RZ.UniBw-Muenchen.de (gatesrv.RZ.UniBw-Muenchen.de [137.193.11.27])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id DAA05366
+	for <fvwm@fvwm.org>; Thu, 5 Jul 2001 03:26:29 -0500 (CDT)
+Received: from daidalos.informatik.unibw-muenchen.de (daidalos.Informatik.UniBw-Muenchen.de [137.193.60.31])
+	by gatesrv.RZ.UniBw-Muenchen.de (8.11.2/8.11.2) with SMTP id f658ObF26434
+	for <fvwm@fvwm.org>; Thu, 5 Jul 2001 10:24:38 +0200 (MEST)
+Received: (qmail 11637 invoked by uid 311); 5 Jul 2001 08:24:37 -0000
+Date: Thu, 5 Jul 2001 10:24:37 +0200
+From: Frank Derichsweiler <fd-l-fvwm@daidalos.informatik.unibw-muenchen.de>
+To: bagarnx@worldonline.se
+Cc: fvwm@fvwm.org
+Subject: Re: FVWM: Error when trying to start fvwm
+Message-ID: <20010705102437.G10033@daidalos.informatik.unibw-muenchen.de>
+Mail-Followup-To: bagarnx@worldonline.se, fvwm@fvwm.org
+References: <200107050728.CAA04661@karazm.math.uh.edu>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.2.5i
+In-Reply-To: <200107050728.CAA04661@karazm.math.uh.edu>; from bagarnx@worldonline.se on Thu, Jul 05, 2001 at 08:26:50AM +0100
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+On Thu, Jul 05, 2001 at 08:26:50AM +0100, bagarnx@worldonline.se wrote:
+> Hi. I tried to start fvwm, but there was an error message:;
+> 'cannot open display'.
+> 
+> I know it's not much, but I'm a new linux-user, so I would appreciate any help.
+> 
+> I'm using redhat 7.1 with kernel 2.4.5
+> 
+
+Possible problems:
+- no X server started
+  How did you log in?
+  What did you execute in order to start fvwm?
+- X server is started by another user, that user did not allow
+  "actions" on the X server
+  How did you log in?
+  What did you execute in order to start fvwm?
+  Are there other users logged in? If yes, how?
+- DISPLAY environment variable with wrong contents
+  Try echo $DISPLAY to check that
+- ...
+
+HTH
+Frank
+
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Mon Jul  9 08:49:11 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 09 Jul 2001 08:49:11 -0500 (CDT)
+Received: from myschoolyears.com (adsl-81-163-170.asm.bellsouth.net [65.81.163.170])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with SMTP id IAA23698
+	for <fvwm@hpc.uh.edu>; Mon, 9 Jul 2001 08:49:00 -0500 (CDT)
+Date: Mon, 9 Jul 2001 08:49:00 -0500 (CDT)
+From: business@myschoolyears.com
+Message-Id: <200107091349.IAA23698@sina.hpc.uh.edu>
+MIME-Version: 1.0
+Content-Type: multipart/mixed;
+	boundary="=200107090951="
+To: fvwm@hpc.uh.edu
+X-Mailer: 6F78D458.1AEB9EDE.475e287483de9d36529acb39b75326cf
+Subject: FVWM: MySchoolYears.com: Where students create their own web pages
+Organization: My School Years, LLC
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+--=200107090951=
+Content-Type: text/html;charset=US-ASCII
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0088)file://C:\WINDOWS\Temporary%20Internet%20Files\Content.IE5\4XMJ4DEB\LetterToSchools.html -->
+<!-- saved from url=(0022)http://internet.e-mail --><!-- saved from url=(0022)http://internet.e-mail --><HTML><HEAD><TITLE>myschoolyears</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<META content="MSHTML 5.50.4522.1800" name=GENERATOR></HEAD>
+<BODY bgColor=#ffffff>
+<P><FONT face="Arial, Helvetica, sans-serif" size=2>Dear Educators:</FONT></P>
+<P><FONT face="Arial, Helvetica, sans-serif" size=2>Introducing <B><I>My<FONT 
+color=#990000>School</FONT>Years</I></B>.<B>com</B>, a new Internet service 
+where students can create their own web pages to showcase their academic 
+achievements. Using a standard web browser, students can create web pages that 
+contain a summary of their <B>Academic Studies, Test Scores, Report Cards, 
+Attendance Records, and Extra Curricular Activities</B> for each school year - 
+from Elementary through College. </FONT></P>
+<P><FONT face="Arial, Helvetica, sans-serif" size=2>Students can even upload 
+their favorite school pictures and share their web pages with family, friends or 
+anyone involved in their academic career. Teachers can even log-on and add 
+comments. </FONT><FONT face="Arial, Helvetica, sans-serif" size=2>Parents will 
+gain a better understanding of their child's academic progress when they help 
+create the web pages.</FONT></P>
+<P><FONT face="Arial, Helvetica, sans-serif" size=2><B>Other features 
+include:</B></FONT></P>
+<UL>
+  <LI><FONT face="Arial, Helvetica, sans-serif" size=2>Member Referral Program 
+  (Earn money through referrals)</FONT> 
+  <LI><FONT face="Arial, Helvetica, sans-serif" size=2>Free Software Download 
+  (<B>KIDdisk</B> Child ID and Safety Software) </FONT>
+  <LI><FONT face="Arial, Helvetica, sans-serif" size=2>On-line Photo Contest 
+  (Students can enter<B> <I>Best Class Photo Contest</I></B>) </FONT></LI></UL>
+<P><FONT face="Arial, Helvetica, sans-serif" size=2><B><I>My<FONT 
+color=#990000>School</FONT>Years</I></B>.<B>com</B> is an excellent technology 
+project for schools, PTA fund-raiser or sponsorship opportunity for the school's 
+Business Partners. We are planning to launch the program during the 2001 
+back-to-school time frame. </FONT><FONT face="Arial, Helvetica, sans-serif" 
+size=2>Your school can participate in this promotional campaign and make the 
+program available to all the students in your school.</FONT></P>
+<P><FONT face="Arial, Helvetica, sans-serif" size=2>Click <A 
+href="http://www.myschoolyears.com/">here</A> to learn more about this exciting 
+new program. To see a sample web page, Click <B>DEMO.</B> The<B> user name</B> 
+and <B>password </B>have already been entered. Click<B> SEARCH</B>. When the 
+student's record is displayed, click <B>THIRD GRADE</B> (This sample page has 
+already been created.)</FONT> </P>
+<P><FONT face="Arial, Helvetica, sans-serif" size=2>If you have any questions or 
+need order information, please feel free to contact us.</FONT></P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+</BODY></HTML>
+
+--=200107090951=--
+
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Tue Jul 10 03:35:21 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 10 Jul 2001 03:35:21 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id DAA02271
+	for <fvwm@hpc.uh.edu>; Tue, 10 Jul 2001 03:35:12 -0500 (CDT)
+Received: from trmail.triumf.ca (trmail.Triumf.CA [142.90.100.150])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id DAA02584
+	for <fvwm@fvwm.org>; Tue, 10 Jul 2001 03:35:39 -0500 (CDT)
+Received: from trinat02.Triumf.CA (IDENT:melcon@trinat02.Triumf.CA [142.90.103.21])
+	by trmail.triumf.ca (8.10.2/8.10.2) with ESMTP id f6A8ZJn29285
+	for <fvwm@fvwm.org>; Tue, 10 Jul 2001 01:35:19 -0700
+Date: Tue, 10 Jul 2001 01:33:39 -0700 (PDT)
+From: Dan Melconian <melcon@triumf.ca>
+To: <fvwm@fvwm.org>
+Subject: FVWM:  loses info in graphics windows
+Message-ID: <Pine.LNX.4.30.0107100121340.25903-100000@trinat02.Triumf.CA>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+	Hello,
+
+	I hope I am writing to the right place ...  If not, sorry!
+
+	I have recently switched (back) to FVWM from GNOME, and am
+generally happy with everything.  The one thing I _really_ want to fix,
+and which may sway me back to GNOME, is the way FVWM is handling my
+graphics windows.  I use a local program, physica, which brings up it's
+own graphics window to make my pretty plots; whenever I switch
+pages/desks, or even just place another window on top of this graphics
+window, the graphics disappear and I'm left with a blank window (when
+placing other windows on top, only the area covered is lost).  When I work
+with small files, this isn't a problem because I generally use macros, but
+sometimes it takes 20 mins to analyze stuff, which is far too long just to
+look again at what I've already analyzed!
+	I realize physica (see www.triumf.ca/physica/html/homepage.html if
+you care) is not a world-renowned program, but perhaps you're familiar
+with CERN's "PAW"  (physics analysis workstation) program?  The same thing
+happens with it's graphics window.
+
+	Thanks in advance,
+		Dan
+
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Tue Jul 10 08:39:24 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 10 Jul 2001 08:39:24 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id IAA04648
+	for <fvwm@hpc.uh.edu>; Tue, 10 Jul 2001 08:39:12 -0500 (CDT)
+Received: from southpass.baynetworks.com (ns2.BayNetworks.COM [134.177.3.16])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id IAA06914
+	for <fvwm@fvwm.org>; Tue, 10 Jul 2001 08:39:39 -0500 (CDT)
+Received: from mailhost.BayNetworks.COM (ns1.baynetworks.com [134.177.1.107])
+	by southpass.baynetworks.com (8.9.1/8.9.1) with ESMTP id GAA14313
+	for <fvwm@fvwm.org>; Tue, 10 Jul 2001 06:28:34 -0700 (PDT)
+Received: from pobox.engeast.BayNetworks.COM (pobox.engeast.baynetworks.com [192.32.61.6])
+	by mailhost.BayNetworks.COM (8.9.1/8.8.8) with ESMTP id GAA13590
+	for <fvwm@fvwm.org>; Tue, 10 Jul 2001 06:36:59 -0700 (PDT)
+Received: from lemming.engeast.baynetworks.com (lemming [192.32.150.127])
+	by pobox.engeast.BayNetworks.COM (SMI-8.6/BNET-97/04/24-S) with ESMTP
+	id JAA27082; Tue, 10 Jul 2001 09:39:06 -0400
+	for <fvwm@fvwm.org>
+Received: from psmith by lemming.engeast.baynetworks.com with local (Exim 3.22 #1 (Debian))
+	id 15JxjG-0003Xj-00; Tue, 10 Jul 2001 09:39:06 -0400
+To: Dan Melconian <melcon@triumf.ca>
+Cc: fvwm <fvwm@fvwm.org>
+Subject: Re: FVWM: loses info in graphics windows
+References: <Pine.LNX.4.30.0107100121340.25903-100000@trinat02.Triumf.CA>
+From: "Paul D. Smith" <pausmith@nortelnetworks.com>
+In-Reply-To: <Pine.LNX.4.30.0107100121340.25903-100000@trinat02.Triumf.CA>
+Reply-To: pausmith@nortelnetworks.com
+Date: 10 Jul 2001 09:39:06 -0400
+Message-ID: <p53d84aop1.fsf@lemming.engeast.baynetworks.com>
+Lines: 36
+User-Agent: Gnus/5.0808 (Gnus v5.8.8) Emacs/20.7
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+%% Dan Melconian <melcon@triumf.ca> writes:
+
+  dm> I have recently switched (back) to FVWM from GNOME, and am
+  dm> generally happy with everything.  The one thing I _really_ want to
+  dm> fix, and which may sway me back to GNOME, is the way FVWM is
+  dm> handling my graphics windows.  I use a local program, physica,
+  dm> which brings up it's own graphics window to make my pretty plots;
+  dm> whenever I switch pages/desks, or even just place another window
+  dm> on top of this graphics window, the graphics disappear and I'm
+  dm> left with a blank window (when placing other windows on top, only
+  dm> the area covered is lost).  When I work with small files, this
+  dm> isn't a problem because I generally use macros, but sometimes it
+  dm> takes 20 mins to analyze stuff, which is far too long just to look
+  dm> again at what I've already analyzed!
+
+It's not the job of the window manager to save the contents of windows
+when they're obscured: it's the job of the application to redisplay its
+contents when it gets the appropriate event.
+
+If physica can't do this without recalculating everything from scratch,
+it's _seriously_ broken.  You should ask them to fix it or get a better
+tool...
+
+Anyway, you can have FVWM ask the X server to try to cache the contents
+of windows using the BackingStore and/or SaveUnder Style options; see
+the fvwm2 man page.  This must be what GNOME is doing if you don't see
+this behavior there.  BTW, what WM were you using with GNOME?  GNOME is
+a whole desktop environment, not just a WM.  At work I run GNOME with
+FVWM as the WM.
+
+-- 
+-------------------------------------------------------------------------------
+ Paul D. Smith <psmith@baynetworks.com>    HASMAT--HA Software Methods & Tools
+ "Please remain calm...I may be mad, but I am a professional." --Mad Scientist
+-------------------------------------------------------------------------------
+   These are my opinions---Nortel Networks takes no responsibility for them.
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Tue Jul 10 10:47:14 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 10 Jul 2001 10:47:14 -0500 (CDT)
+Received: from mail.foxharp.boston.ma.us (foxharp.ne.mediaone.net [24.147.209.205])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with SMTP id KAA05808
+	for <fvwm@hpc.uh.edu>; Tue, 10 Jul 2001 10:47:02 -0500 (CDT)
+Received: (qmail 3588 invoked from network); 10 Jul 2001 15:47:38 -0000
+Received: from gutso.foxharp.boston.ma.us (192.168.111.9)
+  by firethorn.foxharp.boston.ma.us with SMTP; 10 Jul 2001 15:47:38 -0000
+Received: (qmail 2693 invoked from network); 10 Jul 2001 15:47:28 -0000
+Received: from localhost (HELO foxharp) (127.0.0.1)
+  by localhost with SMTP; 10 Jul 2001 15:47:28 -0000
+To: fvwm@hpc.uh.edu
+Subject: FVWM: focus and scrollbars
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2687.994780048.1@foxharp.boston.ma.us>
+Date: Tue, 10 Jul 2001 11:47:28 -0400
+Message-ID: <2689.994780048@foxharp.boston.ma.us>
+From: Paul Fox <pgf@foxharp.boston.ma.us>
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+sometimes when i think an fvwm2 window has focus (i.e., it's turned to
+the focus colors) i still can't type at it, because the mouse pointer
+is over the scrollbar for the window.  moving the mouse just a bit into
+the window text area fixes things.  thinking about this, i've probably only
+seen this with xterms, but it might happen elsewhere -- i forget.
+
+is there a setting that gives focus no matter where the mouse pointer
+is?  
+
+for the record, i get the undesired behavior on 2.2.4 on linux.  i get
+the behavior i want with fvwm2 version 2.0.46 on solaris, and i think
+on a similar vintage version running on linux.
+
+thanks very much...
+paul
+=---------------------
+ paul fox, pgf@foxharp.boston.ma.us (arlington, ma, where it's 79.3 degrees)
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Tue Jul 10 11:00:06 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 10 Jul 2001 11:00:06 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id KAA05989
+	for <fvwm@hpc.uh.edu>; Tue, 10 Jul 2001 10:59:57 -0500 (CDT)
+Received: from trmail.triumf.ca (trmail.Triumf.CA [142.90.100.150])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id LAA10866
+	for <fvwm@fvwm.org>; Tue, 10 Jul 2001 11:00:24 -0500 (CDT)
+Received: from trinat02.Triumf.CA (IDENT:melcon@trinat02.Triumf.CA [142.90.103.21])
+	by trmail.triumf.ca (8.10.2/8.10.2) with ESMTP id f6AFxtn22127;
+	Tue, 10 Jul 2001 08:59:55 -0700
+Date: Tue, 10 Jul 2001 08:58:15 -0700 (PDT)
+From: Dan Melconian <melcon@triumf.ca>
+To: "Paul D. Smith" <pausmith@nortelnetworks.com>
+cc: fvwm <fvwm@fvwm.org>
+Subject: Re: FVWM: loses info in graphics windows
+In-Reply-To: <p53d84aop1.fsf@lemming.engeast.baynetworks.com>
+Message-ID: <Pine.LNX.4.30.0107100855060.27877-100000@trinat02.Triumf.CA>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+	OK.  I'll give the BackingStore and/or SaveUnder a try ... if not,
+I'll get Joe Chuma to fix it from physica's end.
+>
+> Anyway, you can have FVWM ask the X server to try to cache the contents
+> of windows using the BackingStore and/or SaveUnder Style options; see
+> the fvwm2 man page.  This must be what GNOME is doing if you don't see
+> this behavior there.  BTW, what WM were you using with GNOME?  GNOME is
+> a whole desktop environment, not just a WM.  At work I run GNOME with
+> FVWM as the WM.
+
+	Yes, of course; what I should have said was "GNOME running
+on top of Sawfish."
+
+	Thanks a bundle for the advice!!
+
+		Dan
+
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Tue Jul 10 12:33:57 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 10 Jul 2001 12:33:57 -0500 (CDT)
+Received: from spider ([211.216.156.193])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with SMTP id MAA06973
+	for <fvwm@hpc.uh.edu>; Tue, 10 Jul 2001 12:33:45 -0500 (CDT)
+Message-Id: <200107101733.MAA06973@sina.hpc.uh.edu>
+Reply-To: test@test.com
+From: test<test@test.com>
+To: fvwm@hpc.uh.edu
+Subject: FVWM: Mime-Version: 1.0
+Content-Type: text/html; charset="ks_c_5601-1987"
+Date: Wed, 11 Jul 2001 02:33:17 +0900
+X-Mailer: redspider [www.emsoft.co.kr]
+Disposition-Notification-To: test<test@test.com>
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+<html>
+<head>
+<title>´ç½ÅÀÇ ÀÎ»ýÀ» ¹Ù²Ü ÀýÈ£ÀÇ ±âÈ¸ ÀÔ´Ï´Ù...</title>
+<meta name="generator" content="Namo WebEditor v4.0">
+</head>
+<BODY text=black vLink=purple aLink=red link=blue bgColor=white>
+<P><FONT size=2>´ç½ÅÀÇ ÀÎ»ýÀ» ¹Ù²Ü ÀýÈ£ÀÇ ±âÈ¸ ÀÔ´Ï´Ù...</FONT></P>
+<P><FONT size=2>ÀÌÁ¦²¯ °Ý¾î¿Ô´ø ¼ö¸¹Àº ¸¶ÄÉÆÃµéÀÇ ÀåÁ¡¸¸À» º¸¾ÈÇÏ¿© ÅÂ¾î ³´½À´Ï´Ù...</FONT></P>
+<P><A href="http://superjjang.wo.to/">http://superjjang.wo.to/</A><FONT 
+size=2>·Î ¹æ¹®ÇÏ½Ã¸é ¸ðµç³»¿ëÀÌ ³ª¿Í ÀÖ½À´Ï´Ù.</FONT></P>
+<P><FONT size=2>ÁÖÀúÇÏÁö ¸¶½Ã°í ¿À¼Å¼­ È®ÀÎÇÏ½Ã±â ¹Ù¶ø´Ï´Ù...</FONT></P>
+<P><FONT size=2>´Ü¾ðÄÚ ±×³É Áö³ªÄ¡½Ã¸é ºÐ¸íÈ÷ ±âÇÊÄÚ ÈÄÈ¸ÇÏ½Ã°Ô µÉ°Ì´Ï´Ù...</FONT></P>
+<P><FONT color=red size=2><B>º»°ÝÀûÀÎ ½ÃÀÛÀº 7¿ù 15ÀÏ ºÎÅÍÀÔ´Ï´Ù... &nbsp;</B></FONT><FONT 
+size=2>7¿ù 15ÀÏ ºÎÅÍ Æø¹ßÀûÀ¸·Î ´Ã¾î³³´Ï´Ù...</FONT></P>
+<P><FONT size=2></FONT>&nbsp;</P>
+<P><FONT color=red size=2><B>PRE-LAUNCHING WORLDWIDE JULY 15ST</B></FONT></P>
+<P><FONT size=2>We are attempting to verify your email address we have on file 
+as networker</FONT></P>
+<P><FONT size=2>CHECK OUT THE HOTTEST INTERNATIONAL DEBIT/VISA CARD EVER JUST 
+<BR>PRE LAUNCHED --- AND THE GLOBAL TEAM</FONT></P>
+<P><A href="http://onecard_express.wo.to/">http://onecard_express.wo.to/</A> 
+</P>
+<P><FONT size=2>Over 1000 pre enrolled members in over 30 countries ... our 
+first 5 days!!! <BR>EVERYBODY SPONSORS AND MAKES $$$ WITH THE GLOBAL TEAM!!! 
+<BR>This will "EAT UP ANY OTHER DEBIT AND INT'L CARD DEALS ALIVE" <BR>Get a FREE 
+WEB SITE and START PROMOTING NOW --- </FONT></P>
+<P><A href="http://onecard_express.wo.to/">http://onecard_express.wo.to/</A> 
+<FONT size=2>&nbsp;</FONT></P>
+<P><FONT size=2>Our Group is third in line to the Company and our one side is 
+already pre <BR>built to the tune of thousands ... We will be building straight 
+down deep <BR>AND wide to help all of our members earn money internationally --- 
+giving <BR>up tons in matching bonus potential --- why???? </FONT></P>
+<P><FONT size=2>BECAUSE IT'S FAIR FOR EVERYBODY!!! FINALLY --- THE GLOBAL 
+TEAM!!! </FONT></P>
+<P><FONT size=2>Get a site now and start promoting --- Prelaunch apps will be 
+taken real, <BR>real soon! </FONT></P>
+<P><A href="http://onecard_express.wo.to/">http://onecard_express.wo.to/</A> 
+</P>
+<P><FONT size=2>OUR GOAL IS TO HAVE 5,000 pre enrolled by July 1st --- we are ON 
+TRACK! <BR>How many do you want in YOUR DOWNLINE when we launch??? </FONT></P>
+<P><FONT size=2>THANKS, </FONT></P>
+<P><FONT size=2>ADMIN AT THE GLOBAL TEAM &nbsp;</FONT></P>
+<P><FONT size=2>---------------------------------------------------------- 
+<BR>If we do not receive a remove from you we will keep you posted occasionally 
+<BR>with the best the net has to offer. To be removed please email us at <BR><A href="mailto:thdus04@intizen.com">thdus04@intizen.com</A> or just reply 
+to this email and in the subject line type <BR>"REMOVE" and we will remove your 
+email address from our databases at once. </FONT></P>
+<P><FONT size=2>Thank You! </FONT></P>
+</BODY>
+</html>
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Tue Jul 10 15:44:06 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 10 Jul 2001 15:44:06 -0500 (CDT)
+Received: from dnsmx2pya.telcordia.com (dnsmx2pya.telcordia.com [128.96.20.32])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id PAA09025
+	for <fvwm@hpc.uh.edu>; Tue, 10 Jul 2001 15:43:56 -0500 (CDT)
+Received: from castle.mk.telcordia.com (castle.mk.telcordia.com [128.96.133.172])
+	by dnsmx2pya.telcordia.com (8.9.3/8.9.3) with ESMTP id QAA10592;
+	Tue, 10 Jul 2001 16:32:02 -0400 (EDT)
+Received: from mk.telcordia.com (fork [128.96.128.32])
+	by castle.mk.telcordia.com (8.8.8/8.8.8) with ESMTP id QAA11922;
+	Tue, 10 Jul 2001 16:32:02 -0400 (EDT)
+Message-Id: <200107102032.QAA11922@castle.mk.telcordia.com>
+To: Paul Fox <pgf@foxharp.boston.ma.us>
+cc: fvwm@hpc.uh.edu
+Subject: Re: FVWM: focus and scrollbars 
+In-reply-to: Your message of Tue, 10 Jul 2001 11:47:28 -0400.
+             <2689.994780048@foxharp.boston.ma.us> 
+Mime-Version: 1.0 (generated by tm-edit 7.108)
+Content-Type: text/plain; charset=US-ASCII
+Date: Tue, 10 Jul 2001 16:32:02 -0400
+From: Dan Espen <dane@mk.telcordia.com>
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Paul Fox <pgf@foxharp.boston.ma.us> writes:
+> sometimes when i think an fvwm2 window has focus (i.e., it's turned to
+> the focus colors) i still can't type at it, because the mouse pointer
+> is over the scrollbar for the window.  moving the mouse just a bit into
+> the window text area fixes things.  thinking about this, i've probably only
+> seen this with xterms, but it might happen elsewhere -- i forget.
+> 
+> is there a setting that gives focus no matter where the mouse pointer
+> is?  
+> 
+> for the record, i get the undesired behavior on 2.2.4 on linux.  i get
+> the behavior i want with fvwm2 version 2.0.46 on solaris, and i think
+> on a similar vintage version running on linux.
+
+This is an issue with the Linux version of xterm.
+
+It doesn't happen with the Solaris version of xterm,
+or any version of rxvt.
+
+If you want to get xterm fixed, you should contact the authors.
+
+In the mean time, you might want to switch to one of the many
+xterm replacements.  rxvt suites me.
+
+-- 
+Dan Espen
+444 Hoes Lane  Room RRC 1C-214           E-mail: dane@mk.telcordia.com
+Piscataway, NJ 08854                     Phone: (732) 699-5570
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Tue Jul 10 15:55:49 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 10 Jul 2001 15:55:49 -0500 (CDT)
+Received: from mail.foxharp.boston.ma.us (foxharp.ne.mediaone.net [24.147.209.205])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with SMTP id PAA09283
+	for <fvwm@hpc.uh.edu>; Tue, 10 Jul 2001 15:55:39 -0500 (CDT)
+Received: (qmail 4846 invoked from network); 10 Jul 2001 20:56:23 -0000
+Received: from gutso.foxharp.boston.ma.us (192.168.111.9)
+  by firethorn.foxharp.boston.ma.us with SMTP; 10 Jul 2001 20:56:23 -0000
+Received: (qmail 11151 invoked from network); 10 Jul 2001 20:56:05 -0000
+Received: from localhost (HELO foxharp) (127.0.0.1)
+  by localhost with SMTP; 10 Jul 2001 20:56:05 -0000
+To: fvwm@hpc.uh.edu
+Subject: Re: FVWM: focus and scrollbars 
+In-reply-to: dane's message of Tue, 10 Jul 2001 16:32:02 -0400.
+             <200107102032.QAA11922@castle.mk.telcordia.com> 
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <11145.994798565.1@foxharp.boston.ma.us>
+Date: Tue, 10 Jul 2001 16:56:05 -0400
+Message-ID: <11147.994798565@foxharp.boston.ma.us>
+From: Paul Fox <pgf@foxharp.boston.ma.us>
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+interesting.  i thought i'd been using the same xterm for a long time
+now (i usually build my own, to avoid system incompatibilities), but
+i'll take your word for it.
+
+thanks,
+paul
+
+ > > sometimes when i think an fvwm2 window has focus (i.e., it's turned to
+ > > the focus colors) i still can't type at it, because the mouse pointer
+ > > is over the scrollbar for the window.  moving the mouse just a bit into
+ ...
+ > This is an issue with the Linux version of xterm.
+ > 
+ > It doesn't happen with the Solaris version of xterm,
+ > or any version of rxvt.
+
+=---------------------
+ paul fox, pgf@foxharp.boston.ma.us (arlington, ma, where it's 78.4 degrees)
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Tue Jul 10 16:44:50 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 10 Jul 2001 16:44:50 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id QAA09782
+	for <fvwm@hpc.uh.edu>; Tue, 10 Jul 2001 16:44:41 -0500 (CDT)
+Received: from smtp8.xs4all.nl (smtp8.xs4all.nl [194.109.127.134])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id QAA20680
+	for <fvwm@fvwm.org>; Tue, 10 Jul 2001 16:45:07 -0500 (CDT)
+Received: from xs4all.nl (s340-modem1350.dial.xs4all.nl [194.109.165.70])
+	by smtp8.xs4all.nl (8.9.3/8.9.3) with ESMTP id XAA01001
+	for <fvwm@fvwm.org>; Tue, 10 Jul 2001 23:45:05 +0200 (CEST)
+Message-ID: <3B4B69CA.AEC4B738@xs4all.nl>
+Date: Tue, 10 Jul 2001 22:47:06 +0200
+From: jos <josvanr@xs4all.nl>
+X-Mailer: Mozilla 4.77 [en] (X11; U; Linux 2.4.4-4GB i686)
+X-Accept-Language: en
+MIME-Version: 1.0
+To: fvwm@fvwm.org
+Subject: FVWM: Background color of icons when shape extension is not compiled in
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Hi
+
+I like the mwm style of icons, in which the icon is not partly 
+transparent but it is just a solid box with a picture in it. 
+(Also like in cde.) It is possible to get someting like this
+in fvwm, when one uses --disable-shape for the configure 
+script. However, then when 
+loading a partly transparent icon, the transparent part appears
+black. Is it possible to set a color for that? Also I was 
+wondering if it is possible to set a fixed size for the
+box that is drawn around an icon.
+
+best regards
+
+jos
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Wed Jul 11 02:06:15 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Wed, 11 Jul 2001 02:06:15 -0500 (CDT)
+Received: from mail.kmss.no (mail.norcontrol.no [193.213.12.136])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id CAA12595
+	for <fvwm@hpc.uh.edu>; Wed, 11 Jul 2001 02:06:06 -0500 (CDT)
+From: hans-henrik.aafloy@kmss.no
+Subject: FVWM: controlling screen brightness
+To: fvwm@hpc.uh.edu
+X-Mailer: Lotus Notes Release 5.0.5  September 22, 2000
+Message-ID: <OFAEF865A1.D894AC20-ONC1256A86.0024F0AF@kmss.no>
+Date: Wed, 11 Jul 2001 09:04:42 +0200
+X-MIMETrack: Serialize by Router on SMTP02/DMZ(Release 5.07a |May 14, 2001) at 11.07.2001
+ 09:06:46
+MIME-Version: 1.0
+Content-type: text/plain; charset=us-ascii
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+I'd like to control the overall brightness of the monitor, e.g. dim down at
+night.
+
+So I make a colormap with my desired colors, and ask fvwm2 to  put this
+colormap in effect.
+I'm using the prescribed X functions in the Xlib programming manual
+(A.Nye).
+
+But fvwm2  seems to ignore the call  ( XSetWindowColormap )  and refuses to
+install my
+colormap. So nothing happens, not even an error message.
+
+1)  Is there a trick to tell fvwm2 to use a particular colormap ?
+
+2)  Are there other approaches to dim down the ( whole ) monitor in SW ?
+
+thanks
+Hans Afloy
+
+( Sun/Solaris 7, X11R6  )
+
+
+
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Wed Jul 11 09:57:32 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Wed, 11 Jul 2001 09:57:32 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id JAA14786
+	for <fvwm@hpc.uh.edu>; Wed, 11 Jul 2001 09:57:19 -0500 (CDT)
+Received: from dnsmx1rrc.telcordia.com (dnsmx1rrc.telcordia.com [128.96.20.41])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id JAA03350
+	for <fvwm@fvwm.org>; Wed, 11 Jul 2001 09:57:45 -0500 (CDT)
+Received: from castle.mk.telcordia.com (castle.mk.telcordia.com [128.96.133.172])
+	by dnsmx1rrc.telcordia.com (8.9.3/8.9.3) with ESMTP id KAA15392;
+	Wed, 11 Jul 2001 10:52:10 -0400 (EDT)
+Received: from mk.telcordia.com (fork [128.96.128.32])
+	by castle.mk.telcordia.com (8.8.8/8.8.8) with ESMTP id KAA28053;
+	Wed, 11 Jul 2001 10:52:09 -0400 (EDT)
+Message-Id: <200107111452.KAA28053@castle.mk.telcordia.com>
+To: jos <josvanr@xs4all.nl>
+cc: fvwm@fvwm.org
+Subject: Re: FVWM: Background color of icons when shape extension is not compiled in 
+In-reply-to: Your message of Tue, 10 Jul 2001 22:47:06 +0200.
+             <3B4B69CA.AEC4B738@xs4all.nl> 
+x-face: H2G63xNIQ1G~92=">,W';}5I'2EN+pvbeFK2U`LLazP;W3/AU'795C^6M1;wX3''q-~||]i
+ =q\|l:fMk^4zF@^JHkw75M~[d)NKA},lfIOD=B'QWUuv_7Pu+j*']@]x]y'(Eyh}IAEhQDV@tJ?\E"
+ <=..HSTdYCt'DevYza*qnf_0?9qelUgqeJkJA'7Zr<-NU
+Mime-Version: 1.0 (generated by tm-edit 7.108)
+Content-Type: text/plain; charset=US-ASCII
+Date: Wed, 11 Jul 2001 10:52:09 -0400
+From: Dan Espen <dane@mk.telcordia.com>
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+jos <josvanr@xs4all.nl> writes:
+> Hi
+> 
+> I like the mwm style of icons, in which the icon is not partly 
+> transparent but it is just a solid box with a picture in it. 
+> (Also like in cde.) It is possible to get someting like this
+> in fvwm, when one uses --disable-shape for the configure 
+> script. However, then when 
+> loading a partly transparent icon, the transparent part appears
+> black. Is it possible to set a color for that? Also I was 
+> wondering if it is possible to set a fixed size for the
+> box that is drawn around an icon.
+
+I haven't tested it, but it looks to me like you can
+use the "DefaultColors" command to choose something other than
+black.
+
+Clipping an icon to a set size is not currently supported.
+
+-- 
+Dan Espen
+444 Hoes Lane  Room RRC 1C-214           E-mail: dane@mk.telcordia.com
+Piscataway, NJ 08854                     Phone: (732) 699-5570
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Wed Jul 11 10:37:56 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Wed, 11 Jul 2001 10:37:56 -0500 (CDT)
+Received: from dnsmx1rrc.telcordia.com (dnsmx1rrc.telcordia.com [128.96.20.41])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id KAA15056
+	for <fvwm@hpc.uh.edu>; Wed, 11 Jul 2001 10:37:46 -0500 (CDT)
+Received: from castle.mk.telcordia.com (castle.mk.telcordia.com [128.96.133.172])
+	by dnsmx1rrc.telcordia.com (8.9.3/8.9.3) with ESMTP id LAA00792;
+	Wed, 11 Jul 2001 11:33:11 -0400 (EDT)
+Received: from mk.telcordia.com (fork [128.96.128.32])
+	by castle.mk.telcordia.com (8.8.8/8.8.8) with ESMTP id LAA29250;
+	Wed, 11 Jul 2001 11:33:11 -0400 (EDT)
+Message-Id: <200107111533.LAA29250@castle.mk.telcordia.com>
+To: hans-henrik.aafloy@kmss.no
+cc: fvwm@hpc.uh.edu
+Subject: Re: FVWM: controlling screen brightness 
+In-reply-to: Your message of Wed, 11 Jul 2001 09:04:42 +0200.
+             <OFAEF865A1.D894AC20-ONC1256A86.0024F0AF@kmss.no> 
+x-face: H2G63xNIQ1G~92=">,W';}5I'2EN+pvbeFK2U`LLazP;W3/AU'795C^6M1;wX3''q-~||]i
+ =q\|l:fMk^4zF@^JHkw75M~[d)NKA},lfIOD=B'QWUuv_7Pu+j*']@]x]y'(Eyh}IAEhQDV@tJ?\E"
+ <=..HSTdYCt'DevYza*qnf_0?9qelUgqeJkJA'7Zr<-NU
+Mime-Version: 1.0 (generated by tm-edit 7.108)
+Content-Type: text/plain; charset=US-ASCII
+Date: Wed, 11 Jul 2001 11:33:11 -0400
+From: Dan Espen <dane@mk.telcordia.com>
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+hans-henrik.aafloy@kmss.no writes:
+> I'd like to control the overall brightness of the monitor, e.g. dim down at
+> night.
+> 
+> So I make a colormap with my desired colors, and ask fvwm2 to  put this
+> colormap in effect.
+> I'm using the prescribed X functions in the Xlib programming manual
+> (A.Nye).
+> 
+> But fvwm2  seems to ignore the call  ( XSetWindowColormap )  and refuses to
+> install my
+> colormap. So nothing happens, not even an error message.
+> 
+> 1)  Is there a trick to tell fvwm2 to use a particular colormap ?
+> 
+> 2)  Are there other approaches to dim down the ( whole ) monitor in SW ?
+> 
+> thanks
+> Hans Afloy
+> 
+> ( Sun/Solaris 7, X11R6  )
+
+There were questions along the exact sames lines on Usenet
+just recently.  Sorry, I couldn't give a definitive answer there either.
+You might want to check in with P.Eftevik <pef@trasra.no> so see if
+he made any progress.
+
+Solaris supports the Xcms extension:
+
+http://www.funet.fi/pub/X11/X11R4/DOCS/color/Xcms.text
+
+which looks like it might do what you want, but after reading
+thru the above, I'm less sure.
+
+I have seen Fvwm use private colormaps, so I think  Fvwm is doing what
+it should.  You would have to post some  code to show  us what you are
+doing for further help with XSetWindowColormap.
+
+-- 
+Dan Espen
+444 Hoes Lane  Room RRC 1C-214           E-mail: dane@mk.telcordia.com
+Piscataway, NJ 08854                     Phone: (732) 699-5570
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Fri Jul 13 11:42:56 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Fri, 13 Jul 2001 11:42:56 -0500 (CDT)
+Received: from spider ([211.222.181.150])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with SMTP id LAA08746
+	for <fvwm@hpc.uh.edu>; Fri, 13 Jul 2001 11:42:41 -0500 (CDT)
+Message-Id: <200107131642.LAA08746@sina.hpc.uh.edu>
+Reply-To: test@test.com
+From: test<test@test.com>
+To: fvwm@hpc.uh.edu
+Subject: FVWM: PRE-LAUNCHING WORLDWIDE JULY 15th! 
+Mime-Version: 1.0
+Content-Type: text/html; charset="ks_c_5601-1987"
+Date: Sat, 14 Jul 2001 01:41:42 +0900
+X-Mailer: redspider [www.emsoft.co.kr]
+Disposition-Notification-To: test<test@test.com>
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+<html>
+<head>
+<title>´ç½ÅÀÇ ÀÎ»ýÀ» ¹Ù²Ü ÀýÈ£ÀÇ ±âÈ¸ ÀÔ´Ï´Ù...</title>
+<meta name="generator" content="Namo WebEditor v4.0">
+</head>
+<BODY text=black vLink=purple aLink=red link=blue bgColor=white>
+<P><FONT size=2>´ç½ÅÀÇ ÀÎ»ýÀ» ¹Ù²Ü ÀýÈ£ÀÇ ±âÈ¸ ÀÔ´Ï´Ù...<BR><BR>ÀÌÁ¦²¯ °Ý¾î¿Ô´ø ¼ö¸¹Àº ¸¶ÄÉÆÃµéÀÇ ÀåÁ¡¸¸À» º¸¾ÈÇÏ¿© ÅÂ¾î 
+³´½À´Ï´Ù...</FONT></P>
+<P><A href="http://superjjang.wo.to/">http://superjjang.wo.to/</A><FONT 
+size=2>·Î ¹æ¹®ÇÏ½Ã¸é ¸ðµç³»¿ëÀÌ ³ª¿Í ÀÖ½À´Ï´Ù.</FONT></P>
+<P><FONT size=2>ÁÖÀúÇÏÁö ¸¶½Ã°í ¿À¼Å¼­ È®ÀÎÇÏ½Ã±â ¹Ù¶ø´Ï´Ù...<BR>´Ü¾ðÄÚ ±×³É Áö³ªÄ¡½Ã¸é ºÐ¸íÈ÷ ±âÇÊÄÚ ÈÄÈ¸ÇÏ½Ã°Ô 
+µÉ°Ì´Ï´Ù...</FONT></P>
+<P><FONT color=red size=2><B>º»°ÝÀûÀÎ ½ÃÀÛÀº 7¿ù 15ÀÏ ºÎÅÍÀÔ´Ï´Ù... &nbsp;</B></FONT><FONT 
+size=2>7¿ù 15ÀÏ ºÎÅÍ Æø¹ßÀûÀ¸·Î ´Ã¾î³³´Ï´Ù...</FONT></P>
+<P><FONT face=±¼¸² size=2><BR></FONT><FONT face=±¼¸² color=red 
+size=2><B>PRE-LAUNCHING WORLDWIDE JULY 15th! </B></FONT></P>
+<P><FONT face=±¼¸² size=2>PHOENIX, ARIZONA U.S.A. BASED COMPANY HAS CREATED THE 
+MOST POWERFUL AND PROFITABLE ONE CARD SOLUTION IN THE WORLD! </FONT></P>
+<P><FONT face=±¼¸² size=2>THIS IS AN ENTREPRENEUR DREAM THAT IS CREATING THE MOST 
+PHENOMENON WORLDWIDE EXPLOSION NEVER SEEN BEFORE, WITH ANY PRODUCT, IN THE 
+DIRECT SALES INDUSTRY! </FONT></P>
+<P><FONT face=±¼¸² size=2>You\'re About to Discover the Most Exciting and 
+Built-to-Last Opportunity <BR>That Will Enable You to Earn Money QUICKLY, 
+GLOBALLY and Keep It Coming For the Rest of Your Life! </FONT></P>
+<P><FONT face=±¼¸² size=2>THIS UNIVERSAL CARD WAS CREATED BY: </FONT></P>
+<P><FONT face=±¼¸² size=2>a.. THE COMPANY PRESIDENT, A FORMER OFFICER OF ONE OF 
+THE <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LARGEST INTERNATIONAL BANK IN THE WORLD 
+<BR>b.. A FORMER SENIOR VICE PRESIDENT OF VISA INTERNATIONAL <BR>c.. A 
+MULTI-BILLION DOLLAR WORLDWIDE FINANCIAL INSTITUTION </FONT></P>
+<P><FONT face=±¼¸² size=2>UNMATCHED CREDIBILITY AND RECOGNITION </FONT></P>
+<P><FONT face=±¼¸² size=2>The card functions on a Certified Platform that cost 
+over $15 million dollars, took 6 years to create and can perform &nbsp;hundreds 
+features. Ernst and Young, a leading International accounting firm, valued the 
+platform at $25 million dollars. </FONT></P>
+<P><FONT face=±¼¸² size=2>a.. International Multi-Function Debit Card Available In 
+All Countries Carries The Logos Of: <BR>b.. A Multi-Billion Worldwide Financial 
+Institution That &nbsp;Holds And &nbsp;Insures The Deposits <BR>c.. The Largest 
+Merchant Aggregating Company In The World <BR>d.. The Three Largest ATMs 
+Networks In The World <BR>e.. The Largest POS Networks In The World </FONT></P>
+<P><FONT face=±¼¸² size=2>UNMATCHED FEATURES <BR><BR>a.. Anyone In the In The 
+World Can Obtain The Card With &nbsp;NO Credit Check, NO Questions and 
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO Interest <BR>b.. You Can Deposit And Use An 
+UNLIMITED Amount Of Money <BR>c.. You Can Use It To Charge At Over 17 MILLION 
+Point Of Sale Locations Worldwide <BR>d.. Your Money Is Instantly Available 
+Though The Three Largest ATMs Networks In The World <BR>e.. Low Cost 
+Member-To-Member Cash Online Transfer Feature Let You Tap And Undercut The 
+Three<BR>&nbsp;&nbsp;&nbsp;&nbsp; Trillion-Dollar Cash Transfer Industry! 
+<BR>f.. Unique Feature Let You Transfer Money From Your Card To Your ACH 
+(Automated Clearing House)<BR>&nbsp;&nbsp;&nbsp; Checking Account <BR>g.. All 
+Transfers Have Automatic Conversion In the Local Country Currency <BR>h.. You 
+Can Carry Any Amount Anywhere In The World <BR>i.. It Can Be Used By Any Size 
+Company As A Real-Time Global Direct Payroll Deposit <BR>j.. And So Much More! 
+</FONT></P>
+<P><FONT face=±¼¸² size=2>UNMATCHED DEMAND <BR><BR>a.. 90% Of Adults In The World 
+Cannot Obtain A Credit Card Or A Checking Account <BR>b.. 40% Of People In The 
+US Still Don\'t Have A Credit Card <BR>c.. 90% Of Adults In The World Cannot 
+Obtain A Credit Card Or A Checking Account <BR>d.. 15% Don\'t Have A Checking 
+Account <BR>e.. 75% Of People in the US Who Have A Credit Card Are Maxed Out 
+<BR>f.. No Doubt, The Debit Card Market Is Substantially Larger Than The Credit 
+Card Market <BR>g.. Our Multi-Function Card Is HANDS DOWN, The Best Choice Of 
+Any Debit Card, </FONT></P>
+<P><FONT face=±¼¸² size=2>Secure Card, Check Card Or Cash Card With A LOW PRICE 
+Anyone In The World Can Afford! </FONT></P>
+<P><FONT face=±¼¸² size=2>UNMATCHED PROFITS! </FONT></P>
+<P><FONT face=±¼¸² size=2>You Can Build A Worldwide Associates\' Organization From 
+Any Country And Earn WEEKLY COMMISSIONS From Commissionable Business Centers 
+Through An Incredible Front-End <BR>2 X Infinity &nbsp;- Plus Matching Bonuses - 
+Compensation Plan Historically Proven To Create &nbsp;Business Momentum and 
+Large Incomes FAST! </FONT></P>
+<P><FONT face=±¼¸² size=2>You Can Build A LIFE-LONG MONTHLY RESIDUAL INCOME 
+&nbsp;In Usage Overrides From Card Purchases, Money Transfers And All The 
+Services The Card Offers Used By Customers And Associates In Your Worldwide 
+Organization, Through The Most Lucrative Back-End Unilevel Compensation Plan 
+</FONT></P>
+<P><FONT face=±¼¸² size=2>A COMPANY BUILT-TO-LAST MAKING HISTORY AROUND THE WORLD 
+</FONT></P>
+<P><FONT face=±¼¸² size=2>The company is a stable three year old corporation that 
+was formed to develop and distribute worldwide &nbsp;various breakthrough 
+technologies that represent giant advancements in global financial services, 
+e-commerce, telecommunications, Internet technologies and other advanced 
+solutions. </FONT></P>
+<P><FONT face=±¼¸² size=2>The company has developed a powerful system of truly 
+global connectivity and is extremely well poised to attract and service a large 
+International community of customers and Associates. </FONT></P>
+<P><FONT face=±¼¸² size=2>Please visit my personal pre-registration Web site at: 
+</FONT><B><A href="http://onecard_express.wo.to/"><FONT face=°¡À»Ã¼ 
+size=4>http://onecard_express.wo.to/</A></FONT></B></P>
+<P><FONT face=±¼¸² size=2>While you\'re at my site, pre-register with our global 
+team, at no obligation, &amp; receive a free personal website immeditely to 
+begin spreading the word about this unparalleled opportunity. </FONT></P>
+<P><FONT face=±¼¸² size=2>Your introducing Associate is &nbsp;saimon choi 
+&nbsp;&nbsp;<A href="mailto:dkdud04@intizen.com">dkdud04@intizen.com</A></FONT></P>
+<P><FONT face=±¼¸² 
+size=2>=================================================================================</FONT></P>
+<P><FONT face=±¼¸² size=2>Knowing the right people can often times prove quite 
+beneficial in the world of business. We continually receive phone calls, emails, 
+&amp; faxes from people we know on just about every new product &amp; company 
+before it hits the public airwaves. Every so often, of the hundreds we see, ONE 
+jumps out at you. </FONT></P>
+<P><FONT face=±¼¸² size=2>Below is such an example. </FONT></P>
+<P><FONT face=±¼¸² size=2>A NEW Worldwide Financial card (not Vivarebates) will be 
+released in the coming weeks that has some very serious implications. 
+</FONT></P>
+<P><FONT face=±¼¸² size=2>There is nothing like it anywhere, AND 90% OF PEOPLE IN 
+THE WORLD NEED IT NOW! It is a universal card with unmatched services, no 
+competition and massive demand. </FONT></P>
+<P><FONT face=±¼¸² size=2>It is simple to market by anyone, anywhere on the planet 
+and pays huge residual income like no other product can. Finally you can count 
+on a product with the extreme ability to "lock in" millions of long-term, 
+faithful customers, at high speed. </FONT></P>
+<P><FONT face=±¼¸² size=2>The financial platform it's built on was valued by a top 
+ten &amp; leading international accounting firm (you'll see the name) at 
+$25,000,000! </FONT></P>
+<P><FONT face=±¼¸² size=2>Fact: Fourty million Americans are *unbankable* (can't 
+get a checking account), and over 90% of people worldwide fall into this same 
+category. This is only the tip of iceberg of what this card will do. The 
+implications in the International market are unparalled. </FONT></P>
+<P><FONT face=±¼¸² size=2>It was developed in collaboration with a merchant 
+aggregating company, a former Senior Vice President of VISATM International and 
+A WORLDWIDE, MULTI-BILLION DOLLAR FINANCIAL INSTITUTION. With these names 
+printed on the card, insuring all monies deposited into it, your customers will 
+feel safe and you will feel the power and the credibility it offers. </FONT></P>
+<P><FONT face=±¼¸² size=2>Please visit my personal pre-registration Web site at: 
+</FONT><B><A href="http://onecard_express.wo.to/"><FONT face=°¡À»Ã¼ 
+size=4>http://onecard_express.wo.to/</A></FONT></B></P>
+<P><FONT face=±¼¸² size=2>For a CLOSER LOOK, with no obligation, at an exceptional 
+opportunity before the world hears about it, just reply to this email with the 
+words CLOSER LOOK in the subject. </FONT></P>
+<P><FONT face=±¼¸² size=2>We'll forward you a website link promptly. </FONT></P>
+<P><FONT face=±¼¸² size=2>Your introducing Associate is &nbsp;saimon choi 
+&nbsp;&nbsp;&nbsp;<A href="mailto:dkdud04@intizen.com">dkdud04@intizen.com</A> 
+</FONT></P>
+</BODY>
+</html>
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Fri Jul 13 13:37:59 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Fri, 13 Jul 2001 13:37:59 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id NAA10720
+	for <fvwm@hpc.uh.edu>; Fri, 13 Jul 2001 13:37:51 -0500 (CDT)
+Received: from tudor.EECS.Berkeley.EDU (tudor.EECS.Berkeley.EDU [128.32.239.226])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id NAA22656
+	for <fvwm@fvwm.org>; Fri, 13 Jul 2001 13:38:18 -0500 (CDT)
+Received: from localhost (dmitryd@localhost)
+	by tudor.EECS.Berkeley.EDU (8.9.1a/8.9.3) with ESMTP id LAA12134
+	for <fvwm@fvwm.org>; Fri, 13 Jul 2001 11:38:17 -0700 (PDT)
+Date: Fri, 13 Jul 2001 11:38:17 -0700 (PDT)
+From: Dmitry Derevyanko <dmitryd@robotics.EECS.Berkeley.EDU>
+To: <fvwm@fvwm.org>
+Subject: FVWM: libstroke-0.5
+Message-ID: <Pine.SOL.4.30.0107131127590.11850-100000@tudor.EECS.Berkeley.EDU>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+I don't know if this has been mentioned before, but here goes.
+
+some macro names have been changed in libstroke-0.5:
+
+MAX_POINTS -> STROKE_MAX_POINTS
+MIN_POINTS -> STROKE_MIN_POINTS
+MAX_SEQUENCE -> STROKE_MAX_SEQUENCE
+SCALE_RATIO -> STROKE_SCALE_RATIO
+BIN_COUNT_PERCENT -> STROKE_BIN_COUNT_PERCENT
+
+fvmw-2.4 won't compile with libstroke-0.5 unless those are changed.
+
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Mon Jul 16 16:46:28 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 16 Jul 2001 16:46:28 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id QAA15339
+	for <fvwm@hpc.uh.edu>; Mon, 16 Jul 2001 16:46:18 -0500 (CDT)
+Received: from sandbox.genuity.com (sandbox.genuity.com [171.78.212.72])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id QAA08552
+	for <fvwm@fvwm.org>; Mon, 16 Jul 2001 16:46:45 -0500 (CDT)
+Received: from peevo.genuity.com (peevo.genuity.com [171.78.148.52])
+	by sandbox.genuity.com (8.9.3+Sun/8.9.1) with ESMTP id RAA07309
+	for <fvwm@fvwm.org>; Mon, 16 Jul 2001 17:46:15 -0400 (EDT)
+Received: from localhost (skatalic@localhost)
+	by peevo.genuity.com (8.9.3+Sun/8.9.3) with ESMTP id RAA07774
+	for <fvwm@fvwm.org>; Mon, 16 Jul 2001 17:44:22 -0400 (EDT)
+X-Authentication-Warning: peevo.genuity.com: skatalic owned process doing -bs
+Date: Mon, 16 Jul 2001 17:44:22 -0400 (EDT)
+From: Sergey Katalichenka <skatalic@genuity.net>
+X-X-Sender:  <skatalic@peevo.genuity.com>
+To: <fvwm@fvwm.org>
+Subject: FVWM: installing fvwm-1.24r
+Message-ID: <Pine.GSO.4.33.0107161738290.7569-100000@peevo.genuity.com>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+
+Hi,
+
+
+I am trying to compile fvwm-1.24r on solaris 8 Box.
+
+OS: Solaris 8
+GCC: gcc 2.95.2
+XPM: xpm 3.4k
+
+error:
+
+gcc -O -Xc -xF -xcg92    -I/usr/openwin/include  -Dsun -Dsparc -DSVR4
+-DSYSV      -c  CatString3.c
+gcc: unrecognized option `-Xc'
+gcc: language cg92 not recognized
+
+All library build fail this way. Was wondering if this is a know issue,
+and possible work-around.
+
+Thank you.
+
+
+
+
+
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Mon Jul 16 17:44:06 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 16 Jul 2001 17:44:06 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id RAA15965
+	for <fvwm@hpc.uh.edu>; Mon, 16 Jul 2001 17:43:54 -0500 (CDT)
+Received: from dnsmx1pya.telcordia.com (dnsmx1pya.telcordia.com [128.96.20.31])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id RAA09849
+	for <fvwm@fvwm.org>; Mon, 16 Jul 2001 17:44:21 -0500 (CDT)
+Received: from castle.mk.telcordia.com (castle.mk.telcordia.com [128.96.133.172])
+	by dnsmx1pya.telcordia.com (8.9.3/8.9.3) with ESMTP id SAA01654;
+	Mon, 16 Jul 2001 18:41:22 -0400 (EDT)
+Received: from mk.telcordia.com (fork [128.96.128.32])
+	by castle.mk.telcordia.com (8.8.8/8.8.8) with ESMTP id SAA18105;
+	Mon, 16 Jul 2001 18:41:22 -0400 (EDT)
+Message-Id: <200107162241.SAA18105@castle.mk.telcordia.com>
+To: Sergey Katalichenka <skatalic@genuity.net>
+cc: fvwm@fvwm.org
+Subject: Re: FVWM: installing fvwm-1.24r 
+In-reply-to: Your message of Mon, 16 Jul 2001 17:44:22 -0400.
+             <Pine.GSO.4.33.0107161738290.7569-100000@peevo.genuity.com> 
+x-face: H2G63xNIQ1G~92=">,W';}5I'2EN+pvbeFK2U`LLazP;W3/AU'795C^6M1;wX3''q-~||]i
+ =q\|l:fMk^4zF@^JHkw75M~[d)NKA},lfIOD=B'QWUuv_7Pu+j*']@]x]y'(Eyh}IAEhQDV@tJ?\E"
+ <=..HSTdYCt'DevYza*qnf_0?9qelUgqeJkJA'7Zr<-NU
+Mime-Version: 1.0 (generated by tm-edit 7.108)
+Content-Type: text/plain; charset=US-ASCII
+Date: Mon, 16 Jul 2001 18:41:22 -0400
+From: Dan Espen <dane@mk.telcordia.com>
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Sergey Katalichenka <skatalic@genuity.net> writes:
+> 
+> Hi,
+> 
+> 
+> I am trying to compile fvwm-1.24r on solaris 8 Box.
+> 
+> OS: Solaris 8
+> GCC: gcc 2.95.2
+> XPM: xpm 3.4k
+> 
+> error:
+> 
+> gcc -O -Xc -xF -xcg92    -I/usr/openwin/include  -Dsun -Dsparc -DSVR4
+> -DSYSV      -c  CatString3.c
+> gcc: unrecognized option `-Xc'
+> gcc: language cg92 not recognized
+> 
+> All library build fail this way. Was wondering if this is a know issue,
+> and possible work-around.
+
+Using  fvwm1 is  a   bad idea.  (In  my opinion.)    There is  no  one
+supporting fvwm1.
+
+Fvwm2 uses configure so you won't run into this problem.
+
+Your xmkmf config files are set up for Sun's compiler.
+You can adjust them to gcc or override CCOPTIONS from the command line.
+(You may need to use gnumake to get the override to work.)
+
+-- 
+Dan Espen
+444 Hoes Lane  Room RRC 1C-214           E-mail: dane@mk.telcordia.com
+Piscataway, NJ 08854                     Phone: (732) 699-5570
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Fri Jul 20 08:54:47 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Fri, 20 Jul 2001 08:54:47 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id IAA01319
+	for <fvwm@hpc.uh.edu>; Fri, 20 Jul 2001 08:54:38 -0500 (CDT)
+Received: from mail.oeone.com (firewall.oeone.com [216.191.248.101])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id IAA06826
+	for <fvwm@fvwm.org>; Fri, 20 Jul 2001 08:55:04 -0500 (CDT)
+Received: from oeone.com (firewall.oeone.com [192.168.200.1])
+	by mail.oeone.com (Postfix) with ESMTP id D4D9B100B1
+	for <fvwm@fvwm.org>; Fri, 20 Jul 2001 09:54:49 -0400 (EDT)
+Message-ID: <3B58382C.7010404@oeone.com>
+Date: Fri, 20 Jul 2001 09:54:52 -0400
+From: Colin Phillips <colinp@oeone.com>
+User-Agent: Mozilla/5.0 (X11; U; Linux i686; en-US; rv:0.9.2+) Gecko/20010717
+X-Accept-Language: en-us
+MIME-Version: 1.0
+To: "'fvwm@fvwm.org'" <fvwm@fvwm.org>
+Subject: FVWM: Alt / Tab
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Transfer-Encoding: 7bit
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Is there a way to disable the alt/tab functionality in fvwm2?  Something 
+I can do in the fvwm2rc file, that is.
+
+-- 
+Colin Phillips
+Software Developer, OEone Corporation
+#103 - 290 St-Joseph Blvd.
+Hull, Quebec J8Y 3Y3
+819-770-3444 ext. 511
+
+
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Fri Jul 20 09:45:01 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Fri, 20 Jul 2001 09:45:01 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id JAA01708
+	for <fvwm@hpc.uh.edu>; Fri, 20 Jul 2001 09:44:50 -0500 (CDT)
+Received: from dnsmx2pya.telcordia.com (dnsmx2pya.telcordia.com [128.96.20.32])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id JAA08226
+	for <fvwm@fvwm.org>; Fri, 20 Jul 2001 09:45:16 -0500 (CDT)
+Received: from castle.mk.telcordia.com (castle.mk.telcordia.com [128.96.133.172])
+	by dnsmx2pya.telcordia.com (8.9.3/8.9.3) with ESMTP id KAA04073;
+	Fri, 20 Jul 2001 10:34:09 -0400 (EDT)
+Received: from mk.telcordia.com (fork [128.96.128.32])
+	by castle.mk.telcordia.com (8.8.8/8.8.8) with ESMTP id KAA09809;
+	Fri, 20 Jul 2001 10:33:59 -0400 (EDT)
+Message-Id: <200107201433.KAA09809@castle.mk.telcordia.com>
+To: Colin Phillips <colinp@oeone.com>
+cc: "'fvwm@fvwm.org'" <fvwm@fvwm.org>
+Subject: Re: FVWM: Alt / Tab 
+In-reply-to: Your message of Fri, 20 Jul 2001 09:54:52 -0400.
+             <3B58382C.7010404@oeone.com> 
+x-face: H2G63xNIQ1G~92=">,W';}5I'2EN+pvbeFK2U`LLazP;W3/AU'795C^6M1;wX3''q-~||]i
+ =q\|l:fMk^4zF@^JHkw75M~[d)NKA},lfIOD=B'QWUuv_7Pu+j*']@]x]y'(Eyh}IAEhQDV@tJ?\E"
+ <=..HSTdYCt'DevYza*qnf_0?9qelUgqeJkJA'7Zr<-NU
+Mime-Version: 1.0 (generated by tm-edit 7.108)
+Content-Type: text/plain; charset=US-ASCII
+Date: Fri, 20 Jul 2001 10:33:59 -0400
+From: Dan Espen <dane@mk.telcordia.com>
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Colin Phillips <colinp@oeone.com> writes:
+> Is there a way to disable the alt/tab functionality in fvwm2?  Something 
+> I can do in the fvwm2rc file, that is.
+
+I'm guessing that you are using fvwm 2.4.0 and want to remove the
+key binding.
+
+Its in the man page under "BUILT IN KEY AND MOUSE BINDINGS".
+
+You want:
+
+          Key Tab A M -
+
+-- 
+Dan Espen
+444 Hoes Lane  Room RRC 1C-214           E-mail: dane@mk.telcordia.com
+Piscataway, NJ 08854                     Phone: (732) 699-5570
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Sat Jul 21 22:27:08 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sat, 21 Jul 2001 22:27:08 -0500 (CDT)
+Received: from mail.greatbasin.net (mail.greatbasin.net [207.228.35.39])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id WAA17462
+	for <fvwm@hpc.uh.edu>; Sat, 21 Jul 2001 22:26:58 -0500 (CDT)
+Received: from rogue (sugarpinellc.com [216.82.147.171])
+	by mail.greatbasin.net (8.9.3-MySQL-0.2.3b/8.9.3) with SMTP id UAA11852
+	for <fvwm@hpc.uh.edu>; Sat, 21 Jul 2001 20:27:25 -0700 (PDT)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+From: Sugarpine.Sierra.West@greatbasin.net, LLC <info@sugarpinellc.com>
+To: fvwm@hpc.uh.edu
+Subject: FVWM: Press Release
+Message-ID: <200172173629fvwm@hpc.uh.edu>
+Date: Sat, 21 Jul 2001 20:27:09 -0600
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+For Immediate Release
+Incline Village, Nevada
+Contact Corporate Communications
+www.sugarpinellc.com
+
+Sugarpine Sierra West, LLC is proud to announce 4 additional services, Sports Memorabilia, Hair Raisers, Financial Services and Worlds-Best-4 the worlds largest virtual shopping mall featuring over 2.2 million products! Save time! Save money! Make money!!!
+
+These services and products are now available to everyone. To view these tremendous opportunities, please visit our website. Sports Memorabilia may be viewed simply by clicking on its front-page banner. Hair Raisers may be viewed by visiting our web site, www.sugarpinellc.com, and select our associates’ link. Our Financial Services is linked and bannered on our home page.
+
+As you all may already know, Sugarpine Sierra West, LLC is at its heart an asset hosting company.  Please don’t forget to look at our Asset Gallery to see some outstanding business and investment opportunities, as well as collectables and real estate.
+
+Sugarpine Sierra West, LLC would like to extend its sincere thanks and appreciation to all!
+
+Please visit us at our web site at: www.sugarpinellc.com.
+
+Corporate Communications:
+Sugarpine Sierra West, LLC
+Mr. Charles J. Armstrong II or Ms. Denise Pavlo
+Phone:  775-832-2552
+E-Mail: info@sugarpinellc.com
+
+To be removed from our e-mail list, reply to this e-mail with "REMOVE" in the subject line of your reply.
+
+
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Mon Jul 23 05:22:55 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 23 Jul 2001 05:22:55 -0500 (CDT)
+Received: from yog-sothoth.sgi.com (eugate.sgi.com [192.48.160.10])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id FAA28507
+	for <fvwm@hpc.uh.edu>; Mon, 23 Jul 2001 05:22:39 -0500 (CDT)
+Received: from eurohub.neu.sgi.com (gate-eurohub.neu.sgi.com [144.253.133.139]) by yog-sothoth.sgi.com (980305.SGI.8.8.8-aspam-6.2/980304.SGI-aspam-europe) via ESMTP id MAA158866; Mon, 23 Jul 2001 12:22:56 +0200 (CEST)
+	mail_from (srosa@neu.sgi.com)
+Received: from nt-emea-bdc1.neu.sgi.com (nt-emea-bdc1.neu.sgi.com [144.253.131.51]) by eurohub.neu.sgi.com (980427.SGI.8.8.8/19990607.SGI.cwilson.europe.hoststrip) via ESMTP id MAA83611; Mon, 23 Jul 2001 12:23:03 +0200 (CEST)
+Received: from afterburner.neu.sgi.com ([144.253.130.145]) by nt-emea-bdc1.neu.sgi.com with SMTP (Microsoft Exchange Internet Mail Service Version 5.5.2653.13)
+	id LCG6YVX4; Mon, 23 Jul 2001 12:23:01 +0200
+Received: (from srosa@localhost)
+	by afterburner.neu.sgi.com (SGI-8.9.3/8.9.3) id MAA16860;
+	Mon, 23 Jul 2001 12:23:03 +0200 (CEST)
+Message-ID: <XFMail.20010723122303.stephane@sgi.com>
+X-Mailer: XFMail 1.5.0 on IRIX
+X-Priority: 3 (Normal)
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+X-IMAP-Num: 1
+X-Notify: true
+X-Files: Truth ain't out there
+Date: Mon, 23 Jul 2001 12:23:03 +0200 (CEST)
+Organization: SILICON GRAPHICS
+From: Stephane Rosa <stephane@sgi.com>
+To: (FVWM Mailing List) <fvwm@hpc.uh.edu>,
+        (GNOME Devel List) <gnome-devel-list@gnome.org>
+Subject: FVWM: unable to compile with gnome libs
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+
+Hi,
+
+it sounds like I can't compile with gnome support. I found this out
+when trying to configure fvwm, which tries to compile this
+(in ./configure):
+
+#line 5911 "configure"
+#include "confdefs.h"
+
+#include <gnome.h>
+int main(int c, char **v) {
+   /* we can't really run this outside of X */
+   if (!c) gnome_init("test-app", "0.0", c, v);
+      return 0;
+}
+
+
+and there is a conflict between stdio.h and gnomesupport.h which
+redefines sprintf and vsnprintf as if they weren't part or standard
+include files already :
+
+
+configure:5921: sgifwcompile -e -q -nostdinc -I.
+-I/d3/myroots/proot/usr/freeware/include -I/d3/myroots/proot/usr/include 
+-D_BSD_SIGNALS -O3 -OPT:Olimit=0:space=ON -DEBUG:optimize_space=on  -TENV:X=1
+-CG:unique_exit=on 
+-OPT:IEEE_arithmetic=1:roundoff=0:wrap_around_unsafe_opt=off -n32 -mips3
+-nostdlib -L/d3/myroots/proot/usr/freeware/lib32 
+-L/d3/myroots/proot/usr/lib32 -woff
+1009,1014,1107,1110,1116,1164,1185,1188,1204,1230,1233  -Wl,-woff,85,-woff,84
+-rpath /usr/freeware/lib32 -- /d3/myroots/ptoolroot/usr/bin/cc -o conftest -g 
+-I/d3/myroots/proot/usr/freeware/include -DNEED_GNOMESUPPORT_H
+-I/d3/myroots/proot/usr/freeware/lib32/gnome-libs/include
+-I/d3/myroots/proot/usr/freeware/include/glib-1.2
+-I/d3/myroots/proot/usr/freeware/lib32/glib/include
+-I/d3/myroots/proot/usr/freeware/include/gtk-1.2  conftest.c 
+-L/d3/myroots/proot/usr/freeware/lib32 -lgnomeui -lart_lgpl -lgdk_imlib -lSM
+-lICE -lgtk -lgdk -lgmodule -lXi -lXext -lX11 -lgnome -lgnomesupport -lesd
+-laudio -laudiofile -lm -ldb -lglib 1>&5
+cc-1143 cc: ERROR File = /d3/myroots/proot/usr/include/stdio.h, Line = 235
+  Declaration is incompatible with "int snprintf(char *, size_t, char *, ...)"
+          (declared at line 36 of
+          "/d3/myroots/proot/usr/freeware/lib32/gnome-libs/include/gnomesupport
+          .h").
+
+  extern int    snprintf(char *, ssize_t, const char *, ...);
+                ^
+
+cc-1143 cc: ERROR File = /d3/myroots/proot/usr/include/stdio.h, Line = 244
+  Declaration is incompatible with
+          "int vsnprintf(char *, size_t, char *, va_list)" (declared at line
+          34 of
+          "/d3/myroots/proot/usr/freeware/lib32/gnome-libs/include/gnomesupport
+          .h").
+
+  extern int    vsnprintf(char *, ssize_t, const char *, /* va_list */ char *);
+                ^
+
+a more straightforward compile command gives the same result :
+
+cc -I/d3/myroots/proot/usr/freeware/lib32/gnome-libs/include
+-I/d3/myroots/proot/usr/freeware/include
+-I/d3/myroots/proot/usr/freeware/include/gtk-1.2
+-I/d3/myroots/proot/usr/freeware/include/glib-1.2
+-I/d3/myroots/proot/usr/freeware/lib32/glib/include -o conftest -c conftest.c
+
+Here are the offending prototypes :
+
+stdio.h:
+extern int  snprintf(char *, ssize_t, const char *, ...);
+extern int  vsnprintf(char *, ssize_t, const char *, char *);
+
+gnomesupport.h:
+/* Maximum chars of output to write is MAXLEN.  */
+int snprintf  (char *, size_t, char *, ...);
+int vsnprintf (char *, size_t, char *, va_list);
+
+
+just wanted to know if anybody already encountered such a
+problem, cuz I have no clue where to look at in the first
+place. Any ideas ? Why aren't they "extern" in gnomesupport ?
+Can I just fix gnomesupport.h ( I guess not...)
+
+
+Thanks!
+Stephane
+
+
+-- 
+SILICON GRAPHICS                 EUROPEAN MANUFACTURING CENTER
+##############################################################
+Stephane Rosa                     Tel :     +41 (0)32 843-3638
+Business Analyst                  Fax :     +41 (0)32 843-3909
+APS/FP  Project                   GSM :     +41 (0)79 616-0828
+--------------------------------------------------------------
+ircnoc.neu.sgi.com  SGI Intranet  IRC :   EuroOper on #irchelp
+irc.stealth.net     Euro-IRCNet   IRC :   Clipper on #radionet
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Mon Jul 23 12:03:21 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 23 Jul 2001 12:03:21 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id MAA00944
+	for <fvwm@hpc.uh.edu>; Mon, 23 Jul 2001 12:03:11 -0500 (CDT)
+Received: from otaku.freeshell.org (root@t3-d-static-238.adsl.directlink.net [63.68.131.238])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id MAA28175
+	for <fvwm@fvwm.org>; Mon, 23 Jul 2001 12:03:37 -0500 (CDT)
+Received: (from migo@localhost)
+	by otaku.freeshell.org (8.11.4/8.11.0) id f6NH2Yj08291;
+	Mon, 23 Jul 2001 17:02:34 GMT
+Date: Mon, 23 Jul 2001 17:02:33 +0000
+From: Mikhael Goikhman <migo@homemail.com>
+To: Stephane Rosa <stephane@sgi.com>
+Cc: FVWM <fvwm@fvwm.org>, GNOME Devel List <gnome-devel-list@gnome.org>
+Subject: Re: FVWM: unable to compile with gnome libs
+Message-ID: <20010723170233.A381@homemail.com>
+Mail-Followup-To: Mikhael Goikhman <migo@homemail.com>,
+	Stephane Rosa <stephane@sgi.com>, FVWM <fvwm@fvwm.org>,
+	GNOME Devel List <gnome-devel-list@gnome.org>
+References: <XFMail.20010723122303.stephane@sgi.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.2.4i
+In-Reply-To: <XFMail.20010723122303.stephane@sgi.com>; from stephane@sgi.com on Mon, Jul 23, 2001 at 12:23:03PM +0200
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+On 23 Jul 2001 12:23:03 +0200, Stephane Rosa wrote:
+> 
+> it sounds like I can't compile with gnome support. I found this out
+> when trying to configure fvwm, which tries to compile this
+> (in ./configure):
+> 
+> #line 5911 "configure"
+> #include "confdefs.h"
+> 
+> #include <gnome.h>
+> int main(int c, char **v) {
+>    /* we can't really run this outside of X */
+>    if (!c) gnome_init("test-app", "0.0", c, v);
+>    return 0;
+> }
+
+Just to make it clear. This configure check is unique to FVWM, gnome.m4
+does not contain it. I added it because a lot of users have a non-working
+GNOME instalation, usually an incorrect gnome-config or header files.
+gnome.m4 does not detect this, like in your situation, so I enhanced it.
+
+The GNOME libs support (not to be confused with GNOME WM hints) is only
+used in FvwmGtk module and is fully optional. It only determines whether
+FvwmGtk is a gtk application or a gnome application. It is almost safe to
+say that you will not lose anything without "GNOME support in FvwmGtk".
+For example, our rpms have no such support not to be dependent on GNOME.
+
+> and there is a conflict between stdio.h and gnomesupport.h which
+> redefines sprintf and vsnprintf as if they weren't part or standard
+> include files already :
+
+[skipped]
+
+> just wanted to know if anybody already encountered such a
+> problem, cuz I have no clue where to look at in the first
+> place. Any ideas ? Why aren't they "extern" in gnomesupport ?
+> Can I just fix gnomesupport.h ( I guess not...)
+
+Sorry, I am not a GNOME developer.
+I would like to know if there is anything FVWM can help in this situation.
+
+Regards,
+Mikhael.
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Tue Jul 24 08:06:09 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 24 Jul 2001 08:06:09 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id IAA11348
+	for <fvwm@hpc.uh.edu>; Tue, 24 Jul 2001 08:06:00 -0500 (CDT)
+Received: from sph.umich.edu (dns.sph.umich.edu [141.211.50.48])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id IAA29536
+	for <fvwm@fvwm.org>; Tue, 24 Jul 2001 08:06:25 -0500 (CDT)
+Received: from umich.edu (sunm4140.sph.umich.edu [141.211.50.134])
+	by sph.umich.edu (8.9.3/8.9.1) with ESMTP id JAA00896
+	for <fvwm@fvwm.org>; Tue, 24 Jul 2001 09:06:19 -0400 (EDT)
+Message-ID: <3B5D72B2.FE8A1158@umich.edu>
+Date: Tue, 24 Jul 2001 09:05:54 -0400
+From: Terry Gliedt <tpg@umich.edu>
+Organization: Biostatistics
+X-Mailer: Mozilla 4.75 [en] (X11; U; SunOS 5.7 sun4u)
+X-Accept-Language: en
+MIME-Version: 1.0
+To: fvwm@fvwm.org
+Subject: FVWM: Re: Do you see a slow dialog box?
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+This goes back to a thread that is several months old where a fix was
+generated for the fvwm window manager to fix a slow popup dialog box in
+Perl/Tk apps. The fix was based on a similar problem discovered in
+Tcl/Tk (I don't know any of the details). I'd appreciate hearing
+directly from anyone who can shed some light on this. I'll post this to
+other groups too. TIA
+
+
+Has anyone else seen this? 
+ 
+ 
+I have good circumstantial evidence that this change to fvwm2 causes
+some sort of problem with at least one Tcl/Tk app. This could be a
+problem in the application, Tcl/Tk, an incorrect fix for fvwm or even
+mean that Perl/Tk needs a change for the original problem.
+ 
+The application 'tkcvs' is a Tcl/Tk GUI interface for CVS. Most times,
+but not always, when one selects a file and then selects the Commit
+button, a window opens for the reason to be entered and then abruptly
+closes. CVS commit is not done. I've been using the same version of
+tkcvs for many months and this symptom just began showing up after we
+converted to Solaris 5.7.
+
+I have other TkCVS apps (like TKDIFF in the same package) that do not
+show this problem.
+ 
+It is very difficult for me to debug TCL apps, but it appears the
+problem occurs in a call to TKWAIT after the commit prompt window is
+created.
+ 
+Upgrading to the latest version of tkcvs makes no difference.
+
+The problem seems very consistent on both Linux and Solaris systems.
+ 
+Upgrading to fvwm 2.4 (where the fix has been applied) makes no
+difference.
+
+Removing the fix in fvwm (events.c) FIXES the TkCVS problem.
+
+ 
+Versions:
+  TCL tcl8.3.2
+  FVWM 2.4 or 2.3.31 with patch
+  TkCVS 7.0 or 6.3b3(something like this)
+  Solaris 5.7
+
+
+
+-- 
+=============================================================
+Terry Gliedt     tpg@umich.edu       http://www.hps.com/~tpg/
+Biostatistics, Univ of Michigan  Personal Email:  tpg@hps.com
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Tue Jul 24 09:30:35 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 24 Jul 2001 09:30:35 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id JAA11939
+	for <fvwm@hpc.uh.edu>; Tue, 24 Jul 2001 09:30:22 -0500 (CDT)
+Received: from mailout03.sul.t-online.de (mailout03.sul.t-online.com [194.25.134.81])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id JAA01133
+	for <fvwm@fvwm.org>; Tue, 24 Jul 2001 09:30:47 -0500 (CDT)
+Received: from fwd07.sul.t-online.de 
+	by mailout03.sul.t-online.de with smtp 
+	id 15P3Cs-0006sq-08; Tue, 24 Jul 2001 16:30:42 +0200
+Received: from lifelux.lifebits.local (520008918237-0001@[217.81.153.152]) by fmrl07.sul.t-online.com
+	with esmtp id 15P3Cn-1tir9EC; Tue, 24 Jul 2001 16:30:37 +0200
+Received: from localhost (localhost [127.0.0.1])
+	by lifelux.lifebits.local (Postfix on SuSE Linux 7.0 (i386)) with ESMTP
+	id A5E6A29F; Tue, 24 Jul 2001 16:30:28 +0200 (CEST)
+Received: from erdbeere.lifebits.local (erdbeere.lifebits.local [192.168.1.192])
+	by lifelux.lifebits.local (Postfix on SuSE Linux 7.0 (i386)) with ESMTP
+	id CA1CF29A; Tue, 24 Jul 2001 14:30:27 +0000 (/etc/localtime)
+Received: (from luthien@localhost)
+	by erdbeere.lifebits.local (8.11.2/8.11.2/SuSE Linux 8.11.1-0.5) id f6OEUPf31964;
+	Tue, 24 Jul 2001 16:30:25 +0200
+X-Authentication-Warning: erdbeere.lifebits.local: luthien set sender to d.vogt@lifebits.de using -f
+Date: Tue, 24 Jul 2001 16:30:24 +0200
+From: Dominik Vogt <fvwm@fvwm.org>
+To: Terry Gliedt <tpg@umich.edu>, fvwm <fvwm@fvwm.org>
+Subject: Re: FVWM: Re: Do you see a slow dialog box?
+Message-ID: <20010724163024.B1790@lifebits.de>
+Reply-To: fvwm@fvwm.org
+Mail-Followup-To: Terry Gliedt <tpg@umich.edu>, fvwm <fvwm@fvwm.org>
+References: <3B5D72B2.FE8A1158@umich.edu>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.3.12i
+In-Reply-To: <3B5D72B2.FE8A1158@umich.edu>; from tpg@umich.edu on Tue, Jul 24, 2001 at 09:05:54AM -0400
+X-Virus-Scanned: by AMaViS perl-11
+X-Sender: 520008918237-0001@t-dialin.net
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+On Tue, Jul 24, 2001 at 09:05:54AM -0400, Terry Gliedt wrote:
+> This goes back to a thread that is several months old where a fix was
+> generated for the fvwm window manager to fix a slow popup dialog box in
+> Perl/Tk apps. The fix was based on a similar problem discovered in
+> Tcl/Tk (I don't know any of the details). I'd appreciate hearing
+> directly from anyone who can shed some light on this. I'll post this to
+> other groups too. TIA
+> 
+> 
+> Has anyone else seen this? 
+>  
+>  
+> I have good circumstantial evidence that this change to fvwm2 causes
+> some sort of problem with at least one Tcl/Tk app. This could be a
+> problem in the application, Tcl/Tk, an incorrect fix for fvwm or even
+> mean that Perl/Tk needs a change for the original problem.
+>  
+> The application 'tkcvs' is a Tcl/Tk GUI interface for CVS. Most times,
+> but not always, when one selects a file and then selects the Commit
+> button, a window opens for the reason to be entered and then abruptly
+> closes. CVS commit is not done. I've been using the same version of
+> tkcvs for many months and this symptom just began showing up after we
+> converted to Solaris 5.7.
+> 
+> I have other TkCVS apps (like TKDIFF in the same package) that do not
+> show this problem.
+>  
+> It is very difficult for me to debug TCL apps, but it appears the
+> problem occurs in a call to TKWAIT after the commit prompt window is
+> created.
+>  
+> Upgrading to the latest version of tkcvs makes no difference.
+> 
+> The problem seems very consistent on both Linux and Solaris systems.
+>  
+> Upgrading to fvwm 2.4 (where the fix has been applied) makes no
+> difference.
+> 
+> Removing the fix in fvwm (events.c) FIXES the TkCVS problem.
+
+Could you by any chance tell us *which* fix you are talking about?
+
+Bye
+
+Dominik ^_^  ^_^
+
+ --
+Dominik Vogt, email: d.vogt@lifebits.de
+LifeBits Aktiengesellschaft, Albrechtstr. 9, D-72072 Tuebingen
+fon: ++49 (0) 7071/7965-0, fax: ++49 (0) 7071/7965-20
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Tue Jul 24 09:32:48 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 24 Jul 2001 09:32:48 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id JAA12060
+	for <fvwm@hpc.uh.edu>; Tue, 24 Jul 2001 09:32:39 -0500 (CDT)
+Received: from beta.sinix.net (beta.sinix.net [194.224.112.5])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id JAA01226
+	for <fvwm@fvwm.org>; Tue, 24 Jul 2001 09:33:04 -0500 (CDT)
+Received: from galileo.siemens.es ([194.224.112.16]) by beta.sinix.net
+          (Post.Office MTA v3.5.3 release 223 ID# 548-67775U5500L550S0V35)
+          with SMTP id net for <fvwm@fvwm.org>;
+          Tue, 24 Jul 2001 16:34:28 +0200
+Received: by madt009a.siemens.es with Internet Mail Service (5.5.2650.21)
+	id <M2GV27XM>; Tue, 24 Jul 2001 16:33:33 +0100
+Message-ID: <15B5A0CA85F4D111814200A0C9B7B6296ADDA8@ZARS001A>
+From: "Ripalda-Marin, Miguel-Angel" <maripalda@elasa.siemens.es>
+To: Dominik Vogt <fvwm@fvwm.org>
+Subject: FVWM: =?iso-8859-1?Q?Respuesta_autom=E1tica_de_fuera_de_oficina=3A_F?=
+	=?iso-8859-1?Q?VWM=3A_Re=3A_Do_you_see_a_slow_dialog_box=3F?=
+Date: Tue, 24 Jul 2001 16:33:03 +0100
+MIME-Version: 1.0
+X-Mailer: Internet Mail Service (5.5.2650.21)
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Hola,
+
+lo siento mucho, pero ahora no puedo atenderte porque estoy de =
+vacaciones
+hasta el pr=F3ximo d=EDa 16 de agosto. Puedes contactar con Alfredo =
+Guiral,
+M=F3nica Beltr=E1n o Ana Bel=E9n Mart=EDn en caso de que sea necesario. =
+=A1Que pases
+unos buenos d=EDas!
+
+
+Hi,
+
+nowadays I'm on holidays, so I won't be at the office till august 16th.
+Please, contact with Alfredo Guiral, M=F3nica Beltr=E1n or Ana Bel=E9n =
+Mart=EDn.
+Have a nice days!
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Tue Jul 24 10:06:42 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 24 Jul 2001 10:06:42 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id KAA12711
+	for <fvwm@hpc.uh.edu>; Tue, 24 Jul 2001 10:06:33 -0500 (CDT)
+Received: from sph.umich.edu (dns.sph.umich.edu [141.211.50.48])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id KAA02158
+	for <fvwm@fvwm.org>; Tue, 24 Jul 2001 10:06:58 -0500 (CDT)
+Received: from umich.edu (sunm4140.sph.umich.edu [141.211.50.134])
+	by sph.umich.edu (8.9.3/8.9.1) with ESMTP id LAA14918
+	for <fvwm@fvwm.org>; Tue, 24 Jul 2001 11:06:51 -0400 (EDT)
+Message-ID: <3B5D8EF2.C3CD555@umich.edu>
+Date: Tue, 24 Jul 2001 11:06:26 -0400
+From: Terry Gliedt <tpg@umich.edu>
+Organization: Biostatistics
+X-Mailer: Mozilla 4.75 [en] (X11; U; SunOS 5.7 sun4u)
+X-Accept-Language: en
+MIME-Version: 1.0
+To: fvwm@fvwm.org
+Subject: Re: FVWM: Re: Do you see a slow dialog box?
+References: <3B5D72B2.FE8A1158@umich.edu> <20010724163024.B1790@lifebits.de>
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Dominik Vogt wrote:
+> 
+> On Tue, Jul 24, 2001 at 09:05:54AM -0400, Terry Gliedt wrote:
+> > This goes back to a thread that is several months old where a fix was
+> > generated for the fvwm window manager to fix a slow popup dialog box in
+> > Perl/Tk apps. The fix was based on a similar problem discovered in
+> > Tcl/Tk (I don't know any of the details). I'd appreciate hearing
+> > directly from anyone who can shed some light on this. I'll post this to
+> > other groups too. TIA
+> >
+> >
+> > Has anyone else seen this?
+> >
+> >
+> > I have good circumstantial evidence that this change to fvwm2 causes
+> > some sort of problem with at least one Tcl/Tk app. This could be a
+> > problem in the application, Tcl/Tk, an incorrect fix for fvwm or even
+> > mean that Perl/Tk needs a change for the original problem.
+> >
+> > The application 'tkcvs' is a Tcl/Tk GUI interface for CVS. Most times,
+> > but not always, when one selects a file and then selects the Commit
+> > button, a window opens for the reason to be entered and then abruptly
+> > closes. CVS commit is not done. I've been using the same version of
+> > tkcvs for many months and this symptom just began showing up after we
+> > converted to Solaris 5.7.
+> >
+> > I have other TkCVS apps (like TKDIFF in the same package) that do not
+> > show this problem.
+> >
+> > It is very difficult for me to debug TCL apps, but it appears the
+> > problem occurs in a call to TKWAIT after the commit prompt window is
+> > created.
+> >
+> > Upgrading to the latest version of tkcvs makes no difference.
+> >
+> > The problem seems very consistent on both Linux and Solaris systems.
+> >
+> > Upgrading to fvwm 2.4 (where the fix has been applied) makes no
+> > difference.
+> >
+> > Removing the fix in fvwm (events.c) FIXES the TkCVS problem.
+> 
+> Could you by any chance tell us *which* fix you are talking about?
+
+In events.c around line 2125 (fvwm 2.4 source) you  will see 
+
+	cre->value_mask &= !CWStackMode;
+	cre->value_mask |= (ecre->value_mask & CWStackMode);
+	cre->above = ecre->above;
+	cre->detail = ecre->detail;
+	/* srt (28-Apr-2001): Tk needs a ConfigureNotify event after a raise,
+	 * otherwise it would hang for two seconds */
+	new_g = Tmp_win->frame_g;
+	do_send_event = True;
+      }
+    } /* while */
+  } /* if */
+
+
+Removing the new_g and do_send_event allows TkCVS to behave, but brings
+back the Perl/Tk slow dialog problem.
+
+-- 
+=============================================================
+Terry Gliedt     tpg@umich.edu       http://www.hps.com/~tpg/
+Biostatistics, Univ of Michigan  Personal Email:  tpg@hps.com
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Tue Jul 24 11:22:00 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 24 Jul 2001 11:22:00 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id LAA14051
+	for <fvwm@hpc.uh.edu>; Tue, 24 Jul 2001 11:21:47 -0500 (CDT)
+Received: from mailout05.sul.t-online.de (mailout05.sul.t-online.com [194.25.134.82])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id LAA04289
+	for <fvwm@fvwm.org>; Tue, 24 Jul 2001 11:22:11 -0500 (CDT)
+Received: from fwd04.sul.t-online.de 
+	by mailout05.sul.t-online.de with smtp 
+	id 15P4wk-0000V1-0N; Tue, 24 Jul 2001 18:22:10 +0200
+Received: from lifelux.lifebits.local (520008918237-0001@[217.81.153.152]) by fmrl04.sul.t-online.com
+	with esmtp id 15P4wi-29aT5cC; Tue, 24 Jul 2001 18:22:08 +0200
+Received: from localhost (localhost [127.0.0.1])
+	by lifelux.lifebits.local (Postfix on SuSE Linux 7.0 (i386)) with ESMTP id 8516629F
+	for <fvwm@fvwm.org>; Tue, 24 Jul 2001 18:22:08 +0200 (CEST)
+Received: from erdbeere.lifebits.local (erdbeere.lifebits.local [192.168.1.192])
+	by lifelux.lifebits.local (Postfix on SuSE Linux 7.0 (i386)) with ESMTP id 9A6A329A
+	for <fvwm@fvwm.org>; Tue, 24 Jul 2001 16:22:07 +0000 (/etc/localtime)
+Received: (from luthien@localhost)
+	by erdbeere.lifebits.local (8.11.2/8.11.2/SuSE Linux 8.11.1-0.5) id f6OGM6O11001
+	for fvwm@fvwm.org; Tue, 24 Jul 2001 18:22:06 +0200
+X-Authentication-Warning: erdbeere.lifebits.local: luthien set sender to d.vogt@lifebits.de using -f
+Date: Tue, 24 Jul 2001 18:22:06 +0200
+From: Dominik Vogt <fvwm@fvwm.org>
+To: fvwm@fvwm.org
+Subject: Re: FVWM: Re: Do you see a slow dialog box?
+Message-ID: <20010724182206.F1790@lifebits.de>
+Reply-To: fvwm@fvwm.org
+Mail-Followup-To: fvwm@fvwm.org
+References: <3B5D72B2.FE8A1158@umich.edu> <20010724163024.B1790@lifebits.de> <3B5D8EF2.C3CD555@umich.edu>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.3.12i
+In-Reply-To: <3B5D8EF2.C3CD555@umich.edu>; from tpg@umich.edu on Tue, Jul 24, 2001 at 11:06:26AM -0400
+X-Virus-Scanned: by AMaViS perl-11
+X-Sender: 520008918237-0001@t-dialin.net
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+On Tue, Jul 24, 2001 at 11:06:26AM -0400, Terry Gliedt wrote:
+> Dominik Vogt wrote:
+> > 
+> > On Tue, Jul 24, 2001 at 09:05:54AM -0400, Terry Gliedt wrote:
+> > > This goes back to a thread that is several months old where a fix was
+> > > generated for the fvwm window manager to fix a slow popup dialog box in
+> > > Perl/Tk apps. The fix was based on a similar problem discovered in
+> > > Tcl/Tk (I don't know any of the details). I'd appreciate hearing
+> > > directly from anyone who can shed some light on this. I'll post this to
+> > > other groups too. TIA
+> > >
+> > >
+> > > Has anyone else seen this?
+> > >
+> > >
+> > > I have good circumstantial evidence that this change to fvwm2 causes
+> > > some sort of problem with at least one Tcl/Tk app. This could be a
+> > > problem in the application, Tcl/Tk, an incorrect fix for fvwm or even
+> > > mean that Perl/Tk needs a change for the original problem.
+> > >
+> > > The application 'tkcvs' is a Tcl/Tk GUI interface for CVS. Most times,
+> > > but not always, when one selects a file and then selects the Commit
+> > > button, a window opens for the reason to be entered and then abruptly
+> > > closes. CVS commit is not done. I've been using the same version of
+> > > tkcvs for many months and this symptom just began showing up after we
+> > > converted to Solaris 5.7.
+> > >
+> > > I have other TkCVS apps (like TKDIFF in the same package) that do not
+> > > show this problem.
+> > >
+> > > It is very difficult for me to debug TCL apps, but it appears the
+> > > problem occurs in a call to TKWAIT after the commit prompt window is
+> > > created.
+> > >
+> > > Upgrading to the latest version of tkcvs makes no difference.
+> > >
+> > > The problem seems very consistent on both Linux and Solaris systems.
+> > >
+> > > Upgrading to fvwm 2.4 (where the fix has been applied) makes no
+> > > difference.
+> > >
+> > > Removing the fix in fvwm (events.c) FIXES the TkCVS problem.
+> > 
+> > Could you by any chance tell us *which* fix you are talking about?
+> 
+> In events.c around line 2125 (fvwm 2.4 source) you  will see 
+> 
+> 	cre->value_mask &= !CWStackMode;
+> 	cre->value_mask |= (ecre->value_mask & CWStackMode);
+> 	cre->above = ecre->above;
+> 	cre->detail = ecre->detail;
+> 	/* srt (28-Apr-2001): Tk needs a ConfigureNotify event after a raise,
+> 	 * otherwise it would hang for two seconds */
+> 	new_g = Tmp_win->frame_g;
+> 	do_send_event = True;
+>       }
+>     } /* while */
+>   } /* if */
+> 
+> 
+> Removing the new_g and do_send_event allows TkCVS to behave, but brings
+> back the Perl/Tk slow dialog problem.
+
+Ah, yes.  TkCVS maps a new window, asks the window manager to
+raise it and gets a ConfigureNotify in response, can't handle it
+and closes the window.  While responding with a ConfigureNotify to
+a Raise request is not really covered by the specs (ICCCM2), the
+application should be prepared to receive a ConfigureNotify at any
+time and handle it gracefully.  I can't tell if this is a problem
+in Tk or the application, but it should definitely be reported to
+the TkCVS developers.  I don't know what fvwm could do
+differently other than creating a new style that allows control
+over sending/not sending events.  BTW, the hanging Perl/Tk dialog
+boxes are also a Perl/Tk bug that should be reported.  Since a
+number of applications have similar problems (e.g. xemacs), the
+fix should still stay in fvwm's code.
+
+Bye
+
+Dominik ^_^  ^_^
+
+ --
+Dominik Vogt, email: d.vogt@lifebits.de
+LifeBits Aktiengesellschaft, Albrechtstr. 9, D-72072 Tuebingen
+fon: ++49 (0) 7071/7965-0, fax: ++49 (0) 7071/7965-20
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Tue Jul 24 11:28:05 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 24 Jul 2001 11:28:05 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id LAA14181
+	for <fvwm@hpc.uh.edu>; Tue, 24 Jul 2001 11:27:55 -0500 (CDT)
+Received: from sph.umich.edu (dns.sph.umich.edu [141.211.50.48])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id LAA04512
+	for <fvwm@fvwm.org>; Tue, 24 Jul 2001 11:28:19 -0500 (CDT)
+Received: from umich.edu (sunm4140.sph.umich.edu [141.211.50.134])
+	by sph.umich.edu (8.9.3/8.9.1) with ESMTP id MAA25049
+	for <fvwm@fvwm.org>; Tue, 24 Jul 2001 12:28:13 -0400 (EDT)
+Message-ID: <3B5DA204.7492954E@umich.edu>
+Date: Tue, 24 Jul 2001 12:27:48 -0400
+From: Terry Gliedt <tpg@umich.edu>
+Organization: Biostatistics
+X-Mailer: Mozilla 4.75 [en] (X11; U; SunOS 5.7 sun4u)
+X-Accept-Language: en
+MIME-Version: 1.0
+To: fvwm@fvwm.org
+Subject: Re: FVWM: Re: Do you see a slow dialog box?
+References: <3B5D72B2.FE8A1158@umich.edu> <20010724163024.B1790@lifebits.de> <3B5D8EF2.C3CD555@umich.edu> <20010724182206.F1790@lifebits.de>
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Dominik Vogt wrote:
+> 
+> Ah, yes.  TkCVS maps a new window, asks the window manager to
+> raise it and gets a ConfigureNotify in response, can't handle it
+> and closes the window.  While responding with a ConfigureNotify to
+> a Raise request is not really covered by the specs (ICCCM2), the
+> application should be prepared to receive a ConfigureNotify at any
+> time and handle it gracefully.  I can't tell if this is a problem
+> in Tk or the application, but it should definitely be reported to
+> the TkCVS developers.  I don't know what fvwm could do
+> differently other than creating a new style that allows control
+> over sending/not sending events.  BTW, the hanging Perl/Tk dialog
+> boxes are also a Perl/Tk bug that should be reported.  Since a
+> number of applications have similar problems (e.g. xemacs), the
+> fix should still stay in fvwm's code.
+
+Thank you !!  I'll report this to the TkCVS folks as well as Perl/Tk.
+Thanks again for the analysis.
+-- 
+=============================================================
+Terry Gliedt     tpg@umich.edu       http://www.hps.com/~tpg/
+Biostatistics, Univ of Michigan  Personal Email:  tpg@hps.com
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Thu Jul 26 11:05:56 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Thu, 26 Jul 2001 11:05:56 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id LAA06690
+	for <fvwm@hpc.uh.edu>; Thu, 26 Jul 2001 11:05:40 -0500 (CDT)
+Received: from mail.altsoftware.com (mail.altsoftware.com [216.191.138.67])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id LAA23452
+	for <fvwm@fvwm.org>; Thu, 26 Jul 2001 11:06:06 -0500 (CDT)
+Received: from doozer (really [216.191.138.66]) by altsoftware.com
+	via in.smtpd with smtp
+	id <m15PnTH-001wPhC@mail.altsoftware.com> (Debian Smail3.2.0.101)
+	for <fvwm@fvwm.org>; Thu, 26 Jul 2001 11:54:43 -0400 (EDT) 
+Message-ID: <01dc01c115ec$df652ee0$7102a8c0@altsoftware.com>
+From: "Jason McCarty" <mccartyj@altsoftware.com>
+To: <fvwm@fvwm.org>
+Subject: FVWM: catching button down events
+Date: Thu, 26 Jul 2001 12:06:04 -0400
+MIME-Version: 1.0
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 5.50.4522.1200
+X-MimeOLE: Produced By Microsoft MimeOLE V5.50.4522.1200
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Hello, I'm working on an xfree86 touchscreen driver that works with fvwm.
+I'm not sure if this message belongs here or someplace else but I figured
+that the window manager developers would probably be the experts to ask.
+What I'm trying to do is make the behaviour be that:
+
+If user touches a 'button' (like a close button) a down event is generated
+and then immediately after an up event is generated.  But if the user touchs
+some other part of the screen (say to drag a window) I only pass a down
+event (until user lifts finger).  XFree86 seems to just pass events to the
+window manager.  When a button gets pressed I know there is a different
+graphics (indented button) that gets displayed, I'd like to 'hook' this(or
+something) so that I can tell if the user hit a button or someplace else.
+
+The problem is that now, if i do a down/up mode, the user can't drag, which
+kinda sucks.
+
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Fri Jul 27 07:16:10 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Fri, 27 Jul 2001 07:16:10 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id HAA14389
+	for <fvwm@hpc.uh.edu>; Fri, 27 Jul 2001 07:16:02 -0500 (CDT)
+Received: from web11204.mail.yahoo.com (web11204.mail.yahoo.com [216.136.131.186])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with SMTP id HAA13837
+	for <fvwm@fvwm.org>; Fri, 27 Jul 2001 07:16:27 -0500 (CDT)
+Message-ID: <20010727121626.75724.qmail@web11204.mail.yahoo.com>
+Received: from [32.97.136.235] by web11204.mail.yahoo.com; Fri, 27 Jul 2001 05:16:26 PDT
+Date: Fri, 27 Jul 2001 05:16:26 -0700 (PDT)
+From: Paul Powell <moloch16@yahoo.com>
+Subject: FVWM: FVWM2 and Java 1.3 Frame Centering
+To: fvwm@fvwm.org
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Hello,
+
+It doesn't seem IBM Java 1.3 takes into account the
+FVWM2 borders when calculating frame size.
+
+For example, when I run my application in a 640 x 480
+environment, and set my application frame to be size
+640 x 480, the application is shifted so that the
+title bar is offscreen and so is the left border.
+
+Is this a known problem?  Any work arounds?
+
+Thanks,
+Paul
+
+__________________________________________________
+Do You Yahoo!?
+Make international calls for as low as $.04/minute with Yahoo! Messenger
+http://phonecard.yahoo.com/
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Fri Jul 27 09:28:27 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Fri, 27 Jul 2001 09:28:27 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id JAA16065
+	for <fvwm@hpc.uh.edu>; Fri, 27 Jul 2001 09:28:19 -0500 (CDT)
+Received: from dm-dbase-server.melad.local ([211.9.37.210])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id JAA16533
+	for <fvwm@fvwm.org>; Fri, 27 Jul 2001 09:28:42 -0500 (CDT)
+Received: from 211.9.37.210 (dm-dbase-server.melad.local [211.9.37.210]) by dm-dbase-server.melad.local with SMTP (Microsoft Exchange Internet Mail Service Version 5.5.2650.21)
+	id PX2LP8YF; Fri, 27 Jul 2001 23:15:35 +0900
+To: <fvwm@fvwm.org>
+Message-ID: <20010727.2315340689.babaq@sorifu_info-ec-shock.com>
+Date: Fri, 27 Jul 2001 23:15:35 +0900
+From: =?ISO-2022-JP?B?GyRCJWEhPCVrJSIlcyUxITwlSDt2TDM2SRsoQg==?=<sorifu_info@ec-shock.com>
+Subject: FVWM: =?ISO-2022-JP?B?GyRCPi5AdEZiM1UbKEIgGyRCO1k7fUlUO1k7fTZbNV4bKEI=?=
+ =?ISO-2022-JP?B?GyRCJSIlcyUxITwlSBsoQg==?=
+MIME-Version: 1.0
+X-Mail-Agent: BSMTP DLL  Dec 17 2000  by Tatsuo Baba
+Content-Type: text/plain; charset=ISO-2022-JP
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+
+$B>.@tFb3U!!;Y;}!&IT;Y;}!!6[5^%"%s%1!<%H(B
+
+$B$*K;$7$$$H$3$m!"$4LBOG$r$*$+$1$7$^$9$,!"(B 
+$B2<$N(BURL$B$r%/%j%C%/$7$F!"%"%s%1!<%H$K$46(NO$*4j$$$$$?$7$^$9!#(B 
+
+http://211.9.37.210/koizumi/koizumi_an.asp?id=138039
+
+
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Fri Jul 27 10:24:17 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Fri, 27 Jul 2001 10:24:17 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id KAA16994
+	for <fvwm@hpc.uh.edu>; Fri, 27 Jul 2001 10:24:08 -0500 (CDT)
+Received: from dnsmx1pya.telcordia.com (dnsmx1pya.telcordia.com [128.96.20.31])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id KAA18154
+	for <fvwm@fvwm.org>; Fri, 27 Jul 2001 10:24:33 -0500 (CDT)
+Received: from castle.mk.telcordia.com (castle.mk.telcordia.com [128.96.133.172])
+	by dnsmx1pya.telcordia.com (8.9.3/8.9.3) with ESMTP id LAA02939;
+	Fri, 27 Jul 2001 11:20:05 -0400 (EDT)
+Received: from mk.telcordia.com (fork [128.96.128.32])
+	by castle.mk.telcordia.com (8.8.8/8.8.8) with ESMTP id LAA16632;
+	Fri, 27 Jul 2001 11:20:05 -0400 (EDT)
+Message-Id: <200107271520.LAA16632@castle.mk.telcordia.com>
+To: Paul Powell <moloch16@yahoo.com>
+cc: fvwm@fvwm.org
+Subject: Re: FVWM: FVWM2 and Java 1.3 Frame Centering 
+In-reply-to: Your message of Fri, 27 Jul 2001 05:16:26 -0700.
+             <20010727121626.75724.qmail@web11204.mail.yahoo.com> 
+Mime-Version: 1.0 (generated by tm-edit 7.108)
+Content-Type: text/plain; charset=US-ASCII
+Date: Fri, 27 Jul 2001 11:20:05 -0400
+From: Dan Espen <dane@mk.telcordia.com>
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Paul Powell <moloch16@yahoo.com> writes:
+> Hello,
+> 
+> It doesn't seem IBM Java 1.3 takes into account the
+> FVWM2 borders when calculating frame size.
+> 
+> For example, when I run my application in a 640 x 480
+> environment, and set my application frame to be size
+> 640 x 480, the application is shifted so that the
+> title bar is offscreen and so is the left border.
+> 
+> Is this a known problem?  Any work arounds?
+
+This shows up in Sun's bug parade:
+
+4401846
+
+They've marked it as commit to fix in "Tiger" (whatever that is).
+
+I'm not sure what relationship this has to IBM Java 1.3.
+
+-- 
+Dan Espen
+444 Hoes Lane  Room RRC 1C-214           E-mail: dane@mk.telcordia.com
+Piscataway, NJ 08854                     Phone: (732) 699-5570
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Fri Jul 27 10:38:48 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Fri, 27 Jul 2001 10:38:48 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id KAA17365
+	for <fvwm@hpc.uh.edu>; Fri, 27 Jul 2001 10:38:38 -0500 (CDT)
+Received: from dnsmx2pya.telcordia.com (dnsmx2pya.telcordia.com [128.96.20.32])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id KAA18795
+	for <fvwm@fvwm.org>; Fri, 27 Jul 2001 10:39:03 -0500 (CDT)
+Received: from castle.mk.telcordia.com (castle.mk.telcordia.com [128.96.133.172])
+	by dnsmx2pya.telcordia.com (8.9.3/8.9.3) with ESMTP id LAA19907;
+	Fri, 27 Jul 2001 11:27:09 -0400 (EDT)
+Received: from mk.telcordia.com (fork [128.96.128.32])
+	by castle.mk.telcordia.com (8.8.8/8.8.8) with ESMTP id LAA16825;
+	Fri, 27 Jul 2001 11:27:08 -0400 (EDT)
+Message-Id: <200107271527.LAA16825@castle.mk.telcordia.com>
+To: "Jason McCarty" <mccartyj@altsoftware.com>
+cc: fvwm@fvwm.org
+Subject: Re: FVWM: catching button down events 
+In-reply-to: Your message of Thu, 26 Jul 2001 12:06:04 -0400.
+             <01dc01c115ec$df652ee0$7102a8c0@altsoftware.com> 
+x-face: H2G63xNIQ1G~92=">,W';}5I'2EN+pvbeFK2U`LLazP;W3/AU'795C^6M1;wX3''q-~||]i
+ =q\|l:fMk^4zF@^JHkw75M~[d)NKA},lfIOD=B'QWUuv_7Pu+j*']@]x]y'(Eyh}IAEhQDV@tJ?\E"
+ <=..HSTdYCt'DevYza*qnf_0?9qelUgqeJkJA'7Zr<-NU
+Mime-Version: 1.0 (generated by tm-edit 7.108)
+Content-Type: text/plain; charset=US-ASCII
+Date: Fri, 27 Jul 2001 11:27:08 -0400
+From: Dan Espen <dane@mk.telcordia.com>
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+"Jason McCarty" <mccartyj@altsoftware.com> writes:
+> Hello, I'm working on an xfree86 touchscreen driver that works with fvwm.
+> I'm not sure if this message belongs here or someplace else but I figured
+> that the window manager developers would probably be the experts to ask.
+> What I'm trying to do is make the behaviour be that:
+> 
+> If user touches a 'button' (like a close button) a down event is generated
+> and then immediately after an up event is generated.  But if the user touchs
+> some other part of the screen (say to drag a window) I only pass a down
+> event (until user lifts finger).  XFree86 seems to just pass events to the
+> window manager.  When a button gets pressed I know there is a different
+> graphics (indented button) that gets displayed, I'd like to 'hook' this(or
+> something) so that I can tell if the user hit a button or someplace else.
+> 
+> The problem is that now, if i do a down/up mode, the user can't drag, which
+> kinda sucks.
+
+As long as the touchscreen driver generates button down, motion, and
+button up events, it should work with fvwm.
+
+I don't understand the part about 'hook'ing the button being depressed.
+Fvwm depresses the button when it sees the button down event, but considers
+the button clicked when the button is released and a little time passes.
+
+-- 
+Dan Espen
+444 Hoes Lane  Room RRC 1C-214           E-mail: dane@mk.telcordia.com
+Piscataway, NJ 08854                     Phone: (732) 699-5570
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Fri Jul 27 11:51:50 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Fri, 27 Jul 2001 11:51:50 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id LAA18811
+	for <fvwm@hpc.uh.edu>; Fri, 27 Jul 2001 11:51:41 -0500 (CDT)
+Received: from web11207.mail.yahoo.com (web11207.mail.yahoo.com [216.136.131.189])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with SMTP id LAA20972
+	for <fvwm@fvwm.org>; Fri, 27 Jul 2001 11:52:06 -0500 (CDT)
+Message-ID: <20010727165205.61654.qmail@web11207.mail.yahoo.com>
+Received: from [32.97.136.231] by web11207.mail.yahoo.com; Fri, 27 Jul 2001 09:52:05 PDT
+Date: Fri, 27 Jul 2001 09:52:05 -0700 (PDT)
+From: Paul Powell <moloch16@yahoo.com>
+Subject: Re: FVWM: FVWM2 and Java 1.3 Frame Centering 
+To: Dan Espen <dane@mk.telcordia.com>
+Cc: fvwm@fvwm.org
+In-Reply-To: <200107271520.LAA16632@castle.mk.telcordia.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Thanks for the help.  I searched bug parade but only
+found a bug reported against Java 1.1.  This one is
+against 1.3.
+
+Thanks again,
+Paul
+
+--- Dan Espen <dane@mk.telcordia.com> wrote:
+> Paul Powell <moloch16@yahoo.com> writes:
+> > Hello,
+> > 
+> > It doesn't seem IBM Java 1.3 takes into account
+> the
+> > FVWM2 borders when calculating frame size.
+> > 
+> > For example, when I run my application in a 640 x
+> 480
+> > environment, and set my application frame to be
+> size
+> > 640 x 480, the application is shifted so that the
+> > title bar is offscreen and so is the left border.
+> > 
+> > Is this a known problem?  Any work arounds?
+> 
+> This shows up in Sun's bug parade:
+> 
+> 4401846
+> 
+> They've marked it as commit to fix in "Tiger"
+> (whatever that is).
+> 
+> I'm not sure what relationship this has to IBM Java
+> 1.3.
+> 
+> -- 
+> Dan Espen
+> 444 Hoes Lane  Room RRC 1C-214           E-mail:
+> dane@mk.telcordia.com
+> Piscataway, NJ 08854                     Phone:
+> (732) 699-5570
+
+
+__________________________________________________
+Do You Yahoo!?
+Make international calls for as low as $.04/minute with Yahoo! Messenger
+http://phonecard.yahoo.com/
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Fri Jul 27 12:56:04 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Fri, 27 Jul 2001 12:56:04 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id MAA19943
+	for <fvwm@hpc.uh.edu>; Fri, 27 Jul 2001 12:55:54 -0500 (CDT)
+Received: from pcnet1.pcnet.com (root@pcnet1.pcnet.com [204.213.232.3])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id MAA23113
+	for <fvwm@fvwm.org>; Fri, 27 Jul 2001 12:56:19 -0500 (CDT)
+Received: from pcnet.com (pm3-pt4.pcnet.net [206.105.29.78])
+	by pcnet1.pcnet.com (8.8.7/PCNet) with ESMTP id NAA02076;
+	Fri, 27 Jul 2001 13:55:34 -0400 (EDT)
+Message-ID: <3B61AB2F.327F386E@pcnet.com>
+Date: Fri, 27 Jul 2001 13:55:59 -0400
+From: Bob Woodside <proteus@pcnet.com>
+Organization: Woodsway Consulting, Inc.
+X-Mailer: Mozilla 4.7 [en] (X11; U; Linux 2.4.4 i586)
+X-Accept-Language: en
+MIME-Version: 1.0
+To: fvwm@fvwm.org
+CC: Paul Powell <moloch16@yahoo.com>
+Subject: Re: FVWM: FVWM2 and Java 1.3 Frame Centering
+References: <200107271520.LAA16632@castle.mk.telcordia.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+
+Dan Espen wrote:
+> 
+> They've marked it as commit to fix in "Tiger" (whatever that is).
+> 
+> I'm not sure what relationship this has to IBM Java 1.3.
+
+        If he's talking about IBM's 1.3 JDK for Linux, he may not have
+seen the problem with some other port of 1.3, say Blackdown's. Though it
+theoretically shouldn't be so, I've definitely noticed that different
+bugs seem to crop up in different implementers' ports of what is
+supposed to be the same release.
+
+
+Cheers,
+Bob
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Sat Jul 28 07:29:48 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sat, 28 Jul 2001 07:29:48 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id HAA28692
+	for <fvwm@hpc.uh.edu>; Sat, 28 Jul 2001 07:29:36 -0500 (CDT)
+Received: from mail.gmx.net (pop.gmx.net [194.221.183.20])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with SMTP id HAA07361
+	for <fvwm@fvwm.org>; Sat, 28 Jul 2001 07:30:00 -0500 (CDT)
+Received: (qmail 8671 invoked by uid 0); 28 Jul 2001 12:29:26 -0000
+Received: from wldb-3e362d55.pool.mediaways.net (HELO DarkSun.local) (62.54.45.85)
+  by mail.gmx.net (mp001-rz3) with SMTP; 28 Jul 2001 12:29:26 -0000
+Received: (from luthien@localhost)
+	by DarkSun.local (8.11.3/8.11.3/SuSE Linux 8.11.1-0.5) id f6SAif702423
+	for fvwm@fvwm.org; Sat, 28 Jul 2001 12:44:41 +0200
+X-Authentication-Warning: DarkSun.local: luthien set sender to dominik.vogt@gmx.de using -f
+Date: Sat, 28 Jul 2001 12:44:41 +0200
+From: Dominik Vogt <dominik.vogt@gmx.de>
+To: fvwm@fvwm.org
+Subject: Re: FVWM: FVWM2 and Java 1.3 Frame Centering
+Message-ID: <20010728124441.B707@gmx.de>
+Reply-To: dominik.vogt@gmx.de
+Mail-Followup-To: fvwm@fvwm.org
+References: <200107271520.LAA16632@castle.mk.telcordia.com> <3B61AB2F.327F386E@pcnet.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+X-Mailer: Mutt 0.95.6i
+In-Reply-To: <3B61AB2F.327F386E@pcnet.com>; from Bob Woodside on Fri, Jul 27, 2001 at 01:55:59PM -0400
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+On Fri, Jul 27, 2001 at 01:55:59PM -0400, Bob Woodside wrote:
+> 
+> Dan Espen wrote:
+> > 
+> > They've marked it as commit to fix in "Tiger" (whatever that is).
+> > 
+> > I'm not sure what relationship this has to IBM Java 1.3.
+> 
+>         If he's talking about IBM's 1.3 JDK for Linux, he may not have
+> seen the problem with some other port of 1.3, say Blackdown's. Though it
+> theoretically shouldn't be so, I've definitely noticed that different
+> bugs seem to crop up in different implementers' ports of what is
+> supposed to be the same release.
+
+You must be wrong!  We are talking about software written by big,
+professional companies, not the trash open source kiddies like us
+are writing ;-)
+
+Bye
+
+Dominik ^_^  ^_^
+
+ --
+Dominik Vogt, dominik.vogt@gmx.de
+Reply-To: dominik.vogt@gmx.de
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Sat Jul 28 07:34:45 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sat, 28 Jul 2001 07:34:45 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id HAA28977
+	for <fvwm@hpc.uh.edu>; Sat, 28 Jul 2001 07:34:33 -0500 (CDT)
+Received: from mail.gmx.net (pop.gmx.net [194.221.183.20])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with SMTP id HAA07508
+	for <fvwm@fvwm.org>; Sat, 28 Jul 2001 07:34:57 -0500 (CDT)
+Received: (qmail 22245 invoked by uid 0); 28 Jul 2001 12:34:26 -0000
+Received: from wldb-3e362d74.pool.mediaways.net (HELO DarkSun.local) (62.54.45.116)
+  by mail.gmx.net (mail02) with SMTP; 28 Jul 2001 12:34:26 -0000
+Received: (from luthien@localhost)
+	by DarkSun.local (8.11.3/8.11.3/SuSE Linux 8.11.1-0.5) id f6SCZ5Q10735
+	for fvwm@fvwm.org; Sat, 28 Jul 2001 14:35:05 +0200
+X-Authentication-Warning: DarkSun.local: luthien set sender to dominik.vogt@gmx.de using -f
+Date: Sat, 28 Jul 2001 14:35:05 +0200
+From: Dominik Vogt <dominik.vogt@gmx.de>
+To: fvwm@fvwm.org
+Subject: Re: FVWM: catching button down events
+Message-ID: <20010728143505.D707@gmx.de>
+Reply-To: dominik.vogt@gmx.de
+Mail-Followup-To: fvwm@fvwm.org
+References: <01dc01c115ec$df652ee0$7102a8c0@altsoftware.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+X-Mailer: Mutt 0.95.6i
+In-Reply-To: <01dc01c115ec$df652ee0$7102a8c0@altsoftware.com>; from Jason McCarty on Thu, Jul 26, 2001 at 12:06:04PM -0400
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+On Thu, Jul 26, 2001 at 12:06:04PM -0400, Jason McCarty wrote:
+> Hello, I'm working on an xfree86 touchscreen driver that works with fvwm.
+> I'm not sure if this message belongs here or someplace else but I figured
+> that the window manager developers would probably be the experts to ask.
+> What I'm trying to do is make the behaviour be that:
+> 
+> If user touches a 'button' (like a close button) a down event is generated
+> and then immediately after an up event is generated.  But if the user touchs
+> some other part of the screen (say to drag a window) I only pass a down
+> event (until user lifts finger).  XFree86 seems to just pass events to the
+> window manager.  When a button gets pressed I know there is a different
+> graphics (indented button) that gets displayed, I'd like to 'hook' this(or
+> something) so that I can tell if the user hit a button or someplace else.
+> 
+> The problem is that now, if i do a down/up mode, the user can't drag, which
+> kinda sucks.
+
+You don't need to hold down the button to drag windows with fvwm.
+Try out this binding:
+
+  AddToFunc ClickToMove
+  + C Move
+
+  Mouse 1 T A ClickToMove
+
+Now you can click once on a window title to start moving a window.
+A second click terminates the operation.
+
+Bye
+
+Dominik ^_^  ^_^
+
+ --
+Dominik Vogt, dominik.vogt@gmx.de
+Reply-To: dominik.vogt@gmx.de
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Sat Jul 28 18:05:22 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sat, 28 Jul 2001 18:05:22 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id SAA04303
+	for <fvwm@hpc.uh.edu>; Sat, 28 Jul 2001 18:05:12 -0500 (CDT)
+Received: from out-mx1.crosswinds.net (out-mx1.crosswinds.net [209.208.163.38])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id SAA13527
+	for <fvwm@fvwm.org>; Sat, 28 Jul 2001 18:05:39 -0500 (CDT)
+Received: from member-mx1.crosswinds.net (member-mx1.crosswinds.net [209.208.163.43])
+	by out-mx1.crosswinds.net (Postfix) with ESMTP id D8F765D58D
+	for <fvwm@fvwm.org>; Sat, 28 Jul 2001 19:05:37 -0400 (EDT)
+Received: from crosswinds.net (cwmail.crosswinds.net [204.50.152.141])
+	by member-mx1.crosswinds.net (Postfix) with SMTP id 6FC9E4CB9D
+	for <fvwm@fvwm.org>; Sat, 28 Jul 2001 19:05:37 -0400 (EDT)
+From: "Scott Henderson" <scotthenderson@crosswinds.net>
+Reply-To: scotthenderson@crosswinds.net
+To: fvwm@fvwm.org
+Date: Sat, 28 Jul 2001 16:04:52 -0700
+Subject: FVWM: Would like to get help on fvwm
+Message-id: <3b634648.58dc.0@crosswinds.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 7bit
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Can you please tell me what address I could mail to or web site I could go to
+to get help with a problem I'm having installing fvwm?  Thanks much!!!!
+
+Scott
+
+
+
+
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Sat Jul 28 18:53:42 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sat, 28 Jul 2001 18:53:42 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id SAA06024
+	for <fvwm@hpc.uh.edu>; Sat, 28 Jul 2001 18:53:31 -0500 (CDT)
+Received: from mail.idoox.com (gatekeeper-s.gts.cz [194.213.203.154])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with SMTP id SAA14441
+	for <fvwm@fvwm.org>; Sat, 28 Jul 2001 18:53:48 -0500 (CDT)
+Received: (qmail 31496 invoked by uid 620); 28 Jul 2001 23:53:41 -0000
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 28 Jul 2001 23:53:41 -0000
+Date: Sun, 29 Jul 2001 01:53:41 +0200 (CEST)
+From: Jacek Kopecky <jacek@idoox.com>
+To: <fvwm@fvwm.org>
+Message-ID: <Pine.LNX.4.33.0107290123040.28722-200000@mail.idoox.com>
+MIME-Version: 1.0
+Content-Type: MULTIPART/MIXED; BOUNDARY="657920-1508504865-996364421=:31245"
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+  Send mail to mime@docserver.cac.washington.edu for more info.
+
+--657920-1508504865-996364421=:31245
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+
+Hi, I have this enhancement request:
+
+I use different desktops for different tasks, e.g. desk 0 for
+mail and www, desk 1 for development.
+
+When I'm switching among the desktops, I usually want to go to a
+different page as well (I have 3x4 pages), like I'm on the page 1
+0 on desk 1 and I'd like to go directly to 0 0 on desk 0 because
+that's where I was last time.
+
+Imagine I have a terminal with a long compilation on desk 1, page
+1 0 (quite a common situation ) and I want to be there
+automagically when the compilation ends and it beeps and I press
+the button that gets me to desk 1. And all that regardless of
+where I was on the other desktop, reading fvwm news while the
+compilation was in progress. 8-)
+
+Maybe the attached diff of my quick-and-dirty solution will help
+if my previous text is not clear enough.
+
+(I'm not on the list so please cc your replies to me.)
+
+                            Jacek Kopecky
+
+                            Idoox
+                            http://www.idoox.com/
+
+
+
+
+
+--657920-1508504865-996364421=:31245
+Content-Type: TEXT/PLAIN; charset=US-ASCII; name="fvwm.diff"
+Content-Transfer-Encoding: BASE64
+Content-ID: <Pine.LNX.4.33.0107290153410.31245@mail.idoox.com>
+Content-Description: 
+Content-Disposition: attachment; filename="fvwm.diff"
+
+ZGlmZiAtcnViQiBmdndtLTIuNC4wLm9yaWcvZnZ3bS92aXJ0dWFsLmMgZnZ3
+bS0yLjQuMC9mdndtL3ZpcnR1YWwuYw0KLS0tIGZ2d20tMi40LjAub3JpZy9m
+dndtL3ZpcnR1YWwuYwlUdWUgSnVuICA1IDExOjQyOjAzIDIwMDENCisrKyBm
+dndtLTIuNC4wL2Z2d20vdmlydHVhbC5jCVN1biBKdWwgMjkgMDE6MTk6NTUg
+MjAwMQ0KQEAgLTYxLDYgKzYxLDggQEANCiBzdGF0aWMgdW5zaWduZWQgaW50
+IHByZXZfcGFnZV94ID0gMDsNCiBzdGF0aWMgdW5zaWduZWQgaW50IHByZXZf
+cGFnZV95ID0gMDsNCiBzdGF0aWMgaW50IHByZXZfZGVzayA9IDA7DQorc3Rh
+dGljIGludCBwZXJfZGVza194WzEwXTsNCitzdGF0aWMgaW50IHBlcl9kZXNr
+X3lbMTBdOw0KIA0KIC8qKioqKioqKioqKioqKioqKioqKioqKioqKioqKioq
+KioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKg0K
+ICAqDQpAQCAtMTA4Nyw3ICsxMDg5LDcgQEANCiAgKiAgIC0gbWFwcyBmcm9t
+IHRoZSB0b3Agb2YgdGhlIHN0YWNrIGRvd24NCiAgKg0KICAqKioqKioqKioq
+KioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioq
+KioqKioqKioqKioqKioqKiovDQotc3RhdGljIHZvaWQgTWFwRGVzayhpbnQg
+ZGVzaywgQm9vbCBncmFiKQ0KK3N0YXRpYyB2b2lkIE1hcERlc2soaW50IGRl
+c2ssIGludCBuZXd4LCBpbnQgbmV3eSwgQm9vbCBncmFiKQ0KIHsNCiAgIEZ2
+d21XaW5kb3cgKnQ7DQogICBGdndtV2luZG93ICpGb2N1c1dpbiA9IE5VTEw7
+DQpAQCAtMTEyMCw2ICsxMTIyLDEwIEBADQogICAgICAgfQ0KICAgICB9DQog
+ICB9DQorICBpZiAobmV3eCA+PSAwKSANCisgIHsNCisgICAgTW92ZVZpZXdw
+b3J0KG5ld3gsIG5ld3ksIEZhbHNlKTsNCisgIH0NCiAgIGlmIChncmFiKQ0K
+ICAgew0KICAgICBNeVhVbmdyYWJTZXJ2ZXIoZHB5KTsNCkBAIC0xMTg4LDkg
+KzExOTQsMTEgQEANCiAgIGlmIChTY3IuQ3VycmVudERlc2sgIT0gZGVzaykN
+CiAgIHsNCiAgICAgcHJldl9kZXNrID0gU2NyLkN1cnJlbnREZXNrOw0KKyAg
+ICBwZXJfZGVza194W3ByZXZfZGVza10gPSBTY3IuVng7DQorICAgIHBlcl9k
+ZXNrX3lbcHJldl9kZXNrXSA9IFNjci5WeTsNCiAgICAgVW5tYXBEZXNrKFNj
+ci5DdXJyZW50RGVzaywgVHJ1ZSk7DQogICAgIFNjci5DdXJyZW50RGVzayA9
+IGRlc2s7DQotICAgIE1hcERlc2soZGVzaywgVHJ1ZSk7DQorICAgIE1hcERl
+c2soZGVzaywgcGVyX2Rlc2tfeFtkZXNrXSwgcGVyX2Rlc2tfeVtkZXNrXSwg
+VHJ1ZSk7DQogICAgIEJyb2FkY2FzdFBhY2tldChNX05FV19ERVNLLCAxLCBT
+Y3IuQ3VycmVudERlc2spOw0KICAgICAvKiBGSVhNRTogZG9taXZvZ3QgKDIy
+LUFwci0yMDAwKTogRmFrZSBhICdyZXN0YWNrJyBmb3Igc3RpY2t5IHdpbmRv
+dw0KICAgICAgKiB1cG9uIGRlc2sgY2hhbmdlLiAgVGhpcyBpcyBhIHdvcmth
+cm91bmQgZm9yIGEgcHJvYmxlbSBpbiBGdndtUGFnZXI6DQpAQCAtMTI0Myw3
+ICsxMjUxLDcgQEANCiAgIHsNCiAgICAgcHJldl9kZXNrID0gU2NyLkN1cnJl
+bnREZXNrOw0KICAgICBTY3IuQ3VycmVudERlc2sgPSB2YWxbMF07DQotICAg
+IE1hcERlc2sodmFsWzBdLCBUcnVlKTsNCisgICAgTWFwRGVzayh2YWxbMF0s
+IC0xLCAtMSwgVHJ1ZSk7DQogICAgIEJyb2FkY2FzdFBhY2tldChNX05FV19E
+RVNLLCAxLCBTY3IuQ3VycmVudERlc2spOw0KICAgICAvKiBGSVhNRTogZG9t
+aXZvZ3QgKDIyLUFwci0yMDAwKTogRmFrZSBhICdyZXN0YWNrJyBmb3Igc3Rp
+Y2t5IHdpbmRvdw0KICAgICAgKiB1cG9uIGRlc2sgY2hhbmdlLiAgVGhpcyBp
+cyBhIHdvcmthcm91bmQgZm9yIGEgcHJvYmxlbSBpbiBGdndtUGFnZXI6DQpP
+bmx5IGluIGZ2d20tMi40LjAvZnZ3bTogdmlydHVhbC5jLmJhaw0K
+--657920-1508504865-996364421=:31245--
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Sat Jul 28 18:59:11 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sat, 28 Jul 2001 18:59:11 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id SAA06209
+	for <fvwm@hpc.uh.edu>; Sat, 28 Jul 2001 18:59:01 -0500 (CDT)
+Received: from dnsmx1pya.telcordia.com (dnsmx1pya.telcordia.com [128.96.20.31])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id SAA14563
+	for <fvwm@fvwm.org>; Sat, 28 Jul 2001 18:59:27 -0500 (CDT)
+Received: from castle.mk.telcordia.com (castle.mk.telcordia.com [128.96.133.172])
+	by dnsmx1pya.telcordia.com (8.9.3/8.9.3) with ESMTP id TAA05607;
+	Sat, 28 Jul 2001 19:53:21 -0400 (EDT)
+Received: from mk.telcordia.com (fork [128.96.128.32])
+	by castle.mk.telcordia.com (8.8.8/8.8.8) with ESMTP id TAA18482;
+	Sat, 28 Jul 2001 19:53:21 -0400 (EDT)
+Message-Id: <200107282353.TAA18482@castle.mk.telcordia.com>
+To: scotthenderson@crosswinds.net
+cc: fvwm@fvwm.org
+Subject: Re: FVWM: Would like to get help on fvwm 
+In-reply-to: Your message of Sat, 28 Jul 2001 16:04:52 -0700.
+             <3b634648.58dc.0@crosswinds.net> 
+x-face: H2G63xNIQ1G~92=">,W';}5I'2EN+pvbeFK2U`LLazP;W3/AU'795C^6M1;wX3''q-~||]i
+ =q\|l:fMk^4zF@^JHkw75M~[d)NKA},lfIOD=B'QWUuv_7Pu+j*']@]x]y'(Eyh}IAEhQDV@tJ?\E"
+ <=..HSTdYCt'DevYza*qnf_0?9qelUgqeJkJA'7Zr<-NU
+Mime-Version: 1.0 (generated by tm-edit 7.108)
+Content-Type: text/plain; charset=US-ASCII
+Date: Sat, 28 Jul 2001 19:53:21 -0400
+From: Dan Espen <dane@mk.telcordia.com>
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+"Scott Henderson" <scotthenderson@crosswinds.net> writes:
+> Can you please tell me what address I could mail to or web site I could go to
+> to get help with a problem I'm having installing fvwm?  Thanks much!!!!
+
+You've found it.
+
+Reply to fvwm@fvwm.org with a description of the problem,
+the fvwm version, error messages, etc.
+
+-- 
+Dan Espen
+444 Hoes Lane  Room RRC 1C-214           E-mail: dane@mk.telcordia.com
+Piscataway, NJ 08854                     Phone: (732) 699-5570
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Sat Jul 28 19:09:17 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sat, 28 Jul 2001 19:09:17 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id TAA06395
+	for <fvwm@hpc.uh.edu>; Sat, 28 Jul 2001 19:09:07 -0500 (CDT)
+Received: from mail.gmx.net (sproxy.gmx.de [194.221.183.20])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with SMTP id TAA14730
+	for <fvwm@fvwm.org>; Sat, 28 Jul 2001 19:09:33 -0500 (CDT)
+Received: (qmail 27412 invoked by uid 0); 29 Jul 2001 00:09:01 -0000
+Received: from wldb-3e362d62.pool.mediaways.net (HELO DarkSun.local) (62.54.45.98)
+  by mail.gmx.net (mp002-rz3) with SMTP; 29 Jul 2001 00:09:01 -0000
+Received: (from luthien@localhost)
+	by DarkSun.local (8.11.3/8.11.3/SuSE Linux 8.11.1-0.5) id f6T02lF11548;
+	Sun, 29 Jul 2001 02:02:47 +0200
+X-Authentication-Warning: DarkSun.local: luthien set sender to dominik.vogt@gmx.de using -f
+Date: Sun, 29 Jul 2001 02:02:47 +0200
+From: Dominik Vogt <dominik.vogt@gmx.de>
+To: Scott Henderson <scotthenderson@crosswinds.net>, fvwm <fvwm@fvwm.org>
+Subject: Re: FVWM: Would like to get help on fvwm
+Message-ID: <20010729020247.A11263@gmx.de>
+Reply-To: dominik.vogt@gmx.de
+Mail-Followup-To: Scott Henderson <scotthenderson@crosswinds.net>,
+	fvwm <fvwm@fvwm.org>
+References: <3b634648.58dc.0@crosswinds.net>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+X-Mailer: Mutt 0.95.6i
+In-Reply-To: <3b634648.58dc.0@crosswinds.net>; from Scott Henderson on Sat, Jul 28, 2001 at 04:04:52PM -0700
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+On Sat, Jul 28, 2001 at 04:04:52PM -0700, Scott Henderson wrote:
+> Can you please tell me what address I could mail to or web site I could go to
+> to get help with a problem I'm having installing fvwm?  Thanks much!!!!
+
+Ask away, you are at the right place.  Our homepage:
+
+  http://fvwm.org
+
+Our mailing list for user questions etc.
+
+  fvwm@fvwm.org
+
+And for discussions about development, bugs, ...
+
+  fvwm-workers@fvwm.org
+
+Bye
+
+Dominik ^_^  ^_^
+
+ --
+Dominik Vogt, dominik.vogt@gmx.de
+Reply-To: dominik.vogt@gmx.de
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Sun Jul 29 07:38:42 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sun, 29 Jul 2001 07:38:42 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id HAA09374
+	for <fvwm@hpc.uh.edu>; Sun, 29 Jul 2001 07:38:32 -0500 (CDT)
+Received: from mail.idoox.com (gatekeeper-s.gts.cz [194.213.203.154])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with SMTP id HAA21952
+	for <fvwm@fvwm.org>; Sun, 29 Jul 2001 07:38:52 -0500 (CDT)
+Received: (qmail 20317 invoked by uid 620); 29 Jul 2001 12:38:51 -0000
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 29 Jul 2001 12:38:51 -0000
+Date: Sun, 29 Jul 2001 14:38:51 +0200 (CEST)
+From: Jacek Kopecky <jacek@idoox.com>
+To: <fvwm@fvwm.org>
+Subject: FVWM: GotoDesk could remember previous position on the desk?
+Message-ID: <Pine.LNX.4.33.0107291436350.19034-200000@mail.idoox.com>
+MIME-Version: 1.0
+Content-Type: MULTIPART/Mixed; BOUNDARY="657920-1508504865-996364421=:31245"
+Content-ID: <Pine.LNX.4.33.0107291436351.19034@mail.idoox.com>
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+  Send mail to mime@docserver.cac.washington.edu for more info.
+
+--657920-1508504865-996364421=:31245
+Content-Type: TEXT/PLAIN; CHARSET=US-ASCII
+Content-ID: <Pine.LNX.4.33.0107291436352.19034@mail.idoox.com>
+
+(I apologize I forgot to specify the subject last time, so I'm
+resending it properly now. If you read my mail with no subject,
+you need not read this one.)
+
+Hi, I have this enhancement request:
+
+I use different desktops for different tasks, e.g. desk 0 for
+mail and www, desk 1 for development.
+
+When I'm switching among the desktops, I usually want to go to a
+different page as well (I have 3x4 pages), like I'm on the page 1
+0 on desk 1 and I'd like to go directly to 0 0 on desk 0 because
+that's where I was last time.
+
+Imagine I have a terminal with a long compilation on desk 1, page
+1 0 (quite a common situation ) and I want to be there
+automagically when the compilation ends and it beeps and I press
+the button that gets me to desk 1. And all that regardless of
+where I was on the other desktop, reading fvwm news while the
+compilation was in progress. 8-)
+
+Maybe the attached diff of my quick-and-dirty solution will help
+if my previous text is not clear enough.
+
+(I'm not on the list so please cc your replies to me.)
+
+                            Jacek Kopecky
+
+                            Idoox
+                            http://www.idoox.com/
+
+
+
+
+
+--657920-1508504865-996364421=:31245
+Content-Type: TEXT/PLAIN; CHARSET=US-ASCII; NAME="fvwm.diff"
+Content-Transfer-Encoding: BASE64
+Content-ID: <Pine.LNX.4.33.0107290153410.31245@mail.idoox.com>
+Content-Description: 
+Content-Disposition: ATTACHMENT; FILENAME="fvwm.diff"
+
+ZGlmZiAtcnViQiBmdndtLTIuNC4wLm9yaWcvZnZ3bS92aXJ0dWFsLmMgZnZ3
+bS0yLjQuMC9mdndtL3ZpcnR1YWwuYw0KLS0tIGZ2d20tMi40LjAub3JpZy9m
+dndtL3ZpcnR1YWwuYwlUdWUgSnVuICA1IDExOjQyOjAzIDIwMDENCisrKyBm
+dndtLTIuNC4wL2Z2d20vdmlydHVhbC5jCVN1biBKdWwgMjkgMDE6MTk6NTUg
+MjAwMQ0KQEAgLTYxLDYgKzYxLDggQEANCiBzdGF0aWMgdW5zaWduZWQgaW50
+IHByZXZfcGFnZV94ID0gMDsNCiBzdGF0aWMgdW5zaWduZWQgaW50IHByZXZf
+cGFnZV95ID0gMDsNCiBzdGF0aWMgaW50IHByZXZfZGVzayA9IDA7DQorc3Rh
+dGljIGludCBwZXJfZGVza194WzEwXTsNCitzdGF0aWMgaW50IHBlcl9kZXNr
+X3lbMTBdOw0KIA0KIC8qKioqKioqKioqKioqKioqKioqKioqKioqKioqKioq
+KioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKg0K
+ICAqDQpAQCAtMTA4Nyw3ICsxMDg5LDcgQEANCiAgKiAgIC0gbWFwcyBmcm9t
+IHRoZSB0b3Agb2YgdGhlIHN0YWNrIGRvd24NCiAgKg0KICAqKioqKioqKioq
+KioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioq
+KioqKioqKioqKioqKioqKiovDQotc3RhdGljIHZvaWQgTWFwRGVzayhpbnQg
+ZGVzaywgQm9vbCBncmFiKQ0KK3N0YXRpYyB2b2lkIE1hcERlc2soaW50IGRl
+c2ssIGludCBuZXd4LCBpbnQgbmV3eSwgQm9vbCBncmFiKQ0KIHsNCiAgIEZ2
+d21XaW5kb3cgKnQ7DQogICBGdndtV2luZG93ICpGb2N1c1dpbiA9IE5VTEw7
+DQpAQCAtMTEyMCw2ICsxMTIyLDEwIEBADQogICAgICAgfQ0KICAgICB9DQog
+ICB9DQorICBpZiAobmV3eCA+PSAwKSANCisgIHsNCisgICAgTW92ZVZpZXdw
+b3J0KG5ld3gsIG5ld3ksIEZhbHNlKTsNCisgIH0NCiAgIGlmIChncmFiKQ0K
+ICAgew0KICAgICBNeVhVbmdyYWJTZXJ2ZXIoZHB5KTsNCkBAIC0xMTg4LDkg
+KzExOTQsMTEgQEANCiAgIGlmIChTY3IuQ3VycmVudERlc2sgIT0gZGVzaykN
+CiAgIHsNCiAgICAgcHJldl9kZXNrID0gU2NyLkN1cnJlbnREZXNrOw0KKyAg
+ICBwZXJfZGVza194W3ByZXZfZGVza10gPSBTY3IuVng7DQorICAgIHBlcl9k
+ZXNrX3lbcHJldl9kZXNrXSA9IFNjci5WeTsNCiAgICAgVW5tYXBEZXNrKFNj
+ci5DdXJyZW50RGVzaywgVHJ1ZSk7DQogICAgIFNjci5DdXJyZW50RGVzayA9
+IGRlc2s7DQotICAgIE1hcERlc2soZGVzaywgVHJ1ZSk7DQorICAgIE1hcERl
+c2soZGVzaywgcGVyX2Rlc2tfeFtkZXNrXSwgcGVyX2Rlc2tfeVtkZXNrXSwg
+VHJ1ZSk7DQogICAgIEJyb2FkY2FzdFBhY2tldChNX05FV19ERVNLLCAxLCBT
+Y3IuQ3VycmVudERlc2spOw0KICAgICAvKiBGSVhNRTogZG9taXZvZ3QgKDIy
+LUFwci0yMDAwKTogRmFrZSBhICdyZXN0YWNrJyBmb3Igc3RpY2t5IHdpbmRv
+dw0KICAgICAgKiB1cG9uIGRlc2sgY2hhbmdlLiAgVGhpcyBpcyBhIHdvcmth
+cm91bmQgZm9yIGEgcHJvYmxlbSBpbiBGdndtUGFnZXI6DQpAQCAtMTI0Myw3
+ICsxMjUxLDcgQEANCiAgIHsNCiAgICAgcHJldl9kZXNrID0gU2NyLkN1cnJl
+bnREZXNrOw0KICAgICBTY3IuQ3VycmVudERlc2sgPSB2YWxbMF07DQotICAg
+IE1hcERlc2sodmFsWzBdLCBUcnVlKTsNCisgICAgTWFwRGVzayh2YWxbMF0s
+IC0xLCAtMSwgVHJ1ZSk7DQogICAgIEJyb2FkY2FzdFBhY2tldChNX05FV19E
+RVNLLCAxLCBTY3IuQ3VycmVudERlc2spOw0KICAgICAvKiBGSVhNRTogZG9t
+aXZvZ3QgKDIyLUFwci0yMDAwKTogRmFrZSBhICdyZXN0YWNrJyBmb3Igc3Rp
+Y2t5IHdpbmRvdw0KICAgICAgKiB1cG9uIGRlc2sgY2hhbmdlLiAgVGhpcyBp
+cyBhIHdvcmthcm91bmQgZm9yIGEgcHJvYmxlbSBpbiBGdndtUGFnZXI6DQpP
+bmx5IGluIGZ2d20tMi40LjAvZnZ3bTogdmlydHVhbC5jLmJhaw0K
+--657920-1508504865-996364421=:31245--
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Sun Jul 29 09:37:28 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sun, 29 Jul 2001 09:37:28 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id JAA10270
+	for <fvwm@hpc.uh.edu>; Sun, 29 Jul 2001 09:37:20 -0500 (CDT)
+Received: from mail.idoox.com (gatekeeper-s.gts.cz [194.213.203.154])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with SMTP id JAA23547
+	for <fvwm@fvwm.org>; Sun, 29 Jul 2001 09:37:45 -0500 (CDT)
+Received: (qmail 23267 invoked by uid 620); 29 Jul 2001 14:37:40 -0000
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 29 Jul 2001 14:37:40 -0000
+Date: Sun, 29 Jul 2001 16:37:40 +0200 (CEST)
+From: Jacek Kopecky <jacek@idoox.com>
+To: <fvwm@fvwm.org>
+Subject: FVWM: FAQ question 0.1
+Message-ID: <Pine.LNX.4.33.0107291632410.19034-100000@mail.idoox.com>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Hi, I just read the FAQ for my favourite 8-) virtual window
+manager and it seems the big question 0.1 is actually answered by
+the answer to 5.5. Maybe the answer to 5.5 should be moved to the
+answer to 0.1.
+
+Anyway, just a suggestion... 8-)
+
+
+                            Jacek Kopecky
+
+                            Idoox
+                            http://www.idoox.com/
+
+
+
+
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Sun Jul 29 16:52:32 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sun, 29 Jul 2001 16:52:32 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id QAA14170
+	for <fvwm@hpc.uh.edu>; Sun, 29 Jul 2001 16:52:24 -0500 (CDT)
+Received: from web14610.mail.yahoo.com (web14610.mail.yahoo.com [216.136.224.242])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with SMTP id QAA28601
+	for <fvwm@fvwm.org>; Sun, 29 Jul 2001 16:52:49 -0500 (CDT)
+Message-ID: <20010729215248.58894.qmail@web14610.mail.yahoo.com>
+Received: from [62.188.154.126] by web14610.mail.yahoo.com; Sun, 29 Jul 2001 22:52:48 BST
+Date: Sun, 29 Jul 2001 22:52:48 +0100 (BST)
+From: =?iso-8859-1?q?Thomas=20Adam?= <thomas_adam16@yahoo.com>
+Subject: FVWM: size of maximised windows
+To: fvwm@fvwm.org
+Cc: geoffbright1@ukgateway.net
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8bit
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Dear List,
+
+This question is probably a simple one, but I have
+been puzzling over it for days. 
+
+Is it possible to tell FVWM that when a window is
+maximsied, that it places the window at the top left
+hand corner of the screen, and that the bottom line of
+the window appears "x" distance from the bottom of the
+screen, and that the remaining two sides of the
+window, fill out to touch the sides of the screen.
+Does this make sense???
+
+Thankyou for your help,
+Regards,
+
+Thomas Adam
+
+=====
+Thomas Adam
+Linux Co-ordinator for The Purbeck School
+
+e-mail (school): n6tadam@users.purbeck.dorset.sch.uk
+e-mail (yahoo) : thomas_adam16@yahoo.com
+
+____________________________________________________________
+Do You Yahoo!?
+Get your free @yahoo.co.uk address at http://mail.yahoo.co.uk
+or your free @yahoo.ie address at http://mail.yahoo.ie
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Mon Jul 30 05:59:07 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 30 Jul 2001 05:59:07 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id FAA18774
+	for <fvwm@hpc.uh.edu>; Mon, 30 Jul 2001 05:58:59 -0500 (CDT)
+Received: from mail.idoox.com (gatekeeper-s.gts.cz [194.213.203.154])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with SMTP id FAA07363
+	for <fvwm@fvwm.org>; Mon, 30 Jul 2001 05:57:27 -0500 (CDT)
+Received: (qmail 24987 invoked by uid 620); 30 Jul 2001 10:57:05 -0000
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 30 Jul 2001 10:57:05 -0000
+Date: Mon, 30 Jul 2001 12:57:05 +0200 (CEST)
+From: Jacek Kopecky <jacek@idoox.com>
+To: <fvwm@fvwm.org>
+Subject: FVWM: Re: FAQ question 0.1
+In-Reply-To: <Pine.LNX.4.33.0107291632410.19034-100000@mail.idoox.com>
+Message-ID: <Pine.LNX.4.33.0107301256010.24099-100000@mail.idoox.com>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Oh, sorry, now I see it's already mentioned in the text.
+I apologize for bothering you. Twice. 8-)
+
+                            Jacek Kopecky
+
+                            Idoox
+                            http://www.idoox.com/
+
+
+
+
+On Sun, 29 Jul 2001, Jacek Kopecky wrote:
+
+ > Hi, I just read the FAQ for my favourite 8-) virtual window
+ > manager and it seems the big question 0.1 is actually answered by
+ > the answer to 5.5. Maybe the answer to 5.5 should be moved to the
+ > answer to 0.1.
+ >
+ > Anyway, just a suggestion... 8-)
+ >
+ >
+ >                             Jacek Kopecky
+ >
+ >                             Idoox
+ >                             http://www.idoox.com/
+ >
+ >
+ >
+ >
+ >
+
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Mon Jul 30 06:45:38 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 30 Jul 2001 06:45:38 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id GAA19557
+	for <fvwm@hpc.uh.edu>; Mon, 30 Jul 2001 06:45:29 -0500 (CDT)
+Received: from otaku.freeshell.org (root@t3-d-static-238.adsl.directlink.net [63.68.131.238])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id GAA08128
+	for <fvwm@fvwm.org>; Mon, 30 Jul 2001 06:45:54 -0500 (CDT)
+Received: (from migo@localhost)
+	by otaku.freeshell.org (8.11.4/8.11.0) id f6UBf5T01548;
+	Mon, 30 Jul 2001 11:41:05 GMT
+Date: Mon, 30 Jul 2001 11:41:05 +0000
+From: Mikhael Goikhman <migo@homemail.com>
+To: Thomas Adam <thomas_adam16@yahoo.com>
+Cc: FVWM <fvwm@fvwm.org>
+Subject: Re: FVWM: size of maximised windows
+Message-ID: <20010730114104.A32342@homemail.com>
+Mail-Followup-To: Mikhael Goikhman <migo@homemail.com>,
+	Thomas Adam <thomas_adam16@yahoo.com>, FVWM <fvwm@fvwm.org>
+References: <20010729215248.58894.qmail@web14610.mail.yahoo.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.2.4i
+In-Reply-To: <20010729215248.58894.qmail@web14610.mail.yahoo.com>; from thomas_adam16@yahoo.com on Sun, Jul 29, 2001 at 10:52:48PM +0100
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+On 29 Jul 2001 22:52:48 +0100, Thomas Adam wrote:
+> 
+> This question is probably a simple one, but I have
+> been puzzling over it for days. 
+> 
+> Is it possible to tell FVWM that when a window is
+> maximsied, that it places the window at the top left
+> hand corner of the screen, and that the bottom line of
+> the window appears "x" distance from the bottom of the
+> screen, and that the remaining two sides of the
+> window, fill out to touch the sides of the screen.
+> Does this make sense???
+
+In your case, you may have this function MyMaximize:
+
+  DestroyFunc MyMaximize
+  AddToFunc   MyMaximize
+  + I Maximize 100 -48p $0        # x = 48
+
+Use MyMaximize instead of Maximize, it gets one optional argument
+"True"/"On", "False"/"Off" or "Toggle" (the default is "Toggle").
+
+In the fvwm-ewmh patch, which will be integrated to fvwm sometimes soon,
+there are other commands to change the behaviour of the Maximize command.
+
+Regards,
+Mikhael.
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Mon Jul 30 15:57:17 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 30 Jul 2001 15:57:17 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id PAA26425
+	for <fvwm@hpc.uh.edu>; Mon, 30 Jul 2001 15:57:08 -0500 (CDT)
+Received: from Tempo.Update.UU.SE (root@Tempo.Update.UU.SE [130.238.19.17])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id PAA20800
+	for <fvwm@fvwm.org>; Mon, 30 Jul 2001 15:57:33 -0500 (CDT)
+Received: from localhost (ml@localhost)
+	by Tempo.Update.UU.SE (8.11.2/8.11.2/Update-Iltempogigante) with ESMTP id f6UKvV305318
+	for <fvwm@fvwm.org>; Mon, 30 Jul 2001 22:57:31 +0200
+Date: Mon, 30 Jul 2001 22:57:31 +0200 (CEST)
+From: Marcus Lundblad <ml@update.uu.se>
+To: fvwm@fvwm.org
+Subject: FVWM: Opaque resize?
+Message-ID: <Pine.LNX.4.21.0107302256190.5303-100000@Tempo.Update.UU.SE>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Hi!
+
+Why did OpageResize got obsoleted from 1.x to 2.x?
+I like this feature, but I don't want to run fvwm 1.
+
+//Marcus
+
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Mon Jul 30 16:12:00 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 30 Jul 2001 16:12:00 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id QAA26589
+	for <fvwm@hpc.uh.edu>; Mon, 30 Jul 2001 16:11:48 -0500 (CDT)
+Received: from sdf.lonestar.org (root@t3-d-static-237.adsl.directlink.net [63.68.131.237])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id QAA21188
+	for <fvwm@fvwm.org>; Mon, 30 Jul 2001 16:12:13 -0500 (CDT)
+Received: (from migo@localhost)
+	by sdf.lonestar.org (8.11.4/8.11.0) id f6ULBJs08929;
+	Mon, 30 Jul 2001 21:11:19 GMT
+Date: Mon, 30 Jul 2001 21:11:19 +0000
+From: Mikhael Goikhman <migo@homemail.com>
+To: Marcus Lundblad <ml@update.uu.se>
+Cc: fvwm@fvwm.org
+Subject: Re: FVWM: Opaque resize?
+Message-ID: <20010730211119.A3700@homemail.com>
+Mail-Followup-To: Mikhael Goikhman <migo@homemail.com>,
+	Marcus Lundblad <ml@update.uu.se>, fvwm@fvwm.org
+References: <Pine.LNX.4.21.0107302256190.5303-100000@Tempo.Update.UU.SE>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.2.4i
+In-Reply-To: <Pine.LNX.4.21.0107302256190.5303-100000@Tempo.Update.UU.SE>; from ml@update.uu.se on Mon, Jul 30, 2001 at 10:57:31PM +0200
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+On 30 Jul 2001 22:57:31 +0200, Marcus Lundblad wrote:
+> 
+> Why did OpageResize got obsoleted from 1.x to 2.x?
+> I like this feature, but I don't want to run fvwm 1.
+
+Starting from 2.3.8 there is a style option called ResizeOpaque, use:
+
+  Style * ResizeOpaque
+
+Then the Resize command behaves as you expect.
+
+Regards,
+Mikhael.
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Mon Jul 30 16:15:19 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 30 Jul 2001 16:15:19 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id QAA26725
+	for <fvwm@hpc.uh.edu>; Mon, 30 Jul 2001 16:15:09 -0500 (CDT)
+Received: from dnsmx1pya.telcordia.com (dnsmx1pya.telcordia.com [128.96.20.31])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id QAA21335
+	for <fvwm@fvwm.org>; Mon, 30 Jul 2001 16:15:33 -0500 (CDT)
+Received: from castle.mk.telcordia.com (castle.mk.telcordia.com [128.96.133.172])
+	by dnsmx1pya.telcordia.com (8.9.3/8.9.3) with ESMTP id RAA19412;
+	Mon, 30 Jul 2001 17:10:08 -0400 (EDT)
+Received: from mk.telcordia.com (fork [128.96.128.32])
+	by castle.mk.telcordia.com (8.8.8/8.8.8) with ESMTP id RAA18990;
+	Mon, 30 Jul 2001 17:10:07 -0400 (EDT)
+Message-Id: <200107302110.RAA18990@castle.mk.telcordia.com>
+To: Marcus Lundblad <ml@update.uu.se>
+cc: fvwm@fvwm.org
+Subject: Re: FVWM: Opaque resize? 
+In-reply-to: Your message of Mon, 30 Jul 2001 22:57:31 +0200.
+             <Pine.LNX.4.21.0107302256190.5303-100000@Tempo.Update.UU.SE> 
+x-face: H2G63xNIQ1G~92=">,W';}5I'2EN+pvbeFK2U`LLazP;W3/AU'795C^6M1;wX3''q-~||]i
+ =q\|l:fMk^4zF@^JHkw75M~[d)NKA},lfIOD=B'QWUuv_7Pu+j*']@]x]y'(Eyh}IAEhQDV@tJ?\E"
+ <=..HSTdYCt'DevYza*qnf_0?9qelUgqeJkJA'7Zr<-NU
+Mime-Version: 1.0 (generated by tm-edit 7.108)
+Content-Type: text/plain; charset=US-ASCII
+Date: Mon, 30 Jul 2001 17:10:07 -0400
+From: Dan Espen <dane@mk.telcordia.com>
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Marcus Lundblad <ml@update.uu.se> writes:
+> Hi!
+> 
+> Why did OpaqeResize got obsoleted from 1.x to 2.x?
+> I like this feature, but I don't want to run fvwm 1.
+
+In 2.4.0:
+
+Style * ResizeOpaque
+
+Upgrade now!
+
+:)
+
+-- 
+Dan Espen
+444 Hoes Lane  Room RRC 1C-214           E-mail: dane@mk.telcordia.com
+Piscataway, NJ 08854                     Phone: (732) 699-5570
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+
+From owner-fvwm@hpc.uh.edu  Tue Jul 31 14:56:55 2001
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 31 Jul 2001 14:56:55 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id OAA09032
+	for <fvwm@hpc.uh.edu>; Tue, 31 Jul 2001 14:56:47 -0500 (CDT)
+Received: from sunspare.hccnet.nl (sunspare.hccnet.nl [62.251.0.30])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id OAA18954
+	for <fvwm@fvwm.org>; Tue, 31 Jul 2001 14:57:10 -0500 (CDT)
+Received: from uds82-51.dial.hccnet.nl by sunspare.hccnet.nl
+	via uds82-51.dial.hccnet.nl [62.251.51.82] with ESMTP for <fvwm@fvwm.org>
+	id VAA00724 (8.8.8/1.13); Tue, 31 Jul 2001 21:57:08 +0200 (MET DST)
+Date: Tue, 31 Jul 2001 21:55:58 +0200 (CEST)
+From: Sander Graswinckel <sandergr@hccnet.nl>
+X-X-Sender:  <sandergr@eigenheimer.mydomain.nl>
+To: <fvwm@fvwm.org>
+Subject: FVWM: Alt-tab window switching my way....
+Message-ID: <Pine.LNX.4.31.0107312143350.376-100000@eigenheimer.mydomain.nl>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Hi,
+
+I can't seem to get Alt-tab window cycling work the way I like it (fvwm
+version 2.4.0). "Next (CurrentDesk !Iconic) Focus" stops at the last
+window in the list, I want it to focus the first window in the list again.
+In addition I don't want it to change the winlist order (just keep the
+order in which the windows were created).
+
+Is this possible in fvwm?
+
+Thanks!
+
+Sander
+
+--
+Visit the official FVWM web page at <URL: http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-owner@fvwm.org.
+

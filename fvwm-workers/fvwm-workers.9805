@@ -1,0 +1,2623 @@
+From owner-fvwm-workers@hpc.uh.edu  Mon May  4 16:56:25 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 04 May 1998 16:56:25 -0500 (CDT)
+Received: from gaul.lattis.xara.net (gaul.lattis.xara.net [195.224.37.7]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id QAA10612 for <fvwm-workers@hpc.uh.edu>; Mon, 4 May 1998 16:56:10 -0500 (CDT)
+Received: by gaul.lattis.xara.net with ESMTP
+    from sfere.greenend.org.uk (sfere.greenend.org.uk [195.224.38.1])
+    id WAA29424 for <fvwm-workers@hpc.uh.edu> (2.4-8.8.8/3.1.23);
+    Mon, 4 May 1998 22:49:41 +0100 (BST)
+Received: from valour.greenend.org.uk (root@valour.greenend.org.uk [195.224.38.2])
+	by sfere.greenend.org.uk (8.8.8/8.8.8) with ESMTP id WAA30591
+	for <fvwm-workers@hpc.uh.edu>; Mon, 4 May 1998 22:26:32 +0100
+Received: by valour.greenend.org.uk
+	id m0yWSkp-000w4dC
+	(Debian Smail-3.2.0.101 1997-Dec-17 #2); Mon, 4 May 1998 22:26:31 +0100 (BST)
+Message-Id: <m0yWSkp-000w4dC@valour.greenend.org.uk>
+Date: Mon, 4 May 1998 22:26:31 +0100 (BST)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+From: Austin Donnelly <austin@greenend.org.uk>
+To: fvwm-workers@hpc.uh.edu
+Subject: bug fixes to FvwmWinList: PATCH
+X-Mailer: VM 6.42 under Emacs 19.34.1
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Do we have a current maintainer for FvwmWinList?
+
+I've cleaned up the handler for M_FOCUS_CHANGE, re-instating support
+for the
+
+*FvwmWinListFocusFore <color>
+*FvwmWinListFocusBack <color>
+
+options.  Currently, they don't work at all in 2.0.46.
+
+There were some useful old comments lying around.  From them, I
+believe that this code was replaced by some from the TaskBar -
+however, the TaskBar code doesn't quite handle focus changes correctly
+(according to the old code).
+
+The old (commented-out) code was also quite convoluted, but it was
+enough for me to get the idea of things, and re-implement the focus
+stuff properly.  That's lead to a (IMHO) cleaner handler for
+M_FOCUS_CHANGE. I think it's now clearer to read, understand and
+modify in future.
+
+While looking at the code, I also got the title centering stuff
+working again; I believe it broke when MiniIcon support went in.
+
+This means the *FvwmWinListLeftJustify option is now of use again,
+since FvwmWinList now defaults to centered titles (as it was always
+claimed in the manpage).  Note there's no matching
+*FvwmWinListCenterJustify option - so once you've picked LeftJustify,
+there's no way of overriding it.
+
+My fix to the centering stuff makes lines with a MiniIcon left
+justified, so the CenterJustify/LeftJustify stuff only actually
+affects lines that don't have an icon associated.  The reason I've not
+changed the behaviour for icon lines is that its not clear what people
+want in the case of icon lines with CenterJustify - should the icon
+stay flush left, or should it float with the title?
+
+Anyway, I've appended the patch below.  It includes an update to the
+manpage fixing one obvious cut-n-paste-o, and documents the
+LeftJustify option wrt MiniIcons.
+
+
+Austin
+------------------------------------------------------------
+--- ButtonArray.c-old	Mon May  4 21:03:32 1998
++++ ButtonArray.c	Mon May  4 21:27:44 1998
+@@ -318,6 +318,7 @@
+ 
+   newx = 2;
+ 
++  /* buttons with MiniIcons are always LeftJustify'ed */
+   if ((button->p.picture != 0)/* &&
+       (w + button->p.width + w3p + 3 > MIN_BUTTON_SIZE)*/) {
+ 
+@@ -334,19 +335,18 @@
+     XChangeGC(dpy, hilite[set], gcm, &gcv);
+ 
+     newx += button->p.width+4;
+-    }
+-	else
+-	{
+-		newx = 4;
+-	}
++  }
++  else
++  {
++    /* no MiniIcon, so left justify or center the text as required */
++    if (LeftJustify)
++      newx = 4;
++    else
++      newx = max((w-button->tw)/2, 4);
++  }
+ 
+   string=button->title;
+-  if (LeftJustify) {
+-/* newx set by pixmap    newx=4;
+-*/
+-  } else {
+-/* set by pixmap    newx=max((w-button->tw)/2,4);
+-*/
++  if (!LeftJustify) {
+     if (TruncateLeft && (w-button->tw)/2 < 4) {
+       if (button->truncatewidth == w)
+ 	string=button->truncate_title;
+--- FvwmWinList.c-old	Mon May  4 21:19:46 1998
++++ FvwmWinList.c	Mon May  4 21:47:53 1998
+@@ -363,34 +363,33 @@
+         if (UpdateButtonSet(&buttons,i,(flags&ICONIFIED) ? 1 : 0)!=-1) redraw=1;
+       free(name);
+       break;
+-    case M_FOCUS_CHANGE:
+-
+-/* old coded, before Task bar code spliced in
+-
+-      i=FindItem(&windows,body[0]);
+-      if (i==current_focus) break;
+-      if (current_focus!=-1)
+-	if ((ItemFlags(&windows,ItemID(&windows,current_focus))&ICONIFIED)==0)
+-	  if (UpdateButtonSet(&buttons,current_focus,0)!=-1) redraw=1;
+-      current_focus=-1;
+-      if (i!=-1&&(ItemFlags(&windows,body[0])&ICONIFIED)) break;
+-      current_focus=i;
+-      if (current_focus!=-1)
+-	if (UpdateButtonSet(&buttons,current_focus,2)!=-1) redraw=1;
+-* end of old code */
+-
+-/* Code copied Straight from TaskBar */
+-
+-    if ((i=FindItem(&windows,body[0]))!=-1)
+-    {
+-	    flags=ItemFlags(&windows,body[0]);
+- 	    UpdateItemFlags(&windows,body[0],flags);
+-    }
+-    RadioButton(&buttons,i);
+-    redraw = 1;
+-    break;
+ 
++      /* note: we can get a M_FOCUS_CHANGE where
++       *   "i" == "current_focus"
++       * This seems to happen when (de)iconifing windows, eg xterm. */
++    case M_FOCUS_CHANGE:
++      i = FindItem(&windows,body[0]);
++      /* if we had a previous focus, de-colour it */
++      if (current_focus != -1)
++      {
++        if (ItemFlags(&windows,ItemID(&windows,current_focus))&ICONIFIED)
++	  UpdateButtonSet(&buttons,current_focus,1);
++	else
++	  UpdateButtonSet(&buttons,current_focus,0);
++      }
++      /* if we have a new focus, update the flags and colour in the button */
++      if (i!=-1)
++      {
++	flags=ItemFlags(&windows,body[0]);
++	UpdateItemFlags(&windows,body[0],flags);
++	UpdateButtonSet(&buttons,i,2);
++      }
++      /* note the new focus */
++      current_focus = i;
++      RadioButton(&buttons,i);
++      redraw = 1;
+       break;
++
+     case M_END_WINDOWLIST:
+       if (!WindowIsUp) MakeMeWindow();
+       redraw=1;
+--- FvwmWinList.man-old	Mon May  4 22:06:45 1998
++++ FvwmWinList.man	Mon May  4 22:10:16 1998
+@@ -73,7 +73,7 @@
+ are iconified. If omitted, the color from \fBFvwmWinListFore\fP
+ is used.
+ 
+-.IP "*FvwmWinListFocusBack \fIcolor\fP"
++.IP "*FvwmWinListIconBack \fIcolor\fP"
+ Specifies the color to use for the button for windows that
+ are iconified. If omitted, the color from \fBFvwmWinListBack\fP
+ is used.
+@@ -91,8 +91,10 @@
+ name.  This is useful to keep the width of the window small.
+ 
+ .IP "*FvwmWinListLeftJustify
+-By default, FvwmWinList will center the icon text in the icon.  This option
+-causes it to be justified flush with the left edge of the icon.
++By default, FvwmWinList will center the icon text in the icon.  This
++option causes it to be justified flush with the left edge of the icon.
++However, buttons that have mini icons associated with them are always
++drawn left justified.
+ 
+ .IP "*FvwmWinListMinWidth \fIwidth\fP"
+ .IP "*FvwmWinListMaxWidth \fIwidth\fP"
+------------------------------------------------------------
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Mon May 11 21:47:31 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 11 May 1998 21:47:31 -0500 (CDT)
+Received: from ztransform.velsoft.com (d1-0-11.rynex.dialup.ans.net [152.180.176.11]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id VAA27324 for <fvwm-workers@hpc.uh.edu>; Mon, 11 May 1998 21:47:19 -0500 (CDT)
+Received: from ztransform.velsoft.com (andrewtv@localhost [127.0.0.1])
+	by ztransform.velsoft.com (8.8.7/8.8.7) with ESMTP id WAA04142
+	for <fvwm-workers@hpc.uh.edu>; Mon, 11 May 1998 22:41:28 -0400
+Message-Id: <199805120241.WAA04142@ztransform.velsoft.com>
+To: fvwm-workers@hpc.uh.edu
+Subject: style flags
+Date: Mon, 11 May 1998 22:41:27 -0300
+From: Andrew Veliath <andrewtv@usa.net>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+A few weeks ago I rewrote the style flags to use bitfields for the
+core fvwm2 just to play around with it.  I'm just curious if there is
+any interest in this.  I was going to wait for 2.0.47 to re-port it to
+that, but I'm not sure how long that will be.
+
+I came up with the following flag manipulation mechanisms (I had the
+fvwm2 core up and running using these):
+
+Test flag:
+
+flag_isset(tmp_win->flags, title);
+
+Set flag:
+
+set_flag(tmp_win->flags, transient);
+
+Clear flag:
+
+clr_flag(tmp_win->flags, transient);
+
+With some binary ops:
+
+and_flags(ontmp, onFlags, fw->flags);
+eq_flags(oneq, ontmp, onFlags);
+
+The problem remains of sending the flags to the modules, one thing I
+was considering was to have it just append a sizeof then the actual
+byte data to the end of the message body.
+
+--
+
+        Andrew Veliath
+	andrewtv@usa.net, veliaa@rpi.edu
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Tue May 12 08:52:44 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 12 May 1998 08:52:44 -0500 (CDT)
+Received: from sol.bch.msu.edu (sol.bch.msu.edu [35.8.152.77]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id IAA04387; Tue, 12 May 1998 08:46:51 -0500 (CDT)
+Received: by sol.bch.msu.edu (SMI-8.6/SMI-SVR4)
+	id JAA17659; Tue, 12 May 1998 09:46:32 -0400
+Date: Tue, 12 May 1998 09:46:32 -0400
+From: raymermi@sol.bch.msu.edu (Michael L. Raymer)
+Message-Id: <199805121346.JAA17659@sol.bch.msu.edu>
+To: fvwm@hpc.uh.edu, fvwm-workers@hpc.uh.edu
+Subject: Anyone want my FvwmTaskBar improvements?
+X-Sun-Charset: US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+I have written a patch for FvwmTaskBar which allows the following behavior:
+  - Only windows on the current desk (including sticky windows)
+    show up in the taskbar
+  - When the desktop is switched, the taskbar updates to show only windows which
+    are associated with the new desk
+
+This allows the taskbar to be much less crowded, and I find this behavior to be
+more useful than having taskbar entries for every window known to FVWM.
+
+If there is any interest in this patch, I'd be happy to make the above behavior
+optional and then submit the patch to the public domain.  I have two questions:
+
+1) Is there any interest?
+2) Who would be the appropriate person to send such a submission to?  I checked
+   the source code, but none of the email addresses listed there exist anymore.
+   I also checked the FAQ, which said that the mailing lists were the current
+   forum for new code submissions.
+
+Thanks for any info,
+
+Michael L. Raymer
+Depts. of Computer Science and Biochemistry
+Michigan State University
+raymermi@cps.msu.edu
+
+p.s. - I'm not subscribed to the mailing lists, but I check the archive regularly,
+ for a faster response, email me directly.
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Tue May 12 12:35:17 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 12 May 1998 12:35:17 -0500 (CDT)
+Received: from smtp2.xs4all.nl (smtp2.xs4all.nl [194.109.6.52]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id MAA09698; Tue, 12 May 1998 12:35:02 -0500 (CDT)
+From: psto@xs4all.nl
+Received: from [194.109.128.229] (dc2-modem229.dial.xs4all.nl [194.109.128.229])
+	by smtp2.xs4all.nl (8.8.8/8.8.8) with ESMTP id TAA18460;
+	Tue, 12 May 1998 19:33:55 +0200 (CEST)
+Date: Tue, 12 May 1998 19:33:55 +0200 (CEST)
+X-Sender: psto@xs4all.nl (Unverified)
+Message-Id: <l03130306b17e50637706@[194.109.129.164]>
+Mime-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
+To: majordomo@hpc.uh.edu
+Subject: Symbolic Composer 4.0 CD ROM
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Symbolic Composer 4.0 CD ROM, a music language with 700 primitives for
+the Macintosh is now available for $299. The language includes historical,
+modern and mathematical methodologies. Also alternative tunings are
+well supported. Common Lisp interpreter included. VRML2 output as option.
+
+More information:
+http://www.xs4all.nl/~psto/
+
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Tue May 12 22:33:41 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 12 May 1998 22:33:41 -0500 (CDT)
+Received: from mcmuse (root@mcmuse.mc.maricopa.edu [140.198.66.28]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id WAA23981; Tue, 12 May 1998 22:33:33 -0500 (CDT)
+Received: from moramis by mcmuse with smtp (Exim 1.82 #2)
+	id 0yZSI2-0006lM-00; Tue, 12 May 1998 20:33:10 -0700
+Date: Tue, 12 May 1998 20:33:10 -0700 (MST)
+From: Nathan Clegg <moramis@mcmuse.mc.maricopa.edu>
+To: "Michael L. Raymer" <raymermi@sol.bch.msu.edu>
+cc: fvwm@hpc.uh.edu, fvwm-workers@hpc.uh.edu
+Subject: Re: FVWM: Anyone want my FvwmTaskBar improvements?
+In-Reply-To: <199805121346.JAA17659@sol.bch.msu.edu>
+Message-ID: <Pine.SUN.3.96.980512203223.25874B-100000@mcmuse.mc.maricopa.edu>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+> I have written a patch for FvwmTaskBar which allows the following behavior:
+>   - Only windows on the current desk (including sticky windows)
+>     show up in the taskbar
+
+I don't know about everybody else, but I think a far more useful property
+of a task bar would be one that only included iconized applications.  If
+they aren't iconized, they are easy to find.
+
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Wed May 13 08:55:28 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Wed, 13 May 1998 08:55:28 -0500 (CDT)
+Received: from sol.bch.msu.edu (sol.bch.msu.edu [35.8.152.77]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id IAA01274; Wed, 13 May 1998 08:52:22 -0500 (CDT)
+Received: from valen by sol.bch.msu.edu (SMI-8.6/SMI-SVR4)
+	id JAA25307; Wed, 13 May 1998 09:51:55 -0400
+Date: Wed, 13 May 1998 09:51:58 -0400 (EDT)
+From: "Michael L. Raymer" <raymermi@cps.msu.edu>
+X-Sender: raymermi@valen
+To: moramis@mcmuse.mc.maricopa.edu
+cc: fvwm@hpc.uh.edu, fvwm-workers@hpc.uh.edu
+Subject: Re: Anyone want my FvwmTaskBar improvements?
+Message-ID: <Pine.BSF.3.96.980513094651.217A-100000@valen>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+> I don't know about everybody else, but I think a far more useful
+> property of a task bar would be one that only included iconized
+> applications.  If they aren't iconized, they are easy to find. 
+
+That's a good idea.  Here's what I'll do -- I'll add an option
+like *FvwmTaskBarShowWindows which can be set to "All", "CurrentDesk",
+or "Iconized".  "All" will be just like the current FvwmTaskBar module,
+"CurrentDesk" will show only windows for the current desktop, and
+"Iconized" will show only iconized windows.
+
+When I'm done, I'll post the resulting module to this group.  Thanks for
+the input.
+
+-mike-
+
+Michael L. Raymer
+Depts. of Biochemistry and Computer Science
+Michigan State University
+raymermi@sol.bch.msu.edu
+
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Wed May 13 15:34:19 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Wed, 13 May 1998 15:34:19 -0500 (CDT)
+Received: from smtp-gw.BayNetworks.COM (ns1.BayNetworks.COM [134.177.3.20]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id PAA10354; Wed, 13 May 1998 15:20:36 -0500 (CDT)
+Received: from mailhost.BayNetworks.COM ([134.177.1.107])
+	by smtp-gw.BayNetworks.COM (8.8.8/8.8.8) with ESMTP id MAA10934;
+	Wed, 13 May 1998 12:11:09 -0700 (PDT)
+Received: from pobox.engeast.BayNetworks.COM (pobox.engeast.baynetworks.com [192.32.61.6])
+	by mailhost.BayNetworks.COM (8.8.8/8.8.8) with ESMTP id MAA14145;
+	Wed, 13 May 1998 12:11:08 -0700 (PDT)
+Received: from lemming.engeast (lemming [192.32.138.39])
+	by pobox.engeast.BayNetworks.COM (SMI-8.6/BNET-97/04/24-S) with SMTP
+	id PAA26221; Wed, 13 May 1998 15:13:50 -0400
+	for 
+Received: by lemming.engeast (4.1/SMI-4.1)
+	id AA16737; Wed, 13 May 98 15:13:27 EDT
+To: "Michael L. Raymer" <raymermi@cps.msu.edu>
+Cc: moramis@mcmuse.mc.maricopa.edu, fvwm@hpc.uh.edu, fvwm-workers@hpc.uh.edu
+Subject: Re: Anyone want my FvwmTaskBar improvements?
+References: <Pine.BSF.3.96.980513094651.217A-100000@valen>
+Reply-To: psmith@BayNetworks.COM
+From: psmith@BayNetworks.COM (Paul D. Smith)
+In-Reply-To: "Michael L. Raymer"'s message of Wed, 13 May 1998 09:51:58 -0400 (EDT)
+Date: 13 May 1998 15:13:26 -0400
+Message-Id: <p5d8dioug9.fsf@baynetworks.com>
+Lines: 86
+X-Mailer: Gnus v5.5/Emacs 20.2
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+If people are hacking on the taskbar/iconbar stuff, I'll resend my
+fervent wish for the "perfect taskbar feature"... and I don't even think
+it should be that hard, at least not the basic idea... but I'm not an X
+hacker.
+
+----------------------------------------
+From: "Paul D. Smith" <psmith@baynetworks.com>
+Reply-To: psmith@baynetworks.com
+To: Fvwm Workers List <fvwm-workers@hpc.uh.edu>
+Subject: Fvwm Icon Manager enhancement
+Date: Wed Jul 23 11:56:00 -0400 1997
+
+OK, I've been playing with various icon managers, from fvwm2's builtin
+iconbox and windowlist, to FvwmIconMan, to the task bar that fvwm95
+uses, to tkgoodstuff's windowlist tool.
+
+All of them are cool, but none do quite what I want.  I think what I
+want would be most excellent (just saw Bill & Ted's again on Fox last
+week :) so I'm asking if anyone can point me to something that can do
+it, or is interested in modifying their particular manager to do it.
+
+First, I have _tons_ of icons.  Most of them are of two basic types:
+Emacs frames and rxvt windows.  There are some others thrown in for good
+measure (ical, tkman, maybe a WWW browser, occasionally Frame, etc.)
+
+The rxvt windows are also of a few discrete flavors: for example, we use
+ClearCase at work and I have a specific ClearCase class of rxvt windows
+that are set to ClearCase views.
+
+I have so many icons they can't all be shown at once.  And I really hate
+scrollbars in an icon manager; too cumbersome.
+
+Here's what I'd like:
+
+  * An interface like the 95 button bar where you get a button per task,
+    then you click on it to raise/focus it, etc.
+
+  * BUT!  It should be possible to define a _set_ of windows that would
+    appear under one button.  Then I'd define one set for Emacs frames,
+    one for ClearCase view rxvt's, etc.  And I'd get just one button no
+    matter how many Emacs frames I had.  The set would be based on X
+    resource class/instance names, of course.
+
+    When you picked a button that represented multiple windows, you'd
+    get a popup listing each of the windows with its title (like the
+    fvwm2 builtin windowlist).  Then you'd pick the one you wanted from
+    that list.
+
+  * The button bar should have an option for hiding itself, like win95
+    and the new tkgoodstuff can, where it becomes a thin line against
+    the edge of the screeen when the mouse moves off of it, then
+    reappears when you move back over it.
+
+  * In an ideal world, you could also define actions for each set; the
+    actions would appear on the popup above the list of windows,
+    separated by a line.  The actions could of course be commands, fvwm
+    modules, or whatever.
+
+    Right now I have an FvwmForm configured to start ClearCase views; it
+    asks for a view name and invokes rxvt with a command to set to that
+    view.
+
+    So, for my rxvt ClearCase "set", I'd want my popup menu to be
+    something like:
+
+        .________________________.
+        | New View               |
+        `------------------------'
+        ' psmith_view1 @ lemming `
+        | psmith_view2 @ bronto  |
+        | psmith_view3 @ whaler  |
+        `------------------------'
+
+    Then when "new view" was picked, my FvwmForm module is kicked off.
+
+Anyway, you get the idea.
+
+I _dream_ about this interface now that I've imagined it.  Can someone
+help? :)
+
+-- 
+-------------------------------------------------------------------------------
+ Paul D. Smith <psmith@baynetworks.com>         Network Management Development
+ "Please remain calm...I may be mad, but I am a professional." --Mad Scientist
+-------------------------------------------------------------------------------
+     These are my opinions--Bay Networks takes no responsibility for them.
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Thu May 14 21:05:01 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Thu, 14 May 1998 21:05:01 -0500 (CDT)
+Received: from mail.cwo.com (mail.cwo.com [207.49.29.8]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id VAA10732; Thu, 14 May 1998 21:04:52 -0500 (CDT)
+Received: from willie (port-st84.cwo.com [209.63.55.94])
+	by mail.cwo.com (8.8.8/8.8.8) with SMTP id SAA15497;
+	Thu, 14 May 1998 18:16:01 -0700
+Message-Id: <3.0.3.32.19980514181454.006d3280@mail.cwo.com>
+X-Sender: vetring@mail.cwo.com
+X-Mailer: QUALCOMM Windows Eudora Pro Version 3.0.3 (32)
+Date: Thu, 14 May 1998 18:14:54 -0700
+To: "Web Master"vetring@vetring.com
+From: Veterans Ring of Honor <vetring@vetring.com>
+Subject: "Add Veterans Ring of Honor Link"
+Mime-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Please consider adding the "Veterans Ring of Honor Web Site" to your "Links
+Section" 
+
+http://www.vetring.com
+
+The Veterans Ring of Honor is the primary source of funding for the
+"Veterans Ring of Honor Foundation".
+
+Thank You... 
+
+
+Semper Fi!
+
+D. W. Zuk 0311
+RVN 66'~68
+68'Kke Sanh Tet Vet
+
+Possible Banner considerations: http://www.vetring.com/banner
+
+
+NOTE: THIS IS NOT A MAILING LIST, THERE WILL BE NO FURTHER CONTACT!
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Sat May 16 01:40:47 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sat, 16 May 1998 01:40:47 -0500 (CDT)
+Received: from pcnet1.pcnet.com (pcnet1.pcnet.com [204.213.232.3]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id BAA05397 for <fvwm-workers@hpc.uh.edu>; Sat, 16 May 1998 01:40:34 -0500 (CDT)
+Received: (from proteus@localhost)
+	by pcnet1.pcnet.com (8.8.7/PCNet) id CAA11849;
+	Sat, 16 May 1998 02:41:50 -0400 (EDT)
+Message-ID: <XFMail.980516023030.proteus@pcnet.com>
+X-Mailer: XFMail 1.2-beta-111797 [p0] on Linux
+X-Priority: 3 (Normal)
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+Date: Sat, 16 May 1998 02:30:30 -0400 (EDT)
+Reply-To: Bob Woodside <proteus@pcnet.com>
+Organization: Woodsway Consulting
+From: Bob Woodside <proteus@pcnet.com>
+To: The FVWM Workers List <fvwm-workers@hpc.uh.edu>
+To: The FVWM Workers List <fvwm-workers@hpc.uh.edu>,
+        Austin Donnelly <austin@greenend.org.uk>, Jan Vicherek <honza@ied.com>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+
+        I'd like to propose an alternative to Austin Donnelly's solution
+to the (more or less) reversed stacking order on Restart problem, which
+eliminates the added overhead.
+
+        I've uploaded the StackingOrder patch to incoming and notified
+Jason. It should appear in the unofficial_patches directory soon. It does
+three things.
+
+
+        First, it adds a second set of chain pointers to the FvwmWindow
+structure, which keeps track of the current stacking order. (Don't hit
+me, please. It's really not as bad as it sounds!) So now Fvwm can easily
+answer the question "who's on third?" at any time without doing a
+Vaudeville routine with the server.
+
+
+        Second, using this new-found knowledge, the Restart stacking
+order problem is solved by a one-line change of the Reborder loop control
+to something like
+
+  for (t = Scr.FvwmRoot.stack_prev; t != &Scr.FvwmRoot; t = t->stack_prev)
+
+
+        Third, it restructures the changeDesk and MoveViewport logic to
+perform a simultaneous bidirectional loop through the window list via the
+new stacking order chain. Windows that are moving off the visible screen
+are unmapped/moved from the bottom of the stacking order upwards, to
+minimize expose/redraw overhead. Windows that are moving onto the visible
+screen are mapped/moved from the top down, for the same reason.
+
+        A nice (I think) side effect of this, is that the visual dis-
+turbance is not only minimized, but somewhat equalized. Previously,
+moving off a page with a lot of overlapped windows was slow and entailed
+a lot of needless redrawing activity, whereas moving onto such a page
+was smooth and quick. This change evens out that inequity quite a bit.
+
+        The third part was suggested to me a few weeks ago by a post from
+Jan Vicherek, who mentioned that the flashing and the slowness of moving
+off a page containing a lot of overlapped windows could be very annoying.
+While I'm not going to try this with 30 - 90 windows on one page, I see
+a very noticeable improvement in speed and smoothness on my system with
+even a few overlapped windows. The added overhead of the dual loop seems
+to be more than offset by reduced demands on the server.
+
+        I would expect, on average, to see at least a marginal improvement
+in most page/desk transitions. Of course, if you *never* have any 
+overlapping  windows, you're not likely to notice any great improvement. 
+
+
+ 
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Mon May 18 05:42:21 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 18 May 1998 05:42:21 -0500 (CDT)
+Received: from aleph.net.uniovi.es (aleph.net.uniovi.es [156.35.11.1]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id FAA01825 for <fvwm-workers@hpc.uh.edu>; Mon, 18 May 1998 05:42:10 -0500 (CDT)
+Received: from pinon.ccu.uniovi.es by aleph.net.uniovi.es (PMDF V5.1-10 #4541)
+ with ESMTP id <01IX6GNIXOTE008JFB@aleph.net.uniovi.es> for
+ fvwm-workers@hpc.uh.edu; Mon, 18 May 1998 12:40:49 +0200 (MET)
+Received: (from mat006@localhost) by pinon.ccu.uniovi.es (8.8.8/8.7.3)
+ id MAA15721; Mon, 18 May 1998 12:41:49 +0200 (METDST)
+Date: Mon, 18 May 1998 12:41:48 +0200 (METDST)
+From: German Jose Gomez Garcia <mat006@pinon.ccu.uniovi.es>
+Subject: NEW GREAT PATCH FOR FVWM2!
+To: fvwm-workers list <fvwm-workers@hpc.uh.edu>
+Message-id: <Pine.HPP.3.91.980518124100.15552B-100000@pinon.ccu.uniovi.es>
+MIME-version: 1.0
+Content-type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+	Well, maybe you remember me, I am that nice guy who wrote the
+nextify patch for the marvellous fvwm2, I'm being out of it for a while,
+(mainly becasuse I finished my studies (physics) and started new ones
+(mathematics) so, sorry for the wait, but I'm on it again, and having
+seeing the problems fvwm2 is having to keep up to the new standards,
+and because I like it to much to just forget it, I started (today, hehe, 
+I code really fast :) a big change to several things in fvwm2 I think
+can be improved (mainly menu and decors), so the good news are that it 
+was easier that I thought it to be, the bad news are that I indented the
+whole code (sorry but I like it kr style :), so the patch is really
+great, I'v decided to pack the whole code, but I have no web server
+or ftp server to put it on.
+
+	I hope to finished the code before June (it's almost done, but
+I want to be sure it works in the rage conditions), so if any of you have
+some spare space in his big and incredible ftp server please drop me a
+mail (preferebly if you have a good conection to the net, no 28.8kbps
+please :) (I've already got an answer to this by Adam K. )
+
+	The look of my fvwm2 is really good now (I would say the best
+wm I've ever seen) and it is not too difficult to configure, so....
+
+PS: don't ask for screenshots, I will post some as soon as I could :)
+
+<>-------------------------------------+-----------------------------------<>
+   One O.S. to rule them all,          |  German Gomez Garcia
+      One O.S. to find them.           |  mat006@pinon.ccu.uniovi.es
+   One O.S. to bring them all          |
+      and in the darkness bind them.   |  "Wur Qanar Wur Stilor Wur Kas"
+<>-------------------------------------+-----------------------------------<>
+
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Mon May 18 08:30:19 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 18 May 1998 08:30:19 -0500 (CDT)
+Received: from aleph.net.uniovi.es (aleph.net.uniovi.es [156.35.11.1]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id IAA03557 for <fvwm-workers@hpc.uh.edu>; Mon, 18 May 1998 08:30:11 -0500 (CDT)
+Received: from pinon.ccu.uniovi.es by aleph.net.uniovi.es (PMDF V5.1-10 #4541)
+ with ESMTP id <01IX6MITBVLM008QYL@aleph.net.uniovi.es> for
+ fvwm-workers@hpc.uh.edu; Mon, 18 May 1998 15:28:49 +0200 (MET)
+Received: (from mat006@localhost) by pinon.ccu.uniovi.es (8.8.8/8.7.3)
+ id PAA20757; Mon, 18 May 1998 15:29:49 +0200 (METDST)
+Date: Mon, 18 May 1998 15:29:48 +0200 (METDST)
+From: German Jose Gomez Garcia <mat006@pinon.ccu.uniovi.es>
+Subject: Starting fvwm2 development
+To: fvwm-workers list <fvwm-workers@hpc.uh.edu>
+Message-id: <Pine.HPP.3.91.980518152242.20628A-100000@pinon.ccu.uniovi.es>
+MIME-version: 1.0
+Content-type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+	Well, after a long long time without having seen any improvements 
+in the great fvwm2 I have decide to take up the task, but it will have
+a cost, I have reindented the full source (using indent -kr -bli0 -bl), so
+patches are not a good way to distribute it (last was greater than the code
+itself :).
+	My question is simple, is anybody working on fvwm2 now?, if yes
+what are his goals?. If nobody answer, I will start a new series in the fvwm2
+development (maybe something like 2.0.46.x :), and start to put patched
+versions at Adam Kopatz site, I would include most of the patches most
+commonly used (as FvwmPager Ballons, fvwmpython interface, etc...), so 
+I asked the authors of this patches to contact me (I'm not going to repeat
+already done code :)
+
+	Thanks everybody, and hope fvwm2 will rule again really soon!
+
+<>-------------------------------------+-----------------------------------<>
+   One O.S. to rule them all,          |  German Gomez Garcia
+      One O.S. to find them.           |  mat006@pinon.ccu.uniovi.es
+   One O.S. to bring them all          |
+      and in the darkness bind them.   |  "Wur Qanar Wur Stilor Wur Kas"
+<>-------------------------------------+-----------------------------------<>
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Mon May 18 10:46:26 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 18 May 1998 10:46:26 -0500 (CDT)
+Received: from tolt.cs.washington.edu (tolt.cs.washington.edu [128.95.1.155]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id KAA06489 for <fvwm-workers@hpc.uh.edu>; Mon, 18 May 1998 10:46:18 -0500 (CDT)
+Received: (gjb@localhost) by tolt.cs.washington.edu (8.8.5+CS/7.2ws+) id IAA10061; Mon, 18 May 1998 08:45:29 -0700 (PDT)
+To: German Jose Gomez Garcia <mat006@pinon.ccu.uniovi.es>
+Cc: fvwm-workers list <fvwm-workers@hpc.uh.edu>
+Subject: Re: NEW GREAT PATCH FOR FVWM2!
+References: <Pine.HPP.3.91.980518124100.15552B-100000@pinon.ccu.uniovi.es>
+From: Greg Badros <gjb@cs.washington.edu>
+Date: 18 May 1998 08:45:28 -0700
+In-Reply-To: German Jose Gomez Garcia's message of "Mon, 18 May 1998 12:41:48 +0200 (METDST)"
+Message-ID: <qrriun3d1lz.fsf@tolt.cs.washington.edu>
+Lines: 20
+X-Mailer: Gnus v5.4.65/XEmacs 20.4 - "Emerald"
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+German Jose Gomez Garcia <mat006@pinon.ccu.uniovi.es> writes:
+
+> 	Well, maybe you remember me, I am that nice guy who wrote the
+> nextify patch for the marvellous fvwm2, I'm being out of it for a while,
+> (mainly becasuse I finished my studies (physics) and started new ones
+> (mathematics) so, sorry for the wait, but I'm on it again, and having
+> seeing the problems fvwm2 is having to keep up to the new standards,
+> and because I like it to much to just forget it, I started (today, hehe, 
+> I code really fast :) a big change to several things in fvwm2 I think
+> can be improved (mainly menu and decors), so the good news are that it 
+
+I already made substantial changes to the menus for 2.0.47, and decors
+are significantly improved in Scwm, which descends from fvwm2, but uses
+Scheme as a very dynamic configuration language (see my web page).  Be
+sure you're not reinventing the wheel.
+
+Greg J. Badros
+gjb@cs.washington.edu
+Seattle, WA  USA
+http://www.cs.washington.edu/homes/gjb
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Mon May 18 11:10:37 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 18 May 1998 11:10:37 -0500 (CDT)
+Received: from aleph.net.uniovi.es (aleph.net.uniovi.es [156.35.11.1]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id LAA07126 for <fvwm-workers@hpc.uh.edu>; Mon, 18 May 1998 11:10:21 -0500 (CDT)
+Received: from pinon.ccu.uniovi.es by aleph.net.uniovi.es (PMDF V5.1-10 #4541)
+ with ESMTP id <01IX6S4EO1PY008NX7@aleph.net.uniovi.es> for
+ fvwm-workers@hpc.uh.edu; Mon, 18 May 1998 18:09:00 +0200 (MET)
+Received: (from mat006@localhost) by pinon.ccu.uniovi.es (8.8.8/8.7.3)
+ id SAA26228; Mon, 18 May 1998 18:10:00 +0200 (METDST)
+Date: Mon, 18 May 1998 18:09:59 +0200 (METDST)
+From: German Jose Gomez Garcia <mat006@pinon.ccu.uniovi.es>
+Subject: Re: NEW GREAT PATCH FOR FVWM2!
+In-reply-to: <qrriun3d1lz.fsf@tolt.cs.washington.edu>
+To: Greg Badros <gjb@cs.washington.edu>
+Cc: fvwm-workers list <fvwm-workers@hpc.uh.edu>
+Message-id: <Pine.HPP.3.91.980518180448.26029A-100000@pinon.ccu.uniovi.es>
+MIME-version: 1.0
+Content-type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+	Well, I've visited your page (really don't know of it)
+and although I haven't applied your patch (my source is reindented :(
+it seems a GOOD (TM) Thing, but has nothing to do with my own patch,
+my intention is to make menus a really nifty thing, with it you can
+apply menu styles in a Popup basis (I mean a different style for each
+Popup - of course only if you want so :), I have also reimplement the
+nextish lookup, and now you can also set the Menu background as a button
+(I mean, gradients, pixmaps, etc. ), and the gradient option has been
+rewritten to add the posibility to specify the angle (I keep the 
+Horizontal, Vertical, and Diagonal for speed ), also I have changed the
+way items are highlighted, now you control all the process.
+
+So I think I'm not reinventing the wheel, but anyway I will include you
+patch (with a bit effort and crediting you of course :) in my main tree, 
+thanks!
+
+
+<>-------------------------------------+-----------------------------------<>
+   One O.S. to rule them all,          |  German Gomez Garcia
+      One O.S. to find them.           |  mat006@pinon.ccu.uniovi.es
+   One O.S. to bring them all          |
+      and in the darkness bind them.   |  "Wur Qanar Wur Stilor Wur Kas"
+<>-------------------------------------+-----------------------------------<>
+
+On Mon, 18 May 1998, Greg Badros wrote:
+
+> German Jose Gomez Garcia <mat006@pinon.ccu.uniovi.es> writes:
+> 
+> > 	Well, maybe you remember me, I am that nice guy who wrote the
+> > nextify patch for the marvellous fvwm2, I'm being out of it for a while,
+> > (mainly becasuse I finished my studies (physics) and started new ones
+> > (mathematics) so, sorry for the wait, but I'm on it again, and having
+> > seeing the problems fvwm2 is having to keep up to the new standards,
+> > and because I like it to much to just forget it, I started (today, hehe, 
+> > I code really fast :) a big change to several things in fvwm2 I think
+> > can be improved (mainly menu and decors), so the good news are that it 
+> 
+> I already made substantial changes to the menus for 2.0.47, and decors
+> are significantly improved in Scwm, which descends from fvwm2, but uses
+> Scheme as a very dynamic configuration language (see my web page).  Be
+> sure you're not reinventing the wheel.
+> 
+> Greg J. Badros
+> gjb@cs.washington.edu
+> Seattle, WA  USA
+> http://www.cs.washington.edu/homes/gjb
+> --
+> Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+> To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+> body of a message to majordomo@hpc.uh.edu.
+> To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+> 
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Mon May 18 11:54:31 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 18 May 1998 11:54:30 -0500 (CDT)
+Received: from psrw.com (admiral.psrw.com [199.99.166.5]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id LAA08062 for <fvwm-workers@hpc.uh.edu>; Mon, 18 May 1998 11:54:21 -0500 (CDT)
+Received: from finnegan.psrw.com (finnegan [199.99.166.76])
+	by psrw.com (8.8.8/8.8.8) with ESMTP id MAA22852;
+	Mon, 18 May 1998 12:54:01 -0400 (EDT)
+Received: from localhost (bgiaccio@localhost)
+	by finnegan.psrw.com (8.8.7/8.8.7) with SMTP id MAA28758;
+	Mon, 18 May 1998 12:53:59 -0400 (EDT)
+X-Authentication-Warning: finnegan.psrw.com: bgiaccio owned process doing -bs
+Date: Mon, 18 May 1998 12:53:58 -0400 (EDT)
+From: Brad Giaccio <bgiaccio@psrw.com>
+X-Sender: bgiaccio@finnegan
+To: German Jose Gomez Garcia <mat006@pinon.ccu.uniovi.es>
+cc: fvwm-workers list <fvwm-workers@hpc.uh.edu>
+Subject: Re: NEW GREAT PATCH FOR FVWM2!
+In-Reply-To: <Pine.HPP.3.91.980518180448.26029A-100000@pinon.ccu.uniovi.es>
+Message-ID: <Pine.SOL.3.96.980518125207.28409A-100000@finnegan>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+I just wanted to let you know that I have been using your patch and that
+the only comment/request I would have is that with your patch you loose
+the seperators in the menus which are really nice for organizing hosts if
+it you don't wan't numerous sub menus.  So I don't know if it is possible
+to have them or not.  Just thought I would point it out.
+
+Brad
+
+On Mon, 18 May 1998, German Jose Gomez Garcia wrote:
+
+> 	Well, I've visited your page (really don't know of it)
+> and although I haven't applied your patch (my source is reindented :(
+> it seems a GOOD (TM) Thing, but has nothing to do with my own patch,
+> my intention is to make menus a really nifty thing, with it you can
+> apply menu styles in a Popup basis (I mean a different style for each
+> Popup - of course only if you want so :), I have also reimplement the
+> nextish lookup, and now you can also set the Menu background as a button
+> (I mean, gradients, pixmaps, etc. ), and the gradient option has been
+> rewritten to add the posibility to specify the angle (I keep the 
+> Horizontal, Vertical, and Diagonal for speed ), also I have changed the
+> way items are highlighted, now you control all the process.
+> 
+> So I think I'm not reinventing the wheel, but anyway I will include you
+> patch (with a bit effort and crediting you of course :) in my main tree, 
+> thanks!
+> 
+> 
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Mon May 18 12:03:55 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 18 May 1998 12:03:55 -0500 (CDT)
+Received: from aleph.net.uniovi.es (aleph.net.uniovi.es [156.35.11.1]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id MAA08253 for <fvwm-workers@hpc.uh.edu>; Mon, 18 May 1998 12:03:44 -0500 (CDT)
+Received: from pinon.ccu.uniovi.es by aleph.net.uniovi.es (PMDF V5.1-10 #4541)
+ with ESMTP id <01IX6TYKMHLO008OK1@aleph.net.uniovi.es> for
+ fvwm-workers@hpc.uh.edu; Mon, 18 May 1998 19:02:21 +0200 (MET)
+Received: (from mat006@localhost) by pinon.ccu.uniovi.es (8.8.8/8.7.3)
+ id TAA27914; Mon, 18 May 1998 19:03:21 +0200 (METDST)
+Date: Mon, 18 May 1998 19:03:20 +0200 (METDST)
+From: German Jose Gomez Garcia <mat006@pinon.ccu.uniovi.es>
+Subject: Re: NEW GREAT PATCH FOR FVWM2!
+In-reply-to: <Pine.SOL.3.96.980518125207.28409A-100000@finnegan>
+To: Brad Giaccio <bgiaccio@psrw.com>
+Cc: fvwm-workers list <fvwm-workers@hpc.uh.edu>
+Message-id: <Pine.HPP.3.91.980518190108.27846A-100000@pinon.ccu.uniovi.es>
+MIME-version: 1.0
+Content-type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+
+	In my new version separators are keeped intact, and I improve
+a lot the code (not more need to hashtables or sfx.c), only bad thing maybe
+speed (in my dual PII 300Mgz + Motion 771 it's really fast, but ...),
+but I would ask improve it as much as I can (not really too much :)
+
+	Any more ideas to menus?
+
+<>-------------------------------------+-----------------------------------<>
+   One O.S. to rule them all,          |  German Gomez Garcia
+      One O.S. to find them.           |  mat006@pinon.ccu.uniovi.es
+   One O.S. to bring them all          |
+      and in the darkness bind them.   |  "Wur Qanar Wur Stilor Wur Kas"
+<>-------------------------------------+-----------------------------------<>
+
+On Mon, 18 May 1998, Brad Giaccio wrote:
+
+> I just wanted to let you know that I have been using your patch and that
+> the only comment/request I would have is that with your patch you loose
+> the seperators in the menus which are really nice for organizing hosts if
+> it you don't wan't numerous sub menus.  So I don't know if it is possible
+> to have them or not.  Just thought I would point it out.
+> 
+> Brad
+> 
+> On Mon, 18 May 1998, German Jose Gomez Garcia wrote:
+> 
+> > 	Well, I've visited your page (really don't know of it)
+> > and although I haven't applied your patch (my source is reindented :(
+> > it seems a GOOD (TM) Thing, but has nothing to do with my own patch,
+> > my intention is to make menus a really nifty thing, with it you can
+> > apply menu styles in a Popup basis (I mean a different style for each
+> > Popup - of course only if you want so :), I have also reimplement the
+> > nextish lookup, and now you can also set the Menu background as a button
+> > (I mean, gradients, pixmaps, etc. ), and the gradient option has been
+> > rewritten to add the posibility to specify the angle (I keep the 
+> > Horizontal, Vertical, and Diagonal for speed ), also I have changed the
+> > way items are highlighted, now you control all the process.
+> > 
+> > So I think I'm not reinventing the wheel, but anyway I will include you
+> > patch (with a bit effort and crediting you of course :) in my main tree, 
+> > thanks!
+> > 
+> > 
+> 
+> --
+> Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+> To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+> body of a message to majordomo@hpc.uh.edu.
+> To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+> 
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Mon May 18 12:14:26 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 18 May 1998 12:14:26 -0500 (CDT)
+Received: from aleph.net.uniovi.es (aleph.net.uniovi.es [156.35.11.1]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id MAA08471 for <fvwm-workers@hpc.uh.edu>; Mon, 18 May 1998 12:10:02 -0500 (CDT)
+Received: from pinon.ccu.uniovi.es by aleph.net.uniovi.es (PMDF V5.1-10 #4541)
+ with ESMTP id <01IX6U6WLHCS008LTK@aleph.net.uniovi.es> for
+ fvwm-workers@hpc.uh.edu; Mon, 18 May 1998 19:08:17 +0200 (MET)
+Received: (from mat006@localhost) by pinon.ccu.uniovi.es (8.8.8/8.7.3)
+ id TAA28054; Mon, 18 May 1998 19:09:17 +0200 (METDST)
+Date: Mon, 18 May 1998 19:09:16 +0200 (METDST)
+From: German Jose Gomez Garcia <mat006@pinon.ccu.uniovi.es>
+Subject: Re: Starting fvwm2 development
+In-reply-to: 
+ <Pine.LNX.3.96.980518123722.6586B-100000@hilbert.nyongwa.montreal.qc.ca>
+To: Steve Robbins <steve@nyongwa.montreal.qc.ca>
+Cc: fvwm-workers list <fvwm-workers@hpc.uh.edu>
+Message-id: <Pine.HPP.3.91.980518190416.27846B-100000@pinon.ccu.uniovi.es>
+MIME-version: 1.0
+Content-type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+	Sorry if it seems so, but I only want to cooperate with you in the 
+development of such a nice wm, but I wasn't subscribed to fvwm-workers
+list, so don't now anything about active development, I by no means want
+to seem a "hostile-taker", on the contrary, but as the WEB Page doesn't
+get updated for a long time, I just think fvwm2 developer team has switched
+over to scwm, I know now that things are not so bad, many people are still
+working on it!, I would apply the changes to your version (the one with
+autoconf), and submit it to Adam Kopaz to be include in his page.
+
+	Any more info appreciated (mainly more patches I must include)
+
+<>-------------------------------------+-----------------------------------<>
+   One O.S. to rule them all,          |  German Gomez Garcia
+      One O.S. to find them.           |  mat006@pinon.ccu.uniovi.es
+   One O.S. to bring them all          |
+      and in the darkness bind them.   |  "Wur Qanar Wur Stilor Wur Kas"
+<>-------------------------------------+-----------------------------------<>
+
+On Mon, 18 May 1998, Steve Robbins wrote:
+
+> On Mon, 18 May 1998, German Jose Gomez Garcia wrote:
+> 
+> > 	Well, after a long long time without having seen any improvements 
+> > in the great fvwm2 I have decide to take up the task, but it will have
+> > a cost, I have reindented the full source (using indent -kr -bli0 -bl), so
+> > patches are not a good way to distribute it (last was greater than the code
+> > itself :).
+> > 	My question is simple, is anybody working on fvwm2 now?
+> 
+> Yes: Charles Hines.  
+> 
+> > if yes what are his goals?.
+> 
+> My advice: check the archives of this list for his posts.
+> 
+> > If nobody answer, I will start a new series in the fvwm2
+> > development (maybe something like 2.0.46.x :), and start to put patched
+> > versions at Adam Kopatz site, I would include most of the patches most
+> > commonly used (as FvwmPager Ballons, fvwmpython interface, etc...), so 
+> > I asked the authors of this patches to contact me (I'm not going to repeat
+> > already done code :)
+> 
+> Well, Charles Hines is actively maintaining fvwm2.  I'm sure your
+> intentions are good; however, a post like yours might seem like an attempt
+> at a "hostile takeover" to some people.  I wonder if a more cooperative
+> approach would work better.
+> 
+> That said, I've been wishing for a long time that the speed of development
+> be increased.  I've considered proposing a "linux style" dual tree: one
+> stable branch and in parallel, a rapid development branch.  Charles Hines'
+> develops in the "cathedral" style, well-suited to maintaining a stable
+> branch.  The only reason I haven't proposed a dual-tree development to the
+> list is that it would need someone with a lot of time to manage the
+> development branch, and I don't have this amount of time.
+> 
+> Whatever you do, please please *please* use the autoconfigured version of
+> fvwm 2.0.46, which you can find at:
+> 
+> 	http://www.cs.mcgill.ca/~stever/software/fvwm/
+> 
+> 
+> 
+> 
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Mon May 18 12:38:39 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 18 May 1998 12:38:39 -0500 (CDT)
+Received: from tolt.cs.washington.edu (tolt.cs.washington.edu [128.95.1.155]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id MAA08980 for <fvwm-workers@hpc.uh.edu>; Mon, 18 May 1998 12:38:31 -0500 (CDT)
+Received: (gjb@localhost) by tolt.cs.washington.edu (8.8.5+CS/7.2ws+) id KAA10275; Mon, 18 May 1998 10:36:35 -0700 (PDT)
+To: German Jose Gomez Garcia <mat006@pinon.ccu.uniovi.es>
+Cc: Steve Robbins <steve@nyongwa.montreal.qc.ca>,
+        fvwm-workers list <fvwm-workers@hpc.uh.edu>
+Subject: Re: Starting fvwm2 development
+References: <Pine.HPP.3.91.980518190416.27846B-100000@pinon.ccu.uniovi.es>
+From: Greg Badros <gjb@cs.washington.edu>
+Date: 18 May 1998 10:36:35 -0700
+In-Reply-To: German Jose Gomez Garcia's message of "Mon, 18 May 1998 19:09:16 +0200 (METDST)"
+Message-ID: <qrrbtsvbhwc.fsf@tolt.cs.washington.edu>
+Lines: 15
+X-Mailer: Gnus v5.4.65/XEmacs 20.4 - "Emerald"
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+German Jose Gomez Garcia <mat006@pinon.ccu.uniovi.es> writes:
+
+> 	Sorry if it seems so, but I only want to cooperate with you in the 
+> development of such a nice wm, but I wasn't subscribed to fvwm-workers
+> list, so don't now anything about active development, I by no means want
+> to seem a "hostile-taker", on the contrary, but as the WEB Page doesn't
+> get updated for a long time, I just think fvwm2 developer team has switched
+> over to scwm, I know now that things are not so bad, many people are still
+
+No.  I didn't mean to suggest that at all.  I'm doing Scwm development,
+but by no means has fvwm2 been replaced by Scwm.
+
+Sorry if my response was misleading.
+
+Greg
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Mon May 18 15:28:14 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 18 May 1998 15:28:14 -0500 (CDT)
+Received: from VNET.IBM.COM (vnet.ibm.com [204.146.168.194]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id PAA12540 for <fvwm-workers@hpc.UH.EDU>; Mon, 18 May 1998 15:28:00 -0500 (CDT)
+Received: from FISHKILL by VNET.IBM.COM (IBM VM SMTP V2R4) with BSMTP id 5595;
+   Mon, 18 May 98 16:27:32 EDT
+Received: by FISHKILL (XAGENTA 4.0) id 2206; Mon, 18 May 1998 16:27:15 -0400 
+Received: by cold.fishkill.ibm.com (AIX 4.1/UCB 5.64/4.03)
+          id AA27206; Mon, 18 May 1998 16:27:18 -0400
+From: "Charles Hines" <chuck_hines@VNET.IBM.COM>
+Date: Mon, 18 May 1998 16:27:12 -0400 (EDT)
+To: German Jose Gomez Garcia <mat006@pinon.ccu.uniovi.es>
+Cc: Steve Robbins <steve@nyongwa.montreal.qc.ca>,
+        fvwm-workers list <fvwm-workers@hpc.uh.edu>,
+        The FVWM Discussion List <fvwm@hpc.uh.edu>,
+        The FVWM Announce List <fvwm-announce@hpc.uh.edu>
+Subject: The future of FVWM (was Re: Starting fvwm2 development)
+In-Reply-To: <Pine.HPP.3.91.980518190416.27846B-100000@pinon.ccu.uniovi.es>
+X-Mailer: VM 6.43 under 20.4 "Emerald" XEmacs  Lucid
+Message-Id: <13664.30689.947721.182002@sstpok-11.pok.ibm.com>
+X-Face: 'pn"gAx+&w4-=-}\z>*.Y*@(lC;t1<P);@iwiv';)vn3H2\/.x#;>J[a,/Q.Yv0^Wwc6_"H]}}-"?%)ETS`1v[]P`w4,E.9Bgf*XI4<H{C}Mf@'Ms)z?Bqzf"8v/oY\9K){w}\pw
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+>>>>> "GJGG" == German Jose Gomez Garcia <mat006@pinon.ccu.uniovi.es> writes:
+
+GJGG> On Mon, 18 May 1998, Steve Robbins wrote:
+
+>> On Mon, 18 May 1998, German Jose Gomez Garcia wrote:
+>>
+>> >    Well, after a long long time without having seen any improvements
+>> > in the great fvwm2 I have decide to take up the task, but it will have
+>> > a cost, I have reindented the full source (using indent -kr -bli0 -bl), so
+>> > patches are not a good way to distribute it (last was greater than the code
+>> > itself :).
+>> >    My question is simple, is anybody working on fvwm2 now?
+>>
+>> Yes: Charles Hines.
+>>
+>> > if yes what are his goals?.
+>>
+>> My advice: check the archives of this list for his posts.
+>>
+>> > If nobody answer, I will start a new series in the fvwm2
+>> > development (maybe something like 2.0.46.x :), and start to put patched
+>> > versions at Adam Kopatz site, I would include most of the patches most
+>> > commonly used (as FvwmPager Ballons, fvwmpython interface, etc...), so
+>> > I asked the authors of this patches to contact me (I'm not going to repeat
+>> > already done code :)
+>>
+>> Well, Charles Hines is actively maintaining fvwm2.
+
+An admittedly lethargic active development though...
+
+>> I'm sure your intentions are good; however, a post like yours might
+>> seem like an attempt at a "hostile takeover" to some people.  I
+>> wonder if a more cooperative approach would work better.
+
+Yes, that original post aggrivated me quite a bit at first, but then I
+realized that I was really more upset with myself for not having
+enough time to do the work on fvwm that I really wanted to.  So I've
+come to a decision, which I'll outline below...
+
+>> That said, I've been wishing for a long time that the speed of development
+>> be increased.  I've considered proposing a "linux style" dual tree: one
+>> stable branch and in parallel, a rapid development branch.  Charles Hines'
+>> develops in the "cathedral" style, well-suited to maintaining a stable
+>> branch.  The only reason I haven't proposed a dual-tree development to the
+>> list is that it would need someone with a lot of time to manage the
+>> development branch, and I don't have this amount of time.
+
+I've had many people write me (both on the mailing list and directly)
+citing that same cathedral/bazaar paper:
+
+  http://earthspace.net/~esr/writings/cathedral-bazaar/cathedral-bazaar.html
+
+It's not that I was deliberately choosing the "cathedral" method of
+development, but I just didn't have enough time to truly do a more
+frequent development cycle.  I really wanted to (eventually) get a
+good 2.1.0 version out, and then start dual stable & development
+paths.  As you can see, I haven't quite made it there yet.
+
+>> Whatever you do, please please *please* use the autoconfigured version of
+>> fvwm 2.0.46, which you can find at:
+>>
+>> http://www.cs.mcgill.ca/~stever/software/fvwm/
+
+GJGG>   Sorry if it seems so, but I only want to cooperate with you in
+GJGG> the development of such a nice wm, but I wasn't subscribed to
+GJGG> fvwm-workers list, so don't now anything about active
+GJGG> development, I by no means want to seem a "hostile-taker",
+
+I was hoping that was the case.
+
+GJGG> on the contrary, but as the WEB Page doesn't get updated for a long
+GJGG> time,
+
+Several months between updates has been the norm for me for the past
+couple of years, unfortunately, so I'm not sure that I would consider
+5 months to be a "long" time considering that...
+
+GJGG> I just think fvwm2 developer team has switched over to scwm, I
+GJGG> know now that things are not so bad, many people are still
+GJGG> working on it!, I would apply the changes to your version (the
+GJGG> one with autoconf), and submit it to Adam Kopaz to be include in
+GJGG> his page.
+
+Please hold off on putting another fvwm pseudo-distribution out
+there.  It really confuses things...
+
+GJGG>   Any more info appreciated (mainly more patches I must include)
+
+Ok, more info (and the decision I mentioned above):
+
+As of today I'm giving up being fvwm's maintainer.  Unfortunately I've
+finially decided to face facts and accept that I don't currently have
+anywhere near the amount of time to devote to fvwm that it should
+probably have.  It was a painful decision, but probably for the best
+(besides, I guess I can still submit ideas and patches periodically).
+
+I wish to thank everyone that has helped out, submitted patches &
+ideas, or just plain used fvwm over the years that I've been involved
+with it, especially the folks on the mailing lists.
+
+In the not so distant past I spoke offline with Brady Montz, and I
+asked if he might like to take over maintainership from me when I was
+ready to give it up, as I felt that he was one of a few good
+candidates from the mailing lists and that he might have more time to
+devote that I do.  At the time he said he was interested.  After I
+made my decision this morning, I wrote him again to ask if he was
+still interested, but unforutunately haven't heard back from him yet.
+I really wanted to hear back from Brady first before I wrote anything
+to the mailing lists, but decided that I should speak up before too
+many messages flew back and forth without my input (hope you don't
+mind, Brady).  In the event that Brady has changed his mind and
+doesn't want to (or can't) take over, I'm sure we'll be able to find
+someone else.  I'll be sure and announce when this is all decided.
+
+So, what's next?  Well, I'll hand over my current development snapshot
+to the next maintainer after that's settled and they can start with
+that or just toss it out and start with 2.0.46, whichever works out
+better for them.  Then we'll see where they drive it...
+
+My parting thoughts on the future of fvwm:
+
+        - Please try and keep the base code lightweight, standalone
+          (ie - minimal external code usage beyond Xpm), and as
+          generic as possible.  Granted, it still needs more cleanup.
+        - The configuration language definitely needs some more
+          improvement, but I don't think I quite agree with adding an
+          extension language like Guile, Tcl, Python, etc as I think
+          they are all overkill.  Just my 2 cents on the subject since
+          I was out of town and unable to respond when this thread
+          came up again recently.
+        - The current module interface needs more work as well, and
+          should probably be encapsulated in another little lib to be
+          shared amongst the modules as much as possible.
+        - Dynamically loaded modules that use hooks into existing fvwm
+          routines to make for tighter integration is probably worth
+          looking into.  That'd probably help with modules being able
+          to muck with decorations, multiple language interpreters,
+          etc.
+
+I could probably put down more, but I guess the TO-DO list and the
+notes I keep in my local development ChangeLog already cover all this
+and more...
+
+That's enough rambling for now I guess.  Please be kind and
+understanding to the next maintainer.  It's been fun.
+
+Thanks,
+Chuck
+
+--
+*******************************************************************************
+Charles K. Hines <chuck_hines@vnet.ibm.com>
+IBM Logic Synthesis Developer [BooleDozer (TM)]
+Martial Arts Instructor [Modern Arnis and Balintawak Escrima]
+
+         "Go back to sleep, Chuck.  You're just havin' a nightmare
+             -- of course, we ARE still in Hell." (Gary Larson)
+*******************************************************************************
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Mon May 18 16:07:27 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 18 May 1998 16:07:27 -0500 (CDT)
+Received: (from tibbs@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id PAA15531; Mon, 18 May 1998 15:57:30 -0500 (CDT)
+To: fvwm-workers list <fvwm-workers@hpc.uh.edu>,
+        The FVWM Discussion List <fvwm@hpc.uh.edu>
+Subject: Re: The future of FVWM (was Re: Starting fvwm2 development)
+References: <13664.30689.947721.182002@sstpok-11.pok.ibm.com>
+Mime-Version: 1.0 (generated by tm-edit 7.100)
+Content-Type: text/plain; charset=US-ASCII
+From: Jason L Tibbitts III <tibbs@hpc.uh.edu>
+Date: 18 May 1998 15:57:29 -0500
+In-Reply-To: "Charles Hines"'s message of "Mon, 18 May 1998 16:27:12 -0400 (EDT)"
+Message-ID: <ufa7m3ji9fq.fsf@sina.hpc.uh.edu>
+Lines: 19
+X-Mailer: Gnus v5.6.9/Emacs 19.34
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+>>>>> "CH" == Charles Hines <chuck_hines@VNET.IBM.COM> writes:
+
+CH> As of today I'm giving up being fvwm's maintainer.
+
+Thanks, Chuck.  I know everyone appreciates what you've done, and I
+personally have enjoyed coordinating things with you.  I do hope you'll
+stick around and continue to provide guidance.
+
+CH> So, what's next?  Well, I'll hand over my current development snapshot
+CH> to the next maintainer after that's settled and they can start with
+CH> that or just toss it out and start with 2.0.46, whichever works out
+CH> better for them.  Then we'll see where they drive it...
+
+Just to note, I will continue to supply mailing list, FTP and web service
+for as long as it is wanted.  I can also provide a CVS tree (with anonymous
+access and CVSweb) and anonymous rsync access.  I still don't have the time
+to coordinate development, though.
+
+ - J<
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Mon May 18 17:49:03 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 18 May 1998 17:49:03 -0500 (CDT)
+Received: from shell.tsoft.com (rjray@shell.tsoft.com [207.201.34.8]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id RAA18620; Mon, 18 May 1998 17:48:55 -0500 (CDT)
+Received: (from rjray@localhost)
+	by shell.tsoft.com (8.8.7/8.8.7) id PAA15347;
+	Mon, 18 May 1998 15:50:00 -0700 (PDT)
+From: "Randy J. Ray" <rjray@tsoft.com>
+Message-Id: <199805182250.PAA15347@shell.tsoft.com>
+Subject: Re: FVWM: The future of FVWM (was Re: Starting fvwm2 development)
+In-Reply-To: <13664.30689.947721.182002@sstpok-11.pok.ibm.com> from Charles Hines at "May 18, 98 04:27:12 pm"
+To: chuck_hines@VNET.IBM.COM (Charles Hines)
+Date: Mon, 18 May 1998 15:50:00 -0700 (PDT)
+Cc: fvwm-workers@hpc.uh.edu, fvwm@hpc.uh.edu
+X-Mailer: ELM [version 2.4ME+ PL31H (25)]
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+First off, I'd like to second Jason's sentiments and thank Chuck for all the
+work he's done so far. he was particularly helpful with me a while back as I
+muddled through the module API docs while writing the X11::Fvwm module for
+Perl5.
+
+I concur that Brady, if he has the time, is the best choice for picking up the
+Fvwm mantle. However, if brady cannot do it, I will offer a slice of my 
+(admittedly limited) spare time. I'd prefer it went to Brady, though.
+
+Randy
+-- 
+Beware the sarcophogi being offered as "gratefully vacant".
+
+rjray@tsoft.com
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Mon May 18 19:48:38 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 18 May 1998 19:48:38 -0500 (CDT)
+Received: from aleph.net.uniovi.es (aleph.net.uniovi.es [156.35.11.1]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id TAA20564; Mon, 18 May 1998 19:48:30 -0500 (CDT)
+Received: from pinon.ccu.uniovi.es by aleph.net.uniovi.es (PMDF V5.1-10 #4541)
+ with ESMTP id <01IX7A7SN0EQ008F96@aleph.net.uniovi.es>; Tue,
+ 19 May 1998 02:47:08 +0200 (MET)
+Received: (from mat006@localhost) by pinon.ccu.uniovi.es (8.8.8/8.7.3)
+ id CAA04785; Tue, 19 May 1998 02:48:08 +0200 (METDST)
+Date: Tue, 19 May 1998 02:48:08 +0200 (METDST)
+From: German Jose Gomez Garcia <mat006@pinon.ccu.uniovi.es>
+Subject: Re: The future of FVWM (was Re: Starting fvwm2 development)
+In-reply-to: <13664.30689.947721.182002@sstpok-11.pok.ibm.com>
+To: fvwm-workers list <fvwm-workers@hpc.uh.edu>
+Cc: The FVWM Discussion List <fvwm@hpc.uh.edu>,
+        The FVWM Announce List <fvwm-announce@hpc.uh.edu>
+Message-id: <Pine.HPP.3.91.980519023209.4593B-100000@pinon.ccu.uniovi.es>
+MIME-version: 1.0
+Content-type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+	Well, I think you have take the right way, your work in fvwm2
+has been really fantastic, but GPL makes these things easier :)
+I hope Brady will take over it, and I hope he'd choose a more open 
+development mode, just because (IMHO) it is the only way to have a chance
+against wm like WindowMaker, AfterStep, or Enlightment; I really have
+no idea of what the current state of your fvwm2 devlopment tree is, so
+may be I am wrong (I hope so :)
+
+	And about my patch, I've almost finished, and after great work
+I have applied it to smr-2.0.46.4 version of fvwm (the one with the 
+autoconf), I will post a snapshot tomorrow (Tuesday GMT), beacuse many
+people have misunderstand what the patch is made for, I hope you like
+it and decide to include it in the main tree. Another important thing
+may be to choose a good indentation mode (I just think currently (2.0.46)
+indentation is a bit chaotic) because if you choose a baazar approach
+it would be too late :)
+
+	Well, after all, things are changing in the fvwm2 scene, and
+I can just wait to the day fvwm2 rulez again!
+
+	Thanks Charles for all your good work (I hope you'd continue
+active development, your experience is just too valued to be lost),
+thanks!
+
+<>-------------------------------------+-----------------------------------<>
+   One O.S. to rule them all,          |  German Gomez Garcia
+      One O.S. to find them.           |  mat006@pinon.ccu.uniovi.es
+   One O.S. to bring them all          |
+      and in the darkness bind them.   |  "Wur Qanar Wur Stilor Wur Kas"
+<>-------------------------------------+-----------------------------------<>
+
+On Mon, 18 May 1998, Charles Hines wrote:
+
+.......	just too many things ...... :)
+
+> *******************************************************************************
+> Charles K. Hines <chuck_hines@vnet.ibm.com>
+> IBM Logic Synthesis Developer [BooleDozer (TM)]
+> Martial Arts Instructor [Modern Arnis and Balintawak Escrima]
+> 
+>          "Go back to sleep, Chuck.  You're just havin' a nightmare
+>              -- of course, we ARE still in Hell." (Gary Larson)
+> *******************************************************************************
+> 
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Tue May 19 20:29:51 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 19 May 1998 20:29:51 -0500 (CDT)
+Received: from aleph.net.uniovi.es (aleph.net.uniovi.es [156.35.11.1]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id UAA14372; Tue, 19 May 1998 20:21:46 -0500 (CDT)
+Received: from pinon.ccu.uniovi.es by aleph.net.uniovi.es (PMDF V5.1-10 #4541)
+ with ESMTP id <01IX8PN4MVHS008UHC@aleph.net.uniovi.es>; Wed,
+ 20 May 1998 03:20:11 +0200 (MET)
+Received: (from mat006@localhost) by pinon.ccu.uniovi.es (8.8.8/8.7.3)
+ id DAA10863; Wed, 20 May 1998 03:21:12 +0200 (METDST)
+Date: Wed, 20 May 1998 03:21:12 +0200 (METDST)
+From: German Jose Gomez Garcia <mat006@pinon.ccu.uniovi.es>
+Subject: The so polemic NewMenus patch :)
+To: fvwm-workers list <fvwm-workers@hpc.uh.edu>,
+        Fvwm Mailing List <fvwm@hpc.uh.edu>
+Message-id: <Pine.HPP.3.91.980520031809.10847A-101000@pinon.ccu.uniovi.es>
+MIME-version: 1.0
+Content-type: MULTIPART/MIXED; BOUNDARY="711056172-851401618-895627272=:10847"
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+  Send mail to mime@docserver.cac.washington.edu for more info.
+
+--711056172-851401618-895627272=:10847
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+
+	Well, here it is, my first version of this patch which will
+change your menu looks (I hope to a better one).
+
+	It's made against fvwm-smr-2.0.46.4 by Steve Robbins (I can't
+remenber the URL, please post it Steve ).
+
+	I'm wait for your opinions ...    (not your critics ;)
+
+<>-------------------------------------+-----------------------------------<>
+   One O.S. to rule them all,          |  German Gomez Garcia
+      One O.S. to find them.           |  mat006@pinon.ccu.uniovi.es
+   One O.S. to bring them all          |
+      and in the darkness bind them.   |  "Wur Qanar Wur Stilor Wur Kas"
+<>-------------------------------------+-----------------------------------<>
+
+--711056172-851401618-895627272=:10847
+Content-Type: APPLICATION/octet-stream; name="newmenus.diff.gz"
+Content-Transfer-Encoding: BASE64
+Content-ID: <Pine.HPP.3.91.980520032112.10847B@pinon.ccu.uniovi.es>
+Content-Description: 
+
+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
+--711056172-851401618-895627272=:10847--
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Tue May 19 22:28:28 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 19 May 1998 22:28:28 -0500 (CDT)
+Received: from helvetica.cs.arizona.edu (helvetica.CS.Arizona.EDU [192.12.69.220]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id WAA17331; Tue, 19 May 1998 22:24:20 -0500 (CDT)
+Received: (from bradym@localhost) by helvetica.cs.arizona.edu (8.8.7/8.7.3) id UAA25031; Tue, 19 May 1998 20:23:59 -0700
+Date: Tue, 19 May 1998 20:23:59 -0700
+Message-Id: <199805200323.UAA25031@helvetica.cs.arizona.edu>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+From: Brady Montz <bradym@cs.arizona.edu>
+To: fvwm-workers@hpc.uh.edu, fvwm@hpc.uh.edu
+Subject: I'm taking over fvwm development
+X-Mailer: VM 6.35 under Emacs 20.2.1
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Well, it's officially decided that I will be taking over the fvwm
+development. I'd like to thank Chuck for his years of service and stellar
+attitude. 
+
+He's handed off the development tree to me. I have to take my PhD prelims May
+28, and I have to to a code walkthrough, before I'll be able to do any real
+work on the code. I will probably release the current code as 2.0.47 with the
+minimum number of changes and set up a public CVS repository. I hope to have
+that done in the first week of June. I'd like to ask everybody who has any
+patches > 10 lines to wait until then.
+
+Since this endless march of "beta" versions appears to be confusing to various
+distributors and sysadmins, causing them to keep their users at fvwm 1.24, I
+plan to split fvwm development into a stable 2.2 version (released ASAP after
+freezing feature additions when 2.0.47 is released) and development version
+2.3. Note that I am skipping 2.1 altogether to get fvwm in sync with the
+linux/xemacs convention of odd minor versions for development versions and
+even for release versions.
+
+Version 2.3 will be for incremental improvements to fvwm, targeted towards a
+stable release in 6-12 months. Since I think fvwm might need some ground-up
+redesign to support things like loadable modules, potential embedded
+languages, etc, I will probably start a 2.9 source tree for the truly
+speculative and adventurous changes. I think that loadable modules alone would
+warrant a major number increase to 3.0. 2.9 will have to wait until 2.0, 2.2,
+and 2.3 are running smoothly however, so this might occur towards the end of
+the summer. 
+
+-- 
+ Brady Montz
+ bradym@cs.arizona.edu
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Wed May 20 19:46:47 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Wed, 20 May 1998 19:46:47 -0500 (CDT)
+Received: from pcnet1.pcnet.com (pcnet1.pcnet.com [204.213.232.3]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id TAA12243; Wed, 20 May 1998 19:46:35 -0500 (CDT)
+Received: (from proteus@localhost)
+	by pcnet1.pcnet.com (8.8.7/PCNet) id UAA24428;
+	Wed, 20 May 1998 20:46:51 -0400 (EDT)
+Message-ID: <XFMail.980520203507.proteus@pcnet.com>
+X-Mailer: XFMail 1.2-beta-111797 [p0] on Linux
+X-Priority: 3 (Normal)
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+In-Reply-To: <XFMail.980516023030.proteus@pcnet.com>
+Date: Wed, 20 May 1998 20:35:07 -0400 (EDT)
+Reply-To: Bob Woodside <proteus@pcnet.com>
+Organization: Woodsway Consulting
+From: Bob Woodside <proteus@pcnet.com>
+To: Bob Woodside <proteus@pcnet.com>
+Subject: RE: FVWM Stacking Order Patch (was: no subject)
+Cc: The FVWM Workers List <fvwm-workers@hpc.uh.edu>
+Cc: The FVWM Workers List <fvwm-workers@hpc.uh.edu>,
+        The FVWM Discussion List <fvwm@hpc.uh.edu>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+
+        I've had couple of reports of dramatic performance improvement
+with the Stacking Order patch I submitted over the weekend. It seems to
+have turned out far better than I'd expected when I started working on
+it.
+
+        Of course, all hell broke loose immediately afterwards, so I
+was a little surprised that anyone noticed it - particulary with that
+catchy subject line!  :-)
+
+        I'll do my best to get it reworked for the new code base as
+soon as Brady makes it available.
+
+
+ 
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Wed May 20 19:50:08 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Wed, 20 May 1998 19:50:08 -0500 (CDT)
+Received: from aleph.net.uniovi.es (aleph.net.uniovi.es [156.35.11.1]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id TAA12218; Wed, 20 May 1998 19:46:02 -0500 (CDT)
+Received: from pinon.ccu.uniovi.es by aleph.net.uniovi.es (PMDF V5.1-10 #4541)
+ with ESMTP id <01IXA2PEGIW8009NIS@aleph.net.uniovi.es>; Thu,
+ 21 May 1998 02:44:38 +0200 (MET)
+Received: (from mat006@localhost) by pinon.ccu.uniovi.es (8.8.8/8.7.3)
+ id CAA14919; Thu, 21 May 1998 02:45:41 +0200 (METDST)
+Date: Thu, 21 May 1998 02:45:41 +0200 (METDST)
+From: German Jose Gomez Garcia <mat006@pinon.ccu.uniovi.es>
+Subject: New version of newmenus (nextify patch)
+To: fvwm-workers list <fvwm-workers@hpc.uh.edu>,
+        Fvwm Mailing List <fvwm@hpc.uh.edu>
+Message-id: <Pine.HPP.3.91.980521023553.14808A-101000@pinon.ccu.uniovi.es>
+MIME-version: 1.0
+Content-type: MULTIPART/MIXED; BOUNDARY="711056172-1804928587-895711541=:14808"
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+  Send mail to mime@docserver.cac.washington.edu for more info.
+
+--711056172-1804928587-895711541=:14808
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+
+	Well, here there is a new version (I'm releasing even faster that 
+Linus :), it repair some problems with interaction between MWM FVWM and 
+NEXT menus, no you can mix them in any way you like, I have changed the 
+Scr struct heavely (mainly deleting items) and have removed the flags 
+MWMMenus and FVWMMenus, including them in the MenuFace struct.
+
+	Hope you enjoy it.
+
+PS: It's made against fvwm-smr-2.0.46.4 (so you must reverse my last 
+patch before installing this new version)
+
+PSS: This is the last version I'm posting to both lists, I'm going out of
+the Fvwm plain list (I mean I would keep only the workers list), because
+I have started to hate receiving duplicated messages (that this one :)
+
+PSSS: Brady, if you receive it Email me to confirm, if not I will resend 
+it to you for your approval. (Aye Aye Sir :)
+
+PSSSS: What the hell this PSSSS mean ;)
+
+<>-------------------------------------+-----------------------------------<>
+   One O.S. to rule them all,          |  German Gomez Garcia
+      One O.S. to find them.           |  mat006@pinon.ccu.uniovi.es
+   One O.S. to bring them all          |
+      and in the darkness bind them.   |  "Wur Qanar Wur Stilor Wur Kas"
+<>-------------------------------------+-----------------------------------<>
+
+--711056172-1804928587-895711541=:14808
+Content-Type: APPLICATION/octet-stream; name="newmenus-2.diff.gz"
+Content-Transfer-Encoding: BASE64
+Content-ID: <Pine.HPP.3.91.980521024541.14808B@pinon.ccu.uniovi.es>
+Content-Description: 
+
+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
+rWqJQSYAI3kAf75ApdILWM9xXsy4ZFp8AMsB28h8Xc2uGmumjocy2X0uZxFA
+K2nIu0YTHE2xYBG1OmtWU/w/ZNOfOvCy7NKe8OUEu47GOqkpUdR3PfWRV2KR
+yeqdvDQ3ibIrGrXNgv3OjcNHyZAdsZZcR6rEjLFwav9FLhMKNtFEFKKGigyj
+0gvllFoMz4QpFAMYZJdkgEANgjI+z2RgBrxkoG6OYGxvMYEiqp1KAQtqpVyw
+aShxP7geJMBlcGVFlmW4cMdwDlpe0TofsUy0mytnsfaqB7MoTEu7NIVCmYux
+FyE/Q3JRdr9s0AxufkyV0tmK8muamyyT5fJeaRKgainvGOZgGR/2SKlskftm
+oBf56xw+Co31HJS8uhRLeR0v0s4M+NkKWuz68xlapKal3PqZWMsqq8iZn4eU
+H0nyp5x4RabuCpahulD88UNs7G63tq3NJqs1t/f2rM092tdFDFiwIM3jE3my
++uP0+JNnB/zcju/gM+6dwdtpZI+Gbi/ufB+F8Tji8Q8Rkk+PP7oB/+o6yZCA
+Iz6IwnHgwBc8ZBBfyNdguUQCiKY55zcIeKtxZ53c1AooFjuChs0QLXayA6ER
+oOt63o0uNeELXQBIu0nDxFk3cVBH1FQ/6htAeCzMb3zQI4C+8zxSa5zSkApH
+7X/rhaOJ7hlIZd9wpW1kwoYIpUFw9xeWtqB2Ua7Uddlg7jhkNl/UEiK7KZFJ
+4zL4mTsJeZLKR02YArLVtOqZYuqQfTvGw1q9WYEQuLVkoTNa7A0ICF6dLo5y
+HC+Nz5bxO52pF/mddlBD0Wp7JaPoJfwy48ML/FL7cNaA00PPN2B+J2iGAQ2w
+vAH1iEsbYJ7686e8M9Wfr6gM9ecUX6Sd5zjbPMPlz3LnGS5fl2QNt7zJFhqr
+0ExLC51T2bPw5qlqKmctVNhUaixQm9qCzVj8ca56sru2Tzl5NcFlpS5Ym/2a
+XZsVZw5RLTgHKUy6aYfE8Pbuza2b+PZIw/iHMzPydCqemYQFNczSaTJOc7pk
+DBuITWC5uCp8lmcUVUrLE5AM/9vUcCCLo+1daw9qo53NPWsvPfKeWhbMjGbT
+JeFBilEY1qZLz5+i/HkTs4jJWiGTc0vkn2PmJ2M6dd1/cblnj7M7xNNvUrow
+zs6utYPG2dqDd2GcZV5lVtuFF/su38sWa24pH4PaSRVwMHiXblWQ69S6Z//o
+3Hw4u2h3Lq5XWxJ8yN1cvQctg2EioL+k0GRCKZbc4dG7pFW9oZjdy9Q7pXov
+RUrw7Ty851c81urR6SHVmDVbHeRJk7YbQyU6IeHWW6wOkq+3LKnavU2rhY8m
+7OxsWc3Wjl4VLDKMyFldnojedF4VcVi8p1J7Dol5GxVyi1CCSPtkrWXmuk6Q
+RJMPZD0JZLSYgPLoA99oz1jmpKLTSb3aorsVJ7lrv+efu9fqRmHmdiZeuzCO
+WAsJC24ODJDcyVumX7EuDvX0qU3ag2d05nnNU9FZ71Ln3SoPs3/XKTFo9jLw
+Jmw8cvAmVEaTdN8pd4qsFDPz3Pj/T46XPDkudC7jxDhLnlzsVf42RMGZc8Zz
+0QdL8AIrq4sJPl5MILvOnxkvPLLWwy97ZD1jtiw75/IszOc8VeAU71MKXCY4
+POlQidM+e+y+UsuevexLQ7D9CiMDGLc/c/v+pJ70lKD4cICA0p18urskKuAC
+uMzJLIDKA+2sQxGkeTBL3EHYL+ROncrSwJNZw4oz2fprHjhuH6NNg2RP7x/k
+Hqr5T91/mjqYx0N4YGr2UX32npQZo82bUksf1i+EU9yo2PHs+1OPU6eOOd2b
+B48LblGVxH02s1TAAZXCpgMVaQW5/YSPYVTywlBe+jncUoBbxKzOZ3Iikwlz
+t2by99ayN2iKBZaRLZVO7CGb15rFBeHsxea0ja3eyqvN4mZx/poz3a/eam7R
+DeudxgZUmk0qMEu5k3c8aq7WajxwsieN8iIitRvTELOVPpWV1S1bpeRlurya
+LozFDy7ek67okjs9v3/t9qGOYKdX79pnUMHfvP98fX150ZXXCOyYi4fVkO6+
+0filqLFtNGL0rKvnQx7woSYOUfHejce2hw+ioAvgIbK4hnvLKbI6IT1ENHTj
+3+SVOPGX8rMoe9NFFQYZnMVrdpJEa3Qn37dHFlOehsKOcW/BWRvhVf/YMpsC
+2aag9fZ09UBkXJ0MMzTIRada0yBSuoXFHy4QRRCFBq3iT2ffzt99KlCweCov
+r0zjgT2lUnEPEsceVWWtJ285fnJ7+LRuWsAgSMrqaA6DSEVWkvtGt/DCmlJk
+waUT8sf11Z/5gvFWGf3ByRczWwSIPjo03Q2H+RVCK8g8JoFZ5R4qRNv+PRq5
+a9wZo18TlZ/4Wn/5kw56AmJj2O/HXFXfhExK/aO1tf0nXlNzPW52ruoME+sC
+Bx0gjiGAQhq3WPmX+Be8VSKfc3sjBqiyX1mzqhYQipNMdGZlUxC8GKuvrqCq
+90VENi6ryDgkT2CUb6Q8Fd1gYuV6Hai0qhhvG4KhmNUOUz2IIJEJZtJ/1RwU
+EA5PeOSj+ckb0oVjadbYZTqsKltb8iZ46VFOlzifsEGNb1DzJKYSBxvoMQTq
+EXeazElA1OUsKMkplj/PzBB9Ere/iNAso+RsgqAiMpWDUDyNyQZQ7IlHPMVv
+BNC8SCYjZbEUx7wjlTNeSVqvlJaHitWnOemglN7ELlK4fqK5bO2h0ims/vjB
+CoG/PAe4/Rzg9zlg0/ZiVrkJ92G2rcY34glXbXeYoSonsCDmA3hzYW6NEXrE
+o54CFI+NrQpQ4cXKb15VCv0Lh6xWkecKftSVU/WlDsG/j3gPn3QKxv4tp6cz
+hTD4/C1d/8LtAZjN6vne8mJPCHQms5PQJUZhFpJ/iM//EUndoBf6sBZK0meV
+xfyfL1GGUzd23IGbVFYFd5IXZX8QQ0by1apxfU7eHhU9VUhILTEgegKioLsU
+IUB7VUCSDwFo88Ac7o8GXq9DTkRzkRY1bPPPdFCB2Gw0imKKGmum6UoUKgUY
+pYcsd2nnEf7YhtHd2j14ibYktRoMtbzeAI/Q5NVOCHMVlw73mct+PRR9B6xW
+c6UJZUCfrT8X9FcqKVAUEgjJMQSJYgOkWiPN0Ff6hmTIGO6fWW1TL9mjAK4h
+unMGUZOv9MSmHDeVnSKQVoKpAzIL9EFGlUNlpyj2vSKPefHs86EmdNOJ5/Fg
+MEzkk5dIHqINkC8vtpeSV+wzmObRl3hV6/xIVTIEVBELjyCN8NU6KIBRbq2h
+hGNLSN36Dl3yIgyw1rQjlUs0bxZpWqeHwFgSZK1WrIFC6afUolvNICZHeqkh
+e+qpfvqNAL5kXlDbyQWrHZ398hCphoMUxrRacfVQtpoqXWcqLb32VEPNr0K+
+zKLz5Xl02rPotAvp5KHem1BPaqmFG2r5uorK2BnrwwUVl1galq3thUWRsZIE
+uZrPr4nTReSxDev4zGJTH29qdzvrhcEnOxliPSpF+/bpXHcLRggANUNbybKL
+tvKMpbNonSrPNTvpBjF2/dW54YW2I3/HicrpFEZzUMrWy8uW1kTAWIIvmg5k
+MGP1knGu3L6A6Yh50CxUxhGzziZWU7qeEMw9Q5HlcXAX4A8Pqd1HuSCRK0Fj
+NYKk81rLPp0h/koY3CFS+3KLf2BB/zZO5hcWjNZ5P7FggJW6diJ+Y2GTtRr7
+Gzv6FxOyv7Fgopi/E9Lab+3sN/fSH1nYbuIWIPzdkT+yQLPic7fT7hxfXtGB
+stwxbfNeGIHmmPHVYvQ6uTn+8O7itHNDSLIRmj9fHN9cdDrt7s3Xs4v25dcn
+C0bQhlaDqJPW6Z3Z/K6+lY503rn43L3++8eOpca5NAYhap7bu7t2faQDry4s
+f7FFc4e0Pp4d/1faYHI9TQ38raxhe/j1RmnZktQuu51iajkdEEG5K3gS9sbg
+kF25OlctJOrlx8srnAsnl8efu9YM9tCKO9toxZ0dZcVCHdOwclcOL+6gNPJ5
+4xvcvrCkVtqd7vXV5d9JxTlb5rViPMn816jVctSUA+SbrBzF+S6gsOmI5jgM
++u7AoBk6oilD87I9k1qnNwxTD2AcvpIHpFLddI4/XOY9YBY1Z0DXR+LEDjBc
+gQNkmywg1wZPv+p0rXnUFsce+JMNO9QwN+IQRCbYNPebO/uNZmGwEdDmj7k0
+97d29W8Y0WHDxiadNcDbrrwnhPlZ/JTLoTpWFr9RiOlbHAoiyAXtJFz2RV8s
+Dmvh03E4hgJYgqIDFR9EFxy8qlM1GMCn3x67GdGNowFP4EOlmj7r9Sp2gwGe
+SdBPKu02oEZhtY3dFr4LIeR9IH1XUGbpQ6bvCYk7VyLhnUSh/55uE7btxNaX
+aahKGeA9Q5j3A3F3/H/be9amto4lP+NfMXZqHQlJ+OgBCBS4F2Nis2UDC5iQ
+SqW0QjrAWQtJ0cOW9tr/ffsx7zPnSNjJTW7tVSpGmul59fT09PR098BvNmMK
+RmbxPwHL3ZBpzzIfR13XsphJ5VVCE+WYP7mtSZNNOBIbbPZx7O1vxGm/LbGK
+Xxit+O3/H2KVGwrScSNqEh03qpGiY7XWPHs7NBnEaFr8o+C7VKzUjWxbP8A+
+3o8lN7NpDOMajnu0EvMDjtkltFVaViltEZnfzkoBwpY3vEKkLreahOj7YzJd
+IFMajqf3P8HW9JqTCPojhjOQXiqFw59eUt9ZzftZwG8dK4x+JapsURnjPw3b
+Oiqfk2CvtRWGbfhosTnL7lBblMrf/rlrJfKIyCeehdFaA61J0R1KGZOy4k7e
+Ak5+QaWV7Msz9JOEZSyvaWXM5XjxTLb77Pr0nMJBiOiZXOrPjN2fgReTPoyA
+vt0CLnu0JypvcKuEsmkLliR3L7c8d+IymfZjGXQ2xuicGIO5Is47yQQPUhIK
+D6ZkGUk16GRGq5NBpqFV2ImaogR/MUSa2U1JcrQtCDHx/QCI7OYm7tkZyinB
+Xs46v0LngAEeBE5OT9pXx+eX7w/eCs0lrubvOnPUZ62nrVh1s1eLIJAy5Vwq
+tSRd/7QkU/LkFgmiwynC4QhFkQZIIyHBRYGnIiluRkZyqQI1ov05/fHiKGIF
+7UW7P0QNMplntRdSegDhu9tPRqiJvE2mAoPEkdgiw3l9Ox/7BiZksxWRZiuH
+s/EElhR+JSsqtOp3+c3XMO/fgQ27/LPL3dzTJhfc78kvr45+PHj/9vJXvwDZ
+gimnvwIby5yN48lEDpBTzuN+3JnEMu2JYE3LVTJJbtAxeyHPpJTNom1jG1cj
+/1Em8NpOPOiVsvaPJ5U1jGGANqQWwl4ftiiDDTy9jJJfIogwBelUkQkp1r6o
+jrI7xdoK0SL7wztrEcGvvCUJ2auG7UfQd7BQcClWm7B4dxs7u42tVKj+BsUz
+LZk4krvGbM7YhtmmCkUHOmUKvXKeNEA7iT8pKAwMFw9gCys+pp4/Ii+7b9W8
+vrEK7utyc/tnDlp8UToPleaj47enY0ddQmDjbvytOkJmsxQ5mK1WtQmzKow3
+gL0haS9EwUUCG88oAzVVwO4GMJKPps29yOoUWcaddaAG8mawqx6zjc4xXkmv
+PyTFUCEE8Mpo69ZiaOjYFXvg4Q4DFmawXzno8wekanJA8JMikVVbQHslDvz8
+LhPNc/6z8LFhKYMcfGTMCAWFWZeBz0IATseoBWW7mVU9AR30epdDH4o6b9tx
+eOxHt7++Zq1QUVH3XhwZm0hvPMSI5lYBq53gfNtL3hggo3my+J/Z4EM2ehy8
+cJweuy2RvgxXuXR3zpGog1i1sx7Gew5T6ndu4n4ZGebSnUb2ztojZErejiNB
+PFV5o7pbDYYjVuBuLOJqbbe+bXaenQZF08Y/DcvNzV30eE2rf7TSMLTKFcwx
+GVoYIcGULIIIkO+lZpxwIBEtkIPuaiAEoAB+Me1gKN32dUlYjVT2OULB/j7a
+XEDWQyqxIuotc9eXauupMbksEmvFazrl8aN567d2okSd4EF/SaHrmOwfKmsL
+B62V/UWbTfmgOLbzM9bteZNB/bQvrlTWjD1dg+mackjV3pFRk49pNRWCHbBx
+/TLu97WWis8EWMuavllCvXb71enJEYtnOopwPkUspYY52mNkTrORAZfNNaAs
+qyqaLIMPvEW0WD3zSGDui2LRQVNzuwxrtFTdqeNfpY/S87AnHhIzLS3Ou1dO
+gpx3L4+VGDQeyLCNk2pNpH3UXdBoQ1Bsza/dFDcWyjEF2xjx1bLsORcv7Vk5
+lX3VCTl0zOvbxaRr5kL2uu8VhJlIO7HKqckp4/fa6gX3YwFkqlaOHDZM3wKo
+V6sFK+q8QG7CflAJ6oOVr1p0YVJnnR9qMlKyFR0kWLUDkVm5idAWqE8l5ddn
+oGQAkrxFpX0cl/sCY+zEp0QKwOuLnz+bH1gWtnck+LXrQzhYjg9gv5fGxFD7
+J1R+KRKsVMuURnpqRdOlGm2VHBAfr2lLtdq242tNo/oYv+n0b8/j7rSDNxYF
+XbmwahemenWutZrRWCsLN9KIHSKvZBuo+OgxPMLFz9KRB8ZNo9b4FQVaToxM
+DEwJP/DurY02xsSe2pfHl2+PIE9eN9VQaVOrN8vV+uNxlYepfDxZPoiCQzRa
+7NDr9p7ptkLYI5h9Nm3CGR63E7PW3xwdv35z2T66vjw/4GWPG9GrcecTRmVw
+5kSNqCxqBh0lNfaKdE6vbTElblctSsxrL2v0J6dnZM6OWSg3o1mJ+H2RgcO8
+iEedcWc6HMu51qPUU1mzVmFJ9v/i6Ozg/ODy9Bx98oV0EjOUUakvKWNRMNEE
+YQ6d+UGSrDXh76bGXaiTum/6SwT/We1X4Welal1XkidTGwX2TyBrKesEwLuK
+Wd+djfH5Hod1Sqap3EFurYUGW71dwmalyndaMlxp45MFLeE8KQlkRumFRU8Y
+TWBS4p4YzvBho3GvLAZDOL9MpiAXVcgAMe5t6McQQiPRTtUthJAOKxk98mAV
+BjUhyhVJi4RvxJxloqstY4F5mWm/LFRx/gbHVQ52SjO/Q2umHpnLDSUl3A+n
+H+KF+EFE3Cw2+n7Qi8do7VkIN1lTbaomYb1WqigP6AqJMgBbvT1f+K1sF1/U
+aEogT6ElnZ+5bM9Oz96fFZWIYVOMpHccweU4If561pliLOtCisOk+ajZByq9
+SpN5TaNK78A0YNerNnnFrKob4R3IVrC0As63PH7KGcd3CT1GhmdnHC6lXuut
+Qtygwp19K3J856QZoli3wxuzxluYCLYyHDeaI6qdBYXjluUAp8JaQD+NXyQz
+W5oL4wCnRHj2pyxgthWwgf6S7552EDJPdmUH+lDUrihk5sQHwc9tfza551h4
+klDtXN73rfAoKQjt8pfn6xl29gx7e6bdPU3qSz8VO0ATukE3VS31ayGNtT0g
+FdNPEymsts00mDmajM2ZoGTAcNULtZb0qERRT5T8OMQoTe57qNEv3PaHnWnR
+7daLkK2zicKsPvI5G7TYT8MXXVivP/jRbvHAuMdTOtonYn15T1rpqpDqTCAo
+c3V8Oe4M6EYGGUPKwvuXpFQSvxZD9WGkLCPUOUKNV+1SYw1NFSVckooqlpfr
+fSq7VOB39Iv5Sc4VWpbWBHFlCIItoe3iQZJAknRJ70+hhYVLCzld+f2IQfxT
+qcFQAiBzBWqwVwXOUx4xBGnhlU8L0kg5QATaCZB4g+g53oNd4MDxXG49xora
+YmT7FrMSjtl6b2JxHAvohSlNBue9rsMZ10UtjwzJKcfySLEqwzkl03LtSYVd
+TcR/CGwCCgj2ePpKkmFclEq/Gl+njJOQXxegOVnvsfNlxKW/sA/Xv95YkrI1
+l/Zpl4ZoD05RJ/6VUn42begNwN75LNqQtPM1xCGr+8tiNCKkMoEspY6/+mB4
+GFkUEiIPxcD+zaf+9MmL7JkDEVUzLZP6r8+9IockU+P9Nwf7HeiG+YB4DOH8
+1cco+XMO8WQxNzc4zdojPSaxpnBEHfyM5El+tjFyToqOysAkh86hEnQdT7GB
+A6gLYVc2p9MDZrXcI6pWLTx/c3p7y8arqTOqB3hONJIWjPnCED3pC6rDI9l3
+Wyj+YunOVykKS9AdzGL5YK5WHczVy+F0OnwIjGZhuqSxO7JXSN548gunRoR9
+msPi4lEVs6drYQFlokFtogaDipZGZo+0C8gu7ttd1OQ1slhkqBWbPueaAotB
++jX5WT1wiHlhVRcm94VdoavrOuwnI2QIGfwGhoU2oo4iS5Y6HSd3ySCjHN1s
+O9qv4WhhLr1G+qb4USdRNo8P6AlDajRKyYjRZY/F1/YxoKvzY35kLr7/CK1f
+ntMvLSB9a4D/UxSDh0TO9C1G8m0J+C2j5tF3vibHGJyOjUGjWSPPgu0t5+rU
+N2OTyWi7bZtlTWY3FWXRokmzULCtRoIK8ufP0Zq3EL6++vy5MN8v1NdT5jD7
++7VisUjCbcExlgnecC2tRl0H2vZ86IGtTfvsTGmipL7yzcVWg24umvVNiTx5
+EzaZJt0PE96eVJqcWiH3TjRmptvbIArw6u+pZRsFP8lKpD0cYFwMxgGXF9qY
+MAMPy+sSUuxTXWVTw4Xp+/V/zeLx4myY4O5QEF6M9Of/ORt8sL4e3if9nnS/
+bSBZlXYakaYux+LLuF0I3NAqIeMZsl1ZUF7aUkm9hrewyqatkYQ0R5L3NoVL
+dlOg+3KJCUBYFX8fckDT54fttwcYBcleK9vNJhu7NbXdknEHIa/b9k8H52fW
+YsF3scWI8YYODw9JrwezM7yFHyMOj2dWDlqKDfHmA0auKOGp9cg5GVNk+C0B
+sauRoCG9fQUcslmy1ohbTKxdY5/VVHszbb4x8017uZSFvg8OeLdAbkXmzj2r
+NjQZK+NmHTRIQzI1Im1u4RwawCosF/Cn9qTpedAGWnztSCJDxMt9p0oxAarV
+SF9RI/C1NL8NMHbOxVhYkq6cnQSnQKbzay76Voujpz4N+ijgApYARZS2j79/
+AG58k0wF3pIP8Aawc4N3xZP4jp3DxG7RBG13AmeHbIAIz1lAdoDtTCA7fHgm
+kMymkBt6PC1nW4PBDeK4R55CAEYm6mw/C0tnMhV/k5Pm7Xw8V1v8/kJ1u6qd
+T7RYFQn1mjDtnN3Z2N06MUHvnZwL/3q7p1yVSmYz/qBpd1AuLc2f8au+/y5l
+VuJbry2ryNp/KUdKJ0gtXPsPwk5Xci4GtpWNB7Jbfq3h625CuHzwAl3vmpYk
+EZR7sVkj5O4J1djXIbXmIKP2LWgNVJUeCJsjaLxFrdyx1orS5hWDCdfRXy5q
+lms1C0XUIp5fNkuGRLNRv7dnjKOkTvHb6Qe3elhv5JVJy2rNtCyRIUhBUSTR
+xep0QffZ9L5mDUSzfDh3rLhIsIiM4+N0s0g2U6XHtQ/NOtIEjkwNzx4fzFmE
+G6I95P3IEo8qa3pCwmZX0GsqbBnh+ltZyTEB42lUI1pisFVK1x4wUMloQUly
+0peNJF+DAnpxQLE/jQOO16/CQappdPqw55vP2G2XqiW1Y7uFQnY1fkFtVVZI
+D0ealyME274GGgng3mlDZPUuA63pwrqHYXyj/6CU9Xn51+msUK2Zw4Lfrm8p
+5xrJCXIlwEA4fbIoFDF2j+TDZWTXYgu0ZYNMsRxjo+0VL/m7xX24gr61C7k1
+yN3IN9suNRS33NxkdOn3k75T9nG+77/j6+/65bLjqxH7/igHY1uwyQls4PrZ
+qkfAZG+PUOJmGfIda1nEal69KMOiS691Frk4uDp6f/Lq6PwCRSlG6DYLr2hn
+KekPCLhwxdHd14sClTIYMuSsg9Z00rpX4xrOdqYvUrK96Hx05FoWay2ptlzo
+dnq9cXtafBirrRT/V+8FqLVR26EYONXGjnksy1hDTh9GvPsJFDkwzM/l8emJ
+jG1DmQ8Zjr+tJ6q4fGYC2HoywnfV1esBqnZ6/Mg6j1IqukLpxBVdsu5TDlT3
+y12y7o0jcFPUarubW7u1nWyXrHs/olBjt245A2/WEZnw7+aWPKN8lwy6/Vkv
+Fs82Nl70k5sJ1QZfNu6fIRpRqkDKgdoflO4XmA1pdjBvovVOcjdSrE8q5pR5
+u5Wca7dmbLv8j6zwahnAq2UAL/MAlBlhrqWi0hBmNODpEcMN4E9tWGjw2pnL
+1yfwVYWmKETzJp/QvmgTTPmyIZpTQhdRUaByLmFCiGXITzSPoqiJkGoaOdS+
+seaUM2o8IKWA7MOtW09NpfKkuygRgd1HYVtZzgYY/v4fuZhl7Fp2oDayJOqB
+qUrOm2//aDrq31iY0OCebZEfC1ylf6EIq153voiZBHl9KCx7bf3bs/aWqcaG
+2kn2fHEUsOvxQ9vHWScZC7OZBLPs90eDAM4jiEEI7pCa1QXFU7Efn2M8uoKE
+IVFi6AGaQ93eE+Xj4qVLGlujo/1cvpZFcceB/OkYuck7waaljmYzOoSasK+6
+iaFOiRg2HXUDjiaa/KmTQXsmH6DmseA24lEx8az1h1vqFC1lSsV6vmg9OLkS
+eGN9CXt1MrhbYWdIJl13Y6CE3H2BIHxP3dpuLRhnTkK78Szrm7sNy1F3M9qm
+bQH+yNhWktDZaPwinjLNPPqNKJATHvsmVOt3eZvq69v1gyf+Mxo2eDaRjx6N
+aPH497daOnbpu/dvL48pLuQKJDv8GLvu5ZSQS7IEoSMMiR0RRSiaRGFJhqFd
+3/KouVutWgGGqkqlpJnBvI9nj+tTy+OVTiM/6xTpvVgoPB2OOr/N4ja2hJr9
+LNU5nncPej1Gt44Ali6/WkwwvzbiPPgi6ulsSk4rRoc+75eh92XBivM36pKc
+JGSpNj8bThLyVFJEMO+XONBUeTHlb4syBtwtqjeBa+RYvaV0cGvWxROb+pvg
+Prvs7YYB1D8RHfJDTecxt0w3AOVDdq7BcLHFlry1AuQQ/MacpZgNKczs7Yna
+EkwrJUp2DVWF61T558/lrdey9leeKaV4WaE3GfVZChrontKyeNWRBxCM5OI+
+uaWzaTFw6XYSx73LIb+bezkcwrmDAylTgM2oyR5SaiGsSXdNeeWgqMONQkde
+cUZNEQhjWBLuu8E+tOM4LST0lYGu2NC2hKMjQRqfph/hFAUtvT2+PLJucrKD
+MDlVBSGy6mZxLhR3oM4Mpa4ZCmZqZ/pCAEPCR5Gcr3xVJuwuZdYgFuAPzPYL
+fmTZcpqzQgJaM2b5HtIxY7UCGUGsypq25BitBL/Llf3OpItbkTvJVgkck7AH
+tcKReNQZT2JH8pEpefuIBEkfievBKCUK3AvmvQnyj9lJZBhoFahOHal+bB++
+P784PW/TrmjOCJtND+YccCHcz+YOnpwtKC/89tpWZGenYjOvbVVRKMDXtFRI
+cvQ76d6LcfzbLBmjicW0M76Lp+rOCyVSU+H5EU7U2lo1ipzkg+MLSIXkqtT7
+sGol0iGwU13iONjqU601bKD3Z68OLo88GADatIE45HL74s3BqyMbaAtH6I0R
+b9xAJhc3C/FAEspEDAf9xVNveBdHJ69UvW9BauEa4aS7nOrGxEMd6UUl5dGd
+gklLMNWg0K3hvSCJNUfsrm/vEMvZ3sln3Wk+bTHxP5d1/4Gce2XG3dwmLDa3
+te4yMMwyPU9gVfRX4Lkrs1rmsNU6i4BfltM5h8hx2KtKyqNzBePFAq1v70a1
+EJ1reE/puKmDnnOsxx2KVUN/VQxw1DW16ap+/fI+fgtf+PxOSXB6l4wNwSZs
+92J0zPIgz+caiW2MBtuymTCaP0AaWgggT/l0Hw/QOX44vUfvCgxiKjrASW9R
+WU8VIkWENSypDE99kspXypMKdtNkwVTLInRhgyHre51xD/le/IJeHJTPcvH4
+nIKqSuqmp4+h8WKNFJHWvKbJ1UhgFS63pdGD7BYRISi4GLeKVJ7S76VU5yGg
+wEvgAbWRrzSiOSflDF9ZKVcBeqMbDqeCuX6v4KoL6VE6leUrAOlk9fpQWFai
+DmXw6AEAETBFoBHea3QXGNn+A+NBKUCoIlz1UAe/IQ6/gaR6kERGWrxr4UFQ
+wGwK5vzSMstSDFZCCsBKQP1XCSj/uBfALDrT7v3rw2oqpZZKqTvxE2rNpo55
+bOsPdJjjlp+DxozJcDah6MgtiTKlgyBRBHoHQ8fYyfK1X+QIQBZDOPokU7oi
+WhPrhKsh4WfCVxQv4mlXhaRYnRqEBO7dxTDGYb9/3UrN6HfSnQSanBCMFUA4
+hoLBen7+6nq0toX4EJ/nJjVEaIvrkUlYD6aiKrKLr6mQ0RJhDqScWGk36w0O
+l1dvRMqC0FZI4eTQ8zEF/U2s3/Z5R4DjRjweyDcejge3Q/wK602m60Uq9Fp+
+IFaiuABqSPlMTZd6cISBFGCawDjJxOomFpN4FI/xrIrK0+8njkjGdDE57IyQ
+7fRsdBYwjJaCQ6z/NO6MroX/KWw1itiZCw5tYqZHfAJ4YNTIpf/mNKoq+zlV
+F70N96SiL0ekkiANF9UaRdvqr31xeH50dNIm6gzukqyVfGuF562BJFjfjWCH
+9KNlG1j3/AFSI+yGRpNVRsMfOeUlBVolARMExoifKhKv4/EDNPd6+BD/r3jd
+GXeTjvjhoTONoq2/j5LBcLDR7c428JLlY7IRT/bJFxBoMLkTI2QJOI2EBgwR
+80kshjNYwRjQFZcuqgoB2wJW6dh6lRdqQJ7WH04nuCWjVfdwxKI6Gqx2PpDd
+3QMADD8A5+v0+wsxSLrxUyh4guu+O4FVMk36GOY7wViGZTi3fMDjCxXpTIny
+4nkHY92Srv4Jvzz/4vzo4NW7ow1okpgG7gaIGsJ4Ex9WieDQx1gEcXMKQrM4
+H97cJNA18cMEf/99sBgO7j51Nh5wcNC5jd+6G93OPpI9IEYeMF7gajrr3MVj
+8w0DcL5DtPz3XbcrKj/BuL6nWPKTjSf/B7BWjmjDuQAA
+--711056172-1804928587-895711541=:14808--
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Thu May 21 19:50:38 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Thu, 21 May 1998 19:50:38 -0500 (CDT)
+Received: (from tibbs@localhost) by sina.hpc.uh.edu (8.7.3/8.7.3) id TAA03897 for fvwm-workers@hpc.uh.edu; Thu, 21 May 1998 19:50:32 -0500 (CDT)
+Received: from aleph.net.uniovi.es (aleph.net.uniovi.es [156.35.11.1]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id SAA01986 for <fvwm-workers@hpc.uh.edu>; Thu, 21 May 1998 18:08:03 -0500 (CDT)
+Received: from pinon.ccu.uniovi.es by aleph.net.uniovi.es (PMDF V5.1-10 #4541)
+ with ESMTP id <01IXBDK8RHZE00AJHY@aleph.net.uniovi.es> for
+ fvwm-workers@hpc.uh.edu; Fri, 22 May 1998 01:06:37 +0200 (MET)
+Received: (from mat006@localhost) by pinon.ccu.uniovi.es (8.8.8/8.7.3)
+ id BAA14651; Fri, 22 May 1998 01:07:42 +0200 (METDST)
+Date: Fri, 22 May 1998 01:07:42 +0200 (METDST)
+From: German Jose Gomez Garcia <mat006@pinon.ccu.uniovi.es>
+Subject: Just a test to see if I'm subscribed to it
+To: fvwm-workers list <fvwm-workers@hpc.uh.edu>
+Message-id: <Pine.HPP.3.91.980522010636.14606A-100000@pinon.ccu.uniovi.es>
+MIME-version: 1.0
+Content-type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+	Not receiving mail since I unsubscribed myself from
+the plain fvwm list, is the list down?
+
+<>-------------------------------------+-----------------------------------<>
+   One O.S. to rule them all,          |  German Gomez Garcia
+      One O.S. to find them.           |  mat006@pinon.ccu.uniovi.es
+   One O.S. to bring them all          |
+      and in the darkness bind them.   |  "Wur Qanar Wur Stilor Wur Kas"
+<>-------------------------------------+-----------------------------------<>
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Fri May 29 11:56:15 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Fri, 29 May 1998 11:56:15 -0500 (CDT)
+Received: from helvetica.cs.arizona.edu (helvetica.CS.Arizona.EDU [192.12.69.220]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id LAA07841; Fri, 29 May 1998 11:56:08 -0500 (CDT)
+Received: (from bradym@localhost) by helvetica.cs.arizona.edu (8.8.7/8.7.3) id JAA04545; Fri, 29 May 1998 09:55:47 -0700
+To: fvwm@hpc.uh.edu, fvwm-workers@hpc.uh.edu
+Subject: [ANNOUCEMENT] fvwm 2.0.47 status and request for volunteers
+From: Brady Montz <bradym@cs.arizona.edu>
+Date: 29 May 1998 09:55:47 -0700
+Message-ID: <t8lnrlxbho.fsf@helvetica.cs.arizona.edu>
+Lines: 38
+X-Mailer: Gnus v5.5/XEmacs 20.4 - "Emerald"
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+status report:
+-------------
+Good news, I passed my prelims yesterday.
+Mixed news, I'm flying to Des Moines to visit my dying grandma (sad part) and
+eat lots of corn-fed prime rib (happy part).
+
+So, I haven't gotten much done on 2.0.47 except look it over, and won't until
+at least next week.
+
+volunteer request:
+-----------------
+
+I'd like two things:
+
+1. A list of people who want to alpha test. Along with a name I want to know:
+  a. architecture/OS used
+  b. modules used (me: FvwmM4, FvwmButtons, FvwmIconMan, FvwmIdent)
+  c. "extensions" used (things with defines in Fvwm.tmpl) (me: shape,
+     miniicons, pixmap buttons, titlestyle)
+
+People on this list will get to alpha test the new release (probably future
+releases too) and will be expected to give a complete testing/report (reminder 
+email sent after a week). Sounds like fun, eh? 
+
+2. A repository of fvwmrc's on the website (along with all icons, scripts,
+   etc.  used and a list of any environment variables and options in Fvwm.tmpl
+   which need to be set so that people can just run them without going mad)
+   organized by features. So if someone wants to use some fvwmrc's using
+   gradients, they can find them. It would probably also be cool if people
+   submitted "truncated" fvwmrc's which only had the configuration for some
+   module, for example, all of their *FvwmButtons lines long with any Style
+   commands which modify how FvwmButtons looks. I would like to have a
+   volunteer to get this running too. This volunteer (unlike those poor souls
+   for #1) would probably get lots of happy feedback. 
+
+-- 
+ Brady Montz
+ bradym@cs.arizona.edu
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Fri May 29 12:30:01 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Fri, 29 May 1998 12:30:01 -0500 (CDT)
+Received: from norad.dodds.net (electro@norad.dodds.net [208.132.64.105]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id MAA08784; Fri, 29 May 1998 12:26:45 -0500 (CDT)
+Received: from localhost (electro@localhost)
+	by norad.dodds.net (8.8.5/8.8.5) with SMTP id MAA15920;
+	Fri, 29 May 1998 12:26:14 -0500
+Date: Fri, 29 May 1998 12:26:14 -0500 (CDT)
+From: Chris Rode <electro@dodds.net>
+To: Brady Montz <bradym@cs.arizona.edu>
+cc: fvwm@hpc.uh.edu, fvwm-workers@hpc.uh.edu
+Subject: Re: FVWM: [ANNOUCEMENT] fvwm 2.0.47 status and request for volunteers
+In-Reply-To: <t8lnrlxbho.fsf@helvetica.cs.arizona.edu>
+Message-ID: <Pine.LNX.3.95.980529122231.15910A-100000@norad.dodds.net>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+
+
+On 29 May 1998, Brady Montz wrote:
+
+> 2. A repository of fvwmrc's on the website (along with all icons, scripts,
+>    etc.  used and a list of any environment variables and options in Fvwm.tmpl
+>    which need to be set so that people can just run them without going mad)
+>    organized by features. So if someone wants to use some fvwmrc's using
+>    gradients, they can find them. It would probably also be cool if people
+>    submitted "truncated" fvwmrc's which only had the configuration for some
+>    module, for example, all of their *FvwmButtons lines long with any Style
+>    commands which modify how FvwmButtons looks. I would like to have a
+>    volunteer to get this running too. This volunteer (unlike those poor souls
+>    for #1) would probably get lots of happy feedback. 
+
+I have a page with several fvwm configuration examples on it.
+(http://www.public.iastate.edu/~crode/fvwm).  However, I have come to
+realize over the last several months (almost a year) that the page hasn't
+been updated, that I don't have the time to keep maintaining it -- that,
+and I have switched to enlightenment on my main machine.  I also have
+several fvwmrc submissions sitting around that haven't yet been added to
+the page.  If whoever volunteers to take on Brady's second request would
+like any/all of these, please get in contact with me.  Thanks. :)
+
+--chris.
+
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Fri May 29 13:14:50 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Fri, 29 May 1998 13:14:50 -0500 (CDT)
+Received: from aleph.net.uniovi.es (aleph.net.uniovi.es [156.35.11.1]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id NAA10273 for <fvwm-workers@hpc.uh.edu>; Fri, 29 May 1998 13:14:36 -0500 (CDT)
+Received: from pinon.ccu.uniovi.es by aleph.net.uniovi.es (PMDF V5.1-10 #4541)
+ with ESMTP id <01IXM9MATLYO00D0UY@aleph.net.uniovi.es> for
+ fvwm-workers@hpc.uh.edu; Fri, 29 May 1998 20:12:28 +0200 (MET)
+Received: (from mat006@localhost) by pinon.ccu.uniovi.es (8.8.8/8.7.3)
+ id UAA05391; Fri, 29 May 1998 20:13:44 +0200 (METDST)
+Date: Fri, 29 May 1998 20:13:44 +0200 (METDST)
+From: German Jose Gomez Garcia <mat006@pinon.ccu.uniovi.es>
+Subject: Re: [ANNOUCEMENT] fvwm 2.0.47 status and request for volunteers
+In-reply-to: <t8lnrlxbho.fsf@helvetica.cs.arizona.edu>
+To: Brady Montz <bradym@cs.arizona.edu>
+Cc: fvwm-workers@hpc.uh.edu
+Message-id: <Pine.HPP.3.91.980529200730.5275A-100000@pinon.ccu.uniovi.es>
+MIME-version: 1.0
+Content-type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+
+	I will do it, I'm using Linux (usually last dev kernel version) with
+gcc2.8.1 + latest binutils + glibc2.0.7pre3 + XFree 3.3.2 (Waiting 
+eagerly for next versions of everything :). I use mainly FvwmPager + 
+FvwmButtons although I would use any other if it's necessary or usefull. 
+I compile Fvwm with all options enabled (I mean all Fvwm.tmpl options 
+enabled)
+
+PS: Have you received my patch to *improve* menu look with a new menustyle
+concept?
+
+<>-------------------------------------+-----------------------------------<>
+   One O.S. to rule them all,          |  German Gomez Garcia
+      One O.S. to find them.           |  mat006@pinon.ccu.uniovi.es
+   One O.S. to bring them all          |
+      and in the darkness bind them.   |  "Wur Qanar Wur Stilor Wur Kas"
+<>-------------------------------------+-----------------------------------<>
+
+On Fri, 29 May 1998, Brady Montz wrote:
+
+> status report:
+> -------------
+> Good news, I passed my prelims yesterday.
+> Mixed news, I'm flying to Des Moines to visit my dying grandma (sad part) and
+> eat lots of corn-fed prime rib (happy part).
+> 
+> So, I haven't gotten much done on 2.0.47 except look it over, and won't until
+> at least next week.
+> 
+> volunteer request:
+> -----------------
+> 
+> I'd like two things:
+> 
+> 1. A list of people who want to alpha test. Along with a name I want to know:
+
+......
+ 
+>  Brady Montz
+>  bradym@cs.arizona.edu
+> 
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Fri May 29 16:48:43 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Fri, 29 May 1998 16:48:43 -0500 (CDT)
+Received: from helvetica.cs.arizona.edu (helvetica.CS.Arizona.EDU [192.12.69.220]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id QAA14237 for <fvwm-workers@hpc.uh.edu>; Fri, 29 May 1998 16:48:36 -0500 (CDT)
+Received: (from bradym@localhost) by helvetica.cs.arizona.edu (8.8.7/8.7.3) id OAA04895; Fri, 29 May 1998 14:48:14 -0700
+To: fvwm-workers@hpc.uh.edu
+Subject: Re: [ANNOUCEMENT] fvwm 2.0.47 status and request for volunteers
+References: <Pine.HPP.3.91.980529200730.5275A-100000@pinon.ccu.uniovi.es>
+From: Brady Montz <bradym@cs.arizona.edu>
+Date: 29 May 1998 14:48:14 -0700
+In-Reply-To: German Jose Gomez Garcia's message of "Fri, 29 May 1998 20:13:44 +0200 (METDST)"
+Message-ID: <t8wwb4wxy9.fsf@helvetica.cs.arizona.edu>
+Lines: 17
+X-Mailer: Gnus v5.5/Emacs 20.2
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+German Jose Gomez Garcia <mat006@pinon.ccu.uniovi.es> writes:
+> 	I will do it, I'm using Linux (usually last dev kernel version) with
+> gcc2.8.1 + latest binutils + glibc2.0.7pre3 + XFree 3.3.2 (Waiting 
+> eagerly for next versions of everything :). I use mainly FvwmPager + 
+> FvwmButtons although I would use any other if it's necessary or usefull. 
+> I compile Fvwm with all options enabled (I mean all Fvwm.tmpl options 
+> enabled)
+> 
+> PS: Have you received my patch to *improve* menu look with a new menustyle
+> concept?
+
+No. I'd prefer to wait on that until I've released 2.0.47 and set up a public
+CVS server, and let you put all your stuff in yourself.
+
+-- 
+ Brady Montz
+ bradym@cs.arizona.edu
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Sun May 31 11:20:18 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sun, 31 May 1998 11:20:18 -0500 (CDT)
+Received: from po1.glue.umd.edu (po1.glue.umd.edu [128.8.10.97]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id LAA24540 for <fvwm-workers@hpc.uh.edu>; Sun, 31 May 1998 11:20:11 -0500 (CDT)
+Received: from atlantis.csc.umd.edu ((IDENT root)@atlantis.csc.umd.edu [129.2.8.129])
+	by po1.glue.umd.edu (8.9.0.Beta6/8.9.0.Beta6) with SMTP id MAA05325;
+	Sun, 31 May 1998 12:19:44 -0400 (EDT)
+Date: Sun, 31 May 1998 12:19:41 -0400 (EDT)
+From: Root of all Evil <root@Glue.umd.edu>
+To: Brady Montz <bradym@cs.arizona.edu>
+cc: fvwm-workers@hpc.uh.edu
+Subject: Re: FVWM: [ANNOUCEMENT] fvwm 2.0.47 status and request for volunteers
+In-Reply-To: <t8lnrlxbho.fsf@helvetica.cs.arizona.edu>
+Message-ID: <Pine.SOL.3.95q.980531114614.17268A-100000@atlantis.csc.umd.edu>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+On 29 May 1998, Brady Montz wrote:
+
+: status report:
+: -------------
+: Good news, I passed my prelims yesterday.
+: Mixed news, I'm flying to Des Moines to visit my dying grandma (sad part) and
+: eat lots of corn-fed prime rib (happy part).
+: 
+: So, I haven't gotten much done on 2.0.47 except look it over, and won't until
+: at least next week.
+: 
+: volunteer request:
+: -----------------
+: 
+: I'd like two things:
+: 
+: 1. A list of people who want to alpha test. Along with a name I want to know:
+
+That is what fvwm-workers was created for. It was named after "bind-workers"
+and others to do what you are suggesting. I guess you are suggesting that
+fvwm-workers is too open of a list, and gets used as the fvwm list on a
+regular basis...
+
+:   a. architecture/OS used
+:   b. modules used (me: FvwmM4, FvwmButtons, FvwmIconMan, FvwmIdent)
+:   c. "extensions" used (things with defines in Fvwm.tmpl) (me: shape,
+:      miniicons, pixmap buttons, titlestyle)
+
+These are the things that should be reported after compiling and testing
+reports are sent back, not before. These things will change over time, as
+systems and OS releases come and go. I currently have access to 13
+combinations of Vendor and OS. 
+
+: 
+: People on this list will get to alpha test the new release (probably future
+: releases too) and will be expected to give a complete testing/report (reminder 
+: email sent after a week). Sounds like fun, eh? 
+
+Expected is a bit too strong in my view. Everyone here is a volunteer, and
+have to interleave their paid or scholastic work for "internet projects".
+
+I do believe that a format in which to report results is important. However
+an individual who is active for several alpha runs, my only be able to
+monitor the testing reports during others.
+
+: 
+: 2. A repository of fvwmrc's on the website (along with all icons, scripts,
+:    etc.  used and a list of any environment variables and options in Fvwm.tmpl
+:    which need to be set so that people can just run them without going mad)
+:    organized by features. So if someone wants to use some fvwmrc's using
+:    gradients, they can find them. It would probably also be cool if people
+:    submitted "truncated" fvwmrc's which only had the configuration for some
+:    module, for example, all of their *FvwmButtons lines long with any Style
+:    commands which modify how FvwmButtons looks. I would like to have a
+:    volunteer to get this running too. This volunteer (unlike those poor souls
+:    for #1) would probably get lots of happy feedback. 
+: 
+
+I agree in that I have had alot of difficulty in the past getting some
+examples to do anything like what was intended. However too much work will
+tend to keep people from donating their creative ideas. I have gained much
+from reading "fvwm2rc" files that will never run correctly at my site.
+Maybe this says something about the portability of the .fvwm2rc file, which
+may or may not rely on built in defaults or features of fvwm2.
+At a minimum, I find a screen shot(s) most helpful to determine weather
+further perusal of ones fvem setup is waranted.
+
+
+Thank you "Brady Montz", for taking the gauntlet. I support over 1000 Unix
+workstations of various flavors upon which fvwm2 is the default window
+manager. There are many things fvwm2 does well and many it could do better. 
+The whole "dt/mwm" proliferation is the outcome of the vision that "fvwm" 
+and "t*wm" provided as heterogeneous window managers.
+
+And thank you "Chuck" for picking up the gauntlet and caring it when you
+did, when the future of fvwm was in doubt. I have enjoyed working with you
+and other fvwm-workers during your stint in supporting fvwm2. 
+
+I hope to provide help as I can. In the right window of opportunity I can
+provide alot of feedback.. at other times less. I hope this type of
+contribution will be accepted, and allowed to add when it can, monitor when
+it can not.
+
+Randall
+
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+

@@ -1,0 +1,802 @@
+From owner-fvwm-workers@hpc.uh.edu  Thu Sep 11 15:35:19 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Thu, 11 Sep 1997 15:35:19 -0500 (CDT)
+Received: from chiwawa.cs.washington.edu (chiwawa.cs.washington.edu [128.95.1.152]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id PAA09939 for <fvwm-workers@hpc.uh.edu>; Thu, 11 Sep 1997 15:35:12 -0500 (CDT)
+Received: (gjb@localhost) by chiwawa.cs.washington.edu (8.8.5+CS/7.2ws+) id NAA24792; Thu, 11 Sep 1997 13:35:07 -0700 (PDT)
+To: Fvwm-Workers Mailing List <fvwm-workers@hpc.uh.edu>
+Subject: Synthetic Button Press Patch
+From: Greg Badros <gjb@cs.washington.edu>
+Date: 11 Sep 1997 13:35:06 -0700
+Message-ID: <qrrd8mfd1xh.fsf@chiwawa.cs.washington.edu>
+Lines: 233
+X-Mailer: Gnus v5.4.59/Emacs 19.34
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+Below is a patch derived from GWM code which creates a new command
+"SendButtonPress" that creates a synthetic button press in the window
+that the pointer is in.  I use this in conjunction with keybindings that
+move the mouse pointer around so that I need not reach for my mouse.
+Better for CTS, general comfort, ease of use, and in case you don't have
+a mouse.  Lots more could be done to make the patch even nicer,
+including:
+
+Arguments for whether you want to send just a press, just a release, or
+both (with a specified delay);  currently sends both w/ a fixed delay.
+
+My use of the patch is like this:
+
+#------------
+AddToFunc "KeyMouseMoves" 
++ "I" Key $0 A $4 CursorMove  -$5   0
++ "I" Key $1 A $4 CursorMove    0  $5
++ "I" Key $2 A $4 CursorMove    0 -$5
++ "I" Key $3 A $4 CursorMove   $5   0
+
+KeyMouseMoves h j k l CSM 7
+KeyMouseMoves y u i o CSM 1
+
+# This stuff requires a gjb@cs.washington.edu patch
+Key 7 A CSM SendButtonPress 1 0 0
+Key 8 A CSM SendButtonPress 2 0 0
+Key 9 A CSM SendButtonPress 3 0 0
+#--------------
+
+Patch is below, and technically is relative to fvwm-2.0.45 w/ my
+animated menus and gperf command hashing patch, though the changes you
+need are all to builtins.c, except for the addition of the new command
+name and #define, etc.
+
+Also available at 
+http://www.cs.washington.edu/homes/gjb/patches/fvwm-SendButtonPress.patch
+
+Feel free to provide feedback (esp. bugs!)  Use at your own risk, etc.
+
+Greg J. Badros
+gjb@cs.washington.edu
+Seattle, WA  USA
+http://www.cs.washington.edu/homes/gjb
+
+
+Index: builtins.c
+===================================================================
+RCS file: /homes/gws/gjb/.CVS/fvwm/fvwm/builtins.c,v
+retrieving revision 1.16
+retrieving revision 1.18
+diff -u -r1.16 -r1.18
+--- builtins.c	1997/05/07 23:09:15	1.16
++++ builtins.c	1997/09/11 20:07:22	1.18
+@@ -909,6 +909,96 @@
+   XFlush (dpy);
+ }
+ 
++/* Stolen from GWM 1.8c --gjb */
++void
++fill_x_button_event(XButtonEvent *evt, int type, int button, int modifier, 
++		    int x, int y, int x_root, int y_root, Window child, Window sub_window)
++{
++    evt -> type = type;
++    evt -> display = dpy;
++    evt -> window = child;
++    evt -> subwindow = sub_window;
++    evt -> root = Scr.Root;
++    evt -> time = lastTimestamp + (type == ButtonPress? 0 : 5);
++    evt -> x = x;
++    evt -> y = y;
++    evt -> x_root = x_root;
++    evt -> y_root = y_root;
++    evt -> same_screen = 1;
++    evt -> button = button;
++    evt -> state = modifier;
++}
++
++Window
++WindowGettingButtonEvent(Window w, int x, int y)
++{
++    int x2, y2;
++    Window child, w2 = w;
++    XWindowAttributes wa;
++
++ find_window:
++    XTranslateCoordinates(dpy, w, w2, x, y, &x2, &y2, &child);
++    if (child) {
++	x = x2;
++	y = y2;
++	w = w2;
++	w2 = child;
++	goto find_window;
++    }
++    x = x2;
++    y = y2;
++    w = w2;
++
++ find_listener:
++    XGetWindowAttributes(dpy, w, &wa);
++    if (!(wa.all_event_masks & (ButtonPressMask | ButtonReleaseMask))) {
++	Window d1, *d3, parent;
++	unsigned int d4;
++	
++	XQueryTree(dpy, w, &d1, &parent, &d3, &d4);
++	if (d3) XFree(d3);
++	if (parent) {
++	    w = parent;
++	    goto find_listener;
++	}
++    }
++    return w;
++}
++
++/* Inspired by GWM 1.8c --gjb */
++void SendButtonPress(XEvent *eventp,Window w,FvwmWindow *tmp_win,
++		     unsigned long context, char *action, int *Module)
++{
++  char *szButton = strtok(action," \t\n");
++  char *szModifier = strtok(NULL," \t\n");
++  char *szPropagate = strtok(NULL," \t\n");
++  Window child;
++  XButtonEvent event;
++  int button = atoi(szButton);
++  int modifier = atoi(szModifier);
++  int propagate = atoi(szPropagate);
++  int x, y, x_root, y_root, x2, y2;
++  int JunkMask;
++  Window JunkRoot;
++  Window pointer_win, dummy;
++  XQueryPointer( dpy, w, &JunkRoot, &pointer_win,
++                 &x_root,&y_root,&x, &y, &JunkMask);
++
++  child = WindowGettingButtonEvent(pointer_win,x,y);
++  x2 = x; y2 = y;
++
++  XTranslateCoordinates(dpy, pointer_win, child, x2, y2,
++			  &x, &y, &dummy);
++  fill_x_button_event(&event, ButtonPress, button, modifier, 
++		      x, y, x_root, y_root, child, 0);
++  XSendEvent(dpy, PointerWindow, propagate, ButtonPressMask, 
++	     (XEvent *) &event);
++  fill_x_button_event(&event, ButtonRelease, button, modifier | (1 << (button+7)),
++		      x, y, x_root, y_root, child, 0);
++  XSendEvent(dpy, PointerWindow, propagate, ButtonReleaseMask, 
++	     (XEvent *) &event);
++  /*  fprintf(stderr,"New Sent button press of %d at %d, %d; time = %ld\n",button,x,y,lastTimestamp); */
++}
+ 
+ void stick_function(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+ 		    unsigned long context, char *action, int *Module)
+@@ -1106,6 +1196,9 @@
+ {
+   if (action && *action)
+   {
++    int len = strlen(action);
++    if (action[len-1] == '\n')
++      action[len-1] = '\0'; /* drop the closing carraige return */
+     fvwm_msg(INFO,"Echo",action);
+   }
+ }
+@@ -2820,7 +2913,6 @@
+     char *szVar = NULL;
+     char *szValue = NULL;
+     char *szNoOverwrite = NULL;
+-    char *szPutenv = NULL;
+     Bool fOverwrite = TRUE;
+     action = GetNextToken(action,&szVar);
+     action = GetNextToken(action,&szValue);
+@@ -2830,12 +2922,15 @@
+ #ifdef USE_SETENV_CALL /* this call exists on linux */
+     setenv(szVar,szValue,fOverwrite?1:0);
+ #else
++    {
++    char *szPutenv = NULL;
+     if (fOverwrite == FALSE) {
+       fvwm_msg(WARN,"SetEnv","Ignoring NoOverwrite directive. Recompile with -DUSE_SETENV_CALL");
+     }
+     szPutenv = safemalloc(strlen(szVar)+strlen(szValue)+2);
+     sprintf(szPutenv,"%s=%s",szVar,szValue);
+     putenv(szPutenv);
++    }
+ #endif
+ }
+ 
+Index: functions.c
+===================================================================
+RCS file: /homes/gws/gjb/.CVS/fvwm/fvwm/functions.c,v
+retrieving revision 1.6
+retrieving revision 1.7
+diff -u -r1.6 -r1.7
+--- functions.c	1997/04/21 06:03:32	1.6
++++ functions.c	1997/09/11 18:53:43	1.7
+@@ -133,6 +133,7 @@
+   {"Restart",      restart_function, F_RESTART,             FUNC_NO_WINDOW},
+   {"KillModule",   module_zapper,    F_ZAP,                 FUNC_NO_WINDOW},
+   {"SendToModule", SendStrToModule,  F_SEND_STRING,         FUNC_NO_WINDOW},
++  {"SendButtonPress", SendButtonPress, F_SEND_BUTTONPRESS,  FUNC_NEEDS_WINDOW},
+   {"Scroll",       scroll,           F_SCROLL,              FUNC_NO_WINDOW},
+   {"Stick",        stick_function,   F_STICK,               FUNC_NEEDS_WINDOW},
+   {"Send_WindowList",send_list_func, F_SEND_WINDOW_LIST,    FUNC_NO_WINDOW},
+Index: misc.h
+===================================================================
+RCS file: /homes/gws/gjb/.CVS/fvwm/fvwm/misc.h,v
+retrieving revision 1.10
+retrieving revision 1.11
+diff -u -r1.10 -r1.11
+--- misc.h	1997/05/07 23:11:16	1.10
++++ misc.h	1997/09/11 18:53:48	1.11
+@@ -510,6 +510,8 @@
+ void SetBorderStyle(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+ 		    unsigned long context, char *action,int* Module);
+ #endif
++void SendButtonPress(XEvent *eventp,Window w,FvwmWindow *tmp_win,
++		     unsigned long context, char *action, int *Module);
+ void SetMenuStyle(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+ 		unsigned long context, char *action,int* Module);
+ void SetTitleStyle(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+Index: parse.h
+===================================================================
+RCS file: /homes/gws/gjb/.CVS/fvwm/fvwm/parse.h,v
+retrieving revision 1.5
+retrieving revision 1.6
+diff -u -r1.5 -r1.6
+--- parse.h	1997/04/21 06:22:09	1.5
++++ parse.h	1997/09/11 18:53:50	1.6
+@@ -75,6 +75,7 @@
+     F_COLORMAP_FOCUS,
+     F_TITLESTYLE,
+     F_EXEC_SETUP,
++    F_SEND_BUTTONPRESS,
+     F_SETENV,
+     F_SET_ANIMATION,
+     F_SET_MENUDELAY,
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Wed Sep 17 17:09:28 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Wed, 17 Sep 1997 17:09:28 -0500 (CDT)
+Received: from mercury.elmailer.net (mercury.elmailer.net [195.224.76.4]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id RAA18429 for <fvwm-workers@hpc.uh.edu>; Wed, 17 Sep 1997 17:09:19 -0500 (CDT)
+Received: from sfere.greenend.org.uk (sfere.greenend.org.uk [195.224.38.1])
+    by mercury.elmailer.net with ESMTP
+    id XAA23459 for <fvwm-workers@hpc.uh.edu> (2.3-LM-8.8.6/3.1.19);
+    Wed, 17 Sep 1997 23:07:29 +0100 (BST)
+Received: from valour.greenend.org.uk (valour.greenend.org.uk [195.224.38.2])
+          by sfere.greenend.org.uk with ESMTP
+          id XAA12847 for <fvwm-workers@hpc.uh.edu>
+          (2.1.1h-8.8.5/2.1b-greenend); Wed, 17 Sep 1997 23:05:25 +0100
+Received: by valour.greenend.org.uk
+	id m0xBSDs-000qFOC
+	(Debian Smail-3.2 1996-Jul-4 #2); Wed, 17 Sep 1997 23:05:24 +0100 (BST)
+Message-Id: <m0xBSDs-000qFOC@valour.greenend.org.uk>
+Date: Wed, 17 Sep 1997 23:05:24 +0100 (BST)
+From: Austin Donnelly <austin@greenend.org.uk>
+To: fvwm-workers@hpc.uh.edu
+Subject: FvwmPager configuration
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+Hi,
+
+I've been playing with having a system.fvwm2rc which reads in "hook"
+files from user's home directories, so that common configuration
+changes can be made easily by users.  Users don't have a ~/.fvwm2rc,
+but rely on the system.fvwm2rc reading the hook files they place in
+their own ~/.fvwm2/ directory.  Since the users can't edit the
+system.fvwm2rc file, any configuration it establishes needs to be able
+to be overridden by future configuration lines read in from the
+user-editable ~/.fvwm2/foo.hook files.
+
+It's working quite well, but the FvwmPager module parses its config
+options such that later *FvwmPagerXXX options don't always work
+well. As an example, try:
+
+*FvwmPagerGeometry -1-1
+*FvwmPagerGeometry +50+50
+
+as the only two *FvwmPagerGeometry lines read in your fvwm2rc.
+
+You might expect the second to take precedence, and have a pager in
+the top lefthand corner of your screen (indented 50 pixels from the
+top and the left, of course).  What actually happens is that you get a
+pager partially off the bottom right of the screen, as if the geometry
+spec had been "-50-50".
+
+This is due to some global variables in FvwmPager.c being initialised
+explicitly when they're declared, but not re-initialised when a new
+geometry spec is read.  This problem is present in fvwm version
+2.0.46.
+
+I've got a minimal patch which fixes this problem and a few other
+related ones.  I've attached the patch to the end of this email.
+Chuck, please could you consider it for inclusion in a future release?
+
+It fixes:
+
+ o the *FvwmPagerGeometry problem described above
+
+ o similar, but for the width and height of the pager
+
+ o the special *FvwmPagerFont of 'none' is now overridable
+      by future FvwmPagerFonts (uselabel flag needed resetting)
+
+ o a new option has been added, *FvwmPagerNoStartIconic, which turns
+      off the iconic startup flag.  Also a patch to the manpage to
+      document it, naturally :)
+
+I hope you can get this stuff in to a future release, it really makes
+the goal of dynamic configuration a lot easier :)
+
+Thanks,
+Austin
+--- FvwmPager.c.old	Wed Sep 17 22:27:56 1997
++++ FvwmPager.c	Wed Sep 17 22:27:03 1997
+@@ -886,7 +886,16 @@
+ 	    }
+ 	  tmp[strlen(tmp)-1] = 0;
+ 	  
++	  /* reset back to defaults in case we get multiple Geometry
++           * lines. <and1000@debian.org>, 1997/09/17 */
++	  usposition = 0;
++	  xneg = 0;
++	  yneg = 0;
++	  window_w = 0;
++	  window_h = 0;
++
+ 	  flags = XParseGeometry(tmp,&g_x,&g_y,&width,&height);
++
+ 	  if (flags & WidthValue) 
+ 	    {
+ 	      window_w = width;
+@@ -911,7 +920,6 @@
+ 	    }
+ 	  if (flags & YNegative) 
+ 	    {
+-	      window_y = g_y;
+ 	      yneg = 1;
+ 	    }
+ 	}
+@@ -960,8 +968,10 @@
+ 	  CopyString(&font_string,&tline[Clength+5]);
+ 	  if(mystrncasecmp(font_string,"none",4) == 0)
+ 	    uselabel = 0;
+-	  
++	  else
++	    uselabel = 1;	  
+ 	}
++
+       else if((strlen(&tline[0])>1)&&
+ 	      (mystrncasecmp(tline, CatString3("*", MyName, "Fore"),Clength+5)==0))
+ 	{
+@@ -1030,6 +1040,12 @@
+ 			     Clength+12)==0))
+ 	{
+ 	  StartIconic = 1;
++	}	
++      else if((strlen(&tline[0])>1)&&
++	      (mystrncasecmp(tline,CatString3("*",MyName,"NoStartIconic"),
++			     Clength+14)==0))
++	{
++	  StartIconic = 0;
+ 	}	
+       else if((strlen(&tline[0])>1)&&
+ 	      (mystrncasecmp(tline,CatString3("*",MyName,"Rows"),
+--- FvwmPager.man.old	Wed Sep 17 22:30:20 1997
++++ FvwmPager.man	Wed Sep 17 22:31:30 1997
+@@ -126,6 +126,10 @@
+ .IP "*FvwmPagerStartIconic"
+ Causes the pager to start iconified. 
+ 
++.IP "*FvwmPagerNoStartIconic"
++Causes the pager to start normally.  Useful for cancelling the effect
++of the \fIStartIconic\fP option.
++
+ .IP "*FvwmPagerFont \fIfont-name\fP"
+ Specified a font to use to label the desktops.  If \fIfont_name\fP is
+ "none" then no desktop labels will be displayed.
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Sat Sep 20 00:19:49 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sat, 20 Sep 1997 00:19:49 -0500 (CDT)
+Received: from pcnet1.pcnet.com (pcnet1.pcnet.com [204.213.232.3]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id AAA09025; Sat, 20 Sep 1997 00:16:23 -0500 (CDT)
+Received: from drbob.woodsway.com (ts9-pt27.pcnet.com [199.249.196.127])
+	by pcnet1.pcnet.com (8.8.7/8.8.6) with ESMTP id BAA06712;
+	Sat, 20 Sep 1997 01:12:43 -0400 (EDT)
+Received: (from root@localhost)
+	by drbob.woodsway.com (8.8.5/8.8.5) id BAA00620;
+	Sat, 20 Sep 1997 01:09:48 -0400
+Message-ID: <XFMail.970920010948.proteus@pcnet.com>
+X-Mailer: XFMail 1.2-alpha [p0] on Linux
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+Date: Sat, 20 Sep 1997 01:09:48 -0400 (EDT)
+Organization: Woodsway Consulting
+From: Bob Woodside <proteus@pcnet.com>
+To: The FVWM Workers List <fvwm-workers@hpc.uh.edu>,
+        The FVWM Discussion List <fvwm@hpc.uh.edu>
+Subject: StartsOnPage patch - update
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+
+        My StartsOnPage patch now looks pretty solid - I've been running
+the latest version for about a week with no, er, surprises. I'd welcome 
+any comments from testers, both as to its stability, and more importantly,
+as to how people think it *ought* to behave.
+
+        It's rather large (36K), so I'd rather not spam the mailing
+lists with repeated versions. It can be fetched from
+
+        http://www.pcnet.com/~proteus/Fvwm/FvwmPatches.html
+
+
+Usage:
+------
+
+1) New Style:
+      Style StartsOnPage d x y
+   where d = the target desktop, and x and y = the x and y page
+   numbers.
+   If only one arg is used, it works like StartsOnDesk.
+   If 2 args, they specify the page with no desk preference.
+   It shares the StartsOnDesk Style flag, so you don't have
+   to give up some other style. Existing StartsOnDesk code is
+   used, where possible, without functional modification: 2 small
+   exceptions are noted below.
+2) 3 temporary GlobalOpts pairs for customizing its behavior
+   (defaults appear first):
+     CaptureHonorsStartsOnPage/CaptureIgnoresStartsOnPage
+     RecaptureIgnoresStartsOnPage/RecaptureHonorsStartsOnPage
+     StartsOnPageHonorsUSPosition/StartsOnPageModifiesUSPosition
+   I personally think that 2 of the 3 options are a bit of overkill,
+   but I put them in to allow testers (including myself) to try out 
+   different behaviors to see what they really find useful.
+
+
+How It Behaves:  (rather well, actually)
+---------------
+
+1) StartsOnPage is honored for initial placement of new
+   windows, and for initial capture of windows existing
+   prior to startup.
+2) By default, StartsOnPage (or StartsOnDesk) placement *is not* 
+   honored during a Restart or Recapture, but this can be 
+   overridden by GlobalOpts RecaptureHonorsStartsOnPage.
+3) If SkipMapping is not also specified, fvwm will switch to
+   the target desktop (if specified) and page (if specified),
+   except during initial startup, or during a Restart or
+   Recapture.
+4) By default, StartsOnPage placement *does not* modify
+   USPosition, which means that apps started with a geometry
+   spec (and SkipMapping) will probably appear somewhere other
+   than the page you intended. This can be overridden by 
+   specifying GlobalOpts StartsOnPageModifiesUSPosition.
+5) ActivePlacement does not honor StartsOnPage (perhaps it should).
+
+
+To Do:
+------
+
+1) SmartPlacementIsFiendishlyClever (see caveat below)
+2) Decide whether this should be merged with StartsOnDesk or kept as
+   a separate Style. (Chuck - got any strong opinions on this?)
+3) Decide which options to keep or remove. (Ibid.)
+
+
+Caveats:
+--------
+
+1) There is one change in the behavior of StartsOnDesk: by
+   default, StartsOnDesk *no longer* moves a window back to its starting
+   desktop on a Restart/Recapture. (Initial capture on startup does
+   as it has always done.) If you dragged it to another desk, there it'll
+   stay, unless you override the default. (I think someone recently
+   expressed a wish for such a change.)
+2) StartsOnPage in conjunction with SkipMapping introduces a
+   new, undocumented setting, SmartPlacementMaySeemCapricious. Until I
+   (or anyone who cares to volunteer) have some time to tinker with the
+   Smart/Clever placement code, a StartsOnPage window is positioned
+   within the target page at a spot appropriate for the page you're
+   currently on, not necessarily the one where it's about to be placed.
+3) The name_list struct now carries the desk no. as 1-relative, not
+   0-relative, so 0 means "don't care", not "the first desk". It is
+   still stored 0-relative in the FvwmWindow struct, so most of Fvwm
+   is unaffected. If anyone knows of any module code that cares about
+   the internal Style representation of the desk no., please let me
+   know.
+
+
+        - Bob
+
+                             "Never grep a yacc by the i-node."
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Sun Sep 28 23:24:13 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sun, 28 Sep 1997 23:24:13 -0500 (CDT)
+Received: from pcnet1.pcnet.com (pcnet1.pcnet.com [204.213.232.3]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id XAA12721 for <fvwm-workers@hpc.uh.edu>; Sun, 28 Sep 1997 23:24:06 -0500 (CDT)
+Received: from drbob.woodsway.com (ts9-pt0.pcnet.com [199.249.196.100])
+	by pcnet1.pcnet.com (8.8.7/PCNet) with ESMTP id AAA04067
+	for <fvwm-workers@hpc.uh.edu>; Mon, 29 Sep 1997 00:20:23 -0400 (EDT)
+Received: (from root@localhost)
+	by drbob.woodsway.com (8.8.5/8.8.5) id AAA00189
+	for fvwm-workers@hpc.uh.edu; Mon, 29 Sep 1997 00:17:08 -0400
+Message-ID: <XFMail.970929001703.proteus@pcnet.com>
+X-Mailer: XFMail 1.2-alpha [p0] on Linux
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+Date: Mon, 29 Sep 1997 00:17:03 -0400 (EDT)
+Organization: Woodsway Consulting
+From: Bob Woodside <proteus@pcnet.com>
+To: The FVWM Workers List <fvwm-workers@hpc.uh.edu>
+Subject: StartsOnPage patch - update
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+
+        The latest version of the StartsOnPage patch has been running
+smoothly on my system for about a week now, so I think it's ready for
+general consumption. It includes the PlacementIsAlwaysWickedSmart 
+feature: now all of the placement routines -- Smart, Dumb, Clever, 
+Indifferent -- can handle placement on a target page that may not
+be the currently mapped viewport, so that StartsOnPage works 
+intelligently with SkipMapping. 
+
+        At this point, I believe it is functionally complete. Possibly
+more than complete, as I imagine some of the GlobalOpts options could
+stand to be removed. I foresee no further changes other than cosmetic
+code cleanup - unless Chuck (or anyone testing it) has any suggestions.
+
+        As usual, the current version of the patch can be fetched from
+
+    http://www.pcnet.com/~proteus/Fvwm/FvwmPatches.html
+
+
+        Cheers,
+        Bob
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Sep 29 09:40:55 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 29 Sep 1997 09:40:55 -0500 (CDT)
+Received: from Athena.McRCIM.McGill.EDU (root@Athena.McRCIM.McGill.EDU [132.206.4.20]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id JAA21501 for <fvwm-workers@hpc.uh.edu>; Mon, 29 Sep 1997 09:40:49 -0500 (CDT)
+Received: from Chart.McRCIM.McGill.EDU (uucp@Chart.McRCIM.McGill.EDU [132.206.4.7]) by 17653 on Athena.McRCIM.McGill.EDU (8.8.5) with ESMTP id KAA17653 for <hpc.uh.edu!fvwm-workers>; Mon, 29 Sep 1997 10:40:42 -0400 (EDT)
+Received: from hilbert.UUCP (uucp@localhost) by 12309 on Chart.McRCIM.McGill.EDU (8.8.5) with UUCP id KAA12309 for hpc.uh.edu!fvwm-workers; Mon, 29 Sep 1997 10:40:41 -0400 (EDT)
+Received: from localhost by hilbert.nyongwa.montreal.qc.ca
+	via sendmail with smtp
+	id <m0xFgnK-0000uPC@hilbert.nyongwa.montreal.qc.ca>
+	for <fvwm-workers@hpc.uh.edu>; Mon, 29 Sep 1997 10:27:30 -0400 (EDT)
+	(Smail-3.2.0.95 1997-May-7 #1 built 1997-May-25)
+Date: Mon, 29 Sep 1997 10:27:29 -0400 (EDT)
+From: Steve Robbins <steve@nyongwa.montreal.qc.ca>
+To: The FVWM Workers List <fvwm-workers@hpc.uh.edu>
+Subject: Thoughts on a GNU configuring scheme
+In-Reply-To: <XFMail.970929001703.proteus@pcnet.com>
+Message-ID: <Pine.LNX.3.96.970929095229.255a-100000@hilbert.nyongwa.montreal.qc.ca>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+Hi,
+
+I've been happily using fvwm for a couple of years now.  
+
+Quite a while ago, while installing, I saw this note: "In theory, this
+stuff can be replaced with GNU Autoconf"; and thought to myself, "good,
+next time I install, I won't have to wade through configure.h to see what
+needs to be changed".
+
+The next time I installed, the note was still there, but a configure
+script wasn't. 
+
+Recently, I became a part-time sysadmin again.  The lab has about a
+jillion different OSes, each with their own window manager; meaning that I
+have to switch modes each time I sit down at the computer, even though I'm
+using the same tools.  Not to mention the annoyance in keeping all the
+various configurations in synch.  I figured I'd just install fvwm on each,
+for a more uniform setup. 
+
+Then I discovered that autoconf still hasn't made it to fvwm.  So I
+thought, "why spend a few minutes editing the config files for each OS,
+when I can spend hours and hours making fvwm auto-configurable?" :-)
+
+I checked the list archives and see that autoconf comes up on the list
+once in a while.  However, the lack of configuration scripts would suggest
+that the real hackers are busy with other, more interesting, things.  
+
+So, I've joined the list to sound out the prospects of making fvwm
+autoconfigurable.  I will also be happy to help out.
+
+I have tried a couple times before to retrofit existing packages into the
+automake/autoconf scheme. My experience has been that maintainers
+typically have other priorities, and learning how to use autoconf falls
+rather low on the list.  
+
+Ultimately, whether or not fvwm adopts GNU autoconfigure depends on the
+maintainers.  So, a dialogue is needed to find out whether there is
+support or opposition to the scheme.  Probably that will depend on how
+much work is involved for them.  :)  
+
+If nobody else has done it yet, I'm quite willing to do a bunch of the
+grunt work: generating configure.in, and the makefile stuff.  However, it
+needs to be tested, etc, and eventually the maintainers will have to be
+comfortable with editing the Makefile.am's (akin to Imakefiles).
+
+So: what is the state of autoconfigure for fvwm?  If someone has done the
+work, I'll be happy to test it at my lab :).  If not:  I hacked on it for
+a couple hours last night.  However, it's not done yet, and even when it
+is, it will be very rough; hence it will need brave souls to test. :) 
+
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Sep 29 10:58:56 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 29 Sep 1997 10:58:56 -0500 (CDT)
+Received: from thinkpad.velsoft.com (d1-4-225.rynex.dialup.ans.net [152.180.176.225]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id KAA23062 for <fvwm-workers@hpc.uh.edu>; Mon, 29 Sep 1997 10:58:44 -0500 (CDT)
+Received: from thinkpad.velsoft.com (localhost [127.0.0.1])
+	by thinkpad.velsoft.com (8.8.5/8.8.5) with ESMTP id LAA01683
+	for <fvwm-workers@hpc.uh.edu>; Mon, 29 Sep 1997 11:59:04 -0400
+Message-Id: <199709291559.LAA01683@thinkpad.velsoft.com>
+To: FVWM Workers List <fvwm-workers@hpc.uh.edu>
+Subject: MouseFocusClickRaises and undecorated transient windows
+Date: Mon, 29 Sep 1997 11:59:02 -0400
+From: Andrew Veliath <veliaa@frontiernet.net>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+I noticed on fvwm 2.0.46 on my Linux and also SGI/IBM boxes that when
+I have the global option MouseFocusClickRaises enabled, am using
+MouseFocus, and not using the DecorateTransients style with the mouse
+bindings given in the standard system.fvwm2rc that I cannot move
+transient windows, such as the Alt+F in Netscape.
+
+I think I've narrowed it down to the MouseFocusClickRaises globalopt,
+but even so it seems to be the result of combination of options, which
+I hope can be duplicated with the following procedure.
+
+To duplicate this, use the following procedure:
+
+1. Start with the standard system.fvwm2rc that would normally get installed
+from fvwm2 2.0.46
+
+2. Remove DecorateTransients from the Style "*" line
+
+3. Add a 'GlobalOpts MouseFocusClickRaises' line somewhere near the beginning
+
+4. Restart with this rc file
+
+5. Run Netscape and type Alt-F (or Edit/Find, please use this test, as
+it seems it to occur on application-type transients only) and try to
+move the transient window (it won't move here)
+
+6. Remove or comment out 'GlobalOpts MouseFocusClickRaises' line, and restart fvwm2
+
+7. Run Netscape and type Alt-F again, and this time see if you can move the
+transient window (I can here)
+
+I'm not sure if this was discussed before.  I haven't had anytime to
+look into why this occurs.
+
+--
+Regards,
+Andrew Veliath
+veliaa@frontiernet.net, veliaa@rpi.edu
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Sep 29 11:32:50 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 29 Sep 1997 11:32:50 -0500 (CDT)
+Received: from demille.cs.washington.edu (demille.cs.washington.edu [128.95.1.122]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id LAA23791 for <fvwm-workers@hpc.uh.edu>; Mon, 29 Sep 1997 11:32:44 -0500 (CDT)
+Received: (gjb@localhost) by demille.cs.washington.edu (8.8.5+CS/7.2ws+) id JAA20999; Mon, 29 Sep 1997 09:29:09 -0700 (PDT)
+To: Steve Robbins <steve@nyongwa.montreal.qc.ca>
+Cc: The FVWM Workers List <fvwm-workers@hpc.uh.edu>
+Subject: Re: Thoughts on a GNU configuring scheme
+References: <Pine.LNX.3.96.970929095229.255a-100000@hilbert.nyongwa.montreal.qc.ca>
+From: Greg Badros <gjb@cs.washington.edu>
+Date: 29 Sep 1997 09:29:09 -0700
+In-Reply-To: Steve Robbins's message of "Mon, 29 Sep 1997 10:27:29 -0400 (EDT)"
+Message-ID: <qrrlo0g84oa.fsf@demille.cs.washington.edu>
+Lines: 12
+X-Mailer: Gnus v5.4.65/Emacs 19.34
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+The fvwm95 folks have an autoconf version.  That would be a good
+starting place (look at the diffs between the autoconf and the xmkmf
+versions that they distribute, and reapply [probably by hand] to fvwm2).
+
+I think it's a worthwhile goal.  See 
+http://www.terraware.net/ftp/pub/Mirrors/FVWM95/fvwm95.html
+for the fvwm95 versions.
+
+Greg J. Badros
+gjb@cs.washington.edu
+Seattle, WA  USA
+http://www.cs.washington.edu/homes/gjb
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Tue Sep 30 01:40:15 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 30 Sep 1997 01:40:15 -0500 (CDT)
+Received: from pcnet1.pcnet.com (pcnet1.pcnet.com [204.213.232.3]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id BAA11086 for <fvwm-workers@hpc.uh.edu>; Tue, 30 Sep 1997 01:40:05 -0500 (CDT)
+Received: from drbob.woodsway.com (ts9-pt16.pcnet.com [199.249.196.116])
+	by pcnet1.pcnet.com (8.8.7/PCNet) with ESMTP id CAA15534;
+	Tue, 30 Sep 1997 02:36:20 -0400 (EDT)
+Received: (from root@localhost)
+	by drbob.woodsway.com (8.8.5/8.8.5) id CAA00646;
+	Tue, 30 Sep 1997 02:33:10 -0400
+Message-ID: <XFMail.970930023310.proteus@pcnet.com>
+X-Mailer: XFMail 1.2-alpha [p0] on Linux
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+In-Reply-To: <199709291559.LAA01683@thinkpad.velsoft.com>
+Date: Tue, 30 Sep 1997 02:33:10 -0400 (EDT)
+Organization: Woodsway Consulting
+From: Bob Woodside <proteus@pcnet.com>
+To: Andrew Veliath <veliaa@frontiernet.net>
+Subject: RE: MouseFocusClickRaises and undecorated transient windows
+Cc: FVWM Workers List <fvwm-workers@hpc.uh.edu>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+
+On 29-Sep-97 Andrew Veliath wrote:
+>  when I have the global option MouseFocusClickRaises enabled, am using
+>  MouseFocus, and not using the DecorateTransients style with the mouse
+>  bindings given in the standard system.fvwm2rc that I cannot move
+>  transient windows...
+>  I think I've narrowed it down to the MouseFocusClickRaises globalopt,
+>  but even so it seems to be the result of combination of options...
+
+        Followed your directions, and can duplicate the situation exactly.
+I can see where the code in HandleButtonPress (events.c) goes astray,
+exiting prematurely without checking to see whether there are functions 
+bound to the mouse event, when you have the combination of an undecorated 
+transient, MouseFocus, and MouseFocusClickRaises. So it's not just unmovable,
+it won't respond to any function you may have bound to a mouse action on
+the window borders. I need to understand a little more about just what's
+going on at this point to offer a fix. Perhaps I'll have some time in the
+next couple of days to look into it a little more deeply.
+
+
+        Cheers,
+        Bob
+
+
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+

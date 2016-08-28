@@ -1,0 +1,823 @@
+From owner-fvwm-workers@hpc.uh.edu  Wed Oct 15 20:35:20 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Wed, 15 Oct 1997 20:35:20 -0500 (CDT)
+Received: from Athena.McRCIM.McGill.EDU (root@Athena.McRCIM.McGill.EDU [132.206.4.20]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id UAA02705 for <fvwm-workers@hpc.uh.edu>; Wed, 15 Oct 1997 20:35:10 -0500 (CDT)
+Received: from Chart.McRCIM.McGill.EDU (uucp@Chart.McRCIM.McGill.EDU [132.206.4.7]) by 18296 on Athena.McRCIM.McGill.EDU (8.8.5) with ESMTP id VAA18296 for <hpc.uh.edu!fvwm-workers>; Wed, 15 Oct 1997 21:35:04 -0400 (EDT)
+Received: from hilbert.UUCP (uucp@localhost) by 4458 on Chart.McRCIM.McGill.EDU (8.8.5) with UUCP id VAA04458 for hpc.uh.edu!fvwm-workers; Wed, 15 Oct 1997 21:35:03 -0400 (EDT)
+Received: from localhost by hilbert.nyongwa.montreal.qc.ca
+	via sendmail with smtp
+	id <m0xLeHT-0000uSC@hilbert.nyongwa.montreal.qc.ca>
+	for <fvwm-workers@hpc.uh.edu>; Wed, 15 Oct 1997 20:59:15 -0400 (EDT)
+	(Smail-3.2.0.95 1997-May-7 #1 built 1997-May-25)
+Date: Wed, 15 Oct 1997 20:59:14 -0400 (EDT)
+From: Steve Robbins <steve@nyongwa.montreal.qc.ca>
+To: The FVWM Workers List <fvwm-workers@hpc.uh.edu>
+Subject: Re: Thoughts on a GNU configuring scheme
+In-Reply-To: <Pine.LNX.3.96.970929095229.255a-100000@hilbert.nyongwa.montreal.qc.ca>
+Message-ID: <Pine.LNX.3.96.971015204953.26003G-100000@hilbert.nyongwa.montreal.qc.ca>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+On Mon, 29 Sep 1997, Steve Robbins wrote:
+
+> If nobody else has done it yet, I'm quite willing to do a bunch of the
+> grunt work: generating configure.in, and the makefile stuff.  However, it
+> needs to be tested, etc, and eventually the maintainers will have to be
+> comfortable with editing the Makefile.am's (akin to Imakefiles).
+> 
+> So: what is the state of autoconfigure for fvwm?  If someone has done the
+> work, I'll be happy to test it at my lab :).  If not:  I hacked on it for
+> a couple hours last night.  However, it's not done yet, and even when it
+> is, it will be very rough; hence it will need brave souls to test. :) 
+
+Hi again,
+
+A few people expressed interest in having FVWM autoconf'd, and nobody said
+they'd already done it.  So I went ahead and did the "grunt work".  
+
+It's rather rough, but it is enough to build & install fvwm on the systems
+I've tested: linux 2.0, irix 5, sunos 4, and dec OSF/1.  
+
+HOWEVER: in each case, I had gcc & all the GNU stuff installed.  So it
+really needs to be tested on some non-GNU systems.
+
+Here's the top of the README.  Please take a look & tell me your thoughts.
+
+			Compiling autoconfigured FVWM
+			-----------------------------
+
+All one needs is the standard 2.0.46 distribution for fvwm and the
+patch kit.  The latter is available at
+
+	http://www.cs.mcgill.ca/~stever/software/fvwm
+
+or by emailing me.
+
+Then there are five easy steps:
+
+    1. Unpack the fvwm distribution: tar xzf fvwm-2.0.46.tar.gz 
+    2. CD into it: cd fvwm-2.0.46 
+    3. Unpack the patch kit: tar xzf .../autoconf-kit.tar.gz 
+    4. Run the script: autoconf-kit/runme 
+    5. ./configure && make
+
+
+			What the Kit Does
+			-----------------
+
+The biggest change, of course, is that all traces of Imakefile stuff
+is removed, replaced by all kinds of autoconf detrius.
+
+In general: all the options formerly contained in the files Fvwm.tmpl
+and configure.h got replaced by options to the "configure" script.
+Hopefully the correspondence is clear: use "configure --help" for a
+complete list of options.
+
+I've not touched anything in the following subdirectories: docs,
+extras, and icons.  None of that appears to be used in the current
+Imakefiles, anyway.  I also didn't do anything with sample.fvwmrc: one
+has to install that file by hand, currently.
+
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Thu Oct 23 17:37:53 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Thu, 23 Oct 1997 17:37:53 -0500 (CDT)
+Received: from pluto.solarsystem.org (cs2501-10-16.hgl.ny.frontiernet.net [209.130.142.175]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id RAA24011; Thu, 23 Oct 1997 17:35:27 -0500 (CDT)
+Received: from pluto.solarsystem.org (localhost [127.0.0.1])
+	by pluto.solarsystem.org (8.8.5/8.8.5) with ESMTP id SAA00535;
+	Thu, 23 Oct 1997 18:31:16 -0400
+Message-Id: <199710232231.SAA00535@pluto.solarsystem.org>
+To: fvwm@hpc.uh.edu
+Cc: fvwm-workers@hpc.uh.edu
+Subject: Re: FVWM: Dynamic Menus 
+In-reply-to: Your message of "Thu, 23 Oct 1997 12:30:17 EDT."
+             <199710231630.MAA02592@brig.teradyne.com> 
+Date: Thu, 23 Oct 1997 18:31:16 -0400
+From: Andrew Veliath <veliaa@frontiernet.net>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+Self-destroying functions are buggy in fvwm2, since ComplexFunction in
+complex.h reuses the pointer after it has been destroyed with
+DeleteFunction (!).  This is a bug, and I agree, it would be nice if
+they worked.  I'm only guessing that's the problem your having, but
+since I saw that your function did that, I thought I'd bring it up
+again.
+
+This was discussed a while back (one of the examples included uses
+technique), but no one had time to look into it further.  A hack to
+get around it should probably get into 2.0.47 and shouldn't be too
+hard.  If I get some time I'll look into it, but at the moment my
+hands are tied.
+
+--
+Regards,
+Andrew Veliath
+veliaa@frontiernet.net, veliaa@rpi.edu
+
+>>>>> Nils Lohner writes:
+
+    Nils> The problem is this: sometimes it works fine, sometimes it
+    Nils> doesn't, sometimes it refuses to remove the popups,
+    Nils> sometimes it kills my window system and returns to my login
+    Nils> prompt with a core dump.  Can anyone suggest how the
+    Nils> AddToFuncs should look to work best?  Is it legal to have a
+    Nils> Func destroy itself?  Should all items be "I"?  The last two
+    Nils> "C"?  Menu instead of Popup?  I've tried a number of these
+    Nils> with varying results, but so far nothing has worked
+    Nils> consistently so I'm wondering what the 'correct' way of
+    Nils> doing this is.  Or, if anyone has a dynamic directory menu
+    Nils> working, I wouldn't mind a copy of that.  If anyone wants my
+    Nils> perl code, I can post it once its working.  Thanks for the
+    Nils> help in advance.
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Sun Oct 26 15:18:07 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sun, 26 Oct 1997 15:18:07 -0600 (CST)
+Received: from mercury.elmailer.net (mercury.elmailer.net [195.224.76.4]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id PAA29812 for <fvwm-workers@hpc.uh.edu>; Sun, 26 Oct 1997 15:17:59 -0600 (CST)
+Received: by mercury.elmailer.net with ESMTP
+    from sfere.greenend.org.uk (sfere.greenend.org.uk [195.224.38.1])
+    id VAA02476 for <fvwm-workers@hpc.uh.edu> (2.3.5-8.8.7/3.1.23);
+    Sun, 26 Oct 1997 21:16:01 GMT
+Received: from valour.greenend.org.uk (valour.greenend.org.uk [195.224.38.2])
+          by sfere.greenend.org.uk with ESMTP
+          id UAA08508 for <fvwm-workers@hpc.uh.edu>
+          (2.1.1h-8.8.5/2.1b-greenend); Sun, 26 Oct 1997 20:33:10 GMT
+Received: by valour.greenend.org.uk
+	id m0xPZN0-000qE8C
+	(Debian Smail-3.2 1996-Jul-4 #2); Sun, 26 Oct 1997 20:33:10 +0000 (GMT)
+Message-Id: <m0xPZN0-000qE8C@valour.greenend.org.uk>
+Date: Sun, 26 Oct 1997 20:33:10 +0000 (GMT)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+From: Austin Donnelly <austin@greenend.org.uk>
+To: fvwm-workers@hpc.uh.edu
+Subject: EdgeScroll window flickering
+X-Mailer: VM 6.34 under Emacs 19.34.1
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+Hi,
+
+I'm using fvwm2 2.0.46.
+
+If you set EdgeScroll to something that's not 100 100 (eg, 10 10 is
+good for showing this problem), then if you drag a window across a
+page boundary, the window jumps back to its original position briefly
+before going to its correct place.
+
+This didn't happen in 2.0.45, probably because dragging a window
+across a page boundary would flip by an entire page.
+
+I can supply a fvwm2rc which demonstrates this if needed, but it
+should be trivial to reproduce.
+
+Austin
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Sun Oct 26 15:18:11 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sun, 26 Oct 1997 15:18:11 -0600 (CST)
+Received: from mercury.elmailer.net (mercury.elmailer.net [195.224.76.4]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id PAA29817 for <fvwm-workers@hpc.uh.edu>; Sun, 26 Oct 1997 15:18:02 -0600 (CST)
+Received: by mercury.elmailer.net with ESMTP
+    from sfere.greenend.org.uk (sfere.greenend.org.uk [195.224.38.1])
+    id VAA02486 for <fvwm-workers@hpc.uh.edu> (2.3.5-8.8.7/3.1.23);
+    Sun, 26 Oct 1997 21:16:04 GMT
+Received: from valour.greenend.org.uk (valour.greenend.org.uk [195.224.38.2])
+          by sfere.greenend.org.uk with ESMTP
+          id UAA08688 for <fvwm-workers@hpc.uh.edu>
+          (2.1.1h-8.8.5/2.1b-greenend); Sun, 26 Oct 1997 20:46:08 GMT
+Received: by valour.greenend.org.uk
+	id m0xPZZX-000qE8C
+	(Debian Smail-3.2 1996-Jul-4 #2); Sun, 26 Oct 1997 20:46:07 +0000 (GMT)
+Message-Id: <m0xPZZX-000qE8C@valour.greenend.org.uk>
+Date: Sun, 26 Oct 1997 20:46:07 +0000 (GMT)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+From: Austin Donnelly <austin@greenend.org.uk>
+To: fvwm-workers@hpc.uh.edu
+Subject: config override for locaton of CPP
+X-Mailer: VM 6.34 under Emacs 19.34.1
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+Hi,
+
+For whatever reason, our site doesn't have cpp in /usr/lib/cpp.  We do
+have a /lib/cpp, however.  Cunningly, the FvwmCpp module already have
+support for an FVWM_CPP #define.  The patch below documents this
+properly.
+
+Thanks,
+Austin
+------------------------------------------------------------
+--- fvwm2-2.0.46-BETA.orig/Fvwm.tmpl
++++ fvwm2-2.0.46-BETA/Fvwm.tmpl
+@@ -151,6 +151,12 @@
+  * the currently running X server supports it.
+  *
+  *
++ * -DFVWM_CPP=\"/lib/cpp\"
++ *
++ * Specify where your cpp lives, if it isn't installed as /usr/lib/cpp
++ * Used by FvwmCpp module.
++ *
++ *
+  * -DACTIVEDOWN_BTNS
+  *
+  * Enables the ActiveDown button state.  This allows different button
+------------------------------------------------------------
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Sun Oct 26 15:18:17 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sun, 26 Oct 1997 15:18:17 -0600 (CST)
+Received: from mercury.elmailer.net (mercury.elmailer.net [195.224.76.4]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id PAA29825 for <fvwm-workers@hpc.uh.edu>; Sun, 26 Oct 1997 15:18:07 -0600 (CST)
+Received: by mercury.elmailer.net with ESMTP
+    from sfere.greenend.org.uk (sfere.greenend.org.uk [195.224.38.1])
+    id VAA02496 for <fvwm-workers@hpc.uh.edu> (2.3.5-8.8.7/3.1.23);
+    Sun, 26 Oct 1997 21:16:08 GMT
+Received: from valour.greenend.org.uk (valour.greenend.org.uk [195.224.38.2])
+          by sfere.greenend.org.uk with ESMTP
+          id UAA08539 for <fvwm-workers@hpc.uh.edu>
+          (2.1.1h-8.8.5/2.1b-greenend); Sun, 26 Oct 1997 20:40:47 GMT
+Received: by valour.greenend.org.uk
+	id m0xPZUM-000qE8C
+	(Debian Smail-3.2 1996-Jul-4 #2); Sun, 26 Oct 1997 20:40:46 +0000 (GMT)
+Message-Id: <m0xPZUM-000qE8C@valour.greenend.org.uk>
+Date: Sun, 26 Oct 1997 20:40:46 +0000 (GMT)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+From: Austin Donnelly <austin@greenend.org.uk>
+To: fvwm-workers@hpc.uh.edu
+Subject: manpage fixes [patch]
+X-Mailer: VM 6.34 under Emacs 19.34.1
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+I'm the Debian package maintainer for fvwm2, and one of the things I
+do is to collect manpage fixes.
+
+This patch is my latest collection of such typo corrections.
+
+Austin
+------------------------------------------------------------
+--- fvwm2-2.0.46-BETA.orig/modules/FvwmIdent/FvwmIdent.man
++++ fvwm2-2.0.46-BETA/modules/FvwmIdent/FvwmIdent.man
+@@ -55,7 +55,7 @@
+ Tells the module to use \fIcolor\fP instead of black for text.
+ 
+ .IP "*FvwmIdentBack \fIcolor\fP"
+-Tells the module to use \fIcolor\fP instead of black for the window
++Tells the module to use \fIcolor\fP instead of white for the window
+ background.
+ 
+ .IP "*FvwmIdentFont \fIfontname\fP"
+--- fvwm2-2.0.46-BETA.orig/modules/FvwmPager/FvwmPager.man
++++ fvwm2-2.0.46-BETA/modules/FvwmPager/FvwmPager.man
+@@ -68,7 +68,7 @@
+ 
+ 
+ .SH COPYRIGHTS
+-The FvwmClean program, and the concept for
++The FvwmPager program, and the concept for
+ interfacing this module to the Window Manager, are all original work
+ by Robert Nation.
+ 
+--- fvwm2-2.0.46-BETA.orig/modules/FvwmWinList/FvwmWinList.man
++++ fvwm2-2.0.46-BETA/modules/FvwmWinList/FvwmWinList.man
+@@ -8,7 +8,7 @@
+ FvwmWinList is spawned by fvwm, so no command line invocation will work.
+ 
+ .SH DESCRIPTION
+-The FvwmWinList module provides a widow list made up of buttons, each
++The FvwmWinList module provides a window list made up of buttons, each
+ corresponding to a window that FVWM is managing.  Clicking on the buttons
+ with any of the three mouse buttons will either do a default action or
+ can be user configured.  Like the other modules, FvwmWinList only works
+--- fvwm2-2.0.46-BETA.orig/fvwm/fvwm2.man
++++ fvwm2-2.0.46-BETA/fvwm/fvwm2.man
+@@ -19,7 +19,7 @@
+ .SH NAME
+ fvwm2 \- F(?) Virtual Window Manager (version 2.xx) for X11
+ .SH SYNOPSIS
+-\fBfvwm\fP [ \fIoptions\fP ]
++\fBfvwm2\fP [ \fIoptions\fP ]
+ .SH DESCRIPTION
+ \fIFvwm\fP is a window manager for X11.  It is a derivative of
+ \fItwm\fP, redesigned to minimize memory consumption, provide a 3-D
+@@ -1299,9 +1299,9 @@
+ .IP "OpaqueMoveSize \fIpercentage\fP"
+ Tells \fIfvwm\fP the maximum size window with which opaque window
+ movement should be used.  The percentage is percent of the total
+-screen area.  With "OpaqueMove 0" all windows will be moved using the
+-traditional rubber-band outline.  With "OpaqueMove 100" all windows
+-will be move as solid windows.  The default is "OpaqueMove 5", which
++screen area.  With "OpaqueMoveSize 0" all windows will be moved using the
++traditional rubber-band outline.  With "OpaqueMoveSize 100" all windows
++will be move as solid windows.  The default is "OpaqueMoveSize 5", which
+ allows small windows to be moved in an opaque manner but large windows
+ are moved as rubber-bands.
+ 
+@@ -1775,7 +1775,7 @@
+ 
+ If \fIarg1\fP is zero then the new desktop number will be \fIarg2\fP.
+ 
+-If only one argument is given, moves the selected window the the
++If only one argument is given, moves the selected window to the
+ desktop specified as \farg1\fP.
+ 
+ 
+------------------------------------------------------------
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Sun Oct 26 21:45:49 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sun, 26 Oct 1997 21:45:49 -0600 (CST)
+Received: from tekla.ing.umu.se (root@tekla.ing.umu.se [130.239.117.80]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id VAA06082; Sun, 26 Oct 1997 21:45:41 -0600 (CST)
+Received: from torun.ing.umu.se (stric@torun.ing.umu.se [130.239.117.82])
+	by tekla.ing.umu.se (8.8.5/8.8.5) with ESMTP id EAA18383;
+	Mon, 27 Oct 1997 04:45:34 +0100
+Received: (from stric@localhost)
+	by torun.ing.umu.se (8.8.5/8.8.5) id EAA22095;
+	Mon, 27 Oct 1997 04:45:33 +0100
+Message-ID: <19971027044533.18617@torun>
+Date: Mon, 27 Oct 1997 04:45:33 +0100
+From: Tomas Ogren <stric@ing.umu.se>
+To: fvwm@hpc.uh.edu
+Cc: fvwm-workers@hpc.uh.edu
+Subject: Updated animated windowshade
+Mime-Version: 1.0
+Content-Type: multipart/mixed; boundary="GvSO+nmPlgiQ/Ipb"
+Content-Transfer-Encoding: 8bit
+X-Mailer: Mutt 0.74
+X-System: Linux torun 2.0.29 
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+
+--GvSO+nmPlgiQ/Ipb
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8bit
+
+I fixed some cosmetic bugs in the former version of animated windowshade,
+and a bug where you could get an endless loop..
+
+It still doesn't leave the bottom border, I couldnt quite get that part to
+work perfectly, so I'll have to get back on that one..
+
+/Tomas
+-- 
+,oOo--------------------------------------------  - -
+| Tomas Ögren, stric@ing.umu.se, http://www.ing.umu.se/~stric/
+| o Student of Computer Engineering at the University of Umeå
+| o Sysadmin at ing.umu.se
+`o------------------------------- - -  -
+
+--GvSO+nmPlgiQ/Ipb
+Content-Type: text/plain; charset=us-ascii
+Content-Description: animated_shade.diff
+Content-Disposition: attachment; filename="animated_shade.diff"
+
+diff -ru fvwm-2.0.46.orig/fvwm/builtins.c fvwm-2.0.46/fvwm/builtins.c
+--- fvwm-2.0.46.orig/fvwm/builtins.c	Wed Aug 20 01:41:27 1997
++++ fvwm-2.0.46/fvwm/builtins.c	Mon Oct 27 04:31:24 1997
+@@ -22,6 +22,12 @@
+ #include "screen.h"
+ #include "module.h"
+ 
++#ifdef WINDOWSHADE
++/*->CT set shade_anim and shade_anim_steps defaults */
++static int shade_anim_steps=10;
++/*<-CT*/
++#endif
++
+ static char *exec_shell_name="/bin/sh";
+ /* button state strings must match the enumerated states */
+ static char  *button_states[MaxButtonState]={
+@@ -34,6 +40,7 @@
+ #endif
+ };
+ 
++
+ /***********************************************************************
+  *
+  *  Procedure:
+@@ -383,48 +390,91 @@
+  *
+  *  Args: 1 -- force shade, 2 -- force unshade  No Arg: toggle
+  * 
++ ***********************************************************************
++ *
++ *  Animation added. 
++ *     Based on code from AfterStep-1.0 (CT: ctibirna@gch.ulaval.ca)
++ *     Additional fixes by Tomas Ogren <stric@ing.umu.se>
++ *
++ *  Builtin function: WindowShadeAnimate <steps>
++ *      <steps> is number of steps in animation. If 0, the
++ *              windowshade animation goes off. Default = 10.
++ *
+  ***********************************************************************/
+ void WindowShade(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+ 		 unsigned long context, char *action, int *Module)
+-{
++{       
+     int n = 0;
++    int f_w, f_oh, tb_h;
++    int h, y, s;
+ 
+     if (DeferExecution(eventp,&w,&tmp_win,&context, SELECT,ButtonRelease))
+-	return;
+-
++        return;
++    if (tmp_win == NULL)
++        return;
+     if (!(tmp_win->flags & TITLE) || (tmp_win->flags & MAXIMIZED)) {
+-	XBell(dpy, Scr.screen);
+-	return;
++        XBell(dpy, Scr.screen);
++        return;
+     }
+-    while (isspace(*action))++action;
++
++    f_w   = tmp_win->frame_width;
++    tb_h  = tmp_win->title_height+tmp_win->boundary_width;
++    f_oh  = tmp_win->orig_ht;
++
++    if (shade_anim_steps)
++        s = f_oh/shade_anim_steps;
++    if (s<=0)  /* We don't want an endless loop, do we? */
++        s = 1;
++
++    while (isspace(*action))
++        ++action;
+     if (isdigit(*action))
+-	sscanf(action,"%d",&n);
++        sscanf(action,"%d",&n);
+ 
+-    if (((tmp_win->buttons & WSHADE)||(n==2))&&(n!=1))
+-    {
+-	tmp_win->buttons &= ~WSHADE;
+-	SetupFrame(tmp_win,
+-		   tmp_win->frame_x, 
+-		   tmp_win->frame_y, 
+-		   tmp_win->orig_wd,
+-		   tmp_win->orig_ht,
+-		   True);
+-        Broadcast(M_DEWINDOWSHADE, 3, tmp_win->w, tmp_win->frame,
+-                  (unsigned long)tmp_win, 0, 0, 0, 0);
+-    }
+-    else
+-    {
+-	tmp_win->buttons |= WSHADE;
+-	SetupFrame(tmp_win,
+-		   tmp_win->frame_x,
+-		   tmp_win->frame_y,
+-		   tmp_win->frame_width,
+-		   tmp_win->title_height + tmp_win->boundary_width,
+-		   False);
+-        Broadcast(M_WINDOWSHADE, 3, tmp_win->w, tmp_win->frame,
+-                  (unsigned long)tmp_win, 0, 0, 0, 0);
++    if (((tmp_win->buttons & WSHADE)||(n==2))&&(n!=1)) {
++        tmp_win->buttons &= ~WSHADE;
++
++        if(shade_anim_steps) {
++            XMoveWindow(dpy, tmp_win->w, 0, - (f_oh-tb_h));
++            h = tb_h;
++            y = -(tmp_win->orig_ht - tb_h);
++                while (h<f_oh) {
++                    XResizeWindow(dpy, tmp_win->frame, f_w, h);
++                    XMoveWindow(dpy, tmp_win->w, 0, y);
++                    XSync(dpy, 0);
++                    h+=s;
++                    y+=s;
++                }
++            XMoveWindow(dpy, tmp_win->w, 0, 0);
++        }
++        SetupFrame(tmp_win, tmp_win->frame_x, tmp_win->frame_y,
++                f_w, f_oh, True);
++        Broadcast(M_DEWINDOWSHADE,3,tmp_win->w,tmp_win->frame,
++                (unsigned long)tmp_win,0,0,0,0);	
++    } else {
++        tmp_win->buttons |= WSHADE;
++
++        if (shade_anim_steps) {
++            XLowerWindow(dpy, tmp_win->w);
++            h = tmp_win->frame_height;
++            y = 0;
++            while (h>tb_h) {
++                XMoveWindow(dpy, tmp_win->w, 0, y);
++                XResizeWindow(dpy, tmp_win->frame, f_w, h);
++                XSync(dpy, 0);
++                h-=s;
++                y-=s;
++            }
++            XMoveWindow(dpy, tmp_win->w, 0, 0);
++        }
++        SetupFrame(tmp_win, tmp_win->frame_x, tmp_win->frame_y,
++                f_w, tb_h, False);
++        Broadcast(M_WINDOWSHADE,3,tmp_win->w,tmp_win->frame,
++                (unsigned long)tmp_win,0,0,0,0);	
+     }
++
+ }
++
+ #endif /* WINDOWSHADE */
+ 
+ /* For Ultrix 4.2 */
+@@ -671,7 +721,7 @@
+ 		      unsigned long context,char *action, int *Module)
+ 
+ {
+-  int val1;
++  long val1;
+   int val1_unit,n;
+ 
+   if (DeferExecution(eventp,&w,&tmp_win,&context, SELECT, 
+@@ -1240,7 +1290,7 @@
+ void SetClick(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+               unsigned long context, char *action,int* Module)
+ {
+-  int val1;
++  long val1;
+   int val1_unit,n;
+ 
+   n = GetOneArgument(action, &val1, &val1_unit);
+@@ -1256,7 +1306,7 @@
+ void SetXOR(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+             unsigned long context, char *action,int* Module)
+ {
+-  int val1;
++  long val1;
+   int val1_unit,n;
+   XGCValues gcv;
+   unsigned long gcm;
+@@ -1283,7 +1333,7 @@
+ void SetOpaque(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+ 	       unsigned long context, char *action,int* Module)
+ {
+-  int val1;
++  long val1;
+   int val1_unit,n;
+ 
+   n = GetOneArgument(action, &val1, &val1_unit);
+@@ -3329,3 +3379,23 @@
+   if (opts) /* should be empty at this point... */
+     free(opts);
+ }
++
++#ifdef WINDOWSHADE
++/*->CT set shade_anim_steps */
++void setShadeAnim (XEvent *eventp,Window w,FvwmWindow *tmp_win,
++            unsigned long context, char *action,int* Module) 
++{
++  int val_unit,n;
++  long val;
++ 
++  n=GetOneArgument(action, &val, &val_unit);
++  if(n != 1) {
++    fvwm_msg(ERR,"setShadeAnim","WindowShadeAnimate requires 1 argument");
++    return;
++  }
++ 
++  shade_anim_steps = val;
++}
++/*<-CT*/
++#endif
++   
+diff -ru fvwm-2.0.46.orig/fvwm/functions.c fvwm-2.0.46/fvwm/functions.c
+--- fvwm-2.0.46.orig/fvwm/functions.c	Mon Aug 11 22:09:29 1997
++++ fvwm-2.0.46/fvwm/functions.c	Mon Oct 27 04:31:24 1997
+@@ -139,6 +139,9 @@
+   {"WindowsDesk",  changeWindowsDesk,F_CHANGE_WINDOWS_DESK, FUNC_NEEDS_WINDOW},
+ #ifdef WINDOWSHADE
+   {"WindowShade",  WindowShade,      F_WINDOW_SHADE,        FUNC_NEEDS_WINDOW},
++  /*->CT for SHADE_ANIMATE*/
++  {"WindowShadeAnimate",setShadeAnim,F_SHADE_ANIMATE,      FUNC_NO_WINDOW},
++  /*<-CT*/
+ #endif /* WINDOWSHADE */
+   {"XORValue",     SetXOR,           F_XOR,                 FUNC_NO_WINDOW},
+   {"",0,0,0}
+diff -ru fvwm-2.0.46.orig/fvwm/fvwm.c fvwm-2.0.46/fvwm/fvwm.c
+--- fvwm-2.0.46.orig/fvwm/fvwm.c	Mon Aug  4 22:53:32 1997
++++ fvwm-2.0.46/fvwm/fvwm.c	Mon Oct 27 04:31:24 1997
+@@ -630,6 +630,7 @@
+   char *defaults[] = {
+     "HilightColor black grey",
+     "XORValue 0",
++    "WindowShadeAnimate 0",
+     "MenuStyle black grey slategrey fixed fvwm",
+     "TitleStyle Centered -- Raised",
+     "IconFont fixed",
+diff -ru fvwm-2.0.46.orig/fvwm/misc.h fvwm-2.0.46/fvwm/misc.h
+--- fvwm-2.0.46.orig/fvwm/misc.h	Mon Aug 11 22:10:19 1997
++++ fvwm-2.0.46/fvwm/misc.h	Mon Oct 27 04:31:24 1997
+@@ -217,7 +217,13 @@
+ #ifdef  WINDOWSHADE
+ void WindowShade(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+ 		 unsigned long context, char *action, int *Module);
++
++/*->CT for window shade animation */
++void setShadeAnim(XEvent *eventp,Window w,FvwmWindow *tmp_win,
++		 unsigned long context, char *action, int *Module);
++/*<-CT*/
+ #endif
++
+ extern void       RaiseWindow(FvwmWindow *t);
+ extern void       LowerWindow(FvwmWindow *t);
+ extern Bool       GrabEm(int);
+diff -ru fvwm-2.0.46.orig/fvwm/parse.h fvwm-2.0.46/fvwm/parse.h
+--- fvwm-2.0.46.orig/fvwm/parse.h	Mon Aug 11 22:10:39 1997
++++ fvwm-2.0.46/fvwm/parse.h	Mon Oct 27 04:31:24 1997
+@@ -75,6 +75,9 @@
+ #define F_EXEC_SETUP            57
+ #define F_CURSOR_STYLE          58
+ #define F_CURRENT               59
++/*->CT*/
++#define F_SHADE_ANIMATE         60
++/*<-CT*/
+ 
+ /* Functions which require a target window */
+ #define F_RESIZE		100
+@@ -104,6 +107,7 @@
+ #define F_DESTROY_DECOR         124
+ #define F_UPDATE_DECOR          125
+ #define F_WINDOW_SHADE          126
++
+ 
+ /* Functions for use by modules only! */
+ #define F_SEND_WINDOW_LIST     1000
+
+--GvSO+nmPlgiQ/Ipb--
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Sun Oct 26 22:02:57 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sun, 26 Oct 1997 22:02:57 -0600 (CST)
+Received: from Athena.McRCIM.McGill.EDU (root@Athena.McRCIM.McGill.EDU [132.206.4.20]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id WAA06451 for <fvwm-workers@hpc.uh.edu>; Sun, 26 Oct 1997 22:02:50 -0600 (CST)
+Received: from Chart.McRCIM.McGill.EDU (uucp@Chart.McRCIM.McGill.EDU [132.206.4.7]) by 3582 on Athena.McRCIM.McGill.EDU (8.8.5) with ESMTP id XAA03582 for <hpc.uh.edu!fvwm-workers>; Sun, 26 Oct 1997 23:02:42 -0500 (EST)
+Received: from hilbert.UUCP (uucp@localhost) by 3885 on Chart.McRCIM.McGill.EDU (8.8.5) with UUCP id XAA03885 for hpc.uh.edu!fvwm-workers; Sun, 26 Oct 1997 23:02:41 -0500 (EST)
+Received: from localhost by hilbert.nyongwa.montreal.qc.ca
+	via sendmail with smtp
+	id <m0xPgGZ-0000txC@hilbert.nyongwa.montreal.qc.ca>
+	for <fvwm-workers@hpc.uh.edu>; Sun, 26 Oct 1997 22:54:59 -0500 (EST)
+	(Smail-3.2.0.95 1997-May-7 #1 built 1997-May-25)
+Date: Sun, 26 Oct 1997 22:54:57 -0500 (EST)
+From: Steve Robbins <steve@nyongwa.montreal.qc.ca>
+To: fvwm-workers@hpc.uh.edu
+Subject: Re: config override for locaton of CPP
+In-Reply-To: <m0xPZZX-000qE8C@valour.greenend.org.uk>
+Message-ID: <Pine.LNX.3.96.971026225153.27342K-100000@hilbert.nyongwa.montreal.qc.ca>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+On Sun, 26 Oct 1997, Austin Donnelly wrote:
+
+> For whatever reason, our site doesn't have cpp in /usr/lib/cpp.  We do
+> have a /lib/cpp, however.  Cunningly, the FvwmCpp module already have
+> support for an FVWM_CPP #define.  The patch below documents this
+> properly.
+> 
+> Thanks,
+> Austin
+> ------------------------------------------------------------
+> --- fvwm2-2.0.46-BETA.orig/Fvwm.tmpl
+> +++ fvwm2-2.0.46-BETA/Fvwm.tmpl
+
+Thanks for pointing this out.  I've fixed my autoconfig patches so that
+the configure script will now automatically search out cpp either in your
+path, or in /lib or /usr/lib and define FVWM_CPP appropriately.
+
+This update will appear on my web site (www.cs.mcgill.ca/~stever/software)
+by Monday morning.
+
+--
+Steve Robbins                              <steve@nyongwa.montreal.qc.ca>
+
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Oct 27 19:00:29 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 27 Oct 1997 19:00:29 -0600 (CST)
+Received: from mm1 (mm1.sprynet.com [165.121.2.50]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id SAA20374; Mon, 27 Oct 1997 18:58:11 -0600 (CST)
+Received: from gowebway.com ([199.174.174.108]) by mm1.sprynet.com with ESMTP id <148193-19711>; Mon, 27 Oct 1997 16:53:47 -0800
+Message-ID: <345547F7.3EA59AD1@gowebway.com>
+Date: Mon, 27 Oct 1997 18:03:35 -0800
+From: fractture <rroberts@gowebway.com>
+Reply-To: hello@gobnet
+X-Mailer: Mozilla 4.03 [en] (X11; I; Linux 2.0.30 i586)
+MIME-Version: 1.0
+To: Tomas Ogren <stric@ing.umu.se>
+CC: fvwm@hpc.uh.edu, fvwm-workers@hpc.uh.edu
+Subject: Re: FVWM: Updated animated windowshade
+References: <19971027044533.18617@torun>
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+Tomas Ogren wrote:
+
+> I fixed some cosmetic bugs in the former version of animated windowshade,
+> and a bug where you could get an endless loop..
+>
+> It still doesn't leave the bottom border, I couldnt quite get that part to
+> work perfectly, so I'll have to get back on that one..
+
+Could I get directions from someone on how to install and use this file?
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Oct 27 19:12:07 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 27 Oct 1997 19:12:07 -0600 (CST)
+Received: from mm1 (mm1.sprynet.com [165.121.2.50]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id TAA20843; Mon, 27 Oct 1997 19:10:16 -0600 (CST)
+Received: from gowebway.com ([199.174.174.108]) by mm1.sprynet.com with ESMTP id <148193-19711>; Mon, 27 Oct 1997 17:05:50 -0800
+Message-ID: <34554ABF.A015B0A@gowebway.com>
+Date: Mon, 27 Oct 1997 18:15:27 -0800
+From: fractture <rroberts@gowebway.com>
+X-Mailer: Mozilla 4.03 [en] (X11; I; Linux 2.0.30 i586)
+MIME-Version: 1.0
+To: hello@gobnet
+CC: Tomas Ogren <stric@ing.umu.se>, fvwm@hpc.uh.edu, fvwm-workers@hpc.uh.edu
+Subject: Re: FVWM: Updated animated windowshade
+References: <19971027044533.18617@torun> <345547F7.3EA59AD1@gowebway.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+fractture wrote:
+
+> Tomas Ogren wrote:
+>
+> > I fixed some cosmetic bugs in the former version of animated windowshade,
+> > and a bug where you could get an endless loop..
+> >
+> > It still doesn't leave the bottom border, I couldnt quite get that part to
+> > work perfectly, so I'll have to get back on that one..
+>
+> Could I get directions from someone on how to install and use this file?
+
+Oops, don't reply to hello@gobnet I was experimenting and forgot to shut it
+off.
+
+>
+>
+> --
+> Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+> To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+> message to majordomo@hpc.uh.edu.
+> To report problems, send mail to fvwm-owner@hpc.uh.edu.
+
+
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+

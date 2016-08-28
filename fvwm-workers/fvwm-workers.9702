@@ -1,0 +1,2654 @@
+From owner-fvwm-workers@hpc.uh.edu  Tue Feb  4 04:17:54 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 04 Feb 1997 04:17:54 -0600 (CST)
+Received: from rock.helsinki.fi (rock.helsinki.fi [128.214.3.50]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id EAA23064 for <fvwm-workers@hpc.uh.edu>; Tue, 4 Feb 1997 04:17:42 -0600 (CST)
+Received: (from ituohela@localhost) by rock.helsinki.fi (8.6.10/8.6.10) id MAA01711 for fvwm-workers@hpc.uh.edu; Tue, 4 Feb 1997 12:18:10 +0200
+From: Ilkka E T Tuohela <ituohela@rock.helsinki.fi>
+Message-Id: <199702041018.MAA01711@rock.helsinki.fi>
+Subject: Bug in fvwn-2.0.45 internal windowlist
+To: fvwm-workers@hpc.uh.edu
+Date: Tue, 4 Feb 1997 12:18:10 +0200 (EET)
+X-Mailer: ELM [version 2.4ME+ PL27 (25)]
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+
+On OSF1 V3.2 fvwm2's internal window list just hangs everything 
+when started. fvwm must be killed and exits with status -48. I
+have no idea why this happens...
+
+Symptoms after clicking it:
+  o All mouse events, which could go to fvwm or change focus, get 
+    lost until fvwm is killed, then they get thru. If you happen
+    to have active xterm when you get locked you can cut & paste
+    letters in it ( I had to make this a couple times ;)
+
+  o Keyboard focus stays where it was, also if you were focused on
+    a workman, you can't do anything with keyboard.
+
+I think both symptoms are quite normal if fvwm crashes and don't 
+help anyone...
+
+windows.c has changed Jan 15th, maybe those changes have broken it?
+	
+	* hile *
+	   
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Tue Feb  4 09:25:00 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 04 Feb 1997 09:25:00 -0600 (CST)
+Received: from newton.auto.tuwien.ac.at (newton.auto.tuwien.ac.at [128.130.41.13]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id JAA29293 for <fvwm-workers@hpc.uh.edu>; Tue, 4 Feb 1997 09:24:29 -0600 (CST)
+Received: from einstein.auto.tuwien.ac.at by newton.auto.tuwien.ac.at with SMTP id AA03334
+  (5.65c/IDA-1.4.4 for <fvwm-workers@hpc.uh.edu>); Tue, 4 Feb 1997 16:24:05 +0100
+Received: by einstein.auto.tuwien.ac.at (4.1/JK-0.4.5a)
+	id AA15942; Tue, 4 Feb 97 16:24:03 +0100
+Date: Tue, 4 Feb 97 16:24:03 +0100
+From: albrecht@auto.tuwien.ac.at (Albrecht Kadlec)
+Message-Id: <9702041524.AA15942@einstein.auto.tuwien.ac.at>
+To: ituohela@rock.helsinki.fi
+Cc: fvwm-workers@hpc.uh.edu
+In-Reply-To: <199701311304.PAA04946@rock.helsinki.fi> (message from Ilkka E T Tuohela on Fri, 31 Jan 1997 15:04:46 +0200 (EET))
+Subject: Re: Menu code, anyone working on it?
+X-Attribution: A
+Reply-To: albrecht@auto.tuwien.ac.at (Albrecht Kadlec)
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+>>>>> Ilkka E T Tuohela writes:
+
+I> I wanted to fix ugly keyboard handling with menus, almost made it but
+I> my code was so bad that I didn't like it and began thinking of rewriting 
+I> menus.c ... 
+
+[ideas about keyboard handling deleted, although I do very much agree]
+
+I've been thinking of rewriting menus.c, too.
+
+displaying: 
+	. make a show_picture() function, so that we don't duplicate so
+		much code (query if bitmap/pixmap and respective handling)
+	. make arrows on both sides, but if a mini_icon exists, use it's
+		area instead for popping uo submenus (to eliminate
+		unnecessary items, mini_icon and arrow would be too much)
+	. make arrows full height		
+	. change placement code (leftmenu replacement):
+		if the right arrow/icon was touched, place the submenu at
+		new_popup_x = old_popup_x + old_popup_width/2 
+
+		otherwise (left arrow/icon touched)
+		new_popup_x = old_popup_x + old_popup_width/2 - new_popup_width
+		
+		if the preferred position is invisible, use the other.
+		
+		This automatically places submenus so, that half of the old
+		menu is still visible (try opening a _wide_ submenu of a
+		narrow one).
+		
+
+
+
+
+
+There already is also a patch from me for the following feature 
+(didn't make it into 2.0.45)
+
+additional 'command' parameter for popup & menu functions: string in which
+$0 $1 etc are replaced by 
+	the splitted menu return string
+
+e.g: (from my 2.0.43 developer .fvwm2rc)
+
+AddToMenu Machine "Machine" Title
++	&einstein	einstein	$HOSTDISPLAY
++	&euler		euler		$HOSTDISPLAY
++	&hilbert	hilbert		$HOSTDISPLAY
++	&newton		newton		$HOSTDISPLAY
++	&pascal		pascal		$HOSTDISPLAY
++	&kodiak		kodiak.vlsivie.tuwien.ac.at ${HOST}.auto.tuwien.ac.at:0
+
+AddToFunc X		"I"	Exec exec $0 $1 $2 $3 $4 $5 $6 $7 $8 $9
+AddToFunc OnHostExec	"I"	X "xhost +$0 & rsh $0 -n \"setenv DISPLAY $1; exec $2 $3 $4 $5 $6 $7 $8 $9 </dev/null >&/dev/null\""
+
+AddToMenu Tools "Tools"			Title
++	"X&term%xterm-blank.xpm%"	XTerm
++	"uptimes%graphs.xpm%"		X	rsh kodiak.vlsivie.tuwien.ac.at up >/dev/console
+#	"Xterm&s%xterm.xpm%"		PopUp	Xterms
++	"Xterm@%xterm.xpm%"		PopUp	Machine OnHostExec $0 $1 xterm
++	"&Emacs@%gnu-animal.xpm%"	PopUp	Machine OnHostExec $0 $1 emacs
++	"&Perfmeter@%graphs.xpm%"	PopUp	Machine OpenWin perfmeter $0 -title perfmeter:$0 -geometry 132x74 -bg Grey -fg Black
++	"X&calc%xcalc.xpm"		X	xcalc
++	"Calculator%xcalc.xpm"		OpenWin calctool
++	"X&man%question.xpm%"		X	xman
++	"Xma&g%mag_glass.xpm%"		X	xmag
++	"X&lock%Jxlock.xpm%"		XLock
++	"&Netscape@%mini.netscape.xpm%"	PopUp	Machine OnHostExec $0 $1 netscape
++	""				Nop
++	"&Quit%exit.xpm%"		Quit
+
+
+
+In "PopUp	Machine OnHostExec $0 $1 xterm"
+
+$0 is the returned machine (einstein | euler | ...)
+$1 is HOSTDISPLAY (or the corrected value, as 'hostname' is broken on
+our local machines)
+
+so this saves a lot of typing.
+
+If you want to incorporate this, I can send you a patch (for 2.0.43) or the
+corresponding files - mail me.
+
+regards,
+albrecht
+PS: Make sure chuck is fond of your ideas, or you could save a lot of typing.
+    And ask if he plans to reimplement your code, once you submit it. 
+    Then you don't have to test so hard, since he'll have to do the beta
+    testing again, anyway.
+-- 
+My mother came to Hazard when I was just seven
+Even then the folks in town said with prejudiced eyes
+That boy's not right ...
+Three years ago when I came to know Mary
+First time that someone looked beyond the rumours and the lies
+And saw the man inside ...			-- Richard Marx
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Tue Feb  4 09:42:29 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 04 Feb 1997 09:42:29 -0600 (CST)
+Received: from stork.EMBL-Heidelberg.DE (stork.EMBL-Heidelberg.DE [192.54.41.54]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id JAA29759 for <fvwm-workers@hpc.uh.edu>; Tue, 4 Feb 1997 09:42:23 -0600 (CST)
+Received: from alpha1.embl-heidelberg.de (alpha1 [192.54.41.121]) by stork.EMBL-Heidelberg.DE (8.8.4/8.8.4) with ESMTP id QAA08497; Tue, 4 Feb 1997 16:42:09 +0100 (MET)
+Received: by alpha1.embl-heidelberg.de (8.7.1) id QAA23150; Tue, 4 Feb 1997 16:42:08 +0100 (MET)
+Date: Tue, 4 Feb 1997 16:42:08 +0100 (MET)
+Message-Id: <199702041542.QAA23150@alpha1.embl-heidelberg.de>
+From: David Starks-Browning <David.Starks-Browning@EMBL-Heidelberg.de>
+To: fvwm-workers@hpc.uh.edu
+CC: starks@EMBL-Heidelberg.de
+Subject: FvwmWinList option suggestion
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+Greetings fvwm workers,
+
+Shouldn't FvwmWinList have an option *FvwmWinListRightJustify?
+
+Thanks to everyone for your great work with fvwm2.
+
+Sincerely,
+David
+
+=========================================================================
+David Starks-Browning                         | starks@EMBL-Heidelberg.DE
+Parallel Programming Consultant               |
+Supercomputing Resource for Molecular Biology |
+European Molecular Biology Laboratory         |
+Meyerhofstrasse 1                             | tel: +49(0)6221-387 279
+D-69117 Heidelberg, Germany                   | fax: +49(0)6221-387 306
+=========================================================================
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Tue Feb  4 12:12:17 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 04 Feb 1997 12:12:17 -0600 (CST)
+Received: from newton.auto.tuwien.ac.at (newton.auto.tuwien.ac.at [128.130.41.13]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id MAA05186 for <fvwm-workers@hpc.uh.edu>; Tue, 4 Feb 1997 12:11:21 -0600 (CST)
+Received: from einstein.auto.tuwien.ac.at by newton.auto.tuwien.ac.at with SMTP id AA03568
+  (5.65c/IDA-1.4.4 for <fvwm-workers@hpc.uh.edu>); Tue, 4 Feb 1997 19:10:44 +0100
+Received: by einstein.auto.tuwien.ac.at (4.1/JK-0.4.5a)
+	id AA16764; Tue, 4 Feb 97 19:10:42 +0100
+Date: Tue, 4 Feb 97 19:10:42 +0100
+From: albrecht@auto.tuwien.ac.at (Albrecht Kadlec)
+Message-Id: <9702041810.AA16764@einstein.auto.tuwien.ac.at>
+To: ituohela@rock.helsinki.fi
+Cc: fvwm-workers@hpc.uh.edu
+In-Reply-To: <199701311304.PAA04946@rock.helsinki.fi> (message from Ilkka E T Tuohela on Fri, 31 Jan 1997 15:04:46 +0200 (EET))
+Subject: Re: Menu code, anyone working on it?
+X-Attribution: A
+Reply-To: albrecht@auto.tuwien.ac.at (Albrecht Kadlec)
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+>>>>> Ilkka E T Tuohela writes:
+
+I> I wanted to fix ugly keyboard handling with menus, almost made it but
+I> my code was so bad that I didn't like it and began thinking of rewriting 
+I> menus.c ... 
+
+[ideas about keyboard handling deleted, although I do very much agree]
+
+I've been thinking of rewriting menus.c, too.
+
+displaying: 
+	. make a show_picture() function, so that we don't duplicate so
+		much code (query if bitmap/pixmap and respective handling)
+	. make arrows on both sides, but if a mini_icon exists, use it's
+		area instead for popping uo submenus (to eliminate
+		unnecessary items, mini_icon and arrow would be too much)
+	. make arrows full height		
+	. change placement code (leftmenu replacement):
+		if the right arrow/icon was touched, place the submenu at
+		new_popup_x = old_popup_x + old_popup_width/2 
+
+		otherwise (left arrow/icon touched)
+		new_popup_x = old_popup_x + old_popup_width/2 - new_popup_width
+		
+		if the preferred position is invisible, use the other.
+		
+		This automatically places submenus so, that half of the old
+		menu is still visible (try opening a _wide_ submenu of a
+		narrow one).
+		
+
+
+
+
+
+There already is also a patch from me for the following feature 
+(didn't make it into 2.0.45)
+
+additional 'command' parameter for popup & menu functions: string in which
+$0 $1 etc are replaced by 
+	the splitted menu return string
+
+e.g: (from my 2.0.43 developer .fvwm2rc)
+
+AddToMenu Machine "Machine" Title
++	&einstein	einstein	$HOSTDISPLAY
++	&euler		euler		$HOSTDISPLAY
++	&hilbert	hilbert		$HOSTDISPLAY
++	&newton		newton		$HOSTDISPLAY
++	&pascal		pascal		$HOSTDISPLAY
++	&kodiak		kodiak.vlsivie.tuwien.ac.at ${HOST}.auto.tuwien.ac.at:0
+
+AddToFunc X		"I"	Exec exec $0 $1 $2 $3 $4 $5 $6 $7 $8 $9
+AddToFunc OnHostExec	"I"	X "xhost +$0 & rsh $0 -n \"setenv DISPLAY $1; exec $2 $3 $4 $5 $6 $7 $8 $9 </dev/null >&/dev/null\""
+
+AddToMenu Tools "Tools"			Title
++	"X&term%xterm-blank.xpm%"	XTerm
++	"uptimes%graphs.xpm%"		X	rsh kodiak.vlsivie.tuwien.ac.at up >/dev/console
+#	"Xterm&s%xterm.xpm%"		PopUp	Xterms
++	"Xterm@%xterm.xpm%"		PopUp	Machine OnHostExec $0 $1 xterm
++	"&Emacs@%gnu-animal.xpm%"	PopUp	Machine OnHostExec $0 $1 emacs
++	"&Perfmeter@%graphs.xpm%"	PopUp	Machine OpenWin perfmeter $0 -title perfmeter:$0 -geometry 132x74 -bg Grey -fg Black
++	"X&calc%xcalc.xpm"		X	xcalc
++	"Calculator%xcalc.xpm"		OpenWin calctool
++	"X&man%question.xpm%"		X	xman
++	"Xma&g%mag_glass.xpm%"		X	xmag
++	"X&lock%Jxlock.xpm%"		XLock
++	"&Netscape@%mini.netscape.xpm%"	PopUp	Machine OnHostExec $0 $1 netscape
++	""				Nop
++	"&Quit%exit.xpm%"		Quit
+
+
+
+In "PopUp	Machine OnHostExec $0 $1 xterm"
+
+$0 is the returned machine (einstein | euler | ...)
+$1 is HOSTDISPLAY (or the corrected value, as 'hostname' is broken on
+our local machines)
+
+so this saves a lot of typing.
+
+If you want to incorporate this, I can send you a patch (for 2.0.43) or the
+corresponding files - mail me.
+
+regards,
+albrecht
+PS: Make sure chuck is fond of your ideas, or you could save a lot of typing.
+    And ask if he plans to reimplement your code, once you submit it. 
+    Then you don't have to test so hard, since he'll have to do the beta
+    testing again, anyway.
+
+PPS: at the first attemt to send this mail, your .forward returned
+     with error #75, so I'm resending this.
+-- 
+My mother came to Hazard when I was just seven
+Even then the folks in town said with prejudiced eyes
+That boy's not right ...
+Three years ago when I came to know Mary
+First time that someone looked beyond the rumours and the lies
+And saw the man inside ...			-- Richard Marx
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Tue Feb  4 16:08:26 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 04 Feb 1997 16:08:26 -0600 (CST)
+Received: from newton.auto.tuwien.ac.at (newton.auto.tuwien.ac.at [128.130.41.13]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id QAA15465; Tue, 4 Feb 1997 16:07:29 -0600 (CST)
+Received: from einstein.auto.tuwien.ac.at by newton.auto.tuwien.ac.at with SMTP id AA03765
+  (5.65c/IDA-1.4.4); Tue, 4 Feb 1997 23:05:23 +0100
+Received: by einstein.auto.tuwien.ac.at (4.1/JK-0.4.5a)
+	id AA17826; Tue, 4 Feb 97 23:05:21 +0100
+Date: Tue, 4 Feb 97 23:05:21 +0100
+From: albrecht@auto.tuwien.ac.at (Albrecht Kadlec)
+Message-Id: <9702042205.AA17826@einstein.auto.tuwien.ac.at>
+To: FVWM2 mailing list <fvwm@hpc.uh.edu>,
+        FVWM-Workers mailing list <fvwm-workers@hpc.uh.edu>
+Subject: RFV: FvwmAudio extension
+X-Attribution: A
+Reply-To: albrecht@auto.tuwien.ac.at (Albrecht Kadlec)
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+
+what do you think:
+
+as it is FvwmAudio calls an external command via the C system() call.
+
+should FvwmAudio call the fvwm-function audiofunc (changeable via cmdline) 
+with the sound as parameter ?
+
+examples:
+
+	a) RPlay (still handled internally) call FvwmAudio this way:
+		Module FvwmAudio builtin_rplay
+
+	b) normal external play cmd
+	   AddToFunc audiofunc "I" exec /usr/bin/X11/demos/auplay FvwmAudioDir/$1
+		Module FvwmAudio
+	   or 
+		Module FvwmAudio audiofunc
+
+
+	c) rsynth/say:
+	   AddToFunc audiofunc "I" exec /rsynth/say $1
+
+		Module FvwmAudio
+	   or 
+		Module FvwmAudio audiofunc
+	   or
+		Module FvwmAudio "exec /rsynth/say"
+
+	d) echoing the parameters for debugging purposes is faster, 
+	   using the fvwm internal echo rather than calling a shell:
+
+		Module FvwmAudio echo
+
+
+this somewhat reduces all the cryptic possibilities to two possibilities:
+
+	builtin_rplay
+	arbitrary fvwm function
+		 which also takes care of FvwmAudioDir
+
+net effect:
+you can attach an arbitrary fvwm function to an fvwm event:
+
+
+*FvwmAudio focus after_focus_hook
+AddToFunction call_hook "I" $1
+FvwmAudio call_hook
+
+results in after_focus_hook being called after every focus.
+(you might like to rearrange windows)
+
+and lots of other possibilities...
+
+the code size is the same, it just adds flexibility.
+
+what do you think ?
+albrecht
+-- 
+I used to think that my brain was the most wonderful organ in my body.
+Then I realised who had been telling me this...		-- Stephen Wray
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Thu Feb  6 12:28:53 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Thu, 06 Feb 1997 12:28:53 -0600 (CST)
+Received: from helvetica.CS.Arizona.EDU (bradym@helvetica.CS.Arizona.EDU [192.12.69.220]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id MAA19446 for <fvwm-workers@hpc.uh.edu>; Thu, 6 Feb 1997 12:28:46 -0600 (CST)
+Received: (from bradym@localhost) by helvetica.CS.Arizona.EDU (8.8.4/8.7.3) id LAA05933; Thu, 6 Feb 1997 11:28:25 -0700
+To: fvwm-workers@hpc.uh.edu
+Subject: Bug with SendToModule command
+From: Allen Brady Montz <bradym@cs.arizona.edu>
+Date: 06 Feb 1997 11:28:24 -0700
+Message-ID: <t820atpz5j.fsf@helvetica.CS.Arizona.EDU>
+Lines: 18
+X-Mailer: Gnus v5.4.11/XEmacs 19.14
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+The SendToModule command in 2.0.45 has a bug. If fvwm executes the command:
+
+SendToModule "FvwmIconMan" gotobutton Down, select
+
+Then FvwmIconMan gets the string: '" gotobutton Down, select'. If fvwm
+executes:
+
+SendToModule FvwmIconMan gotobutton Down, select 
+
+Then FvwmIconMan gets the string: ' gotobutton Down, select'. 
+
+Fvwm certainly shouldn't be sending the trailing ". And, it probably would be
+best to advance past any whitespace before sending.
+
+
+-- 
+ Brady Montz
+ bradym@cs.arizona.edu
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Fri Feb  7 07:23:10 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Fri, 07 Feb 1997 07:23:10 -0600 (CST)
+Received: from bae.bae.bellcore.com (bae.bae.bellcore.com [128.96.133.81]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id HAA21569; Fri, 7 Feb 1997 07:19:59 -0600 (CST)
+Received: from fork (fork.bae.bellcore.com) by bae.bae.bellcore.com with SMTP id AA02543
+  (5.65c/IDA-1.4.4); Fri, 7 Feb 1997 08:19:26 -0500
+Message-Id: <199702071319.AA02543@bae.bae.bellcore.com>
+To: fvwm@hpc.uh.edu, fvwm-workers@hpc.uh.edu
+Subject: Re: FVWM: bug in fvwm 2.0.45? 
+In-Reply-To: Your message of 06 Feb 1997 23:41:33 -0700.
+             <t8sp39ktia.fsf@helvetica.CS.Arizona.EDU> 
+X-Face: -:-!LDdizWr~[l?RsG!7/BSm'=,`y>~^N7a#qX+.-ZUy"%YF.bP?t_E$lZG54!X1`_>u8>V
+ /DpeH-oUPJ".cJfU'!(om[k{>?!DzZP&UYPi!W/]`[K`Ga+S()<~)mZlm;m}0fId<>1}XS.O+zV%w"
+ 1)-+K#MqP:&_@FrPF}_}R?_\"z9mHc!)e{e/DNzDY&*QoH,HGZJP#LszzhoGERD7$J4ebNt9oh-nvL
+ *IX4w6m=+qtbLQrrI{-jd2Q+(ZUg,a`n58O}z/zl"
+Mime-Version: 1.0 (generated by tm-edit 7.66)
+Content-Type: text/plain; charset=US-ASCII
+Date: Fri, 07 Feb 1997 08:19:25 -0500
+From: Dan Espen <dane@bae.bellcore.com>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+Allen Brady Montz <bradym@cs.arizona.edu> writes:
+> I saw this in 2.0.44 as well. 
+> 
+> I have the following:
+> 
+> DeskTopSize 2x2
+> 
+> Key KP_7        A       M       GotoPage 0 0
+> Key KP_9        A       M       GotoPage 1 0
+> Key KP_1        A       M       GotoPage 0 1
+> Key KP_3        A       M       GotoPage 1 1
+> 
+> So I use the meta key and my number pad to move around my 2x2 desktops. 
+> Now, after I quit netscape, none of these commands work, although these still
+> do:
+> 
+> Key Left	A	M	Scroll -100 0
+> Key Right	A	M	Scroll +100 +0
+> Key Up		A	M	Scroll +0   -100
+> Key Down	A	M	Scroll +0   +100
+> 
+> So, fvwm can still recognize actions bound to meta-something, and move the
+> page around, but GotoPage doesn't seem to work.
+> 
+> Once I change the current page, either with FvwmPager, or one of the Scroll
+> commands, then everything works fine again.
+
+I  believe this has been  reported before.  For  me, this is the worst
+bug remaining in fvwm2.
+
+I see a slightly different  set of symptoms, NO key  works until I use
+the mouse to do something.
+
+So far I   have found  that both  gimp   and netscape can   cause this
+behavior.
+
+If there is a window under the gimp or netscape that the mouse pointer
+falls into, you won't see   this problem.  You   only see it when  the
+mouse pointer ends up on the root.  (I use mousefocus.)
+
+On the testing I have done so far, if you watch a window's events with
+xev, as it exits, most applications generate "unmapnotify", where gimp
+and netscape don't.
+
+Fvwm2 does do some processing on unmapnotify, but  I don't see what it
+does that would cause this problem.
+
+I have made some attempts to understand what is going on in fvwm2, but
+so far  I am mystified.  If  someone could explain  to me how fvwm2 is
+supposed to see keypress events when it  gives focus to other windows,
+and what the "NoFocusWin" is, maybe I could make some progress.
+
+> -- 
+>  Brady Montz
+>  bradym@cs.arizona.edu
+> --
+
+--
+Dan Espen                                    Phone: (908) 699-5570
+dane@bae.bellcore.com
+444 Hoes Lane  Room RRC 1C-214
+Piscataway, NJ 08854
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Fri Feb  7 16:32:23 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Fri, 07 Feb 1997 16:32:23 -0600 (CST)
+Received: from newton.auto.tuwien.ac.at (newton.auto.tuwien.ac.at [128.130.41.13]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id QAA10353; Fri, 7 Feb 1997 16:23:10 -0600 (CST)
+Received: from einstein.auto.tuwien.ac.at by newton.auto.tuwien.ac.at with SMTP id AA08162
+  (5.65c/IDA-1.4.4); Fri, 7 Feb 1997 23:22:50 +0100
+Received: by einstein.auto.tuwien.ac.at (4.1/JK-0.4.5a)
+	id AA13409; Fri, 7 Feb 97 23:22:49 +0100
+Date: Fri, 7 Feb 97 23:22:49 +0100
+From: albrecht@auto.tuwien.ac.at (Albrecht Kadlec)
+Message-Id: <9702072222.AA13409@einstein.auto.tuwien.ac.at>
+To: dane@bae.bellcore.com
+Cc: fvwm@hpc.uh.edu, fvwm-workers@hpc.uh.edu
+In-Reply-To: <199702071319.AA02543@bae.bae.bellcore.com> (message from Dan Espen on Fri, 07 Feb 1997 08:19:25 -0500)
+Subject: Re: FVWM: bug in fvwm 2.0.45?
+X-Attribution: A
+Reply-To: albrecht@auto.tuwien.ac.at (Albrecht Kadlec)
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+>>>>> Dan Espen writes:
+
+D> Allen Brady Montz <bradym@cs.arizona.edu> writes:
+> I saw this in 2.0.44 as well. 
+
+[...]
+
+> So, fvwm can still recognize actions bound to meta-something, and move the
+> page around, but GotoPage doesn't seem to work.
+> 
+> Once I change the current page, either with FvwmPager, or one of the Scroll
+> commands, then everything works fine again.
+
+D> I  believe this has been  reported before.  For  me, this is the worst
+D> bug remaining in fvwm2.
+
+what, I seem to be lacking the original message.
+
+albrecht
+-- 
+And if my owners let me have some free time some day
+With all good intention I would probably run away
+clutching the short straw.	-- Marillion
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Fri Feb  7 19:41:41 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Fri, 07 Feb 1997 19:41:41 -0600 (CST)
+Received: from forbidden.cs.washington.edu (forbidden.cs.washington.edu [128.95.1.39]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id TAA15259 for <fvwm-workers@hpc.uh.edu>; Fri, 7 Feb 1997 19:41:36 -0600 (CST)
+Received: (gjb@localhost) by forbidden.cs.washington.edu (8.6.12/7.2ws+) id RAA20853; Fri, 7 Feb 1997 17:41:05 -0800
+To: fvwm-workers@hpc.uh.edu
+Subject: Setting Environment variables?
+From: Greg Badros <gjb@cs.washington.edu>
+Date: 07 Feb 1997 17:41:04 -0800
+In-Reply-To: albrecht@auto.tuwien.ac.at's message of Tue, 4 Feb 97 16:24:03 +0100
+Message-ID: <qrrbu9wt6q7.fsf@forbidden.cs.washington.edu>
+Lines: 15
+X-Mailer: Gnus v5.4.11/Emacs 19.34
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+Is there any way to set an environment variable using a fvwm command?
+
+e.g. I'd like to do something like
+
++ "I" SetEnv ROOT_HEIGHT HEIGHT
+
+to set the environment variable $ROOT_HEIGHT to the FvwmM4-expanded
+HEIGHT.
+
+I know I could use xwininfo -root and parse that output from my
+.xsession before starting fvwm2, but a fvwm "setenv" command would be
+nice (and really easy), if it's not already doable somehow.
+
+Greg
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Sat Feb  8 19:08:12 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sat, 08 Feb 1997 19:08:12 -0600 (CST)
+Received: from vipunen.hut.fi (root@vipunen.hut.fi [130.233.224.20]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id TAA09494 for <fvwm-workers@hpc.uh.edu>; Sat, 8 Feb 1997 19:08:07 -0600 (CST)
+Received: from beta.hut.fi (jkontkan@beta.hut.fi [130.233.224.51]) by vipunen.hut.fi (8.8.5/8.8.2) with ESMTP id DAA267820 for <fvwm-workers@hpc.uh.edu>; Sun, 9 Feb 1997 03:07:53 +0200
+From: Janne Kontkanen <jkontkan@cc.hut.fi>
+Received: (jkontkan@localhost) by beta.hut.fi (8.8.3/8.6.7) id DAA16771 for fvwm-workers@hpc.uh.edu; Sun, 9 Feb 1997 03:07:56 +0200 (EET)
+Message-Id: <199702090107.DAA16771@beta.hut.fi>
+Subject: Fvwm2 configuration tool
+To: fvwm-workers@hpc.uh.edu
+Date: Sun, 9 Feb 1997 03:07:56 +0200 (EET)
+X-Mailer: ELM [version 2.4 PL21]
+Content-Type: text
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+
+
+We are developing fvwm2 configuration tool for easy and fast configuration of
+colors, menus, mouse, virtual desktop, etc. We are aware of dotfile generator,
+but this is going to be something different. The aim is to allow configuration
+to be at least as comfortable as in MS-Windows or Amiga OS.
+
+Unix-philosophy - everything should be editable by hand - will be respected.
+Configuration tool reads your old configuration file and doesn't change it
+any other way that you would if you edited the configuration by hand. This
+would be ideal for beginners to get their system 'decent-looking' and by
+time they would maybe want to edit the file by hand for changing some
+more exotic feature of fvwm. 
+
+We are using xforms library for gui - so the outlook is quite slick. 
+
+Enough adverising - to the point. We are hoping that it would be possible to 
+co-operate with fvwm-developers, so that our tool will not be outdated allready 
+when the initial releas comes out. That means we would be happy to know if
+there will be changes in configuration tags/commands in near future (?).
+And also if you are a skilled programmer with some spare time, contact us.
+
+Wouldn't it be nice to include configuration tool to fvwm distribution...
+
+
+
+Janne.Kontkanen@hut.fi (Suggestions, opinions, anything... )
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Sun Feb  9 12:40:22 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sun, 09 Feb 1997 12:40:22 -0600 (CST)
+Received: from mercury.elmailer.net (mercury.elmailer.net [195.224.76.4]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id MAA25503 for <fvwm-workers@hpc.uh.edu>; Sun, 9 Feb 1997 12:40:15 -0600 (CST)
+Received: from sfere.greenend.org.uk (sfere.greenend.org.uk [195.224.38.1])
+    by mercury.elmailer.net with ESMTP
+    id SAA01627 for <fvwm-workers@hpc.uh.edu> (2.1.1g-8.8.4/3.0b);
+    Sun, 9 Feb 1997 18:39:31 GMT
+Received: from valour.greenend.org.uk (valour.greenend.org.uk [195.224.38.2])
+          by sfere.greenend.org.uk with ESMTP
+          id SAA04921 for <fvwm-workers@hpc.uh.edu>
+          (2.1.1h-8.8.5/2.1b-greenend); Sun, 9 Feb 1997 18:32:03 GMT
+Received: by valour.greenend.org.uk
+	id m0vtdzN-000qFkC
+	(Debian Smail-3.2 1996-Jul-4 #2); Sun, 9 Feb 1997 18:28:33 +0000 (GMT)
+Message-Id: <m0vtdzN-000qFkC@valour.greenend.org.uk>
+Date: Sun, 9 Feb 1997 18:28:33 +0000 (GMT)
+From: Austin Donnelly <austin@greenend.org.uk>
+To: fvwm-workers@hpc.uh.edu
+Subject: Num lock interactions
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+Hi,
+
+Something to be added to the FAQ, I think - I've been asked this same
+question about 4-5 times now.
+
+
+Q: When I turn on Num Lock, I can't move windows any more!  What gives?
+
+A: Since XFree86-3.1.2, "Num Lock" has been considered a modifier key,
+   similar in spirit to shift, caps lock, control etc.
+   This changes the meaning of lines like this in your fvwm2rc:
+      Mouse 1     ST     N     Move
+   This means "left mouse button in the sides or titlebar with no
+   modifiers runs the Move command" -- note that it specifies no
+   modifiers.  But if you have Num Lock turned on, that counts as a
+   modifier, so this line won't match.  What you need to do it add a
+   line to cover this case:
+      Mouse 1     ST     2     Move
+   Num Lock is modifier number 2 - hence the 2 in the line above. You
+   need to do this for each definition you have which should be run
+   when your not holding down any modifiers.
+
+
+Austin
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Sun Feb  9 13:56:17 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sun, 09 Feb 1997 13:56:17 -0600 (CST)
+Received: from ee00 (ee00.ethz.ch [129.132.98.179]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id NAA28142 for <fvwm-workers@hpc.uh.edu>; Sun, 9 Feb 1997 13:56:11 -0600 (CST)
+Received: from engelberg.ethz.ch (engelberg.ethz.ch [129.132.7.69]) by ee00 (8.8.4/8.8.3) with ESMTP id UAA12251; Sun, 9 Feb 1997 20:55:58 +0100 (MET)
+Received: from localhost (oetiker@localhost) by engelberg.ethz.ch (8.8.4/8.8.3) with SMTP id UAA23302; Sun, 9 Feb 1997 20:55:55 +0100 (MET)
+X-Authentication-Warning: engelberg.ethz.ch: oetiker owned process doing -bs
+Date: Sun, 9 Feb 1997 20:55:55 +0100 (MET)
+From: Tobias Oetiker <oetiker@ee.ethz.ch>
+X-Sender: oetiker@engelberg
+To: Janne Kontkanen <jkontkan@cc.hut.fi>
+cc: fvwm-workers@hpc.uh.edu
+Subject: Re: Fvwm2 configuration tool
+In-Reply-To: <199702090107.DAA16771@beta.hut.fi>
+Message-ID: <Pine.GSO.3.95.970209205445.23194A-100000@engelberg>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+On Sun, 9 Feb 1997, Janne Kontkanen wrote:
+
+> 
+> 
+> We are developing fvwm2 configuration tool for easy and fast configuration of
+> colors, menus, mouse, virtual desktop, etc. We are aware of dotfile generator,
+> but this is going to be something different. The aim is to allow configuration
+> to be at least as comfortable as in MS-Windows or Amiga OS.
+> 
+> Unix-philosophy - everything should be editable by hand - will be respected.
+> Configuration tool reads your old configuration file and doesn't change it
+> any other way that you would if you edited the configuration by hand. This
+> would be ideal for beginners to get their system 'decent-looking' and by
+> time they would maybe want to edit the file by hand for changing some
+> more exotic feature of fvwm. 
+> 
+> We are using xforms library for gui - so the outlook is quite slick. 
+
+before you start  check out qt www.troll.com
+
+its free for free software and comes WITH source !!!!
+
+cheers
+tobi
+--
+ ______    __   _
+/_  __/_  / /  (_) Oetiker, Timelord & SysMgr @ EE-Dept ETH-Zurich
+ / // _ \/ _ \/ / TEL:+41(0)1-6325286  FAX:+41(0)1-6321194
+/_/ \___/_.__/_/ oetiker@ee.ethz.ch http://www.ee.ethz.ch/~oetiker
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Sun Feb  9 15:13:43 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sun, 09 Feb 1997 15:13:43 -0600 (CST)
+Received: from mercury.elmailer.net (mercury.elmailer.net [195.224.76.4]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id PAA00666 for <fvwm-workers@hpc.uh.edu>; Sun, 9 Feb 1997 15:13:38 -0600 (CST)
+Received: from sfere.greenend.org.uk (sfere.greenend.org.uk [195.224.38.1])
+    by mercury.elmailer.net with ESMTP
+    id VAA01730 for <fvwm-workers@hpc.uh.edu> (2.1.1g-8.8.4/3.0b);
+    Sun, 9 Feb 1997 21:12:58 GMT
+Received: from valour.greenend.org.uk (valour.greenend.org.uk [195.224.38.2])
+          by sfere.greenend.org.uk with ESMTP
+          id UAA10111 for <fvwm-workers@hpc.uh.edu>
+          (2.1.1h-8.8.5/2.1b-greenend); Sun, 9 Feb 1997 20:53:00 GMT
+Received: by valour.greenend.org.uk
+	id m0vtgBo-000qFkC
+	(Debian Smail-3.2 1996-Jul-4 #2); Sun, 9 Feb 1997 20:49:32 +0000 (GMT)
+Message-Id: <m0vtgBo-000qFkC@valour.greenend.org.uk>
+Date: Sun, 9 Feb 1997 20:49:32 +0000 (GMT)
+From: Austin Donnelly <austin@greenend.org.uk>
+To: fvwm-workers@hpc.uh.edu
+Subject: bug: removing button 0 in 2.0.45
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+The following (minimal!) config file worked fine with 2.0.43, but
+doesn't with 2.0.45:
+
+Style "*"       NoButton 0
+Key F1          FSTIW   N       Resize
+
+In particular, hitting F1 to resize a window just beeps if button 0
+has been removed.  This used to work in 2.0.43 - but I can't see which
+of the (many) changes could be relevant.
+
+Also, the window border decorations are incorrectly drawn.
+
+Austin
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Sun Feb  9 22:24:19 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sun, 09 Feb 1997 22:24:19 -0600 (CST)
+Received: from arwild01.remote.louisville.edu (arwild01.remote.louisville.edu [136.165.241.223]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id WAA08590 for <fvwm-workers@hpc.uh.edu>; Sun, 9 Feb 1997 22:24:12 -0600 (CST)
+Received: (from arwild01@localhost) by arwild01.remote.louisville.edu (8.7.4/8.7.3) id XAA03069; Sun, 9 Feb 1997 23:24:15 -0500
+Message-ID: <Mutt.19970209232415.arwild01@arwild01.remote.louisville.edu>
+Date: Sun, 9 Feb 1997 23:24:15 -0500
+From: arwild01@remote.louisville.edu (Alan Wild)
+To: austin@greenend.org.uk (Austin Donnelly)
+Cc: fvwm-workers@hpc.uh.edu, dsembr01@starbase
+Subject: Re: bug: removing button 0 in 2.0.45
+References: <m0vtgBo-000qFkC@valour.greenend.org.uk>
+X-Mailer: Mutt 0.58.1
+Mime-Version: 1.0
+Content-Type: multipart/signed; protocol="application/pgp-signature";
+	micalg=pgp-md5; boundary="=0dwX=YdRrHGmjtB"
+Reply-To: arwild01@starbase.spd.louisville.edu (Alan Wild)
+X-URL: a http://www.spd.louisville.edu/~arwild01
+In-Reply-To: <m0vtgBo-000qFkC@valour.greenend.org.uk>; from Austin Donnelly on Feb 9, 1997 20:49:32 +0000
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+
+--=0dwX=YdRrHGmjtB
+
+On Feb 9, austin@greenend.org.uk (Austin Donnelly) wrote:
+> The following (minimal!) config file worked fine with 2.0.43, but
+> doesn't with 2.0.45:
+> 
+> Style "*"       NoButton 0
+> Key F1          FSTIW   N       Resize
+> 
+> Also, the window border decorations are incorrectly drawn.
+
+Another user at my sight just ran up against this same problem.  All of
+his border Handles are miss-drawn if he specifies "NoButton 0".  I'm not
+quite sure of the extent but I believe he was having some other problems
+which also cleared up by removing that particular Style command.
+
+I also have experienced some problems with Ileaf (Motif-based word
+processing package).  It doesn't seem to want to start up under the new
+release, but I haven't bee able to determine what the cause of the
+problem is.  I'm presently investigating this.
+
+Incidentally, our system is HP-UX 10.10 and fvwm was built with cc -Ae
+
+I have experienced absolutely no problems with 2.0.45 on my Linux 2.0.28
+system.  (Built that version as soon as Chuck sent out the patch).
+
+-Alan
+
+-- 
+Alan Wild <arwild01@starbase.spd.louisville.edu>           /T\ f/s/c lou95
+IT-HSC Consultant       Speed School Student Council        Speed News Guy
+http://www.spd.louisville.edu/~arwild01 or ==> ~triangle/ ~spdnews/ ~sssc/
+
+--=0dwX=YdRrHGmjtB
+Content-Type: application/pgp-signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: 2.6.2
+
+iQCVAwUBMv6i7i6Zq/ke4hdVAQEGkAP7BH9q/Qlx1ZgU106FwZ8X5GwLyCzs4rWp
+j4UCYVbjLLoBmcbna2TCJZkRGt2ZPirxDkfWQTXyFf+eneA8Igl/7N0zeDOy1d+V
+iAnZbwZViLzkjIZ/ft5pF18dkpSIrmhX2mgwirZzoq6QvAT48rIUIENREHgTNaMx
+nj47WtozxtQ=
+=N5fI
+-----END PGP SIGNATURE-----
+
+--=0dwX=YdRrHGmjtB--
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Feb 10 02:33:13 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 10 Feb 1997 02:33:13 -0600 (CST)
+Received: from rock.helsinki.fi (ituohela@rock.helsinki.fi [128.214.3.50]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id CAA12104 for <fvwm-workers@hpc.uh.edu>; Mon, 10 Feb 1997 02:33:08 -0600 (CST)
+Received: (from ituohela@localhost) by rock.helsinki.fi (8.6.10/8.6.10) id KAA11232 for fvwm-workers@hpc.uh.edu; Mon, 10 Feb 1997 10:34:07 +0200
+From: Hile Tuohela <ituohela@rock.helsinki.fi>
+Message-Id: <199702100834.KAA11232@rock.helsinki.fi>
+Subject: Re: Fvwm2 configuration tool
+In-Reply-To: <Pine.GSO.3.95.970209205445.23194A-100000@engelberg> from Tobias Oetiker at "Feb 9, 97 08:55:55 pm"
+To: fvwm-workers@hpc.uh.edu
+Date: Mon, 10 Feb 1997 10:34:06 +0200 (EET)
+X-Mailer: ELM [version 2.4ME+ PL27 (25)]
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+>> We are using xforms library for gui - so the outlook is quite slick. 
+>
+>before you start  check out qt www.troll.com
+>
+>its free for free software and comes WITH source !!!!
+
+Yes, but it's for C++... well maybe configuration tool can be
+written in ++ and other tools with C.
+
+How is your configuration tool going to respect multiple 
+configuration files? Our fvwm2 reads first a system file, which
+defines architecture dependent things (ModulePath for example, we 
+have same configuration files for Digital unix, linux i386 & linux alpha),
+then reads Styles, Bindings, Icons, Menus and Functions, all from
+different files, and in between reads appropriate user files from
+$HOME/.fvwm2 This way we can offer users a standard fvwm setup, which
+they can tweak with their own files, while still reading everything 
+they don't want to change from system files. Files are splitted,
+because I have a submenu Read Resources under menu Fvwm, from which
+you can read all configuration files seperately without restarting.
+
+I think fvwm should have a standardised structure for splitting 
+of the configuration files, so that we could write config apps
+that can handle them. Look at my files, it's not perfect but works..
+http://www.iki.fi/fvwm-docs/fvwmconfig.tgz includes my script to start 
+fvwm2 and all config files, including my own settings from $HOME/.fvwm2
+
+My files have some caveats. They should use a environment variable
+to define resources-dir, not M4 defines, and many other problems.
+
+	* hile *
+	   
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Feb 10 08:21:21 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 10 Feb 1997 08:21:21 -0600 (CST)
+Received: from bae.bae.bellcore.com (bae.bae.bellcore.com [128.96.133.81]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id IAA17172; Mon, 10 Feb 1997 08:20:21 -0600 (CST)
+Received: from fork (fork.bae.bellcore.com) by bae.bae.bellcore.com with SMTP id AA28925
+  (5.65c/IDA-1.4.4); Mon, 10 Feb 1997 09:19:17 -0500
+Message-Id: <199702101419.AA28925@bae.bae.bellcore.com>
+To: fvwm@hpc.uh.edu, fvwm-workers@hpc.uh.edu
+Subject: Re: FVWM: bug in fvwm 2.0.45? 
+In-Reply-To: Your message of Fri, 07 Feb 1997 23:22:49 +0100.
+             <9702072222.AA13409@einstein.auto.tuwien.ac.at> 
+X-Face: -:-!LDdizWr~[l?RsG!7/BSm'=,`y>~^N7a#qX+.-ZUy"%YF.bP?t_E$lZG54!X1`_>u8>V
+ /DpeH-oUPJ".cJfU'!(om[k{>?!DzZP&UYPi!W/]`[K`Ga+S()<~)mZlm;m}0fId<>1}XS.O+zV%w"
+ 1)-+K#MqP:&_@FrPF}_}R?_\"z9mHc!)e{e/DNzDY&*QoH,HGZJP#LszzhoGERD7$J4ebNt9oh-nvL
+ *IX4w6m=+qtbLQrrI{-jd2Q+(ZUg,a`n58O}z/zl"
+Mime-Version: 1.0 (generated by tm-edit 7.66)
+Content-Type: text/plain; charset=US-ASCII
+Date: Mon, 10 Feb 1997 09:19:16 -0500
+From: Dan Espen <dane@bae.bellcore.com>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+albrecht@auto.tuwien.ac.at (Albrecht Kadlec) writes:
+> >>>>> Dan Espen writes:
+> 
+> D> Allen Brady Montz <bradym@cs.arizona.edu> writes:
+> > I saw this in 2.0.44 as well. 
+> 
+> [...]
+> 
+> > So, fvwm can still recognize actions bound to meta-something, and move the
+> > page around, but GotoPage doesn't seem to work.
+> > 
+> > Once I change the current page, either with FvwmPager, or one of the Scroll
+> > commands, then everything works fine again.
+> 
+> D> I  believe this has been  reported before.  For  me, this is the worst
+> D> bug remaining in fvwm2.
+> 
+> what, I seem to be lacking the original message.
+
+Well, I can't prove this was reported  before, and I  can't find it in
+the bug list or todo list.  Never the less,  I have the problem, and I
+assume others can reproduce it as well.  If not, I would be interested
+to hear that.
+
+To give the problem a short description:
+
+"keyboarding doesn't work after exiting certain applications including
+Netscape, when the mouse pointer drops on to the root window".
+
+Despite the subject line above, this is not a new problem in 2.0.45.
+
+> albrecht
+> -- 
+
+--
+Dan Espen                                    Phone: (908) 699-5570
+dane@bae.bellcore.com
+444 Hoes Lane  Room RRC 1C-214
+Piscataway, NJ 08854
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Feb 10 11:36:25 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 10 Feb 1997 11:36:25 -0600 (CST)
+Received: from mail1.its.rpi.edu (root@mail1.its.rpi.edu [128.113.100.7]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id LAA23749; Mon, 10 Feb 1997 11:36:12 -0600 (CST)
+Received: from magritte.its.rpi.edu (veliaa@magritte.its.rpi.edu [128.113.113.19])
+	by mail1.its.rpi.edu (8.8.5/8.8.5) with ESMTP id MAA70474;
+	Mon, 10 Feb 1997 12:35:38 -0500
+Received: (veliaa@localhost) by magritte.its.rpi.edu (8.6.9/8.6.4) id MAA63972; Mon, 10 Feb 1997 12:35:26 -0500
+Date: Mon, 10 Feb 1997 12:35:26 -0500 (EST)
+From: Andrew Veliath <veliaa@rpi.edu>
+X-Sender: veliaa@magritte.its.rpi.edu
+To: fvwm@hpc.uh.edu
+cc: fvwm-workers@hpc.uh.edu
+Subject: Fix for NoButton 0 Problem
+Message-ID: <Pine.A32.3.91.970210123354.44928A-100000@magritte.its.rpi.edu>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+
+Here is a patch to fix it.
+
+--
+Andrew Veliath <veliaa@rpi.edu>        http://www.rpi.edu/~veliaa
+Finger for PGP Public Key
+Key fingerprint =  51 56 5D 3E 51 43 8B 74  7C B2 E4 B6 84 8E 8B 08
+
+--- ../../orig/fvwm-2.0.45/fvwm/style.c	Wed Jan 22 15:28:59 1997
++++ style.c	Mon Feb 10 12:23:28 1997
+@@ -115,7 +115,9 @@
+             restofline++;
+           while(isspace(*restofline))restofline++;
+ 	  
+-          on_buttons |= (1<<(butt-1));        
++          if (butt == 0) butt = 10;
++          if (butt > 0 && butt <= 10)
++              on_buttons |= (1<<(butt-1));        
+         }
+         else if(mystrncasecmp(restofline,"BorderWidth",11)==0)
+         {
+@@ -460,7 +462,9 @@
+             restofline++;
+           while(isspace(*restofline))restofline++;
+ 	  
+-          off_buttons |= (1<<(butt-1));
++          if (butt == 0) butt = 10;
++          if (butt > 0 && butt <= 10)
++              off_buttons |= (1<<(butt-1));
+         }
+         else if(mystrncasecmp(restofline,"NOOLDECOR",9)==0)
+         {
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Tue Feb 11 13:48:20 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 11 Feb 1997 13:48:20 -0600 (CST)
+Received: from newton.auto.tuwien.ac.at (newton.auto.tuwien.ac.at [128.130.41.13]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id NAA06406; Tue, 11 Feb 1997 13:39:06 -0600 (CST)
+Received: from einstein.auto.tuwien.ac.at by newton.auto.tuwien.ac.at with SMTP id AA13337
+  (5.65c/IDA-1.4.4); Tue, 11 Feb 1997 20:38:00 +0100
+Received: by einstein.auto.tuwien.ac.at (4.1/JK-0.4.5a)
+	id AA02453; Tue, 11 Feb 97 20:37:59 +0100
+Date: Tue, 11 Feb 97 20:37:59 +0100
+From: albrecht@auto.tuwien.ac.at (Albrecht Kadlec)
+Message-Id: <9702111937.AA02453@einstein.auto.tuwien.ac.at>
+To: FVWM2 mailing list <fvwm@hpc.uh.edu>,
+        FVWM-Workers mailing list <fvwm-workers@hpc.uh.edu>
+Subject: fvwm / FvwmAuto problem
+X-Attribution: A
+Reply-To: albrecht@auto.tuwien.ac.at (Albrecht Kadlec)
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+
+	start FvwmAuto 100
+
+	put 2 somewhat overlapping windows on a screen
+	
+	go to window A
+
+	go to window B, (not touching root)
+
+	go back to A, _before_ B is _raised_, but be sure to 
+	stay in	the area, where the 2 windows overlap.
+
+
+the last 2 steps must happen very quickly (just leave A for 50 ms)	
+
+focus keeps toggling between the two windows and they'll be raiseed
+alternatively, until the mouse leaves the space where the 2 windows
+overlap.
+
+after a few tries you'll get the feeling how to trigger the effect.
+
+So this is a _very_ bad interaction between fvwm2 & FvwmAuto.
+
+>From my debug output FvwmAuto behaves correctly, so what seems to happen
+is: 
+
+apparently, FvwmAuto gets a new focus event _after_ the raise, 
+which was originated _before_ the raise.
+The raise event triggers a new focus event (since we're in the overlap
+area).
+
+
+time	fvwm:				FvwmAuto:
+
+ |	focus B
+ |	focus A, because we re-entered	timeout expires, while we haven't
+ |					seen the focus A yet  -> raise B
+ v	focus B, because it's on top	timeout expires, but we haven't
+					seen the focus B yet  -> raise A
+and so on.
+
+the 100ms just seem to be >= the round trip delay of the 
+	FvwmAuto (raise) -> fvwm (focus) -> FvwmAuto (receive new focus)
+path.
+
+so the two columns seem to be executed in parallel, with the "left hand not
+knowing what the right hand does"
+
+
+I tried to get an interval where this effect is triggered:
+
+	I got down to 70ms
+	raising to 200 ms also
+
+	raising the timeout to 300 ms, I noticed an interesting effect:
+	the flipping stops after some time:
+
+	I got 6, 65, 3, 5, 4, 16, 63 flips so far
+
+Increasing the time slows down the FvwmAuto column in the above timing
+diagram, so at some point the next focus event from fvwm arrives, before
+the timeout elapses, so the raise is cancelled.
+
+
+Can anybody suggest a solution ?
+
+I guess, adding a paragraph to the man page saying:
+	don't set timeout below 
+	"complex-fn-depending-on-system-speed-load-and-windowsizes"
+is out of question.
+
+you can get my current developer-version from
+	<URL:http://www.auto.tuwien.ac.at/~albrecht/FvwmAuto.c.gz>
+
+albrecht
+-- 
+I was in the kitchen		Seamus, that's the dog was outside
+Well, I was in the kitchen	Seamus, my old hound was outside
+Well, you know the sun was sinking slowly
+But my hound just sat right down and cried	-- Pink Floyd, "Seamus"
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Thu Feb 13 07:12:23 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Thu, 13 Feb 1997 07:12:23 -0600 (CST)
+Received: from lemming0.lem.uni-karlsruhe.de (jens@lemming0.lem.uni-karlsruhe.de [129.13.103.195]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id HAA14464 for <fvwm-workers@hpc.uh.edu>; Thu, 13 Feb 1997 07:12:17 -0600 (CST)
+Received: (from jens@localhost) by lemming0.lem.uni-karlsruhe.de (8.6.12/8.6.9) id OAA08088; Thu, 13 Feb 1997 14:10:03 +0100
+To: fvwm-workers@hpc.uh.edu
+Subject: FvwmIconMan
+X-Face: Z[@OB)("ZvE?ev~1b+b!0ZUB.$%rh.9qE>dVf>q}Q/V?%d`J3gd!LR\aAZ8<Hwi]xTA(:*c;i3,?K?+rCy*^b$)a,}E?eo},}x2]5LlJysyoUOK"o[>K)'\Ulb7y-7*.If^;rHl['oa)n_M7E6w+LDKMs"G8_`c)uOS1^}.1|8Ill]7X68X-paeUOpBhz<F`B0?~^2Et~GYfw~/0]H]nx4~C_E/_mp#^7Ixc:
+Reply-To: jens@lemcbed.lem.uni-karlsruhe.de
+Mime-Version: 1.0 (generated by tm-edit 7.94)
+Content-Type: text/plain; charset=US-ASCII
+From: Jens Lautenbacher <jens@lemming0.lem.uni-karlsruhe.de>
+Date: 13 Feb 1997 14:10:02 +0100
+Message-ID: <x2ohdoam39.fsf@lemming0.lem.uni-karlsruhe.de>
+Lines: 28
+X-Mailer: Gnus v5.4.11/XEmacs 19.14
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+
+I use the very last version 0.9.7 and I must say I'm pretty impressed.
+
+Some problems still remain:
+
+     - I tried to bind a menu to Action Mouse 3 (It was the normal
+       Window-Ops menu, I want to have the possiblity to
+       close/lower/raise... and so on from IconMan.) 
+       Activating the menu made it pop up but any thing I actually
+       selected from it made fvwm (--> X followed of course) crash.
+
+     - I have ClickToFocus set. If I iconify a window from the
+       titlebarbutton I often have the case that none of the remaining
+       non-iconified windows will get the focus, but FvwmIconMan.
+       (I'm not sure at the moment if the Problem is also with
+       FvwmButtons)
+       How can I achive that IconMan will never get the focus (unless
+       I really click on it, of course) 
+
+     - How about an option so that only iconified windows will be
+       displayed? This would be a screen-estate saving variant of the
+       usual icon mechanism: A Icon is displayed if (surprise) the
+       window gets iconified.
+
+Cheers,
+		Jens
+
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Thu Feb 13 22:01:22 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Thu, 13 Feb 1997 22:01:22 -0600 (CST)
+Received: from inesc.inesc.pt (inesc.inesc.pt [146.193.0.1]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id VAA19314; Thu, 13 Feb 1997 21:57:03 -0600 (CST)
+Received: from qual.inesc.pt by inesc.inesc.pt with SMTP;
+	id AA22294 (/); Fri, 14 Feb 1997 03:56:42 GMT
+Received: by qual.inesc.pt (4.1/SunOS4.1.3)
+	id AA29817; Fri, 14 Feb 97 03:56:41 GMT
+To: albrecht@auto.tuwien.ac.at (Albrecht Kadlec)
+Cc: FVWM2 mailing list <fvwm@hpc.uh.edu>,
+        FVWM-Workers mailing list <fvwm-workers@hpc.uh.edu>
+Subject: Re: FVWM: fvwm / FvwmAuto problem
+References: <9702111937.AA02453@einstein.auto.tuwien.ac.at>
+From: jmp@inesc.pt (Jose M. Pereira)
+Date: 14 Feb 1997 03:56:40 +0000
+In-Reply-To: albrecht@auto.tuwien.ac.at's message of Tue, 11 Feb 97 20:37:59 +0100
+Message-Id: <khniv3w6nwn.fsf@inesc.pt>
+Lines: 41
+X-Mailer: Gnus v5.4.12/Emacs 19.34
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+albrecht@auto.tuwien.ac.at (Albrecht Kadlec) writes:
+
+> apparently, FvwmAuto gets a new focus event _after_ the raise, 
+> which was originated _before_ the raise.
+> The raise event triggers a new focus event (since we're in the overlap
+> area).
+> 
+> Can anybody suggest a solution ?
+> 
+> I guess, adding a paragraph to the man page saying:
+> 	don't set timeout below 
+> 	"complex-fn-depending-on-system-speed-load-and-windowsizes"
+> is out of question.
+
+Been there (I once made an FvwmAuto -- in a module written in Python, posted
+once upon a time in this list, which included FvwmClean, FvwmAudio and
+similars). I remember a quick argument with Rob about it. To summarize:
+
+- AutoRaise can only be reliable if done by fvwm. (I think I couldn't convince
+Rob of this, sigh)
+
+- Rob had no intention of bringing AutoRaise back from a module.
+
+- You have to live with FvwmAuto and fvwm functioning asynchronously. That
+means the "black dot", transient window overlapping etc. can't be completely
+avoided.
+
+Your extensive testing (much better than mine!) seems to reinforce my
+conclusion. Sorry.
+
+PS:
+If you have any suggestions to hack out the "black dot", I'm ready to try
+anything -- my sparc10 is always slower than me :-) 
+
+-- 
+Jose' Pereira
+	     INESC (Inst. Eng. Sistemas e Computadores)
+             R. Alves Redol 9, 6. 1000 Lisboa, PORTUGAL.
+             Phone.: +351 1 3100223 Fax...: +351 1 3145843
+ e-mail: jmp@inesc.pt PGP PUBLIC KEY: finger -m pereira @sabrina.inesc.pt
+		<< Hit any user to continue >>
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Fri Feb 14 16:26:32 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Fri, 14 Feb 1997 16:26:32 -0600 (CST)
+Received: from VNET.IBM.COM (vnet.ibm.com [199.171.26.4]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id QAA23905 for <fvwm-workers@hpc.uh.edu>; Fri, 14 Feb 1997 16:26:23 -0600 (CST)
+Received: from RCHLAND by VNET.IBM.COM (IBM VM SMTP V2R3) with BSMTP id 9846;
+   Fri, 14 Feb 97 17:26:03 EST
+Reply-To: "Bill Oswald" <wamo@VNET.IBM.COM>
+Received: by po1 (AIX 3.2/UCB 5.64/4.7) id <AA21603> for fvwm-workers@hpc.uh.edu; Fri, 14 Feb 1997 16:25:07 -0600
+Received: via switchmail; Fri, 14 Feb 1997 16:25:06 -0600 (CST)
+Received: from penfold.rchland.ibm.com via qmail
+          ID </afs/rchland.ibm.com/service/mailqs/q000/QF.kn1CMag91Gl=B:MUIN>;
+          Fri, 14 Feb 1997 16:24:39 -0600 (CST)
+Received: from penfold.rchland.ibm.com via qmail
+          ID </afs/rchland.ibm.com/usr1/wamo/.Outgoing/QF.cn1CMYc91Gl=5hq6QB>;
+          Fri, 14 Feb 1997 16:24:36 -0600 (CST)
+Received: from Messages.8.5.N.CUILIB.3.45.SNAP.NOT.LINKED.penfold.rchland.ibm.com.rs.aix41
+          via MS.5.6.penfold.rchland.ibm.com.rs_aix41;
+          Fri, 14 Feb 1997 16:24:35 -0600 (CST)
+Message-Id: <Qn1CMXQ91Gl=5hq6En@rchland.ibm.com>
+Date: Fri, 14 Feb 1997 16:24:35 -0600 (CST)
+From: Bill Oswald <wamo@VNET.IBM.COM>
+To: fvwm@hpc.uh.edu, fvwm-workers@hpc.uh.edu
+Subject: Minor patch to rc conversion program
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+Don't know how many folks are using the rc converter but judging by the
+number of questions still asked about fvwm1.24r there may still be a
+need. 
+
+It was missing a conversion for StartsOnDesk and also had a bug in the
+WindowListSkip conversion (missing newline. *blush*). 
+
+I've attached the patch.  
+
+Chuck: can you apply this to  2.0.45?  It's been tested. 
+
+Thanks, 
+-Bill 
+
+--- fvwmrc_convert.orig	Thu Aug  1 14:43:11 1996 
++++ fvwmrc_convert	Fri Feb 14 16:14:55 1997 
+@@ -23,9 +23,12 @@ 
+ # Originally written by Martin Kraemer <Martin.Kraemer@mch.sni.de> 
+ # Corrected, extended, and modified by Grant McDorman <grant@isgtec.com> 
+ # 24 May 95 
+-# Addtional corrections and extensions by Bill Oswald <wamo@vnet.ibm.com> 
++# Additional corrections and extensions by Bill Oswald <wamo@vnet.ibm.com> 
+ # 8 Mar 96 thru 18 Jul 96 
+ # Minor corrections to make it easier to customize by Charles Hines 08/01/96 
++# Added conversion for StartsOnDesk and missing newline in WindowListSkip 
++# conversion. Bill Oswald <wamo@vnet.ibm.com> 
++# 13 Feb 97 
+ # 
+
+ echo "fvwmrc-to-fvwm2rc" 
+@@ -284,7 +287,8 @@ 
+ 	print $0; next; 
+ } 
+
+-/^[ \t]*WindowListSkip[ \t]*/	{ printf "Style %s WindowListSkip", $2; next; } 
++/^[ \t]*StartsOnDesk[ \t]*/	{ printf "Style %s StartsOnDesk %s\n", $2,
+$3; next; } 
++/^[ \t]*WindowListSkip[ \t]*/	{ printf "Style %s WindowListSkip\n", $2;
+next; } 
+ /^[ \t]*WindowFont[ \t]*/	{ print $0; next; } 
+ /^[ \t]*ClickTime[ \t]*/		{ print $0; next; } 
+ /^[ \t]*OpaqueMove[ \t]*/	{ print "OpaqueMoveSize " $2; next; } 
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Sat Feb 15 16:19:40 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sat, 15 Feb 1997 16:19:40 -0600 (CST)
+Received: from mercury.elmailer.net (mercury.elmailer.net [195.224.76.4]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id QAA18117 for <fvwm-workers@hpc.uh.edu>; Sat, 15 Feb 1997 16:19:33 -0600 (CST)
+Received: from sfere.greenend.org.uk (sfere.greenend.org.uk [195.224.38.1])
+    by mercury.elmailer.net with ESMTP
+    id WAA20049 for <fvwm-workers@hpc.uh.edu> (2.1.1h-8.8.5/3.1.11);
+    Sat, 15 Feb 1997 22:18:46 GMT
+Received: from valour.greenend.org.uk (valour.greenend.org.uk [195.224.38.2])
+          by sfere.greenend.org.uk with ESMTP
+          id TAA00773 for <fvwm-workers@hpc.uh.edu>
+          (2.1.1h-8.8.5/2.1b-greenend); Sat, 15 Feb 1997 19:45:54 GMT
+Received: by valour.greenend.org.uk
+	id m0vvpEO-000qFPC
+	(Debian Smail-3.2 1996-Jul-4 #2); Sat, 15 Feb 1997 18:53:04 +0000 (GMT)
+Message-Id: <m0vvpEO-000qFPC@valour.greenend.org.uk>
+Date: Sat, 15 Feb 1997 18:53:04 +0000 (GMT)
+From: Austin Donnelly <austin@greenend.org.uk>
+To: fvwm-workers@hpc.uh.edu
+Subject: Sticky windows don't survive fvwm2 restarts
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+Hi,
+
+If I mark a window as "sticky", then restart fvwm2, it comes back as a
+plain, non-stick window.
+
+There is an analogous problem with windows which have been
+WindowShaded.
+
+I thought fvwm saved some state across restarts in properties attached
+to the display/windows.  Maybe the stickyness and WindowShadedness
+could be propagated too?
+
+Austin
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Tue Feb 18 17:16:04 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 18 Feb 1997 17:16:04 -0600 (CST)
+Received: from uswgco3.uswc.uswest.com (uswgco3.uswest.com [206.196.133.82]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id RAA18955 for <fvwm-workers@hpc.uh.edu>; Tue, 18 Feb 1997 17:15:52 -0600 (CST)
+Received: from egate.mnet.uswest.com (egate.mnet.uswest.com [151.116.23.138])
+	by uswgco3.uswc.uswest.com (8.8.5/8.8.5) with ESMTP id QAA16526;
+	Tue, 18 Feb 1997 16:15:03 -0700 (MST)
+Received: from smokey.ecte.uswc.uswest.com (smokey.ecte.uswc.uswest.com [151.116.109.68]) by egate.mnet.uswest.com (8.7.1/8.7.1) with ESMTP id QAA10077; Tue, 18 Feb 1997 16:15:02 -0700 (MST)
+Received: from snakepit.ecte.uswc.uswest.com (snakepit.ecte.uswc.uswest.com [151.116.111.62]) by smokey.ecte.uswc.uswest.com (8.6.11/uswc-hub.950320) with ESMTP id QAA13406; Tue, 18 Feb 1997 16:15:01 -0700
+Received: (from rjray@localhost) by snakepit.ecte.uswc.uswest.com (8.6.11/uswc-server.950313) id QAA20094; Tue, 18 Feb 1997 16:15:08 -0700
+Date: Tue, 18 Feb 1997 16:15:08 -0700
+From: "Randy J. Ray" <rjray@uswest.com>
+Subject: More on the Perl 5 API to Fvwm2 
+To: fvwm-workers@hpc.uh.edu
+Cc: Tim Bunce <Tim.Bunce@ig.co.uk>
+Message-Id: <rjray-9701182315.AA00215815@snakepit.ecte.uswc.uswest.com>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+Well, I've tripped over some interesting glitches that tempt me strongly into
+letting go of backwards-compatibility and opting instead for a more OO model
+to the interface. For example:
+
+* You InitModule() with a specific mask that *does not* include M_CONFIG_INFO
+  and/or M_END_CONFIG_INFO. Now call GetConfigInfo(). And wait. And wait...
+
+So now you have to add in those elements to the mask. But you don't *want*
+them, so why should I force you? And as far as I know, I can't retrieve the
+mask from the server, so I have to store it at the time of InitModule. And as
+it is, I am running into way too many package-globals. I'm thinking I'd rather
+have X11::Fvwm be a class, and store this stuff as instance variables. Then I
+lose any illusion of backwards-compatibility.
+
+Another thing... is there a version of docs/modules.tex in a format other than
+TeX? I don't have TeX installed, and I really don't want to install it for just
+one document. I'd even settle for plain ASCII.
+
+Note: I am copying this to someone from the perl5-porters list who helped me
+choose a name that fit in with the rest of the perl5 modules collection. He is
+an fvwm user who is interested in this extension, so I could use his feedback
+as well.
+
+Randy
+--
+===============================================================================
+Randy J. Ray -- U S WEST Technologies IAD/CSS/DPDS         Phone: (303)595-2869
+                Denver, CO                                     rjray@uswest.com
+"It's not denial. I'm just very selective about the reality I accept." --Calvin
+===============================================================================
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Thu Feb 20 11:48:15 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Thu, 20 Feb 1997 11:48:15 -0600 (CST)
+Received: from dybbuk.gt.ed.net (r35h34.res.gatech.edu [128.61.35.34]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id LAA13688 for <fvwm-workers@hpc.uh.edu>; Thu, 20 Feb 1997 11:47:54 -0600 (CST)
+Received: from dybbuk.gt.ed.net (localhost [127.0.0.1])
+          by dybbuk.gt.ed.net (8.8.4/8.8.4) with SMTP
+	  id MAA05568 for <fvwm-workers@hpc.uh.edu>; Thu, 20 Feb 1997 12:54:08 -0500
+Message-ID: <330C8FBF.12B6DB14@dybbuk.gt.ed.net>
+Date: Thu, 20 Feb 1997 12:54:07 -0500
+From: diakka <diakka@r35h34.res.gatech.edu>
+X-Mailer: Mozilla 3.01Gold (X11; I; Linux 2.0.29 i586)
+MIME-Version: 1.0
+To: fvwm-workers@hpc.uh.edu
+Subject: FvwmTile bug
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+i hope this is the right place.. anyways
+there is a very minor bug in fvwm tile and i think it will probably be
+very easily corrected... when you tile a window, it seems to not
+take in to account the border, or atleast not all of it, because
+i can see the bars on the left and bottom of the window when i flip
+over to the next virtual desktop... it's not a big deal unless i decide
+to do a tile on that desktop, in which case it will pull the window
+over to the next desktop...
+hope this helps...
+
+-agc
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Fri Feb 21 17:34:46 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Fri, 21 Feb 1997 17:34:46 -0600 (CST)
+Received: from mercury.elmailer.net (mercury.elmailer.net [195.224.76.4]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id RAA03376 for <fvwm-workers@hpc.uh.edu>; Fri, 21 Feb 1997 17:34:39 -0600 (CST)
+Received: from sfere.greenend.org.uk (sfere.greenend.org.uk [195.224.38.1])
+    by mercury.elmailer.net with ESMTP
+    id XAA14338 for <fvwm-workers@hpc.uh.edu> (2.1.1h-8.8.5/3.1.11);
+    Fri, 21 Feb 1997 23:33:45 GMT
+Received: from tacitus.greenend.org.uk (tacitus.greenend.org.uk [195.224.38.3])
+          by sfere.greenend.org.uk with SMTP
+          id WAA26157 for <fvwm-workers@hpc.uh.edu>
+          (2.1.1h-8.8.5/2.1b-greenend); Fri, 21 Feb 1997 22:43:46 GMT
+Received: by tacitus.greenend.org.uk
+	id m0vy3mI-000LIBC
+	(Debian /\oo/\ Smail3.1.29.1 #29.33); Fri, 21 Feb 97 22:49 GMT
+Message-Id: <8P3zpJjS0@tacitus.greenend.org.uk>
+Date: Fri, 21 Feb 97 22:49:17 +0000 (GMT)
+From: Owen Dunn <owen@greenend.org.uk>
+To: fvwm-workers@hpc.uh.edu
+Subject: `Quoting' keypresses in fvwm
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+It would be nice and useful if there were a function in fvwm which
+caused the next keypress to be sent directly to the window with focus,
+bypassing any fvwm keyboard shortcuts. Any chance of something like
+this at some point in the future?
+
+(S)
+-- 
+		     Owen `Stribethssonsson' Dunn
+http://www.chiark.greenend.org.uk/~owend/      <owen@greenend.org.uk>
+		       `Bongo drums in maths!'
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Feb 24 21:28:39 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 24 Feb 1997 21:28:39 -0600 (CST)
+Received: from sdvax2.sp.TRW.COM (sdvax2.sdd.TRW.COM [129.4.68.52]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id VAA15360 for <fvwm-workers@hpc.uh.edu>; Mon, 24 Feb 1997 21:28:31 -0600 (CST)
+Date: Mon, 24 Feb 1997 19:31:09 -0800 (PST)
+From: RICK FLOWER <FLOWER@sdvax2.sdd.TRW.COM>
+To: fvwm-workers@hpc.uh.edu
+Message-Id: <970224193109.aa0@sdvax2.sp.TRW.COM>
+Subject: FVWM 2.0.45 crashes eXodus 6.1b on Macintosh...
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+Hi!
+
+I was wondering if anyone has seen 2.0.45 crashing their X-server?  I'm running
+a beta version of eXodus (an X server for the Mac), and FVWM 2.0.45 is the
+only thing that I've found that it really dislikes.  In fact, it causes a
+very hostile exit of the application.. I've been trying to narrow down the 
+causes, but haven't gotten very far.. If I switch back to fvwm-2.0.43, the
+problem doesn't exist!  I know that there have been some major code changes
+since then, but I was mostly curious if anyone else has seen anything similar?
+
+My configuration is as follows :
+
+Compilation Options : OPTION_DEFINES  = -DSHAPE -DPIXMAP_BUTTONS -DVECTOR_BUTTONS -DMINI_ICONS -DBORDE
+RSTYLE
+Platform	    : SunOS 4.1.4 on Sparc w/ gcc 2.7.2
+
+Thanks!
+
+-- Rick
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Tue Feb 25 05:07:06 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 25 Feb 1997 05:07:06 -0600 (CST)
+Received: from hydra.ifh.de (hydra.ifh.de [141.34.100.25]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id FAA25339 for <fvwm-workers@hpc.uh.edu>; Tue, 25 Feb 1997 05:06:52 -0600 (CST)
+Received: from localhost (weyers@localhost) by hydra.ifh.de (8.7.3/8.7.3) with SMTP id MAA14060 for <fvwm-workers@hpc.uh.edu>; Tue, 25 Feb 1997 12:06:30 +0100 (MET)
+X-Authentication-Warning: hydra.ifh.de: weyers owned process doing -bs
+Date: Tue, 25 Feb 1997 12:06:29 +0100 (MET)
+From: "Peter J. Weyers" <weyers@ifh.de>
+To: The FVWM Workers List <fvwm-workers@hpc.uh.edu>
+Subject: Color for (Bitmap) Icon ?
+Message-ID: <Pine.SGI.3.95.970225114129.28144A-100000@hydra.ifh.de>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+Hi all,
+
+A was reading your discussion for some time an got the impression, that
+Version 2.0.45 would be quite stable and includes some nice features I
+like, especially the MiniIcons, so I gave it a try, and I am quite
+impressed!
+
+                 What you build is realy great !!!!!
+
+As my time permitts, I would like to contribute to the work. Of course,
+I'm aiming at features I'm missing myself:
+
+The '[H]Gradient' styles makes my windows look very nice. However, this
+gives me the possibility to set a specific color to the region of the
+Titlebar where the title appears. Now selecting a foreground color which
+has a sufficient contrast to that color might result in a color with a
+rather low contrast to the window background color. This is okay 
+with windows, as I set the color at the respective place of the
+titlebar with the 'HGradient' style for the Active and InActive windows as
+well.
+
+BUT: The icons suffer from that, as the bitmaps (wich could be replaced 
+by pixmaps with their own color) and icon names (which could not be
+changed to my understanding) are shown in the color settings for the
+window, maybe resulting in a combinatin of low contrast.
+
+I hope, I am right that far. If not I am very sorry to missuse this
+list for configuration questions.
+
+If I am right, I would like to implement new (style? decorate ?) commands
+IconColor <fore>/<back>, HiIconColor <fore>/<back> to set the icon colors
+seperatly. In advance I would like to now of course, if anybody is already
+working on something like that. And wether this had a chance to become
+part of the official fvwm2.
+
+BTW: Is this a philosophy or only inherited from fvwm 1.XX, that setting
+     hilighted and normal colors for windows is quite different? I refer
+     to 'Color' beeing a Style option, but HilightColor beeing a
+     decoration.
+
+Peter _______________
+ ----| Info, PGP-Key | -->  http://sugra.desy.de/user/weyers/home.html <--
+      ---------------
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Tue Feb 25 14:29:24 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 25 Feb 1997 14:29:24 -0600 (CST)
+Received: from bae.bae.bellcore.com (bae.bae.bellcore.com [128.96.133.81]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id OAA18311 for <fvwm-workers@hpc.uh.edu>; Tue, 25 Feb 1997 14:29:13 -0600 (CST)
+Received: from fork (fork.bae.bellcore.com) by bae.bae.bellcore.com with SMTP id AA20351
+  (5.65c/IDA-1.4.4 for <fvwm-workers@hpc.uh.edu>); Tue, 25 Feb 1997 15:28:29 -0500
+Message-Id: <199702252028.AA20351@bae.bae.bellcore.com>
+Cc: Fvwm Workers List <fvwm-workers@hpc.uh.edu>
+Subject: FVWM color limiting
+X-Face: -:-!LDdizWr~[l?RsG!7/BSm'=,`y>~^N7a#qX+.-ZUy"%YF.bP?t_E$lZG54!X1`_>u8>V
+ /DpeH-oUPJ".cJfU'!(om[k{>?!DzZP&UYPi!W/]`[K`Ga+S()<~)mZlm;m}0fId<>1}XS.O+zV%w"
+ 1)-+K#MqP:&_@FrPF}_}R?_\"z9mHc!)e{e/DNzDY&*QoH,HGZJP#LszzhoGERD7$J4ebNt9oh-nvL
+ *IX4w6m=+qtbLQrrI{-jd2Q+(ZUg,a`n58O}z/zl"
+Mime-Version: 1.0 (generated by tm-edit 7.66)
+Content-Type: text/plain; charset=US-ASCII
+Date: Tue, 25 Feb 1997 15:28:29 -0500
+From: Dan Espen <dane@bae.bellcore.com>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+
+This patch causes fvwm to limit the colors used in pixmaps.
+
+I failed  to  keep  the  FvwmPager   mini-icon patch, so   it  doesn't
+currently do anything to the colors in the pager.
+
+I've tested  this with my own configurations  on 2 different machines,
+and it seems to work surprisingly well.  Assuming this eventually gets
+incorporated into fvwm, any feedback would be appreciated.
+
+
+*** fvwm/fvwm2.man.orig	Tue Jan 14 17:38:43 1997
+--- fvwm/fvwm2.man	Thu Feb 20 22:47:10 1997
+***************
+*** 826,831 ****
+--- 826,847 ----
+  destroyed.
+  
+  
++ .IP "ColorLimit \fIlimit\fP"
++ Specifies a  limit on the colors  used in pixmaps.  Zero (the default)
++ sets no limit.   This command limits pixmap  colors to a set of colors
++ that  starts out with common  colors.  The current list contains about
++ 40 colors and starts with white, black,  grey, green, blue, red, cyan,
++ yellow, and  magenta.  The command  "ColorLimit 9" would limit pixmaps
++ to these 9 colors.
++ 
++ It makes the most sense to put this command at the front of the
++ .fvwm2rc  file.  This   command should  be   before any  menu
++ definitions that contain mini-icons.
++ 
++ Frame and  title  colors  (including shading  and gradients)  are  not
++ controlled by this command.
++ 
++ 
+  .IP "ColormapFocus [FollowsMouse | FollowsFocus]"
+  By default, fvwm installs the colormap of the window that the cursor
+  is in.  If you use ColormapFocus FollowsFocus, then the installed
+*** fvwm/icons.c.orig	Mon Feb 17 16:38:01 1997
+--- fvwm/icons.c	Sun Feb 23 14:10:35 1997
+***************
+*** 593,598 ****
+--- 593,600 ----
+    XpmAttributes xpm_attributes;
+    extern char *PixmapPath;
+    char *path = NULL;
++   XpmImage	my_image;
++   int rc;
+  
+    path = findIconFile(tmp_win->icon_bitmap_file, PixmapPath,R_OK);
+    if(path == NULL)return;  
+***************
+*** 600,621 ****
+    XGetWindowAttributes(dpy,Scr.Root,&root_attr);
+    xpm_attributes.colormap = root_attr.colormap;
+    xpm_attributes.closeness = 40000; /* Allow for "similar" colors */
+!   xpm_attributes.valuemask = XpmSize | XpmReturnPixels | XpmColormap | XpmCloseness;
+  
+!   if(XpmReadFileToPixmap(dpy, Scr.Root, path,
+! 			 &tmp_win->iconPixmap, 
+! 			 &tmp_win->icon_maskPixmap, 
+! 			 &xpm_attributes) == XpmSuccess) 
+!     { 
+!       tmp_win->icon_p_width = xpm_attributes.width;
+!       tmp_win->icon_p_height = xpm_attributes.height;
+!       tmp_win->flags |= PIXMAP_OURS;
+!       tmp_win->iconDepth = Scr.d_depth;
+  #ifdef SHAPE
+!       if (ShapesSupported && tmp_win->icon_maskPixmap)
+! 	tmp_win->flags |= SHAPED_ICON;
+  #endif
+-     } 
+    free(path);
+  #endif /* XPM */
+  }
+--- 602,633 ----
+    XGetWindowAttributes(dpy,Scr.Root,&root_attr);
+    xpm_attributes.colormap = root_attr.colormap;
+    xpm_attributes.closeness = 40000; /* Allow for "similar" colors */
+!   xpm_attributes.valuemask = XpmSize|XpmReturnPixels|XpmColormap|XpmCloseness;
+  
+!   rc =XpmReadFileToXpmImage(path, &my_image, NULL);
+!   if (rc != XpmSuccess) {
+!     fvwm_msg(ERR,"GetXPMFile","XpmReadFileToXpmImage failed, pixmap %s, rc %d",
+!            path, rc);
+!     return;
+!   }
+!   color_reduce_pixmap(&my_image,Scr.ColorLimit);
+!   rc = XpmCreatePixmapFromXpmImage(dpy,Scr.Root, &my_image,
+!                                    &tmp_win->iconPixmap, 
+!                                    &tmp_win->icon_maskPixmap, 
+!                                    &xpm_attributes);
+!   if (rc != XpmSuccess) {
+!     fvwm_msg(ERR,"GetXPMFile",
+!              "XpmCreatePixmapFromXpmImage failed, rc %d\n", rc);
+!     return;
+!   }
+!   tmp_win->icon_p_width = my_image.width;
+!   tmp_win->icon_p_height = my_image.height;
+!   tmp_win->flags |= PIXMAP_OURS;
+!   tmp_win->iconDepth = Scr.d_depth;
+  #ifdef SHAPE
+!   if (ShapesSupported && tmp_win->icon_maskPixmap)
+!     tmp_win->flags |= SHAPED_ICON;
+  #endif
+    free(path);
+  #endif /* XPM */
+  }
+*** fvwm/builtins.c.orig	Mon Feb 17 16:38:43 1997
+--- fvwm/builtins.c	Sun Feb 23 11:20:46 1997
+***************
+*** 2156,2162 ****
+  #else
+  				   NULL,
+  #endif
+! 				   file);
+  	    if (bf->u.p == NULL)
+  	    {
+  		if(verbose)fvwm_msg(ERR,"ReadButtonFace",
+--- 2156,2162 ----
+  #else
+  				   NULL,
+  #endif
+! 				   file,Scr.ColorLimit);
+  	    if (bf->u.p == NULL)
+  	    {
+  		if(verbose)fvwm_msg(ERR,"ReadButtonFace",
+***************
+*** 3136,3139 ****
+--- 3136,3153 ----
+    }
+    if (opts) /* should be empty at this point... */
+      free(opts);
++ }
++ void SetColorLimit(XEvent *eventp,Window w,FvwmWindow *tmp_win,
++                    unsigned long context, char *action,int* Module)
++ {
++   long val1;
++   int val1_unit,n;
++   
++   n = GetOneArgument(action, &val1, &val1_unit);
++   if(n != 1) {
++     fvwm_msg(ERR,"SetColorLimit","ColorLimit requires 1 argument, found %d",n);
++     return;
++   }
++   
++   Scr.ColorLimit = val1;
+  }
+*** fvwm/functions.c.orig	Mon Feb 17 16:38:29 1997
+--- fvwm/functions.c	Thu Feb 20 22:12:46 1997
+***************
+*** 57,62 ****
+--- 57,63 ----
+  #endif
+    {"ClickTime",    SetClick,         F_CLICK,               FUNC_NO_WINDOW},
+    {"Close",        close_function,   F_CLOSE,               FUNC_NEEDS_WINDOW},
++   {"ColorLimit",   SetColorLimit,    F_COLOR_LIMIT,         FUNC_NO_WINDOW},
+    {"ColormapFocus",SetColormapFocus, F_COLORMAP_FOCUS,      FUNC_NO_WINDOW},
+    {"CursorMove",   movecursor,       F_MOVECURSOR,          FUNC_NO_WINDOW},
+    {"Delete",       delete_function,  F_DELETE,              FUNC_NEEDS_WINDOW},
+*** fvwm/misc.h.orig	Mon Feb 17 16:37:48 1997
+--- fvwm/misc.h	Sun Feb 23 10:19:23 1997
+***************
+*** 354,359 ****
+--- 354,361 ----
+  		unsigned long context, char *action,int *Module);
+  void SetColormapFocus(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+  		      unsigned long context, char *action,int* Module);
++ void SetColorLimit(XEvent *eventp,Window w,FvwmWindow *tmp_win,
++ 		      unsigned long context, char *action,int* Module);
+  FVWM_INLINE void DrawPattern(Window, GC, GC, int, int,int);
+  Pixel    GetShadow(Pixel);
+  Pixel    GetHilite(Pixel);
+*** fvwm/read.c.orig	Sun Feb 23 11:57:06 1997
+--- fvwm/read.c	Sun Feb 23 11:57:51 1997
+***************
+*** 319,324 ****
+--- 319,326 ----
+  #ifdef XPM
+    sprintf(message,"PixmapPath %s\n",PixmapPath);
+    SendName(*Module,M_CONFIG_INFO,0,0,0,message);
++   sprintf(message,"ColorLimit %d\n",Scr.ColorLimit);
++   SendName(*Module,M_CONFIG_INFO,0,0,0,message);
+  #endif
+    sprintf(message,"ClickTime %d\n",Scr.ClickTime);
+    SendName(*Module,M_CONFIG_INFO,0,0,0,message);
+*** fvwm/screen.h.orig	Mon Feb 17 16:32:18 1997
+--- fvwm/screen.h	Thu Feb 20 22:12:43 1997
+***************
+*** 311,316 ****
+--- 311,317 ----
+    int OpaqueSize;
+    int CurrentDesk;             /* The current desktop number */
+    int ColormapFocus;           /* colormap focus style */
++   int ColorLimit;              /* Limit on colors used in pixmaps */
+  
+    /*
+    ** some additional global options which will probably become window
+*** fvwm/parse.h.orig	Mon Feb 17 16:38:15 1997
+--- fvwm/parse.h	Thu Feb 20 22:12:44 1997
+***************
+*** 101,106 ****
+--- 101,107 ----
+  #define F_DESTROY_DECOR         124
+  #define F_UPDATE_DECOR          125
+  #define F_WINDOW_SHADE          126
++ #define F_COLOR_LIMIT           127
+  
+  /* Functions for use by modules only! */
+  #define F_SEND_WINDOW_LIST     1000
+*** fvwm/add_window.c.orig	Mon Feb 24 20:50:54 1997
+--- fvwm/add_window.c	Sun Feb 23 13:31:21 1997
+***************
+*** 519,525 ****
+  #else
+  					   NULL,
+  #endif
+! 					   tmp_win->mini_pixmap_file);
+        }
+        else {
+  	tmp_win->mini_icon = NULL;
+--- 519,526 ----
+  #else
+  					   NULL,
+  #endif
+! 					   tmp_win->mini_pixmap_file,
+!                                            Scr.ColorLimit);
+        }
+        else {
+  	tmp_win->mini_icon = NULL;
+*** fvwm/menus.c.orig	Mon Jan 20 11:56:11 1997
+--- fvwm/menus.c	Tue Feb 25 12:30:02 1997
+***************
+*** 1145,1153 ****
+  
+  	  /* Next, check for a color pixmap */
+  #ifdef XPM
+! 	  pp=CachePicture(dpy,Scr.Root,IconPath,PixmapPath,name);
+  #else
+! 	  pp=CachePicture(dpy,Scr.Root,IconPath,IconPath,name);
+  #endif
+  	  if(*txt != '\0')txt++;
+  	  while(*txt != '\0')
+--- 1145,1153 ----
+  
+  	  /* Next, check for a color pixmap */
+  #ifdef XPM
+! 	  pp=CachePicture(dpy,Scr.Root,IconPath,PixmapPath,name,Scr.ColorLimit);
+  #else
+! 	  pp=CachePicture(dpy,Scr.Root,IconPath,IconPath,name,Scr.ColorLimit);
+  #endif
+  	  if(*txt != '\0')txt++;
+  	  while(*txt != '\0')
+*** libs/Picture.c.orig	Mon Feb 17 16:42:00 1997
+--- libs/Picture.c	Sun Feb 23 13:55:16 1997
+***************
+*** 5,10 ****
+--- 5,28 ----
+   *     You may use this code for any purpose, as long as the original
+   *     copyright remains in the source code and all documentation
+   ****************************************************************************/
++ /*
++   Changed 02/12/97 by Dan Espen:
++   - added routines to determine color closeness, for color use reduction.
++   Some of the logic comes from pixy2, so the copyright is below.
++   */
++ /*
++  * $Id: pixy.c,v 3.0.1.1 1996/03/20 12:31:49 deejai!martin Exp $
++  * Copyright 1996, Romano Giannetti. No guarantees or warantees or anything
++  * are provided or implied in any way whatsoever. Use this program at your
++  * own risk. Permission to use this program for any purpose is given,
++  * as long as the copyright is kept intact.
++  *
++  * Romano Giannetti - Dipartimento di Ingegneria dell'Informazione
++  *                    via Diotisalvi, 2  PISA
++  * mailto:romano@iet.unipi.it
++  * http://www.iet.unipi.it/~romano
++  *
++  */
+  
+  
+  /****************************************************************************
+***************
+*** 30,36 ****
+  #include <X11/Xutil.h>
+  
+  #ifdef XPM
+! #include <X11/xpm.h>
+  #endif
+  
+  #include "fvwmlib.h"
+--- 48,58 ----
+  #include <X11/Xutil.h>
+  
+  #ifdef XPM
+! /* static function prototypes */
+! static void c100_init_base_table ();    /* prototype */
+! static void c200_substitute_color(char **,int); /* prototype */
+! static void c300_color_to_rgb(char *, XColor *); /* prototype */
+! static double c400_distance(XColor *, XColor *); /* prototype */
+  #endif
+  
+  #include "fvwmlib.h"
+***************
+*** 38,59 ****
+  
+  static Picture *PictureList=NULL;
+  static Colormap PictureCMap;
+  
+! 
+  void InitPictureCMap(Display *dpy,Window Root)
+  {
+    XWindowAttributes root_attr;
+    XGetWindowAttributes(dpy,Root,&root_attr);
+    PictureCMap=root_attr.colormap;
+  }
+  
+  
+! Picture *LoadPicture(Display *dpy,Window Root,char *path)
+  {
+    int i,l;
+    Picture *p;
+  #ifdef XPM
+    XpmAttributes xpm_attributes;
+  #endif
+  
+    p=(Picture*)safemalloc(sizeof(Picture));
+--- 60,85 ----
+  
+  static Picture *PictureList=NULL;
+  static Colormap PictureCMap;
++ static Display *save_dpy;               /* Save area for display pointer */
+  
+! /* This routine called during fvwm initialization */
+  void InitPictureCMap(Display *dpy,Window Root)
+  {
+    XWindowAttributes root_attr;
++   save_dpy = dpy;                       /* save for latter */
+    XGetWindowAttributes(dpy,Root,&root_attr);
+    PictureCMap=root_attr.colormap;
+  }
+  
+  
+! Picture *LoadPicture(Display *dpy,Window Root,char *path, int color_limit)
+  {
+    int i,l;
+    Picture *p;
+  #ifdef XPM
+    XpmAttributes xpm_attributes;
++   int rc;
++   XpmImage	my_image;
+  #endif
+  
+    p=(Picture*)safemalloc(sizeof(Picture));
+***************
+*** 68,81 ****
+    xpm_attributes.valuemask=
+      XpmSize | XpmReturnPixels | XpmColormap | XpmCloseness;
+    
+!   if(XpmReadFileToPixmap(dpy,Root,path,&p->picture,&p->mask,&xpm_attributes)
+!      == XpmSuccess) 
+!     { 
+!       p->width = xpm_attributes.width;
+!       p->height = xpm_attributes.height;
+        p->depth = DefaultDepthOfScreen(DefaultScreenOfDisplay(dpy));
+        return p;
+      }
+  #endif
+  
+    /* If no XPM support, or XPM loading failed, try bitmap */
+--- 94,112 ----
+    xpm_attributes.valuemask=
+      XpmSize | XpmReturnPixels | XpmColormap | XpmCloseness;
+    
+!   rc =XpmReadFileToXpmImage(path, &my_image, NULL);
+!   if (rc == XpmSuccess) {
+!     color_reduce_pixmap(&my_image, color_limit);
+!     rc = XpmCreatePixmapFromXpmImage(dpy, Root, &my_image,
+!                                      &p->picture,&p->mask,
+!                                      &xpm_attributes);
+!     if (rc == XpmSuccess) {
+!       p->width = my_image.width;
+!       p->height = my_image.height;
+        p->depth = DefaultDepthOfScreen(DefaultScreenOfDisplay(dpy));
+        return p;
+      }
++   }
+  #endif
+  
+    /* If no XPM support, or XPM loading failed, try bitmap */
+***************
+*** 92,98 ****
+    return NULL;
+  }
+  
+! 
+  Picture *GetPicture(Display *dpy,Window Root,char *IconPath,char *PixmapPath,
+  		    char *name)
+  {
+--- 123,129 ----
+    return NULL;
+  }
+  
+! #ifdef NotUsed
+  Picture *GetPicture(Display *dpy,Window Root,char *IconPath,char *PixmapPath,
+  		    char *name)
+  {
+***************
+*** 100,111 ****
+    if(!(path=findIconFile(name,PixmapPath,R_OK)))
+      if(!(path=findIconFile(name,IconPath,R_OK)))
+        return NULL;
+!   return LoadPicture(dpy,Root,path);
+  }
+  
+- 
+  Picture *CachePicture(Display *dpy,Window Root,char *IconPath,char *PixmapPath,
+! 		    char *name)
+  {
+    char *path;
+    Picture *p=PictureList;
+--- 131,142 ----
+    if(!(path=findIconFile(name,PixmapPath,R_OK)))
+      if(!(path=findIconFile(name,IconPath,R_OK)))
+        return NULL;
+!   return LoadPicture(dpy,Root,path, color_limit);
+  }
++ #endif
+  
+  Picture *CachePicture(Display *dpy,Window Root,char *IconPath,char *PixmapPath,
+! 		    char *name, int color_limit)
+  {
+    char *path;
+    Picture *p=PictureList;
+***************
+*** 135,141 ****
+      }
+  
+    /* Not previously cached, have to load it ourself. Put it first in list */
+!   p=LoadPicture(dpy,Root,path);
+    if(p)
+      {
+        p->next=PictureList;
+--- 166,172 ----
+      }
+  
+    /* Not previously cached, have to load it ourself. Put it first in list */
+!   p=LoadPicture(dpy,Root,path, color_limit);
+    if(p)
+      {
+        p->next=PictureList;
+***************
+*** 248,250 ****
+--- 279,431 ----
+  }
+   
+  
++ #ifdef XPM
++ /* This structure is used to quickly access the RGB values of the colors */
++ /* without repeatedly having to transform them.   */
++ typedef struct {
++   char * c_color;	/* Pointer to the name of the color */
++   XColor rgb_space;                     /* rgb color info */
++ } Color_Info;
++ 
++ /* First thing in base array are colors probably already in the color map
++    because they have familiar names.
++    I pasted them into a xpm and spread them out so that similar colors are
++    spread out.
++    TODO:
++    Find the large gaps and add colors to fill them.
++    Currently contains 41 colors.
++    If reducing from 256, how many colors should be allowed for?
++    */
++ static Color_Info base_array[] = {
++   {"white"},
++   {"black"},
++   {"grey"},
++   {"green"},
++   {"blue"},
++   {"red"},
++   {"cyan"},
++   {"yellow"},
++   {"magenta"},
++   {"DodgerBlue"},
++   {"SteelBlue"},
++   {"chartreuse"},
++   {"wheat"},
++   {"turquoise"},
++   {"CadetBlue"},
++   {"gray87"},
++   {"CornflowerBlue"},
++   {"YellowGreen"},
++   {"NavyBlue"},
++   {"MediumBlue"},
++   {"plum"},
++   {"aquamarine"},
++   {"orchid"},
++   {"ForestGreen"},
++   {"lightyellow"},
++   {"brown"},
++   {"orange"},
++   {"red3"},
++   {"HotPink"},
++   {"LightBlue"},
++   {"gray47"},
++   {"pink"},
++   {"red4"},
++   {"violet"},
++   {"purple"},
++   {"gray63"},
++   {"gray94"},
++   {"plum1"},
++   {"PeachPuff"},
++   {"maroon"},
++   {"lavender"}
++ };
++ 
++ #define NColors (sizeof(base_array) / sizeof(Color_Info))
++ 
++ /* given an xpm, change colors to colors close to the
++    subset above. */
++ void
++ color_reduce_pixmap(XpmImage *image,int color_limit) {
++   int i;
++   XpmColor *color_table_ptr;
++   static char base_init = 'n';
++   if (color_limit > 0) {                /* If colors to be limited */
++     if (base_init == 'n') {             /* if base table not created yet */
++       c100_init_base_table();           /* init the base table */
++       base_init = 'y';                  /* remember that its set now. */
++     }                                   /* end base table init */
++     color_table_ptr = image->colorTable; /* start of xpm color table */
++     for(i=0; i<image->ncolors; i++) {   /* all colors in the xpm */
++       c200_substitute_color(&color_table_ptr->c_color,
++                             color_limit); /* fix each one */
++       color_table_ptr +=1;              /* counter for loop */
++     }                                   /* end all colors in xpm */
++   }                                     /* end colors limited */
++   return;                               /* return, no rc! */
++ }
++ 
++ /* from the color names in the base table, calc rgbs */
++ static void
++ c100_init_base_table () {
++   int i;
++   for (i=0; i<NColors; i++) {           /* change all base colors to numbers */
++     c300_color_to_rgb(base_array[i].c_color, &base_array[i].rgb_space);
++   }
++ }
++ 
++ 
++ /* Replace the color in my_color by the closest matching color
++    from base_table */
++ void c200_substitute_color(char **my_color, int color_limit) {
++   int i, limit, minind;
++   double mindst=1e20;
++   double dst;
++   XColor rgb;          /* place to calc rgb for each color in xpm */
++ 
++   if (!strcasecmp(*my_color,"none")) {
++     return ;                        /* do not substitute the "none" color */
++   }
++ 
++   c300_color_to_rgb(*my_color, &rgb);  /* get rgb for a color in xpm */
++   /* Loop over all base_array colors; find out which one is closest
++      to my_color */
++   minind = 0;                           /* Its going to find something... */
++   limit = NColors;                      /* init to max */
++   if (color_limit < NColors) {          /* can't do more than I have */
++     limit = color_limit;                /* Do reduction using subset */
++   }                                     /* end reducing limit */
++   for(i=0; i < limit; i++) {            /* loop over base array */
++     dst = c400_distance (&rgb, &base_array[i].rgb_space); /* distance */
++     if (dst < mindst ) {              /* less than min and better than last */
++       mindst=dst;                     /* new minimum */
++       minind=i;                       /* save loc of new winner */
++       if (dst <= 100) {               /* if close enough */
++         break;                        /* done */
++       }                               /* end close enough */
++     }                                 /* end new low distance */
++   }                                   /* end all base colors */
++   /* Finally: replace the color string by the newly determined color string */
++   *my_color = base_array[minind].c_color; /* change the color */
++   return;                             /* all done */
++ }
++ 
++ static void c300_color_to_rgb(char *c_color, XColor *rgb_space) {
++   int rc;
++   rc=XParseColor(save_dpy, PictureCMap, c_color, rgb_space);
++   if (rc==0) {
++     fprintf(stderr,"color_to_rgb: can't parse color %s, rc %d\n", c_color, rc);
++     return;
++   } 
++ }
++ 
++ /* A macro for squaring things */
++ #define SQUARE(X) ((X)*(X))
++ /* RGB Color distance sum of square of differences */
++ double c400_distance(XColor *target_ptr, XColor *base_ptr) {
++   register double dst;
++   dst = SQUARE((double)(base_ptr->red   - target_ptr->red  )/655.35)
++     +   SQUARE((double)(base_ptr->green - target_ptr->green)/655.35)
++     +   SQUARE((double)(base_ptr->blue  - target_ptr->blue )/655.35);
++   return dst;
++ }
++ #endif /* XPM */
+*** libs/fvwmlib.h.orig	Sun Feb 23 10:12:00 1997
+--- libs/fvwmlib.h	Sun Feb 23 13:33:22 1997
+***************
+*** 73,83 ****
+  } Picture;
+  
+  void InitPictureCMap(Display*,Window);
+  Picture *GetPicture(Display*,Window,char *iconpath,char *pixmappath,char*);
+! Picture *CachePicture(Display*,Window,char *iconpath,char *pixmappath,char*);
+  void DestroyPicture(Display*,Picture*);
+  
+  char *findIconFile(char *icon, char *pathlist, int type);
+  
+  /***********************************************************************
+   * Wrappers around various X11 routines
+--- 73,91 ----
+  } Picture;
+  
+  void InitPictureCMap(Display*,Window);
++ #ifdef NotUsed
+  Picture *GetPicture(Display*,Window,char *iconpath,char *pixmappath,char*);
+! #endif
+! Picture *CachePicture(Display*,Window,char *iconpath,
+!                       char *pixmappath,char*,int);
+  void DestroyPicture(Display*,Picture*);
+  
+  char *findIconFile(char *icon, char *pathlist, int type);
++ #ifdef XPM
++ #include <X11/Intrinsic.h>              /* needed for xpm.h */
++ #include <X11/xpm.h>                    /* needed for next prototype */
++ void color_reduce_pixmap(XpmImage *, int);
++ #endif
+  
+  /***********************************************************************
+   * Wrappers around various X11 routines
+*** modules/FvwmButtons/FvwmButtons.c.orig	Sun Feb 23 10:21:12 1997
+--- modules/FvwmButtons/FvwmButtons.c	Sun Feb 23 15:05:14 1997
+***************
+*** 133,138 ****
+--- 133,139 ----
+  
+  button_info *UberButton=NULL;
+  
++ int save_color_limit;                   /* Color limit, if any */
+  /* ------------------------------ Misc functions ----------------------------*/
+  
+  #ifdef DEBUG
+***************
+*** 768,774 ****
+  **/
+  int LoadIconFile(char *s,Picture **p)
+  {
+!   *p=CachePicture(Dpy,Root,iconPath,pixmapPath,s);
+    if(*p)
+      return 1;
+    return 0;
+--- 769,775 ----
+  **/
+  int LoadIconFile(char *s,Picture **p)
+  {
+!   *p=CachePicture(Dpy,Root,iconPath,pixmapPath,s, save_color_limit);
+    if(*p)
+      return 1;
+    return 0;
+*** modules/FvwmButtons/parse.c.orig	Sun Feb 23 09:52:08 1997
+--- modules/FvwmButtons/parse.c	Sun Feb 23 12:03:31 1997
+***************
+*** 793,798 ****
+--- 793,799 ----
+    fclose(f);
+  }
+  
++ extern int save_color_limit;            /* global for xpm color limiting */
+  /**
+  *** ParseOptions()
+  **/
+***************
+*** 799,808 ****
+  void ParseOptions(button_info *ub)
+  {
+    char *s;
+!   char *items[]={"iconpath","pixmappath",NULL,NULL};
+  
+!   items[2]=mymalloc(strlen(MyName)+2);
+!   sprintf(items[2],"*%s",MyName);
+  
+    GetConfigLine(fd,&s);
+    while(s && s[0])
+--- 800,810 ----
+  void ParseOptions(button_info *ub)
+  {
+    char *s;
+!   char *items[]={"iconpath","pixmappath","colorlimit",NULL,NULL};
+!   int rc;
+  
+!   items[3]=mymalloc(strlen(MyName)+2);
+!   sprintf(items[3],"*%s",MyName);
+  
+    GetConfigLine(fd,&s);
+    while(s && s[0])
+***************
+*** 817,823 ****
+  	case 1:
+  	  CopyString(&pixmapPath,s);
+  	  break;
+! 	case 2:
+  	  if(s && s[0] && !config_file)
+  	    ParseConfigLine(&ub,s);
+  	}
+--- 819,828 ----
+  	case 1:
+  	  CopyString(&pixmapPath,s);
+  	  break;
+! 	case 2:                         /* colorlimit */
+!           sscanf(s,"%d",&save_color_limit);
+! 	  break;
+! 	case 3:
+  	  if(s && s[0] && !config_file)
+  	    ParseConfigLine(&ub,s);
+  	}
+*** modules/FvwmIconBox/icons.c.orig	Sun Feb 23 14:03:25 1997
+--- modules/FvwmIconBox/icons.c	Mon Feb 24 21:29:48 1997
+***************
+*** 45,50 ****
+--- 45,52 ----
+  #include <X11/extensions/shape.h>
+  #endif /* SHAPE */
+  
++ extern int save_color_limit;
++ 
+  #define ICON_EVENTS (ExposureMask |\
+  ButtonReleaseMask | ButtonPressMask | EnterWindowMask | LeaveWindowMask)
+  
+***************
+*** 235,240 ****
+--- 237,244 ----
+    XWindowAttributes root_attr;
+    XpmAttributes xpm_attributes;
+    char *path = NULL;
++   int rc;
++   XpmImage	my_image;
+  
+    path = findIconFile(item->icon_file, pixmapPath,R_OK);
+    if(path == NULL)return;  
+***************
+*** 241,257 ****
+  
+    XGetWindowAttributes(dpy,Root,&root_attr);
+    xpm_attributes.colormap = root_attr.colormap;
+!   xpm_attributes.closeness = 20000;    /* tight? */
+    xpm_attributes.valuemask = XpmSize|XpmReturnPixels|XpmColormap|XpmCloseness;
+!   if(XpmReadFileToPixmap(dpy, Root, path,
+! 			 &item->iconPixmap,
+! 			 &item->icon_maskPixmap, 
+! 			 &xpm_attributes) == XpmSuccess) 
+!     { 
+!       item->icon_w = min(max_icon_width, xpm_attributes.width);
+!       item->icon_h = min(max_icon_height, xpm_attributes.height);
+!       item->icon_depth = d_depth;
+!     } 
+    free(path);
+  #endif /* XPM */
+  }
+--- 245,271 ----
+  
+    XGetWindowAttributes(dpy,Root,&root_attr);
+    xpm_attributes.colormap = root_attr.colormap;
+!   xpm_attributes.closeness = 40000;    /* same closeness used elsewhere */
+    xpm_attributes.valuemask = XpmSize|XpmReturnPixels|XpmColormap|XpmCloseness;
+!   rc = XpmReadFileToXpmImage(path, &my_image, NULL);
+!   if (rc != XpmSuccess) {
+!     fprintf(stderr, "Problem reading pixmap %s, rc %d\n", path, rc);
+!     free(path);
+!     return;
+!   }
+!   color_reduce_pixmap(&my_image,save_color_limit);
+!   rc = XpmCreatePixmapFromXpmImage(dpy,Root, &my_image,
+!                                     &item->iconPixmap,
+!                                     &item->icon_maskPixmap, 
+!                                     &xpm_attributes);
+!   if (rc != XpmSuccess) {
+!     fprintf(stderr, "Problem creating pixmap from image, rc %d\n", rc);
+!     free(path);
+!     return;
+!   }
+!   item->icon_w = min(max_icon_width, my_image.width);
+!   item->icon_h = min(max_icon_height, my_image.height);
+!   item->icon_depth = d_depth;
+    free(path);
+  #endif /* XPM */
+  }
+***************
+*** 340,349 ****
+    XWindowAttributes root_attr;
+  #ifdef XPM
+    XpmAttributes xpm_attributes;
+  #endif
+    char *path = NULL;
+    Pixmap tmp_bitmap, maskPixmap;
+!   int x, y, w=0, h=0;
+  
+    if (IconwinPixmapFile == NULL)
+      return False;
+--- 354,364 ----
+    XWindowAttributes root_attr;
+  #ifdef XPM
+    XpmAttributes xpm_attributes;
++   XpmImage my_image;
+  #endif
+    char *path = NULL;
+    Pixmap tmp_bitmap, maskPixmap;
+!   int x, y, w=0, h=0, rc;
+  
+    if (IconwinPixmapFile == NULL)
+      return False;
+***************
+*** 368,380 ****
+      { 
+        XGetWindowAttributes(dpy,Root,&root_attr);
+        xpm_attributes.colormap = root_attr.colormap;
+!       xpm_attributes.valuemask = XpmSize|XpmReturnPixels|XpmColormap;
+!       if (XpmReadFileToPixmap(dpy, Root, path, &IconwinPixmap,
+! 			      &maskPixmap, &xpm_attributes) ==
+! 	  XpmSuccess){ 
+! 	w = xpm_attributes.width;
+! 	h = xpm_attributes.height;
+        }
+        free(path);
+      }
+  #endif
+--- 383,409 ----
+      { 
+        XGetWindowAttributes(dpy,Root,&root_attr);
+        xpm_attributes.colormap = root_attr.colormap;
+!       xpm_attributes.closeness = 40000;    /* same closeness used elsewhere */
+!       xpm_attributes.valuemask = XpmSize|XpmReturnPixels|XpmColormap|
+!         XpmCloseness;
+!       rc = XpmReadFileToXpmImage(path, &my_image, NULL);
+!       if (rc != XpmSuccess) {
+!         fprintf(stderr, "Problem reading pixmap %s, rc %d\n", path, rc);
+!         free(path);
+!         return False;
+        }
++       color_reduce_pixmap(&my_image,save_color_limit);
++       rc = XpmCreatePixmapFromXpmImage(dpy,Root, &my_image,
++                                        &IconwinPixmap,
++                                        &maskPixmap,
++                                        &xpm_attributes);
++       if (rc != XpmSuccess) {
++         fprintf(stderr, "Problem creating pixmap from image, rc %d\n", rc);
++         free(path);
++         return False;
++       }
++       w = my_image.width;
++       h = my_image.height;
+        free(path);
+      }
+  #endif
+*** modules/FvwmIconBox/FvwmIconBox.c.orig	Mon Feb 24 20:51:59 1997
+--- modules/FvwmIconBox/FvwmIconBox.c	Mon Feb 24 20:54:17 1997
+***************
+*** 158,163 ****
+--- 158,165 ----
+  unsigned long local_flags = 0;
+  int sortby = UNSORT;
+  
++ int save_color_limit;                   /* color limit from config */
++ 
+  /************************************************************************
+    Main 
+    Based on main() from GoodStuff:
+***************
+*** 208,213 ****
+--- 210,216 ----
+        fprintf(stderr,"%s: Screen %d is not valid ", MyName, screen);
+        exit(1);
+      }
++   InitPictureCMap(dpy,Root); /* store the root cmap */
+    d_depth = DefaultDepth(dpy, screen);
+  
+    XSetErrorHandler((XErrorHandler)myErrorHandler);
+***************
+*** 1579,1584 ****
+--- 1582,1590 ----
+  	  CopyString(&pixmapPath,&tline[10]);
+  	else if (mystrncasecmp(tline,"ClickTime",9)==0)
+  	  ClickTime = atoi(&tline[9]);
++ 	else if (mystrncasecmp(tline,"ColorLimit",10)==0) {
++ 	  save_color_limit = atoi(&tline[10]);
++         }
+        }
+        GetConfigLine(fd,&tline);
+      }
+
+--
+Dan Espen                                    Phone: (908) 699-5570
+dane@bae.bellcore.com
+444 Hoes Lane  Room RRC 1C-214
+Piscataway, NJ 08854
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Wed Feb 26 07:52:36 1997
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Wed, 26 Feb 1997 07:52:35 -0600 (CST)
+Received: from bae.bae.bellcore.com (bae.bae.bellcore.com [128.96.133.81]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id HAA26954 for <fvwm-workers@hpc.uh.edu>; Wed, 26 Feb 1997 07:52:27 -0600 (CST)
+Received: from fork (fork.bae.bellcore.com) by bae.bae.bellcore.com with SMTP id AA07195
+  (5.65c/IDA-1.4.4 for <fvwm-workers@hpc.uh.edu>); Wed, 26 Feb 1997 08:50:57 -0500
+Message-Id: <199702261350.AA07195@bae.bae.bellcore.com>
+To: Thimo Jansen <teejay@Cam031102.student.utwente.nl>
+Cc: fvwm-workers@hpc.uh.edu
+Subject: Re: FVWM color limiting 
+In-Reply-To: Your message of Tue, 25 Feb 1997 23:38:58 +0100.
+             <19970225233858.42521@Ferrenzo.student.utwente.nl> 
+X-Face: -:-!LDdizWr~[l?RsG!7/BSm'=,`y>~^N7a#qX+.-ZUy"%YF.bP?t_E$lZG54!X1`_>u8>V
+ /DpeH-oUPJ".cJfU'!(om[k{>?!DzZP&UYPi!W/]`[K`Ga+S()<~)mZlm;m}0fId<>1}XS.O+zV%w"
+ 1)-+K#MqP:&_@FrPF}_}R?_\"z9mHc!)e{e/DNzDY&*QoH,HGZJP#LszzhoGERD7$J4ebNt9oh-nvL
+ *IX4w6m=+qtbLQrrI{-jd2Q+(ZUg,a`n58O}z/zl"
+Mime-Version: 1.0 (generated by tm-edit 7.66)
+Content-Type: text/plain; charset=US-ASCII
+Date: Wed, 26 Feb 1997 08:50:57 -0500
+From: Dan Espen <dane@bae.bellcore.com>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.1
+
+Thimo Jansen <teejay@Cam031102.student.utwente.nl> writes:
+> On 25 Feb 1997, Dan Espen (dane@bae.bellcore.com) wrote:
+> > 
+> > This patch causes fvwm to limit the colors used in pixmaps.
+> > I failed  to  keep  the  FvwmPager   mini-icon patch, so   it  doesn't
+> > currently do anything to the colors in the pager.
+> 
+> If you would like to try this with the patch mentioned, here it is (hope
+> you did not already get it a thousand times). Yep, it was me who posted
+> it on the mailinglist, BUT, I did not write it!
+> 
+> Good luck and have fun. :)
+
+Thanks,  I did.
+
+Since the   Mini-icons in FvwmPager are  copied  from pixmaps that the
+color limit patch already limited, no  change to the color limit patch
+is needed.
+
+> Thimo Jansen
+
+--
+Dan Espen                                    Phone: (908) 699-5570
+dane@bae.bellcore.com
+444 Hoes Lane  Room RRC 1C-214
+Piscataway, NJ 08854
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+

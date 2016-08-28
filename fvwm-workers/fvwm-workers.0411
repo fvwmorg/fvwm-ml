@@ -1,0 +1,2338 @@
+From owner-fvwm-workers@hpc.uh.edu  Mon Nov  1 05:22:49 2004
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 01 Nov 2004 05:22:49 -0600 (CST)
+Received: from util2.math.uh.edu (util2.math.uh.edu [129.7.128.23])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id FAA20592
+	for <fvwm-workers@hpc.uh.edu>; Mon, 1 Nov 2004 05:22:35 -0600 (CST)
+Received: from pop.gmx.net ([213.165.64.20] helo=mail.gmx.net)
+	by util2.math.uh.edu with smtp (Exim 4.30)
+	id 1COaGS-0001P4-4O
+	for fvwm-workers@fvwm.org; Mon, 01 Nov 2004 05:22:20 -0600
+Received: (qmail 15437 invoked by uid 65534); 1 Nov 2004 11:21:46 -0000
+Received: from p508B08D2.dip0.t-ipconnect.de (EHLO zitrone.obstwiese) (80.139.8.210)
+  by mail.gmx.net (mp016) with SMTP; 01 Nov 2004 12:21:46 +0100
+X-Authenticated: #885628
+Received: from luthien by zitrone.obstwiese with local (Exim 3.35 #1 (Debian))
+	id 1COYGk-0002yt-00; Mon, 01 Nov 2004 10:14:30 +0100
+Date: Mon, 1 Nov 2004 10:14:26 +0100
+From: Dominik Vogt <fvwm-workers@fvwm.org>
+To: FVWM Workers <fvwm-workers@fvwm.org>
+Cc: orang@imonk.com
+Subject: Re: SnapAttraction does not work properly since 2.5.11
+Message-ID: <20041101091426.GC2669@gmx.de>
+Reply-To: fvwm-workers@fvwm.org
+Mail-Followup-To: FVWM Workers <fvwm-workers@fvwm.org>, orang@imonk.com
+References: <19686.64.173.252.34.1098892728.squirrel@imonk.com> <20041027174421.GA27232@SDF.LONESTAR.ORG> <40597.64.173.252.34.1098903597.squirrel@imonk.com> <20041027210755.GA29945@SDF.LONESTAR.ORG>
+Mime-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="8NvZYKFJsRX2Djef"
+Content-Disposition: inline
+In-Reply-To: <20041027210755.GA29945@SDF.LONESTAR.ORG>
+User-Agent: Mutt/1.3.28i
+X-PGP-Key: http://www.dominikvogt.de/gpg/pubkey.asc
+X-Spam-Score: -4.9 (----)
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+
+--8NvZYKFJsRX2Djef
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Oct 27, 2004 at 09:07:55PM +0000, Mikhael Goikhman wrote:
+> On 27 Oct 2004 11:59:57 -0700, orang@imonk.com wrote:
+> >=20
+> > > The intended logic is simple, as long as Alt is pressed, there is no
+> > > snap-attraction; as long as it is not pressed, there is one.
+> > >
+> > > It is possible to press and release Alt as many times as needed to sw=
+itch
+> > > snap-attraction on and off while moving windows using keyboard or mou=
+se.
+> >=20
+> > Not when alt being continuously pressed is part of your only way of mov=
+ing
+> > a window...which is the workflow I put SnapAttraction into fvwm in the
+> > first place for.  Therefore, I hope that this new intended logic is not
+> > really intended anymore.
+> >=20
+> > Really, this toggable snap feature thing should be via some bindable ev=
+ent,
+> > not a specific modifier (like an alt key), and it should be unbound (of=
+f)
+> > by default.
+>=20
+> It was on in 2.5.10, and it seems you liked it. The toggle-able snap
+> feature worked starting with the first fresh Alt press.
+>=20
+> There are many hardcoded bindings, like Ctrl-arrows moves a window by 1
+> pixel in interactive Move. Middle mouse button cancels Move, third button
+> activates a certain window flag. This is good. Noone complained yet.
+>=20
+> In short, I agree that the logic from 2.5.10 should be restored. but I
+> think your suggestions are redundant.
+
+I see where the problem is.  Traditionally, we never bothered to
+set the modifier states on faked motion and keyboard events.  This
+erases the initial Alt state since one of my recent patches.
+
+Fixed with my next commit.
+
+Ciao
+
+Dominik ^_^  ^_^
+
+ --
+Dominik Vogt, dominik.vogt@gmx.de
+
+--8NvZYKFJsRX2Djef
+Content-Type: application/pgp-signature
+Content-Disposition: inline
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.0.6 (GNU/Linux)
+Comment: For info see http://www.gnupg.org
+
+iD8DBQFBhf5ymeSprTOr4tgRAudsAJ9NZBj+nOJ2Vz4IfVGlXPWEJlUUagCaAkwL
+wXfhGcj5CAOW2s8UqIlBvqg=
+=USqz
+-----END PGP SIGNATURE-----
+
+--8NvZYKFJsRX2Djef--
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Nov  1 06:31:31 2004
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 01 Nov 2004 06:31:31 -0600 (CST)
+Received: from util2.math.uh.edu (util2.math.uh.edu [129.7.128.23])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id GAA20732
+	for <fvwm-workers@hpc.uh.edu>; Mon, 1 Nov 2004 06:31:22 -0600 (CST)
+Received: from util6.math.uh.edu ([129.7.128.34])
+	by util2.math.uh.edu with esmtp (Exim 4.30)
+	id 1CObL4-0001sn-5s
+	for fvwm-workers@fvwm.org; Mon, 01 Nov 2004 06:31:10 -0600
+Received: from util6.math.uh.edu (util6.math.uh.edu [127.0.0.1])
+	by util6.math.uh.edu (8.12.11/8.12.5) with ESMTP id iA1CV96q025341
+	for <fvwm-workers@fvwm.org>; Mon, 1 Nov 2004 06:31:09 -0600
+Received: (from cvs@localhost)
+	by util6.math.uh.edu (8.12.11/8.12.8/Submit) id iA1CV9Ce025314;
+	Mon, 1 Nov 2004 06:31:09 -0600
+Date: Mon, 1 Nov 2004 06:31:09 -0600
+Message-Id: <200411011231.iA1CV9Ce025314@util6.math.uh.edu>
+To: fvwm-workers@fvwm.org
+From: FVWM CVS <fvwm-workers@fvwm.org>
+Reply-To: FVWM CVS <fvwm-workers@fvwm.org>
+Subject: CVS domivogt: * Fixed ALT-Move to disable snapping.
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+CVSROOT:	/home/cvs/fvwm
+Module name:	fvwm
+Changes by:	domivogt	04/11/01 06:31:09
+
+Modified files:
+	.              : ChangeLog 
+	fvwm           : add_window.c functions.c menus.c 
+	                 module_interface.c move_resize.c 
+
+Log message:
+* Fixed ALT-Move to disable snapping.
+
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Fri Nov  5 01:10:27 2004
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Fri, 05 Nov 2004 01:10:27 -0600 (CST)
+Received: from util2.math.uh.edu (util2.math.uh.edu [129.7.128.23])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id BAA12641
+	for <fvwm-workers@hpc.uh.edu>; Fri, 5 Nov 2004 01:10:15 -0600 (CST)
+Received: from aaoepp2.aao.gov.au ([192.231.167.64])
+	by util2.math.uh.edu with smtp (Exim 4.30)
+	id 1CPyET-0001iP-AW
+	for fvwm-workers@fvwm.org; Fri, 05 Nov 2004 01:10:01 -0600
+Received: from aaopcnss.aao.gov.au (aaopcnss.aao.GOV.AU [192.231.167.47])
+	by aaoepp2.aao.gov.au (8.12.11/8.12.11) with ESMTP id iA579niq011079;
+	Fri, 5 Nov 2004 18:09:49 +1100 (EST)
+	(envelope-from ss@aaoepp2.aao.gov.au)
+Received: from aaopcnss.aao.gov.au (localhost.localdomain [127.0.0.1])
+	by aaopcnss.aao.gov.au (8.12.8/8.12.8) with ESMTP id iA579ihG021836;
+	Fri, 5 Nov 2004 18:09:44 +1100
+Received: (from ss@localhost)
+	by aaopcnss.aao.gov.au (8.12.8/8.12.8/Submit) id iA579dtt021834;
+	Fri, 5 Nov 2004 18:09:39 +1100
+Date: Fri, 5 Nov 2004 18:09:39 +1100
+From: Scott Smedley <ss@aaoepp.aao.gov.au>
+To: fvwm-workers@fvwm.org
+Cc: sal@email.arc.nasa.gov
+Subject: Re: Parsing window_flags in perl
+Message-ID: <20041105070939.GA21793@aaopcnss.aao.gov.au>
+Reply-To: ss@aaoepp.aao.gov.au
+Mail-Followup-To: fvwm-workers@fvwm.org, sal@email.arc.nasa.gov
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.4i
+X-Spam-Score: -4.9 (----)
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+
+Does anyone happen to know the status of the work that was proposed
+in this thread?
+
+http://www.hpc.uh.edu/fvwm/archive/0409/msg00094.html
+
+SCoTT. :)
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Fri Nov  5 13:49:02 2004
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Fri, 05 Nov 2004 13:49:02 -0600 (CST)
+Received: from util2.math.uh.edu (util2.math.uh.edu [129.7.128.23])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id NAA15665
+	for <fvwm-workers@hpc.uh.edu>; Fri, 5 Nov 2004 13:48:52 -0600 (CST)
+Received: from imap.srv.cs.cmu.edu ([128.2.206.250] helo=lychee.srv.cs.cmu.edu)
+	by util2.math.uh.edu with smtp (Exim 4.30)
+	id 1CQA4b-0001RU-Oa
+	for fvwm-workers@fvwm.org; Fri, 05 Nov 2004 13:48:37 -0600
+Received: from UX4.SP.CS.CMU.EDU ([128.2.198.104]) by lychee.srv.cs.cmu.edu
+          id aa10882; 5 Nov 2004 14:46 EST
+Date: Fri, 5 Nov 2004 14:46:39 -0500 (EST)
+From: Salvatore Domenick Desiano <sal@email.arc.nasa.gov>
+X-X-Sender:  <sal@ux4.sp.cs.cmu.edu>
+To: Scott Smedley <ss@aaoepp.aao.gov.au>
+cc: <fvwm-workers@fvwm.org>
+Subject: Re: Parsing window_flags in perl
+In-Reply-To: <20041105070939.GA21793@aaopcnss.aao.gov.au>
+Message-ID: <Pine.LNX.4.33L.0411051446250.8487-100000@ux4.sp.cs.cmu.edu>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Spam-Score: -4.8 (----)
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+That's me. It's on temporary hold. Are you waiting on it?
+
+On Fri, 5 Nov 2004, Scott Smedley wrote:
+
+o
+o Does anyone happen to know the status of the work that was proposed
+o in this thread?
+o
+o http://www.hpc.uh.edu/fvwm/archive/0409/msg00094.html
+o
+o SCoTT. :)
+o --
+o Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+o To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+o body of a message to majordomo@fvwm.org.
+o To report problems, send mail to fvwm-workers-owner@fvwm.org
+o
+o
+o
+
+--------------
+  Salvatore Domenick Desiano
+    Research Scientist
+      NASA Ames Research Center (QSS Group, Inc.)
+
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Sat Nov  6 08:00:34 2004
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sat, 06 Nov 2004 08:00:34 -0600 (CST)
+Received: from util2.math.uh.edu (util2.math.uh.edu [129.7.128.23])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id IAA19741
+	for <fvwm-workers@hpc.uh.edu>; Sat, 6 Nov 2004 08:00:19 -0600 (CST)
+Received: from c67-252.icpnet.pl ([62.21.67.252] helo=itec.com.pl)
+	by util2.math.uh.edu with smtp (Exim 4.30)
+	id 1CQR6o-00012N-S6
+	for fvwm-workers@fvwm.org; Sat, 06 Nov 2004 08:00:03 -0600
+Received: (qmail 15435 invoked by uid 500); 6 Nov 2004 14:00:12 -0000
+Date: Sat, 6 Nov 2004 15:00:12 +0100
+From: Rafal Bisingier <ravbc@man.poznan.pl>
+To: fvwm-workers@fvwm.org
+Subject: Re: FVWM: Matching windows with * in it's name
+Message-ID: <20041106140012.GA5771@localhost>
+Mail-Followup-To: fvwm-workers@fvwm.org
+References: <20041020102726.GA4986@localhost> <Pine.LNX.4.61.0410201911140.18234@Psilocybe.Update.UU.SE> <20041021085840.GB23791@localhost> <20041026081016.GC6793@gmx.de> <20041026122156.GA23821@localhost> <20041026133311.GA4783@SDF.LONESTAR.ORG>
+Mime-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="Qrgsu6vtpU/OV/zm"
+Content-Disposition: inline
+In-Reply-To: <20041026133311.GA4783@SDF.LONESTAR.ORG>
+User-Agent: Mutt/1.4.2.1i
+X-PGP-Key: http://www.man.poznan.pl/~ravbc/pubkey.asc
+X-Spam-Score: -1.6 (-)
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+
+--Qrgsu6vtpU/OV/zm
+Content-Type: multipart/mixed; boundary="RIYY1s2vRbPFwWeW"
+Content-Disposition: inline
+
+
+--RIYY1s2vRbPFwWeW
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, Oct 26, 2004 at 01:33:11PM +0000, Mikhael Goikhman wrote:
+> On 26 Oct 2004 14:21:56 +0200, Rafal Bisingier wrote:
+> >=20
+> > On Tue, Oct 26, 2004 at 10:10:16AM +0200, Dominik Vogt wrote:
+> > > On Thu, Oct 21, 2004 at 10:58:40AM +0200, Rafal Bisingier wrote:
+> > > > >=20
+> > > > > On Wed, 20 Oct 2004, Rafal Bisingier wrote:
+> > > > >=20
+> > > > > >I've found a problem with selecting windows which
+> > > > > >name/res/class/icon contains a literal *.
+> > > > > >I've looked in the source code, and if I understand it function
+> > > > > >matchWildcards from libs/wild.c use every * as a wildcard, so
+> > > > > >there is no chance to match only a literal *.
+> > > > > >I think I can patch it to use ** as a literal *, but I'm not
+> > > > > >sure if it's a good way of resolving this problem.
+> > >=20
+> > > We recently had a discussion about qouting of window titles.
+> > > Mikhael came up with with a suggestion to solve it by enhancing
+> > > $[...] expansion.  Maybe someone can look up the thread in the
+> > > list archives.
+> >=20
+> > I've found a thread "CVS scott: Apply conditionals patch." from July in
+> > which this (and couple of other, even more serious) problem has been di=
+scussed,
+> > but this thread ended with Mikhael's suggestion:
+> > <cite>
+> > I think the current syntax of non-option names should not be the main
+> > one in the long run. How about to solve the whole issue correctly by
+> > introducing the following options in conditions:
+> > Name "pattern", IconName "pattern", Class "pattern", Resource "pattern",
+> > AnyName "pattern"
+> > All of these will support special pattern characters including "|".
+> > The non-option names are still supported, but there is a better syntax.
+> > And we still need the variable filters like $[var:pattern], and
+> > quoting syntax for names in conditions; "||", "**" and "??" is ok by me.
+> > </cite>
+> >=20
+> > I can implement "||", "**" and "??" part (it should be simple), but I
+> > want to know if there is a chance to inclusion of this patch into to
+> > fvwm (this is my original question as you can see above)?
+>=20
+> I think someone else wanted to implement the OR syntax, i.e. "|", I have
+> no idea what is the status of this.
+
+This functionality is already implemented.
+
+> The first step (that you can do) is to handle the specified doubled chars
+> as escaped char rather than meta-chars in conditions. And implement one
+> filter "pattern" that quotes variables in order to be used in commands
+> that require patterns. I.e. Next ($[w.name:pattern], !Iconified) ...
+
+Ok, so I've done it. Conditional commands now understand doubled '*',
+'?' and '|' as escaped chars.
+I've made also $[w.name:pattern] filter.
+
+> If you are at it, you may implement other suggested filters, but please
+> test this thoroufully if you do it.
+
+I've tested it, and don't see any problems with it.
+
+> > It'll be good to implement also the proposed syntax for selecting window
+> > exclusivly by it's class, resource, icon name or title, but I'm not
+> > sure if I have enough skill to do it.
+> > And there's still a problem with backward compatibility of this new
+> > syntax. Can we just leave existing syntax as is, and add only the new
+> > options? I know it can break backward compatibility in some (I think
+> > rare) cases when one want to select window named for ex: "Name" or
+> > "Resource", but in this cases there will always be posibility to use the
+> > new option AnyName.
+>=20
+> I don't think that Name/IconName/Class/Resource/AnyName should be
+> done before 2.6.
+
+I suspected you'll say that. I don't think I can do anything to change
+this, so maybe from the other side: what is needed to release 2.6? ;-)
+
+I'd realy like to see this Name/IconName/Class/Resource/AnyName syntax.
+
+> > PS. I know I'm a little boring with this, but some time ago I've send a
+> > patch adding new Test option... ;-)
+>=20
+> I guess, noone had a time to look at it yet.
+
+I've noticed that Dominik doesn't have time recently... ;-)
+
+> fvwm-workers should be a better place for these discussions.
+
+So I'm moving this thread to fvwm-workers, because here is my next patch
+atached adding discussed here new functionality.
+
+--=20
+Greetings
+Rafal Bisingier
+
+--RIYY1s2vRbPFwWeW
+Content-Type: application/x-gzip
+Content-Disposition: attachment; filename="CondWildMatch.patch.gz"
+Content-Transfer-Encoding: base64
+
+H4sICAnSjEECA0NvbmRXaWxkTWF0Y2gucGF0Y2gAxRhpc5tI9rP5Fc+uqdEBwqADHYmvTZyK
+ah1nynYmW5VyqTC0JCoItNCy7I393/e9bhqQhCYz82HXH0wf775bfjCdQmuVXMP0cb2YxEkw
+O343d6MZu4pn4qzYaq1WqwrsoG1Z3ZZttywH7O6o3Rv1hmava9vd/rDbBd2yLUvTdX2L3Dba
+cNS1zP6w17PbtjPI0M7PoWUbHdBtw+7C+bmml7Dgxp26IfwjSINoFrAE3ibu44N3vnAjcxn/
+J6JPeKrpmg4HTcmdPS3dyDc9OrrwfebDt7UZuQs2WrqcsyS6BwmCFCFe8iCOYBonsEoZBBFh
+eTFe0jly9uIF8vLTEgP6Z9qmhM3OSiiScxPC4CE9XgdhJsq7CqLAE+ZyqDWbNXBT/NYMqJ2d
+yQ19Ip9Qay8v8uilhlsNcvvYAO/jRRAF3+H3eMYB3vpyaz7i9ny2eDJ9dqohipJzwaJVanpQ
+n0wWYRwvJzPGJ+yRRbwx0vyKSNnVrjDCltabsbMLsB0Nzshqm22n1+90+rtB9HP8wajdNwft
+gWN1B+1uKZqcnmMMQadPu0cRBQf4t2ydUhScEM3lm+KMPfGTZXYZBilXV6WjE4Rv0eF6HoSs
+3hQk4NdfIVsdnpBvGpq+DdOQtH5IbBFYS11/IwEPgikoWidlCggvv9sIZYyC+yZugbyD/aoW
+LEzZHvBWKwc/eMDo/L6Drb4lIvvkfZXqZ59gWj/cMsveiFNJXIqFPK8r4kzdVYZY37Ycx7Gt
+6hDbh5pF1xCjy+m3y7XK7hgOViv89GVwHa1NyroAdZui748MeRb4akVxhGtdrVUlUvcJS+NV
+4uWY68Dnc7V5woXgO5B8B13F9/eLm8nXyafx9Xj87vP1h/HVpZGfjt8X6+uLT5fEvdhNfru4
+u7u8uS5gbi5vP3+5eVei8HX8/u5jsf2XlAKtRLnVttqG3ZZioNopx5rKvAkuOebThEOTPXno
+5h90P3cTaKYUFHLJFyL/5AZ15/nOXy0Wz9+c7n1xz90EaxScQD1e8eWKN+AM5ApGEp4Ip9zl
+gQeE0oSH1XSKreIErr9cXZVug4hnd5OQRXhvERs69VLctWy1jdQieCOUxvpEpu/0h0ZvqApK
+yhPqICcwXctKIVwrqocI+Dx7PBc7y67tR5QklNDTNSXz4fh2cvn108fJ+8vbf959/q3+AV2A
+d42GyGyZYmi5XYZ0QfILs9ImlKrpRTHCK1kfskwVdUQQO6GuAy8vkG/PNrd5ZVFJHub5nVUC
+hMyP8kt5R3xCOC1ZfUcM5a0tLtOEseJOMQT53XBiu+dAE+o26BDCMW0VeB4HqTtlCzcMY69e
+DoBGWVR5/s26L4wnrZ3+ZaMeSqNShVbbs83tjlHLNty1cFFqFTwpjgGIWtSl4A2hvg62IoK3
+kedypbABqQGhbue2VApHJYW34kgqnVMsy/i65WQgL1uwYY+fyvgzESsklBzz1JMQ4krcZDkH
+5Zyj2kh5N6Kk/HP5Bn/Ym/L5r9RFipmwojvll5XtadgZOB272x1Utqe9uLI/dXqO1ek7Vrk/
+9YeyUdBXdgoNSFrd7AUa/JJNw/ea/sv2YCxvqY9JiHxLbS3bljvdfdaYLEd2JqtvyPLoB+l3
+A1RbAy900xRwxs5PiD7tlszjwSMLw2eD7leRbMfM1+CIuL1FyZLgYcXZ6f0RZH5HJ0YxrIPI
+j9cQpDgap7EXuBxH/XXA58DnTFMztqnpt8gkKKZu2FEbBeGrJEozkrVUiodKPrIEqWo6j+Eo
+g26FwXeGojxH3H0qPRyg6tVgwphruh+vHkKWAs7ZybOa8sV0T5XAwCjm4MdRjYPr+/DvVcxZ
+aiqvtcxOoFboP2Fwq2cP0bU6LtodYyBMThVHUDxDirRYuM8kU4rzK8RT4OuYLLyIEwZuSJq4
+ZPkUO3zKlm4izPfwTMYTbdT1EEbKh/XOmwMekKmRNny+wYcTQ5Q4MQHq46lWPkIQ5IFW8Q2i
+9gyLFYoQxdh82SavdOl6aJdpEi+0FjEmu6dmA+DSRY6Zh6UzkO0Dm6EZhItrh7lcy0S8X/CF
+VqbwBZ0i3lXouoXLES4MUCH0TfHKIucVjqDHlTh5qZl/iz+YY+V4jWLUjZ6F4VGqEiUDKHuy
+5W5iCFnR+R/jNYWLQZw2DOgul2GA5kO9kGjwGPgrVEqoTVHowiyJV8vK6lV6kcoKU36ibtat
+0k1F0eqag26v07V7g52Z+g8Qs4rlYMVyrPLrv9c22rjHTz+brn6oWt3Msi6bTLLSTK+p42bm
+VzJzEbDNYzGcKTRd9K9W0TP0vKFVkt9u56rTlK7zHrzJI++6m1z2t3BZdODDxdXtZUVXzREy
++P366pWMX/NBlCjBjrbNLWOmTABRtNJIriJXoQjeLBXceeIGIXITqDh7pauHjH2GJHfmfmds
+S2M1ql2SCake0JnJ7m6+XL4BlFkJgjKIFJEGEuIru2x7sfm/8CKI/y01KuYSNArPlrQiEYXk
+XzFtPDfx03omlJGhNfIQ+DteErg/cVNhq12vbOv6V8z/WvpNpGSGjV9FymRLv4z8KZMUPz1U
+UHndcCfNrtnPEa3NU73aka/5WFmdQdkQLyXYDaN98Pvqy8v/vb7wOQ5T6Txehb7oNnPsNSw6
+zJ25SbEI8p3zvOzICvNfqqPI+4IWAAA=
+
+--RIYY1s2vRbPFwWeW--
+
+--Qrgsu6vtpU/OV/zm
+Content-Type: application/pgp-signature
+Content-Disposition: inline
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.6 (GNU/Linux)
+
+iD8DBQFBjNjsMJnHpIMRS0gRAprqAJ427uKTnMffLF2j96/XQbFIJFcsWQCePZ9a
+eR9aqov/+rOZ3YoblUKifgs=
+=wvOw
+-----END PGP SIGNATURE-----
+
+--Qrgsu6vtpU/OV/zm--
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Sat Nov  6 14:43:01 2004
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sat, 06 Nov 2004 14:43:01 -0600 (CST)
+Received: from util2.math.uh.edu (util2.math.uh.edu [129.7.128.23])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id OAA22044
+	for <fvwm-workers@hpc.uh.edu>; Sat, 6 Nov 2004 14:42:47 -0600 (CST)
+Received: from ol.freeshell.org
+	([192.94.73.20] helo=sdf.lonestar.org ident=root)
+	by util2.math.uh.edu with esmtp (Exim 4.30)
+	id 1CQXOK-0003dz-QW
+	for fvwm-workers@fvwm.org; Sat, 06 Nov 2004 14:42:32 -0600
+Received: from sdf.lonestar.org (IDENT:migo@ukato.freeshell.org [192.94.73.7])
+	by sdf.lonestar.org (8.12.10/8.12.10) with ESMTP id iA6KgS0s008459
+	for <fvwm-workers@fvwm.org>; Sat, 6 Nov 2004 20:42:28 GMT
+Received: (from migo@localhost)
+	by sdf.lonestar.org (8.12.10/8.12.8/Submit) id iA6KgS5K022836
+	for fvwm-workers@fvwm.org; Sat, 6 Nov 2004 20:42:28 GMT
+Date: Sat, 6 Nov 2004 20:42:28 +0000
+From: Mikhael Goikhman <migo@homemail.com>
+To: FVWM Workers <fvwm-workers@fvwm.org>
+Subject: Re: FVWM: Matching windows with * in it's name
+Message-ID: <20041106204228.GA16080@SDF.LONESTAR.ORG>
+Mail-Followup-To: FVWM Workers <fvwm-workers@fvwm.org>
+References: <20041020102726.GA4986@localhost> <Pine.LNX.4.61.0410201911140.18234@Psilocybe.Update.UU.SE> <20041021085840.GB23791@localhost> <20041026081016.GC6793@gmx.de> <20041026122156.GA23821@localhost> <20041026133311.GA4783@SDF.LONESTAR.ORG> <20041106140012.GA5771@localhost>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20041106140012.GA5771@localhost>
+User-Agent: Mutt/1.4.2.1i
+X-Spam-Score: -4.8 (----)
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+On 06 Nov 2004 15:00:12 +0100, Rafal Bisingier wrote:
+> 
+> On Tue, Oct 26, 2004 at 01:33:11PM +0000, Mikhael Goikhman wrote:
+> > On 26 Oct 2004 14:21:56 +0200, Rafal Bisingier wrote:
+> > > 
+> > > On Tue, Oct 26, 2004 at 10:10:16AM +0200, Dominik Vogt wrote:
+> > > > On Thu, Oct 21, 2004 at 10:58:40AM +0200, Rafal Bisingier wrote:
+> > > > > > 
+> > > > > > On Wed, 20 Oct 2004, Rafal Bisingier wrote:
+> > > > > > 
+> > > > > > >I've found a problem with selecting windows which
+> > > > > > >name/res/class/icon contains a literal *.
+> > > > > > >I've looked in the source code, and if I understand it function
+> > > > > > >matchWildcards from libs/wild.c use every * as a wildcard, so
+> > > > > > >there is no chance to match only a literal *.
+> > > > > > >I think I can patch it to use ** as a literal *, but I'm not
+> > > > > > >sure if it's a good way of resolving this problem.
+> > > > 
+> > > > We recently had a discussion about qouting of window titles.
+> > > > Mikhael came up with with a suggestion to solve it by enhancing
+> > > > $[...] expansion.  Maybe someone can look up the thread in the
+> > > > list archives.
+> > > 
+> > > I've found a thread "CVS scott: Apply conditionals patch." from July in
+> > > which this (and couple of other, even more serious) problem has been discussed,
+> > > but this thread ended with Mikhael's suggestion:
+> > > <cite>
+> > > I think the current syntax of non-option names should not be the main
+> > > one in the long run. How about to solve the whole issue correctly by
+> > > introducing the following options in conditions:
+> > > Name "pattern", IconName "pattern", Class "pattern", Resource "pattern",
+> > > AnyName "pattern"
+> > > All of these will support special pattern characters including "|".
+> > > The non-option names are still supported, but there is a better syntax.
+> > > And we still need the variable filters like $[var:pattern], and
+> > > quoting syntax for names in conditions; "||", "**" and "??" is ok by me.
+> > > </cite>
+> > > 
+> > > I can implement "||", "**" and "??" part (it should be simple), but I
+> > > want to know if there is a chance to inclusion of this patch into to
+> > > fvwm (this is my original question as you can see above)?
+> > 
+> > I think someone else wanted to implement the OR syntax, i.e. "|", I have
+> > no idea what is the status of this.
+> 
+> This functionality is already implemented.
+
+True. I forgot that we discussed the commited code in that thread.
+
+> > The first step (that you can do) is to handle the specified doubled chars
+> > as escaped char rather than meta-chars in conditions. And implement one
+> > filter "pattern" that quotes variables in order to be used in commands
+> > that require patterns. I.e. Next ($[w.name:pattern], !Iconified) ...
+> 
+> Ok, so I've done it. Conditional commands now understand doubled '*',
+> '?' and '|' as escaped chars.
+> I've made also $[w.name:pattern] filter.
+
+Hmm, you didn't do what I meant. :)
+
+I meant a filter that may be applied to any variable, i.e.
+
+  $[w.iconname:pattern]
+  $[HOME:pattern]
+
+This escapes all special chars like "*" to be suitable for conditions.
+
+> > If you are at it, you may implement other suggested filters, but please
+> > test this thoroufully if you do it.
+> 
+> I've tested it, and don't see any problems with it.
+
+I didn't see the whole code, just the diff, but it seems that your
+$[w.name:pattern] is done incorrectly. IIRC, there should be 2 parts, one
+that estimates the resulting string length and one that generates the
+expanded string content. You should not really allocate the string space
+yourself. For the "pattern" filter you may double the string length as an
+estimation. But there is no support for filters yet, it should be added.
+
+Possible filters would be:
+
+  $[VAR]             - expanded to: 'My %^&* window'
+  $[VAR:dquote]      - expanded to: "My %^&* window"
+  $[VAR:noquote]     - expanded to: My %^&* window
+  $[VAR:pattern]     - expanded to: 'My %^&** window'
+  $[VAR:menu]        - expanded to: 'My %%^&* window'
+
+> > > It'll be good to implement also the proposed syntax for selecting window
+> > > exclusivly by it's class, resource, icon name or title, but I'm not
+> > > sure if I have enough skill to do it.
+> > > And there's still a problem with backward compatibility of this new
+> > > syntax. Can we just leave existing syntax as is, and add only the new
+> > > options? I know it can break backward compatibility in some (I think
+> > > rare) cases when one want to select window named for ex: "Name" or
+> > > "Resource", but in this cases there will always be posibility to use the
+> > > new option AnyName.
+> > 
+> > I don't think that Name/IconName/Class/Resource/AnyName should be
+> > done before 2.6.
+> 
+> I suspected you'll say that. I don't think I can do anything to change
+> this, so maybe from the other side: what is needed to release 2.6? ;-)
+
+Testing, testing and fixing bugs in the bug system and todo-2.6.
+
+> I'd realy like to see this Name/IconName/Class/Resource/AnyName syntax.
+
+I want to see it too. But I want to see 2.6 even stronger.
+
+I will support inclusion of the patch for these condition options if
+his authors also does something from todo-2.6.
+
+Regards,
+Mikhael.
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Sun Nov  7 22:17:35 2004
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sun, 07 Nov 2004 22:17:35 -0600 (CST)
+Received: from util1.math.uh.edu (util1.math.uh.edu [129.7.128.22])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id WAA01102
+	for <fvwm-workers@hpc.uh.edu>; Sun, 7 Nov 2004 22:17:26 -0600 (CST)
+Received: from epithumia.math.uh.edu ([129.7.128.2])
+	by util1.math.uh.edu with esmtp (Exim 4.30)
+	id 1CR0xq-0005oP-22
+	for fvwm-workers@hpc.uh.edu; Sun, 07 Nov 2004 22:17:10 -0600
+Received: from epithumia.math.uh.edu (epithumia.math.uh.edu [127.0.0.1])
+	by epithumia.math.uh.edu (8.12.11/8.12.5) with ESMTP id iA84HBMg017278
+	for <fvwm-workers@hpc.uh.edu>; Sun, 7 Nov 2004 22:17:11 -0600
+Received: (from tibbs@localhost)
+	by epithumia.math.uh.edu (8.12.11/8.12.8/Submit) id iA84HBWY017277
+	for fvwm-workers@hpc.uh.edu; Sun, 7 Nov 2004 22:17:11 -0600
+Received: from util2.math.uh.edu (util2.math.uh.edu [129.7.128.23])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id AAA12195
+	for <fvwm-workers@hpc.uh.edu>; Fri, 5 Nov 2004 00:03:53 -0600 (CST)
+Date: Fri, 5 Nov 2004 00:03:53 -0600 (CST)
+From: fvwm-bug@fvwm.org
+Message-Id: <200411050603.AAA12195@sina.hpc.uh.edu>
+Received: from localhost ([127.0.0.1])
+	by util2.math.uh.edu with esmtp (Exim 4.30)
+	id 1CPxCH-0001Iz-8g
+	for fvwm-workers@fvwm.org; Fri, 05 Nov 2004 00:03:41 -0600
+To: fvwm-workers@fvwm.org
+Subject: Notification: incoming/1492
+X-Spam-Score: 0.5 (/)
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+FVWM Bug Tracking notification
+
+new message incoming/1492
+
+Message summary for PR#1492
+	From: mightyquinn@letterboxes.org
+	Subject: Nautilus desktop window behaves awkwardly with TAKE_FOCUS
+	Date: Fri, 5 Nov 2004 00:03:40 -0600
+	0 replies 	0 followups
+
+====> ORIGINAL MESSAGE FOLLOWS <====
+
+>From mightyquinn@letterboxes.org Fri Nov 05 00:03:41 2004
+Received: from util7.math.uh.edu ([129.7.128.5])
+	by util2.math.uh.edu with esmtp (Exim 4.30)
+	id 1CPxCH-0001Iq-1a
+	for fvwm-bug@fvwm.org; Fri, 05 Nov 2004 00:03:41 -0600
+Received: from localhost (util7.math.uh.edu [127.0.0.1])
+	by util7.math.uh.edu (8.12.11/8.12.5) with ESMTP id iA563ePf010558
+	for <fvwm-bug@fvwm.org>; Fri, 5 Nov 2004 00:03:40 -0600
+Date: Fri, 5 Nov 2004 00:03:40 -0600
+Message-Id: <200411050603.iA563ePf010558@util7.math.uh.edu>
+From: mightyquinn@letterboxes.org
+To: fvwm-bug@fvwm.org
+Subject: Nautilus desktop window behaves awkwardly with TAKE_FOCUS
+
+Full_Name: Dave Ahlswede
+Version: 2.5.12
+CVS_Date: 
+OS: 
+X_Server: 
+Submission from: (NULL) (66.188.40.113)
+
+
+FVWM seems to eat any click that triggers a WM_TAKE_FOCUS event for
+Nautilus' desktop window-- This gives the effect that nautilus' desktop
+behaves like it's in !FPPassFocusClick mode, regardless of whether or not
+this style is set.
+
+Also, in Sloppy Focus mode, the desktop will never receive focus. (by
+comparison, in Metacity the desktop will receive focus if explicitly
+clicked)
+
+
+
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Nov  8 06:01:36 2004
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 08 Nov 2004 06:01:36 -0600 (CST)
+Received: from util2.math.uh.edu (util2.math.uh.edu [129.7.128.23])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id GAA03443
+	for <fvwm-workers@hpc.uh.edu>; Mon, 8 Nov 2004 06:01:26 -0600 (CST)
+Received: from util6.math.uh.edu ([129.7.128.34])
+	by util2.math.uh.edu with esmtp (Exim 4.30)
+	id 1CR8Cv-0003qS-Uc
+	for fvwm-workers@fvwm.org; Mon, 08 Nov 2004 06:01:13 -0600
+Received: from util6.math.uh.edu (util6.math.uh.edu [127.0.0.1])
+	by util6.math.uh.edu (8.12.11/8.12.5) with ESMTP id iA8C1DqX001617
+	for <fvwm-workers@fvwm.org>; Mon, 8 Nov 2004 06:01:13 -0600
+Received: (from cvs@localhost)
+	by util6.math.uh.edu (8.12.11/8.12.8/Submit) id iA8C1DVS001616;
+	Mon, 8 Nov 2004 06:01:13 -0600
+Date: Mon, 8 Nov 2004 06:01:13 -0600
+Message-Id: <200411081201.iA8C1DVS001616@util6.math.uh.edu>
+To: fvwm-workers@fvwm.org
+From: FVWM CVS <fvwm-workers@fvwm.org>
+Reply-To: FVWM CVS <fvwm-workers@fvwm.org>
+Subject: CVS uwp fvwm-web: Added link to fvwm forum, removed link to wiki since it does not seem to work.
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+CVSROOT:	/home/cvs/fvwm
+Module name:	fvwm-web
+Changes by:	uwp	04/11/08 06:01:13
+
+Modified files:
+	.              : ChangeLog index.php links.php 
+
+Log message:
+Added link to fvwm forum, removed link to wiki since it does not seem to work.
+
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Nov  8 06:05:34 2004
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 08 Nov 2004 06:05:34 -0600 (CST)
+Received: from util2.math.uh.edu (util2.math.uh.edu [129.7.128.23])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id GAA03469
+	for <fvwm-workers@hpc.uh.edu>; Mon, 8 Nov 2004 06:05:20 -0600 (CST)
+Received: from john.hrz.tu-chemnitz.de ([134.109.132.2])
+	by util2.math.uh.edu with esmtp (Exim 4.30)
+	id 1CR8Gg-0003sE-MK
+	for fvwm-workers@fvwm.org; Mon, 08 Nov 2004 06:05:06 -0600
+Received: from herzbube.infotech.tu-chemnitz.de ([134.109.4.37])
+	by john.hrz.tu-chemnitz.de with esmtp (Exim 4.41)
+	id 1CR8Gc-00045V-E2
+	for fvwm-workers@fvwm.org; Mon, 08 Nov 2004 13:05:02 +0100
+Received: (from uwp@localhost)
+	by herzbube.infotech.tu-chemnitz.de (8.11.7p1+Sun/8.11.6) id iA8C52j16025
+	for fvwm-workers@fvwm.org; Mon, 8 Nov 2004 13:05:02 +0100 (MET)
+Date: Mon, 8 Nov 2004 13:05:01 +0100
+From: Uwe Pross <keinFruehstuecksfleisch@gmx.net>
+To: Fvwm Workers <fvwm-workers@fvwm.org>
+Subject: [Fwd] Creation of an Fvwm Forum
+Message-ID: <20041108120501.GA15944@hrz.tu-chemnitz.de>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Organization: TU Chemnitz
+X-Operating-System: SunOS herzbube 5.8 Generic_117000-01 sun4u sparc SUNW,Sun-Blade-1000
+User-Agent: Mutt/1.5.4i
+X-Spam-Score: 1.1 (+)
+X-Spam-Report: --- Start der SpamAssassin 2.64 Textanalyse (1.1 Punkte)
+	Fragen an/questions to:  Postmaster TU Chemnitz <postmaster@tu-chemnitz.de>
+	1.1 MAILTO_TO_SPAM_ADDR    URI: Hyperlink mit E-mail-Adresse eines verdaechtigten Spam-Versenders
+	--- Ende der SpamAssassin Textanalyse
+X-Scan-Signature: f44fef0072f3d9b0e43987e44c48a302
+X-Spam-Score: -4.9 (----)
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Hi there,
+
+Please find below a mail from the creator of a fvwm
+forum. I have added a link to the fvwm homepage.
+
+Have fun, Uwe
+
+----- Forwarded message from Bert Geens <bn463783@belgacom.net> -----
+
+From: Bert Geens <bn463783@belgacom.net>
+Date: Sat, 06 Nov 2004 21:07:21 +0100
+Subject: Creation of an Fvwm Forum
+X-Spam-Score: 0.9 (/)
+
+Dear mister Pross,
+
+I don't really know how to start this off, so I'll just plunge into it
+straight away: I have started a forum (or Bulletin Board if you prefer)
+for Fvwm. I had a couple of reasons for doing this, which I'll detail
+below, which you can skip if you think I'm ranting too much (my
+apoligies if I am).
+
+
+Well, the first and most obvious reason is that there was no Fvwm Forum
+before I started this project, but that doesn't say why we'd need one
+anyway, the Fvwm community has lots of other ways of communicating:
+there's the mailinglists, the wiki and the IRC channel, so why would we
+need a forum? I'll start with comparing the advantages of forums to each
+of the above mentioned forms of communication.
+
+A Wiki is a great way to generate community driven up-to-date
+communication, but it obviously lacks any real communication between the
+participants themselves, further a Wiki provides answers and doesn't
+allow for user questions.
+
+I'm no big fan of mailinglists, they lack every decent form of layout in
+their messages and their searchability is about nonexistant.
+
+If we're talking about IRC we can just forget about searching, unless
+you want to search through 2Mb of IRC logs just to find that answer you
+heard someday to the problem you think you have today.
+
+So I think forums have the following qualities:
+ - they are easily searchable
+ - they maintain community interaction while at the same time allowing
+for the building of some sort of a "knowledge base", script/function
+resource, or just by being a FAQ on it's own.
+ - they have a nice and easily usable layout.
+
+
+So I wondered if it would be possible to add a link to the forum from
+the main Fvwm site, the url is http://fvwm.lair.be .
+
+I'd be most grateful if you could help with this, I see this as my
+chance to do something back for the community that has helped me a lot
+already. Please don't hesistate to contact me me about any questions,
+suggestions or remarks you might have at this point.
+
+With kind regards,
+
+Bert Geens
+
+----- End forwarded message -----
+
+-- 
+  ,_,   For personal reply/mail put "fvwm"
+ (O,O)  in the subject.
+ (   )  Otherwise your mail is discarded by a filter.
+=-"-"-= http://www.tu-chemnitz.de/~uwp
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Nov  8 06:10:10 2004
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 08 Nov 2004 06:10:10 -0600 (CST)
+Received: from util2.math.uh.edu (util2.math.uh.edu [129.7.128.23])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id GAA03516
+	for <fvwm-workers@hpc.uh.edu>; Mon, 8 Nov 2004 06:09:58 -0600 (CST)
+Received: from john.hrz.tu-chemnitz.de ([134.109.132.2])
+	by util2.math.uh.edu with esmtp (Exim 4.30)
+	id 1CR8LB-0003ur-T0
+	for fvwm-workers@fvwm.org; Mon, 08 Nov 2004 06:09:46 -0600
+Received: from herzbube.infotech.tu-chemnitz.de ([134.109.4.37])
+	by john.hrz.tu-chemnitz.de with esmtp (Exim 4.41)
+	id 1CR8LB-0004XG-1W
+	for fvwm-workers@fvwm.org; Mon, 08 Nov 2004 13:09:45 +0100
+Received: (from uwp@localhost)
+	by herzbube.infotech.tu-chemnitz.de (8.11.7p1+Sun/8.11.6) id iA8C9i116138
+	for fvwm-workers@fvwm.org; Mon, 8 Nov 2004 13:09:44 +0100 (MET)
+Date: Mon, 8 Nov 2004 13:09:44 +0100
+From: Uwe Pross <keinFruehstuecksfleisch@gmx.net>
+To: Fvwm Workers <fvwm-workers@fvwm.org>
+Subject: Fvwm Wiki seems to be down
+Message-ID: <20041108120944.GB15944@hrz.tu-chemnitz.de>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Organization: TU Chemnitz
+X-Operating-System: SunOS herzbube 5.8 Generic_117000-01 sun4u sparc SUNW,Sun-Blade-1000
+User-Agent: Mutt/1.5.4i
+X-Spam-Score: 0.0 (/)
+X-Spam-Report: --- Start der SpamAssassin 2.64 Textanalyse (0.0 Punkte)
+	Fragen an/questions to:  Postmaster TU Chemnitz <postmaster@tu-chemnitz.de>
+	--- Ende der SpamAssassin Textanalyse
+X-Scan-Signature: b75b3a670525627ec81a7de66e8d9271
+X-Spam-Score: -4.9 (----)
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Hi there,
+
+The URL to the Fvwm Wiki (http://rvb.dyndns.org/FvwmWiki/)
+results in a 404 error. I have (temporarily) removed the
+links to this page from the fvwm homepage. Please sent a
+mail to fvwm-workers when this site is working again.
+
+Cheers, Uwe
+-- 
+  ,_,   For personal reply/mail put "fvwm"
+ (O,O)  in the subject.
+ (   )  Otherwise your mail is discarded by a filter.
+=-"-"-= http://www.tu-chemnitz.de/~uwp
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Nov  8 09:20:47 2004
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 08 Nov 2004 09:20:47 -0600 (CST)
+Received: from util2.math.uh.edu (util2.math.uh.edu [129.7.128.23])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id JAA04036
+	for <fvwm-workers@hpc.uh.edu>; Mon, 8 Nov 2004 09:20:35 -0600 (CST)
+Received: from host217-42-103-119.range217-42.btcentralplus.com ([217.42.103.119] helo=edulinux.homeunix.org)
+	by util2.math.uh.edu with esmtp (Exim 4.30)
+	id 1CRBJe-0005wp-Fp
+	for fvwm-workers@fvwm.org; Mon, 08 Nov 2004 09:20:22 -0600
+Received: from station
+	([192.168.0.100] helo=edulinux.homeunix.org ident=mail)
+	by edulinux.homeunix.org with smtp (Exim 4.34)
+	id 1CRBJC-0006rk-7n
+	for fvwm-workers@fvwm.org; Mon, 08 Nov 2004 15:19:54 +0000
+Received: (nullmailer pid 9807 invoked by uid 1000);
+	Mon, 08 Nov 2004 15:19:50 -0000
+Date: Mon, 8 Nov 2004 15:19:50 +0000
+From: Thomas Adam <thomas@edulinux.homeunix.org>
+To: Fvwm Workers <fvwm-workers@fvwm.org>
+Subject: Re: Fvwm Wiki seems to be down
+Message-ID: <20041108151950.GO8271@edulinux.homeunix.org>
+Mail-Followup-To: Thomas Adam <thomas@edulinux.homeunix.org>,
+	Fvwm Workers <fvwm-workers@fvwm.org>
+References: <20041108120944.GB15944@hrz.tu-chemnitz.de>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20041108120944.GB15944@hrz.tu-chemnitz.de>
+X-gazette-tag: Thomas
+X-Linux-Knowledge: I might well be dangerous...
+User-Agent: Mutt/1.5.6+20040818i
+X-Spam-Score: -0.8 (/)
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+On Mon, Nov 08, 2004 at 01:09:44PM +0100, Uwe Pross wrote:
+> Hi there,
+>
+> The URL to the Fvwm Wiki (http://rvb.dyndns.org/FvwmWiki/) results in
+> a 404 error. I have (temporarily) removed the links to this page from
+> the fvwm homepage. Please sent a mail to fvwm-workers when this site
+> is working again.
+
+That's because it is now in active development here:
+
+http://www.fvwmwiki.org
+
+-- Thomas Adam
+
+-- 
+I know nothing, and understand even less.
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Nov  8 09:47:39 2004
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 08 Nov 2004 09:47:39 -0600 (CST)
+Received: from util2.math.uh.edu (util2.math.uh.edu [129.7.128.23])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id JAA04091
+	for <fvwm-workers@hpc.uh.edu>; Mon, 8 Nov 2004 09:47:30 -0600 (CST)
+Received: from util6.math.uh.edu ([129.7.128.34])
+	by util2.math.uh.edu with esmtp (Exim 4.30)
+	id 1CRBjh-0006Nb-FT
+	for fvwm-workers@fvwm.org; Mon, 08 Nov 2004 09:47:17 -0600
+Received: from util6.math.uh.edu (util6.math.uh.edu [127.0.0.1])
+	by util6.math.uh.edu (8.12.11/8.12.5) with ESMTP id iA8FlHfZ010759
+	for <fvwm-workers@fvwm.org>; Mon, 8 Nov 2004 09:47:17 -0600
+Received: (from cvs@localhost)
+	by util6.math.uh.edu (8.12.11/8.12.8/Submit) id iA8FlHpM010758;
+	Mon, 8 Nov 2004 09:47:17 -0600
+Date: Mon, 8 Nov 2004 09:47:17 -0600
+Message-Id: <200411081547.iA8FlHpM010758@util6.math.uh.edu>
+To: fvwm-workers@fvwm.org
+From: FVWM CVS <fvwm-workers@fvwm.org>
+Reply-To: FVWM CVS <fvwm-workers@fvwm.org>
+Subject: CVS uwp fvwm-web: Changed wiki link
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+CVSROOT:	/home/cvs/fvwm
+Module name:	fvwm-web
+Changes by:	uwp	04/11/08 09:47:16
+
+Modified files:
+	.              : ChangeLog index.php links.php 
+
+Log message:
+Changed wiki link
+
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Nov  8 09:49:22 2004
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 08 Nov 2004 09:49:22 -0600 (CST)
+Received: from util2.math.uh.edu (util2.math.uh.edu [129.7.128.23])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id JAA04107
+	for <fvwm-workers@hpc.uh.edu>; Mon, 8 Nov 2004 09:49:09 -0600 (CST)
+Received: from john.hrz.tu-chemnitz.de ([134.109.132.2])
+	by util2.math.uh.edu with esmtp (Exim 4.30)
+	id 1CRBlG-0006PB-Vy
+	for fvwm-workers@fvwm.org; Mon, 08 Nov 2004 09:48:55 -0600
+Received: from herzbube.infotech.tu-chemnitz.de ([134.109.4.37])
+	by john.hrz.tu-chemnitz.de with esmtp (Exim 4.41)
+	id 1CRBlF-0001GP-Vw
+	for fvwm-workers@fvwm.org; Mon, 08 Nov 2004 16:48:54 +0100
+Received: (from uwp@localhost)
+	by herzbube.infotech.tu-chemnitz.de (8.11.7p1+Sun/8.11.6) id iA8Fmrb20734
+	for fvwm-workers@fvwm.org; Mon, 8 Nov 2004 16:48:53 +0100 (MET)
+Date: Mon, 8 Nov 2004 16:48:53 +0100
+From: Uwe Pross <keinFruehstuecksfleisch@gmx.net>
+To: Fvwm Workers <fvwm-workers@fvwm.org>
+Subject: Re: Fvwm Wiki seems to be down
+Message-ID: <20041108154853.GA20700@hrz.tu-chemnitz.de>
+References: <20041108120944.GB15944@hrz.tu-chemnitz.de> <20041108151950.GO8271@edulinux.homeunix.org>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20041108151950.GO8271@edulinux.homeunix.org>
+Organization: TU Chemnitz
+X-Operating-System: SunOS herzbube 5.8 Generic_117000-01 sun4u sparc SUNW,Sun-Blade-1000
+User-Agent: Mutt/1.5.4i
+X-Spam-Score: 0.0 (/)
+X-Spam-Report: --- Start der SpamAssassin 2.64 Textanalyse (0.0 Punkte)
+	Fragen an/questions to:  Postmaster TU Chemnitz <postmaster@tu-chemnitz.de>
+	--- Ende der SpamAssassin Textanalyse
+X-Scan-Signature: fe0f9a1e465c9ea7a797d01aaaa3a8a6
+X-Spam-Score: -4.9 (----)
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Hi there,
+
+On 08 Nov 2004 at 15:19:50 +0000, Thomas Adam wrote:
+
+> That's because it is now in active development here:
+> 
+> http://www.fvwmwiki.org
+
+Good to know. I have updated the links on the fvwm
+homepage.
+
+Cheers, Uwe
+-- 
+  ,_,   For personal reply/mail put "fvwm"
+ (O,O)  in the subject.
+ (   )  Otherwise your mail is discarded by a filter.
+=-"-"-= http://www.tu-chemnitz.de/~uwp
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Nov  8 09:49:50 2004
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 08 Nov 2004 09:49:50 -0600 (CST)
+Received: from util2.math.uh.edu (util2.math.uh.edu [129.7.128.23])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id JAA04124
+	for <fvwm-workers@hpc.uh.edu>; Mon, 8 Nov 2004 09:49:36 -0600 (CST)
+Received: from bcl88.neoplus.adsl.tpnet.pl ([83.27.227.88] helo=itec.com.pl)
+	by util2.math.uh.edu with smtp (Exim 4.30)
+	id 1CRBli-0006P8-5r
+	for fvwm-workers@fvwm.org; Mon, 08 Nov 2004 09:49:22 -0600
+Received: (qmail 20855 invoked by uid 500); 8 Nov 2004 15:49:29 -0000
+Date: Mon, 8 Nov 2004 16:49:28 +0100
+From: Rafal Bisingier <ravbc@man.poznan.pl>
+To: FVWM Workers <fvwm-workers@fvwm.org>
+Subject: Re: FVWM: Matching windows with * in it's name
+Message-ID: <20041108154928.GA14015@localhost>
+Mail-Followup-To: FVWM Workers <fvwm-workers@fvwm.org>
+References: <20041020102726.GA4986@localhost> <Pine.LNX.4.61.0410201911140.18234@Psilocybe.Update.UU.SE> <20041021085840.GB23791@localhost> <20041026081016.GC6793@gmx.de> <20041026122156.GA23821@localhost> <20041026133311.GA4783@SDF.LONESTAR.ORG> <20041106140012.GA5771@localhost> <20041106204228.GA16080@SDF.LONESTAR.ORG>
+Mime-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="VbJkn9YxBvnuCH5J"
+Content-Disposition: inline
+In-Reply-To: <20041106204228.GA16080@SDF.LONESTAR.ORG>
+User-Agent: Mutt/1.4.2.1i
+X-PGP-Key: http://www.man.poznan.pl/~ravbc/pubkey.asc
+X-Spam-Score: -4.9 (----)
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+
+--VbJkn9YxBvnuCH5J
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Sat, Nov 06, 2004 at 08:42:28PM +0000, Mikhael Goikhman wrote:
+> On 06 Nov 2004 15:00:12 +0100, Rafal Bisingier wrote:
+> >=20
+> > On Tue, Oct 26, 2004 at 01:33:11PM +0000, Mikhael Goikhman wrote:
+> > > The first step (that you can do) is to handle the specified doubled c=
+hars
+> > > as escaped char rather than meta-chars in conditions. And implement o=
+ne
+> > > filter "pattern" that quotes variables in order to be used in commands
+> > > that require patterns. I.e. Next ($[w.name:pattern], !Iconified) ...
+> >=20
+> > Ok, so I've done it. Conditional commands now understand doubled '*',
+> > '?' and '|' as escaped chars.
+> > I've made also $[w.name:pattern] filter.
+>=20
+> Hmm, you didn't do what I meant. :)
+>=20
+> I meant a filter that may be applied to any variable, i.e.
+>=20
+>   $[w.iconname:pattern]
+>   $[HOME:pattern]
+>=20
+> This escapes all special chars like "*" to be suitable for conditions.
+
+Well, look's like I haven't understood you indeed.
+And even worse: to get what you've said, much bigger change than I thought =
+is
+needed... :-(
+
+In the meantime I've found a problem with this double char escaping
+algoritm. If we use '**' to get literal match for '*' and '*' to match
+any string, then there is no posibility to match strings like:
+'One*', 'Two*', 'Three*' with a wildcard pattern.
+So I've thought that we should change escaping character to some
+non-special one (eg. '\'), and use '\*' for literal '*' match, and of
+course '\\' for '\'. I know this will add new special character, but I
+don't see any other solution.
+
+> > > If you are at it, you may implement other suggested filters, but plea=
+se
+> > > test this thoroufully if you do it.
+> >=20
+> > I've tested it, and don't see any problems with it.
+>=20
+> I didn't see the whole code, just the diff, but it seems that your
+> $[w.name:pattern] is done incorrectly. IIRC, there should be 2 parts, one
+> that estimates the resulting string length and one that generates the
+> expanded string content. You should not really allocate the string space
+> yourself.
+
+The code for variable expanding is a little strange. There are 2
+functions. One for simple variables (like n), and one expanding extended
+variables (like w.name). First function calls second two times:
+- first it only check output length, and allocates memmory for it
+- at the second call it actually copy output to the allocated memory.
+That's why I decided to use 'static char*' buffer.
+Nevertheless it's not needed there, because we should do filtering in
+another function. ;-)
+
+> For the "pattern" filter you may double the string length as an
+> estimation. But there is no support for filters yet, it should be added.
+>
+> Possible filters would be:
+>=20
+>   $[VAR]             - expanded to: 'My %^&* window'
+>   $[VAR:dquote]      - expanded to: "My %^&* window"
+>   $[VAR:noquote]     - expanded to: My %^&* window
+>   $[VAR:pattern]     - expanded to: 'My %^&** window'
+>   $[VAR:menu]        - expanded to: 'My %%^&* window'
+
+So now I see filter support have to be added first. ;-)
+
+> > > > It'll be good to implement also the proposed syntax for selecting w=
+indow
+> > > > exclusivly by it's class, resource, icon name or title, but I'm not
+> > > > sure if I have enough skill to do it.
+> > > > And there's still a problem with backward compatibility of this new
+> > > > syntax. Can we just leave existing syntax as is, and add only the n=
+ew
+> > > > options? I know it can break backward compatibility in some (I think
+> > > > rare) cases when one want to select window named for ex: "Name" or
+> > > > "Resource", but in this cases there will always be posibility to us=
+e the
+> > > > new option AnyName.
+> > >=20
+> > > I don't think that Name/IconName/Class/Resource/AnyName should be
+> > > done before 2.6.
+> >=20
+> > I suspected you'll say that. I don't think I can do anything to change
+> > this, so maybe from the other side: what is needed to release 2.6? ;-)
+>=20
+> Testing, testing and fixing bugs in the bug system and todo-2.6.
+
+If using current fvwm can be treated as testing, then I do that every
+day... ;-)
+For fixing bugs - I'm afraid my programming skills are insufficient. :-(
+
+> > I'd realy like to see this Name/IconName/Class/Resource/AnyName syntax.
+>=20
+> I want to see it too. But I want to see 2.6 even stronger.
+
+:-)
+
+> I will support inclusion of the patch for these condition options if
+> his authors also does something from todo-2.6.
+
+I understand, and try to do something to speed up 2.6 release... ;-)
+
+--=20
+Rafal Bisingier
+
+--VbJkn9YxBvnuCH5J
+Content-Type: application/pgp-signature
+Content-Disposition: inline
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.6 (GNU/Linux)
+
+iD8DBQFBj5WIMJnHpIMRS0gRArCqAJ431N874D6RfMFf8F9LzcXaSvQxfACfctce
+cC8gdms2j+c/itYo01mUkdM=
+=HGTh
+-----END PGP SIGNATURE-----
+
+--VbJkn9YxBvnuCH5J--
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Nov  8 10:12:13 2004
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 08 Nov 2004 10:12:13 -0600 (CST)
+Received: from util2.math.uh.edu (util2.math.uh.edu [129.7.128.23])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id KAA04212
+	for <fvwm-workers@hpc.uh.edu>; Mon, 8 Nov 2004 10:12:01 -0600 (CST)
+Received: from host217-42-103-119.range217-42.btcentralplus.com ([217.42.103.119] helo=edulinux.homeunix.org)
+	by util2.math.uh.edu with esmtp (Exim 4.30)
+	id 1CRC7Q-0006jO-6y
+	for fvwm-workers@fvwm.org; Mon, 08 Nov 2004 10:11:48 -0600
+Received: from station
+	([192.168.0.100] helo=edulinux.homeunix.org ident=mail)
+	by edulinux.homeunix.org with smtp (Exim 4.34)
+	id 1CRC6x-0007SA-Vc
+	for fvwm-workers@fvwm.org; Mon, 08 Nov 2004 16:11:20 +0000
+Received: (nullmailer pid 10940 invoked by uid 1000);
+	Mon, 08 Nov 2004 16:11:15 -0000
+Date: Mon, 8 Nov 2004 16:11:15 +0000
+From: Thomas Adam <thomas@edulinux.homeunix.org>
+To: Fvwm Workers <fvwm-workers@fvwm.org>
+Subject: Re: Fvwm Wiki seems to be down
+Message-ID: <20041108161115.GP8271@edulinux.homeunix.org>
+Mail-Followup-To: Thomas Adam <thomas@edulinux.homeunix.org>,
+	Fvwm Workers <fvwm-workers@fvwm.org>
+References: <20041108120944.GB15944@hrz.tu-chemnitz.de> <20041108151950.GO8271@edulinux.homeunix.org> <20041108154853.GA20700@hrz.tu-chemnitz.de>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20041108154853.GA20700@hrz.tu-chemnitz.de>
+X-gazette-tag: Thomas
+X-Linux-Knowledge: I might well be dangerous...
+User-Agent: Mutt/1.5.6+20040818i
+X-Spam-Score: -0.8 (/)
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+On Mon, Nov 08, 2004 at 04:48:53PM +0100, Uwe Pross wrote:
+> Good to know. I have updated the links on the fvwm homepage.
+
+While you're on the topic of updating links, I noticed that the page
+referenced to "Glen Lee Edwards" is dead. Some gooling revealed his page
+to now be here:
+
+http://research.cmis.csiro.au/gjw/xwindows/
+
+I quite like this page -- he has to be the only user of Fvwm to make use
+of all ten buttons on the title bar. :) Very colourful.
+
+-- Thomas Adam
+
+-- 
+I know nothing, and understand even less.
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Nov  8 10:26:55 2004
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 08 Nov 2004 10:26:55 -0600 (CST)
+Received: from util2.math.uh.edu (util2.math.uh.edu [129.7.128.23])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id KAA04248
+	for <fvwm-workers@hpc.uh.edu>; Mon, 8 Nov 2004 10:26:45 -0600 (CST)
+Received: from util6.math.uh.edu ([129.7.128.34])
+	by util2.math.uh.edu with esmtp (Exim 4.30)
+	id 1CRCLe-0006we-Gw
+	for fvwm-workers@fvwm.org; Mon, 08 Nov 2004 10:26:30 -0600
+Received: from util6.math.uh.edu (util6.math.uh.edu [127.0.0.1])
+	by util6.math.uh.edu (8.12.11/8.12.5) with ESMTP id iA8GQU31002575
+	for <fvwm-workers@fvwm.org>; Mon, 8 Nov 2004 10:26:30 -0600
+Received: (from cvs@localhost)
+	by util6.math.uh.edu (8.12.11/8.12.8/Submit) id iA8GQUOV002574;
+	Mon, 8 Nov 2004 10:26:30 -0600
+Date: Mon, 8 Nov 2004 10:26:30 -0600
+Message-Id: <200411081626.iA8GQUOV002574@util6.math.uh.edu>
+To: fvwm-workers@fvwm.org
+From: FVWM CVS <fvwm-workers@fvwm.org>
+Reply-To: FVWM CVS <fvwm-workers@fvwm.org>
+Subject: CVS uwp fvwm-web: Changed link to Glen
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+CVSROOT:	/home/cvs/fvwm
+Module name:	fvwm-web
+Changes by:	uwp	04/11/08 10:26:30
+
+Modified files:
+	.              : ChangeLog links.php 
+
+Log message:
+Changed link to Glen
+
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Nov  8 10:27:54 2004
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 08 Nov 2004 10:27:54 -0600 (CST)
+Received: from util2.math.uh.edu (util2.math.uh.edu [129.7.128.23])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id KAA04264
+	for <fvwm-workers@hpc.uh.edu>; Mon, 8 Nov 2004 10:27:41 -0600 (CST)
+Received: from john.hrz.tu-chemnitz.de ([134.109.132.2])
+	by util2.math.uh.edu with esmtp (Exim 4.30)
+	id 1CRCMZ-0006xM-Fe
+	for fvwm-workers@fvwm.org; Mon, 08 Nov 2004 10:27:27 -0600
+Received: from herzbube.infotech.tu-chemnitz.de ([134.109.4.37])
+	by john.hrz.tu-chemnitz.de with esmtp (Exim 4.41)
+	id 1CRCMY-0004gf-F9
+	for fvwm-workers@fvwm.org; Mon, 08 Nov 2004 17:27:26 +0100
+Received: (from uwp@localhost)
+	by herzbube.infotech.tu-chemnitz.de (8.11.7p1+Sun/8.11.6) id iA8GRQl21529
+	for fvwm-workers@fvwm.org; Mon, 8 Nov 2004 17:27:26 +0100 (MET)
+Date: Mon, 8 Nov 2004 17:27:26 +0100
+From: Uwe Pross <keinFruehstuecksfleisch@gmx.net>
+To: Fvwm Workers <fvwm-workers@fvwm.org>
+Subject: Re: Fvwm Wiki seems to be down
+Message-ID: <20041108162726.GA21444@hrz.tu-chemnitz.de>
+References: <20041108120944.GB15944@hrz.tu-chemnitz.de> <20041108151950.GO8271@edulinux.homeunix.org> <20041108154853.GA20700@hrz.tu-chemnitz.de> <20041108161115.GP8271@edulinux.homeunix.org>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20041108161115.GP8271@edulinux.homeunix.org>
+Organization: TU Chemnitz
+X-Operating-System: SunOS herzbube 5.8 Generic_117000-01 sun4u sparc SUNW,Sun-Blade-1000
+User-Agent: Mutt/1.5.4i
+X-Spam-Score: 0.0 (/)
+X-Spam-Report: --- Start der SpamAssassin 2.64 Textanalyse (0.0 Punkte)
+	Fragen an/questions to:  Postmaster TU Chemnitz <postmaster@tu-chemnitz.de>
+	--- Ende der SpamAssassin Textanalyse
+X-Scan-Signature: 8a8fa125b9cc748093f12ed7809f170b
+X-Spam-Score: -4.9 (----)
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Hi there,
+
+On 08 Nov 2004 at 16:11:15 +0000, Thomas Adam wrote:
+
+> While you're on the topic of updating links, I noticed
+> that the page referenced to "Glen Lee Edwards" is dead.
+> Some gooling revealed his page to now be here:
+> 
+> http://research.cmis.csiro.au/gjw/xwindows/
+
+Thanks for the hint. I have changed the link.
+
+Cheers, Uwe
+-- 
+  ,_,   For personal reply/mail put "fvwm"
+ (O,O)  in the subject.
+ (   )  Otherwise your mail is discarded by a filter.
+=-"-"-= http://www.tu-chemnitz.de/~uwp
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Nov  8 22:15:33 2004
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 08 Nov 2004 22:15:33 -0600 (CST)
+Received: from util2.math.uh.edu (util2.math.uh.edu [129.7.128.23])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id WAA07287
+	for <fvwm-workers@hpc.uh.edu>; Mon, 8 Nov 2004 22:15:22 -0600 (CST)
+Received: from baidcd02163.bai.ne.jp ([220.208.33.99] helo=alpenantique.com)
+	by util2.math.uh.edu with smtp (Exim 4.30)
+	id 1CRNPQ-0008I7-8K
+	for fvwm-workers@fvwm.org; Mon, 08 Nov 2004 22:15:09 -0600
+Date: Tue, 09 Nov 2004 08:12:02 +0000
+From: "Alpen-Antique recruitment (Australian job opportunities)" <info@alpenantique.com>
+Subject: Alpen-Antique recruitment (Australian job opportunities)
+To: fvwm-workers <fvwm-workers@fvwm.org>
+References: <KJ0198E94HD6ILL8@fvwm.org>
+In-Reply-To: <KJ0198E94HD6ILL8@fvwm.org>
+Message-ID: <EHH6KIEJB6CHEF4C@alpenantique.com>
+Reply-To: "Alpen-Antique recruitment (Australian job opportunities)" <info@alpenantique.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Score: 1.9 (+)
+X-Spam-Report: SpamAssassin (2.61 1.212.2.1-2003-12-09-exp) analysis follows
+	-0.0 BAYES_44               BODY: Bayesian spam probability is 44 to 50%
+	[score: 0.4643]
+	1.9 DATE_IN_FUTURE_03_06   Date: is 3 to 6 hours after Received: date
+	-0.0 AWL                    AWL: Auto-whitelist adjustment
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Dear Mr/Mrs,
+
+Alpen-Antique GmbH was founded in 1896 year and since that time our company
+successfully participated in antique items distribution all over the Central
+Europe. After opening our website our goods became subject of new customers?
+interest from all over the world, especially from Australia and New Zealand.
+
+We started new campaign selling our goods on-line, but we faced new difficulties
+connected with payment delivery delays to our account, because of international
+wire transfers usual 5 business days delay. A decision was made to hire sales
+representatives capable to receiving payments from the same area where are
+the customers located.
+At this moment we run sales representatives hiring campaign and are glad
+to propose you this position. You?re welcome to be our representative. Please
+visit our webpage www.alpenantique.com/partner.htm describing all aspects
+of this opportunity and if you?re interested - please send us an email to
+job@alpenantique.com and you will be sent an application form. If you have
+any additional questions - don?t hesitate to contact us at info@alpenantique.com
+and we?ll try to help you for sure.
+
+Best regards,
+Karl Schallmeiner,
+Alpen-Antique GmbH
+job@alpenantique.com
+
+
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Tue Nov  9 02:35:34 2004
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 09 Nov 2004 02:35:34 -0600 (CST)
+Received: from util2.math.uh.edu (util2.math.uh.edu [129.7.128.23])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id CAA08303
+	for <fvwm-workers@hpc.uh.edu>; Tue, 9 Nov 2004 02:35:24 -0600 (CST)
+Received: from util6.math.uh.edu ([129.7.128.34])
+	by util2.math.uh.edu with esmtp (Exim 4.30)
+	id 1CRRT5-0001rR-SK
+	for fvwm-workers@fvwm.org; Tue, 09 Nov 2004 02:35:11 -0600
+Received: from util6.math.uh.edu (util6.math.uh.edu [127.0.0.1])
+	by util6.math.uh.edu (8.12.11/8.12.5) with ESMTP id iA98ZA4d010576
+	for <fvwm-workers@fvwm.org>; Tue, 9 Nov 2004 02:35:11 -0600
+Received: (from cvs@localhost)
+	by util6.math.uh.edu (8.12.11/8.12.8/Submit) id iA98ZANx010575;
+	Tue, 9 Nov 2004 02:35:10 -0600
+Date: Tue, 9 Nov 2004 02:35:10 -0600
+Message-Id: <200411090835.iA98ZANx010575@util6.math.uh.edu>
+To: fvwm-workers@fvwm.org
+From: FVWM CVS <fvwm-workers@fvwm.org>
+Reply-To: FVWM CVS <fvwm-workers@fvwm.org>
+Subject: CVS uwp fvwm-web: Added screenshot of Chris Debenham
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+CVSROOT:	/home/cvs/fvwm
+Module name:	fvwm-web
+Changes by:	uwp	04/11/09 02:35:09
+
+Modified files:
+	.              : ChangeLog 
+	screenshots/desktops: screenshot_db.inc 
+
+Log message:
+Added screenshot of Chris Debenham
+
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Tue Nov  9 02:37:16 2004
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 09 Nov 2004 02:37:16 -0600 (CST)
+Received: from util2.math.uh.edu (util2.math.uh.edu [129.7.128.23])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id CAA08339
+	for <fvwm-workers@hpc.uh.edu>; Tue, 9 Nov 2004 02:37:06 -0600 (CST)
+Received: from util6.math.uh.edu ([129.7.128.34])
+	by util2.math.uh.edu with esmtp (Exim 4.30)
+	id 1CRRUj-0001ss-Qq
+	for fvwm-workers@fvwm.org; Tue, 09 Nov 2004 02:36:53 -0600
+Received: from util6.math.uh.edu (util6.math.uh.edu [127.0.0.1])
+	by util6.math.uh.edu (8.12.11/8.12.5) with ESMTP id iA98ars2011605
+	for <fvwm-workers@fvwm.org>; Tue, 9 Nov 2004 02:36:53 -0600
+Received: (from cvs@localhost)
+	by util6.math.uh.edu (8.12.11/8.12.8/Submit) id iA98arfr011604;
+	Tue, 9 Nov 2004 02:36:53 -0600
+Date: Tue, 9 Nov 2004 02:36:53 -0600
+Message-Id: <200411090836.iA98arfr011604@util6.math.uh.edu>
+To: fvwm-workers@fvwm.org
+From: FVWM CVS <fvwm-workers@fvwm.org>
+Reply-To: FVWM CVS <fvwm-workers@fvwm.org>
+Subject: CVS uwp fvwm-web: 
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+CVSROOT:	/home/cvs/fvwm
+Module name:	fvwm-web
+Changes by:	uwp	04/11/09 02:36:53
+
+fvwm-web/screenshots/desktops/Chris_Debenham-1400x1050
+
+Update of /home/cvs/fvwm/fvwm-web/screenshots/desktops/Chris_Debenham-1400x1050
+In directory util6.math.uh.edu:/tmp/cvs-serv11595/screenshots/desktops/Chris_Debenham-1400x1050
+
+Log Message:
+Directory /home/cvs/fvwm/fvwm-web/screenshots/desktops/Chris_Debenham-1400x1050 added to the repository
+
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Tue Nov  9 02:37:53 2004
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 09 Nov 2004 02:37:53 -0600 (CST)
+Received: from util2.math.uh.edu (util2.math.uh.edu [129.7.128.23])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id CAA08355
+	for <fvwm-workers@hpc.uh.edu>; Tue, 9 Nov 2004 02:37:43 -0600 (CST)
+Received: from util6.math.uh.edu ([129.7.128.34])
+	by util2.math.uh.edu with esmtp (Exim 4.30)
+	id 1CRRVL-0001tL-0k
+	for fvwm-workers@fvwm.org; Tue, 09 Nov 2004 02:37:31 -0600
+Received: from util6.math.uh.edu (util6.math.uh.edu [127.0.0.1])
+	by util6.math.uh.edu (8.12.11/8.12.5) with ESMTP id iA98bU0X012048
+	for <fvwm-workers@fvwm.org>; Tue, 9 Nov 2004 02:37:30 -0600
+Received: (from cvs@localhost)
+	by util6.math.uh.edu (8.12.11/8.12.8/Submit) id iA98bU6t012047;
+	Tue, 9 Nov 2004 02:37:30 -0600
+Date: Tue, 9 Nov 2004 02:37:30 -0600
+Message-Id: <200411090837.iA98bU6t012047@util6.math.uh.edu>
+To: fvwm-workers@fvwm.org
+From: FVWM CVS <fvwm-workers@fvwm.org>
+Reply-To: FVWM CVS <fvwm-workers@fvwm.org>
+Subject: CVS uwp fvwm-web: Added screenshot of Chris Debenham (and screenshot files)
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+CVSROOT:	/home/cvs/fvwm
+Module name:	fvwm-web
+Changes by:	uwp	04/11/09 02:37:30
+
+Added files:
+	screenshots/desktops/Chris_Debenham-1400x1050: descrition.inc 
+	                                               preview.gif 
+	                                               screenshot.jpg 
+
+Log message:
+Added screenshot of Chris Debenham (and screenshot files)
+
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Nov 22 12:13:32 2004
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 22 Nov 2004 12:13:32 -0600 (CST)
+Received: from util2.math.uh.edu (util2.math.uh.edu [129.7.128.23])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id MAA21154
+	for <fvwm-workers@hpc.uh.edu>; Mon, 22 Nov 2004 12:13:18 -0600 (CST)
+Received: from mailout01.sul.t-online.com ([194.25.134.80])
+	by util2.math.uh.edu with esmtp (Exim 4.30)
+	id 1CWIgP-0005eR-HS
+	for fvwm-workers@fvwm.org; Mon, 22 Nov 2004 12:13:01 -0600
+Received: from sfwd00.aul.t-online.de 
+	by mailout01.sul.t-online.com with smtp 
+	id 1CWIgI-0004WA-01; Mon, 22 Nov 2004 19:12:54 +0100
+Received: from [192.168.1.10] (SmC7fYZCZecmxEGWUiYdpD3XRT-P+X3BcqX-ju+-7QmND7baSNGcwi@[80.146.104.46]) by sfwd00.sul.t-online.de
+	with esmtp id 1CWIg0-0HwZsW0; Mon, 22 Nov 2004 19:12:36 +0100
+Message-ID: <41A22C14.1040408@t-online.de>
+Date: Mon, 22 Nov 2004 19:12:36 +0100
+From: "Harald Dunkel" <harald.dunkel@t-online.de>
+User-Agent: Mozilla Thunderbird 0.9 (X11/20041120)
+X-Accept-Language: en-us, en
+MIME-Version: 1.0
+To: fvwm-workers@fvwm.org
+Subject: patch for gdk-imlib 1.9
+Content-Type: multipart/mixed;
+ boundary="------------000206060601000403020502"
+X-ID: SmC7fYZCZecmxEGWUiYdpD3XRT-P+X3BcqX-ju+-7QmND7baSNGcwi
+X-TOI-MSGID: 68000b03-1462-4ce1-8998-5bfd87748da6
+X-Spam-Score: -4.7 (----)
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+This is a multi-part message in MIME format.
+--------------000206060601000403020502
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
+
+Hi folks,
+
+Attached you can find a patch for fvwm to make configure detect 
+gdk-imlib 1.9.14. I can't verify it with an older version of
+gdk-imlib, but since no source file in the current snapshot
+includes Imlib.h, I would assume it is safe.
+
+The change requires to rebuild configure.
+
+
+Regards
+
+Harri
+
+--------------000206060601000403020502
+Content-Type: text/plain;
+ name="fvwm.patch4gdk1.9"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline;
+ filename="fvwm.patch4gdk1.9"
+
+--- acinclude.m4~	2004-07-08 13:00:02.000000000 +0200
++++ acinclude.m4	2004-11-22 18:57:48.157582568 +0100
+@@ -573,7 +573,7 @@
+       AC_TRY_RUN([
+ #include <stdio.h>
+ #include <stdlib.h>
+-#include <Imlib.h>
++#include <gdk_imlib.h>
+ 
+ ImlibImage testimage;
+ 
+@@ -632,7 +632,7 @@
+           LIBS="$LIBS $IMLIB_LIBS"
+           AC_TRY_LINK([
+ #include <stdio.h>
+-#include <Imlib.h>
++#include <gdk_imlib.h>
+ ],      [ return 0; ],
+         [ echo "*** The test program compiled, but did not run. This usually means"
+           echo "*** that the run-time linker is not finding IMLIB or finding the wrong"
+@@ -712,7 +712,6 @@
+       AC_TRY_RUN([
+ #include <stdio.h>
+ #include <stdlib.h>
+-#include <Imlib.h>
+ #include <gdk_imlib.h>
+ 
+ /* migo: originally it was GdkImLibColor with incorrect spelling */
+@@ -778,7 +777,6 @@
+           LIBS="$LIBS $GDK_IMLIB_LIBS"
+           AC_TRY_LINK([
+ #include <stdio.h>
+-#include <Imlib.h>
+ #include <gdk_imlib.h>
+ ],      [ return 0; ],
+         [                 (echo "*** The test program compiled, but did not run. This usually means" >&5) 2>/dev/null || \
+
+--------------000206060601000403020502--
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Thu Nov 25 20:49:26 2004
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Thu, 25 Nov 2004 20:49:26 -0600 (CST)
+Received: from util2.math.uh.edu (util2.math.uh.edu [129.7.128.23])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id UAA08776
+	for <fvwm-workers@hpc.uh.edu>; Thu, 25 Nov 2004 20:49:14 -0600 (CST)
+Received: from [209.130.178.134] (helo=MPADC.mpa.ads)
+	by util2.math.uh.edu with esmtp (Exim 4.30)
+	id 1CXWAH-00049x-4f
+	for fvwm-workers@fvwm.org; Thu, 25 Nov 2004 20:48:53 -0600
+Received: from maxspeed.com.cn ([211.152.148.195]) by MPADC.mpa.ads with Microsoft SMTPSVC(5.0.2195.6713);
+	 Thu, 25 Nov 2004 18:48:18 -0800
+Received: from [192.168.88.173] [211.148.0.237] by maxspeed.com.cn
+  (SMTPD32-8.05) id AA4B1061014C; Fri, 26 Nov 2004 10:51:55 +0800
+X-MSReally-From: sun.david@maxspeed.com.cn
+Subject: Please Help on Customizing Start-Menu
+From: David Sun <sun.david@maxspeed.com.cn>
+To: fvwm-workers@fvwm.org
+Content-Type: text/plain
+Organization: 
+Message-Id: <1101437514.6535.8.camel@outfox>
+Mime-Version: 1.0
+X-Mailer: Ximian Evolution 1.2.2 (1.2.2-4) 
+Date: 26 Nov 2004 10:51:54 +0800
+Content-Transfer-Encoding: 7bit
+X-OriginalArrivalTime: 26 Nov 2004 02:48:21.0142 (UTC) FILETIME=[64037360:01C4D362]
+X-Spam-Score: -4.3 (----)
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Hi all
+I'm planning to customize the Start Menu on the taskbar based on fvwm
+2.4.18.The thing I would like to do is:
+
+when people left-mouse-click on the Start Menu, fvwm will look for
+certain place on local disk for some certain files, and spawn the menu
+on the fly according to the lookup result.
+
+Could you please advise which files/functions I should look into? And
+how can I look into a running FVWM for what call-chains are performed
+when certain event happens? The more detailed is more appreciated^_^
+
+thanks for your help
+David Sun
+
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Fri Nov 26 20:37:04 2004
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Fri, 26 Nov 2004 20:37:04 -0600 (CST)
+Received: from util2.math.uh.edu (util2.math.uh.edu [129.7.128.23])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id UAA14648
+	for <fvwm-workers@hpc.uh.edu>; Fri, 26 Nov 2004 20:36:22 -0600 (CST)
+Received: from dane-2.cc.telcordia.com ([128.96.196.27])
+	by util2.math.uh.edu with esmtp (Exim 4.30)
+	id 1CXsHY-0006tB-CU
+	for fvwm-workers@fvwm.org; Fri, 26 Nov 2004 20:25:52 -0600
+Received: from dane-2.cc.telcordia.com (localhost.localdomain [127.0.0.1])
+	by dane-2.cc.telcordia.com (8.12.11/8.12.11) with ESMTP id iAR2OUVN024116
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=NO);
+	Fri, 26 Nov 2004 21:24:30 -0500
+Received: from dane-2.cc.telcordia.com (dane@localhost)
+	by dane-2.cc.telcordia.com (8.12.11/8.12.11/Submit) with ESMTP id iAR2OKmG024110;
+	Fri, 26 Nov 2004 21:24:30 -0500
+Message-Id: <200411270224.iAR2OKmG024110@dane-2.cc.telcordia.com>
+To: queen3@tut.by
+cc: fvwm-workers@fvwm.org
+Subject: bug report FvwmForm non-reproducible
+Mime-Version: 1.0 (generated by tm-edit 1.8)
+Content-Type: text/plain; charset=US-ASCII
+Date: Fri, 26 Nov 2004 21:24:20 -0500
+From: Dan Espen <dane@mk.telcordia.com>
+X-Spam-Score: -4.9 (----)
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+
+I've moved this problem to "unreproducible".
+The action with the button not activating is a feature.
+Using the Form FvwmForm-Defaults, you can change buttons
+so they activate on a press.
+
+I could not reproduce the button with two labels.
+
+If you have questions about this, respond to fvwm-workers.
+
+Bug report:
+
+Full_Name: Sergey Prohorenko
+Version: 2.5.7
+CVS_Date: 
+OS: Debian Unstable
+X_Server: x-window-system_4.2.1-12.1
+Submission from: (NULL) (212.44.95.112)
+
+
+The form is called using:
+*FvwmButtons(1x1, Title Logout, Icon 48x48-gnome/window-destroy.xpm, Action
+`Module FvwmForm FvwmForm-QuitVerify`) 
+(Using modified Debian-blue setup from
+http://themes.freshmeat.net/projects/debian-blue/?topic_id=929)
+
+So, after QuitVerify form appears, I press any button (Logout for example)
+with left mouse button and then, not releasing it, move mouse cursor
+outside the form button. And when it returns to "unpressed" state, text on
+it becomes distorted, as if the old one hasn't been cleared. That is, two
+labels, one on top of the other, are displayed.
+I did not test it with other FvwmForm forms/buttons.
+
+fvwm 2.5.7 is self-compiled using hand-tuned debian build rules (just some
+minor tweaking).
+
+-- 
+Dan Espen                               E-mail: dane@mk.telcordia.com
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Fri Nov 26 20:37:11 2004
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Fri, 26 Nov 2004 20:37:11 -0600 (CST)
+Received: from util2.math.uh.edu (util2.math.uh.edu [129.7.128.23])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id UAA14680
+	for <fvwm-workers@hpc.uh.edu>; Fri, 26 Nov 2004 20:36:44 -0600 (CST)
+Received: from dane-2.cc.telcordia.com ([128.96.196.27])
+	by util2.math.uh.edu with esmtp (Exim 4.30)
+	id 1CXsRn-0006xl-CL
+	for fvwm-workers@fvwm.org; Fri, 26 Nov 2004 20:36:27 -0600
+Received: from dane-2.cc.telcordia.com (localhost.localdomain [127.0.0.1])
+	by dane-2.cc.telcordia.com (8.12.11/8.12.11) with ESMTP id iAR2Z6Ax024638
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=NO);
+	Fri, 26 Nov 2004 21:35:06 -0500
+Received: from dane-2.cc.telcordia.com (dane@localhost)
+	by dane-2.cc.telcordia.com (8.12.11/8.12.11/Submit) with ESMTP id iAR2Z6Hw024632;
+	Fri, 26 Nov 2004 21:35:06 -0500
+Message-Id: <200411270235.iAR2Z6Hw024632@dane-2.cc.telcordia.com>
+To: Emmanuel.Thome+bugzilla@loria.fr
+cc: fvwm-workers@fvwm.org
+Subject: Fvwm bug 1135 keysym documentation, not a bug
+Mime-Version: 1.0 (generated by tm-edit 1.8)
+Content-Type: text/plain; charset=US-ASCII
+Date: Fri, 26 Nov 2004 21:35:06 -0500
+From: Dan Espen <dane@mk.telcordia.com>
+X-Spam-Score: -4.9 (----)
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+
+I've closed this problem as "not a bug".
+
+
+I found this comment in the keysymdef.h from the current Xorg release:
+
+
+! The definitions here should match <X11/XF86keysym.h>
+XF86AudioLowerVolume	:1008FF11
+
+
+Therefore I am closing this problem.  The header file should be
+updated, not the Fvwm man page.
+
+
+Date: Fri, 13 Feb 2004 03:37:32 -0600
+From: Emmanuel.Thome+bugzilla@loria.fr
+To: fvwm-bug@fvwm.org
+Subject: XF86 custom keysyms are also usable
+
+Full_Name: Emmanuel Thom..
+Version: 2.4.x and 2.5.x
+CVS_Date: 
+OS: fedora core 1, kernel 2.6
+X_Server: XFree86 4.3
+Submission from: (NULL) (152.81.8.127)
+
+
+Excerpt from the fvwm man page:
+
+Key Keyname Context Modifiers Function
+       [...]
+       The Keyname is one of the entries from
+/usr/include/X11/keysymdef.h,
+       with the leading XK_ omitted.
+       [...]
+
+This is correct, but under XFree86, it turns out that the XF86
+vendor-specific keysyms also work. These are defined in
+/usr/include/X11/XF86keysym.h (or, as far as Xlib is concerned, in
+/usr/X11R6/lib/X11/XKeysymDB). For example, I have successfully set up the
+following binding:
+
+Key XF86AudioLowerVolume        A A Function MMK "AudioLowerVolume"
+
+This means that when you read along the lines of XF86keysym.h,
+XF86XK_AudioLowerVolume should really be read as XF86AudioLowerVolume ; the
+XK_ prefix isn't in XKeysymDB.
+
+Of course, this is only possibly useful if the running X server does
+generate such keysyms, which require some configuration work.
+
+In short, I suggest augmenting the quoted sentence above by  the
+following:
+
+        Under XFree86, you can also use any of the keysyms listed in
+        /usr/X11R6/lib/X11/XKeysymDB. You are responsible of having your X
+        server generating such events.
+
+-- 
+Dan Espen                               E-mail: dane@mk.telcordia.com
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Nov 29 02:37:54 2004
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 29 Nov 2004 02:37:54 -0600 (CST)
+Received: from util2.math.uh.edu (util2.math.uh.edu [129.7.128.23])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id CAA28263
+	for <fvwm-workers@hpc.uh.edu>; Mon, 29 Nov 2004 02:37:41 -0600 (CST)
+Received: from [209.130.178.134] (helo=MPADC.mpa.ads)
+	by util2.math.uh.edu with esmtp (Exim 4.30)
+	id 1CYh20-00064y-NY
+	for fvwm-workers@fvwm.org; Mon, 29 Nov 2004 02:37:12 -0600
+Received: from maxspeed.com.cn ([211.152.148.195]) by MPADC.mpa.ads with Microsoft SMTPSVC(5.0.2195.6713);
+	 Mon, 29 Nov 2004 00:36:39 -0800
+Received: from [192.168.88.173] [211.148.0.237] by maxspeed.com.cn
+  (SMTPD32-8.05) id A07712A9014E; Mon, 29 Nov 2004 16:40:23 +0800
+X-MSReally-From: sun.david@maxspeed.com.cn
+Subject: Re: Please Help on Customizing Start-Menu
+From: David Sun <sun.david@maxspeed.com.cn>
+To: fvwm-workers@fvwm.org
+In-Reply-To: <20041128172357.GA15125@gmx.de>
+References: <1101437514.6535.8.camel@outfox> <20041128172357.GA15125@gmx.de>
+Content-Type: text/plain; charset=GB18030
+Organization: 
+Message-Id: <1101717621.2816.8.camel@outfox>
+Mime-Version: 1.0
+X-Mailer: Ximian Evolution 1.2.2 (1.2.2-4) 
+Date: 29 Nov 2004 16:40:21 +0800
+Content-Transfer-Encoding: 8bit
+X-OriginalArrivalTime: 29 Nov 2004 08:36:39.0457 (UTC) FILETIME=[8B9E8110:01C4D5EE]
+X-Spam-Score: -4.5 (----)
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Hi Dominik
+ÔÚ 2004-11-29 Ò» µÄ 01:23£¬ Dominik Vogt Ð´µÀ£º
+> On Fri, Nov 26, 2004 at 10:51:54AM +0800, David Sun wrote:
+> > Hi all
+> > I'm planning to customize the Start Menu on the taskbar based on fvwm
+> > 2.4.18.The thing I would like to do is:
+> > 
+> > when people left-mouse-click on the Start Menu, fvwm will look for
+> > certain place on local disk for some certain files, and spawn the menu
+> > on the fly according to the lookup result.
+> > 
+> > Could you please advise which files/functions I should look into?
+> 
+> Take a look at the DynamicPopUpAction menu option and the
+> fvwm-menu-directory script.
+thanks for your advice, unfortuantely, my target machine is too
+size-limited to have perl. I have achieved the purpose by playing with
+the FvwmTaskBar code which get called when the "Start" button is pressed
+> 
+> > And
+> > how can I look into a running FVWM for what call-chains are performed
+> > when certain event happens? The more detailed is more appreciated^_^
+> 
+> You can attach a debugger to the running fvwm process from a
+> console or a second X server (*not* from the X server running
+> fvwm).  With gdb:
+> 
+>   $ gdb fvwm <processid>
+> 
+> Ciao
+> 
+> Dominik ^_^  ^_^
+> 
+>  --
+> Dominik Vogt, dominik.vogt@gmx.de
+
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Nov 29 03:38:58 2004
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 29 Nov 2004 03:38:58 -0600 (CST)
+Received: from util2.math.uh.edu (util2.math.uh.edu [129.7.128.23])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id DAA28439
+	for <fvwm-workers@hpc.uh.edu>; Mon, 29 Nov 2004 03:38:45 -0600 (CST)
+Received: from macker.loria.fr ([152.81.1.70])
+	by util2.math.uh.edu with esmtp (Exim 4.30)
+	id 1CYhzJ-0006bU-Fr
+	for fvwm-workers@fvwm.org; Mon, 29 Nov 2004 03:38:29 -0600
+Received: from localhost.loria.fr (localhost [127.0.0.1])
+	by localhost (Postfix) with ESMTP id 0A80F4803D;
+	Mon, 29 Nov 2004 10:37:54 +0100 (CET)
+X-Amavix: Anti-virus check done by ClamAV
+X-Amavix: Scanned by Amavix
+Received: from tate.loria.fr (tate.loria.fr [152.81.8.127])
+	by macker.loria.fr (Postfix) with ESMTP id C2CB549D3A;
+	Mon, 29 Nov 2004 10:34:27 +0100 (CET)
+Received: from tate.loria.fr (localhost.localdomain [127.0.0.1])
+	by tate.loria.fr (8.13.1/8.12.11) with ESMTP id iAT9YHow005154;
+	Mon, 29 Nov 2004 10:34:17 +0100
+Received: (from thome@localhost)
+	by tate.loria.fr (8.13.1/8.13.1/Submit) id iAT9YGYN005153;
+	Mon, 29 Nov 2004 10:34:16 +0100
+Date: Mon, 29 Nov 2004 10:34:16 +0100
+From: Emmanuel =?iso-8859-1?Q?Thom=E9?= <Emmanuel.Thome+bugzilla@loria.fr>
+To: Dan Espen <dane@mk.telcordia.com>
+Cc: fvwm-workers@fvwm.org
+Subject: Re: Fvwm bug 1135 keysym documentation, not a bug
+Message-ID: <20041129093416.GB4603@tate.loria.fr>
+References: <200411270235.iAR2Z6Hw024632@dane-2.cc.telcordia.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <200411270235.iAR2Z6Hw024632@dane-2.cc.telcordia.com>
+User-Agent: Mutt/1.5.4i
+X-Spam-Score: -4.9 (----)
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+On Fri, Nov 26, 2004 at 09:35:06PM -0500, Dan Espen wrote:
+> I've closed this problem as "not a bug".
+
+you seem to miss the point.
+
+> I found this comment in the keysymdef.h from the current Xorg release:
+> 
+> ! The definitions here should match <X11/XF86keysym.h>
+> XF86AudioLowerVolume	:1008FF11
+
+This can't be in keysymdef.h ; it's in XKeysymDB. XKeysymDB is a better
+reference to look into, IMHO, when looking for keysyms.
+
+The point is that not only the entries from keysymdef.h can be used, but
+also those from XF86keysym.h (with XK_ stripped out in the middle) ; The
+alternative I suggest is to direct the user to XKeysymDB instead, which
+contains all possible keysyms with correct spelling.
+
+Note that as the man page currently contains no reference to XKeysymDB,
+it's not obvious that one should look into it.
+
+E.
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Nov 29 05:49:13 2004
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 29 Nov 2004 05:49:13 -0600 (CST)
+Received: from util2.math.uh.edu (util2.math.uh.edu [129.7.128.23])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id FAA28697
+	for <fvwm-workers@hpc.uh.edu>; Mon, 29 Nov 2004 05:49:00 -0600 (CST)
+Received: from dane-2.cc.telcordia.com ([128.96.196.27])
+	by util2.math.uh.edu with esmtp (Exim 4.30)
+	id 1CYk1K-00080z-Tp
+	for fvwm-workers@fvwm.org; Mon, 29 Nov 2004 05:48:42 -0600
+Received: from dane-2.cc.telcordia.com (localhost.localdomain [127.0.0.1])
+	by dane-2.cc.telcordia.com (8.12.11/8.12.11) with ESMTP id iATBlJ5S007722
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=NO);
+	Mon, 29 Nov 2004 06:47:19 -0500
+Received: from dane-2.cc.telcordia.com (dane@localhost)
+	by dane-2.cc.telcordia.com (8.12.11/8.12.11/Submit) with ESMTP id iATBlGBq007716;
+	Mon, 29 Nov 2004 06:47:16 -0500
+Message-Id: <200411291147.iATBlGBq007716@dane-2.cc.telcordia.com>
+To: Emmanuel Thomé <Emmanuel.Thome+bugzilla@loria.fr>
+cc: fvwm-workers@fvwm.org
+Subject: Re: Fvwm bug 1135 keysym documentation, not a bug 
+In-reply-to: Your message of Mon, 29 Nov 2004 10:34:16 +0100.
+             <20041129093416.GB4603@tate.loria.fr> 
+x-face: H2G63xNIQ1G~92=">,W';}5I'2EN+pvbeFK2U`LLazP;W3/AU'795C^6M1;wX3''q-~||]i =q\|l:fMk^4zF@^JHkw75M~[d)NKA},lfIOD=B'QWUuv_7Pu+j*']@]x]y'(Eyh}IAEhQDV@tJ?\E" <=..HSTdYCt'DevYza*qnf_0?9qelUgqeJkJA'7Zr<-NU
+Mime-Version: 1.0 (generated by tm-edit 1.8)
+Content-Type: text/plain; charset=ISO-8859-1
+Date: Mon, 29 Nov 2004 06:47:16 -0500
+From: Dan Espen <dane@mk.telcordia.com>
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Score: -4.9 (----)
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Emmanuel Thom=E9 <Emmanuel.Thome+bugzilla@loria.fr> writes:
+> On Fri, Nov 26, 2004 at 09:35:06PM -0500, Dan Espen wrote:
+> > I've closed this problem as "not a bug".
+> =
+
+> you seem to miss the point.
+> =
+
+> > I found this comment in the keysymdef.h from the current Xorg release=
+:
+> > =
+
+> > ! The definitions here should match <X11/XF86keysym.h>
+> > XF86AudioLowerVolume	:1008FF11
+> =
+
+> This can't be in keysymdef.h ; it's in XKeysymDB. XKeysymDB is a better=
+
+> reference to look into, IMHO, when looking for keysyms.
+> =
+
+> The point is that not only the entries from keysymdef.h can be used, bu=
+t
+> also those from XF86keysym.h (with XK_ stripped out in the middle) ; Th=
+e
+> alternative I suggest is to direct the user to XKeysymDB instead, which=
+
+> contains all possible keysyms with correct spelling.
+> =
+
+> Note that as the man page currently contains no reference to XKeysymDB,=
+
+> it's not obvious that one should look into it.
+
+I think you missed my point.
+
+=46rom the header file, I surmised that the X developers mean to keep
+XKeysymDB and keysymdef.h in sync.
+
+It looks like they've failed.  What you have is a bug in X, not
+in Fvwm.
+
+I believe removing the XK_ from the middle is also a bug.
+
+This whole thing with X keysyms is bad enough (using a header file
+as documentation).  It shouldn't get any worse than it is.
+
+(Just my opinion.)
+
+-- =
+
+Dan Espen                           E-mail: dane@mk.telcordia.com
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Nov 29 06:21:29 2004
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 29 Nov 2004 06:21:29 -0600 (CST)
+Received: from util2.math.uh.edu (util2.math.uh.edu [129.7.128.23])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id GAA28795
+	for <fvwm-workers@hpc.uh.edu>; Mon, 29 Nov 2004 06:21:14 -0600 (CST)
+Received: from dane-2.cc.telcordia.com ([128.96.196.27])
+	by util2.math.uh.edu with esmtp (Exim 4.30)
+	id 1CYkWX-0008Eq-NA
+	for fvwm-workers@fvwm.org; Mon, 29 Nov 2004 06:20:57 -0600
+Received: from dane-2.cc.telcordia.com (localhost.localdomain [127.0.0.1])
+	by dane-2.cc.telcordia.com (8.12.11/8.12.11) with ESMTP id iATCJa6T009228
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=NO);
+	Mon, 29 Nov 2004 07:19:36 -0500
+Received: from dane-2.cc.telcordia.com (dane@localhost)
+	by dane-2.cc.telcordia.com (8.12.11/8.12.11/Submit) with ESMTP id iATCJaxN009222;
+	Mon, 29 Nov 2004 07:19:36 -0500
+Message-Id: <200411291219.iATCJaxN009222@dane-2.cc.telcordia.com>
+To: Emmanuel Thomé <Emmanuel.Thome+bugzilla@loria.fr>
+cc: fvwm-workers@fvwm.org
+Subject: Re: Fvwm bug 1135 keysym documentation, not a bug 
+In-reply-to: Your message of Mon, 29 Nov 2004 10:34:16 +0100.
+             <20041129093416.GB4603@tate.loria.fr> 
+x-face: H2G63xNIQ1G~92=">,W';}5I'2EN+pvbeFK2U`LLazP;W3/AU'795C^6M1;wX3''q-~||]i =q\|l:fMk^4zF@^JHkw75M~[d)NKA},lfIOD=B'QWUuv_7Pu+j*']@]x]y'(Eyh}IAEhQDV@tJ?\E" <=..HSTdYCt'DevYza*qnf_0?9qelUgqeJkJA'7Zr<-NU
+Mime-Version: 1.0 (generated by tm-edit 1.8)
+Content-Type: text/plain; charset=ISO-8859-1
+Date: Mon, 29 Nov 2004 07:19:36 -0500
+From: Dan Espen <dane@mk.telcordia.com>
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Score: -4.9 (----)
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Emmanuel Thom=E9 <Emmanuel.Thome+bugzilla@loria.fr> writes:
+> On Fri, Nov 26, 2004 at 09:35:06PM -0500, Dan Espen wrote:
+> > I've closed this problem as "not a bug".
+> =
+
+> you seem to miss the point.
+> =
+
+> > I found this comment in the keysymdef.h from the current Xorg release=
+:
+> > =
+
+> > ! The definitions here should match <X11/XF86keysym.h>
+> > XF86AudioLowerVolume	:1008FF11
+> =
+
+> This can't be in keysymdef.h ; it's in XKeysymDB. XKeysymDB is a better=
+
+> reference to look into, IMHO, when looking for keysyms.
+> =
+
+> The point is that not only the entries from keysymdef.h can be used, bu=
+t
+> also those from XF86keysym.h (with XK_ stripped out in the middle) ; Th=
+e
+> alternative I suggest is to direct the user to XKeysymDB instead, which=
+
+> contains all possible keysyms with correct spelling.
+> =
+
+> Note that as the man page currently contains no reference to XKeysymDB,=
+
+> it's not obvious that one should look into it.
+
+Sorry, the man page for xmodmap explains it this way:
+
+   The KEYSYMNAME on the left hand side is translated
+   into matching keycodes used to perform the  corre=AD
+   sponding  set of keycode expressions.  The list of
+   keysym names may  be  found  in  the  header  file
+   <X11/keysymdef.h>  (without the XK_ prefix) or the
+   keysym   database    /usr/X11R6/lib/X11/XKeysymDB.
+   Note  that if the same keysym is bound to multiple
+   keys, the expression is executed for each matching
+   keycode.
+
+They still refer to an XK_ prefix, but it looks like
+having 2 files to refer to is intentional.
+
+I'll update the man page.
+
+-- =
+
+Dan Espen                           E-mail: dane@mk.telcordia.com
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Nov 29 14:15:38 2004
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 29 Nov 2004 14:15:38 -0600 (CST)
+Received: from util2.math.uh.edu (util2.math.uh.edu [129.7.128.23])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id OAA00241
+	for <fvwm-workers@hpc.uh.edu>; Mon, 29 Nov 2004 14:15:25 -0600 (CST)
+Received: from angstlos.probsd.net ([209.98.239.41])
+	by util2.math.uh.edu with esmtp (Exim 4.30)
+	id 1CYrvQ-0006yd-Lk
+	for fvwm-workers@fvwm.org; Mon, 29 Nov 2004 14:15:08 -0600
+Received: from localhost (localhost.probsd.net [127.0.0.1])
+	by angstlos.probsd.net (Postfix) with ESMTP id 1FB3D4514C
+	for <fvwm-workers@fvwm.org>; Mon, 29 Nov 2004 14:14:31 -0600 (CST)
+Received: from angstlos.probsd.net ([127.0.0.1])
+ by localhost (angstlos.probsd.net [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 34746-08 for <fvwm-workers@fvwm.org>;
+ Mon, 29 Nov 2004 14:14:29 -0600 (CST)
+Received: from monolith.probsd.net (travel.with.the.timebong.org [209.98.239.43])
+	(using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by angstlos.probsd.net (Postfix) with ESMTP id 7EB5945148
+	for <fvwm-workers@fvwm.org>; Mon, 29 Nov 2004 14:14:29 -0600 (CST)
+Date: Mon, 29 Nov 2004 14:14:27 -0600
+From: Evan Sikorski <temper@probsd.net>
+To: fvwm-workers@fvwm.org
+Subject: shape masking and it's future in fvwm
+Message-ID: <20041129141427.0b976c77.temper@probsd.net>
+Reply-To: temper@probsd.net
+Organization: ProBSD Networks
+X-Mailer: Sylpheed-Claws 0.9.12cvs146.8 (GTK+ 2.4.9; i686-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: by amavisd-new at probsd.net
+X-Spam-Score: -4.9 (----)
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+
+Hello devs, great work on fvwm.
+
+
+	I was wondering what the future of shape masking in Fvwm will
+	be. I've noticed a few things about it currently that don't sit
+	well with me, and I wondered if anyone was still working on this
+	portion of fvwm and of course, if they were willing to take some
+	suggestions:
+
+ 1.   Shape masking doesn't work in title bars as of yet, although you
+	can use pixmaps to shape yourself some rounded (or otherwise
+	different) corners, if you don't use pixmaps you are left with
+	no choices.
+
+ 2.  Shape masking ruins the effect borders have in Fvwm. Example: I
+	make a shape mask for my menu and when I bring up the menu I
+	have shaped	corners, the problem is, the border around the menu
+	window is cut off where the shaping happens.  Will it ever be
+	possible for the border to follow the contour of the shape mask?
+
+Thanks in advance,
+-Evan
+temper@probsd.net
+hednod @ #fvwm irc.freenode.net
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Tue Nov 30 19:37:01 2004
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 30 Nov 2004 19:37:01 -0600 (CST)
+Received: from util2.math.uh.edu (util2.math.uh.edu [129.7.128.23])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id TAA08273
+	for <fvwm-workers@hpc.uh.edu>; Tue, 30 Nov 2004 19:36:51 -0600 (CST)
+Received: from util6.math.uh.edu ([129.7.128.34])
+	by util2.math.uh.edu with esmtp (Exim 4.30)
+	id 1CZJQ2-0001kU-Fb
+	for fvwm-workers@fvwm.org; Tue, 30 Nov 2004 19:36:34 -0600
+Received: from util6.math.uh.edu (util6.math.uh.edu [127.0.0.1])
+	by util6.math.uh.edu (8.12.11/8.12.5) with ESMTP id iB11aYFN015562
+	for <fvwm-workers@fvwm.org>; Tue, 30 Nov 2004 19:36:34 -0600
+Received: (from cvs@localhost)
+	by util6.math.uh.edu (8.12.11/8.12.8/Submit) id iB11aY7U015561;
+	Tue, 30 Nov 2004 19:36:34 -0600
+Date: Tue, 30 Nov 2004 19:36:34 -0600
+Message-Id: <200412010136.iB11aY7U015561@util6.math.uh.edu>
+To: fvwm-workers@fvwm.org
+From: FVWM CVS <fvwm-workers@fvwm.org>
+Reply-To: FVWM CVS <fvwm-workers@fvwm.org>
+Subject: CVS dane: * fvwm/fvwm.1.in: Fix keysym description add XKeysymDB.
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+CVSROOT:	/home/cvs/fvwm
+Module name:	fvwm
+Changes by:	dane	04/11/30 19:36:33
+
+Modified files:
+	.              : ChangeLog 
+	fvwm           : fvwm.1.in 
+
+Log message:
+* fvwm/fvwm.1.in: Fix keysym description add XKeysymDB.
+
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+

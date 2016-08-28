@@ -1,0 +1,2333 @@
+From owner-fvwm-workers@hpc.uh.edu  Sun Aug  6 04:09:50 2000
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sun, 06 Aug 2000 04:09:50 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id EAA03047
+	for <fvwm-workers@hpc.uh.edu>; Sun, 6 Aug 2000 04:09:38 -0500 (CDT)
+Received: from david.virtual.co.il (david.virtual.co.il [199.203.234.2])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id EAA21062
+	for <fvwm-workers@fvwm.org>; Sun, 6 Aug 2000 04:10:10 -0500 (CDT)
+Received: (from migo@localhost)
+	by david.virtual.co.il (8.9.3/8.9.3) id MAA08495;
+	Sun, 6 Aug 2000 12:09:02 +0300
+Date: Sun, 6 Aug 2000 12:09:02 +0300
+From: Mikhael Goikhman <migo@cortext.co.il>
+To: Adam Tla/lka <atlka@pg.gda.pl>
+Cc: Fvwm Workers List <fvwm-workers@fvwm.org>
+Subject: Re: FVWM: Focus change and destroy_window event in 2.3.19
+Message-ID: <20000806120902.A7261@cortext.co.il>
+Mail-Followup-To: Adam Tla/lka <atlka@pg.gda.pl>,
+	Fvwm Workers List <fvwm-workers@fvwm.org>
+References: <20000630131910.A18987@sunrise.pg.gda.pl>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+X-Mailer: Mutt 1.0pre2us
+In-Reply-To: <20000630131910.A18987@sunrise.pg.gda.pl>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+On 30 Jun 2000 13:19:11 +0200, Adam Tla/lka wrote:
+> 
+> Hi,
+> 
+> I am using in my .fvwm2rc :
+
+Here is the same configuration that you posted, but a bit formatted to be
+more clear, not to interfere with other FvwmEvent's and to be able to be
+re-Read as many times as needed.
+
+DestroyFunc CurrentRaiseWarp
+AddToFunc   CurrentRaiseWarp
++ I Current (!Visible) Raise
++ I WarpToWindow 50 16p
+     
+DestroyFunc GoToLast
+AddToFunc   GoToLast I Prev (CurrentPage !Iconic) FlipFocus
+     
+DestroyFunc WasActive
+AddToFunc   WasActive
++ I DestroyFunc GoToLast
++ I AddToFunc   GoToLast I Nop
+  
+DestroyFunc LastActive
+AddToFunc   LastActive
+#+ I WindowList
++ I Current (CurrentPage !Iconic) Function WasActive
++ I Function GoToLast
++ I Current (CurrentPage !Iconic) Function CurrentRaiseWarp
++ I DestroyFunc GoToLast
++ I AddToFunc   GoToLast I Prev (CurrentPage !Iconic) FlipFocus
+
+DestroyFunc WarpToNew
+AddToFunc   WarpToNew
++ I WindowId $0 WarpToWindow 50 16p
+
+DestroyModuleConfig MyEvent*
+*MyEventPassID
+*MyEventDelay 0
+*MyEventCmd Function
+*MyEvent add_window WarpToNew
+*MyEvent destroy_window LastActive
+
+KillModule  FvwmEvent MyEvent
+Module      FvwmEvent MyEvent
+
+> to obtain focus to any new created window and get focus to last active one
+> while current active is deleted. First works ok for me but second does not.
+> I observe that before event is activated the window under the pointer 
+> position is focused (it's not the last active one in this case)
+> so list order is changed and then event function is useless. 
+> I am using SloppyFocus.
+> Strange because it worked properly in 2.2.4 version.
+
+Your observation is correct. LastActive is called after a window under
+the pointer gets a focus, which makes destroy_window event useless in your
+case. This is clearly seen if you uncomment the WindowList line.
+
+I can see that, like in 2.2.4, M_DESTROY_WINDOW is broadcasted, i.e. added
+to a queue, *before* the focus games on a window under a pointer.
+
+Ok, I have fixed this problem by making SetSyncMask on all messages in
+FvwmEvent.
+
+For some reason SetSyncMask(fd, M_DESTROY_WINDOW), i.e. 1<<7, has no
+effect for me, but SetSyncMask(fd, 1<<31) does the fix! I am confused.
+Don't forget to SendUnlockNotification(fd) if you want to try this.
+
+Related issue. FvwmEvent does not SetMessageMask, so it always gets all
+events, which is by itself is not optimal; making all of them synchronized
+can be a little slow. Any thoughts?
+
+Regards,
+Mikhael.
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Fri Aug 11 19:06:56 2000
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Fri, 11 Aug 2000 19:06:56 -0500 (CDT)
+Received: from dnsmx1rrc.telcordia.com (dnsmx1rrc.telcordia.com [128.96.20.41])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id TAA16957
+	for <fvwm-workers@hpc.uh.edu>; Fri, 11 Aug 2000 19:06:46 -0500 (CDT)
+Received: from castle.mk.telcordia.com (castle.mk.telcordia.com [128.96.133.172])
+	by dnsmx1rrc.telcordia.com (8.9.3/8.9.2) with ESMTP id UAA07030
+	for <fvwm-workers@hpc.uh.edu>; Fri, 11 Aug 2000 20:01:15 -0400 (EDT)
+Received: from mk.telcordia.com (fork [128.96.128.32])
+	by castle.mk.telcordia.com (8.8.8/8.8.8) with ESMTP id UAA05660
+	for <fvwm-workers@hpc.uh.edu>; Fri, 11 Aug 2000 20:01:15 -0400 (EDT)
+Message-Id: <200008120001.UAA05660@castle.mk.telcordia.com>
+To: fvwm-workers <fvwm-workers@hpc.uh.edu>
+Subject: Re: FVWM: StrokeWidth patch 
+In-reply-to: Your message of Sat, 29 Jul 2000 23:42:47 +0200.
+             <39834FD7.17177C27@free.fr> 
+x-face: H2G63xNIQ1G~92=">,W';}5I'2EN+pvbeFK2U`LLazP;W3/AU'795C^6M1;wX3''q-~||]i
+ =q\|l:fMk^4zF@^JHkw75M~[d)NKA},lfIOD=B'QWUuv_7Pu+j*']@]x]y'(Eyh}IAEhQDV@tJ?\E"
+ <=..HSTdYCt'DevYza*qnf_0?9qelUgqeJkJA'7Zr<-NU
+Mime-Version: 1.0 (generated by tm-edit 7.108)
+Content-Type: text/plain; charset=US-ASCII
+Date: Fri, 11 Aug 2000 20:01:14 -0400
+From: Dan Espen <dane@mk.telcordia.com>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Olivier Chapuis <olivier.chapuis@free.fr> writes:
+> Johannes Zellner wrote:
+> > 
+> > Here's the patch which I forgot to attach at the fvwm list.
+> > 
+> > I hacked a variable StrokeWidth. The patch is attached
+> > and contains also an update of the docs. Try:
+> > 
+> >     Mouse 3 A M StrokeFunc StrokeWidth 10 DrawMotion
+> > 
+> > I've also changed the allocation of the coordinate
+> > array (for undrawing) to be dynamical, so that strokes
+> > of arbitrary length (depends on your memory) can be drawn.
+> > 
+> > Well, I've been told it's a feature freeze ...
+> > At least I consider the dynamical allocation for the
+> > strokes a bug fix :-)
+> 
+> 
+> Ok, I try the patch it works find (need just one change for
+> using the fvwm libs malloc).
+> I suggest to apply it. We may consider that it is a bug fix 
+> patch (1 pixel line for the motion is not enought under certain
+> config).
+> 
+> Some objections ?
+
+I must be unsubscribed again, I haven't seen anything on fvwm-workers
+for almost 2 weeks?
+
+I guess I'll find out when this reply comes thru.
+
+>From my viewpoint there don't appear to be any objections.
+
+--
+Dan Espen
+444 Hoes Lane  Room RRC 1C-214           E-mail: dane@mk.telcordia.com
+Piscataway, NJ 08854                     Phone: (732) 699-5570
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Fri Aug 11 19:29:44 2000
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Fri, 11 Aug 2000 19:29:44 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id TAA17061
+	for <fvwm-workers@hpc.uh.edu>; Fri, 11 Aug 2000 19:29:34 -0500 (CDT)
+Received: from dnsmx2pya.telcordia.com (dnsmx2pya.telcordia.com [128.96.20.32])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id TAA02544
+	for <fvwm-workers@fvwm.org>; Fri, 11 Aug 2000 19:30:05 -0500 (CDT)
+Received: from castle.mk.telcordia.com (castle.mk.telcordia.com [128.96.133.172])
+	by dnsmx2pya.telcordia.com (8.9.3/8.9.3) with ESMTP id UAA28859
+	for <fvwm-workers@fvwm.org>; Fri, 11 Aug 2000 20:29:33 -0400 (EDT)
+Received: from mk.telcordia.com (fork [128.96.128.32])
+	by castle.mk.telcordia.com (8.8.8/8.8.8) with ESMTP id UAA05854
+	for <fvwm-workers@fvwm.org>; Fri, 11 Aug 2000 20:29:33 -0400 (EDT)
+Message-Id: <200008120029.UAA05854@castle.mk.telcordia.com>
+To: fvwm-workers@fvwm.org
+x-face: H2G63xNIQ1G~92=">,W';}5I'2EN+pvbeFK2U`LLazP;W3/AU'795C^6M1;wX3''q-~||]i
+ =q\|l:fMk^4zF@^JHkw75M~[d)NKA},lfIOD=B'QWUuv_7Pu+j*']@]x]y'(Eyh}IAEhQDV@tJ?\E"
+ <=..HSTdYCt'DevYza*qnf_0?9qelUgqeJkJA'7Zr<-NU
+Subject: fvwm doing xsync reading almost every command
+Mime-Version: 1.0 (generated by tm-edit 7.108)
+Content-Type: text/plain; charset=US-ASCII
+Date: Fri, 11 Aug 2000 20:29:32 -0400
+From: Dan Espen <dane@mk.telcordia.com>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+
+I've previously complained about fvwm taking forever to start up
+when run remotely over a cable modem.  Fifteen minutes or more.
+
+I've added debug logic that times every command executed by fvwm.
+I find that commands that shouldn't take any time at all,
+like "AddToFunction", take an average of 1/4 elapsed seconds.
+
+A big chunk of that time is in WaitForButtonsUp where there are
+a few X calls including calls to XSync, XAllowEvents, XQueryPointer,
+XPending, etc.
+
+I traced that 1/4 second down to functions.c ExecuteFunction() around
+line 1035 where it has this:
+
+  /* Only wait for an all-buttons-up condition after calls from
+   * regular built-ins, not from complex-functions, menus or modules. */
+  if(Module == -1)
+    WaitForButtonsUp(True);
+
+The condition "Module == -1" is true for just about every command.
+Only blank lines and comments get away with zero measurable elapsed time.
+
+For startup, the Module switch seems to originate in fvwm.c around line
+639:
+
+  if (num_config_commands > 0)
+  {
+    int i;
+    for(i=0;i<num_config_commands;i++)
+    {
+      DoingCommandLine = True;
+      ExecuteFunction(
+	config_commands[i], NULL, &Event, C_ROOT, -1, EXPAND_COMMAND, NULL);
+      free(config_commands[i]);
+    }
+    DoingCommandLine = False;
+  } else {
+    /* Run startup command file in 5 places: FVWM_USERDIR, FVWM_DATADIR,
+       and for compatibility: ~/.fvwm2rc, $sysconfdir/system.fvwm2rc */
+    if (
+      !run_command_file( CatString3(fvwm_userdir, "/",       FVWMRC),
+        &Event, NULL, C_ROOT, -1 ) &&
+      !run_command_file( CatString3(home_dir,     "/",       FVWMRC),
+        &Event, NULL, C_ROOT, -1 ) &&
+      !run_command_file( CatString3(FVWM_DATADIR, "/",       FVWMRC),
+        &Event, NULL, C_ROOT, -1 ) &&
+      !run_command_file( CatString3(FVWM_DATADIR, "/system", FVWMRC),
+        &Event, NULL, C_ROOT, -1 ) &&
+      !run_command_file( CatString3(FVWM_CONFDIR, "/system", FVWMRC),
+        &Event, NULL, C_ROOT, -1 ) )
+
+
+All  those  "run_command_file"   and "ExecuteFunction"  commands   are
+passing "-1" for the "Module" value causing all the XSync calls.  This
+appears  to be the way fvwm  has worked since  at  least 2.2.  (2.2 is
+also slow run this way.)
+
+I changed all the above "-1" to another value with no obvious negative
+consequences.  I don't know for sure what that does to startup time,
+the first test seemed to show improvement.
+
+I don't think thats the right fix for this.
+It would seem to me, the decision about which commands need to be
+XSync'd should be made based on the command, or possibly the command
+and its arguments.
+
+Any comments?
+
+-- 
+Dan Espen
+444 Hoes Lane  Room RRC 1C-214             E-mail: dane@mk.telcordia.com
+Piscataway, NJ 08854                       Phone: (732) 699-5570
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Fri Aug 11 21:51:09 2000
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Fri, 11 Aug 2000 21:51:09 -0500 (CDT)
+Received: from epithumia.math.uh.edu (IDENT:root@epithumia.math.uh.edu [129.7.128.2])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id VAA17945
+	for <fvwm-workers@hpc.uh.edu>; Fri, 11 Aug 2000 21:51:01 -0500 (CDT)
+Received: (from tibbs@localhost)
+	by epithumia.math.uh.edu (8.9.3/8.9.3) id VAA08448;
+	Fri, 11 Aug 2000 21:51:33 -0500
+To: fvwm-workers <fvwm-workers@hpc.uh.edu>
+Subject: Re: FVWM: StrokeWidth patch
+References: <200008120001.UAA05660@castle.mk.telcordia.com>
+From: Jason L Tibbitts III <tibbs@math.uh.edu>
+Date: 11 Aug 2000 21:51:33 -0500
+In-Reply-To: Dan Espen's message of "Fri, 11 Aug 2000 20:01:14 -0400"
+Message-ID: <ufabsyzchu2.fsf@epithumia.math.uh.edu>
+Lines: 11
+User-Agent: Gnus/5.0803 (Gnus v5.8.3) Emacs/20.5
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+>>>>> "DE" == Dan Espen <dane@mk.telcordia.com> writes:
+
+DE> I must be unsubscribed again, I haven't seen anything on fvwm-workers
+DE> for almost 2 weeks?
+
+I only remove addresses that bounce for a really long time.  The software
+will never automatically unsubscribe anyone.
+
+I think the list has just been quiet.
+
+ - J<
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Sat Aug 12 04:49:40 2000
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sat, 12 Aug 2000 04:49:40 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id EAA20261
+	for <fvwm-workers@hpc.uh.edu>; Sat, 12 Aug 2000 04:49:28 -0500 (CDT)
+Received: from david.virtual.co.il (david.virtual.co.il [199.203.234.2])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id EAA10417
+	for <fvwm-workers@fvwm.org>; Sat, 12 Aug 2000 04:49:57 -0500 (CDT)
+Received: (from migo@localhost)
+	by david.virtual.co.il (8.9.3/8.9.3) id MAA23104
+	for fvwm-workers@fvwm.org; Sat, 12 Aug 2000 12:49:32 +0300
+Date: Sat, 12 Aug 2000 12:49:32 +0300
+From: Mikhael Goikhman <migo@cortext.co.il>
+To: Fvwm Workers List <fvwm-workers@fvwm.org>
+Subject: Re: FVWM: StrokeWidth patch
+Message-ID: <20000812124932.A22426@cortext.co.il>
+Mail-Followup-To: Fvwm Workers List <fvwm-workers@fvwm.org>
+References: <20000725012014.A2326@zellner.org> <39834FD7.17177C27@free.fr>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+X-Mailer: Mutt 1.0pre2us
+In-Reply-To: <39834FD7.17177C27@free.fr>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+On 29 Jul 2000 23:42:47 +0200, Olivier Chapuis wrote:
+> 
+> Johannes Zellner wrote:
+> > 
+> > Here's the patch which I forgot to attach at the fvwm list.
+> 
+> Ok, I try the patch it works find (need just one change for
+> using the fvwm libs malloc).
+> I suggest to apply it. We may consider that it is a bug fix 
+> patch (1 pixel line for the motion is not enought under certain
+> config).
+> 
+> Some objections ?
+
+I think it is good to apply it. This small feature/fix affects only ones
+who have libstroke installed and use stroke.
+
+There is a related bug, which is shown when stroke is drawn over window
+titles. The visual effect is instead of the absolute title_w coordinates,
+relative ones are used, i.e. stroke jumps when goes through any title.
+The code is in 'case MotionNotify:' of strokeFunc, but I don't know what
+the fix should be.
+
+Regards,
+Mikhael.
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Sat Aug 12 11:13:15 2000
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sat, 12 Aug 2000 11:13:15 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id LAA25677
+	for <fvwm-workers@hpc.uh.edu>; Sat, 12 Aug 2000 11:13:07 -0500 (CDT)
+Received: from david.virtual.co.il (david.virtual.co.il [199.203.234.2])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id LAA15151
+	for <fvwm-workers@fvwm.org>; Sat, 12 Aug 2000 11:13:36 -0500 (CDT)
+Received: (from migo@localhost)
+	by david.virtual.co.il (8.9.3/8.9.3) id TAA25534
+	for fvwm-workers@fvwm.org; Sat, 12 Aug 2000 19:13:11 +0300
+Date: Sat, 12 Aug 2000 19:13:11 +0300
+From: Mikhael Goikhman <migo@cortext.co.il>
+To: Fvwm Workers List <fvwm-workers@fvwm.org>
+Subject: Fixing module configuration conflicts
+Message-ID: <20000812191311.A25157@cortext.co.il>
+Mail-Followup-To: Fvwm Workers List <fvwm-workers@fvwm.org>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+X-Mailer: Mutt 1.0pre2us
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+This subject was disscused a year+ ago, but no real solution to this
+problem was implemented since then:
+
+  http://www.hpc.uh.edu/fvwm/archive/9903/msg00230.html
+
+In two words the problem is that if you have a module MyAlias2, all its
+configuration will be passed to MyAlias module as well, which may result
+in fatal errors for some modules.
+
+If the syntax enables conflicts they will come (remember FormFvwmTalkHelp;
+we at fvwm-themes have many such cases), Of course it is possible to solve
+every individual conflict, but, instead, the conflicting syntax should be
+resolved, i.e. introduced an alternative one.
+
+I have a small patch, solving this problem. So both syntaxes are valid:
+
+  *FvwmMyPagerLabel 0 Desk
+  *FvwmMyPager:Label 0 Desk
+
+Everything is fully backward compatible, but if you use the second (new)
+variant, it is guaranteed that the configuration will only be passed
+to FvwmMyPager and not, for example, to FvwmMyPage module.
+The current implementation converts the new syntax to the old one (while
+keeping the exact matching), because many modules rely on the old syntax,
+but in the future, I hope, we could make a conflicting syntax obsolete.
+
+Why I used colon? Originally Steve and Dan suggested colon, and I don't
+care, as long as there is no conflict. Asterisk can't be used because of
+DestroyModuleConfig, period can't be used because of the current FvwmForm.
+
+The sooner a non conflicting syntax is introduced the better. We already
+have in fvwm-themes about 50 module aliases for at least 6 FvwmModule's.
+As a side note, we use a FvwmModule-SubName naming scheme for them,
+which is just fine with a non conflicting syntax.
+
+I want to apply this or similar patch before 2.4. Please comment.
+
+Regards,
+Mikhael.
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Sat Aug 12 13:11:18 2000
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sat, 12 Aug 2000 13:11:18 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id NAA26747
+	for <fvwm-workers@hpc.uh.edu>; Sat, 12 Aug 2000 13:11:09 -0500 (CDT)
+Received: from dnsmx1rrc.telcordia.com (dnsmx1rrc.telcordia.com [128.96.20.41])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id NAA17155
+	for <fvwm-workers@fvwm.org>; Sat, 12 Aug 2000 13:11:39 -0500 (CDT)
+Received: from castle.mk.telcordia.com (castle.mk.telcordia.com [128.96.133.172])
+	by dnsmx1rrc.telcordia.com (8.9.3/8.9.2) with ESMTP id OAA09165
+	for <fvwm-workers@fvwm.org>; Sat, 12 Aug 2000 14:09:46 -0400 (EDT)
+Received: from mk.telcordia.com (fork [128.96.128.32])
+	by castle.mk.telcordia.com (8.8.8/8.8.8) with ESMTP id OAA13598
+	for <fvwm-workers@fvwm.org>; Sat, 12 Aug 2000 14:09:47 -0400 (EDT)
+Message-Id: <200008121809.OAA13598@castle.mk.telcordia.com>
+To: Fvwm Workers List <fvwm-workers@fvwm.org>
+Subject: Re: Fixing module configuration conflicts 
+In-reply-to: Your message of Sat, 12 Aug 2000 19:13:11 +0300.
+             <20000812191311.A25157@cortext.co.il> 
+Mime-Version: 1.0 (generated by tm-edit 7.108)
+Content-Type: text/plain; charset=US-ASCII
+Date: Sat, 12 Aug 2000 14:09:47 -0400
+From: Dan Espen <dane@mk.telcordia.com>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Mikhael Goikhman <migo@cortext.co.il> writes:
+> This subject was disscused a year+ ago, but no real solution to this
+> problem was implemented since then:
+> 
+>   http://www.hpc.uh.edu/fvwm/archive/9903/msg00230.html
+> 
+> In two words the problem is that if you have a module MyAlias2, all its
+> configuration will be passed to MyAlias module as well, which may result
+> in fatal errors for some modules.
+...
+> Why I used colon? Originally Steve and Dan suggested colon, and I don't
+> care, as long as there is no conflict. Asterisk can't be used because of
+> DestroyModuleConfig, period can't be used because of the current FvwmForm.
+> 
+> The sooner a non conflicting syntax is introduced the better. We already
+> have in fvwm-themes about 50 module aliases for at least 6 FvwmModule's.
+> As a side note, we use a FvwmModule-SubName naming scheme for them,
+> which is just fine with a non conflicting syntax.
+> 
+> I want to apply this or similar patch before 2.4. Please comment.
+
+I don't understand.  All modules should be able to use the period.
+
+--
+Dan Espen
+444 Hoes Lane  Room RRC 1C-214           E-mail: dane@mk.telcordia.com
+Piscataway, NJ 08854                     Phone: (732) 699-5570
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Sat Aug 12 14:09:10 2000
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sat, 12 Aug 2000 14:09:10 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id OAA27416
+	for <fvwm-workers@hpc.uh.edu>; Sat, 12 Aug 2000 14:09:01 -0500 (CDT)
+Received: from david.virtual.co.il (david.virtual.co.il [199.203.234.2])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id OAA18227
+	for <fvwm-workers@fvwm.org>; Sat, 12 Aug 2000 14:09:31 -0500 (CDT)
+Received: (from migo@localhost)
+	by david.virtual.co.il (8.9.3/8.9.3) id WAA26745
+	for fvwm-workers@fvwm.org; Sat, 12 Aug 2000 22:09:08 +0300
+Date: Sat, 12 Aug 2000 22:09:08 +0300
+From: Mikhael Goikhman <migo@cortext.co.il>
+To: Fvwm Workers List <fvwm-workers@fvwm.org>
+Subject: Re: Fixing module configuration conflicts
+Message-ID: <20000812220908.A25771@cortext.co.il>
+Mail-Followup-To: Fvwm Workers List <fvwm-workers@fvwm.org>
+References: <20000812191311.A25157@cortext.co.il> <200008121809.OAA13598@castle.mk.telcordia.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+X-Mailer: Mutt 1.0pre2us
+In-Reply-To: <200008121809.OAA13598@castle.mk.telcordia.com>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+On 12 Aug 2000 14:09:47 -0400, Dan Espen wrote:
+> 
+> Mikhael Goikhman <migo@cortext.co.il> writes:
+> > This subject was disscused a year+ ago, but no real solution to this
+> > problem was implemented since then:
+> > 
+> >   http://www.hpc.uh.edu/fvwm/archive/9903/msg00230.html
+> > 
+> > In two words the problem is that if you have a module MyAlias2, all its
+> > configuration will be passed to MyAlias module as well, which may result
+> > in fatal errors for some modules.
+> ...
+> > Why I used colon? Originally Steve and Dan suggested colon, and I don't
+> > care, as long as there is no conflict. Asterisk can't be used because of
+> > DestroyModuleConfig, period can't be used because of the current FvwmForm.
+> > 
+> > The sooner a non conflicting syntax is introduced the better. We already
+> > have in fvwm-themes about 50 module aliases for at least 6 FvwmModule's.
+> > As a side note, we use a FvwmModule-SubName naming scheme for them,
+> > which is just fine with a non conflicting syntax.
+> > 
+> > I want to apply this or similar patch before 2.4. Please comment.
+> 
+> I don't understand.  All modules should be able to use the period.
+
+Using a delimiter in module names is not a good idea, this is a hack,
+which makes file names ugly and does not disallow conflicts in general.
+Say you have MyAlias2. with a period at the end, still MyAlias module will
+get its configuration. You can't force a delimeter in module alias names,
+the solution is to make a delimiter a part of the syntax (your idea).
+
+I really don't care if FvwmForm aliases remain the same as now, we only
+need to be able to use a non conflicting syntax, so, say, configuration of
+FvwmEvent-Sound will never be passed to a FvwmEvent module with no alias.
+And as I wrote, it is easily solvable.
+
+Regards,
+Mikhael.
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Sat Aug 12 15:06:22 2000
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sat, 12 Aug 2000 15:06:22 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id PAA27969
+	for <fvwm-workers@hpc.uh.edu>; Sat, 12 Aug 2000 15:06:10 -0500 (CDT)
+Received: from dnsmx1rrc.telcordia.com (dnsmx1rrc.telcordia.com [128.96.20.41])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id PAA19153
+	for <fvwm-workers@fvwm.org>; Sat, 12 Aug 2000 15:06:35 -0500 (CDT)
+Received: from castle.mk.telcordia.com (castle.mk.telcordia.com [128.96.133.172])
+	by dnsmx1rrc.telcordia.com (8.9.3/8.9.2) with ESMTP id QAA18317
+	for <fvwm-workers@fvwm.org>; Sat, 12 Aug 2000 16:02:09 -0400 (EDT)
+Received: from mk.telcordia.com (fork [128.96.128.32])
+	by castle.mk.telcordia.com (8.8.8/8.8.8) with ESMTP id QAA14232
+	for <fvwm-workers@fvwm.org>; Sat, 12 Aug 2000 16:02:09 -0400 (EDT)
+Message-Id: <200008122002.QAA14232@castle.mk.telcordia.com>
+To: Fvwm Workers List <fvwm-workers@fvwm.org>
+Subject: Re: Fixing module configuration conflicts 
+In-reply-to: Your message of Sat, 12 Aug 2000 22:09:08 +0300.
+             <20000812220908.A25771@cortext.co.il> 
+Mime-Version: 1.0 (generated by tm-edit 7.108)
+Content-Type: text/plain; charset=US-ASCII
+Date: Sat, 12 Aug 2000 16:02:08 -0400
+From: Dan Espen <dane@mk.telcordia.com>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Mikhael Goikhman <migo@cortext.co.il> writes:
+> On 12 Aug 2000 14:09:47 -0400, Dan Espen wrote:
+> > 
+> > Mikhael Goikhman <migo@cortext.co.il> writes:
+> > > This subject was disscused a year+ ago, but no real solution to this
+> > > problem was implemented since then:
+> > > 
+> > >   http://www.hpc.uh.edu/fvwm/archive/9903/msg00230.html
+> > > 
+> > > In two words the problem is that if you have a module MyAlias2, all its
+> > > configuration will be passed to MyAlias module as well, which may result
+> > > in fatal errors for some modules.
+> > ...
+> > > Why I used colon? Originally Steve and Dan suggested colon, and I don't
+> > > care, as long as there is no conflict. Asterisk can't be used because of
+> > > DestroyModuleConfig, period can't be used because of the current FvwmForm
+> .
+> > > 
+> > > The sooner a non conflicting syntax is introduced the better. We already
+> > > have in fvwm-themes about 50 module aliases for at least 6 FvwmModule's.
+> > > As a side note, we use a FvwmModule-SubName naming scheme for them,
+> > > which is just fine with a non conflicting syntax.
+> > > 
+> > > I want to apply this or similar patch before 2.4. Please comment.
+> > 
+> > I don't understand.  All modules should be able to use the period.
+> 
+> Using a delimiter in module names is not a good idea, this is a hack,
+> which makes file names ugly and does not disallow conflicts in general.
+
+I was beginning to like those trailing dots.
+If its used for all modules, it works.
+
+> Say you have MyAlias2. with a period at the end, still MyAlias module will
+> get its configuration. You can't force a delimeter in module alias names,
+> the solution is to make a delimiter a part of the syntax (your idea).
+
+Rereading what you plan to do, it does seem cleaner, the new delimiter
+doesn't appear in the command sent to the module.  But still affects
+the command matching done by InitGetConfigInfo.
+
+> I really don't care if FvwmForm aliases remain the same as now, we only
+> need to be able to use a non conflicting syntax, so, say, configuration of
+> FvwmEvent-Sound will never be passed to a FvwmEvent module with no alias.
+> And as I wrote, it is easily solvable.
+
+I think the changes to the FvwmForm to get rid of the period would
+be easy.  Just change the filenames, makefile rules and man page.
+
+--
+Dan Espen
+444 Hoes Lane  Room RRC 1C-214           E-mail: dane@mk.telcordia.com
+Piscataway, NJ 08854                     Phone: (732) 699-5570
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Sun Aug 13 02:15:05 2000
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sun, 13 Aug 2000 02:15:05 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id CAA00635
+	for <fvwm-workers@hpc.uh.edu>; Sun, 13 Aug 2000 02:14:56 -0500 (CDT)
+Received: from postfix2.free.fr (postfix@postfix2.free.fr [212.27.32.74])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id CAA26712
+	for <fvwm-workers@fvwm.org>; Sun, 13 Aug 2000 02:15:27 -0500 (CDT)
+Received: from free.fr (massy-1-9-145.dial.proxad.net [213.228.9.145])
+	by postfix2.free.fr (Postfix) with ESMTP id 0D148740B9
+	for <fvwm-workers@fvwm.org>; Sun, 13 Aug 2000 09:15:24 +0200 (MEST)
+Message-ID: <39964940.83ABD0F0@free.fr>
+Date: Sun, 13 Aug 2000 09:07:44 +0200
+From: Olivier Chapuis <olivier.chapuis@free.fr>
+X-Mailer: Mozilla 4.08 [en] (X11; I; Linux 2.2.10 i586)
+MIME-Version: 1.0
+To: "fvwm-workers@fvwm.org" <fvwm-workers@fvwm.org>
+Subject: Re: FVWM: StrokeWidth patch
+References: <20000725012014.A2326@zellner.org> <39834FD7.17177C27@free.fr> <20000812124932.A22426@cortext.co.il>
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Mikhael Goikhman wrote:
+> 
+> On 29 Jul 2000 23:42:47 +0200, Olivier Chapuis wrote:
+> >
+> > Johannes Zellner wrote:
+> > >
+> > > Here's the patch which I forgot to attach at the fvwm list.
+> >
+> > Ok, I try the patch it works find (need just one change for
+> > using the fvwm libs malloc).
+> > I suggest to apply it. We may consider that it is a bug fix
+> > patch (1 pixel line for the motion is not enought under certain
+> > config).
+> >
+> > Some objections ?
+> 
+> I think it is good to apply it. This small feature/fix affects only ones
+> who have libstroke installed and use stroke.
+>
+
+I will commit the patch soon.
+ 
+> There is a related bug, which is shown when stroke is drawn over window
+> titles. The visual effect is instead of the absolute title_w coordinates,
+> relative ones are used, i.e. stroke jumps when goes through any title.
+> The code is in 'case MotionNotify:' of strokeFunc, but I don't know what
+> the fix should be.
+
+I have noted this too but I don't know how to fix this. This maybe need 
+an X expert.
+
+Olivier
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Sun Aug 13 02:18:29 2000
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sun, 13 Aug 2000 02:18:29 -0500 (CDT)
+Received: by sina.hpc.uh.edu (8.9.3/8.9.3) id CAA00774;
+	Sun, 13 Aug 2000 02:18:23 -0500 (CDT)
+Date: Sun, 13 Aug 2000 02:18:23 -0500 (CDT)
+From: CVS <cvs@hpc.uh.edu>
+Message-Id: <200008130718.CAA00774@sina.hpc.uh.edu>
+To: fvwm-workers@hpc.uh.edu
+Reply-To: fvwm-workers@hpc.uh.edu
+Subject: CVS olicha: Applied Johannes  Zellner StrokeWidth patch
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+CVSROOT:	/home/cvs/fvwm
+Module name:	fvwm
+Changes by:	olicha	00/08/13 02:18:22
+
+Modified files:
+	.              : ChangeLog AUTHORS 
+	fvwm           : builtins.c fvwm2.1 
+
+Log message:
+Applied Johannes  Zellner StrokeWidth patch
+
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Sun Aug 13 21:21:49 2000
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sun, 13 Aug 2000 21:21:49 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id VAA11376
+	for <fvwm-workers@hpc.uh.edu>; Sun, 13 Aug 2000 21:21:41 -0500 (CDT)
+Received: from bug.csse.monash.edu.au (bug.csse.monash.edu.au [130.194.224.171])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id VAA12302
+	for <fvwm-workers@fvwm.org>; Sun, 13 Aug 2000 21:22:07 -0500 (CDT)
+Received: (from rfinkel@localhost)
+	by bug.csse.monash.edu.au (8.10.1/8.10.1) id e7E2LBO26750
+	for fvwm-workers@fvwm.org; Mon, 14 Aug 2000 12:21:11 +1000 (EST)
+Message-Id: <200008140221.e7E2LBO26750@bug.csse.monash.edu.au>
+From: rfinkel@insect.sd.monash.edu.au (Raphael Finkel)
+Date: Mon, 14 Aug 2000 12:21:09 -0500
+X-Mailer: Mail User's Shell (7.2.6 beta(5) 10/07/98)
+To: fvwm-workers@fvwm.org
+Subject: broken size hints
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+I get the following message.  The window in question was formed by Tcl/Tk,
+
+Pulsar window 0x540000c has broken (6) size hints
+Please report this to fvwm-workers@fvwm.org
+368 490 0 490 0 7 13 1/1 1/1 28 8 1
+
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Aug 14 12:34:31 2000
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 14 Aug 2000 12:34:31 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id MAA21104
+	for <fvwm-workers@hpc.uh.edu>; Mon, 14 Aug 2000 12:34:22 -0500 (CDT)
+Received: from hotmail.com (f224.law3.hotmail.com [209.185.241.224])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id MAA29340
+	for <fvwm-workers@fvwm.org>; Mon, 14 Aug 2000 12:34:50 -0500 (CDT)
+Received: from mail pickup service by hotmail.com with Microsoft SMTPSVC;
+	 Mon, 14 Aug 2000 10:34:19 -0700
+Received: from 64.160.19.240 by lw3fd.law3.hotmail.msn.com with HTTP;	Mon, 14 Aug 2000  GMT
+X-Originating-IP: [64.160.19.240]
+From: "Tim Freedom" <tim_freedom@hotmail.com>
+To: fvwm-workers@fvwm.org
+Subject: Keyboard mappings -- strange...
+Date: Mon, 14 Aug 2000 10:34:19 PDT
+Mime-Version: 1.0
+Content-Type: text/plain; format=flowed
+Message-ID: <F224Z9fhzgAfiwHETT40000451e@hotmail.com>
+X-OriginalArrivalTime: 14 Aug 2000 17:34:19.0705 (UTC) FILETIME=[E081B290:01C00615]
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+I'm having alot of strange problems with my key mappings which don't appear 
+on any of my other systems.  Both the Ctrl-Lock and the Num-Lock are off 
+(disabled) and I tried toggling them just in case too (so it ain't them :-)
+
+I have the following in my .fvwm2rc file
+
+DeskTopSize 3 3
+
+Key KP_Decimal  A       C       Prev [ CurrentPage !iconic] FlipFocus
+Key KP_0        A       C       Prev [!CurrentPage !iconic] FlipFocus
+Key KP_1        A       C       GotoPage 0 2
+Key KP_2        A       C       GotoPage 1 2
+Key KP_3        A       C       GotoPage 2 2
+Key KP_4        A       C       GotoPage 0 1
+Key KP_5        A       C       GotoPage 1 1
+Key KP_6        A       C       GotoPage 2 1
+Key KP_7        A       C       GotoPage 0 0
+Key KP_8        A       C       GotoPage 1 0
+Key KP_9        A       C       GotoPage 2 0
+
+Key KP_7        A       M       WarpToWindow 50p 50p
+
+Key Left        A       C       Scroll -100 +0
+Key Right       A       C       Scroll +100 +0
+Key Up          A       C       Scroll +0   -100
+Key Down        A       C       Scroll +0   +100
+
+This is what's happening.
+Ctrl-7, Ctrl-4, Ctrl-5, Ctrl-6, and Ctrl-1 all work properly.
+Ctrl-8, Ctrl-9, Ctrl-2 and Ctrl-3 do NOT for some reason (why ?????).
+
+As for the arrow keys, the up and down don't seem to do anything at all.  
+The left and right function as though they are 'GotoPage 0 1' and 'GotoPage 
+2 1' respectively.  Again, Why ??????
+
+Besides that my Meta (or Alt -- Diamond key on Sun's keyboard) doesn't work 
+unless I'm using Emacs or Netscape.  In Fvwm it doesn't seem to have any 
+affect.
+
+Could someone please tell me what I'm doing wrong.  As noted, this all works 
+on my linux box and on the previous Ultra-5 that I had (different OS 
+though).
+
+uname -a:       SunOS klepto 5.7 Generic_106541-10 sun4u
+fvwm version:   fvwm-snap-20000809 (with xpm support)
+
+Thanks for the help in advance.
+
++ Tim
+
+________________________________________________________________________
+Get Your Private, Free E-mail from MSN Hotmail at http://www.hotmail.com
+
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Tue Aug 15 07:14:10 2000
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 15 Aug 2000 07:14:10 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id HAA02313
+	for <fvwm-workers@hpc.uh.edu>; Tue, 15 Aug 2000 07:14:02 -0500 (CDT)
+Received: from david.virtual.co.il (david.virtual.co.il [199.203.234.2])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id HAA22689
+	for <fvwm-workers@fvwm.org>; Tue, 15 Aug 2000 07:14:31 -0500 (CDT)
+Received: (from migo@localhost)
+	by david.virtual.co.il (8.9.3/8.9.3) id PAA11701
+	for fvwm-workers@fvwm.org; Tue, 15 Aug 2000 15:14:12 +0300
+Date: Tue, 15 Aug 2000 15:14:12 +0300
+From: Mikhael Goikhman <migo@cortext.co.il>
+To: Fvwm Workers List <fvwm-workers@fvwm.org>
+Subject: Re: Fixing module configuration conflicts
+Message-ID: <20000815151412.I8772@cortext.co.il>
+Mail-Followup-To: Fvwm Workers List <fvwm-workers@fvwm.org>
+References: <20000812191311.A25157@cortext.co.il>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+X-Mailer: Mutt 1.0pre2us
+In-Reply-To: <20000812191311.A25157@cortext.co.il>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+On 12 Aug 2000 19:13:11 +0300, Mikhael Goikhman wrote:
+> 
+> In two words the problem is that if you have a module MyAlias2, all its
+> configuration will be passed to MyAlias module as well, which may result
+> in fatal errors for some modules.
+> 
+> I have a small patch, solving this problem. So both syntaxes are valid:
+> 
+>   *FvwmMyPagerLabel 0 Desk
+>   *FvwmMyPager:Label 0 Desk
+> 
+> Everything is fully backward compatible, but if you use the second (new)
+> variant, it is guaranteed that the configuration will only be passed
+> to FvwmMyPager and not, for example, to FvwmMyPage module.
+
+I would like to close some details.
+
+1) Which delimeter to use. I think about colon/period (50%/50%), but any
+other (not isalnum or asterisk or isspace) can be used too.
+
+What others prefer?
+
+2) It is possible to trivially patch FvwmForm to support old aliases with
+a period at the end, so it could convert anything matching FormFvwm<name>.
+to FvwmForm-<name> or whatever scheme we choose, for compatibility.
+
+Should I do this?
+
+3) Some time ago we with Olivier had a discussion about a naming scheme
+convention for module alises, and decided that FvwmModule-IdName is a
+clean and consistent scheme.
+
+Any objections if I use this scheme if we rename files/aliases anyway?
+
+Regards,
+Mikhael.
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Thu Aug 17 21:55:16 2000
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Thu, 17 Aug 2000 21:55:16 -0500 (CDT)
+Received: from epithumia.math.uh.edu (IDENT:root@epithumia.math.uh.edu [129.7.128.2])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id VAA02161
+	for <fvwm-workers@hpc.uh.edu>; Thu, 17 Aug 2000 21:55:10 -0500 (CDT)
+Received: (from tibbs@localhost)
+	by epithumia.math.uh.edu (8.9.3/8.9.3) id VAA09933
+	for fvwm-workers@hpc.uh.edu; Thu, 17 Aug 2000 21:55:40 -0500
+Received: from larry.math.uh.edu (larry.math.uh.edu [129.7.128.51])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id VAA01890
+	for <fvwm-workers@hpc.uh.edu>; Thu, 17 Aug 2000 21:35:18 -0500 (CDT)
+From: fvwm-bug@larry.math.uh.edu
+Received: from localhost (localhost [127.0.0.1])
+	by larry.math.uh.edu (8.9.1/8.9.1) with ESMTP id VAA05422
+	for <fvwm-workers@hpc.uh.edu>; Thu, 17 Aug 2000 21:46:41 -0500 (CDT)
+Date: Thu, 17 Aug 2000 21:46:41 -0500 (CDT)
+Message-Id: <200008180246.VAA05422@larry.math.uh.edu>
+To: fvwm-workers@hpc.uh.edu
+Subject: Notification: incoming/643
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+FVWM Bug Tracking notification
+
+new message incoming/643
+
+Message summary for PR#643
+	From: dsb@smart.net
+	Subject: Move-or-Raise raises even on move
+	Date: Thu, 17 Aug 2000 21:35:43 -0500
+	0 replies 	0 followups
+
+====> ORIGINAL MESSAGE FOLLOWS <====
+
+From dsb@smart.net  Thu Aug 17 21:46:40 2000
+Received: from malifon.math.uh.edu (malifon.math.uh.edu [129.7.128.13])
+	by larry.math.uh.edu (8.9.1/8.9.1) with ESMTP id VAA06633
+	for <fvwm-bug@fvwm.math.uh.edu>; Thu, 17 Aug 2000 21:46:40 -0500 (CDT)
+From: dsb@smart.net
+Received: from localhost ([127.0.0.1])
+	by malifon.math.uh.edu with esmtp (Exim 3.13 #1)
+	id 13Pc0V-0007Qk-00
+	for fvwm-bug@fvwm.math.uh.edu; Thu, 17 Aug 2000 21:35:43 -0500
+To: fvwm-bug@larry.math.uh.edu
+Subject: Move-or-Raise raises even on move
+Message-Id: <E13Pc0V-0007Qk-00@malifon.math.uh.edu>
+Date: Thu, 17 Aug 2000 21:35:43 -0500
+
+Full_Name: Daniel Barclay
+Version: 2.2.3
+CVS_Date: 
+OS: 
+X_Server: 
+Submission from: (NULL) (207.226.43.112)
+
+
+Move-or-Raise in sample.fvwmrc/system.fvwm2rc is wrong.
+It raises even if the window is moved.
+
+Compare the current implementation (my comments):
+
+
+AddToFunc Move-or-Raise		"I" Raise       # raise immediately (in any case)
+
++				"M" Move        # move if dragged
++  				"D" Lower       # lower if double-clicked
+
+
+with the version from 2.0.46:
+
+AddToFunc Move-or-Raise         "C" Raise       # raise if simply clicked
++                               "M" Move        # move if dragged
++                               "D" Lower       # lower if double-clicked
+
+
+related bugs: 136
+
+
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Fri Aug 18 10:32:52 2000
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Fri, 18 Aug 2000 10:32:52 -0500 (CDT)
+Received: from www-uk-01.digiserve.com ([195.172.23.15])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id KAA11166
+	for <fvwm-workers@hpc.uh.edu>; Fri, 18 Aug 2000 10:32:42 -0500 (CDT)
+Received: from coal-ink.com (dialup137-167.saqnet.co.uk [195.2.137.167])
+	by www-uk-01.digiserve.com (8.9.1/8.9.1) with ESMTP id PAA03760;
+	Fri, 18 Aug 2000 15:29:54 +0100 (BST)
+Received: from Nikki.saqnet.co.uk [192.168.0.5] by coal-ink.com (FTGate 2, 2, 2, 1);
+     Fri, 18 Aug 2000 14:32:34 +0100
+Reply-To: "Robert Lim" <robert@coal-ink.com>
+From: "Robert Lim" <robert@coal-ink.com>
+To: <robertlim@uk2.net>
+Date: Fri, 18 Aug 2000 14:32:45 +0100
+Message-ID: <01c00918$cb0d85a0$0500a8c0@Nikki.saqnet.co.uk>
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+	boundary="----=_NextPart_000_0361_01C00921.2D45E520"
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 4.71.1712.3
+X-MimeOLE: Produced By Microsoft MimeOLE V4.71.1712.3
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+This is a multi-part message in MIME format.
+
+------=_NextPart_000_0361_01C00921.2D45E520
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+I'm writing to let you know that we have updated our website recently( =
+www.coal-ink.com ) Available is latest news on the coal industry, marker =
+price information and a selection of latest import/export statistics. We =
+will continue to improve and update this site in the future. Please let =
+me know of any comments or suggestions you have. You may wish to add =
+your website on to our links page or place a link to our website on your =
+own page. Please feel free to forward our link to anyone who is likely =
+to be interested.=20
+
+Kind regards,
+
+Robert Lim
+
+
+Email address: robert@coal-ink.com
+Tel: (+44) 01730 265095
+Fax: (+44) 01730 260044
+
+If you have received this email in error, we apologise for any =
+inconvenience caused.
+
+------=_NextPart_000_0361_01C00921.2D45E520
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META content=3D"text/html; charset=3Dwindows-1252" =
+http-equiv=3DContent-Type>
+<META content=3D"MSHTML 5.00.2314.1000" name=3DGENERATOR></HEAD>
+<BODY bgColor=3D#ffffff>
+<DIV><FONT size=3D2>
+<DIV><FONT size=3D2>
+<DIV><FONT size=3D2>Hi,</FONT></DIV>
+<DIV>&nbsp;</DIV>
+<DIV><FONT size=3D2>I'm writing to let you know that we have updated our =
+website=20
+recently( <A href=3D"http://www.coal-ink.com">www.coal-ink.com</A> ) =
+Available is=20
+latest news on the coal industry, marker price information and a =
+selection of=20
+latest import/export statistics. We will continue to improve and update =
+this=20
+site in the future. Please let me know of any comments or suggestions =
+you have.=20
+You may wish to add your website on to our links page or place a link to =
+our=20
+website on your own page. Please feel free to forward our link to anyone =
+who is=20
+likely to be interested. </FONT></DIV>
+<DIV>&nbsp;</DIV>
+<DIV><FONT size=3D2>Kind regards,</FONT></DIV>
+<DIV>&nbsp;</DIV>
+<DIV><FONT size=3D2>Robert Lim</FONT></DIV>
+<DIV>&nbsp;</DIV>
+<DIV>&nbsp;</DIV>
+<DIV><FONT size=3D2>Email address: <A=20
+href=3D"mailto:robert@coal-ink.com">robert@coal-ink.com</A><BR>Tel: =
+(+44) 01730=20
+265095<BR>Fax: (+44) 01730 260044</FONT></DIV>
+<DIV>&nbsp;</DIV>
+<DIV><FONT size=3D2>If you have received this email in error, we =
+apologise for any=20
+inconvenience =
+caused.</FONT></DIV></FONT></DIV></FONT></DIV></BODY></HTML>
+
+------=_NextPart_000_0361_01C00921.2D45E520--
+
+
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Sat Aug 19 10:54:34 2000
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sat, 19 Aug 2000 10:54:34 -0500 (CDT)
+Received: by sina.hpc.uh.edu (8.9.3/8.9.3) id KAA22528;
+	Sat, 19 Aug 2000 10:54:28 -0500 (CDT)
+Date: Sat, 19 Aug 2000 10:54:28 -0500 (CDT)
+From: CVS <cvs@hpc.uh.edu>
+Message-Id: <200008191554.KAA22528@sina.hpc.uh.edu>
+To: fvwm-workers@hpc.uh.edu
+Reply-To: fvwm-workers@hpc.uh.edu
+Subject: CVS migo: * FvwmEvent: synchronize on destroy_window
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+CVSROOT:	/home/cvs/fvwm
+Module name:	fvwm
+Changes by:	migo	00/08/19 10:54:27
+
+Modified files:
+	.              : AUTHORS ChangeLog NEWS 
+	fvwm           : fvwm2.1 module_interface.c 
+	modules        : ChangeLog 
+	modules/FvwmEvent: FvwmEvent.c 
+	modules/FvwmForm: FvwmForm.1 
+	utils          : ChangeLog fvwm-menu-desktop.1 
+	                 fvwm-menu-desktop.in 
+
+Log message:
+* FvwmEvent: synchronize on destroy_window
+* SendToModule now can accept an alias too
+* fvwm-menu-desktop: be more quiet; rename --fvwm-gtk-name to --fvwmgtk-alias
+* FvwmForm.1: several corrections like s/FVWMUSER_HOME/FVWM_USERDIR/
+
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Sun Aug 20 11:30:35 2000
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sun, 20 Aug 2000 11:30:35 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id LAA01571
+	for <fvwm-workers@hpc.uh.edu>; Sun, 20 Aug 2000 11:30:24 -0500 (CDT)
+Received: from david.virtual.co.il (david.virtual.co.il [199.203.234.2])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id LAA02983
+	for <fvwm-workers@fvwm.org>; Sun, 20 Aug 2000 11:30:40 -0500 (CDT)
+Received: (from migo@localhost)
+	by david.virtual.co.il (8.9.3/8.9.3) id WAA22479
+	for fvwm-workers@fvwm.org; Sat, 19 Aug 2000 22:02:58 +0300
+Date: Sat, 19 Aug 2000 22:02:58 +0300
+From: Mikhael Goikhman <migo@cortext.co.il>
+To: Fvwm Workers List <fvwm-workers@fvwm.org>
+Subject: Re: FVWM: Focus change and destroy_window event in 2.3.19
+Message-ID: <20000819220258.A22415@cortext.co.il>
+Mail-Followup-To: Fvwm Workers List <fvwm-workers@fvwm.org>
+References: <20000630131910.A18987@sunrise.pg.gda.pl> <20000806120902.A7261@cortext.co.il>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+X-Mailer: Mutt 1.0pre2us
+In-Reply-To: <20000806120902.A7261@cortext.co.il>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+On 06 Aug 2000 12:09:02 +0300, Mikhael Goikhman wrote:
+> 
+> On 30 Jun 2000 13:19:11 +0200, Adam Tla/lka wrote:
+> > 
+> > to obtain focus to any new created window and get focus to last active one    
+> > while current active is deleted. First works ok for me but second does not.   
+> > I observe that before event is activated the window under the pointer         
+> > position is focused (it's not the last active one in this case)               
+> > so list order is changed and then event function is useless.                  
+> > I am using SloppyFocus.                                                       
+> > Strange because it worked properly in 2.2.4 version.                          
+> 
+> Your observation is correct. LastActive is called after a window under
+> the pointer gets a focus, which makes destroy_window event useless in your
+> case. This is clearly seen if you uncomment the WindowList line.
+> 
+> I can see that, like in 2.2.4, M_DESTROY_WINDOW is broadcasted, i.e. added
+> to a queue, *before* the focus games on a window under a pointer.
+> 
+> Ok, I have fixed this problem by making SetSyncMask on all messages in
+> FvwmEvent.
+
+This fix (SetSyncMask on all messages) was actually not a relable one.
+
+> For some reason SetSyncMask(fd, M_DESTROY_WINDOW), i.e. 1<<7, has no
+> effect for me, but SetSyncMask(fd, 1<<31) does the fix! I am confused.
+
+On some level, 0x80000000 is converted to 0x7fffffff, which is buggy
+regardless of signed/unsigned arithmetics. But this is not directly
+related to the mentioned problem.
+
+The problem is in this line of PositiveWrite in module_interface.c:
+
+  if ((SyncMask[module] & ptr[1]) && !myxgrabcount)
+
+So, even if a message is set to be synchronized, still it's not guaranteed
+that this will be the case. For example, M_DESTROY_WINDOW is always sent
+inside of MyXGrab/MyXUnGrab. I removed the myxgrabcount condition bit,
+this together with synching on destroy_window fixes the original problem.
+I understand this may cause problems, but I see no other solution. I have
+tested several cases, like 2 FvwmAnimate, 2 FvwmEvent and see no problems.
+I will restore the original condition if there are ones.
+
+> Related issue. FvwmEvent does not SetMessageMask, so it always gets all
+> events, which is by itself is not optimal; making all of them synchronized
+> can be a little slow. Any thoughts?
+
+Regards,
+Mikhael.
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Sun Aug 20 11:30:51 2000
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sun, 20 Aug 2000 11:30:51 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id LAA01606
+	for <fvwm-workers@hpc.uh.edu>; Sun, 20 Aug 2000 11:30:40 -0500 (CDT)
+Received: from david.virtual.co.il (david.virtual.co.il [199.203.234.2])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id LAA03001
+	for <fvwm-workers@fvwm.org>; Sun, 20 Aug 2000 11:30:46 -0500 (CDT)
+Received: (from migo@localhost)
+	by david.virtual.co.il (8.9.3/8.9.3) id TAA21460;
+	Sat, 19 Aug 2000 19:44:16 +0300
+Date: Sat, 19 Aug 2000 19:44:16 +0300
+From: Mikhael Goikhman <migo@cortext.co.il>
+To: Tim Freedom <tim_freedom@hotmail.com>
+Cc: Fvwm Workers List <fvwm-workers@fvwm.org>
+Subject: Re: Keyboard mappings -- strange...
+Message-ID: <20000819194416.A21051@cortext.co.il>
+Mail-Followup-To: Tim Freedom <tim_freedom@hotmail.com>,
+	Fvwm Workers List <fvwm-workers@fvwm.org>
+References: <F224Z9fhzgAfiwHETT40000451e@hotmail.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+X-Mailer: Mutt 1.0pre2us
+In-Reply-To: <F224Z9fhzgAfiwHETT40000451e@hotmail.com>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+On 14 Aug 2000 10:34:19 -0700, Tim Freedom wrote:
+> 
+> I'm having alot of strange problems with my key mappings which don't appear 
+> on any of my other systems.  Both the Ctrl-Lock and the Num-Lock are off 
+> (disabled) and I tried toggling them just in case too (so it ain't them :-)
+> 
+> I have the following in my .fvwm2rc file
+[...]
+> 
+> Key KP_9        A       C       GotoPage 2 0
+> 
+> Key KP_7        A       M       WarpToWindow 50p 50p
+> 
+> Key Left        A       C       Scroll -100 +0
+> Key Right       A       C       Scroll +100 +0
+> Key Up          A       C       Scroll +0   -100
+> Key Down        A       C       Scroll +0   +100
+> 
+> This is what's happening.
+> Ctrl-7, Ctrl-4, Ctrl-5, Ctrl-6, and Ctrl-1 all work properly.
+> Ctrl-8, Ctrl-9, Ctrl-2 and Ctrl-3 do NOT for some reason (why ?????).
+> 
+> As for the arrow keys, the up and down don't seem to do anything at all.  
+> The left and right function as though they are 'GotoPage 0 1' and 'GotoPage 
+> 2 1' respectively.  Again, Why ??????
+
+I am not familar much with sun keyboards, so probably there is a sun
+specific solution here, but generally this is probably a X Server related
+problem, not fvwm's. Try to run xev(1) and see whether KP_9 is really
+generated when you press 9 (with or without Ctrl). You can use xmodmap(1)
+to alter mappings.
+
+> Besides that my Meta (or Alt -- Diamond key on Sun's keyboard) doesn't work 
+> unless I'm using Emacs or Netscape.  In Fvwm it doesn't seem to have any 
+> affect.
+
+Again, xev can answer what this key generates.
+
+> Could someone please tell me what I'm doing wrong.  As noted, this all works 
+> on my linux box and on the previous Ultra-5 that I had (different OS 
+> though).
+> 
+> uname -a:       SunOS klepto 5.7 Generic_106541-10 sun4u
+> fvwm version:   fvwm-snap-20000809 (with xpm support)
+
+Regards,
+Mikhael.
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Tue Aug 22 19:53:44 2000
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 22 Aug 2000 19:53:44 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id TAA28256
+	for <fvwm-workers@hpc.uh.edu>; Tue, 22 Aug 2000 19:53:33 -0500 (CDT)
+Received: from hotmail.com (f49.law3.hotmail.com [209.185.241.49])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id TAA15813
+	for <fvwm-workers@fvwm.org>; Tue, 22 Aug 2000 19:54:01 -0500 (CDT)
+Received: from mail pickup service by hotmail.com with Microsoft SMTPSVC;
+	 Tue, 22 Aug 2000 17:53:30 -0700
+Received: from 64.160.19.240 by lw3fd.law3.hotmail.msn.com with HTTP;	Wed, 23 Aug 2000  GMT
+X-Originating-IP: [64.160.19.240]
+From: "Tim Freedom" <tim_freedom@hotmail.com>
+To: fvwm-workers@fvwm.org
+Subject: Re: Keyboard mappings -- strange...
+Date: Tue, 22 Aug 2000 17:53:30 PDT
+Mime-Version: 1.0
+Content-Type: text/plain; format=flowed
+Message-ID: <F491IT18olkDTM9wGmA000002df@hotmail.com>
+X-OriginalArrivalTime: 23 Aug 2000 00:53:30.0706 (UTC) FILETIME=[8E3B5B20:01C00C9C]
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+On Sat, 19 Aug 2000 19:44:16 +0300, Mikhael Goikhman wrote:
+>
+>On 14 Aug 2000 10:34:19 -0700, Tim Freedom wrote:
+> > > I'm having alot of strange problems with my key mappings which > don't 
+>appear on any of my other systems.  Both the Ctrl-Lock and
+> > the Num-Lock are off (disabled) and I tried toggling them just in
+> > case too (so it ain't them :-)
+> > > I have the following in my .fvwm2rc file
+>[...]
+> > > Key KP_9        A       C       GotoPage 2 0
+> > > Key KP_7        A       M       WarpToWindow 50p 50p
+> > > Key Left        A       C       Scroll -100 +0
+> > Key Right       A       C       Scroll +100 +0
+> > Key Up          A       C       Scroll +0   -100
+> > Key Down        A       C       Scroll +0   +100
+> > > This is what's happening.
+> > Ctrl-7, Ctrl-4, Ctrl-5, Ctrl-6, and Ctrl-1 all work properly.
+> > Ctrl-8, Ctrl-9, Ctrl-2 and Ctrl-3 do NOT for some reason (why
+> > ?????).
+> > > As for the arrow keys, the up and down don't seem to do anything
+> > at all.  The left and right function as though they are 'GotoPage
+> > 0 1' and 'GotoPage 2 1' respectively.  Again, Why ??????
+>
+>I am not familar much with sun keyboards, so probably there is a sun
+>specific solution here, but generally this is probably a X Server
+>related problem, not fvwm's. Try to run xev(1) and see whether KP_9
+>is really generated when you press 9 (with or without Ctrl). You can
+>use xmodmap(1) to alter mappings.
+>
+> > Besides that my Meta (or Alt -- Diamond key on Sun's keyboard)
+> > doesn't work unless I'm using Emacs or Netscape.  In Fvwm it
+> > doesn't seem to have any affect.
+>
+>Again, xev can answer what this key generates.
+>
+> > Could someone please tell me what I'm doing wrong.  As noted, this
+> > all works on my linux box and on the previous Ultra-5 that I had
+> > (different OS though).
+> > > uname -a:       SunOS klepto 5.7 Generic_106541-10 sun4u
+> > fvwm version:   fvwm-snap-20000809 (with xpm support)
+>
+
+Mikhael et all.  A couple of things to follow-up on..  I tried a Talk form 
+so as to attempt to debug (I'll attach a simplified configuration file 
+below):
+
+When I press Ctrl-arrow-up, I get,
+[FVWM][ExecuteFunction]: <<ERROR>> No such command 'MIT-MAGIC-COOKIE-1'
+
+When I press KP_8, I get,
+[FVWM][ExecuteFunction]: <<ERROR>> No such command 'MIT-MAGIC-COOKIE-1'
+
+Pressing SC arrows works fine.  Pressing Ctrl-arrows doesn't work properly; 
+as noted above Ctrl-left and Ctrl-right function as though they are GotoPage 
+0 1 and GotoPage 2 1.  Ctrl-up and Ctrl-down don't modify the view at all.
+
+KP_0 doesn't function properly.
+
+I also took your advice Mikhael about xev.
+
+If num_lock is NOT active
+
+pressing KP_5 gives me,
+
+KeyRelease event, serial 23, synthetic NO, window 0x6800001,
+    root 0x2a, subw 0x0, time 623342502, (43,114), root:(87,383),
+    state 0x0, keycode 99 (keysym 0xffdc, F31), same_screen YES,
+    XLookupString gives 0 characters:  ""
+
+pressing KP_4 gives me,
+
+KeyPress event, serial 23, synthetic NO, window 0x6800001,
+    root 0x2a, subw 0x0, time 623343471, (43,114), root:(87,383),
+    state 0x0, keycode 98 (keysym 0xff51, Left), same_screen YES,
+    XLookupString gives 0 characters:  ""
+
+If num_lock is active
+
+pressing KP_5 gives me,
+
+KeyRelease event, serial 23, synthetic NO, window 0x6800001,
+    root 0x2a, subw 0x6800002, time 623433508, (39,42), root:(83,311),
+    state 0x20, keycode 99 (keysym 0xffb5, KP_5), same_screen YES,
+    XLookupString gives 1 characters:  "5"
+
+pressing KP_4 gives me,
+
+KeyPress event, serial 23, synthetic NO, window 0x6800001,
+    root 0x2a, subw 0x6800002, time 623434196, (39,42), root:(83,311),
+    state 0x20, keycode 98 (keysym 0xffb4, KP_4), same_screen YES,
+    XLookupString gives 1 characters:  "4"
+
+My 'xmodmap' shows,
+
+xmodmap:  up to 2 keys per modifier, (keycodes in parentheses):
+
+shift       Shift_L (0x6a),  Shift_R (0x75)
+lock        Caps_Lock (0x7e)
+control     Control_L (0x53)
+mod1        Alt_L (0x1a)
+mod2        Mode_switch (0x14)
+mod3        Num_Lock (0x69)
+mod4        Meta_L (0x7f),  Meta_R (0x81)
+mod5
+
+I attempted, per FAQ, to 'xmodmap -e "clear Mod3"' but nothing improved.
+
+What should I do to get the KP_* and arrow key mappings working ????
+
++ Tim
+
+##########################################################################
+# FVWM - Version 2.x (fvwm2) Configuration File
+#
+
+##########################################################################
+# PATH Setup
+#
+# Colon seperated unix directory paths for Modules, xpm files, and bitmaps
+#
+ModulePath /local/users/timf/download/fvwm-0809/libexec/fvwm/2.3.21
+ImagePath 
+/local/users/timf/.fvwm/pixmaps:/local/common/lib/pixmaps:/usr/openwin/include/X11/bitmaps
+
+############################################################################
+# COLORS and FONTS
+#
+# Set the fore and back border colors for the window that has focus
+HilightColor            White Red
+
+
+############################################################################
+# KEYBOARD Setup
+
+# Arrow Keys
+# press arrow + control anywhere, and scroll by 1 page
+Key Left	A	C	Scroll -100 +0
+Key Right	A	C	Scroll +100 +0
+Key Up		A	C	Scroll +0   -100
+Key Down	A	C	Scroll +0   +100
+
+# press arrow + meta key, and scroll by 1/10 of a page
+Key Left	A	M	Scroll -10  +0
+Key Right	A	M	Scroll +10  +0
+Key Up		A	M	Scroll +0   -10
+Key Down	A	M	Scroll +0   +10
+
+# press shift arrow + control anywhere, and move the pointer by 1% of a page
+Key Left	A	SC	CursorMove -1 +0
+Key Right	A	SC	CursorMove +1 +0
+Key Up		A	SC	CursorMove +0 -1
+Key Down	A	SC	CursorMove +0 +1
+
+# press shift arrow + meta key, and move the pointer by 1/10 of a page
+Key Left	A	SM	CursorMove -10 +0
+Key Right	A	SM	CursorMove +10 +0
+Key Up		A	SM	CursorMove +0  -10
+Key Down	A	SM	CursorMove +0  +10
+# kEYboard accelerators
+
+Key KP_Decimal	A	C	Prev [ CurrentPage !iconic] FlipFocus
+Key KP_0	A	C	Prev [!CurrentPage !iconic] FlipFocus
+Key KP_1	A       C       GotoPage 0 2
+Key KP_2	A       C       GotoPage 1 2
+Key KP_3	A       C       GotoPage 2 2
+Key KP_4	A       C       GotoPage 0 1
+Key KP_5	A       C       GotoPage 1 1
+Key KP_6	A       C       GotoPage 2 1
+Key KP_7	A       C       GotoPage 0 0
+Key KP_8	A       C       GotoPage 1 0
+Key KP_9	A       C       GotoPage 2 0
+
+________________________________________________________________________
+Get Your Private, Free E-mail from MSN Hotmail at http://www.hotmail.com
+
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Fri Aug 25 17:24:31 2000
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Fri, 25 Aug 2000 17:24:31 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id RAA02745
+	for <fvwm-workers@hpc.uh.edu>; Fri, 25 Aug 2000 17:24:20 -0500 (CDT)
+Received: from southpass.baynetworks.com (ns2.BayNetworks.COM [134.177.3.16])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id RAA13212
+	for <fvwm-workers@fvwm.org>; Fri, 25 Aug 2000 17:24:47 -0500 (CDT)
+Received: from mailhost.BayNetworks.COM (h8754.s84f5.BayNetworks.COM [132.245.135.84])
+	by southpass.baynetworks.com (8.9.1/8.9.1) with ESMTP id PAA28116
+	for <fvwm-workers@fvwm.org>; Fri, 25 Aug 2000 15:16:08 -0700 (PDT)
+Received: from pobox.engeast.BayNetworks.COM (pobox.engeast.baynetworks.com [192.32.61.6])
+	by mailhost.BayNetworks.COM (8.9.1/8.8.8) with ESMTP id SAA12210
+	for <fvwm-workers@fvwm.org>; Fri, 25 Aug 2000 18:24:15 -0400 (EDT)
+Received: from lemming.engeast (lemming [192.32.148.86])
+	by pobox.engeast.BayNetworks.COM (SMI-8.6/BNET-97/04/24-S) with ESMTP
+	id SAA24344; Fri, 25 Aug 2000 18:24:14 -0400
+	for <fvwm-workers@fvwm.org>
+Received: (from psmith@localhost)
+	by lemming.engeast (8.9.3+Sun/8.9.1) id SAA17433;
+	Fri, 25 Aug 2000 18:24:07 -0400 (EDT)
+X-Authentication-Warning: lemming.engeast: psmith set sender to psmith@baynetworks.com using -f
+To: fvwm-workers Mailing List <fvwm-workers@fvwm.org>
+Subject: Re: FVWM: xscreensaver colormap bug?
+References: <p5af7abfin.fsf@baynetworks.com>
+From: "Paul D. Smith" <pausmith@nortelnetworks.com>
+In-Reply-To: psmith@BayNetworks.COM's message of "18 Jun 1998 16:50:56 -0400"
+Reply-To: pausmith@nortelnetworks.com
+Date: 25 Aug 2000 18:24:06 -0400
+Message-ID: <p5og2hvv21.fsf@nortelnetworks.com>
+Lines: 51
+User-Agent: Gnus/5.0806 (Gnus v5.8.6) Emacs/20.7
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+%% On 18 Jun 1998 16:50:56 -0400
+%% Regarding FVWM: xscreensaver colormap bug?; I wrote:
+
+Yes, more than two years have gone by.
+
+I just noticed this on the XScreenSaver web site, and I wonder if it
+applies to FVWM?
+
+> The installColormap option doesn't work very well with the twm (1)
+> window manager and its descendants.
+>
+> There is a race condition between the screensaver and this window
+> manager, which can result in the screensaver's colormap not getting
+> installed properly, meaning the graphics hacks will appear in
+> essentially random colors. (If the screen goes white instead of black,
+> this is probably why.)
+>
+> The mwm (1) and olwm (1) window managers don't have this problem. The
+> race condition exists because X (really, ICCCM) does not provide a way
+> for an OverrideRedirect window to have its own colormap, short of
+> grabbing the server (which is neither a good idea, nor really possible
+> with the current design.) What happens is that, as soon as xscreensaver
+> installs its colormap, twm responds to the resultant ColormapNotify
+> event by re-instaling the default colormap. Apparently, twm doesn't
+> always do this; it seems to do it regularly if the screensaver is
+> activated from a menu item, but seems to not do it if the screensaver
+> comes on of its own volition, or is activated from another console.
+>
+> Attention, window manager authors! 
+>                                                           
+> You should only call XInstallColormap (3) in response to user
+> events. That is, it is appropriate to install a colormap in response to
+> FocusIn, FocusOut, EnterNotify, and LeaveNotify events; but it is not
+> appropriate to call it in response to ColormapNotify events. If you
+> install colormaps in response to application actions as well as in
+> response to user actions, then you create the situation where it is
+> impossible for override-redirect applications (such as xscreensaver) to
+> display their windows in the proper colors.
+
+http://www.jwz.org/xscreensaver/man1.html#12
+
+What do you think?
+
+There is still a bug #5 open about this against FVWM.
+
+-- 
+-------------------------------------------------------------------------------
+ Paul D. Smith <psmith@baynetworks.com>         Network Management Development
+ "Please remain calm...I may be mad, but I am a professional." --Mad Scientist
+-------------------------------------------------------------------------------
+   These are my opinions---Nortel Networks takes no responsibility for them.
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Sat Aug 26 12:41:39 2000
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sat, 26 Aug 2000 12:41:39 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id MAA11735
+	for <fvwm-workers@hpc.uh.edu>; Sat, 26 Aug 2000 12:41:29 -0500 (CDT)
+Received: from david.virtual.co.il (david.virtual.co.il [199.203.234.2])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id MAA29473
+	for <fvwm-workers@fvwm.org>; Sat, 26 Aug 2000 12:41:56 -0500 (CDT)
+Received: (from migo@localhost)
+	by david.virtual.co.il (8.9.3/8.9.3) id UAA15118
+	for fvwm-workers@fvwm.org; Sat, 26 Aug 2000 20:41:10 +0300
+Date: Sat, 26 Aug 2000 20:41:10 +0300
+From: Mikhael Goikhman <migo@cortext.co.il>
+To: Fvwm Workers List <fvwm-workers@fvwm.org>
+Subject: Re: fvwm doing xsync reading almost every command
+Message-ID: <20000826204110.B14666@cortext.co.il>
+Mail-Followup-To: Fvwm Workers List <fvwm-workers@fvwm.org>
+References: <200008120029.UAA05854@castle.mk.telcordia.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+X-Mailer: Mutt 1.0pre2us
+In-Reply-To: <200008120029.UAA05854@castle.mk.telcordia.com>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+On 11 Aug 2000 20:29:32 -0400, Dan Espen wrote:
+> 
+> I've previously complained about fvwm taking forever to start up
+> when run remotely over a cable modem.  Fifteen minutes or more.
+> 
+> I've added debug logic that times every command executed by fvwm.
+
+Since this logging is quite useful, can you please add #ifdef's and commit
+your additions? I planned to create a 2/3 column table (start/end time in
+milliseconds, command) myself, but seems that you already have this.
+
+> I find that commands that shouldn't take any time at all,
+> like "AddToFunction", take an average of 1/4 elapsed seconds.
+
+A really bad bug.
+
+> A big chunk of that time is in WaitForButtonsUp where there are
+> a few X calls including calls to XSync, XAllowEvents, XQueryPointer,
+> XPending, etc.
+> 
+> I traced that 1/4 second down to functions.c ExecuteFunction() around
+> line 1035 where it has this:
+> 
+>   /* Only wait for an all-buttons-up condition after calls from
+>    * regular built-ins, not from complex-functions, menus or modules. */
+>   if(Module == -1)
+>     WaitForButtonsUp(True);
+> 
+> The condition "Module == -1" is true for just about every command.
+> Only blank lines and comments get away with zero measurable elapsed time.
+> 
+> For startup, the Module switch seems to originate in fvwm.c around line
+> 639:
+> 
+>   if (num_config_commands > 0)
+>   {
+>     int i;
+>     for(i=0;i<num_config_commands;i++)
+>     {
+>       DoingCommandLine = True;
+>       ExecuteFunction(
+> 	config_commands[i], NULL, &Event, C_ROOT, -1, EXPAND_COMMAND, NULL);
+>       free(config_commands[i]);
+>     }
+>     DoingCommandLine = False;
+>   } else {
+>     /* Run startup command file in 5 places: FVWM_USERDIR, FVWM_DATADIR,
+>        and for compatibility: ~/.fvwm2rc, $sysconfdir/system.fvwm2rc */
+>     if (
+>       !run_command_file( CatString3(fvwm_userdir, "/",       FVWMRC),
+>         &Event, NULL, C_ROOT, -1 ) &&
+>       !run_command_file( CatString3(home_dir,     "/",       FVWMRC),
+>         &Event, NULL, C_ROOT, -1 ) &&
+>       !run_command_file( CatString3(FVWM_DATADIR, "/",       FVWMRC),
+>         &Event, NULL, C_ROOT, -1 ) &&
+>       !run_command_file( CatString3(FVWM_DATADIR, "/system", FVWMRC),
+>         &Event, NULL, C_ROOT, -1 ) &&
+>       !run_command_file( CatString3(FVWM_CONFDIR, "/system", FVWMRC),
+>         &Event, NULL, C_ROOT, -1 ) )
+> 
+> 
+> All  those  "run_command_file"   and "ExecuteFunction"  commands   are
+> passing "-1" for the "Module" value causing all the XSync calls.  This
+> appears  to be the way fvwm  has worked since  at  least 2.2.  (2.2 is
+> also slow run this way.)
+> 
+> I changed all the above "-1" to another value with no obvious negative
+> consequences.  I don't know for sure what that does to startup time,
+> the first test seemed to show improvement.
+> 
+> I don't think thats the right fix for this.
+> It would seem to me, the decision about which commands need to be
+> XSync'd should be made based on the command, or possibly the command
+> and its arguments.
+> 
+> Any comments?
+
+I think, your fix (disallow WaitForButtonsUp for startup commands) is ok.
+We grab a busy cursor during start-up commands anyway. Maybe to call
+WaitForButtonsUp after that block.
+
+Your suggestion of calling WaitForButtonsUp based on the command name
+(I don't think parsing arguments is needed/possible) also can be used
+to speed up the run time commands. Probably Dominik, who worked with
+this function, can comment better on this suggestion after his vacation.
+
+Regards,
+Mikhael.
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Sat Aug 26 19:41:18 2000
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sat, 26 Aug 2000 19:41:18 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id TAA13417
+	for <fvwm-workers@hpc.uh.edu>; Sat, 26 Aug 2000 19:41:08 -0500 (CDT)
+Received: from dnsmx1rrc.telcordia.com (dnsmx1rrc.telcordia.com [128.96.20.41])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id TAA04572
+	for <fvwm-workers@fvwm.org>; Sat, 26 Aug 2000 19:41:36 -0500 (CDT)
+Received: from castle.mk.telcordia.com (castle.mk.telcordia.com [128.96.133.172])
+	by dnsmx1rrc.telcordia.com (8.9.3/8.9.2) with ESMTP id UAA04328
+	for <fvwm-workers@fvwm.org>; Sat, 26 Aug 2000 20:38:31 -0400 (EDT)
+Received: from mk.telcordia.com (fork [128.96.128.32])
+	by castle.mk.telcordia.com (8.8.8/8.8.8) with ESMTP id UAA05564
+	for <fvwm-workers@fvwm.org>; Sat, 26 Aug 2000 20:38:31 -0400 (EDT)
+Message-Id: <200008270038.UAA05564@castle.mk.telcordia.com>
+To: Fvwm Workers List <fvwm-workers@fvwm.org>
+Subject: Re: fvwm doing xsync reading almost every command 
+In-reply-to: Your message of Sat, 26 Aug 2000 20:41:10 +0300.
+             <20000826204110.B14666@cortext.co.il> 
+x-face: H2G63xNIQ1G~92=">,W';}5I'2EN+pvbeFK2U`LLazP;W3/AU'795C^6M1;wX3''q-~||]i
+ =q\|l:fMk^4zF@^JHkw75M~[d)NKA},lfIOD=B'QWUuv_7Pu+j*']@]x]y'(Eyh}IAEhQDV@tJ?\E"
+ <=..HSTdYCt'DevYza*qnf_0?9qelUgqeJkJA'7Zr<-NU
+Mime-Version: 1.0 (generated by tm-edit 7.108)
+Content-Type: text/plain; charset=US-ASCII
+Date: Sat, 26 Aug 2000 20:38:31 -0400
+From: Dan Espen <dane@mk.telcordia.com>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Mikhael Goikhman <migo@cortext.co.il> writes:
+> On 11 Aug 2000 20:29:32 -0400, Dan Espen wrote:
+> > I've added debug logic that times every command executed by fvwm.
+> 
+> Since this logging is quite useful, can you please add #ifdef's and commit
+> your additions? I planned to create a 2/3 column table (start/end time in
+> milliseconds, command) myself, but seems that you already have this.
+
+I originally added time, and I found it really  hard to spot big gaps.
+Right now, its  printing elapsed milliseconds  from the previous debug
+line.  A shortcoming of  my  implementation is  that the  elapsed time
+applies  to  the previous line.   I'll  add it anyway,   I did find it
+helpful.
+
+> > I find that commands that shouldn't take any time at all,
+> > like "AddToFunction", take an average of 1/4 elapsed seconds.
+> 
+> A really bad bug.
+
+I'm seeing 2-3 minutes where I used to see 10 minutes.
+
+When I get a chance, I'll clean it up and commit.
+
+--
+Dan Espen
+444 Hoes Lane  Room RRC 1C-214           E-mail: dane@mk.telcordia.com
+Piscataway, NJ 08854                     Phone: (732) 699-5570
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Aug 28 13:07:59 2000
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 28 Aug 2000 13:07:59 -0500 (CDT)
+Received: by sina.hpc.uh.edu (8.9.3/8.9.3) id NAA02901;
+	Mon, 28 Aug 2000 13:07:52 -0500 (CDT)
+Date: Mon, 28 Aug 2000 13:07:52 -0500 (CDT)
+From: CVS <cvs@hpc.uh.edu>
+Message-Id: <200008281807.NAA02901@sina.hpc.uh.edu>
+To: fvwm-workers@hpc.uh.edu
+Reply-To: fvwm-workers@hpc.uh.edu
+Subject: CVS dane: * fvwm/fvwm.c (main): Read commands from config files without
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+CVSROOT:	/home/cvs/fvwm
+Module name:	fvwm
+Changes by:	dane	00/08/28 13:07:52
+
+Modified files:
+	.              : ChangeLog 
+	docs           : ANNOUNCE ChangeLog 
+	fvwm           : add_window.c fvwm.c misc.c read.c 
+
+Log message:
+* fvwm/fvwm.c (main): Read commands from config files without
+doing XSync on each comamnd.  (Speed up.)
+
+* fvwm/misc.c (fvwm_msg): Add ifdef'd timing logic to fvwm_msg.
+
+* fvwm/read.c (ReadFile): Add information to existing debug lines.
+
+* fvwm/add_window.c (setup_window_name): Add debugging to window
+creation.
+
+* ANNOUNCE (Highlights): Added faster startup.
+Some explanation of layers.
+Clarified the announcement of EscapeFunc.
+
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Aug 28 15:09:15 2000
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 28 Aug 2000 15:09:15 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id PAA04248
+	for <fvwm-workers@hpc.uh.edu>; Mon, 28 Aug 2000 15:09:05 -0500 (CDT)
+Received: from dnsmx2pya.telcordia.com (dnsmx2pya.telcordia.com [128.96.20.32])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id PAA13510
+	for <fvwm-workers@fvwm.org>; Mon, 28 Aug 2000 15:09:20 -0500 (CDT)
+Received: from castle.mk.telcordia.com (castle.mk.telcordia.com [128.96.133.172])
+	by dnsmx2pya.telcordia.com (8.9.3/8.9.3) with ESMTP id PAA28524
+	for <fvwm-workers@fvwm.org>; Mon, 28 Aug 2000 15:58:17 -0400 (EDT)
+Received: from mk.telcordia.com (fork [128.96.128.32])
+	by castle.mk.telcordia.com (8.8.8/8.8.8) with ESMTP id PAA02781
+	for <fvwm-workers@fvwm.org>; Mon, 28 Aug 2000 15:58:17 -0400 (EDT)
+Message-Id: <200008281958.PAA02781@castle.mk.telcordia.com>
+To: fvwm-workers Mailing List <fvwm-workers@fvwm.org>
+Subject: Re: FVWM: xscreensaver colormap bug? 
+In-reply-to: Your message of 25 Aug 2000 18:24:06 -0400.
+             <p5og2hvv21.fsf@nortelnetworks.com> 
+Mime-Version: 1.0 (generated by tm-edit 7.108)
+Content-Type: text/plain; charset=US-ASCII
+Date: Mon, 28 Aug 2000 15:58:16 -0400
+From: Dan Espen <dane@mk.telcordia.com>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+"Paul D. Smith" <pausmith@nortelnetworks.com> writes:
+> %% On 18 Jun 1998 16:50:56 -0400
+> %% Regarding FVWM: xscreensaver colormap bug?; I wrote:
+> 
+> Yes, more than two years have gone by.
+
+Time flies when you are having fun.
+
+> I just noticed this on the XScreenSaver web site, and I wonder if it
+> applies to FVWM?
+> 
+> > The installColormap option doesn't work very well with the twm (1)
+> > window manager and its descendants.
+> >
+> > There is a race condition between the screensaver and this window
+> > manager, which can result in the screensaver's colormap not getting
+> > installed properly, meaning the graphics hacks will appear in
+> > essentially random colors. (If the screen goes white instead of black,
+> > this is probably why.)
+...
+> What do you think?
+> 
+> There is still a bug #5 open about this against FVWM.
+
+I tested this just now.  I first allocated all my colors, then modified
+my XScreensaver setup to install colormaps.
+
+I tried  about 10 times and each   time, the hack  ran with  the right
+colormap.
+
+A long  time ago I reported  that fvwm DID  have  this problem.  While
+trying  to solve  it, I  realized  that  I was  using  xli  and xv  as
+substitutes for the  hacks that come with  xscreensaver.  For this  to
+work correctly,  the hack has to use  the root colormap and both those
+programs use the default colormap.
+
+I don't think fvwm has a problem with xscreensaver.
+
+--
+Dan Espen
+444 Hoes Lane  Room RRC 1C-214           E-mail: dane@mk.telcordia.com
+Piscataway, NJ 08854                     Phone: (732) 699-5570
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Aug 28 15:46:05 2000
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 28 Aug 2000 15:46:05 -0500 (CDT)
+Received: from epithumia.math.uh.edu (IDENT:root@epithumia.math.uh.edu [129.7.128.2])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id PAA05341
+	for <fvwm-workers@hpc.uh.edu>; Mon, 28 Aug 2000 15:45:36 -0500 (CDT)
+Received: (from tibbs@localhost)
+	by epithumia.math.uh.edu (8.9.3/8.9.3) id PAA30007
+	for fvwm-workers@hpc.uh.edu; Mon, 28 Aug 2000 15:46:04 -0500
+Received: from larry.math.uh.edu (larry.math.uh.edu [129.7.128.51])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id PAA04296
+	for <fvwm-workers@hpc.uh.edu>; Mon, 28 Aug 2000 15:14:22 -0500 (CDT)
+From: fvwm-bug@larry.math.uh.edu
+Received: from localhost (localhost [127.0.0.1])
+	by larry.math.uh.edu (8.9.1/8.9.1) with ESMTP id PAA20752
+	for <fvwm-workers@hpc.uh.edu>; Mon, 28 Aug 2000 15:26:04 -0500 (CDT)
+Date: Mon, 28 Aug 2000 15:26:04 -0500 (CDT)
+Message-Id: <200008282026.PAA20752@larry.math.uh.edu>
+To: fvwm-workers@hpc.uh.edu
+Subject: Notification: incoming/644
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+FVWM Bug Tracking notification
+
+new message incoming/644
+
+Message summary for PR#644
+	From: markem@flash.net
+	Subject: configure problems
+	Date: Mon, 28 Aug 2000 15:26:02 -0500 (CDT)
+	0 replies 	0 followups
+
+====> ORIGINAL MESSAGE FOLLOWS <====
+
+From markem@flash.net  Mon Aug 28 15:26:03 2000
+Received: from localhost (localhost [127.0.0.1])
+	by larry.math.uh.edu (8.9.1/8.9.1) with ESMTP id PAA26575
+	for <fvwm-bug@fvwm.math.uh.edu>; Mon, 28 Aug 2000 15:26:02 -0500 (CDT)
+Date: Mon, 28 Aug 2000 15:26:02 -0500 (CDT)
+From: markem@flash.net
+Message-Id: <200008282026.PAA26575@larry.math.uh.edu>
+To: fvwm-bug@larry.math.uh.edu
+Subject: configure problems
+
+Full_Name: Mark Manning
+Version: 2.2.4
+CVS_Date: 
+OS: SGIs
+X_Server: SGI X Windows
+Submission from: (NULL) (139.169.226.24)
+
+
+I reported this once before, took it to the configure people too.  It's
+been
+about a year and when I downloaded again this year - same problem.
+
+When running the ./configure program it looks for the C compiler.  It
+correctly finds the compiler to be CC.  But it then tries to do a test
+compile and ./configure generates:
+
+checking whether the C compiler (/usr/bin/CC -o32 -g -fullwarn -DIRIX -o32
+-shared -demangle) works... no
+
+which then generates:
+
+configure: error: installation or configuration problem: C compiler cannot
+create executables.
+
+and aborts.
+
+Has nothing been done to correct the problem in either FVWM or automake? 
+Let me know!
+Thanks!  :-)
+
+
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Tue Aug 29 04:37:19 2000
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 29 Aug 2000 04:37:19 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id EAA10788
+	for <fvwm-workers@hpc.uh.edu>; Tue, 29 Aug 2000 04:37:06 -0500 (CDT)
+Received: from david.virtual.co.il (david.virtual.co.il [199.203.234.2])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id EAA28682
+	for <fvwm-workers@fvwm.org>; Tue, 29 Aug 2000 04:37:33 -0500 (CDT)
+Received: (from migo@localhost)
+	by david.virtual.co.il (8.9.3/8.9.3) id MAA28605
+	for fvwm-workers@fvwm.org; Tue, 29 Aug 2000 12:36:44 +0300
+Date: Tue, 29 Aug 2000 12:36:44 +0300
+From: Mikhael Goikhman <migo@cortext.co.il>
+To: Fvwm Workers List <fvwm-workers@fvwm.org>
+Subject: Re: fvwm-themes 0.3.17 is out
+Message-ID: <20000829123644.A28468@cortext.co.il>
+Mail-Followup-To: Fvwm Workers List <fvwm-workers@fvwm.org>
+References: <20000828030517.A4763@cortext.co.il> <39AB4238.36FF7AE@free.fr>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+X-Mailer: Mutt 1.0pre2us
+In-Reply-To: <39AB4238.36FF7AE@free.fr>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+On 29 Aug 2000 06:55:20 +0200, Olivier Chapuis wrote:
+> 
+> Mikhael Goikhman wrote:
+> > 
+> > I would like if somebody test this release and report results.
+> 
+> With perl 5.004_05 I've got the following error when I make install:
+> 
+> /usr/local/bin/fvwm-themes-config --site --reset
+> /^(.*/|)+([^/]+)\.tar\.(gz|bz2)$/: regexp *+ operand could be empty at /usr/local/bin/fvwm-themes-config line 1508.
+> 
+> This error does not occure with perl 5.6.0 (fortunately I've these
+> two versions of perl on my machine).
+
+Uff, you should remove the first +, I guess.
+Is this a warning or error? I am not near my computer, I get a fatal error
+(different from what you specified) with perl 5.005.
+
+> > There is one problem, which I had no time to investigate: NoteMessage (on
+> > theme switching) is freezed until a mouse is moved or a button is pressed.
+> > I can't say now whether it is an old or a new problem, but it should be
+> > fixed (in fvwm I suppose) as soon as possible.
+> 
+> As you say in the ChangeLog this happen with modules@migo (even with
+> all the option to None). This freeze is caused by FuncFvwmStopThemeModules
+> from themes/migo/modules/main (i.e., I've got the freeze when I execute
+> this function from the Console). I do not think I saw this freeze before
+> 0.3.17. I've no time to do more investigation now.
+
+I got this freeze with other than modules@migo components too IIRC.
+
+> About swallowing two pagers: we must use different name for *all* the
+> pager we use.
+
+Yes, I think you are right. But there will be even more duplication...
+Maybe to have one FvwmPager file with all pager configs or several files
+are better? I have an idea (not new) how to fix a duplication for a future
+fvwm versions. FvwmPager-Desker simply should read FvwmPager config first.
+
+Regards,
+Mikhael.
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Tue Aug 29 12:49:46 2000
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 29 Aug 2000 12:49:46 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id MAA17865
+	for <fvwm-workers@hpc.uh.edu>; Tue, 29 Aug 2000 12:49:34 -0500 (CDT)
+Received: from hotmail.com (f97.law3.hotmail.com [209.185.241.97])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id MAA12671
+	for <fvwm-workers@fvwm.org>; Tue, 29 Aug 2000 12:50:00 -0500 (CDT)
+Received: from mail pickup service by hotmail.com with Microsoft SMTPSVC;
+	 Tue, 29 Aug 2000 10:49:29 -0700
+Received: from 64.160.19.240 by lw3fd.law3.hotmail.msn.com with HTTP;	Tue, 29 Aug 2000 17:49:29 GMT
+X-Originating-IP: [64.160.19.240]
+From: "Tim Freedom" <tim_freedom@hotmail.com>
+To: fvwm-workers@fvwm.org
+Subject: Re: Keyboard mappings -- strange...
+Date: Tue, 29 Aug 2000 10:49:29 PDT
+Mime-Version: 1.0
+Content-Type: text/plain; format=flowed
+Message-ID: <F97wViaaskjeo4lB4Bw00000c08@hotmail.com>
+X-OriginalArrivalTime: 29 Aug 2000 17:49:29.0997 (UTC) FILETIME=[7B477BD0:01C011E1]
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+On Tue, 22 Aug 2000 17:53:30 PDT, Tim Freedom wrote:
+>
+>My 'xmodmap' shows,
+>xmodmap:  up to 2 keys per modifier, (keycodes in parentheses):
+>
+>shift       Shift_L (0x6a),  Shift_R (0x75)
+>lock        Caps_Lock (0x7e)
+>control     Control_L (0x53)
+>mod1        Alt_L (0x1a)
+>mod2        Mode_switch (0x14)
+>mod3        Num_Lock (0x69)
+>mod4        Meta_L (0x7f),  Meta_R (0x81)
+>
+>I attempted, per FAQ, to 'xmodmap -e "clear Mod3"' but nothing >improved.
+>
+>What should I do to get the KP_* and arrow key mappings working ????
+
+I'm answering my own question in hopes of having this info added to the FAQ. 
+  This took me awhile to figure this out since its not mentioned anywhere 
+even though it might be understood by the masses.
+
+After an "xmodmap -e blah blah" or "xmodmap filename" one _must_ either 
+restart fvwm to see the affects or add those commands to one's startx or 
+xinitrc file and reboot.  Bare in mind that the changes show-up immediately 
+when queried command-line in an xterm or xev or xkeycaps (kinda confusing to 
+a newbie like myself).
+
+Do please add this note to the FAQ, it might help another poor soul.
+
+Now if I can only figure why my diamond key (SUN keyboard) does not function 
+as a Meta key in fvwm (it does fine in emacs).  In Fvwm I have to use the 
+Alt key --- Does fvwm map Mod1 as Meta by any chance ???
+
+Thanks again.
+
+Tim
+_________________________________________________________________________
+Get Your Private, Free E-mail from MSN Hotmail at http://www.hotmail.com.
+
+Share information about yourself, create your own public profile at 
+http://profiles.msn.com.
+
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Tue Aug 29 13:04:58 2000
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 29 Aug 2000 13:04:58 -0500 (CDT)
+Received: by sina.hpc.uh.edu (8.9.3/8.9.3) id NAA17996;
+	Tue, 29 Aug 2000 13:04:52 -0500 (CDT)
+Date: Tue, 29 Aug 2000 13:04:52 -0500 (CDT)
+From: CVS <cvs@hpc.uh.edu>
+Message-Id: <200008291804.NAA17996@sina.hpc.uh.edu>
+To: fvwm-workers@hpc.uh.edu
+Reply-To: fvwm-workers@hpc.uh.edu
+Subject: CVS dane: * fvwm/read.c (ReadFile): remove extra quotes in debug message.
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+CVSROOT:	/home/cvs/fvwm
+Module name:	fvwm
+Changes by:	dane	00/08/29 13:04:52
+
+Modified files:
+	.              : ChangeLog 
+	docs           : ChangeLog FAQ 
+	fvwm           : read.c 
+
+Log message:
+* fvwm/read.c (ReadFile): remove extra quotes in debug message.
+* FAQ (5.5): Add note about restarting fvwm after using xmodmap.
+
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Tue Aug 29 13:23:43 2000
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 29 Aug 2000 13:23:43 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id NAA18079
+	for <fvwm-workers@hpc.uh.edu>; Tue, 29 Aug 2000 13:23:33 -0500 (CDT)
+Received: from dnsmx1rrc.telcordia.com (dnsmx1rrc.telcordia.com [128.96.20.41])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id NAA13753
+	for <fvwm-workers@fvwm.org>; Tue, 29 Aug 2000 13:24:00 -0500 (CDT)
+Received: from castle.mk.telcordia.com (castle.mk.telcordia.com [128.96.133.172])
+	by dnsmx1rrc.telcordia.com (8.9.3/8.9.2) with ESMTP id OAA25898;
+	Tue, 29 Aug 2000 14:06:06 -0400 (EDT)
+Received: from mk.telcordia.com (fork [128.96.128.32])
+	by castle.mk.telcordia.com (8.8.8/8.8.8) with ESMTP id OAA20362;
+	Tue, 29 Aug 2000 14:06:06 -0400 (EDT)
+Message-Id: <200008291806.OAA20362@castle.mk.telcordia.com>
+To: "Tim Freedom" <tim_freedom@hotmail.com>
+cc: fvwm-workers@fvwm.org
+Subject: Re: Keyboard mappings -- strange... 
+In-reply-to: Your message of Tue, 29 Aug 2000 10:49:29 -0700.
+             <F97wViaaskjeo4lB4Bw00000c08@hotmail.com> 
+x-face: H2G63xNIQ1G~92=">,W';}5I'2EN+pvbeFK2U`LLazP;W3/AU'795C^6M1;wX3''q-~||]i
+ =q\|l:fMk^4zF@^JHkw75M~[d)NKA},lfIOD=B'QWUuv_7Pu+j*']@]x]y'(Eyh}IAEhQDV@tJ?\E"
+ <=..HSTdYCt'DevYza*qnf_0?9qelUgqeJkJA'7Zr<-NU
+Mime-Version: 1.0 (generated by tm-edit 7.108)
+Content-Type: text/plain; charset=US-ASCII
+Date: Tue, 29 Aug 2000 14:06:06 -0400
+From: Dan Espen <dane@mk.telcordia.com>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+"Tim Freedom" <tim_freedom@hotmail.com> writes:
+> On Tue, 22 Aug 2000 17:53:30 PDT, Tim Freedom wrote:
+> >
+> >My 'xmodmap' shows,
+> >xmodmap:  up to 2 keys per modifier, (keycodes in parentheses):
+> >
+> >shift       Shift_L (0x6a),  Shift_R (0x75)
+> >lock        Caps_Lock (0x7e)
+> >control     Control_L (0x53)
+> >mod1        Alt_L (0x1a)
+> >mod2        Mode_switch (0x14)
+> >mod3        Num_Lock (0x69)
+> >mod4        Meta_L (0x7f),  Meta_R (0x81)
+> >
+> >I attempted, per FAQ, to 'xmodmap -e "clear Mod3"' but nothing >improved.
+> >
+> >What should I do to get the KP_* and arrow key mappings working ????
+> 
+> I'm answering my own question in hopes of having this info added to the FAQ. 
+>   This took me awhile to figure this out since its not mentioned anywhere 
+> even though it might be understood by the masses.
+> 
+> After an "xmodmap -e blah blah" or "xmodmap filename" one _must_ either 
+> restart fvwm to see the affects or add those commands to one's startx or 
+> xinitrc file and reboot.  Bare in mind that the changes show-up immediately 
+> when queried command-line in an xterm or xev or xkeycaps (kinda confusing to 
+> a newbie like myself).
+> 
+> Do please add this note to the FAQ, it might help another poor soul.
+
+I added this note to the answer for 5.5:
+
+   Fvwm has to be restarted to use the changes made by xmodmap.
+
+This might take a while to appear at the web site, I think I have some
+other things in my mail folders I want to add.
+
+--
+Dan Espen
+444 Hoes Lane  Room RRC 1C-214           E-mail: dane@mk.telcordia.com
+Piscataway, NJ 08854                     Phone: (732) 699-5570
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+
+From owner-fvwm-workers@hpc.uh.edu  Thu Aug 31 06:20:36 2000
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Thu, 31 Aug 2000 06:20:36 -0500 (CDT)
+Received: from karazm.math.uh.edu (karazm.math.uh.edu [129.7.128.1])
+	by sina.hpc.uh.edu (8.9.3/8.9.3) with ESMTP id GAA05626
+	for <fvwm-workers@hpc.uh.edu>; Thu, 31 Aug 2000 06:20:23 -0500 (CDT)
+Received: from david.virtual.co.il (david.virtual.co.il [199.203.234.2])
+	by karazm.math.uh.edu (8.9.3/8.9.3) with ESMTP id GAA07006
+	for <fvwm-workers@fvwm.org>; Thu, 31 Aug 2000 06:20:48 -0500 (CDT)
+Received: (from migo@localhost)
+	by david.virtual.co.il (8.9.3/8.9.3) id OAA03377
+	for fvwm-workers@fvwm.org; Thu, 31 Aug 2000 14:20:08 +0300
+Date: Thu, 31 Aug 2000 14:20:08 +0300
+From: Mikhael Goikhman <migo@cortext.co.il>
+To: Fvwm Workers List <fvwm-workers@fvwm.org>
+Subject: Re: fvwm-themes 0.3.17 is out
+Message-ID: <20000831142008.B2904@cortext.co.il>
+Mail-Followup-To: Fvwm Workers List <fvwm-workers@fvwm.org>
+References: <20000828030517.A4763@cortext.co.il> <39AB4238.36FF7AE@free.fr> <20000829123644.A28468@cortext.co.il>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+X-Mailer: Mutt 1.0pre2us
+In-Reply-To: <20000829123644.A28468@cortext.co.il>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+On 29 Aug 2000 12:36:44 +0300, Mikhael Goikhman wrote:
+> 
+> > > There is one problem, which I had no time to investigate: NoteMessage (on
+> > > theme switching) is freezed until a mouse is moved or a button is pressed.
+> > > I can't say now whether it is an old or a new problem, but it should be
+> > > fixed (in fvwm I suppose) as soon as possible.
+
+This was not really supposed to go to fvwm-workers (my 2 aliases are very
+similar). The quoted problem is fixed by correcting a function definition.
+
+Still it is possible to reproduce the described freeze (XGrab) by
+executing the following commands in FvwmConsole (note an absence of "I"):
+
+  AddToFunc TestFunc anyword1 anyword2
+  TestFunc
+
+Regards,
+Mikhael.
+--
+Visit the official FVWM web page at <URL:http://www.fvwm.org/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@fvwm.org.
+To report problems, send mail to fvwm-workers-owner@fvwm.org
+

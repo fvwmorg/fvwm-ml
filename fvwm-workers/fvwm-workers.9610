@@ -1,0 +1,1241 @@
+From owner-fvwm-workers@hpc.uh.edu  Thu Oct  3 15:50:36 1996
+Received: by sina.hpc.uh.edu (TLB v0.06a (1.15 tibbs 1996/09/28 08:48:32)); Thu, 03 Oct 1996 15:50:36 -0500 (CDT)
+Received: from sturgeon.cs.washington.edu (sturgeon.cs.washington.edu [128.95.2.58]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id PAA28039 for <fvwm-workers@hpc.uh.edu>; Thu, 3 Oct 1996 15:50:27 -0500 (CDT)
+Received: (gjb@localhost) by sturgeon.cs.washington.edu (8.7.5/7.2ws+) id NAA12734; Thu, 3 Oct 1996 13:50:24 -0700
+Date: Thu, 3 Oct 1996 13:50:23 -0700 (PDT)
+From: Greg Badros <gjb@cs.washington.edu>
+To: FVWM Workers List <fvwm-workers@hpc.uh.edu>
+Subject: config_command (-cmd) 
+Message-ID: <Pine.ULT.3.91.961003134618.12682B-100000@sturgeon.cs.washington.edu>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-beta2
+
+I think it'd be very useful to allow multiple sequential -cmd options in 
+the argument list for Fvwm2, and have each executed in order.  Then, for 
+example, this would work:
+
+fvwm2 -cmd "ModulePath ~/lib/fvwm2" -cmd "FvwmM4 .fvwm/fvwm2rc.m4"
+
+Alternatively, a way to set the module path on the command line before a 
+"-cmd" would provide the same functionality, but less orthogonally.  Any 
+thoughts?  Have I missed something that would let me do what I want 
+(other than a .fvwm2rc that has the above two lines and use -cmd "Read 
+.fvwm2rc").
+
+Greg
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Oct  7 14:46:13 1996
+Received: by sina.hpc.uh.edu (TLB v0.07a (1.18 tibbs 1996/10/06 23:32:29)); Mon, 07 Oct 1996 14:46:13 -0500 (CDT)
+Received: from localhost (hd83-016.compuserve.com [199.174.254.16]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id OAA22331 for <fvwm-workers@hpc.uh.edu>; Mon, 7 Oct 1996 14:45:28 -0500 (CDT)
+Received: from FastFelix (root@localhost [127.0.0.1]) by localhost (8.6.12/8.6.9) with SMTP id VAA00665; Mon, 7 Oct 1996 21:46:29 +0100
+Message-ID: <32596C22.41BA9647@sprynet.com>
+Date: Mon, 07 Oct 1996 21:46:26 +0100
+From: Ondrej Popp <ondrej@sprynet.com>
+Organization: FastFelix
+X-Mailer: Mozilla 3.0b7Gold (X11; I; Linux 2.0.6 i586)
+MIME-Version: 1.0
+To: FvwmList-Contribution <fvwm-workers@hpc.uh.edu>
+Subject: New fvwm-2.0.43 feature
+Content-Type: multipart/mixed; boundary="------------639C47487F1812504DE3CA18"
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-beta2
+
+This is a multi-part message in MIME format.
+
+--------------639C47487F1812504DE3CA18
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+
+Hi,
+I would like to contribute a new feature I've built into
+Fvwm last weekend.
+
+With this feature, it is possible to set automaticaly
+the foreground/background colors of a swallowed X/Xt/Xm/Xmt -
+application to the fore/back colors of the button in question, or to the
+the general colors of FvwmButtons.
+
+If you want uniformly colored buttons, you can set the
+general colors on FvwmButtons. Like this, 
+*FvwmButtonsFore	gold2
+*FvwmButtonsBack	chocolate4
+
+Although this works fine for action buttons, it does not work
+for swallowed X(t/m/mt)-programs, because they inherit their colors
+from the window manager during their initialisation phase.
+And the Fore/Back colors of the window manager are not necessarily
+the Fore/Back clors of the FvwmButtons.
+
+To solve this I modified the  fvwm-2.0.43/modules/FvwmButtons/parse.c
+file to allow command substitutions.
+
+With this modification, you can add the %f %F (foreground), %b %B
+(background) operators to the Exec command that is going to spawn
+the X application. During parsing, these operators are substituted
+for the actual fore/back colors of the button or for the general
+colors of FvwmButtons in that order of priority.
+
+here is an example,
+
+*FvwmButtons(Title "CD Rom",Swallow "XCdrom" `Exec Xcdrom -fg %F -bg %B
+> /dev/console &`)
+
+in this example, the X application Xcdrom is executed with the standard
+X toolkit options
+-fg %F -bg %B. During the parsing phase of FvwmButtons these operators
+are going to be
+substituted for the actual colors, so when the program is spawned it
+gets the right colors.
+
+to implement this I added a new function,
+ 
+static char *ProcessSpawnCommand(button_info *b, button_info *ub, char
+*spawn_command)
+
+to the parse.c file. This function does the substitutions. It processes
+the original
+*spawn_command, looks for the actual colors in the *b and *ub
+button_info structures
+and returns the modified spawn_command to be used to spawn the X
+application.
+
+This function is called at two places, inside match_string() to get it
+working.
+Oh, yeah... I also suspended the actual spawning in case 7 to later,
+because at that point the Fore/Back colors of the button may not be
+defined yet.
+(if the private Fore/Back colors of the button are defined *after* the
+Swallow command.
+ I dont know if this is legal, but that is the way dotfile generates it.
+Great tool,
+ by the way, no more typing errors, etc...) 
+
+I also modified the FvwmPager module, to add the -fg -bg and -hi options
+for
+setting the fore, back and the highlight colors respectively.
+
+with this modification, you can also get the colors of FvwmPager right
+when you
+swallow it. Here is an example,
+
+*FvwmButtons(8x1,Swallow "FvwmPager" `Module FvwmPager 0 3 -bg %b -hi
+%f`,Padding 0 0)
+
+In this example, the background of the FvwmPager module is set to the
+background of
+FvwmButtons and the highlight color is set to the foreground of the
+FvwmButtons.
+The foreground remains as defined in the fvwmrc file.
+
+
+The changes to FvwmPager consist of the introduction of three
+new variables,  
+char *arg_PagerFore,
+char *arg_PagerBack,
+char *arg_HilightC  in main(int argc, char **argv)
+
+I've also modified the ParseOptions() function to 
+void ParseOptions(char *arg_PagerFore, char *arg_PagerBack, char
+*arg_HilightC)
+to process these arguments accordingly. The commandline options take
+precedence
+before the settings in the fvwmrc file. I reshuffled the calling order
+in main a little bit because I needed Scr.d_depth earlier.
+I also modified the external declaration of ParseOptions(...) in
+FvwmPager.h
+to reflect its new arguments.
+
+In the following attachement you will find the three modified files.
+
+Can somebody please look at the modifications I made, because I am not
+too
+familiar with the fvwm source yet. I have only been at it for one
+afternoon yet.
+I am especially not sure if the *ub button_info structure always holds
+the right
+color information if the button has no defined colors itself. And if
+not, where to get them
+from in that case. Also what happens if you introduce more hierarchy in
+it with the 
+containers. I've protected the code against crashes if the colors can
+not be found, but it is
+ofcourse better to solve it the right way. I think it might take me an
+other afternoon
+or maybe longer to figure all this out, when somebody else just knows
+these things by head.
+
+Well, having said that, it works great for me, and I hope it is going to
+be
+of use to other people as well.
+
+Greetings from Holland,
+Ondrej Popp
+
+--------------639C47487F1812504DE3CA18
+Content-Type: application/x-gzip-compressed; name="fvwm-2.0.43-hack.tar.gz"
+Content-Transfer-Encoding: base64
+Content-Disposition: inline; filename="fvwm-2.0.43-hack.tar.gz"
+
+H4sIALYOWDIAA+w9aXPbuJLz1foViLbGQym0Ldm5FafKz5YzrnVsj5XD8/JcKpqEJFYkUktS
+lrVJ9rdvNxoAAYqylYyPmreryiGggUYD6AuNQ73L6Whtc72x/mRrYxQHkyFPN/Yh78Tr8yT/
+tu7/8vOfZqPx7MkT9gvDT6PwP3v67GnjCWPPNjefNRpPN5tbjDWfbT5/8gtr/IU2l/5M0sxL
+GPsliePsunI3wf+mn406ez8IU0Zz7zIvClg24IxHWZhw9k5k7/GLSR+4gI2TuJ94o7yYH0c+
+H2esFycVVmdhlPGk5/lh1AewRsuyWJT+FEZBPGXvvAh5CrBAC95wyOIk7IeRN2TTOPmCeC5m
+7DS+4EnGjrwsjCPIw+zdeDyDooOMNV++fOLaZdbZUcz6Ey/xgAieAlI2NRNeNAOSoj4iwoah
+L5dhwAOEhaPxMISvYYTFoB78HXhZGvNL4H32IeXUHdl/5mVsFk9El+NpxJIw/bLOTngyCtMU
+SMH+Top1ekQDG0+ScQxAAPXDSx65gqCUDWMYNPifhlV1FEp9wQGGkfX8bJ3VNyqV/wh4L4w4
+e3/6oc2aOrm/c9hpMwCHkT+cBJxV19c34A/MUS/sTxK+Pqga0NdpFoTx+uCNmRX2YRrsvJ4f
+ZYWsNEtgIAt5s3Rj6oXZfG4WjridO4lCaNzO87PZWBbrQYfYQWeXAXN2vMkQO22jvEgDLJ5C
+easQj4KwZ+Ywu7/D8EI2wWjQAtbtdncOzti3b3lOMd394+is27WzsNDHLTNvLqPbaf/xoX30
+vlsgPuVD7tM4CXrNOTlrNjfONJVW7iQLhyXZwF5ZXJLvZfFoPvsgwqlLQx9Bc5zSA3UvrYDN
+KxIOhKWikKCwSvrbGOJqbi+gerE2iBIKRxlINIz/iGb9AWjk+rvZkTfirQpwPusF3WkYZAOV
++rx53qpUNuq39UERxL8dP+EgkSCrUeYynvkgd72YtM+tfTYq1MwBoMYWWxUxZFI51jtgjzK2
+zY4+HB4WQPuxP0khoaGVvTAdD0Fb1YPxrLWysgKsPx2E/oAFEoCabgqayBt+EUo5RqnAQbzq
+9gI3H1c56KK5/RgqbbPqxdDzv1RbJugfkLNdhSYyrgE4WF1SCVirF17xQAPTESj4fSihaab8
+38Mh6rddsx1B11T0tTvdbrjq+8D4fmV8n203iCFCUHEAWQNHowFgkZzZSYFPfBuoWpMU9HCI
+pgOIaLigsIfeBR9CokkFriLeFyA2k99aFX4FFi5iezz9Iuavjt9SKi9m7gDaCH0qjJmn8TSF
+1FrTBfM1nIwiShEwgMpNpAy/bDJFWYTJlHDcFpNLE8pOktjnAViDV5BcGXnATWssFTwX96S9
+vk2G36hcxmHAsCEH++Ylfd9lxAR1SFzWKl8rTGZkfDR2gWngrz/OQDIUQLJzNwKVoDmJMTH5
+olKoyw5B+X6GqT/XOSMv/dId8bT/+SnkgoVUWKH5rsnxCm0BikxfCtVMrKCoDaGEMECXnIGL
+oM0/E6SvCTeAJwn8CxSlgD4VdophLwANjshnoj3dBqFK/EHiyEyX/bbxW030u8eclD2iVmsV
+1MKyfsoeI/sCHYyRBsVMr8dRDmPfAZRDHjlYuvZ4UyCDLH88c6i0KxDVJIawh237jL1mz6iZ
+rxVS+r0xyHvWA3wB9Mat/pqyj6TfGXxNB/FkCJ5VNJyxC3Amr7g/ycAkgl+HWv7Rv6KqK9ur
+rBDCj+3TzsHxkWgZP/wqzJymTH43aHnNXkhS2FK0JPy/JuDKgmM1jXF4JyPwbdNXCIrYCClR
+JEiKJCWSQE1QsRXImg448A0KaxaPEV02SOJJf8BGQu9KpuUBNFJrLaIWsuIxaiGYoJnLPq/1
++uB0AUP68TBO3pxDzgXkXAAT5jmDkL0eAO8J/lPZvhfhaKeTsfBmrVbnhpPYdI97ARuHY+CS
+bYbWG4iGeRIcSc4gczoHb08OTtquKHwCZQErIwxgiRvnyLVZHBKXNs9FGwBo2oDNc8VUyugA
++C3P9oNPmHAkFGg6iEApe8Pwvzk7wwVGBN4SzqUgCjn/kQPWDmqfHY95JC2gY2qIWq3GbuDW
+Vzhav4HOAxTaWP6aVl1W4Msz2QBmFhoxWZVZg4vGFQnc1dQfTUawVkHC1TCA5V9PhSOwDSPb
+A4c1I79AF8ISp7DsBEz4H3kBCHWNyoao5uVBMcQRX2IQqEX2a4ALjQiqXsLABywfBoZKu1Zo
+rpShsEzQDWCxgjMre7SHyRKSwaxprp+xGFzDBNZiLOVZBm5EigsxWrawXojLUlAcfjwawbIT
+1busmjLJE9DeSyQE/JIhd0A0hJVBLfGVSQEQGhMU3WhM7BiuNUGfVkHYqjUcr4YcLD1a8Cma
+B6p4rmVKojU7/oY1azkUPoX6OT45jt8lMj7EJeECIi/miGQlVEozpaj8USLz6jm6HyFyECoi
+SwfScPh+gkK7tkaW0ydLIyuEYAI3EfIdcxQa+F94W5ZSekZKSXpfBuD5uVByJFcEfk31bTMY
+SrMrQKpDqh1Rz8zENkSNXGq0q0fwNVk5N+J7Eu7kLmdN2nKqW09BU8Y9DSe9BAbECcGfDF9T
+qVb4+LFNeirVAQqUW8XaoAaqbviYuqnoxphLRzj3zqqgBWZuXTjKLta8vtyeME2u5icoLZf3
+e+1/fHi7QDF9Rmfx/BV1/fOvgcKD3PVrihY7dAtNIGK9+Be4STWIQUblxLN35G69A2fQgaWP
+xV7i8667s7fX/XRwtHf86VsZePf4aP/g7YfT9nWF9tqd96fHf15XZP9490Onu/v7ztHbdmmB
+o/an7snONUBo5D9Lgac7B51ryTs8/tQ+va7AAfTyYP/Pb5WVFZmCOrs778Ejknl77ZIyRzvv
+2jJNw9Q9ONo/ljnto70FuUTI4UHn/TxrLGILH7gf15onXpLyY7IEwtdR8RRmgRxL7bq2gnMt
+dbI8DeiNsV4Sj0qpcXVuCL4MG2NrJoVMLxOE++FRCbmslTZNO0FdAXR+hra8dZf1ybSqRoZh
+mhUGjSjaTbiXcaAJS+CSEAO0VEmuVKDQKfjUHMClpYRo1RkGA8VqZ1fFH2UYYwz08Uwi60Dr
+qLVQJKuY6FKpQ8BbdRs/0+uSnrpsGMdjyJzv8iEAoHHI/X57EaXyxTY2BRpeD0zgZR5GZMZY
+Kk3vYNUtOoeL5Dr0UKyzz9qXsPxh4l9pYchrKhq2HiwIu2dH/CoTZYUPtyq+1mqVFXSKvcwf
+EEzmK6sGA3nHI3lCI6aW0DCo/MobgTlKJXcxER6W+xTeF8j3xjDMwDuCuf18U+F2PnK85Ux2
+JV3OJMJFFCyoRHAfaXLtrPpFHMxoZtJpCAPqYCFzKnwPfC7TNL2SM4R83dWxfUcgUsb4AoRY
+Om+yftF2/RwW27hZOMBryJJ4dhMG0/ZZ9XsY27yptjKMVs2IT4WOXKYyGs65yujw3FTZNKwW
+gsQL0xubNq2uVXsYT0G331BbmttXxTxtmC2UGOQMezdOhLbihVlcsro2+nNti8XxTdVt22/h
+AN3slNUMaEVplZ1EX6J4Gi1s7T50kQyPsAEuTsGKrzGVM+IerFEx4IWr62BGm4+3rXNUVEbo
++Qi8Dw5/SKWINXrjPkybmA0vCHABQzESrYmBJTKMuKGlI6N9B4Og2ncWqldrIyVz6/Vxwi91
+DBkj78IYYrBFxPExjUUgvaozyFRmVuBVWUxV2MnW3kRgNjU/IkqZp7JgMZYvAeuypmORWDOD
+trTCM+C0yHNE1dramylUx67KyLHOx6YdilfXBHzThvcSChALWNOGXan8LTt/pvKf2Pkqpidg
+T23YgIvNbAl8ZgNR/SrQcxuEY2ZE3nO6h14/VXVe2HW0DiqrmIXZkHdtcl7a9S/iBJi0a3Wn
+2ShpQw9682UJdBxejbxxXmizODXUNYIVpuWCQjEEo+HfCYIjPpUhQCp3X2KtvYMHFe7cR1lS
+xHHUZALEFxYF3amScZm0hcaSfBL0XNJXhVhPcctF1a7Z4j8n5XLPItsuUxZaX0nLpWtgiM3G
+u1CKJbREhk1ItyDHFqwgyxasRJ4teJlMK4IXSpkscI2MqTbmJVxCSmXPhC2QPEXbvNwpoual
+TujqnqPpWWXkNB2092AR9BX3CDLSlKrxq5bMnBmZM5WpOqy7QZvvBNTjpaCUIcA2EZ0PJyen
+7U4HianRRsVXtV8h6aHN75aROyvmfq+sfJd9FFxX7I9kn0KHJOOU9Mhgm7IumVzTypumngkb
+8EgbATW4u+BU9TnG+vZjKdlO5qpCBharH+/iS37K0WgKjfAx5FCrZsxnfo4CKIO2ZPwHUJsb
+kAKXAdrfN1e496B45ZLqQdWuWtb9uF/107p3gdf1I8p4eV9MaelSlw4AApMGrihfreDPbdRZ
+wkfAdiroJAJR4iTfAE9YyFi04nbNlgIz7tRVVs72aKSNXT6zpO5BeTk8dWIVK+HyudNDluj0
+Es6d7J45XCz6H5S/KeywNHerzZsS5pYng07CKz5kAi1aIld+xQ19TLcWykCF5bVss2xjsM35
+XXktWEcxTKEK7XgpoGIjg7uyAmshPqyUi5HWqnh0J1esNtvOF1egXE3fF6OqGNOD8qoOdC1k
+V9xD/Ygc4iCkZnCXgMxsSFNDdidJAn3Yo5WYUYQcJJgVh1C/8660md46r337RvkzM//JeYHJ
+8qpznmhee84RPeV648Cp5cyJxh2lkvIw1clC/4vUhyllzzOM5LFyTro/HhJ+zkPzkIh3LuQh
+jIfEwwB5QaolmUJNY/PKjeyjNZs9a/BnL/Gmb5MwcBRyufPt0s6zBhfR28X+TtMvAsUPOvcU
+qv6bLZ8XOWaL3KhT7OSNTlRJqdyFMozXfQSQ842AB+UO2or4N+eOQ+zkTdyB5k6tSaW+ebPd
+kGSaufJsTa0MMx1QKVQ4X99V45jzYglNBXf+3riQ9lOAWtrMSJkXsUmER1H7ESynA8mV63fF
+g2o/ZyEXwkJr7gTAB6pk7vyKbX7AfD+aXW6ZPaj0qm27v5n8lgZHE55NkigveJsxUQrSlYZE
+KVRXGhHNg3WlAVEjWlcaD6W43bftPHpoAAvRQ51fCCCaqm1BHNCM3xmRvmLs73vexoJ4pIYv
+DElSiesCbfems/SW9QPInxUo+78mgpILt9n/XMPWOohc5GsdRy5jRiuUXMqNdjT5Zna8tbjv
+fRmUrrwv9LAmhQ5z/M04+hqnMB/ZPLpEkU8DVnqm2SzgKsvjrKpIiK5ziEej1VaFnYteXQFC
+LHUvTMWjhz2dged6MEWco1lKnFrxYfIDWOPTNT7JQ/jiggt04tofLwTKMq0i38mLgjT5j87+
+mPBk9h7nVF87ORWYVgnhqsK4qltlq5oCyWO5/qvkZ+lZ+FqXmz9PD2SY/Iwf4mkE5Nz2VW7n
+YbZ2VLaZwvs5FFE1AVQ7nUWo3NQzCuVbnnbZ4uYgbmhgpbK10fzS2S5a05uJ5QWNNYvaXlSD
+IuAkp9L7kDfQaM70oLI36vbI2T5OoBIzPTmtWxYX/EiR+eSFIAV4LFccOjlj/FJwCWTQyw3M
+m2TxGkVx8EmDeHK76yDxobvZ9slb8463qw7w1gV5JEu9oJtyfCKi2wvgS8sUL6GxB9wDyf78
+e3tnr33a7Rz8s01hXcCD+qs75FGfLC1m+fEEOi7+xQsr4mRUmnlZ6AswvnHRFVCeKHCJgVDY
+sjjzhpigufQVjKb+7ASPYoN+xTtvtjwVzh5z44ixkk/WbJnctL/X/Wf79NhZVSMhikNup/3e
+EffdSyHirqIFUmfOu93BeHKF3RdPNjjq5qJLZ6pruo6Ll8Thj5BxPF9O7lKx2uLydCtADwtQ
+dtDRVLOctjmbVhhAUi8Lhg4g85O3Yg5m4UCAWVqdWBOtWmjeMFhZ4JlwdRCxYV8zNftDY31d
+hwRWvPEI2Og5CbRTsiIxsiusbo20xYrUbsWj15LnoZI8YoOFhKnX6VwVyRFoSP1ym+olf1xC
+vLOTgNrAG4z4lafjGATnYsiFikmAYry3gGfWwUal9IgONy9C3oG+EQbaui9TcjfeLbsS75bc
+hLcv80eBW89SZRFlLt4aI2sIQNpNRWnaJSXkRm4gdhYqtLWALCDvwKpNa8zG9jJeyPzY8b0h
+Zm5tSg2Due9mUoF+kusLM1l6m9aq9btadFjpRbdwza2urXpJ82slNOX7c6UVJQVrZXTJ3bm8
+2dfSgJqENMxSs7lSM6OU3kDMUzOVgj9ykiBHviNg3JF/yzPasDuECcbrPKuZvCCovXuRwcrd
+c2CBfvfKhX9gYMXSUukbbVxIidprvlxxqKcNqFlYYtTeNGEVAXLujGYAi/DoOd5aFXCX7XoZ
++fZbTrVuXHiuvuXxiGfJrFpzZX8fv6xtbze0es3EBrhsRxc5FypGLmMcUJDgYXMHWbyGixn8
+gl3/7V/Rb1ZGY85LAwBq29yLgozP6uEGQLcmrtaT7sa/6qzcmRBjRT4WdVdxTFdxTFelCaLh
+q8lTZcxRsSTBiR+94QSvjdv0qCdZoIn8dJckzURBLHktDmQd41hbCZKza+sja/blmTTBG+Yb
+Ls1FOP+8FudM4Jz9IE6wsX3wiS7n0cpnYxZTs7DmAoJmcwhNM30974vPDwoAevKGEMDSgPAo
+Vm9u3SwOza1/O3nQB09zIbiB+ylkarP8EryuY9Q5py/L0jqGnfPPLbFLgVsks1RFYMPQlM8s
+1pBH++XteMhIU9+Lek6BWZ6du1W8e76KBdVUOOLePXsjqyOLiIzX2+Kq/ByXRJoHhCjRUxCS
+6wrNPY5gaRxpnlKlHy1bXLiRtMFn7+6Je/H5Qnn+TnxJcbc4GNjcfYk6vsxlzN5Ta/ZM8o1H
+vooEPz3XU2Y3btapRnHEq+4T9UTECmla/eSWkt677m7CF3ZXnXIyH6Fgq6vMvkDOVLzcfqDC
+HKvcbS4bKVXjDoQy7yj653+ho/QWiO4oCVr+lsaiPotVQUmfYV4LVXG940TbjVak3qeIMJ4m
++/q1UNqSuMh482GljJRCsZtenzAaKV4tN5dF56+YGJXFj1LM4VOfyJ2nXF5BX1G8oMV95e50
+NVKxi+0bnNFs/IzCbjbuV2M3Gz+mso3yJtPi6QE0ouV8Xpi/r/i6EFYZ4mMF+DaSfqZIvOsa
+o6YZiaXZBRcHJmbr6/hAK8vZcrGlmGfhG62FZOe5qSB7YfcSn74Rr6YuZPcCsy9g3jkZ0Dz0
+44KA3Vij03t599aK42EKxt26LjJmYQjDi+XVZP4gka0lzUlUZYpT9oKurtyhpHfUq5ul7ntj
+oZXXr3XOc9nd05y/nllK9aZFtf3WZvOOacNHPMuIsu1qua58qlQlIrnrQZRPjJbR+mIJWl8o
+WiUe84rVzfTa4v6jlul9PBbxO6S9XIHIz9wyVAFMt2GB3dpSHczjhSUu2eJQliql9gdFuPih
+33D/K5/eku//D/5CG9e//8+ebz3dVO//bz1/+lS8///s+f+//38fHzwtiS4CiOrEz1j+MrW9
+Sy/29SjUrQL20iy2tAMDfge+W4+vQc2//ijD5OpxK9zjtELg+HL1aJYjmIvRL0YgI+GCgHkU
+ZrzewqF3JNQWg6ABN1xw6wgx4HfxeofxkhTVlUcPqJaqhhxivOGVFxMShGdhcM8Rn8KWC8Qo
+axljh6tlNQ24PFKN4gJZPIhJj4Q56tnMmurF2112FCdgud/uAjGIKhJJBPTEO8PRJHXVO2CJ
+OCBl0ynGgd7kznhLoCj2PRt44scI9KOzwBRkYuqMX6nfgGARz/A3HHDrKuB4zsQlZzkUv2ug
+Kkic9FL5aXvn8PBPcKDppw/oSqDom+Y+UtStfKxOvCiCsUjFfk/P8zNoWjOG2PbQI6uq4CbH
+MPbFT0UIUrN4DK59T7xedhkm9Bh3jgR3RVoao42OMMprKYh1MUKDLL0lXrhBcyIOb8DU4z2W
+bj/xZvI8hwEUQ74AZuVWvhsyDMmCfI+JFWn8zb0649zN1PguzqcouvV46J7oE3qYyDdm1NPm
+6rtxCDBPzuykhap4uk8cJDAeFchPL+TvCKi8/CCtTs2s1HzpHCnd3szkkTJKXciHUG1lqLeo
+5EgR6mKGOpiT73/qQ2StoobAwzNGfXWeRpQrm746naj5bp6GgsLFKceJ6OLPGNB8l0wyjayZ
+o28plE899YSWbHlaaCqkR71E2sp/quT4yPihkuP9fda45Z9vEL/eMLlQ2+sn+KsY4g04uft+
+W5+yh/ValKefMpT5Lg2LPJBQePiN5rCmfyYhf+wHa5O7qhCXv/DU+ktPzrVue+O/VVniJabW
+0g+6tJZ8g6C11F1us1QW9/vDmxu99rJtseDCG5Wtpa7ftZa6htVa8qJMa8lrIa2lT6+bJeUe
+5cJzwcXWlyvpD7305qkD32U5dPqsaesHz9PRy+SdbNL73/aetLltHMvP0q+gtWXLkqmO5Rye
+tpupTTLp7Tn6qLi7amsdV0YHlciRRUekEmti729fvAPAAwlSUo6e2Wrig02B4APw8PBwvGsC
+W64bcr76zSjQE7/gl5WroaUCD46KKfJUYmVi/HCejMSbgZ5DQzPJHY+aulXasSYWkRbRXG0+
+/8ls5rwydrcy0xjX4gIYwt94MbAsBd6jDFiXcd6eoZ/KXxPg8vj2z3QFXHj5ZD7GqnUZi2un
+V45nK1exl7xcmY7kdftd7XNd0uczJufGAalGzduxaHnelNjBmLYGcOCEsCCajo8WicK97Suu
+mvRvJetg6F5USN1xf+fyeuT+UoIgoGzq9AVyaJhwdLwNwTK2R/l+wOuyvoT+Jv2ABoXPbyD0
+mb/Ooi03t5ovsZ+++Plvz396dfbbT69IkfXMH0YqXcKGDpT/Ugw1xTG2/l/f0ny9VHb/83SZ
+ZYpy7oEiYvxZ0R/Xxn+8f3RM9z8Pj4+PD4+P4f6nf/9Rff/ze6R7XbjTFCMevEdq6PeuZ8vF
+YNb7n95gdv0G1isZfPFRGPx1sJgFvybZTM3sptFvLYkj+V9JMqZV9d8phOT9P2IIyWYTY0j6
+Ai9WRYYUwROLYSA3imDoxB5UdLdZfEN/HEMb9tDpTEsQshtncIiZGF6QHTXh/UX4JrwJVyGo
+7IWgZmcCvLG1Ai6jr0D1mnaGvfUpuBqolTNdU9QJ5KnwcgU3R/tpJ/hIgu1uGkXtoH17iw8v
+M/M0b3dUsYOD0zvncxxq/L5SdlKRXtrLoEgBOuV2ZDvRYSfIQJK+PTwwunusGsWw9rNev6P7
+pX9Q38wv1b8g6/WKtQE81bTDUzLqb6rDeJDG8VvqeQd+U56ah3AHx/e300VKVm7TebJM1RcU
+TIqvdzlsoaKFJBjAljDAQ/ggi8cEjN4Dr0L3bvBNMlOn7gT5FMxIxSHG3wRPRsDEUiwJH12n
+wbtlwnEIsjcIrB22gFP8Q/A+vkKEonHwTkfwitPR4Bp5SUrqBqahACt4+e6bJtxE8NWBwQEH
+1UulEv4wBLdli/AdGlxqOuumKMt6F6nSrBz+TiG/1Yb4pfD0D/P0st12NbWHkaKPLpIg5/Do
+dlOUjqv/O9E7+FwNeDflYX3ZhpdqYDsgguwqeoq6+wRGWujuYPMbvlBVvwHCrxSPh6vn3RHj
+bJIs52MRTu6dY8cbyIZ67ZihN93U2xOjWwJtggzsWbvTts+hwk3DRYYFp81Rv4uG0qjQmCws
+oqsV3/lkveEBeTRCken1an8RDkOVi3mLc/V0QS6qGcZCey1CwvoRDo5nsNAMZiCyTMV0eIEf
+pHTZHoL6i1pBQpf+UbyQnF8o1qUAqbXOxIOE+/sAF+H3PCMGE6B7WtqNlAS/I6LE83ahPUyq
+fCXWTfRDZn1OTaPD8JKJEfGf4B8QLzft2CRg1sio/thsXCqs2BfnlxdIZQldoqTqtyI+/ZNL
+dDqXqEYE1KazQCLOakmKxezBh6yZw/ie4s879ZUd6TtiSKkYFojrKcYFb9fgxozGg37T8qwj
+mKl1nCyAFAOCkgaH9ls9rZ15rb5Pzy+ijy24Y2mFQFN3wsgmVIuF+kLf2i6AeJqGvhG9TMw5
+m2q7EolZiSsP0npqu4/zi4NWFAc8DaGF4V7KGgfo9//wBOP7jSiYH1ieRaRl5pvv2Hco20Hl
+K4hqmCxg7q/izE540qBil/8NEyMAlMQjyxn30k5pPX+ZzeLXA7rm52EJXqo3L1uCrbCCuHGS
+KcxYET+dgDGjkO5QxKJIEL/CdftmFIFFm66ZFn1uiCIcrhQb7KI4gp8h3qljiAVfGIKB4W2F
+LUSM+j+Kga+qB1hqKgjpd6Ye02YvCf0dxGxEQtTzveh/h68QMz+ok8A/cbAQD7dRIV8TC8Lr
+I7wXuFFeCxDf3EZHm4M/QvDPEMcbw+9vDv8+wj+DXYKEDp/hF2rfA9a3Elwu/0tMHRysLzZ3
+8vPl7AMskh82mzFcODdnNIhtZk1K35h5M0/U0S9L1UzR/+fJ2+lsph743zwZzdSxDCYV/Ud5
+dwvsPAcf5ljAPqvDndpI6jLzBH9ALiITC/PTv8uUFAjxTsqfkh8AMQVC5HyXCmWmZ0IWIeGE
+2Q7UETfrb2p4irAg1wVkcjxTrADD+WANiAfckGdAFh78YH6+UzbTgfWQOEoBEuNnG1CPiPcR
+SRaaxfkuLJnpwDrmLvqgYdO2A/cnBPdbGv88GxdaRtkuJJHnAPqW25WHg23aBlD/UDcJ+bGv
+UfiiAM3muvD63LIiON22TeF9DuvmSf3VmPczWGkUA1lsxr5N8RwDt2AEC8crHVJt6A4l64bj
+PjHtEevDqv0OqPCGLdCygn+gYKL+w6YPcxfErlXXWteDMdjhq2zNihlJyJRBBIW7pX96WXOS
+23lP4UzzOzNq7L6XRbNaL1PbsPd41Hs8X169YjRFV4Ob/X6oDoXqzKQA7WVh/7BDFJBGWenu
+iUNDOiAB31vDI46NOnISnjAk85A3l9ETEfXqSrj49+huxwENOR+iXBO9cEkVqqzpxOPRoITg
+OwPasKO5j/cHqTF3mkJgJ33Wo0Hjqwm3fjgKUUxm0zagXg9CFET7nsHlgBlA5OgjVwIZkFtf
+cQlCYzh3lBbxJsOzKF2KfqGZx1Cn3lHhK8WcKRFVcqOmbkSPK3icGvMaPWSIcC9cHgqCDdPG
+NN2AMkPfuCsZI+6Atd6UCK5iw8xzIBrt8kqdFsoOuGKtpXWjx9bO29FcDm+XyzSbTlaRNcZy
+8l/B6iNeimPonsKhUzb3Ez91EOx5rRCaw+Nf6bUfj6bx648kFEaeVg693qCFEttGBBLHCBLW
+OYeGHXdWnj0KHy2+zEDwQlMYCM73DoQ+29ih4NK5n2VD4bwuDgWD/4yh0FuMLzkY+Ld0s3cG
+Gs4OazK9UW8EV7qazm8i86gngIYJNci9nwDr5yGXOjcL95Icx8LLzMeZf9yxHdPTQuYqusxl
+FntC7C3ZnuegHrhmOGkJx/m83WV+vL/A/jJAOdzP8/EivvzP9HqxmsfZN6PkKmABbya9LH2A
+U1u6HCpuki0zlhSPRstFPB+BSHcS7E5QGLM7DFAC9H4wm44BDCxmrxcgXACRDSyk/ItsHeEc
+D5Kk9/FshVJrugenLSnqsoM3OYWZ9xBvmL5Bv1+q1IqaNYxBwIuVJSp38QEdy73h0qm+Wl8O
+NdTcV00wNYVA4uybjbagHBn5DI5Vz5KrK9W5fXejHAbO7+VQq6LhUUxtBfGjDmkL8yvQcXRe
+41YU9rfqzzi+IStb/j1axFccXZqyksmE3dLRb+1uzsKfoGG9DUvEsisKyEa5+PUkAKZFexTa
+SmhZAEMY0jYEgbC5WrC/lFsb72dLu4Px1oTW41pixGHiaHtVWZPns6XdmdF2Hv4U0KsKuqE/
+ASEdRSna9C43VgdBnz2QsoMmlYyPJrfsaUAdhGELtGsnHiLzk22xscx3fjjYr4+B9MDkFDjH
+ry/APra927Yim0An9QFVoBpfWUnhy8AEy/bUCOAuXFvugjsBZOrtSTs48b/5Xr0hbytAHjt+
++3CnBj2SFclMDDsyAL6jdg5Hp7C8DEbZUg36CplE0DsCuRvalahfu9/jnICI5jPwE7eycmpi
+A2urN567+OEgN1Mrko88VSOQPgvvwiBPsqbCvvWSW5YUYkD6WazxINCjS6Qa4tTtnK7rtiFs
+fpDdrsQZWNBXvcc5X1XAKmKsaaJvAR0ly9kY5V4T1W+5GgFF7KY7lQ4n8km7BclxgnVjwe3a
+ZDBau7ujVq4COR+r6rqrRpHeiOSyaaYOS+fwUz2HkfF+vTmMZ2ycw3+0CYg9/4NMQLEBrCcg
+JT4XqFnmReCUjwDJdbwYgH3mSaCaCIfAL4I80bdt0Pr1UHrnopDKRQZoX5S2HhWsPpJOhYZR
+jQfUKPBz59tlSZWUIthPhBnoIS/2BXKbAc9RN+lqm/e6xvQXpsw4Hi5fv+bbPfVOb8q+/8vf
+n6sDALgQnChame+37o3j9/fAbCGBy/eg9aFlUK0JbXKt8vX+HCjrBigq0DnV5fkIUPxMnw3W
+fY2XvL6vn5ZyRLNJLj3A+OqDVpJLHX2w0dD98OR5wwMPV0ILr8i/ff2WRxrbaZnrx5fn0OX/
+vBLrngNVKRSNfYGbipNfWU0C5yKL8VQOugr14syXA81DEJhGO9+5DKq9m7bx28J5zvNpkb+Z
+zwuvBM4mqLigQNBo3AXsIEBrM3nuAeBCxoj8UA+QJTVCBxGNSIIBXzywP2vWHscCXaG3zQ4O
+zvUV4UVHX+aqDzF0B9eNIsJ7Xa0FjU6uXv3y5MXZ8xdadui0x7n26C6H8WLIaoisWZe7J1FF
+IirmCPOksA9+DSPciL2irxVdhJo2QAxGuUbN1bkXbnrvhWEcNHPM6fo50kotytRCSlIENJJN
+I8U016tCjDlAJWhQVNEXdOo5no+LEk7ztRF1QvIIK70CTuNIq5s+jtqHpDmbfhe1v23nL0LZ
+YU8K/nlu0EXPNNy7dO6rp48PO8C4nqJbEHFfqt5d6nfk70Pcm+qG7YDeuWndy6wtWmoewzZf
+ODY8HeU8UiZfxvLG1Ypq3fv9/Peb6UsKxAjhrZAtljXNJ2ZoeASMdAHuFy0ynPyywr7zNc8S
+t9IlUkgLh8WQDVmlUx3dV5v3RfEj1qQvpA1a+nk5ZLHpyPFN04mTi6aXiCz124LM0t+OgtTa
+1455Jtth5Nm55lTJuYutmmf+VqF7kirjE5YdVhqn2P7dF/LGT6A/I0uVYkYnx8q1Gj7pohQt
+5uWKRtydlyjmsWVFilZ66xNncDcytGXIzg8vFFfooTVEdt6/2CEXarZPyH1BKCxdLfIqhGXy
+ZyN8dcLYtOIQDapjPSDmJqnW+7HN52nz0VsPnMF+BFsysKPDyvyyZRZQdawERki3tyGqHi7Q
+GxPVg7wu+JYDAnr+vgFBnwNgsEWSesxjg+kIIh2dernfp+EVO/yV0Uq+cDZG68OCngvibxuV
+h4LGC2eTpkyJIgTjrEoYSB0p03DYFjFGZWJDxPg0TLZGjVYwkSoh5hh6GwVSA8QiyV9JQ9YA
+9X00e61cDZAMKNxwbIX3dbolW2NeC/Q3xPyxoydRvYAMS3QgShQgvOuNTytCqkT49SHKWE9S
+wZIc2gC3E8lccB2riY9vivlWtaIhO0kGAEQeO/s2f8+oOnfEAofK6NH+f4M+AL7sdoxZGV8E
+23cdS3iJITv4U7yyAC/CgW4DHmI0SoedPa0miw1pgOOjX+MbCNIUJuEhHmjJdbJHTJ8u02tV
+Ph6rVWk2C2YDsIxI5qGiFbB3xkPygEUe6vy2wjvYN4P36lUcz9UZbZqBBRDSkaAPOJRGCTkB
+/FE7ZZ7HMVSkjuusdw/TIIVwEFNkj/5bT32J9ikrgp4aGy8KPBaYk3zOMkFHuso5SYDEzCQN
+pif05ZqdnXfW2QlAh6aGJwqAOtFdJUswh3jYgdW6wO18+HwG1+/zdqavDrCJBWQSL4TKo4eV
+jNZwT98pNWBYsgvYP/WO8zbaMULPnozHdI1BSN0fhlNQfx0vr9V7W7yCa2tK4vH8YkzbquJs
+xLS/ZX1h/ZGlDntK4x3CLZ3mbumcdGvWQPVEWDAN/nHwVmhyD21P6JolGlaeu8uZvYWp2P2w
+BEFSk+v5fCx6xLXDrQ3FBjUA9DUdXeKc93q+q52LiDRUbDN3LKhOJdv4bU4Wt+Pg+U9/ZgU5
+HeutQO3xzTTb71fwCNeuQGiryWEr6I4NrRqc0IErAX6UV4Qj3lC2hfIrxOkJI5Xi7DpqdOHM
+T9KCyy+e1IeGVn7baktUrfpW6LtUgaviApXmpaTEtUYPDqGY1cFpiuZ3+cmhlythIFC4nruD
+u0Y1cK/jTB8G1QwwF6rko5R3G/rKAs+bufiM5sCb678ZU10AD2vmV0ef2m5vRZ45vLk7aD7n
+yrEUgDv6DkWflql7QuTl1Rr19A9Niwvds8fHii6aQqabJifXVZFvuvux6T+A+o6qdx48WJga
+FzZnC3xIIiEBhH/DNlfbmXGCzmxQsRG3YXYXB0yLd/majCSWae8L7hOoJ/Idbyjty+qdprNV
+1Xu+IAq8Ko8gYglNKSMlkVtV/ZJ3rE2W4RIi9HGFdvVa5GC6WNjimLv1Y3RK75CVexWoe82E
+UMUz0NvHMFF/wOcI1A8eSriqHaM7LXmXXSQsX4iOTy2B8zHFS92WKPdNO2/NGIpS8qRSwnLW
+HF8+5eRiwKKPEDcekTkDVFADEroa26RI5FfJeDoB901Zoj2qgmrwPVAMZo3vtQehKvpSLRWa
+zTqQAqg3Nz17xkO9Z4Ru67DAIuRA3sKOIxUUbeZ0CIO86KtK8EVSr6EVdBnx02sdE9DInqyp
+XMHQrmhZZ0RTwKmE7RxL1kLSMdlIQmJnF8tH1KjqOH80R6lEA3sA7T5/9ABceqBzaTT6hkCA
+r8kzNCUnIr0barShdjhWPPXovuofwIRZBmKpKOpLDyIIP8oFH4Tya6IPIo0Rl5DBBz9EMuim
+KeKEG3wTOUE1TSEdYPAmsqEEzUsdQnAV2WCB9ksbpBKcY0X9wte2wMoWUPsT3q4QUu/sIPVP
+hJCE3srQM0bYbmPGCcZkYbLExb3LY84gR2kcoBDxMtx7K1kHyhC5LrzN42e8b7t0CvZNQXz5
+tqwx909cy0pfY1oky/Q2QxpgXpZV8uBEGFp+Sg1oj1kK/uGJEDAWB2df6itUjMujEyGQKweD
+crgKMMcn8g57297yRXVpX/+E0KczAdyzegnXbyWLpQVrzgel0BxFBOC/Xjh3JcwdGuvaT+sg
+EEEaq3Mm2ZiQx1cOcDDloOJCscK7PCDoHP8XptTpef/w6MFFSAECWFcrIkUtgSHF9UlJC52X
+sxOnnYm7Daq85wGI8vTLijJ8OhJVGbzp9ZAQ19R3OxN1xoHFQrX7fjjJbfBhmUgyWOTVjhYu
+AtViH/N6D6zkTbyIIYgbrDhazo8IPbG0whFtZ5G2WOh0vuPtCrkJS89nvf4F+bLTv48uyAka
++DajBh6ozNB815uptp7aVj5BS6MrPJ6KutnblG0GONCyShaZquQ/2iQoi6IUhJbkWG+HKs/r
+XKA7vfJjJt593YmqDWFnzm4s6+T3G4qbh5k8e2rFok5x/6K9z3ea/nD05cRJjtY4rEIWX1mH
+WNeD7A1sTzD6Av3AgPO85wD6xPJqWOyW04lofnCEzdf6orp42OrupuK2oOkLFkVzmwYoJQrQ
+Tsw0IVbscrCqnPV+r493D46x4yFmSfYKPf9FdTbUlteuqX6+OGGn9IOjEyYr0wV0iienIhGL
+b/Cdm4kyDDFtqCocoDmYyKGWQ0K22AT/qz3n1qlOdapTnepUpzrVqU51qlOd6lSnOtWpTnWq
+U53qVKc61alOdapTnepUpzrVqU51qtO/Nv0fBST9CADwAAA=
+--------------639C47487F1812504DE3CA18--
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Fri Oct 11 11:01:08 1996
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Fri, 11 Oct 1996 11:01:08 -0500 (CDT)
+Received: from pophh.Hamburg.pop.de (mail.hamburg.pop.de [193.98.9.7]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id KAA20943; Fri, 11 Oct 1996 10:49:54 -0500 (CDT)
+Received: from prompt.de
+	  by pophh.Hamburg.pop.de (smtp)
+	id m0vBjqH-0000xmC; Fri, 11 Oct 96 17:49 MESZ; (Smail3.1.28.1)
+Received: from zaphod.prompt.de by prompt.de (4.1/SMI-4.1)
+	id AA07882; Fri, 11 Oct 96 17:49:45 +0200
+Received: from zaphod (localhost) by zaphod.prompt.de (5.x/SMI-SVR4)
+	id AA06313; Fri, 11 Oct 1996 17:49:40 +0200
+Message-Id: <9610111549.AA06313@zaphod.prompt.de>
+X-Mailer: exmh version 1.6.6 3/24/96
+To: fvwm@hpc.uh.edu, fvwm-workers@hpc.uh.edu
+Subject: Displaying Miniature-Windows in FvwmPager
+Organization: prompt! Medizinische Informationssysteme GmbH
+Phone: +49 40 2 54 59 170
+Reply-To: Fleck@prompt.de
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Date: Fri, 11 Oct 1996 17:49:38 +0200
+From: Werner Fleck <wf@zaphod.prompt.de>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-beta2
+
+Hi,
+
+Can anybody tell me how expensive it would be to extend the FvwmPager module 
+so that it displays miniatures of the real windows. This way if you are using 
+your workstation primarily for diplaying pictures you would have a nice way to 
+navigate on your virtual desktop.
+
+If anybody has done or is working on this please let me know. Or maybe someone 
+is willing to this if he gets some financial sponsorship?
+
+Werner
+
+--
+Werner Fleck                                  * Phone: +49 40 2 54 59 170
+prompt! Medizinische Informationssysteme GmbH * Fax:   +49 40 2 54 59 199
+Eiffestrasse 426                              * 
+D-20537 Hamburg                               * EMail: Fleck@prompt.de
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Fri Oct 11 11:44:17 1996
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Fri, 11 Oct 1996 11:44:17 -0500 (CDT)
+Received: from bae.bae.bellcore.com (bae.bae.bellcore.com [128.96.133.81]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id LAA22804; Fri, 11 Oct 1996 11:31:07 -0500 (CDT)
+Received: from fork (fork.bae.bellcore.com) by bae.bae.bellcore.com with SMTP id AA13612
+  (5.65c/IDA-1.4.4); Fri, 11 Oct 1996 12:30:08 -0400
+Message-Id: <199610111630.AA13612@bae.bae.bellcore.com>
+To: fvwm@hpc.uh.edu, fvwm-workers@hpc.uh.edu
+Subject: Re: Displaying Miniature-Windows in FvwmPager 
+In-Reply-To: Your message of Fri, 11 Oct 1996 17:49:38 +0200.
+             <9610111549.AA06313@zaphod.prompt.de> 
+X-Face: -:-!LDdizWr~[l?RsG!7/BSm'=,`y>~^N7a#qX+.-ZUy"%YF.bP?t_E$lZG54!X1`_>u8>V
+ /DpeH-oUPJ".cJfU'!(om[k{>?!DzZP&UYPi!W/]`[K`Ga+S()<~)mZlm;m}0fId<>1}XS.O+zV%w"
+ 1)-+K#MqP:&_@FrPF}_}R?_\"z9mHc!)e{e/DNzDY&*QoH,HGZJP#LszzhoGERD7$J4ebNt9oh-nvL
+ *IX4w6m=+qtbLQrrI{-jd2Q+(ZUg,a`n58O}z/zl"
+Mime-Version: 1.0 (generated by tm-edit 7.66)
+Content-Type: text/plain; charset=US-ASCII
+Date: Fri, 11 Oct 1996 12:30:07 -0400
+From: Dan Espen <dane@bae.bellcore.com>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-beta2
+
+Werner Fleck <wf@zaphod.prompt.de> writes:
+> Hi,
+> 
+> Can  anybody  tell  me  how expensive  it would   be to   extend the
+> FvwmPager  module so  that    it displays  miniatures of  the   real
+> windows. This way  if you are  using your workstation primarily  for
+> diplaying pictures you  would have a  nice  way to  navigate on your
+> virtual desktop.
+
+There are a number of programs that already draw their own icons.
+
+For pictures, the  "display" program in  the ImageMagick  package does
+what you want.
+
+The one I am most familiar with is XEmacs which includes the live-icon
+package which  does a sketch  of the XEmacs   window.  Since XEmacs is
+appoximating characters to     pixels, and ignoring title    bars  and
+menubars  the logic is fairly simple.   However, if the window manager
+attempted to draw the  icon, I think it  would fail miserably. When it
+went to reduce a spot in the window containing a character to a pixel,
+the  color in  the  background   would  overwhelm  the  color of   the
+character.  So  when it tried to draw  a picture of the XEmacs window,
+with all  its  glorious color,  all  you would see  is the background,
+menubar, toolbar and status line.
+
+> If anybody has done  or is working on  this please let me  know. Or
+
+As I said, ImageMagick would be a place to start.
+
+> maybe someone   is willing to    this  if he gets   some   financial
+> sponsorship?
+
+My guess is that money could buy anything.
+
+> 
+> Werner
+> 
+> --
+> Werner Fleck                                  * Phone: +49 40 2 54 59 170
+> prompt! Medizinische Informationssysteme GmbH * Fax:   +49 40 2 54 59 199
+> Eiffestrasse 426                              * 
+> D-20537 Hamburg                               * EMail: Fleck@prompt.de
+> --
+
+--
+Dan Espen                                    Phone: (908) 699-5570
+dane@bae.bellcore.com
+444 Hoes Lane  Room RRC 1C-214
+Piscataway, NJ 08854
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Fri Oct 11 21:04:35 1996
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Fri, 11 Oct 1996 21:04:35 -0500 (CDT)
+Received: from cortex.corpus.uni-muenster.de (news@PPPE011.UNI-MUENSTER.DE [128.176.20.11]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id VAA10425; Fri, 11 Oct 1996 21:04:22 -0500 (CDT)
+Received: (from gutschk@localhost) by cortex.corpus.uni-muenster.de (8.6.12/8.6.11) id TAA11185; Fri, 11 Oct 1996 19:45:04 +0200
+To: fvwm@hpc.uh.edu, fvwm-workers@hpc.uh.edu
+Subject: Re: FVWM: Re: Displaying Miniature-Windows in FvwmPager
+References: <199610111630.AA13612@bae.bae.bellcore.com>
+X-Face: +.[`xCMz]E6GW}5ECgY#C"Er6&v$q7:oe+zPlPtOh>/US;9B>;)ro_lpLx9/]q_{u-\YR>r
+ P&)Da0gS,PW{@BWSG,PIV)3#J<$Ft_t]qa!xF~'*wuwg-CJj*0:EUr3z}y
+Mime-Version: 1.0 (generated by tm-edit 7.68)
+Content-Type: text/plain; charset=US-ASCII
+From: Markus Gutschke <gutschk@uni-muenster.de>
+Date: 11 Oct 1996 19:44:57 +0200
+In-Reply-To: Dan Espen's message of Fri, 11 Oct 1996 12:30:07 -0400
+Message-ID: <m2d8ypcs4m.fsf@cortex.corpus.uni-muenster.de>
+Lines: 53
+X-Mailer: Gnus v5.2.25/XEmacs 19.14
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-beta2
+
+Dan Espen <dane@bae.bellcore.com> writes:
+> However, if the window manager attempted to draw the icon, I think
+> it would fail miserably. When it went to reduce a spot in the window
+> containing a character to a pixel, the color in the background would
+> overwhelm the color of the character.  So when it tried to draw a
+> picture of the XEmacs window, with all its glorious color, all you
+> would see is the background, menubar, toolbar and status line.
+
+I do not think, it would look _that_ bad. Of course, an application
+knows a lot more about its data and is thus much better suited to
+calculate the icon, but even without this knowledge it is possible to
+come up with a generic algorithm that looks quite passable. Do a
+couple of experiments with "xv" and you will see what I mean.
+
+For instance, open a window of your prefered application and grab its
+contents. Then calculate the size that this window will have in the
+pager and shrink the grabbed image to this size. If you tell "xv" to
+use dithering and to internally compute with true-color values, then
+the resulting icon can be told apart from other icons. This will not
+help in telling exactly what is displayed in the original window, but
+it should give you a basic impression.
+
+Also, an algorithm that wants to do this, could probably enhance the
+image quality by using first and second derivatives of the color
+gradients in order to detect edges. It would then have to use this
+information in order to emphasize structures.
+
+I see a couple of other problems, though:
+
+ - this algorithm takes a lot of time. In order to not eat up all of
+   the cpu resources, the process would have to artificially slow down
+   and return cpu performance to the system. This means that updates
+   do not happen very often.
+
+ - in order to come up with good results it is essential to use lots
+   of colors. While this is no problem in a true color environment, it
+   could eat up valuable color entries in an 8bit environment. I
+   imagine, that there would have to be some rather tricky code to use
+   existing color entries. Maybe, the icons could be limited to
+   grayscale entries. It might be able to get away with just a few
+   discreet values.
+
+ - I am uncertain, whether it would be possible to reflect changes in
+   partially or totally obscured windows. Somebody else, who is more
+   experienced with the X protocol, will have to provide this
+   information.
+
+
+
+Markus
+
+P.S.: Sorry, I do not have the time to try implementing this
+      algorithm. Even money wont convince me :-)
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Sat Oct 12 04:05:00 1996
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sat, 12 Oct 1996 04:05:00 -0500 (CDT)
+Received: from paloalto.access.hp.com (daemon@paloalto.access.hp.com [15.254.56.2]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id DAA16400; Sat, 12 Oct 1996 03:56:20 -0500 (CDT)
+Received: from fortfips.bri.hp.com (computer.bri.hp.com) by paloalto.access.hp.com with SMTP
+	(1.37.109.16/15.5+ECS 3.3) id AA257120572; Sat, 12 Oct 1996 01:56:12 -0700
+Received: by fortfips.bri.hp.com
+	(1.38.193.4/15.5+ECS 3.3) id AA20733; Sat, 12 Oct 1996 09:56:10 +0100
+Date: Sat, 12 Oct 1996 09:56:10 +0100
+From: Tim Phipps <tim@hpcpbla.bri.hp.com>
+Message-Id: <9610120856.AA20733@fortfips.bri.hp.com>
+To: fvwm-workers@hpc.uh.edu, fvwm@hpc.uh.edu, gutschk@uni-muenster.de
+Subject: Re: Re: FVWM: Re: Displaying Miniature-Windows in FvwmPager
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-beta2
+
+> I do not think, it would look _that_ bad. Of course, an application
+> knows a lot more about its data and is thus much better suited to
+> calculate the icon, but even without this knowledge it is possible to
+> come up with a generic algorithm that looks quite passable. Do a
+> couple of experiments with "xv" and you will see what I mean.
+
+I think you've got an important point in here that scuppers any scheme to
+have mini-windows in the pager.  Only the application and the X-server can
+tell when the applications windows contents change.  In order to have
+mini-windows the application window would have to be grabbed every few seconds.
+I've seen programs that spy on other windows by grabbing at intervals, you can't
+get any work done since the window keeps getting frozen when it is grabbed.
+
+Perhaps you might consider a more abstract alternative.  The pager could find
+out the application top level window background colour and use that in the
+pager window.  If you colour code your windows it would give a better hint
+and might look quite nice.  It would be a lot of work for the pager to query
+every window that gets created but would be low on CPU load.
+
+Cheers,
+Tim Phipps.
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Sun Oct 13 01:31:01 1996
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sun, 13 Oct 1996 01:31:01 -0500 (CDT)
+Received: from gclgw.gctech.co.jp (gclgw.gctech.co.jp [202.33.9.18]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id BAA10191; Sun, 13 Oct 1996 01:25:43 -0500 (CDT)
+Received: from cave.gctech.co.jp by gclgw.gctech.co.jp (8.6.5+2.3W/6.4J.6-gcl-1.0-MX)
+	id PAA13919; Sun, 13 Oct 1996 15:26:12 +0900
+Received: (from dave@localhost) by cave.gctech.co.jp (8.7.6/8.7.3/cave) id PAA16505; Sun, 13 Oct 1996 15:24:42 +0900
+Date: Sun, 13 Oct 1996 15:24:42 +0900
+Message-Id: <199610130624.PAA16505@cave.gctech.co.jp>
+From: David Wuertele <dave@cave.gctech.co.jp>
+To: fvwm@hpc.uh.edu, fvwm-workers@hpc.uh.edu
+In-reply-to: Markus Gutschke's message of 11 Oct 1996 19:44:57 +0200
+Subject: Re: Displaying Miniature-Windows in FvwmPager
+References: <199610111630.AA13612@bae.bae.bellcore.com>
+	<m2d8ypcs4m.fsf@cortex.corpus.uni-muenster.de>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-beta2
+
+<Clueless User Warning>
+
+How about another X server, kind of like Xest, which would eavesdrop on the
+stream of requests to the main X server, and display the same thing except with
+automatic subsampling?
+
+Since this nested piggy-back X server would run only at the same time as the
+main X server (only faster, due to less data to display), the user should only
+perceive the added work as an X server slowdown.  The slowdown would be a small
+fraction of the normal latency of the main X server, ideally equal to the ratio 
+of the resolution of the piggy-back server to that of the main server.
+
+Could Xnest be mangled to perform such a piggy-back service?
+
+David Wuertele
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Oct 14 11:43:07 1996
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 14 Oct 1996 11:43:07 -0500 (CDT)
+Received: from newton.auto.tuwien.ac.at (newton.auto.tuwien.ac.at [128.130.41.13]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id LAA19647; Mon, 14 Oct 1996 11:33:32 -0500 (CDT)
+Received: from vta_host.auto.tuwien.ac.at by newton.auto.tuwien.ac.at with SMTP id AA26403
+  (5.65c/IDA-1.4.4); Mon, 14 Oct 1996 18:32:55 +0200
+Received: by vta_host.auto.tuwien.ac.at (4.1/JK-0.4.5a)
+	id AA22121; Mon, 14 Oct 96 18:32:53 +0200
+Date: Mon, 14 Oct 96 18:32:53 +0200
+From: albrecht@auto.tuwien.ac.at (Albrecht Kadlec)
+Message-Id: <9610141632.AA22121@vta_host.auto.tuwien.ac.at>
+To: dave@cave.gctech.co.jp
+Cc: fvwm@hpc.uh.edu, fvwm-workers@hpc.uh.edu
+In-Reply-To: <199610130624.PAA16505@cave.gctech.co.jp> (message from David Wuertele on Sun, 13 Oct 1996 15:24:42 +0900)
+Subject: Re: Displaying Miniature-Windows in FvwmPager
+X-Attribution: A
+Reply-To: albrecht@auto.tuwien.ac.at (Albrecht Kadlec)
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-beta2
+
+>>>>> David Wuertele writes:
+
+D> <Clueless User Warning>
+D> How about another X server, kind of like Xest, which would eavesdrop on the
+D> stream of requests to the main X server, and display the same thing except with
+D> automatic subsampling?
+
+D> Since this nested piggy-back X server would run only at the same time as the
+D> main X server (only faster, due to less data to display), the user should only
+D> perceive the added work as an X server slowdown.  The slowdown would be a small
+D> fraction of the normal latency of the main X server, ideally equal to the ratio 
+D> of the resolution of the piggy-back server to that of the main server.
+
+no, subsampling is a hell of a job, if it has to look like the original.
+
+D> Could Xnest be mangled to perform such a piggy-back service?
+
+don't know, but mangling the X server isn't fvwm's job.
+If the event stream doesn't carry the information, fvwm2 is left out in the
+rain.
+
+well we could of course hook onto the "redraw" event and do a grab
+afterwards, hmmmm. I don't like the idea. Sounds like a CPU hog.
+
+albrecht
+PS: And yes, the grip of the men in green isn't that strong .... :)
+-- 
+The secret is to know when to stop,
+The secret is to know when to stop,
+The secret is to know when to stop - remembering.	-- Tom Cochrane
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Tue Oct 15 02:04:13 1996
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 15 Oct 1996 02:04:12 -0500 (CDT)
+Received: from pophh.Hamburg.pop.de (mail.hamburg.pop.de [193.98.9.7]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id BAA21518; Tue, 15 Oct 1996 01:57:11 -0500 (CDT)
+Received: from prompt.de
+	  by pophh.Hamburg.pop.de (smtp)
+	id m0vD3Qm-0000ojC; Tue, 15 Oct 96 08:56 MESZ; (Smail3.1.28.1)
+Received: from zaphod.prompt.de by prompt.de (4.1/SMI-4.1)
+	id AA16860; Tue, 15 Oct 96 08:57:02 +0200
+Received: from zaphod (localhost) by zaphod.prompt.de (5.x/SMI-SVR4)
+	id AA19562; Tue, 15 Oct 1996 08:56:56 +0200
+Message-Id: <9610150656.AA19562@zaphod.prompt.de>
+X-Mailer: exmh version 1.6.6 3/24/96
+To: fvwm@hpc.uh.edu
+Cc: fvwm-workers@hpc.uh.edu
+Subject: Re: FVWM: Displaying Miniature-Windows in FvwmPager 
+In-Reply-To: wf's message of Fri, 11 Oct 1996 17:49:38 +0200.
+	     <9610111549.AA06313@zaphod.prompt.de> 
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Date: Tue, 15 Oct 1996 08:56:51 +0200
+From: Werner Fleck <wf@zaphod.prompt.de>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-beta2
+
+I think I have to make a little bit clearer what we would like to do:
+
+We have made a set of motif applications to display medical greyscale images 
+with sizes in the range from about 256x256 up to more than 2048x2048 pixels.
+
+The window contents of the displayed images may change very often (about 10 
+frames per second depending on the image size) due to brightness/contrast 
+adjustment.
+
+Since there may be many images displayed on many virtual screens (eg. 32 
+virtual screens with two images each) displaying the images in the pager would 
+be a big aid in navigating the desktop, i.e. to quickly switch to the virtual 
+screen with the image I am looking for.
+
+It should be possible to make an extended pager module which displays the 
+scaled down images (using a crude scaling algorithm this could be very fast) 
+with reduced colors (eg. 16 grey values) only when an application requests the 
+pager to do so (eg. by a new x-event).
+
+So I am asking again if anybody has done this or is willing to this if he gets 
+some financial sponsorship?
+
+Werner
+
+--
+Werner Fleck                                  * Phone: +49 40 2 54 59 170
+prompt! Medizinische Informationssysteme GmbH * Fax:   +49 40 2 54 59 199
+Eiffestrasse 426                              * 
+D-20537 Hamburg                               * EMail: Fleck@prompt.de
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Thu Oct 17 17:39:27 1996
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Thu, 17 Oct 1996 17:39:27 -0500 (CDT)
+Received: from dobbs.ngs.noaa.gov (root@dobbs.ngs.noaa.gov [140.90.111.139]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id RAA11213 for <fvwm-workers@hpc.uh.edu>; Thu, 17 Oct 1996 17:39:11 -0500 (CDT)
+Received: from dobbs.ngs.noaa.gov (randy@localhost [127.0.0.1]) by dobbs.ngs.noaa.gov (8.7.6/8.7.6) with ESMTP id SAA24134 for <fvwm-workers@hpc.uh.edu>; Thu, 17 Oct 1996 18:39:01 -0400 (EDT)
+Message-Id: <199610172239.SAA24134@dobbs.ngs.noaa.gov>
+X-Mailer: exmh version 1.6.9 8/22/96
+To: Beta testers and contributors list <fvwm-workers@hpc.uh.edu>
+Subject: Little Imake Fix
+Mime-Version: 1.0
+Content-Type: multipart/mixed ;
+	boundary="===_0_Thu_Oct_17_18:37:33_EDT_1996"
+Date: Thu, 17 Oct 1996 18:38:55 -0400
+From: "C. Randolph Philipp" <randy@ngs.noaa.gov>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-beta2
+
+This is a multipart MIME message.
+
+--===_0_Thu_Oct_17_18:37:33_EDT_1996
+Content-Type: text/plain; charset=us-ascii
+
+I spotted this problem when I was compiling fvwm on a Solaris 2.5
+box (it was the first window manager I compiled after finishing
+X11R6.1, aren't you proud of me?).  Anyways, here is the little patch
+to Fvwm.tmpl.  BTW, I am not on the list, so send me some direct
+e-mail if you have a question.
+
+--===_0_Thu_Oct_17_18:37:33_EDT_1996
+Content-Type: text/plain; charset=us-ascii
+Content-Description: Fvwm.tmpl.fix
+
+362c362
+< 	$(CC) -o $@ $(OBJS) $(LDOPTIONS) $(LOCAL_LIBRARIES) $(LDLIBS) 
+$(EXTRA_LOAD_FLAGS) @@\
+---
+> 	$(CCLINK) -o $@ $(OBJS) $(LDOPTIONS) $(LOCAL_LIBRARIES) $(LDLIBS) $(EXTRA_LOAD_FLAGS) @@\
+387c387
+< 	$(CC) -o $@ $(OBJS) $(LDOPTIONS) $(LOCAL_LIBRARIES) $(LDLIBS) 
+$(EXTRA_LOAD_FLAGS) @@\
+---
+> 	$(CCLINK) -o $@ $(OBJS) $(LDOPTIONS) $(LOCAL_LIBRARIES) $(LDLIBS) $(EXTRA_LOAD_FLAGS) @@\
+
+--===_0_Thu_Oct_17_18:37:33_EDT_1996
+Content-Type: text/plain; charset=us-ascii
+
+------------------------------------------------------------------------------
+C. Randolph Philipp				National Geodetic Survey
+randy@dobbs.ngs.noaa.gov			assert(*this!=opinionof(NGS));
+------------------------------------------------------------------------------
+
+--===_0_Thu_Oct_17_18:37:33_EDT_1996--
+
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Sun Oct 20 11:32:18 1996
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sun, 20 Oct 1996 11:32:18 -0500 (CDT)
+Received: from drbob.woodsway.com (root@ts9-pt25.pcnet.com [199.249.196.125]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id LAA04713 for <fvwm-workers@hpc.uh.edu>; Sun, 20 Oct 1996 11:32:11 -0500 (CDT)
+Received: from drbob.woodsway.com (root@localhost [127.0.0.1]) by drbob.woodsway.com (8.7.5/8.6.9) with SMTP id MAA00753 for <fvwm-workers@hpc.uh.edu>; Sun, 20 Oct 1996 12:26:40 -0400
+Date: Sun, 20 Oct 1996 12:26:40 -0400 (EDT)
+From: Bob Woodside <proteus@pcnet.com>
+Reply-To: Bob Woodside <proteus@pcnet.com>
+Subject: Iconic short-term memory loss
+To: fvwm-workers@hpc.uh.edu
+Message-ID: <ML-2.2.845828800.7349.root@drbob.woodsway.com>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; CHARSET=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-beta2
+
+Hi, all --
+
+	I've been bothered for some time by the fact that, when you perform a
+Recapture operation, the current positions of all the icons are forgotten, and
+they are put back into the default location.
+
+	I've written a patch that eliminates this "feechur", and sent a copy to
+Chuck to evaluate. I'd be happy to e-mail a copy to anyone who wants to try it
+out. I don't really want to post it to the general mailing list or put it on my
+Web site yet, for a couple of reasons.
+
+	First, I'd like to get Chuck's take on the issue. Second, this patch
+*only* addresses the case of a Recapture, and I believe it can be extended to
+address the more general case, such that it would eliminate this behavior when
+fvwm restarts fvwm. So, although the code appears rock solid, I look on it as a
+preliminary cut subject to significant change. I hope to have some time this
+week to look into this.
+
+	Cheers,
+	Bob
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Tue Oct 22 14:55:41 1996
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 22 Oct 1996 14:55:41 -0500 (CDT)
+Received: from june.cs.washington.edu (june.cs.washington.edu [128.95.1.4]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id OAA24127 for <fvwm-workers@hpc.uh.edu>; Tue, 22 Oct 1996 14:55:30 -0500 (CDT)
+Received: from uni.cs.washington.edu (uni.cs.washington.edu [128.95.4.33]) by june.cs.washington.edu (8.7.6/7.2ju) with SMTP id MAA18571 for <fvwm-workers@hpc.uh.edu>; Tue, 22 Oct 1996 12:55:21 -0700
+Date: Tue, 22 Oct 1996 12:50:33 -0700 (PDT)
+From: Greg Badros <gjb@cs.washington.edu>
+To: FVWM Workers List <fvwm-workers@hpc.uh.edu>
+Subject: Two Column Menus???
+In-Reply-To: <ML-2.2.845828800.7349.root@drbob.woodsway.com>
+Message-ID: <Pine.LNX.3.93.961022124602.31622B-100000@uni.cs.washington.edu>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-beta2
+
+Has anybody thought about extending the menu creation code to allow
+menus created with too many items to make two-column-wide menus popup?
+e.g, if I want to create a list of hosts, and there are more than, say 40
+(since only 40 will fit w/ my screen height and font), I'd like for them
+to either get split into two columns of 20 rows each, or 1 column of 40
+and a second of (n-40) [whatever's left].
+
+It'd also be nice to have a way to tell FVWM to assign shortcut keys
+automatically.  My current m4 configuration does this, but it's
+error-prone, and slow.  eg. a menu with  Apple, Abracadabra, Tom, Bat
+would get
+
+&Apple
+A&bracadabra
+&Tom
+Bat
+
+(Note that bat can't have a shortcut key, because they're all used.
+Alternatively, bat could get "&1 Bat")
+
+Any interest or thoughts on how useful this might or might not be?
+
+Greg
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Thu Oct 24 17:42:41 1996
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Thu, 24 Oct 1996 17:42:41 -0500 (CDT)
+Received: from mail1.its.rpi.edu (mail1.its.rpi.edu [128.113.100.7]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id RAA20527; Thu, 24 Oct 1996 17:36:39 -0500 (CDT)
+Received: from pluto.solarsystem.org (rts4p2.xyp.rpi.edu [128.113.29.71]) by mail1.its.rpi.edu (8.6.9/8.6.4) with ESMTP id SAA02134; Thu, 24 Oct 1996 18:36:23 -0400
+Received: (from drewvel@localhost) by pluto.solarsystem.org (8.7.6/8.7.3) id SAA26817; Thu, 24 Oct 1996 18:37:23 -0400
+Date: Thu, 24 Oct 1996 18:37:23 -0400
+Message-Id: <199610242237.SAA26817@pluto.solarsystem.org>
+From: Andrew Veliath <veliaa@rpi.edu>
+To: FVWM List <fvwm@hpc.uh.edu>, FVWM Workers <fvwm-workers@hpc.uh.edu>
+Subject: Borderstyle Patch Available
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-beta2
+
+A new patch which lets one alter their borderstyle is at:
+
+http://www.rpi.edu/~veliaa/projects/fvwm_patches/fvwm_border_picture.html
+
+If you want textured borders, this should be for you.  Although a
+separate patch from the title-bar patch , it *requires* the title-bar
+patch (version 6 or greater).  See the new manpage entry for
+Borderstyle.  A quick example of how it works is:
+
+Borderstyle Active (Pixmap texture.xpm)
+
+Only Pixmap is available now, but one can also specify Simple to
+remove the decoration.  The HiddenHandles style which was present in
+the experimental title-bar patch has been removed (pending
+reimplementation).
+
+Enjoy,
+Andy
+
+-- 
+Andrew Veliath <veliaa@rpi.edu>        http://www.rpi.edu/~veliaa
+Finger for PGP Public Key
+Key fingerprint =  51 56 5D 3E 51 43 8B 74  7C B2 E4 B6 84 8E 8B 08
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Thu Oct 24 17:42:42 1996
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Thu, 24 Oct 1996 17:42:42 -0500 (CDT)
+Received: from mail1.its.rpi.edu (mail1.its.rpi.edu [128.113.100.7]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id RAA20469; Thu, 24 Oct 1996 17:35:41 -0500 (CDT)
+Received: from pluto.solarsystem.org (rts4p2.xyp.rpi.edu [128.113.29.71]) by mail1.its.rpi.edu (8.6.9/8.6.4) with ESMTP id SAA01852; Thu, 24 Oct 1996 18:35:10 -0400
+Received: (from drewvel@localhost) by pluto.solarsystem.org (8.7.6/8.7.3) id SAA26811; Thu, 24 Oct 1996 18:36:11 -0400
+Date: Thu, 24 Oct 1996 18:36:11 -0400
+Message-Id: <199610242236.SAA26811@pluto.solarsystem.org>
+From: Andrew Veliath <veliaa@rpi.edu>
+To: FVWM List <fvwm@hpc.uh.edu>, FVWM Workers <fvwm-workers@hpc.uh.edu>
+Subject: Title-bar Patch Version 7 Available
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-beta2
+
+A new version of the title-bar patch is available at:
+
+http://www.rpi.edu/~veliaa/projects/fvwm_patches/fvwm_title_picture.html
+
+There is also a diff from the previous version [, Chuck ;].  It is
+only a minor update.
+
+Changes:
+
+	* allow specification of Simple titlestyle to clear any
+	titlestyle
+	* added a free() call in SetTitleStyle
+
+Enjoy,
+Andy
+
+-- 
+Andrew Veliath <veliaa@rpi.edu>        http://www.rpi.edu/~veliaa
+Finger for PGP Public Key
+Key fingerprint =  51 56 5D 3E 51 43 8B 74  7C B2 E4 B6 84 8E 8B 08
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Wed Oct 30 09:20:49 1996
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Wed, 30 Oct 1996 09:20:49 -0600 (CST)
+Received: from aliboron.emi.u-bordeaux.fr (aliboron.emi.u-bordeaux.fr [147.210.12.128]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id JAA05364 for <fvwm-workers@hpc.uh.edu>; Wed, 30 Oct 1996 09:20:40 -0600 (CST)
+Received: from edwood.emi.u-bordeaux.fr by aliboron.emi.u-bordeaux.fr; Wed, 30 Oct 1996 16:20:28 +0100 (MET)
+Received: (from fortier@localhost) by edwood.emi.u-bordeaux.fr (8.7.6/) id QAA14719; Wed, 30 Oct 1996 16:20:25 +0100 (MET)
+Date: Wed, 30 Oct 1996 16:20:25 +0100 (MET)
+Message-Id: <199610301520.QAA14719@edwood.emi.u-bordeaux.fr>
+From: Patrice Fortier <Patrice.Fortier@emi.u-bordeaux.fr>
+To: fvwm-workers@hpc.uh.edu
+Subject: FVWM: FvwmButtons backgroundPixmap patch
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-beta2
+
+
+
+  I made a small patch for FvwmButtons to put a background pixmap
+behind an icon. It uses the Back(Icon) command.
+Like this (Goodstuff style)
+
+*FvwmButtons(Back(Icon) TissueRed.xpm)	xterm	Xterm.xpm	Exec ""	color-xterm &
+
+or (FvwmButtons style)
+
+*FvwmButtons(Back(Icon) TissueRed.xpm,Title xterm,Icon Xterm.xpm, Action `Exec "" color-xterm &`)
+
+Note that this only work on a per button basis. You can't do this for
+a container for example. So you need to put the 'back' option on every
+button definition (boring I know....)
+
+To make a patch to change also the Container background pixmap will
+require to modify the data structure and a lot of code... Since I'm
+not the maintainer of FvwmButtons...
+
+you can have a look here:
+http://www.emi.u-bordeaux.fr/~fortier/Fvwm/index.html
+
+
+----------------------------------Cut Here----------------------------------
+*** FvwmButtons.c.orig	Sun Sep 29 09:19:05 1996
+--- FvwmButtons.c	Wed Oct 30 12:20:32 1996
+***************
+*** 230,241 ****
+      {
+        if(b->flags&b_Icon)
+  	DestroyPicture(Dpy,b->icon);
+- /*
+        if(b->flags&b_IconBack)
+  	DestroyPicture(Dpy,b->backicon);
+        if(b->flags&b_Container && b->c->flags&b_IconBack)
+  	DestroyPicture(Dpy,b->c->backicon);
+- */
+      }
+  
+    exit(0);
+--- 230,239 ----
+*** button.c.orig	Wed Oct 30 12:14:59 1996
+--- button.c	Mon Oct 28 20:47:16 1996
+***************
+*** 179,188 ****
+  **/
+  Pixel buttonBack(button_info *b)
+  {
+!   if(b->flags&b_Back)
+      return b->bc;
+    while((b=b->parent))
+!     if(b->c->flags&b_Back)
+        return b->c->bc;
+  #ifdef DEBUG
+    fprintf(stderr,"%s: BUG: No background definition?\n",MyName);
+--- 179,188 ----
+  **/
+  Pixel buttonBack(button_info *b)
+  {
+!   if(b->flags&b_Back && !(b->flags&b_IconBack))
+      return b->bc;
+    while((b=b->parent))
+!     if(b->c->flags&b_Back && !(b->flags&b_IconBack))
+        return b->c->bc;
+  #ifdef DEBUG
+    fprintf(stderr,"%s: BUG: No background definition?\n",MyName);
+***************
+*** 196,205 ****
+  **/
+  Pixel buttonHilite(button_info *b)
+  {
+!   if(b->flags&b_Back)
+      return b->hc;
+    while((b=b->parent))
+!     if(b->c->flags&b_Back)
+        return b->c->hc;
+  #ifdef DEBUG
+    fprintf(stderr,"%s: BUG: No background definition?\n",MyName);
+--- 196,205 ----
+  **/
+  Pixel buttonHilite(button_info *b)
+  {
+!   if(b->flags&b_Back && !(b->flags&b_IconBack))
+      return b->hc;
+    while((b=b->parent))
+!     if(b->c->flags&b_Back && !(b->flags&b_IconBack))
+        return b->c->hc;
+  #ifdef DEBUG
+    fprintf(stderr,"%s: BUG: No background definition?\n",MyName);
+***************
+*** 213,222 ****
+  **/
+  Pixel buttonShadow(button_info *b)
+  {
+!   if(b->flags&b_Back)
+      return b->sc;
+    while((b=b->parent))
+!     if(b->c->flags&b_Back)
+        return b->c->sc;
+  #ifdef DEBUG
+    fprintf(stderr,"%s: BUG: No background definition?\n",MyName);
+--- 213,222 ----
+  **/
+  Pixel buttonShadow(button_info *b)
+  {
+!   if(b->flags&b_Back && !(b->flags&b_IconBack))
+      return b->sc;
+    while((b=b->parent))
+!     if(b->c->flags&b_Back && !(b->flags&b_IconBack))
+        return b->c->sc;
+  #ifdef DEBUG
+    fprintf(stderr,"%s: BUG: No background definition?\n",MyName);
+*** draw.c.orig	Sun Sep 29 10:18:29 1996
+--- draw.c	Wed Oct 30 12:43:44 1996
+***************
+*** 119,124 ****
+--- 119,138 ----
+    if(!(b->flags&b_Icon) && (buttonSwallowCount(b)<3))
+      return;
+  
++   /* Set the background pixmap if we need one */
++   if(b->flags&b_IconBack)
++     {
++       int x,y,px,py,f,BW,BH;
++ 
++       XSetWindowBackgroundPixmap(Dpy,MyWindow,b->backicon->picture);
++       BW = buttonWidth(b);
++       BH = buttonHeight(b);
++       buttonInfo(b,&x,&y,&px,&py,&f);
++       f=abs(f);
++       if(BW>2*f && BH>2*f)
++ 	XClearArea(Dpy,MyWindow,x+f,y+f,BW-2*f,BH-2*f,False);
++     }
++ 
+    font = buttonFont(b);
+  
+    GetInternalSize(b,&ix,&iy,&iw,&ih);
+***************
+*** 230,236 ****
+  	  if(h1)XFillRectangle(Dpy,MyWindow,NormalGC,x1,y1,w,h1);
+  	  if(h2)XFillRectangle(Dpy,MyWindow,NormalGC,x1,y1+h-h2,w,h2);
+  	}
+!       else 
+  	XFillRectangle(Dpy,MyWindow,NormalGC,x+f,y+f,BW-2*f,BH-2*f);
+      }
+  
+--- 244,250 ----
+  	  if(h1)XFillRectangle(Dpy,MyWindow,NormalGC,x1,y1,w,h1);
+  	  if(h2)XFillRectangle(Dpy,MyWindow,NormalGC,x1,y1+h-h2,w,h2);
+  	}
+!       else if(!(b->flags&b_IconBack))
+  	XFillRectangle(Dpy,MyWindow,NormalGC,x+f,y+f,BW-2*f,BH-2*f);
+      }
+  
+*** parse.c.orig	Mon Sep 23 22:47:23 1996
+--- parse.c	Mon Oct 28 21:04:13 1996
+***************
+*** 118,124 ****
+  	{
+  	case 0: /* Icon */
+  	  r=1;
+- 	  fprintf(stderr,"%s: Back(Icon) not supported yet\n",MyName);
+  	  break;
+  	default:
+  	  t=seekright(&s);
+--- 118,123 ----
+----------------------------------Cut Here----------------------------------
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+

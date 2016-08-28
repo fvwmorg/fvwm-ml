@@ -1,0 +1,1551 @@
+From owner-fvwm-workers@hpc.uh.edu  Thu Apr  2 03:46:29 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Thu, 02 Apr 1998 03:46:29 -0600 (CST)
+Received: from nether.tky.hut.fi (nether.tky.hut.fi [130.233.23.85]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id DAA21010 for <fvwm-workers@hpc.uh.edu>; Thu, 2 Apr 1998 03:46:19 -0600 (CST)
+Received: from localhost (ts@localhost)
+	by nether.tky.hut.fi (8.8.7/8.8.5) with SMTP id MAA28187
+	for <fvwm-workers@hpc.uh.edu>; Thu, 2 Apr 1998 12:48:03 +0300
+Date: Thu, 2 Apr 1998 12:48:03 +0300 (EEST)
+From: Tomi Sarvela <ts@nether.tky.hut.fi>
+Reply-To: Tomi Sarvela <ts@nether.tky.hut.fi>
+To: fvwm-workers@hpc.uh.edu
+Subject: FvwmWinList
+In-Reply-To: <Pine.LNX.3.96.980316161314.11982I-100000@deb.kentek.com>
+Message-ID: <Pine.LNX.3.96.980402123713.28175C-100000@nether.tky.hut.fi>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+
+	Hi!
+
+	I noticed that the RESIZE_BUG_HACK is not needed in my
+	configuration (linux-2.0.33, XFree86 3.3, fvwm-2.0.46),
+	in fact, the window moves 2 pixels up and left when
+	refreshed, and therefore made very simple patch to move
+	the ugly compile-flag to the rc-options.
+
+	Also, if there's active maintainer for this module,
+	I'd like a reply .. I have couple of ideas, but I'm
+	not sure how to carry them out by myself.
+
+	Tomi
+
+tomi.sarvela@iki.fi  Ideas and thoughts expressed herein are mine, all mine!
+t@nether.tky.hut.fi  An NT server can be run by an idiot, and usually is.
+__________________________________________________________________________resizebug.diff
+--- FvwmWinList.c~	Thu Apr  2 12:41:40 1998
++++ FvwmWinList.c	Thu Apr  2 12:32:53 1998
+@@ -116,7 +116,7 @@
+       *ForeColor[MAX_COLOUR_SETS] = { "black" },
+       *geometry="";
+ char *font_string = "fixed";
+-int UseSkipList=0,Anchor=1,UseIconNames=0,LeftJustify=0,TruncateLeft=1;
++int UseSkipList=0,Anchor=1,UseIconNames=0,LeftJustify=0,TruncateLeft=1,UseResizeBugHack=0;
+ 
+ long CurrentDesk = 0;
+ int ShowCurrentDesk = 0;
+@@ -399,7 +399,7 @@
+ 	CurrentDesk = body[0];
+ 	if(ShowCurrentDesk)
+ 	{
+-	  RESIZE_BUG_HACK = 1;
++	  RESIZE_BUG_HACK = UseResizeBugHack;
+ 	  AdjustWindow();
+ 	  RESIZE_BUG_HACK = 0;
+ 	  RedrawWindow(1);
+@@ -549,6 +549,8 @@
+ 	    CopyString(&BackColor[2],&tline[Clength+9]);
+ 	  else if(mystrncasecmp(tline,CatString3(Module, "NoAnchor",""),
+ 				Clength+8)==0) Anchor=0;
++	  else if(mystrncasecmp(tline,CatString3(Module, "UseResizeBugHack",""),
++				Clength+16)==0) UseResizeBugHack=1;
+ 	  else if(mystrncasecmp(tline,CatString3(Module, "Action",""), Clength+6)==0)
+ 	    LinkAction(&tline[Clength+6]);
+ 	  else if(mystrncasecmp(tline,CatString3(Module, "UseSkipList",""),
+
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Wed Apr  8 19:53:15 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Wed, 08 Apr 1998 19:53:15 -0500 (CDT)
+Received: from alphatech.com (erebus.alphatech.com [198.112.236.2]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id TAA00121; Wed, 8 Apr 1998 19:53:06 -0500 (CDT)
+Received: from venus.alphatech.com by alphatech.com (SMI-8.6/SMI-SVR4)
+	id UAA22651; Wed, 8 Apr 1998 20:52:07 -0400
+Received: from pochacco.alphatech.com by venus.alphatech.com (4.1/SMI-4.1)
+	id AA26309; Wed, 8 Apr 98 20:53:08 EDT
+Received: by pochacco.alphatech.com (SMI-8.6/SMI-SVR4)
+	id UAA25300; Wed, 8 Apr 1998 20:51:53 -0400
+Message-Id: <199804090051.UAA25300@pochacco.alphatech.com>
+Mime-Version: 1.0
+Date: Wed,  8 Apr 1998 20:51:52 -0400 (EDT)
+From: greg@alphatech.com (Greg Klanderman)
+To: fvwm@hpc.uh.edu, fvwm-workers@hpc.uh.edu
+Subject: [patch] focus warping bug in 2.0.46
+Reply-To: greg@alphatech.com
+Content-Type: text/plain; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+
+
+Hello,
+
+The patch below seems to be needed to avoid invalid icon location
+fields from being used when focusing to an iconified window which has
+no icon window (using FvwmIconMan).  I also fixed an apparent typo
+(width/height were swapped), I'm not sure the consequences of that.
+I'm still not sure why you'd ever want to call SetupFrame (last line
+of context in the patch).
+
+The bug manifests itself if you create a window in one part of a desk,
+and move it to a different part of the viewport.  Iconify it, putting
+it into FvwmIconMan.  Now, if you have IconMan set as follows, and you
+move the mouse over the button for that window, selecting it, the
+viewport warps to 0,0 and the window is moved to 0,0.
+
+Let me know if you need more information,
+Greg
+
+
+
+Style "Fvwm*"       NoTitle, Sticky, WindowListSkip
+Style "Fvwm*"       BorderWidth 2, CirculateSkipIcon, CirculateSkip
+Style "FvwmIconMan" Title, CirculateHit
+
+*FvwmIconMan*action          Select sendcommand Focus
+*FvwmIconMan*resolution      page
+*FvwmIconMan*usewinlist      true
+*FvwmIconMan*drawicons       true
+*FvwmIconMan*followfocus     true
+*FvwmIconMan*sort            true
+*FvwmIconMan*managergeometry -1+1
+*FvwmIconMan*buttongeometry  90x19
+*FvwmIconMan*font            -adobe-helvetica-bold-r-normal--10-*
+*FvwmIconMan*background           dimgray
+*FvwmIconMan*foreground           white
+*FvwmIconMan*plainbutton          up
+*FvwmIconMan*selectbutton         down
+*FvwmIconMan*focusbutton          raisededge white palevioletred
+*FvwmIconMan*focusandselectButton raisededge white palevioletred
+
+
+
+
+--- ../.backups/builtins.c!!!proj!mstar!software!fvwm!fvwm-2.0.46!fvwm!.~1~	Tue Aug 19 19:41:27 1997
++++ fvwm/builtins.c	Wed Apr  8 20:36:56 1998
+@@ -180,6 +180,7 @@
+   }
+ 
+ #ifndef NON_VIRTUAL
++  if (!(t->flags & ICONIFIED) || t->icon_w) {
+   if(t->flags & ICONIFIED)
+   {
+     cx = t->icon_xl_loc + t->icon_w_width/2;
+@@ -195,6 +196,7 @@
+   dy = (cy +Scr.Vy)/Scr.MyDisplayHeight*Scr.MyDisplayHeight;
+ 
+   MoveViewport(dx,dy,True);
++  }
+ #endif
+ 
+   if(t->flags & ICONIFIED)
+@@ -217,7 +219,7 @@
+   KeepOnTop();
+ 
+   /* If the window is still not visible, make it visible! */
+-  if(((t->frame_x + t->frame_height)< 0)||(t->frame_y + t->frame_width < 0)||
++  if(((t->frame_x + t->frame_width)< 0)||(t->frame_y + t->frame_height < 0)||
+      (t->frame_x >Scr.MyDisplayWidth)||(t->frame_y>Scr.MyDisplayHeight))
+   {
+     SetupFrame(t,0,0,t->frame_width, t->frame_height,False);
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Apr 13 15:28:18 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 13 Apr 1998 15:28:18 -0500 (CDT)
+Received: from heorot.cks.com (root@heorot.cks.com [209.116.197.20]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id PAA20582 for <fvwm-workers@hpc.uh.edu>; Mon, 13 Apr 1998 15:28:01 -0500 (CDT)
+Received: by heorot.cks.com
+	id m0yOpoy-000ACPC
+	(Debian Smail-3.2 1996-Jul-4 #2); Mon, 13 Apr 1998 13:27:16 -0700 (PDT)
+Message-ID: <19980413132716.11366@heorot>
+Date: Mon, 13 Apr 1998 13:27:16 -0700
+From: David Welton <davidw@gate.cks.com>
+To: fvwm-workers@hpc.uh.edu
+Subject: IconBox "Gravity"
+Reply-To: davidw@cks.com
+Mime-Version: 1.0
+Content-Type: multipart/signed; protocol="application/pgp-signature";
+	micalg=pgp-md5; boundary="2B/JsCI69OhZNC5r"
+X-Mailer: Mutt 0.88
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+
+--2B/JsCI69OhZNC5r
+Content-Type: multipart/mixed; boundary=AhhlLboLdkugWU4S
+
+
+--AhhlLboLdkugWU4S
+Content-Type: text/plain; charset=us-ascii
+
+Hi, I found out that fvwm2 lacks any way to direct how icons are
+placed within the IconBox, so I sat down and took a look at the code
+and came up with this fix.
+
+Basically, it looks at where your IconBox lies on the screen, and uses
+this to determine how to lay out icons.  If it is towards the left, it
+goes left to right, and right to left if it is towards the right.  If
+it is towards the top, it goes top to bottom, etc...   So that with my
+IconBox in the lower right corner, it starts at the bottom of the
+screen and goes right to left and then up.  It's not as good as
+actually having an IconBoxGravity (which should let you set both the
+right to left and top to bottom gravities), but I think it's good
+enough for what most people want, and it's something that could easily
+be built on top of.
+
+I'm not subscribed to this list, so please CC replies to me.
+
+Thanks:-)
+-- 
+David Welton                          http://www.efn.org/~davidw 
+
+	Debian GNU/Linux - www.debian.org
+--AhhlLboLdkugWU4S
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: attachment; filename=iconboxdiff
+
+--- fvwm2-2.0.46-BETA/fvwm/icons.c	Mon Aug 11 07:39:04 1997
++++ icons.c	Mon Apr 13 13:11:21 1998
+@@ -366,6 +366,8 @@
+   Bool loc_ok;
+   int real_x=10, real_y=10;
+   int new_x, new_y;
++  int incr_x, incr_y;  /* we need these to set which direction IconBox
++			  takes when placing icons */
+ 
+   /* New! Put icon in same page as the center of the window */
+   /* Not a good idea for StickyIcons */
+@@ -384,7 +386,7 @@
+     }
+   else
+     {
+-      base_x=((t->frame_x+Scr.Vx+(t->frame_width>>1))/Scr.MyDisplayWidth)*
++      base_x=((t->frame_x + Scr.Vx + (t->frame_width>>1)) /Scr.MyDisplayWidth) *
+ 	Scr.MyDisplayWidth - Scr.Vx;
+       base_y=((t->frame_y+Scr.Vy+(t->frame_height>>1))/Scr.MyDisplayHeight)*
+ 	Scr.MyDisplayHeight - Scr.Vy;
+@@ -409,70 +411,98 @@
+       width = t->icon_p_width;
+       height = t->icon_w_height + t->icon_p_height;
+       loc_ok = False;  
++
+       
+       /* check all boxes in order */
+       /* In each IconBox, start at the upper left, travel right, then
+        * down */
+-      test_y = t->IconBox[1]+base_y;
+-      
++     
+       temp_h = height;
+       temp_w = width;
+-      
++
++
++      /* test_y and test_x determine where we start placing icons  */ 
++
++      if (((t->IconBox[3] + t->IconBox[1]) / 2) > Scr.MyDisplayHeight / 2) { 
++	/* more towards the bottom  */ 
++	test_y = t->IconBox[3] + base_y - temp_h - 5;  /* arbitrary number  */
++	incr_y = -3;
++      } else {
++	/* more towards the top  */ 
++	test_y = t->IconBox[1] + base_y ;  /* arbitrary number  */ 	  
++	incr_y = 3;
++      }
++            
+       /* OK second try at this.
+        * If the window is taller than the icon box, ignore the icon height
+        * when figuring where to put it. Same goes for the width */
+       /* This should permit reasonably graceful handling of big icons. */
++      /* l t r b  */ 
++      /* 0 1 2 3  */ 
+       if(width >= (t->IconBox[2] - t->IconBox[0]))
+-	    temp_w = 0;
+-	  if(height >= (t->IconBox[3] - t->IconBox[1]))
+-	    temp_h = 0;
++	temp_w = 0;
++      if(height >= (t->IconBox[3] - t->IconBox[1]))
++	temp_h = 0;
++      
++      while(((test_y + temp_h) < (t->IconBox[3]+base_y))&&(!loc_ok) && 
++	    ((test_y + temp_h) > (t->IconBox[1]+base_y)))
++	{
++	  if (((t->IconBox[2] + t->IconBox[0]) / 2) > Scr.MyDisplayWidth / 2)  { 
++	    /* more towards the right  */ 
++	    test_x = t->IconBox[2] + base_x - temp_w - 5;  /* arbitrary number  */
++	    incr_x = -3;
++	  } else {
++	    /* more towards the left  */ 
++	    test_x = t->IconBox[0] + base_x;  /* arbitrary number  */
++	    incr_x = 3;
++	  }
+ 	  
+-	  while(((test_y + temp_h) < (t->IconBox[3]+base_y))&&(!loc_ok))
++	  while(((test_x + temp_w) < (t->IconBox[2]+base_x))&& (!loc_ok) &&	
++		((test_x + temp_w) > (t->IconBox[0]+base_x)))
+ 	    {
+-	      test_x = t->IconBox[0]+base_x;
+-	      while(((test_x + temp_w) < (t->IconBox[2]+base_x))&&
+-		    (!loc_ok))
++	      real_x = test_x;
++	      real_y = test_y;
++	      
++	      if(test_x + width > (Scr.MyDisplayWidth-2+base_x))
++		real_x = Scr.MyDisplayWidth - width -2 + base_x;
++	      if(test_y + height > (Scr.MyDisplayHeight-2+base_y))
++		real_y = Scr.MyDisplayHeight - height -2+base_y;
++	      if(test_x <base_x)
++		real_x = base_x;
++	      if(test_y < base_y)
++		real_y = base_y;
++	      loc_ok = True;
++	      test_window = Scr.FvwmRoot.next;
++	     
++	      while((test_window != (FvwmWindow *)0) && (loc_ok == True))
+ 		{
+-		  real_x = test_x;
+-		  real_y = test_y;
+-		  
+-		  if(test_x + width > (Scr.MyDisplayWidth-2+base_x))
+-		    real_x = Scr.MyDisplayWidth - width -2 + base_x;
+-		  if(test_y + height > (Scr.MyDisplayHeight-2+base_y))
+-		    real_y = Scr.MyDisplayHeight - height -2+base_y;
+-		  if(test_x <base_x)
+-		    real_x = base_x;
+-		  if(test_y < base_y)
+-		    real_y = base_y;
+-		  loc_ok = True;
+-		  test_window = Scr.FvwmRoot.next;
+-		  while((test_window != (FvwmWindow *)0)&&(loc_ok == True))
++		  if(test_window->Desk == t->Desk)
+ 		    {
+-		      if(test_window->Desk == t->Desk)
++		      if((test_window->flags&ICONIFIED)&&
++			 (test_window->icon_w || test_window->icon_pixmap_w)&&
++			 (test_window != t))
+ 			{
+-			  if((test_window->flags&ICONIFIED)&&
+-                             (test_window->icon_w||test_window->icon_pixmap_w)&&
+-			     (test_window != t))
+-			    {
+-			      tw=test_window->icon_p_width;
+-			      th=test_window->icon_p_height+
+-				test_window->icon_w_height;
+-			      tx = test_window->icon_x_loc;
+-			      ty = test_window->icon_y_loc;
++			  tw=test_window->icon_p_width;
++			  th=test_window->icon_p_height+
++			    test_window->icon_w_height;
++			  tx = test_window->icon_x_loc;
++			  ty = test_window->icon_y_loc;
+ 			  
+-			      if((tx<(real_x+width+3))&&((tx+tw+3) > real_x)&&
+-				 (ty<(real_y+height+3))&&((ty+th + 3)>real_y))
+-				{
+-				  loc_ok = False;
+-				}
++			  /* switched out incr_x and incr_y for 3 - davidw */ 
++			  if((tx < (real_x + width + incr_x )) && ((tx + tw + incr_x) > real_x)&&
++			     (ty < (real_y + height + incr_y)) && ((ty + th + incr_y) > real_y))
++			    {
++			      loc_ok = False;
+ 			    }
+ 			}
+-		      test_window = test_window->next;
+ 		    }
+-		  test_x +=3;
++		  test_window = test_window->next;
+ 		}
+-	      test_y +=3;
++	      test_x += incr_x;   /* we can set this var to + or - to
++				     do the right thing */
+ 	    }
++	  test_y += incr_y;  
++	}
+       if(loc_ok == False)
+ 	return;
+       t->icon_x_loc = real_x;
+
+--AhhlLboLdkugWU4S--
+
+--2B/JsCI69OhZNC5r
+Content-Type: application/pgp-signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: 2.6.3a
+
+iQBVAwUBNTJ1JFf1ruXoMyApAQG3dQH/dQJh1eo0vCMcsApx9lWtteOUK7uG7w4e
+zcJR9azS8EynsWtQq+M9rx9XF2p+ex8T4Z2jFaNUSaISINTgThXM9w==
+=nZjo
+-----END PGP SIGNATURE-----
+
+--2B/JsCI69OhZNC5r--
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Apr 13 15:53:27 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 13 Apr 1998 15:53:27 -0500 (CDT)
+Received: from castle.mk.bellcore.com (castle.mk.bellcore.com [128.96.133.172]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id PAA21048 for <fvwm-workers@hpc.uh.edu>; Mon, 13 Apr 1998 15:53:10 -0500 (CDT)
+Received: from mk.bellcore.com (fork [128.96.133.4])
+	by castle.mk.bellcore.com (8.8.8/8.8.8) with ESMTP id QAA20624;
+	Mon, 13 Apr 1998 16:51:17 -0400 (EDT)
+Message-Id: <199804132051.QAA20624@castle.mk.bellcore.com>
+To: davidw@cks.com
+cc: fvwm-workers@hpc.uh.edu
+Subject: Re: IconBox "Gravity" 
+In-reply-to: Your message of Mon, 13 Apr 1998 13:27:16 -0700.
+             <19980413132716.11366@heorot> 
+x-face: -:-!LDdizWr~[l?RsG!7/BSm'=,`y>~^N7a#qX+.-ZUy"%YF.bP?t_E$lZG54!X1`_>u8>V
+ /DpeH-oUPJ".cJfU'!(om[k{>?!DzZP&UYPi!W/]`[K`Ga+S()<~)mZlm;m}0fId<>1}XS.O+zV%w"
+ 1)-+K#MqP:&_@FrPF}_}R?_\"z9mHc!)e{e/DNzDY&*QoH,HGZJP#LszzhoGERD7$J4ebNt9oh-nvL
+ *IX4w6m=+qtbLQrrI{-jd2Q+(ZUg,a`n58O}z/zl"
+Mime-Version: 1.0 (generated by tm-edit 7.108)
+Content-Type: text/plain; charset=US-ASCII
+Date: Mon, 13 Apr 1998 16:51:16 -0400
+From: Dan Espen <dane@mk.bellcore.com>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+David Welton <davidw@gate.cks.com> writes:
+> 
+> Hi, I found out that fvwm2 lacks any way to direct how icons are
+> placed within the IconBox, so I sat down and took a look at the code
+> and came up with this fix.
+> 
+> Basically, it looks at where your IconBox lies on the screen, and uses
+> this to determine how to lay out icons.  If it is towards the left, it
+> goes left to right, and right to left if it is towards the right.  If
+> it is towards the top, it goes top to bottom, etc...   So that with my
+> IconBox in the lower right corner, it starts at the bottom of the
+> screen and goes right to left and then up.  It's not as good as
+> actually having an IconBoxGravity (which should let you set both the
+> right to left and top to bottom gravities), but I think it's good
+> enough for what most people want, and it's something that could easily
+> be built on top of.
+> 
+> I'm not subscribed to this list, so please CC replies to me.
+
+Ok, just this once.
+
+Take a look at the unofficial patches site, you will find
+the "iconboxes patch", including icon gravity.
+
+> Thanks:-)
+> -- 
+> David Welton                          http://www.efn.org/~davidw 
+
+--
+Dan Espen                                Phone: (732) 699-5570
+444 Hoes Lane  Room RRC 1C-214           E-mail: dane@mk.bellcore.com
+Piscataway, NJ 08854
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Fri Apr 17 17:33:40 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Fri, 17 Apr 1998 17:33:40 -0500 (CDT)
+Received: from gaul.lattis.xara.net (gaul.lattis.xara.net [195.224.37.7]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id RAA25618 for <fvwm-workers@hpc.uh.edu>; Fri, 17 Apr 1998 17:33:28 -0500 (CDT)
+Received: by gaul.lattis.xara.net with ESMTP
+    from sfere.greenend.org.uk (sfere.greenend.org.uk [195.224.38.1])
+    id XAA02820 (2.4-8.8.8/3.1.23);
+    Fri, 17 Apr 1998 23:27:25 +0100 (BST)
+Received: from valour.greenend.org.uk (root@valour.greenend.org.uk [195.224.38.2])
+	by sfere.greenend.org.uk (8.8.8/8.8.8) with ESMTP id WAA19857;
+	Fri, 17 Apr 1998 22:51:33 +0100
+Received: by valour.greenend.org.uk
+	id m0yQJ2i-000w4ZC
+	(Debian Smail-3.2.0.101 1997-Dec-17 #2); Fri, 17 Apr 1998 22:51:32 +0100 (BST)
+Message-Id: <m0yQJ2i-000w4ZC@valour.greenend.org.uk>
+Date: Fri, 17 Apr 1998 22:51:32 +0100 (BST)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+From: Austin Donnelly <austin@greenend.org.uk>
+To: Tomi Sarvela <ts@nether.tky.hut.fi>
+Cc: fvwm-workers@hpc.uh.edu
+Subject: Re: FvwmWinList
+In-Reply-To: <Pine.LNX.3.96.980402123713.28175C-100000@nether.tky.hut.fi>
+References: <Pine.LNX.3.96.980316161314.11982I-100000@deb.kentek.com>
+	<Pine.LNX.3.96.980402123713.28175C-100000@nether.tky.hut.fi>
+X-Mailer: VM 6.42 under Emacs 19.34.1
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+On Thu, 2 Apr 1998, Tomi Sarvela wrote:
+
+> 	I noticed that the RESIZE_BUG_HACK is not needed in my
+> 	configuration (linux-2.0.33, XFree86 3.3, fvwm-2.0.46),
+> 	in fact, the window moves 2 pixels up and left when
+> 	refreshed, and therefore made very simple patch to move
+> 	the ugly compile-flag to the rc-options.
+> 
+> 	Also, if there's active maintainer for this module,
+> 	I'd like a reply .. I have couple of ideas, but I'm
+> 	not sure how to carry them out by myself.
+
+I too have looked at the code in question.  It's not pretty, and not
+at all clear when the resize hack needs to be used (if at all).
+
+Until someone claims to have a full(er) understanding of all the
+issues involved, I think it would be better if people didn't go
+dashing in with quick fixes.  If you _do_, please add comments
+describing exactly what the problem you were fixing was.  I believe
+this is the only way co-operative development can take place.
+
+Austin
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Wed Apr 22 10:31:59 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Wed, 22 Apr 1998 10:31:59 -0500 (CDT)
+Received: from boole.auto.tuwien.ac.at (albrecht@boole.auto.tuwien.ac.at [128.130.55.34]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id KAA21874 for <fvwm-workers@hpc.uh.edu>; Wed, 22 Apr 1998 10:31:50 -0500 (CDT)
+Received: (from albrecht@localhost) by boole.auto.tuwien.ac.at (8.8.3/8.8.3) id RAA06008; Wed, 22 Apr 1998 17:31:04 +0200
+To: FVWM-Workers mailing list <fvwm-workers@hpc.uh.edu>,
+        Charles Hines <chuck_hines@VNET.IBM.COM>, Mark Boyns <boyns@sdsu.edu>,
+        Mark Scott <Imscott@mcd.mot.com>
+Subject: FvwmEvent 1.0 (FvwmAudio++) Alpha release
+Reply-To: albrecht@auto.tuwien.ac.at
+X-Attribution: A
+From: Albrecht Kadlec <albrecht@auto.tuwien.ac.at>
+Date: 22 Apr 1998 17:31:02 +0200
+Message-ID: <sa0btttkh55.fsf@boole.auto.tuwien.ac.at>
+Lines: 313
+X-Mailer: Gnus v5.4.56/Emacs 19.34
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+
+
+New module, full man page at the end:
+
+SYNOPSIS
+       FvwmEvent  is  a more versatile replacement for FvwmAudio.
+       It can in general be used to hook any  fvwm2  function  or
+       program  to any window manager event. e.g: Delete unwanted
+       netscape-popups  or  application  error  popups  as   they
+       appear, play sounds, log events to a file and the like. Be
+       creative, You'll find a use for it.
+
+
+Could please as many of you as possible test this module with your setup ?
+
+Test version at
+<URL:http://www.auto.tuwien.ac.at/~albrecht/fvwm2/FvwmEvent.tgz>
+
+
+
+To be released soon (monday ?), after some final fixes & comments.
+
+
+	Mark Boyns & Mark Scott: are the credits, times & copyrights ok ?
+				I included the grant to modify the program
+				in the COPYRIGHT section.
+				Copyright in code is GPL, just like FvwmAudio.
+
+	Chuck: What do you say ?  Could this replace FvwmAudio after some
+	       testing. It's a gerneralization of FvwmAudio.
+	
+		BTW:	fvwm2 is still lacking an IF and a DELAY
+			function. 
+			If these functions existed, several ugly race
+			conditions could be eliminated:
+
+			   *FvwmEventCmd
+			   *FvwmEvent add_window 'Next ["APPL ERROR"] close'
+
+			This sometimes fails to close the newly opened
+			window, since the Next is so fast, that it
+			sometimes has already evaluated the title of the
+			new window, before that title has even been set. 
+
+			Another benefit of a Delay function would be, that
+			one could use FvwmEvent to replace simple FvwmAuto.
+
+			   DestroyFunc myfocus
+			   AddToFunc myfocus	"I"	Delay 100
+						"I"	Raise
+
+			   *FvwmEventCmd
+			   *FvwmEvent focus_change	   myfocus
+
+
+
+			I'd also find an ALL function very useful.
+
+			e.g:  ALL ["APPL ERROR"] close
+			or :  *FvwmEvent add_window 'ALL ["Java Console"] close'
+
+
+
+now the full man page:
+
+
+FvwmEvent(1.0)                                     FvwmEvent(1.0)
+
+NAME
+       FvwmEvent - the FVWM Event module
+
+SYNOPSIS
+       FvwmEvent  is  a more versatile replacement for FvwmAudio.
+       It can in general be used to hook any  fvwm2  function  or
+       program  to any window manager event. e.g: Delete unwanted
+       netscape-popups  or  application  error  popups  as   they
+       appear, play sounds, log events to a file and the like. Be
+       creative, You'll find a use for it.
+
+       FvwmEvent is spawned by fvwm2(1), so no command line invo-
+       cation   will   work.   From  within  the  .fvwm2rc  file,
+       FvwmEvent is spawned as follows:
+
+       Module FvwmEvent
+
+       or from within an fvwm2 pop-up menu:
+
+       DestroyMenu Module-Popup
+       AddToMenu Module-Popup "Modules"      Title
+       +                      "Event"        Module FvwmEvent
+       +                      "Auto"         Module FvwmAuto 200
+       +                      "Buttons"      Module FvwmButtons
+       +                      "Ident"        Module FvwmIdent
+       +                      "Banner"       Module FvwmBanner
+       +                      "Pager"        Module FvwmPager 0 3
+
+DESCRIPTION
+       The FvwmEvent module communicates with  the  fvwm2  window
+       manager to bind actions to window manager events.  Differ-
+       ent actions may be assigned  to  distinct  window  manager
+       events.
+
+       FvwmEvent  can  be used to bind sound files to events like
+       FvwmAudio (RiP) did. It can  be  used  for  logging  event
+       traces to a log file, while debugging fvwm2.
+
+       FvwmEvent  can  also  have  builtin  support for the rplay
+       library.  (heritage of FvwmAudio)
+
+CONFIGURATION OPTIONS
+       FvwmEvent reads the same .fvwm2rc file as fvwm2 reads when
+       it starts up, and looks for certain configuration options:
+
+       *FvwmEventCmd command
+              This determines the fvwm2 function that  is  to  be
+              called  with  the event parameters.  You might want
+              to do one of the following (details below):
+
+                   *FvwmEventCmd builtin-rplay
+                                  play sounds
+                   *FvwmEventCmd /rsynth/say
+                                  tell the user, what he did
+                   *FvwmEventCmd Echo
+                                  echo to fvwm2 stdout
+                   *FvwmEventCmd
+                                  execute distinct fvwm2 functions
+                   *FvwmEventCmd exec
+                                  execute distinct external programs
+
+              This version of FvwmEvent has builtin rplay support
+              which  does  not  need  to invoke an external audio
+              player  to  play  sounds.   The  rplay  support  is
+              enabled  when FvwmEvent is compiled with HAVE_RPLAY
+              defined (see the Imakefile) and  when  FvwmEventCmd
+              is set to builtin-rplay.
+
+              For example:
+
+                   *FvwmEventCmd builtin-rplay
+                   *FvwmEvent add_window drip.au
+
+              rplay can be obtained via anonymous ftp at
+                   <URL:ftp://ftp.sdsu.edu/pub/rplay>
+              or   <URL:ftp://ftp.x.org/contrib/Event/rplay>
+
+              FvwmEvent  also  has support for any other external
+              program.  e.g: the rsynth 'say' command:
+
+                   *FvwmEventCmd /rsynth/say
+                   *FvwmEvent destroy_window "window closed"
+
+              You can also use fvwm2's builtin  Echo  command  as
+              FvwmEventCmd  to  obtain  debug  output  for  fvwm2
+              events quietly.  I used this setup  to  debug  Fvw-
+              mAuto:
+
+                   *FvwmEventCmd Echo
+                   *FvwmEvent focus_change "focus change"
+                   *FvwmEvent raise_window "raise window"
+
+              You can even call different shell commands for each
+              event just by setting
+
+                   *FvwmEventCmd exec
+                   *FvwmEvent add_window killname "APPL ERROR"
+
+       *FvwmEvent window-manager-event action-or-filename
+              Binds particular actions to window manager  events.
+
+              e.g. for audio-events:
+
+                   *FvwmEvent startup TaDa.au
+                   *FvwmEvent shutdown Elvis_Left.au
+                   *FvwmEvent unknown doh.au
+
+                   *FvwmEvent new_page beam_trek.au
+                   *FvwmEvent new_desk beam_trek.au
+                   *FvwmEvent add_window drip.au
+                   *FvwmEvent raise_window swoosh.au
+                   *FvwmEvent lower_window swoosh.au
+                   *FvwmEvent configure_window hammer.au
+                   *FvwmEvent focus_change boing.au
+                   *FvwmEvent destroy_window explosion.au
+                   *FvwmEvent iconify ploop.au
+                   *FvwmEvent deiconify ploop.au
+                   *FvwmEvent window_name huh.au
+                   *FvwmEvent icon_name beep.au
+                   *FvwmEvent res_class beep.au
+                   *FvwmEvent res_name beep.au
+                   *FvwmEvent end_windowlist twang.au
+
+                   *FvwmEvent icon_location beep.au
+                   *FvwmEvent map beep.au
+                   *FvwmEvent error beep.au
+                   *FvwmEvent config_info beep.au
+                   *FvwmEvent end_config_info beep.au
+                   *FvwmEvent icon_file beep.au
+                   *FvwmEvent default_icon beep.au
+                   *FvwmEvent string plapper.au
+
+                   *FvwmEvent mini_icon beep.au
+                   *FvwmEvent windowshade beep.au
+                   *FvwmEvent dewindowshade beep.au
+
+              Provided  fvwm2  supports  it (not yet), there's an
+              additional event to replace all fvwm2 beeps with  a
+              sound:
+
+                   *FvwmEvent beep beep.au
+
+              The toggle_paging event will be supported, as soon,
+              as it's resurrected by fvwm2:
+
+                   *FvwmEvent toggle_paging fwop.au
+
+       *FvwmEventDelay 5
+              Specifies that an event-action will  only  be  exe-
+              cuted  if  it  occurs  at least 5 seconds after the
+              previous event.  Events that occur during the delay
+              period  are  ignored.  This option is useful if you
+              don't want several sounds playing at the same time.
+              The  default  delay  is  0 which disables the Event
+              delay.
+
+RPLAY OPTIONS
+       The following options are only valid  with  builtin  rplay
+       support.   They  are only valid when FvwmEvent is compiled
+       with HAVE_RPLAY defined (see the Imakefile) and  they  are
+       used only if FvwmEventCmd is set to builtin-rplay.
+
+       *FvwmEventRplayHost hostname
+              Specifies  what host the rplay sounds will play on.
+              The hostname can also be  an  environment  variable
+              such as $HOSTDISPLAY.
+
+       *FvwmEventRplayPriority 0
+              Specifies  what  priority  will  be assigned to the
+              rplay sounds when they are played.
+
+       *FvwmEventRplayVolume 127
+              Specifies what  volume  will  be  assigned  to  the
+              sounds when they are played.
+
+INVOCATION
+       The  invocation  method was shown in the synopsis section.
+       No command line invocation is possible. FvwmEvent must  be
+       invoked by the fvwm2 window manager.
+
+FvwmAudio Compatibility
+       FvwmAudioPlayCmd   used   to  call  an  external  program.
+       FvwmEventCmd calls an fvwm2  function.  External  programs
+       can  be  called  using  the fvwm2 exec function "exec pro-
+       gram".
+
+       FvwmAudioDir has been removed due to  the  fact  that  the
+       parameters don't have to be files any more.  use:
+
+            DestroyFunc mysay
+            AddToFunc mysay "I" exec /rsynth/say /rsynth/audiofiles/$1
+
+            *FvwmEventCmd mysay
+
+BUGS
+       It's  REALLY noisy when fvwm2 starts and restarts using an
+       audio player.  FvwmEventDelay helps a little bit.
+
+       The parameters inherent to several events are not accessi-
+       ble.  This  might be implemented in the future so that the
+       command  executed  by  fvwm2   looks   like   FvwmEventCmd
+       FvwmEvent-parameters event-specific-parameters.
+
+       Simple FvwmAuto could then be emulated by:
+            *FvwmEventCmd
+            *FvwmEvent raise-window Raise
+
+COPYRIGHTS
+       This  module  has  evolved  of FvwmAudio, which in term is
+       heavily based on a similar Fvwm module called FvwmSound by
+       Mark  Boyns. FvwmAudio simply took Mark's original program
+       and extended it to make it generic enough to work with any
+       Audio  player.  Due  to  different requests to do specific
+       things on specific events, FvwmEvent took  this  one  step
+       further  and  now  calls  any  fvwm2 function, or builtin-
+       rplay. If fvwm2's Exec function is used, any external pro-
+       gram can be called with any parameter.
+
+       The concept for interfacing this module to the Window Man-
+       ager, is original work by Robert Nation.
+
+       Copyright 1998  Albrecht  Kadlec.   Copyright  1994,  Mark
+       Boyns and Mark Scott.  No guarantees or warranties or any-
+       thing are provided or implied in any way whatsoever.   Use
+       this program at your own risk.  Permission to use and mod-
+       ify this program for any purpose is given, as long as  the
+       copyright is kept intact.
+
+
+AUTHORS
+       1994  FvwmSound  Mark Boyns       (boyns@sdsu.edu)
+       1994  FvwmAudio  Mark Scott       (mscott@mcd.mot.com)
+       1996  FvwmAudio  Albrecht Kadlec
+       1998  FvwmEvent  Albrecht Kadlec  (albrecht@auto.tuwien.ac.at)
+
+                           Apr 22 1998                          5
+
+-- 
+Albrecht Kadlec
+---------------
+It may be legendary but the swordmakers of ancient times were said to
+have quenched red hot blades by running them through the bodies of
+slaves, which would certainly both raise the temper of the slaves and
+also most likely quench them as well.	
+			-- Alan Heldman about "tempering & quenching steel"
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Wed Apr 22 12:27:44 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Wed, 22 Apr 1998 12:27:44 -0500 (CDT)
+Received: from VNET.IBM.COM (vnet.ibm.com [204.146.168.194]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id MAA23739 for <fvwm-workers@hpc.uh.edu>; Wed, 22 Apr 1998 12:27:34 -0500 (CDT)
+Received: from FISHKILL by VNET.IBM.COM (IBM VM SMTP V2R4) with BSMTP id 6816;
+   Wed, 22 Apr 98 13:27:14 EDT
+Received: by FISHKILL (XAGENTA 4.0) id 5832; Wed, 22 Apr 1998 13:27:15 -0400 
+Received: by cold.fishkill.ibm.com (AIX 4.1/UCB 5.64/4.03)
+          id AA22268; Wed, 22 Apr 1998 13:27:02 -0400
+From: "Charles Hines" <chuck_hines@VNET.IBM.COM>
+Date: Wed, 22 Apr 1998 13:26:55 -0400 (EDT)
+To: albrecht@auto.tuwien.ac.at
+Cc: FVWM-Workers mailing list <fvwm-workers@hpc.uh.edu>,
+        Mark Boyns <boyns@sdsu.edu>, Mark Scott <Imscott@mcd.mot.com>
+Subject: Re: FvwmEvent 1.0 (FvwmAudio++) Alpha release
+In-Reply-To: <sa0btttkh55.fsf@boole.auto.tuwien.ac.at>
+References: <sa0btttkh55.fsf@boole.auto.tuwien.ac.at>
+X-Mailer: VM 6.43 under 20.4 "Emerald" XEmacs  Lucid
+Message-Id: <13630.4461.844701.718265@sstpok-11.pok.ibm.com>
+X-Face: 'pn"gAx+&w4-=-}\z>*.Y*@(lC;t1<P);@iwiv';)vn3H2\/.x#;>J[a,/Q.Yv0^Wwc6_"H]}}-"?%)ETS`1v[]P`w4,E.9Bgf*XI4<H{C}Mf@'Ms)z?Bqzf"8v/oY\9K){w}\pw
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+>>>>> "A" == Albrecht Kadlec <albrecht@auto.tuwien.ac.at> writes:
+
+A> New module, full man page at the end:
+
+A> SYNOPSIS
+A>        FvwmEvent  is  a more versatile replacement for FvwmAudio.
+A>        It can in general be used to hook any  fvwm2  function  or
+A>        program  to any window manager event. e.g: Delete unwanted
+A>        netscape-popups  or  application  error  popups  as   they
+A>        appear, play sounds, log events to a file and the like. Be
+A>        creative, You'll find a use for it.
+
+Hm.  Sounds good.
+
+A> Could please as many of you as possible test this module with your setup ?
+
+A> Test version at
+A> <URL:http://www.auto.tuwien.ac.at/~albrecht/fvwm2/FvwmEvent.tgz>
+
+A> To be released soon (monday ?), after some final fixes & comments.
+
+
+A>      Mark Boyns & Mark Scott: are the credits, times & copyrights ok ?
+A>                              I included the grant to modify the program
+A>                              in the COPYRIGHT section.
+A>                              Copyright in code is GPL, just like FvwmAudio.
+
+You know, the fact that FvwmAudio is GPLed has bothered me slightly
+since the rest of the stuff distributed in fvwm follows the twm/fvwm
+copyright.  I suppose it doesn't really matter though (any kind of
+leagalese makes me nervous).
+
+A>      Chuck: What do you say ?  Could this replace FvwmAudio after some
+A>             testing. It's a gerneralization of FvwmAudio.
+
+I haven't looked too closely at it yet, but at first glance I don't
+see why not.  Could probably replace FvwmAuto too, as you noted.
+
+A>              BTW:    fvwm2 is still lacking an IF and a DELAY
+A>                      function.
+
+I had already planned on putting something like a 'Sleep' function in
+2.0.47 that works like 'Wait' but just does a timeout instead of
+waiting for a window to appear.  You know, a 'WaitWithTimeout' might
+not be a bad idea either...
+
+As for an 'If' function, that might be useful for things that aren't
+easily handled by Next/Prev/Current/None/WindowId.  Something like:
+
+  If [conditional] true_action false_action
+
+looks simple at first glance, but I think actually implementing the
+'conditional' part might not be so simple.  What types of condition
+checks (that can't be handled by Next/Prev/etc) does everyone think
+would be handy?
+
+A>                      If these functions existed, several ugly race
+A>                      conditions could be eliminated:
+
+A>                         *FvwmEventCmd
+A>                         *FvwmEvent add_window 'Next ["APPL ERROR"] close'
+
+A>                      This sometimes fails to close the newly opened
+A>                      window, since the Next is so fast, that it
+A>                      sometimes has already evaluated the title of the
+A>                      new window, before that title has even been set.
+
+A>                      Another benefit of a Delay function would be, that
+A>                      one could use FvwmEvent to replace simple FvwmAuto.
+
+A>                         DestroyFunc myfocus
+A>                         AddToFunc myfocus    "I"     Delay 100
+A>                                              "I"     Raise
+
+A>                         *FvwmEventCmd
+A>                         *FvwmEvent focus_change         myfocus
+
+A>                      I'd also find an ALL function very useful.
+
+A>                      e.g:  ALL ["APPL ERROR"] close
+A>                      or :  *FvwmEvent add_window 'ALL ["Java Console"] close'
+
+Yup, 'All' should probably be added to that Next/Prev/etc list above
+and shouldn't be too hard to implement.  I'll put in on my list for
+2.0.47.
+
+Chuck
+
+--
+*******************************************************************************
+Charles K. Hines <chuck_hines@vnet.ibm.com>
+IBM Logic Synthesis Developer [BooleDozer (TM)]
+Martial Arts Instructor [Modern Arnis, Presas Style Filipino Martial Arts]
+
+         "Go back to sleep, Chuck.  You're just havin' a nightmare
+             -- of course, we ARE still in Hell." (Gary Larson)
+*******************************************************************************
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Thu Apr 23 17:55:59 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Thu, 23 Apr 1998 17:55:59 -0500 (CDT)
+Received: from gaul.lattis.xara.net (gaul.lattis.xara.net [195.224.37.7]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id RAA13973 for <fvwm-workers@hpc.uh.edu>; Thu, 23 Apr 1998 17:55:46 -0500 (CDT)
+Received: by gaul.lattis.xara.net with ESMTP
+    from sfere.greenend.org.uk (sfere.greenend.org.uk [195.224.38.1])
+    id XAA07170 for <fvwm-workers@hpc.uh.edu> (2.4-8.8.8/3.1.23);
+    Thu, 23 Apr 1998 23:49:55 +0100 (BST)
+Received: from valour.greenend.org.uk (root@valour.greenend.org.uk [195.224.38.2])
+	by sfere.greenend.org.uk (8.8.8/8.8.8) with ESMTP id VAA04740
+	for <fvwm-workers@hpc.uh.edu>; Thu, 23 Apr 1998 21:55:21 +0100
+Received: by valour.greenend.org.uk
+	id m0yST1c-000w4fC
+	(Debian Smail-3.2.0.101 1997-Dec-17 #2); Thu, 23 Apr 1998 21:55:20 +0100 (BST)
+Message-Id: <m0yST1c-000w4fC@valour.greenend.org.uk>
+Date: Thu, 23 Apr 1998 21:55:20 +0100 (BST)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+From: Austin Donnelly <austin@greenend.org.uk>
+To: fvwm-workers@hpc.uh.edu
+Subject: submenu positioning bug with MWM-style menus
+X-Mailer: VM 6.42 under Emacs 19.34.1
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Yet another fvwm2 bug from the Debian archives :)
+
+This happens if you have MWM-style menus enabled, and you put a menu
+with submenus on a window menu button (eg using:
+
+Mouse 0 3 A Menu /DebianMenu Nop
+
+for a suitably defined "/DebianMenu" containing other menus)
+
+The further to the right of the menu button you click, the further
+offset to the right any submenu of "/DebianMenu" is.  Deeper submenus
+off the first submenu popup in the right place, it's just the first
+submenu to popup that has this unsightly gap between it and it's
+parent. The spacing seems off only in the x-axis, not the y-axis.
+
+I've been able to reproduce the bug myself, using fvwm2 2.0.46.
+
+Austin
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Thu Apr 23 19:07:06 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Thu, 23 Apr 1998 19:07:06 -0500 (CDT)
+Received: from elwha.cs.washington.edu (elwha.cs.washington.edu [128.95.1.153]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id TAA15244 for <fvwm-workers@hpc.uh.edu>; Thu, 23 Apr 1998 19:06:59 -0500 (CDT)
+Received: (gjb@localhost) by elwha.cs.washington.edu (8.8.5+CS/7.2ws+) id RAA07394; Thu, 23 Apr 1998 17:03:14 -0700 (PDT)
+To: Austin Donnelly <austin@greenend.org.uk>
+Cc: fvwm-workers@hpc.uh.edu
+Subject: Re: submenu positioning bug with MWM-style menus
+References: <m0yST1c-000w4fC@valour.greenend.org.uk>
+From: Greg Badros <gjb@cs.washington.edu>
+Date: 23 Apr 1998 17:03:13 -0700
+In-Reply-To: Austin Donnelly's message of "Thu, 23 Apr 1998 21:55:20 +0100 (BST)"
+Message-ID: <qrr4szkdr26.fsf@elwha.cs.washington.edu>
+Lines: 25
+X-Mailer: Gnus v5.4.65/XEmacs 20.3 - "Vatican City"
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+Austin Donnelly <austin@greenend.org.uk> writes:
+
+> Yet another fvwm2 bug from the Debian archives :)
+> 
+> This happens if you have MWM-style menus enabled, and you put a menu
+> with submenus on a window menu button (eg using:
+> 
+> Mouse 0 3 A Menu /DebianMenu Nop
+> 
+> for a suitably defined "/DebianMenu" containing other menus)
+> 
+> The further to the right of the menu button you click, the further
+> offset to the right any submenu of "/DebianMenu" is.  Deeper submenus
+> off the first submenu popup in the right place, it's just the first
+> submenu to popup that has this unsightly gap between it and it's
+> parent. The spacing seems off only in the x-axis, not the y-axis.
+> 
+> I've been able to reproduce the bug myself, using fvwm2 2.0.46.
+
+Hopefully Chuck will have time to integrate my major changes to the
+menuing code which fix all sorts of problems (especially with keyboard
+traversal) in the stock fvwm2 menuing code.  I imagine this goes away
+with my changes (but can't test it easily -- I use scwm now).
+
+Greg
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Fri Apr 24 08:06:19 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Fri, 24 Apr 1998 08:06:19 -0500 (CDT)
+Received: from VNET.IBM.COM (vnet.ibm.com [204.146.168.194]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id IAA23823 for <fvwm-workers@hpc.uh.edu>; Fri, 24 Apr 1998 08:06:12 -0500 (CDT)
+Received: from FISHKILL by VNET.IBM.COM (IBM VM SMTP V2R4) with BSMTP id 3181;
+   Fri, 24 Apr 98 09:05:53 EDT
+Received: by FISHKILL (XAGENTA 4.0) id 6173; Fri, 24 Apr 1998 09:05:54 -0400 
+Received: by cold.fishkill.ibm.com (AIX 4.1/UCB 5.64/4.03)
+          id AA34520; Fri, 24 Apr 1998 09:05:43 -0400
+From: "Charles Hines" <chuck_hines@VNET.IBM.COM>
+Date: Fri, 24 Apr 1998 09:05:37 -0400 (EDT)
+To: Greg Badros <gjb@cs.washington.edu>
+Cc: Austin Donnelly <austin@greenend.org.uk>, fvwm-workers@hpc.uh.edu
+Subject: Re: submenu positioning bug with MWM-style menus
+In-Reply-To: <qrr4szkdr26.fsf@elwha.cs.washington.edu>
+References: <m0yST1c-000w4fC@valour.greenend.org.uk>
+        <qrr4szkdr26.fsf@elwha.cs.washington.edu>
+X-Mailer: VM 6.43 under 20.4 "Emerald" XEmacs  Lucid
+Message-Id: <13632.36076.378779.80908@sstpok-11.pok.ibm.com>
+X-Face: 'pn"gAx+&w4-=-}\z>*.Y*@(lC;t1<P);@iwiv';)vn3H2\/.x#;>J[a,/Q.Yv0^Wwc6_"H]}}-"?%)ETS`1v[]P`w4,E.9Bgf*XI4<H{C}Mf@'Ms)z?Bqzf"8v/oY\9K){w}\pw
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+>>>>> "Greg" == Greg Badros <gjb@cs.washington.edu> writes:
+
+Greg> Austin Donnelly <austin@greenend.org.uk> writes:
+>> Yet another fvwm2 bug from the Debian archives :)
+
+Your users do seem to find a fair number of them...
+
+>> This happens if you have MWM-style menus enabled, and you put a menu
+>> with submenus on a window menu button (eg using:
+>>
+>> Mouse 0 3 A Menu /DebianMenu Nop
+>>
+>> for a suitably defined "/DebianMenu" containing other menus)
+>>
+>> The further to the right of the menu button you click, the further
+>> offset to the right any submenu of "/DebianMenu" is.  Deeper submenus
+>> off the first submenu popup in the right place, it's just the first
+>> submenu to popup that has this unsightly gap between it and it's
+>> parent. The spacing seems off only in the x-axis, not the y-axis.
+>>
+>> I've been able to reproduce the bug myself, using fvwm2 2.0.46.
+
+Greg> Hopefully Chuck will have time to integrate my major changes to
+Greg> the menuing code which fix all sorts of problems (especially
+Greg> with keyboard traversal) in the stock fvwm2 menuing code.
+
+Actually your menu changes have been in my development copy for quite
+some time now so they'll definitely be in 2.0.47.
+
+Greg> I imagine this goes away with my changes (but can't test it
+Greg> easily -- I use scwm now).
+
+Seems to - I can't reproduce this behavior in my development version.
+
+Chuck
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Fri Apr 24 08:57:56 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Fri, 24 Apr 1998 08:57:56 -0500 (CDT)
+Received: from heaton.cl.cam.ac.uk (exim@heaton.cl.cam.ac.uk [128.232.32.11]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id IAA24838 for <fvwm-workers@hpc.uh.edu>; Fri, 24 Apr 1998 08:54:33 -0500 (CDT)
+Received: from ivatt.cl.cam.ac.uk [128.232.0.114] (and1000)
+	by heaton.cl.cam.ac.uk with smtp (Exim 1.82 #1)
+	id 0ySiut-0005QU-00; Fri, 24 Apr 1998 14:53:27 +0100
+Received: from and1000 by ivatt.cl.cam.ac.uk with local (Exim 1.70 #1)
+	id 0ySiul-0001A3-00; Fri, 24 Apr 1998 14:53:19 +0100
+From: Austin Donnelly <austin@greenend.org.uk>
+To: Charles Hines <chuck_hines@VNET.IBM.COM>
+Cc: fvwm-workers@hpc.uh.edu
+Subject: Re: submenu positioning bug with MWM-style menus
+In-Reply-To: <13632.36076.378779.80908@sstpok-11.pok.ibm.com>
+References: <m0yST1c-000w4fC@valour.greenend.org.uk>
+	<qrr4szkdr26.fsf@elwha.cs.washington.edu>
+	<13632.36076.378779.80908@sstpok-11.pok.ibm.com>
+Message-Id: <E0ySiul-0001A3-00@ivatt.cl.cam.ac.uk>
+Date: Fri, 24 Apr 1998 14:53:19 +0100
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+On Fri, 24 Apr 1998, Charles Hines wrote:
+
+> >>>>> "Greg" == Greg Badros <gjb@cs.washington.edu> writes:
+> 
+> Greg> Austin Donnelly <austin@greenend.org.uk> writes:
+> >> Yet another fvwm2 bug from the Debian archives :)
+> 
+> Your users do seem to find a fair number of them...
+
+I think it's because they're encouraged to file bug reports.  My job
+is simply to filter poor bug reports, reproduce them if possible, and
+then send you guys a proper bug report :)
+
+In an attempt to win the "Most Tedious Email of the Year, 1998" award,
+I now list the outstanding bugs we have on fvwm2:
+
+#5736: fvwm2: spaces in Restart command
+   Parser doesn't strip spaces correctly.  "Restart  foo" will
+   attempt to exec " foo".  Note the extra space.
+
+#10862: fvwm2: restarting fvwm2 reverses the z-order of windows
+   I supplied a patch fixing this a while ago.  It's not the z-order
+   that gets reversed, its the order of window creation.
+
+#11174: fvwm2: crash fvwmbuttons by changing xterm title
+   I haven't been able to reproduce this.
+
+#11463: fvwm2: Race condition in fvwm2 icon box
+   Icons don't always appear inside the iconbox.  I haven't been able
+   to reproduce this.
+
+#11824: fvwm2: strange things with focus
+   If using SloppyFocus and FvwmAuto and pulling down an emacs menu,
+   the menu is be hidden when the main emacs is raised.  Generic
+   problem with FvwmAuto, really.
+
+#11886: fvwm2: pager not showing window, icon probs, raise/lower
+   Really 3 separate bugs.  Only the last one I've been able to reproduce.
+   1) Sometimes pager doesn't show window when it's mapped.
+      Moving window makes it appear.
+   2) xfmail icon disappearing.
+   3) raiselower with only overlapping borders does wrong thing.
+
+#13146: fvwm2: FvwmButtons won't swallow window
+   Not reproduced.
+
+#14163: fvwm2 edgescroll behaves badly
+   EdgeScroll setting of anything other than 100 100 is enough to
+   reproduce this.
+
+#14236: fvwm2: EdgeResistance doesn't work any more with 2.0.46
+   Not reproduced.
+
+#16143: fvwm2: FvwmWinList drifts off screen
+   There's been some discussion on this list recently.
+
+#18576: fvwm2: Fvwmbuttons are eating processor time
+   Not reproduced (but not tried).  Apparently happens if you kill X
+   server with ctrl-alt-backspace.
+
+#20444: fvwm2 moves windows when it is restarted
+   Not reproduced (not tried), but others claim to see it (esp with
+   xterm).
+
+
+
+The following bugs I believe to have already forwarded details to
+this list:
+
+#8774: glitch in windowlist menu
+   *foo* in windowlist menu looks for icon.  Maybe not too desirable,
+   esp with emacs "*scratch*" buffer.
+
+#9769: fvwm2: SkipMapping loses current focus
+     Style *     ClickToFocus
+     Style test  StartsOnDesk 1, SkipMapping
+   then "xterm -name test" is enough to reproduce.
+
+#14791: fvwm2: MenuStyle should default to fvwm not mwm
+   This is really to do with menus near the right hand side of the
+   screen screwing up.  Greg's stuff fixes this, I think.
+
+#16040: fvwm2: PipeRead should set extra environment variables
+   Like M4 stuff: eg TWM_TYPE = fvwm2, WIDTH = 1152, HEIGHT = 900, etc.
+
+
+
+Other feature requests:
+
+#8785: fvwm2: Athena is not movable by static interface components
+
+#8954: fvwm2: FvwmPager doesnt update in realtime with window moves
+
+#11356: fvwm2: Can't specifiy colors for iconified programs
+
+#20831: fvwm2: wishlist: fvwm pager balloon patch
+
+#21097: fvwm2: IconBox 'gravity' patch would be nice
+
+
+
+The full details on each bug is available off:
+    http://www.debian.org/Bugs/db/pa/lfvwm2.html
+This page also list bugs that specific to the Debian packaging of
+fvwm2, which aren't actual bugs in the upstream code.
+
+
+Austin
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Fri Apr 24 10:42:36 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Fri, 24 Apr 1998 10:42:36 -0500 (CDT)
+Received: from elwha.cs.washington.edu (elwha.cs.washington.edu [128.95.1.153]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id KAA28004 for <fvwm-workers@hpc.uh.edu>; Fri, 24 Apr 1998 10:42:24 -0500 (CDT)
+Received: (gjb@localhost) by elwha.cs.washington.edu (8.8.5+CS/7.2ws+) id IAA00478; Fri, 24 Apr 1998 08:41:57 -0700 (PDT)
+To: "Charles Hines" <chuck_hines@VNET.IBM.COM>
+Cc: Austin Donnelly <austin@greenend.org.uk>, fvwm-workers@hpc.uh.edu
+Subject: Re: submenu positioning bug with MWM-style menus
+References: <m0yST1c-000w4fC@valour.greenend.org.uk>         <qrr4szkdr26.fsf@elwha.cs.washington.edu> <13632.36076.378779.80908@sstpok-11.pok.ibm.com>
+From: Greg Badros <gjb@cs.washington.edu>
+Date: 24 Apr 1998 08:41:57 -0700
+In-Reply-To: "Charles Hines"'s message of "Fri, 24 Apr 1998 09:05:37 -0400 (EDT)"
+Message-ID: <qrrra2ncjlm.fsf@elwha.cs.washington.edu>
+Lines: 15
+X-Mailer: Gnus v5.4.65/XEmacs 20.3 - "Vatican City"
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+"Charles Hines" <chuck_hines@VNET.IBM.COM> writes:
+
+> Actually your menu changes have been in my development copy for quite
+> some time now so they'll definitely be in 2.0.47.
+
+Excellent.
+
+> Greg> I imagine this goes away with my changes (but can't test it
+> Greg> easily -- I use scwm now).
+> 
+> Seems to - I can't reproduce this behavior in my development version.
+
+Even better!
+
+Greg
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Sun Apr 26 15:44:52 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Sun, 26 Apr 1998 15:44:52 -0500 (CDT)
+Received: from pcnet1.pcnet.com (pcnet1.pcnet.com [204.213.232.3]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id PAA03780 for <fvwm-workers@hpc.uh.edu>; Sun, 26 Apr 1998 15:44:43 -0500 (CDT)
+Received: (from proteus@localhost)
+	by pcnet1.pcnet.com (8.8.7/PCNet) id QAA10552;
+	Sun, 26 Apr 1998 16:42:44 -0400 (EDT)
+Message-ID: <XFMail.980426163132.proteus@pcnet.com>
+X-Mailer: XFMail 1.2-beta-111797 [p0] on Linux
+X-Priority: 3 (Normal)
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+In-Reply-To: <E0ySiul-0001A3-00@ivatt.cl.cam.ac.uk>
+Date: Sun, 26 Apr 1998 16:31:32 -0400 (EDT)
+Reply-To: Bob Woodside <proteus@pcnet.com>
+Organization: Woodsway Consulting
+From: Bob Woodside <proteus@pcnet.com>
+To: Austin Donnelly <austin@greenend.org.uk>
+Subject: Re: submenu positioning bug with MWM-style menus
+Cc: fvwm-workers@hpc.uh.edu, Charles Hines <chuck_hines@VNET.IBM.COM>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+
+On 24-Apr-98 Austin Donnelly wrote:
+
+> I now list the outstanding bugs we have on fvwm2:
+> ...
+>
+>#9769: fvwm2: SkipMapping loses current focus
+>      Style *     ClickToFocus
+>      Style test  StartsOnDesk 1, SkipMapping
+>    then "xterm -name test" is enough to reproduce.
+
+        I believe this is the problem corrected by my DontFocusOffscreen
+patch, submitted last fall sometime. It may still be in the
+unofficial_patches directory, and can also be fetched from my unofficial
+patches page at
+
+                http://www.pcnet.com/~proteus/Fvwm/FvwmPatches.html
+
+        I haven't discussed this one with Chuck lately, but I would guess
+he's probably had it, or a version thereof,  in his development system for
+some time and that it would be slated for 2.0.47.
+
+        Time permitting, I'll take a look at a couple of the other items
+in your list this week.
+
+
+ 
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Apr 27 05:18:26 1998
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 27 Apr 1998 05:18:26 -0500 (CDT)
+Received: from boole.auto.tuwien.ac.at (albrecht@boole.auto.tuwien.ac.at [128.130.55.34]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id FAA11379 for <fvwm-workers@hpc.uh.edu>; Mon, 27 Apr 1998 05:18:07 -0500 (CDT)
+Received: (from albrecht@localhost) by boole.auto.tuwien.ac.at (8.8.3/8.8.3) id MAA02999; Mon, 27 Apr 1998 12:16:47 +0200
+To: "Charles Hines" <chuck_hines@VNET.IBM.COM>
+Cc: FVWM-Workers mailing list <fvwm-workers@hpc.uh.edu>,
+        Mark Boyns <boyns@sdsu.edu>, Mark Scott <Imscott@mcd.mot.com>
+Subject: Re: FvwmEvent 1.0 (FvwmAudio++) Alpha release
+References: <sa0btttkh55.fsf@boole.auto.tuwien.ac.at> <13630.4461.844701.718265@sstpok-11.pok.ibm.com>
+Reply-To: albrecht@auto.tuwien.ac.at
+X-Attribution: A
+From: Albrecht Kadlec <albrecht@auto.tuwien.ac.at>
+In-Reply-To: "Charles Hines"'s message of "Wed, 22 Apr 1998 13:26:55 -0400 (EDT)"
+Date: 27 Apr 1998 12:16:44 +0200
+Message-ID: <sa0af97zi0j.fsf@boole.auto.tuwien.ac.at>
+Lines: 137
+X-Mailer: Gnus v5.4.56/Emacs 19.34
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94.jlt7
+
+
+> >>>>> "A" == Albrecht Kadlec <albrecht@auto.tuwien.ac.at> writes:
+> 
+> A> New module, full man page at the end:
+> 
+> A> SYNOPSIS
+> A>        FvwmEvent  is  a more versatile replacement for FvwmAudio.
+> A>        It can in general be used to hook any  fvwm2  function  or
+> A>        program  to any window manager event. e.g: Delete unwanted
+> A>        netscape-popups  or  application  error  popups  as   they
+> A>        appear, play sounds, log events to a file and the like. Be
+> A>        creative, You'll find a use for it.
+> 
+> Hm.  Sounds good.
+
+great.
+
+> A>      Mark Boyns & Mark Scott: are the credits, times & copyrights ok ?
+> A>                              I included the grant to modify the program
+> A>                              in the COPYRIGHT section.
+> A>                              Copyright in code is GPL, just like FvwmAudio.
+
+Mark Boyns > Seems ok with me.  I haven't been using fvwm lately but I'll try to
+Mark Boyns > get around to looking at it someday.  I'll be happy just as long as
+Mark Boyns > there's builtin support for rplay.
+
+For my part, I'd like to move the rplay function out of FvwmEvent (!?) into
+Fvwm core, so that anyone could use the new function >builtin-rplay "file"<
+(only included, if fvwm2 is compiled with --HAVE_RPLAY)
+
+
+"Charles Hines" <chuck_hines@VNET.IBM.COM> writes:
+ 
+> You know, the fact that FvwmAudio is GPLed has bothered me slightly
+> since the rest of the stuff distributed in fvwm follows the twm/fvwm
+> copyright.  I suppose it doesn't really matter though (any kind of
+> leagalese makes me nervous).
+
+
+
+me too: it's "my Contribution to Free Software" as my homepage says.
+in the way "Do whatever you want to", use code or code-snippets / idea.
+
+I don't like the idea that someone could sell Free Software. But I can't do
+anything against it.
+
+... except maybe Microsoft: they must not use idea and/or code for any
+purpose - hmmm, I might add that to the copyright section :-)
+or only if they use the --with-all-bugs or --coredump-once-per-hour
+compilerswitch.
+
+ 
+> A>      Chuck: What do you say ?  Could this replace FvwmAudio after some
+> A>             testing. It's a gerneralization of FvwmAudio.
+> 
+> I haven't looked too closely at it yet, but at first glance I don't
+> see why not.  Could probably replace FvwmAuto too, as you noted.
+
+FvwmAuto does some more things, but with some slight extensions to Fvwm
+functions, we could come pretty near.
+
+
+ 
+> A>              BTW:    fvwm2 is still lacking an IF and a DELAY
+> A>                      function.
+> 
+> I had already planned on putting something like a 'Sleep' function in
+> 2.0.47 that works like 'Wait' but just does a timeout instead of
+> waiting for a window to appear.  You know, a 'WaitWithTimeout' might
+> not be a bad idea either...
+> 
+> As for an 'If' function, that might be useful for things that aren't
+> easily handled by Next/Prev/Current/None/WindowId.  Something like:
+> 
+>   If [conditional] true_action false_action
+> 
+> looks simple at first glance, but I think actually implementing the
+> 'conditional' part might not be so simple.  What types of condition
+> checks (that can't be handled by Next/Prev/etc) does everyone think
+> would be handy?
+
+I too think that a complete boolean eval is not simple and only used for
+this single function, while extending the next conditions would make many
+new things possible, we can't think of now.
+Every item you add to the condition, you can use for prev/next/none/all/if.
+
+Some combinations may be cryptic, but what is
+
+DestroyFunc Do
+AddToFunc Do		"I"	$0 $1 $2 $3 $4 $5 $6 $7 $8 $9
+
+*FvwmAudioPlayCmd Do
+*FvwmAudio add_window	   'Next ["APPL ERROR"] close'
+
+Module FvwmAudio
+
+which led me to renaming FvwmAudio.
+
+
+
+BTW:
+I still miss the WindowId as part of the prev/next/none clause.
+
+"next [windowid $w iconic] do_sth" is the kind of conditional I most often
+need. 
+(e.g: for FvwmAuto, if the window has been closed within the timeout.)
+
+
+
+
+and some sort of GetWindowId would be nice for the delay:
+
+DestroyFunc destroy_after_timeout
+AddToFunc destroy_after_timeout "I" delay 100
+				"I" destroy $1
+
+destroy_after_timeout GetWindowId
+
+otherwise the wrong window would be closed.
+
+another idea would be variables, to have some old state-info after a delay.
+
+	"I"	$a=WindowID
+	"I"	delay 100
+	"I"	close $a
+	
+and, and, ....
+
+
+and some hundred programmers on the net to implement it. ;^)
+ 
+-- 
+Albrecht Kadlec
+---------------
+The most horrifying thing about Unix is that, no matter how many times
+you hit yourself over the head with it, you never quite manage to lose
+consciousness.  It just goes on and on.      -- Patrick Sobalvarro
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+

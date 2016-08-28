@@ -1,0 +1,747 @@
+From owner-fvwm-workers@hpc.uh.edu  Fri Nov  8 11:08:49 1996
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Fri, 08 Nov 1996 11:08:49 -0600 (CST)
+Received: from newton.auto.tuwien.ac.at (newton.auto.tuwien.ac.at [128.130.41.13]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id KAA29336; Fri, 8 Nov 1996 10:53:31 -0600 (CST)
+Received: from vta_host.auto.tuwien.ac.at by newton.auto.tuwien.ac.at with SMTP id AA23383
+  (5.65c/IDA-1.4.4); Fri, 8 Nov 1996 18:52:55 +0200
+Received: by vta_host.auto.tuwien.ac.at (4.1/JK-0.4.5a)
+	id AA21405; Fri, 8 Nov 96 17:52:54 +0100
+Date: Fri, 8 Nov 96 17:52:54 +0100
+From: albrecht@auto.tuwien.ac.at (Albrecht Kadlec)
+Message-Id: <9611081652.AA21405@vta_host.auto.tuwien.ac.at>
+To: FVWM2 mailing list <fvwm@hpc.uh.edu>,
+        FVWM-Workers mailing list <fvwm-workers@hpc.uh.edu>
+Subject: new version of FvwmAuto (less hassles) (with URL!!!)
+X-Attribution: A
+Reply-To: albrecht@auto.tuwien.ac.at (Albrecht Kadlec)
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-beta2
+
+
+PS: I forgot the URL !!! (blush) 
+
+<URL:http://www.auto.tuwien.ac.at/~albrecht>
+
+
+Enhanced, less bug ridden, smaller & faster version.
+
+Many thanX to jha@cs.purdue.edu ("John H. Aughey") for testing & suggestions.
+
+The file libs/MatchToken.c (is part of the new library)
+must be linked in. 
+
+Please report any bugs/deficiencies to me.
+
+here the man page:
+
+
+NAME
+     FvwmAuto - the FVWM auto-raise module
+
+SYNOPSIS
+     FvwmAuto is spawned by fvwm, so no command  line  invocation
+     will work.  The correct syntax is:
+
+          Module FvwmAuto Timeout [EnterCommand [LeaveCommand]]
+
+          AddToMenu Modules "Modules"      Title
+          +                 "Audio"        Module FvwmAudio
+          +                 "Auto"         Module FvwmAuto 300 raise lower
+          +                 "Buttons"      Module FvwmButtons
+          +                 "Ident"        Module FvwmIdent
+          +                 "Banner"       Module FvwmBanner
+          +                 "Pager"        Module FvwmPager 0 3
+
+     The Timeout argument is required. It  specifies  how  long a
+     window  must retain the keyboard input focus before the com-
+     mand is executed. The delay is measured in milliseconds, and
+     any integer 0 or greater is acceptable.
+
+     EnterCommand and LeaveCommand are optional.  EnterCommand is
+     executed  Timeout  milliseconds after a window gets the input
+     focus, LeaveCommand is executed  Timeout  milliseconds  after
+     the window has lost focus.
+
+     "Raise" is the default for EnterCommand, but any fvwm2 func-
+     tion is allowed. I would not use "Close" or "Destroy" with a
+     low timeout, though.  The LeaveCommand can be  handy  for  a
+     tidy desktop. Experiment with:
+
+          Module FvwmAuto 0 Nop Lower
+          Module FvwmAuto 0 Nop Iconify
+
+
+AUTHOR
+     FvwmAuto just appeared one day, nobody knows how.
+     FvwmAuto was simply rewritten 09/96, nobody knows by whom.
+
+have fun, 
+albrecht
+-- 
+You've finished playing hangman, you've cast the fateful dice
+  Advise, advise, advise me, this shroud will not suffice. -- Marillion
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Fri Nov  8 11:08:54 1996
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Fri, 08 Nov 1996 11:08:54 -0600 (CST)
+Received: from newton.auto.tuwien.ac.at (newton.auto.tuwien.ac.at [128.130.41.13]) by sina.hpc.uh.edu (8.7.3/8.7.3) with SMTP id KAA29262; Fri, 8 Nov 1996 10:52:07 -0600 (CST)
+Received: from vta_host.auto.tuwien.ac.at by newton.auto.tuwien.ac.at with SMTP id AA23379
+  (5.65c/IDA-1.4.4); Fri, 8 Nov 1996 18:50:57 +0200
+Received: by vta_host.auto.tuwien.ac.at (4.1/JK-0.4.5a)
+	id AA21401; Fri, 8 Nov 96 17:50:55 +0100
+Date: Fri, 8 Nov 96 17:50:55 +0100
+From: albrecht@auto.tuwien.ac.at (Albrecht Kadlec)
+Message-Id: <9611081650.AA21401@vta_host.auto.tuwien.ac.at>
+To: FVWM2 mailing list <fvwm@hpc.uh.edu>,
+        FVWM-Workers mailing list <fvwm-workers@hpc.uh.edu>
+Subject: new version of FvwmAuto (less hassles)
+X-Attribution: A
+Reply-To: albrecht@auto.tuwien.ac.at (Albrecht Kadlec)
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-beta2
+
+
+Enhanced, less bug ridden, smaller & faster version.
+
+Many thanX to jha@cs.purdue.edu ("John H. Aughey") for testing & suggestions.
+
+The file libs/MatchToken.c (is part of the new library)
+must be linked in. 
+
+Please report any bugs/deficiencies to me.
+
+here the man page:
+
+
+NAME
+     FvwmAuto - the FVWM auto-raise module
+
+SYNOPSIS
+     FvwmAuto is spawned by fvwm, so no command  line  invocation
+     will work.  The correct syntax is:
+
+          Module FvwmAuto Timeout [EnterCommand [LeaveCommand]]
+
+          AddToMenu Modules "Modules"      Title
+          +                 "Audio"        Module FvwmAudio
+          +                 "Auto"         Module FvwmAuto 300 raise lower
+          +                 "Buttons"      Module FvwmButtons
+          +                 "Ident"        Module FvwmIdent
+          +                 "Banner"       Module FvwmBanner
+          +                 "Pager"        Module FvwmPager 0 3
+
+     The Timeout argument is required. It  specifies  how  long a
+     window  must retain the keyboard input focus before the com-
+     mand is executed. The delay is measured in milliseconds, and
+     any integer 0 or greater is acceptable.
+
+     EnterCommand and LeaveCommand are optional.  EnterCommand is
+     executed  Timeout  milliseconds after a window gets the input
+     focus, LeaveCommand is executed  Timeout  milliseconds  after
+     the window has lost focus.
+
+     "Raise" is the default for EnterCommand, but any fvwm2 func-
+     tion is allowed. I would not use "Close" or "Destroy" with a
+     low timeout, though.  The LeaveCommand can be  handy  for  a
+     tidy desktop. Experiment with:
+
+          Module FvwmAuto 0 Nop Lower
+          Module FvwmAuto 0 Nop Iconify
+
+
+AUTHOR
+     FvwmAuto just appeared one day, nobody knows how.
+     FvwmAuto was simply rewritten 09/96, nobody knows by whom.
+
+have fun, 
+albrecht
+-- 
+You've finished playing hangman, you've cast the fateful dice
+  Advise, advise, advise me, this shroud will not suffice. -- Marillion
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Tue Nov 12 22:34:12 1996
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Tue, 12 Nov 1996 22:34:12 -0600 (CST)
+Received: from mail1.its.rpi.edu (root@mail1.its.rpi.edu [128.113.100.7]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id WAA07980 for <fvwm-workers@hpc.uh.edu>; Tue, 12 Nov 1996 22:34:03 -0600 (CST)
+Received: from pluto.solarsystem.org (drewvel@rts4p15.xyp.rpi.edu [128.113.29.84]) by mail1.its.rpi.edu (8.8.2/8.8.2) with ESMTP id XAA51170 for <fvwm-workers@hpc.uh.edu>; Tue, 12 Nov 1996 23:33:46 -0500
+Received: (from drewvel@localhost) by pluto.solarsystem.org (8.7.6/8.7.3) id XAA24705; Tue, 12 Nov 1996 23:36:57 -0500
+Date: Tue, 12 Nov 1996 23:36:57 -0500
+Message-Id: <199611130436.XAA24705@pluto.solarsystem.org>
+From: Andrew Veliath <veliaa@rpi.edu>
+To: fvwm-workers@hpc.uh.edu
+Subject: fvwm2 window repaint on destroy
+Mime-Version: 1.0 (generated by tm-edit 7.92)
+Content-Type: text/plain; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-beta2
+
+fvwm2 seems to repaint the window back when destroying, resulting in a
+flash before destroy... has anyone noticed this?
+
+I remember someone mentioned a solution before, but 2.0.43 still does
+it.  Has anyone any ideas?
+
+andrew
+
+--
+Andrew Veliath <veliaa@rpi.edu>        http://www.rpi.edu/~veliaa
+One day, all forms of communication will be superseded by a FAQ.
+Finger for PGP Public Key
+Key fingerprint =  51 56 5D 3E 51 43 8B 74  7C B2 E4 B6 84 8E 8B 08
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Wed Nov 13 06:09:38 1996
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Wed, 13 Nov 1996 06:09:38 -0600 (CST)
+Received: from mail1.its.rpi.edu (root@mail1.its.rpi.edu [128.113.100.7]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id GAA15536 for <fvwm-workers@hpc.uh.edu>; Wed, 13 Nov 1996 06:09:30 -0600 (CST)
+Received: from pluto.solarsystem.org (drewvel@rts4p3.xyp.rpi.edu [128.113.29.72]) by mail1.its.rpi.edu (8.8.2/8.8.2) with ESMTP id HAA25326 for <fvwm-workers@hpc.uh.edu>; Wed, 13 Nov 1996 07:09:18 -0500
+Received: (from drewvel@localhost) by pluto.solarsystem.org (8.7.6/8.7.3) id HAA29095; Wed, 13 Nov 1996 07:12:48 -0500
+Date: Wed, 13 Nov 1996 07:12:48 -0500
+Message-Id: <199611131212.HAA29095@pluto.solarsystem.org>
+From: Andrew Veliath <veliaa@rpi.edu>
+To: FVWM Workers List <fvwm-workers@hpc.uh.edu>
+Subject: New BorderStyle Patch
+Mime-Version: 1.0 (generated by tm-edit 7.92)
+Content-Type: text/plain; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-beta2
+
+Okay, I put a new borderstyle patch on the page today (I put bsp1a
+there yesterday too, but this is, of course, much newer :).
+
+ChangeLog [from bsp1a]
+---------
+
+	* speed improvements (e.g., transients do not repaint texture on
+	destroy, but there is still one more repaint to get rid of, 
+	introduced, uh.. hint, resize, but shhhh... :).. 
+	more to come though..
+
+	* buttons no longer default to borderstyle background
+
+	* two new buttonstyle flags, UseTitleStyle and
+	UseBorderStyle (and, ahem, flags also now work on
+	standard buttons :) so each button can inherit (with 
+	limits)  either the titlestyle or the borderstyle 
+	(however, usetitlestyle does not use activedown).
+
+	- These type of flags were suggested by Chuck.
+
+I made this patch only bsp1b since it needs to be tested (even with
+different compile-out options):
+
+http://www.rpi.edu/~veliaa/projects/fvwm_patches/fvwm_border_picture.html
+
+There are context diffs from tbp7 and bsp1a.
+
+Andrew
+
+--
+Andrew Veliath <veliaa@rpi.edu>        http://www.rpi.edu/~veliaa
+One day, all forms of communication will be superseded by a FAQ.
+Finger for PGP Public Key
+Key fingerprint =  51 56 5D 3E 51 43 8B 74  7C B2 E4 B6 84 8E 8B 08
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Fri Nov 15 06:00:10 1996
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Fri, 15 Nov 1996 06:00:10 -0600 (CST)
+Received: from mail1.its.rpi.edu (root@mail1.its.rpi.edu [128.113.100.7]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id GAA12257 for <fvwm-workers@hpc.uh.edu>; Fri, 15 Nov 1996 06:00:03 -0600 (CST)
+Received: from pluto.solarsystem.org (drewvel@rts4p16.xyp.rpi.edu [128.113.29.85]) by mail1.its.rpi.edu (8.8.2/8.8.2) with ESMTP id GAA59710 for <fvwm-workers@hpc.uh.edu>; Fri, 15 Nov 1996 06:59:52 -0500
+Received: (from drewvel@localhost) by pluto.solarsystem.org (8.7.6/8.7.3) id GAA17276; Fri, 15 Nov 1996 06:59:56 -0500
+Date: Fri, 15 Nov 1996 06:59:56 -0500
+Message-Id: <199611151159.GAA17276@pluto.solarsystem.org>
+From: Andrew Veliath <veliaa@rpi.edu>
+To: FVWM Workers List <fvwm-workers@hpc.uh.edu>
+Subject: New Titlebar Patch
+Mime-Version: 1.0 (generated by tm-edit 7.92)
+Content-Type: text/plain; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-beta2
+
+A new version of the title bar patch is available at:
+
+http://www.rpi.edu/~veliaa/projects/fvwm_patches/fvwm_title_picture.html
+
+Changes
+------
+
+	* added linear gradient styles
+
+Andrew
+
+--
+Andrew Veliath <veliaa@rpi.edu>        http://www.rpi.edu/~veliaa
+One day, all forms of communication will be superseded by a FAQ.
+Finger for PGP Public Key
+Key fingerprint =  51 56 5D 3E 51 43 8B 74  7C B2 E4 B6 84 8E 8B 08
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Thu Nov 21 04:34:45 1996
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Thu, 21 Nov 1996 04:34:45 -0600 (CST)
+Received: from mail1.its.rpi.edu (root@mail1.its.rpi.edu [128.113.100.7]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id EAA11677 for <fvwm-workers@hpc.uh.edu>; Thu, 21 Nov 1996 04:34:37 -0600 (CST)
+Received: from pluto.solarsystem.org (drewvel@rts4p19.xyp.rpi.edu [128.113.29.88]) by mail1.its.rpi.edu (8.8.2/8.8.3) with ESMTP id FAA71972; Thu, 21 Nov 1996 05:34:29 -0500
+Received: (from drewvel@localhost) by pluto.solarsystem.org (8.7.6/8.7.3) id FAA21269; Thu, 21 Nov 1996 05:36:34 -0500
+Date: Thu, 21 Nov 1996 05:36:34 -0500
+Message-Id: <199611211036.FAA21269@pluto.solarsystem.org>
+From: Andrew Veliath <veliaa@rpi.edu>
+To: Henrique Martins <martins@martins.hpl.hp.com>
+Cc: fvwm workers list <fvwm-workers@hpc.uh.edu>
+Subject: moving windows patch -- revisited?
+Mime-Version: 1.0 (generated by tm-edit 7.92)
+Content-Type: text/plain; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-beta2
+
+Hi Henrique (and fvwm :),
+
+Any chance you might do another FvwmPager moving windows patch for
+2.0.43 with maybe some sort of option to toggle it on or off?  I
+thought this was a nifty thing.
+
+Regards,
+Andrew
+
+--
+Andrew Veliath <veliaa@rpi.edu>        http://www.rpi.edu/~veliaa
+One day, all forms of communication will be superseded by a FAQ.
+Finger for PGP Public Key
+Key fingerprint =  51 56 5D 3E 51 43 8B 74  7C B2 E4 B6 84 8E 8B 08
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Thu Nov 21 04:40:16 1996
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Thu, 21 Nov 1996 04:40:16 -0600 (CST)
+Received: from mail1.its.rpi.edu (root@mail1.its.rpi.edu [128.113.100.7]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id EAA11761 for <fvwm-workers@hpc.uh.edu>; Thu, 21 Nov 1996 04:40:08 -0600 (CST)
+Received: from pluto.solarsystem.org (drewvel@rts4p19.xyp.rpi.edu [128.113.29.88]) by mail1.its.rpi.edu (8.8.2/8.8.3) with ESMTP id FAA65814 for <fvwm-workers@hpc.uh.edu>; Thu, 21 Nov 1996 05:39:58 -0500
+Received: (from drewvel@localhost) by pluto.solarsystem.org (8.7.6/8.7.3) id FAA21307; Thu, 21 Nov 1996 05:42:05 -0500
+Date: Thu, 21 Nov 1996 05:42:05 -0500
+Message-Id: <199611211042.FAA21307@pluto.solarsystem.org>
+From: Andrew Veliath <veliaa@rpi.edu>
+To: fvwm workers list <fvwm-workers@hpc.uh.edu>
+Subject: module headers location
+Mime-Version: 1.0 (generated by tm-edit 7.92)
+Content-Type: text/plain; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-beta2
+
+I am not sure I understand (or am not aware of) why libfvwm2.a gets
+installed without any header files.  What do you think of a proposal
+to install the required module header files in to a standard include
+location, maybe under an fvwm directory hierarchy?
+
+If I missed something obvious, I'm sorry.
+
+Regard,
+Andrew
+
+--
+Andrew Veliath <veliaa@rpi.edu>        http://www.rpi.edu/~veliaa
+One day, all forms of communication will be superseded by a FAQ.
+Finger for PGP Public Key
+Key fingerprint =  51 56 5D 3E 51 43 8B 74  7C B2 E4 B6 84 8E 8B 08
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Thu Nov 21 20:04:21 1996
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Thu, 21 Nov 1996 20:04:21 -0600 (CST)
+Received: from hplms26.hpl.hp.com (hplms26.hpl.hp.com [15.255.168.31]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id UAA04951 for <fvwm-workers@hpc.uh.edu>; Thu, 21 Nov 1996 20:04:05 -0600 (CST)
+Received: from martins.hpl.hp.com by hplms26.hpl.hp.com with ESMTP
+	(1.37.109.16/15.5+ECS 3.3+HPL1.1S) id AA259958228; Thu, 21 Nov 1996 18:03:49 -0800
+Received: from localhost by martins.hpl.hp.com with SMTP
+	(1.37.109.20/15.5+ECS 3.3+HPL1.1) id AA074498227; Thu, 21 Nov 1996 18:03:47 -0800
+Message-Id: <199611220203.AA074498227@martins.hpl.hp.com>
+To: Andrew Veliath <veliaa@rpi.edu>
+Cc: fvwm workers list <fvwm-workers@hpc.uh.edu>
+Subject: Re: moving windows patch -- revisited? 
+In-Reply-To: Your message of "Thu, 21 Nov 1996 05:36:34 EST."
+             <199611211036.FAA21269@pluto.solarsystem.org> 
+Mime-Version: 1.0 (generated by tm-edit 7.68)
+Content-Type: text/plain; charset=US-ASCII
+Date: Thu, 21 Nov 1996 18:03:47 -0800
+From: Henrique Martins <martins@martins.hpl.hp.com>
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-beta2
+
+
+> Any chance you might do another FvwmPager moving windows patch for
+> 2.0.43 with maybe some sort of option to toggle it on or off?  I
+> thought this was a nifty thing.
+
+  
+  Patch below, MINIMALLY TESTED! Patch with "-c -p".  New function
+  PagerRTMoves controls the added behavior. This is the addition to the man
+  page:
+
+    PagerRTMoves [value]
+
+    Specifies whether FvwmPager will track window moves in
+    real-time. Default is on. "PagerRTMoves 0" turns it off. "PagerRTMoves
+    <non zero value> turns it on. "PagerRTMoves" with no argument, toggles
+    current value.
+
+  -- Henrique (martins@hpl.hp.com)
+
+
+*** ./modules/FvwmPager/FvwmPager.c.orig	Thu Nov 21 15:55:46 1996
+--- ./modules/FvwmPager/FvwmPager.c	Thu Nov 21 15:57:27 1996
+***************
+*** 161,166 ****
+--- 161,167 ----
+  
+    SetMessageMask(fd,
+                   M_ADD_WINDOW|
++                  M_MOVING_WINDOW|
+                   M_CONFIGURE_WINDOW|
+                   M_DESTROY_WINDOW|
+                   M_FOCUS_CHANGE|
+***************
+*** 234,239 ****
+--- 235,243 ----
+      case M_CONFIGURE_WINDOW:
+        list_configure(body);
+        break;
++     case M_MOVING_WINDOW:
++       list_moving_window (body);
++       break;
+      case M_DESTROY_WINDOW:
+        list_destroy(body);
+        break;
+***************
+*** 321,326 ****
+--- 325,363 ----
+    (*prev)->text = body[22];
+    (*prev)->back = body[23];
+    AddNewWindow(*prev);
++ }
++ 
++ /***********************************************************************
++  *
++  *  Procedure:
++  *	list_moving_window - displays packet contents to stderr
++  *
++  ***********************************************************************/
++ 
++ void list_moving_window (unsigned long *body)
++ {
++   PagerWindow *t;
++   Window target_w;
++   
++   for (target_w = body[0],
++          t = Start;
++        t != NULL && t->w != target_w;
++        t = t->next);
++ 
++   if(t != NULL) {
++     t->x = body[1];
++     t->y = body[2];
++ 
++     if(t->desk != body[3])
++       ChangeDeskForWindow (t, body[3]);
++     else
++       MoveResizePagerView (t);
++ 
++     if (FocusWin == t)
++       Hilight (t, ON);
++     else
++       Hilight (t, OFF);
++   }
+  }
+  
+  /***********************************************************************
+*** ./modules/FvwmPager/FvwmPager.h.orig	Thu Nov 21 15:57:36 1996
+--- ./modules/FvwmPager/FvwmPager.h	Thu Nov 21 15:57:51 1996
+***************
+*** 91,96 ****
+--- 91,97 ----
+  
+  void list_add(unsigned long *body);
+  void list_configure(unsigned long *body);
++ void list_moving_window (unsigned long *body);
+  void list_destroy(unsigned long *body);
+  void list_focus(unsigned long *body);
+  void list_toggle(unsigned long *body);
+*** ./fvwm/parse.h.orig	Thu Nov 21 17:10:46 1996
+--- ./fvwm/parse.h	Thu Nov 21 17:21:07 1996
+***************
+*** 73,78 ****
+--- 73,79 ----
+  #define F_COLORMAP_FOCUS        55
+  #define F_TITLESTYLE            56
+  #define F_EXEC_SETUP            57
++ #define F_PAGER_RT_MOVES        58
+  /* Functions which require a target window */
+  #define F_RESIZE		100
+  #define F_RAISE			101
+*** ./fvwm/functions.c.orig	Thu Nov 21 17:10:53 1996
+--- ./fvwm/functions.c	Thu Nov 21 17:31:22 1996
+***************
+*** 75,80 ****
+--- 75,81 ----
+    {"Next",         NextFunc,         F_NEXT,                FUNC_NO_WINDOW},
+    {"None",         NoneFunc,         F_NONE,                FUNC_NO_WINDOW},
+    {"OpaqueMoveSize", SetOpaque,      F_OPAQUE,              FUNC_NO_WINDOW},
++   {"PagerRTMoves", SetPagerRTMoves,  F_PAGER_RT_MOVES,      FUNC_NO_WINDOW},
+    {"PipeRead",     PipeRead,         F_READ,                FUNC_NO_WINDOW},
+  #ifdef XPM
+    {"PixmapPath",   setPixmapPath,    F_PIXMAP_PATH,         FUNC_NO_WINDOW},
+*** ./fvwm/builtins.c.orig	Thu Nov 21 17:14:52 1996
+--- ./fvwm/builtins.c	Thu Nov 21 17:36:23 1996
+***************
+*** 977,982 ****
+--- 977,995 ----
+    }
+  }
+  
++ void SetPagerRTMoves (XEvent *eventp,Window w,FvwmWindow *tmp_win,
++                    unsigned long context, char *action,int* Module)
++ {
++   int n, val1, val1_unit;
++ 
++   n = GetOneArgument(action, &val1, &val1_unit);
++ 
++   if(n != 1)
++     RTMoves = !RTMoves;
++   else
++     RTMoves = val1 != 0;
++ }
++ 
+  void SetEdgeScroll(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+                     unsigned long context, char *action,int* Module)
+  {
+*** ./fvwm/misc.h.orig	Thu Nov 21 17:17:22 1996
+--- ./fvwm/misc.h	Thu Nov 21 17:30:51 1996
+***************
+*** 115,120 ****
+--- 115,121 ----
+  extern unsigned long Globalgcm;
+  extern Time lastTimestamp;
+  extern XEvent Event;
++ extern int RTMoves;
+  
+  extern char NoName[];
+  extern char NoClass[];
+***************
+*** 305,310 ****
+--- 306,313 ----
+  void SetBox(char *text, FILE *fd, char **arg,int *);
+  void set_func(char *, FILE *, char **,int *);
+  void copy_config(FILE **config_fd);
++ void SetPagerRTMoves (XEvent *eventp,Window w,FvwmWindow *tmp_win,
++                    unsigned long context, char *action,int* Module);
+  void SetEdgeScroll(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+  		     unsigned long context, char *action,int *Module);
+  void SetEdgeResistance(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+*** ./fvwm/move.c.orig	Thu Nov 21 15:58:37 1996
+--- ./fvwm/move.c	Thu Nov 21 17:20:35 1996
+***************
+*** 28,33 ****
+--- 28,34 ----
+  extern XEvent Event;
+  extern int menuFromFrameOrWindowOrTitlebar;
+  Bool NeedToResizeToo;
++ int RTMoves = 1;
+  
+  /****************************************************************************
+   *
+***************
+*** 202,208 ****
+  	case MotionNotify:
+  	  xl = Event.xmotion.x_root;
+  	  yt = Event.xmotion.y_root;
+! 	  HandlePaging(Scr.MyDisplayWidth,Scr.MyDisplayHeight,&xl,&yt,
+  		       &delta_x,&delta_y,False);
+  	  /* redraw the rubberband */
+  	  xl += XOffset;
+--- 203,209 ----
+  	case MotionNotify:
+  	  xl = Event.xmotion.x_root;
+  	  yt = Event.xmotion.y_root;
+! 	  HandlePaging(Scr.EdgeScrollX,Scr.EdgeScrollY,&xl,&yt,
+  		       &delta_x,&delta_y,False);
+  	  /* redraw the rubberband */
+  	  xl += XOffset;
+***************
+*** 242,247 ****
+--- 243,254 ----
+  		XMoveWindow(dpy,tmp_win->frame,xl,yt);
+  	    }
+  	  DisplayPosition(tmp_win,xl+Scr.Vx,yt+Scr.Vy,False);
++           if (RTMoves) {
++             Broadcast (M_MOVING_WINDOW, 6,
++                        tmp_win->w, xl, yt, tmp_win->Desk,
++                        xl - XOffset, yt - YOffset, 0);
++             FlushQueues ();
++           }
+  	  done = TRUE;
+  	  break;
+  
+*** ./fvwm/events.c.orig	Thu Nov 21 16:00:55 1996
+--- ./fvwm/events.c	Thu Nov 21 16:01:25 1996
+***************
+*** 1454,1456 ****
+--- 1454,1490 ----
+    return 0;
+  }
+  
++ void FlushQueues ()
++ {
++   extern int fd_width;
++   fd_set out_fdset;
++   int i;
++   int retval;
++ 
++   FD_ZERO(&out_fdset);
++   for(i=0; i<npipes; i++)
++     {
++       if(pipeQueue[i]!= NULL)
++ 	{
++ 	  FD_SET(writePipes[i], &out_fdset);
++ 	}
++     }
++   
++ #ifdef __hpux
++   retval=select(fd_width, 0, (int *)&out_fdset,0, NULL);
++ #else
++   retval=select(fd_width, 0, &out_fdset, 0, NULL);
++ #endif
++   
++   for(i=0;i<npipes;i++)
++     {
++       if(writePipes[i] >= 0)
++ 	{
++ 	  if((retval>0)&&(FD_ISSET(writePipes[i], &out_fdset)))
++ 	    {
++ 	      FlushQueue(i);
++ 	    }
++ 	}
++     }
++ 
++ }
+*** ./fvwm/module.h.orig	Thu Nov 21 16:29:39 1996
+--- ./fvwm/module.h	Thu Nov 21 16:30:11 1996
+***************
+*** 39,45 ****
+  #define M_ICON_FILE          (1<<20)
+  #define M_DEFAULTICON        (1<<21)
+  #define M_STRING             (1<<22)
+! #define MAX_MESSAGES         23
+  #define MAX_MASK             ((1<<MAX_MESSAGES)-1)
+  
+  #define HEADER_SIZE         4
+--- 39,46 ----
+  #define M_ICON_FILE          (1<<20)
+  #define M_DEFAULTICON        (1<<21)
+  #define M_STRING             (1<<22)
+! #define M_MOVING_WINDOW      (1<<23)
+! #define MAX_MESSAGES         24
+  #define MAX_MASK             ((1<<MAX_MESSAGES)-1)
+  
+  #define HEADER_SIZE         4
+*** ./fvwm/fvwm2.man.orig	Thu Nov 21 17:42:17 1996
+--- ./fvwm/fvwm2.man	Thu Nov 21 17:48:56 1996
+***************
+*** 917,922 ****
+--- 917,927 ----
+  are moved as rubber-bands.
+  
+  
++ .IP "PagerRTMoves \fI[value]\fP"
++ Specifies whether FvwmPager will track window moves in real-time. Default
++ is on. "PagerRTMoves 0" turns it off. "PagerRTMoves \fI<non zero value>\fP
++ turns it on. "PagerRTMoves" with no argument, toggles current value.
++ 
+  .IP "PipeRead \fIcmd\fP"
+  Causes fvwm to read commands outputted from the program named
+  \fIcmd\fP.  Useful for building up dynamic menu entries based on a
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
+From owner-fvwm-workers@hpc.uh.edu  Mon Nov 25 01:43:21 1996
+Received: by sina.hpc.uh.edu (TLB v0.09a (1.20 tibbs 1996/10/09 22:03:07)); Mon, 25 Nov 1996 01:43:21 -0600 (CST)
+Received: from mail1.its.rpi.edu (root@mail1.its.rpi.edu [128.113.100.7]) by sina.hpc.uh.edu (8.7.3/8.7.3) with ESMTP id BAA28480 for <fvwm-workers@hpc.uh.edu>; Mon, 25 Nov 1996 01:43:14 -0600 (CST)
+Received: from pluto.solarsystem.org (drewvel@rts4p4.xyp.rpi.edu [128.113.29.73]) by mail1.its.rpi.edu (8.8.3/8.8.3) with ESMTP id CAA35380; Mon, 25 Nov 1996 02:43:05 -0500
+Received: (from drewvel@localhost) by pluto.solarsystem.org (8.7.6/8.7.3) id CAA01133; Mon, 25 Nov 1996 02:09:30 -0500
+Date: Mon, 25 Nov 1996 02:09:30 -0500
+Message-Id: <199611250709.CAA01133@pluto.solarsystem.org>
+From: Andrew Veliath <veliaa@rpi.edu>
+To: Henrique Martins <martins@martins.hpl.hp.com>
+Cc: fvwm workers <fvwm-workers@hpc.uh.edu>
+Subject: Re: moving windows patch -- revisited? yes!
+In-Reply-To: <199611220203.AA074498227@martins.hpl.hp.com>
+References: <199611211036.FAA21269@pluto.solarsystem.org>
+	<199611220203.AA074498227@martins.hpl.hp.com>
+Mime-Version: 1.0 (generated by tm-edit 7.92)
+Content-Type: text/plain; charset=US-ASCII
+Sender: owner-fvwm-workers@hpc.uh.edu
+Precedence: list
+X-Majordomo: 1.94-beta2
+
+    >> Any chance you might do another FvwmPager moving windows patch
+    >> for 2.0.43 with maybe some sort of option to toggle it on or
+    >> off?  I thought this was a nifty thing.
+  
+    Henrique>   Patch below, MINIMALLY TESTED! Patch with "-c -p".
+    Henrique> New function PagerRTMoves controls the added
+    Henrique> behavior. This is the addition to the man page:
+
+    Henrique>     PagerRTMoves [value]
+
+    Henrique>     Specifies whether FvwmPager will track window moves
+    Henrique> in real-time. Default is on. "PagerRTMoves 0" turns it
+    Henrique> off. "PagerRTMoves <non zero value> turns it
+    Henrique> on. "PagerRTMoves" with no argument, toggles current
+    Henrique> value.
+
+Thanks, this was nice and quick!!
+
+The niftiness lives on! :)
+
+Regards,
+Andrew
+
+--
+Andrew Veliath <veliaa@rpi.edu>        http://www.rpi.edu/~veliaa
+One day, all forms of communication will be superseded by a FAQ.
+Finger for PGP Public Key
+Key fingerprint =  51 56 5D 3E 51 43 8B 74  7C B2 E4 B6 84 8E 8B 08
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm-workers" in the
+body of a message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner@hpc.uh.edu.
+
