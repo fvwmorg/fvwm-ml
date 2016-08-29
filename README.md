@@ -11,4 +11,6 @@ historical purposes.  The files herein are readable with a MUA such as mutt:
 mutt -f $MBOX_FILE
 ```
 
+Alternatively, [an HTML interface can be used to view these files.](http://www.fvwm.org/fvwm-ml)
+
 Enjoy!
