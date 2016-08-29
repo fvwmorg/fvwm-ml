@@ -1,0 +1,40 @@
+*** FvwmBacker.c.orig	Wed Apr  4 12:30:03 2001
+--- FvwmBacker.c	Fri May 11 03:34:10 2001
+***************
+*** 265,270 ****
+--- 265,271 ----
+  void ProcessMessage(unsigned long type, unsigned long *body)
+  {
+    char *tline;
++   int new_x, new_y;
+  
+    switch (type)
+    {
+***************
+*** 279,288 ****
+      break;
+  
+    case M_NEW_PAGE:
+!     current_desk = body[2];
+!     current_x = body[0]/MyDisplayWidth;
+!     current_y = body[1]/MyDisplayHeight;
+!     ExecuteMatchingCommands(-1);
+      break;
+  
+    }
+--- 280,293 ----
+      break;
+  
+    case M_NEW_PAGE:
+!     new_x = body[0]/MyDisplayWidth;
+!     new_y = body[1]/MyDisplayHeight;
+!     if (body[2] != current_desk || new_x != current_x || new_y != current_y) {
+!       current_desk = body[2];
+!       current_x = new_x;
+!       current_y = new_y;
+!       ExecuteMatchingCommands(-1);
+!     }
+      break;
+  
+    }
+

@@ -1,0 +1,987 @@
+# this is a bare bones sample .fvwm2rc/system.fvwm2rc file for fvwm-2.
+# It should be customized before install.  See other sample .fvwm2rc files
+# for hints, as well as pointers from the various links on the official
+# fvwm web page (see the FAQ).
+
+# be sure to customize these paths for your installation:
+ModulePath /usr/X11R6/libexec/fvwm/2.4.16
+ImagePath /usr/X11R6/include/X11/pixmaps:/usr/X11R6/include/X11/3dpixmaps:/usr/X11R6/include/X11/bitmaps:/usr/share/pixmaps:$HOME/.fvwm/pixmaps
+
+ModuleSynchronous Timeout  5 FvwmTheme
+*FvwmTheme: Colorset 1 fg grey80, bg grey20, hi grey30, sh black
+*FvwmTheme: Colorset 2 fg blue, bg grey80, hi grey90, sh black
+*FvwmTheme: Colorset 3 fg grey80, bg red, hi rgb:255/128/128, sh rgb:64/0/0
+*FvwmTheme: Colorset 4 fg white, bg red, hi rgb:255/128/128, sh rgb:64/0/0
+
+EdgeResistance 250 100
+EdgeScroll 100 100
+ClickTime 50
+
+# make sure these fonts exist on your system:
+IconFont		"-elseware-CG Omega-bold-r-normal-*-*-80-*-*-p-*-iso8859-15"
+WindowFont		"-elseware-CG Omega-bold-r-normal-*-*-120-*-*-p-*-iso8859-15"
+
+HilightColor blue grey90
+DeskTopSize 4x4
+ColormapFocus FollowsMouse
+OpaqueMoveSize 100
+
+
+# Menu styles
+MenuStyle * Foreground grey80, Background grey20, ActiveFore white
+MenuStyle * HilightBackOff, Hilight3DThin
+MenuStyle * Font -adobe-helvetica-bold-r-*-*-*-90-*-*-*-*-*-*
+MenuStyle * PopupOffset -5 100
+MenuStyle * Animation
+MenuStyle * TitleUnderlines2
+MenuStyle * MenuFace TiledPixmap granite.xpm
+
+# For light marbled menus:
+#MenuStyle * Foreground grey30, Background grey76, ActiveFore black
+#MenuStyle * MenuFace TiledPixmap marble.xpm
+
+# default Styles:
+Style "*"           BorderWidth 5, HandleWidth 5, Colorset 1, HilightColorset 2
+Style "*"           MWMFunctions, MWMDecor, HintOverride
+Style "*"           DecorateTransient, NoPPosition, StickyIcon, Icon unknown1.xpm
+Style "*"           RandomPlacement, SmartPlacement, ResizeOpaque, FocusFollowsMouse
+Style "*"           IconBox 320x1200-1-1, IconGrid 64 64, IconFill Top Right
+Style "*"           RecaptureHonorsStartsOnPage, ActivePlacementIgnoresStartsOnPage
+
+
+TitleStyle ActiveUp (TiledPixmap stone.xpm) ActiveDown (TiledPixmap stone.xpm) Inactive (TiledPixmap granite.xpm)
+
+# Styles for various Fvwm modules:
+Style "Fvwm*"       NoTitle, Sticky, WindowListSkip, CirculateSkipIcon, CirculateSkip
+Style "FvwmPager"   NoHandles
+Style "FvwmBanner"  StaysOnTop
+Style "FvwmButtons" Icon toolbox.xpm, ClickToFocus
+
+
+AddToDecor Hot	TitleStyle ActiveUp (TiledPixmap lava.xpm) ActiveDown (TiledPixmap stone.xpm) Inactive (TiledPixmap granite.xpm)
+
+
+# Styles for various common programs:
+Style "*lock"       NoTitle, NoHandles, Sticky, WindowListSkip, CirculateSkipIcon, CirculateSkip, NeverFocus
+Style "xcalc"       Icon xcalc.xpm, NoButton 2,RandomPlacement
+Style "xconsole"    Icon rterm.xpm, WindowListSkip, Sticky
+Style "ProcMeter*"  Sticky, NoTitle, NoHandles, WindowListSkip, CirculateSkipIcon, CirculateSkip
+Style "Coolmail*"   Sticky, NoTitle, NoHandles, WindowListSkip, CirculateSkipIcon, CirculateSkip
+Style "XTerm"       Icon xterm.xpm
+Style "Mutt:*"		Icon mutt.xpm
+Style "ICB"		Icon xterm-blank.xpm
+Style "X-Chat*"		Icon xchat-virge.xpm
+Style "Appointment"	Icon datebook.xpm
+Style "xcalc"		Icon xcalc.xpm
+Style "xbiff"		Icon mail1.xpm
+Style "xmh"		Icon mail1.xpm, StartsOnDesk 2
+Style "xman"		Icon xman.xpm
+Style "xvgr"		Icon graphs.xpm
+Style "matlab"		Icon math4.xpm
+Style "xmag"		Icon mag_glass.xpm
+Style "xgraph"		Icon graphs.xpm
+Style "GoodStuff"	Icon toolbox.xpm
+Style "Edit Message"	StaysOnTop
+Style "GoodStuff"	Icon toolbox.xpm
+Style "xmessage"	NoTitle, WindowListSkip
+Style "xload"		Sticky, NoHandles, WindowListSkip, StaysOnTop
+Style "XVMount"		CirculateSkip, StaysOnTop
+Style "WorkMan"		StaysOnTop
+Style "The GIMP"	Icon mona_lisa.xpm
+Style "image_window"	Icon mona_lisa.xpm
+Style "Script-Fu*"	Icon mona_lisa.xpm
+Style "DB Browser"	Icon mona_lisa.xpm
+Style "DigitalDJ*"	Icon ddj.xpm, StartsOnPage 0 0, SkipMapping
+Style "Grip*"		Icon grip.xpm
+Style "GCD*"		Icon gcd.xpm
+Style "XMMS_Player"	NoTitle, StaysOnTop
+Style "XMMS_Playlist"	NoTitle, StaysOnTop
+Style "XMMS_Equalizer"	NoTitle, StaysOnTop
+Style "CrackLog"	Sticky, WindowListSkip, CirculateSkip, StaysOnTop
+Style "Much To Do*"	Icon shakespeare.xpm
+Style "Pan*"		Icon pan.xpm
+Style "*\%*Saved"	Colorset 3, HilightColorset 4, UseDecor Hot
+
+ButtonStyle All -- UseTitleStyle
+
+######################## Initialization Functions ############################
+AddToFunc InitFunction 	"I" Module FvwmPager 0 0
++			"I" Module FvwmAuto 500 raise
++			"I" Exec /opt/oss/ossmix vol 25 line 33 pcm 33 pcm2 25 cd 50 mute.linemute on mute.micmute on
++			"I" Exec /opt/oss/ossmix -d1 voices.dsp8 75 voices.dsp9 75
++			"I" Exec xv -root -quit -max /home/alaric/Wallpaper/aurora.jpg
++			"I" Exec xset m 3 6
++			"I" Exec coolmail -f /var/spool/mail/root -p /root/mail.wav -o /dev/dsp8 -geometry 65x65+0+95 -e "xterm -title Mutt:Root -geometry 80x89 -sb -sl 500 -j -ls -bg black -fg yellow -fn 6X13 -e /home/alaric/bin/mail.root"
++			"I" Exec coolmail -f /var/spool/mail/alaric -p /home/alaric/mail.wav -o /dev/dsp9 -geometry 65x65+74+95 -e "xterm -title Mutt:Alaric -geometry 80x89 -sb -sl 500 -j -ls -bg black -fg yellow -fn 6X13 -e /home/alaric/bin/mail.alaric"
++			"I" Exec procmeter3 -geometry 139x1017+0+169
++			"I" Exec ddj
+
+AddToFunc RestartFunction	"I" Module FvwmPager 0 0
++				"I" Module FvwmAuto 500 raise
+
+
+######################## Menus ###################
+AddToMenu RootMenu	"Desktop Menu"	Title
++			"Geek!"		Exec exec /home/alaric/bin/geek
++			"Applications"	Popup Applications
++			"Audio"		Popup Audio
++			"Moooooo!"	Popup Moo
++			"Utilities"	Popup Utilities
++			"Office"	Popup Office
++			"Security"	Popup Security
++			"XTerms"	Popup XTerms
++			""		Nop
++			"Screen"	Title
++			"Window Manager"	Popup Windowmgr
++			"Wallpaper"	Popup Wallpaper
++			"Patterns"	Popup Patterns
++			"Screensaver"	Popup Screensaver
++			"Lock Screen"	Popup Screenlock
++			""		Nop
++			""		Nop
++                       "Exit"  	Quit
+
+AddToMenu Applications 	"Applications"	Title
++			"Bacula"	Exec exec /opt/bacula/bin/gnome-console -c /opt/bacula/etc/gnome-console.conf
++			"GAIM"		Exec exec gaim
++			"The GIMP"	Exec exec gimp
++			"Gnutella"	Exec exec gtk-gnutella
++			"Mozilla!"	Exec exec nice -5 /opt/mozilla/mozilla
++			"Mozilla Mail"	Exec exec nice -5 /opt/mozilla/mozilla -mail
++			"MpegTV"	Exec exec mtv
++			"Pan"		Exec exec pan
++			"QCad"		Exec exec qcad
++			"VMware"	Exec exec /opt/VMware/bin/vmware
++			"Xcoral"	Exec exec xcoral
++			"XVMount"	Exec exec xvmount -title XVMount
++			"XV-3.10a"	Exec exec xv -cge -10-24 -ige +320+726 -vsg 580x635+0+0
+
+AddToMenu Audio		"Players"	Title
++			"DigitalDJ"	Exec exec ddj
++			"GCD"		Exec exec gcd -f
++			"RealPlayer 8"	Exec exec /opt/RealPlayer8/realplay
++			"Timidity"	Exec exec timidity -ia -L /usr/sound/midi
++			"XAudio"	Exec exec mxaudio
++			"XMMS"		Exec exec xmms
++			""		Nop
++			"Mixers"	Title
++			"OSS Mixer"	Exec exec /opt/oss/ossxmix
++			"Virtual Mixer"	Exec exec /opt/oss/ossxmix -d1
++			"XMixer"	Exec exec xmix
++			""		Nop
++			"Tools"		Title
++			"Audacity"	Exec exec audacity
++			"Gnutella"	Exec exec gtk-gnutella
++			"Grip"		Exec exec grip
+
+AddTomenu Moo		"Moo Clients"	Title
++			"GMoo"		Exec exec gmoo
++			"TinyFugue"	Exec exec xterm -sb -sl 2048 -j -ls -bg 'black' -fg yellow -geometry 80x89 -e tf
++			"TkMoo Lite"	Exec exec /home/alaric/bin/tkmoo -geometry 80x71
+
+AddToMenu Utilities	"Utilities"	Title
++			"Ghostview"     Exec exec ghostview
++			"Info browser (Konqueror)"	Exec exec /opt/kde2/bin/konqueror info:/dir/Top
++			"Xcolorsel"	Exec exec xcolorsel
++			"Xfontsel"	Exec exec xfontsel
++			"Xfig"          Exec exec xfig
++			"Xfilemanager"  Exec exec xfilemanager
++			"Xfm"           Exec exec xfm
++			"Xfractint"     Exec exec xterm -font 7x14 -e xfractint map=chroma
++			"Xgrab"         Exec exec xgrab
++			"Xpaint"        Exec exec xpaint
++			"Xspread"       Exec exec xspread
++			"Xxgdb"         Exec exec xxgdb
+
+AddToMenu Office	"Office"	Title
++			"KOffice"	Popup KOffice
++			"OpenOffice"	Exec exec /opt/OpenOffice/program/soffice
++			"WordPerfect"	Exec exec /opt/wp8/wpbin/xwp
++			"Quicken"	Exec exec /opt/VMware/bin/vmware -x /home/alaric/vmware/win95/win95.cfg -- -geometry +2112+56
+
+AddToMenu KOffice	"KOffice"	Title
++			"Kivio"		Exec exec /opt/kde2/bin/kivio
++			"Konqueror"	Exec exec /opt/kde2/bin/konqueror
++			"Kontour"	Exec exec /opt/kde2/bin/kontour
++			"KPresenter"	Exec exec /opt/kde2/bin/kpresenter
++			"KSpread"	Exec exec /opt/kde2/bin/kspread
++			"KWord"		Exec exec /opt/kde2/bin/kword
++			"KWrite"	Exec exec /opt/kde2/bin/kwrite
+
+AddToMenu Security	 "Security"	Title
++			"Nessus"	Exec exec nessus
++			"NMap"		Exec exec xnmap
+
+AddToMenu Xterms	"Xterms"	Title
++			"313x89"	Exec exec xterm -sb -sl 2048 -j -ls -bg black -fg yellow -geometry 313x89+0+0
++			"289x89"	Exec exec xterm -sb -sl 2048 -j -ls -bg black -fg yellow -geometry 289x89+0+0
++			"80x89"		Exec exec xterm -sb -sl 2048 -j -ls -bg black -fg yellow -geometry 80x89
++			"80x43"		Exec exec xterm -sb -sl 2048 -j -ls -bg black -fg yellow -geometry 80x43
++			"80x28"		Exec exec xterm -sb -sl 2048 -j -ls -bg black -fg yellow -geometry 80x28
++			"80x20"		Exec exec xterm -sb -sl 2048 -j -ls -bg black -fg yellow -geometry 80x20
++			"80x10"		Exec exec xterm -sb -sl 512 -j -ls -bg black -fg yellow -fn 6x10 -fb 6x10B -geometry 80x10-1-1
+
+AddToMenu WindowMgr	"FVWM2"		Title
++			"Edit .fvwm2rc"	Exec exec xcoral ~/.fvwm2rc
++			"Reload"	Restart
++                       "Refresh"	Refresh
++                       "Recapture"	Recapture
++			""		Nop
++			"Fvwm Modules"	          Popup Module-Popup
++                       "Fvwm Window Ops"         Popup Window-Ops
++			""		Nop
++			"Alternatives"	Title
++			"Start fvwm1" 	Restart fvwm
++			"Start mwm" 	Restart mwm
++			"Start olwm" 	Restart /usr/openwin/bin/olwm
++			"Start olvwm" 	Restart /usr/openwin/bin/olvwm
++			"Start tvtwm" 	Restart tvtwm
+
+AddToMenu Screenlock	"Random"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode random
++			"A-H"		Popup Screenlock1
++			"I-Q"		Popup Screenlock2
++			"R-Z"		Popup Screenlock3
+
+AddToMenu Screensaver	"Random"	Exec exec /usr/X11R6/bin/xlock -nolock -nice 0 -mode random
++			"A-H"		Popup Screensaver1
++			"I-Q"		Popup Screensaver2
++			"R-Z"		Popup Screensaver3
+
+AddToMenu Patterns	"Patterns"	Title
++			"Black"		Exec exec xsetroot -solid black
++			"Midnight Blue"	Exec exec xsetroot -solid 'rgb:06/06/30'
++			"Blue Diamonds"	Exec exec bggen black black black blue black black black blue black black black -r 45 -g 32x32 | xv -root -quit -rmode 3 -
++			"Blue Grid"	Exec exec bggen black black blue black black -r 45 -g 32x32 | xv -root -quit -rmode 3 -
++			"Blue Tiles"	Exec exec bggen midnightblue black  -r 30 -g 32x32 | xv -root -quit -
++			"Green Beams"	Exec exec bggen black black green black black -g 256x4 -r 90 | xv -root -quit -
++			"Green Columns"	Exec exec xv -root -quit ~mosaic/htdocs/icon/scanline.gif
++			"Green Tiles"	Exec exec bggen green black  -r 30 -g 32x32 | xv -root -quit -
++			"Hot Diamonds"	Exec exec bggen yellow yellow yellow yellow yellow orange red black red orange yellow yellow yellow yellow yellow -r 30 -g 54x32 | xv -root -quit -rmode 3 -
++			"Rainbow"	Exec exec bggen red yellow green blue purple red -h 256 -w 4 | xv -root -quit -
++			"Red Bars"	Exec exec bggen -r 90 -w 64 -h 4 black black black red black black black | xv -root -quit -
++			"Red Diamonds"	Exec exec bggen black black black red black black black red black black black -r 45 -g 32x32 | xv -root -quit -rmode 3 -
++			"Red-Hot Bars"	Exec exec bggen -r 90 -w 32 -h 4 black black black black black black red orange yellow orange red black black black black black black | xv -root -quit -
++			"Steel Bars"	Exec exec bggen -r 90 -w 64 -h 4 black black black 'rgb:06/06/30' white 'rgb:06/06/30' black black black | xv -root -quit -
++			"Steel Mesh"	Exec exec bggen black black black 'rgb:06/06/30' white 'rgb:06/06/30' black black black -r 45 -g 32x32 | xv -root -quit -rmode 3 -
++			"Steel Plates"	Exec exec xv -root -quit /home/alaric/Patterns/steeltile.png
+
+AddToMenu Wallpaper	"Wallpaper"	Title
++			"Art"		Popup Wallpaper1
++			"Astronomical"	Popup Wallpaper2
++			"Military"	Popup Wallpaper3
+
+AddToMenu Wallpaper1	"Amber"					Exec exec xv -root -quit -max /home/alaric/Wallpaper/ambercard.jpg
++			"Angel"					Exec exec xv -root -quit -maxpect -rmode 5 /home/alaric/Wallpaper/angel.jpg
++			"Blue Moments"				Exec exec xv -root -quit -max /home/alaric/Wallpaper/Blue_Moments_V2.jpg
++			"Blue Mosque"				Exec exec xv -root -quit -max /home/alaric/Wallpaper/bluemosq.jpg
++			"Cable Car"				Exec exec xv -root -quit -max /home/alaric/Wallpaper/cablecar.jpg
++			"Castles/Chess"				Exec exec xv -root -quit -hflip -maxpect -rmode 2 /home/alaric/Wallpaper/gt_chess.jpg
++			"Crusade"				Exec exec xv -root -quit -max /home/alaric/Wallpaper/excalibur.jpg
++			"Earthlights"				Exec exec xv -root -quit -max /home/alaric/Wallpaper/earthlights.jpg
++			"Ice and Rust"				Exec exec xv -root -quit -max /home/alaric/Wallpaper/ice_and_rust.png
++			"Mountain Fortress"			Exec exec xv -root -quit -max /home/alaric/Wallpaper/serene.jpg
++			"Oni"					Exec exec xv -root -quit -max /home/alaric/Wallpaper/oni_theme1_1024.jpg
++			"Phage Rock"				Exec exec xv -root -quit -max /home/alaric/Wallpaper/phagerock.jpg
++			"Sailing Fortress"			Exec exec xv -root -quit -max /home/alaric/Wallpaper/gofortrs.jpg
++			"Seafall Station"			Exec exec xv -root -quit -maxpect -rmode 9 /home/alaric/Wallpaper/aseafort.jpg
++			"Shuttle Launch"			Exec exec xv -root -quit -max /home/alaric/Wallpaper/wfpclaunch.jpg
++			"Sleeper Service"			Exec exec xv -root -quit -max /home/alaric/Wallpaper/sleeperservice.jpg
++			"Sun Worshipper"			Exec exec xv -root -quit -maxpect -rmode 5 /home/alaric/Wallpaper/sunwoman.jpg
++			"Vorlon"				Exec exec xv -root -quit -max /home/alaric/Wallpaper/vorlon.jpg
+
+AddToMenu Wallpaper2	"Ant Nebula"				Exec exec xv -root -quit -max /home/alaric/Wallpaper/antnebula.jpg
++			"Cartwheel Galaxy"			Exec exec xv -root -quit -max /home/alaric/Wallpaper/cartwheel-galaxy.jpg
++			"Comet Hale-Bopp"			Exec exec xv -root -quit -max /home/alaric/Wallpaper/halebopp.jpg
++			"Copernicus Crater"			Exec exec xv -root -quit -max /home/alaric/Wallpaper/copernicus.gif
++			"Crab Nebula"				Exec exec xv -root -quit -max /home/alaric/Wallpaper/crab-vlt-big.jpg
++			"Crab Nebula 2"				Exec exec xv -root -quit -max /home/alaric/Wallpaper/crab-nebula-2.jpg
++			"Dumbbell Nebula"			Exec exec xv -root -quit -max /home/alaric/Wallpaper/wfpc-06.jpg
++			"Edge-on Galaxy"			Exec exec xv -root -quit -max /home/alaric/Wallpaper/hubble010229.jpg
++			"Giant Cluster"				Exec exec xv -root -quit -max /home/alaric/Wallpaper/giant-cluster.gif
++			"GRO J1655-40: A Spinning Black Hole"	Exec exec xv -root -quit -max /home/alaric/Wallpaper/blackholestorm.jpg
++			"Keyhole Nebula in Carina"		Exec exec xv -root -quit -max /home/alaric/Wallpaper/carina-keyhole-nebula.jpg
++			"Horsehead Nebula"			Exec exec xv -root -quit -max /home/alaric/Wallpaper/horsehead010424.jpg
++			"Horsehead Nebula (Widefield)"		Exec exec xv -root -quit -max /home/alaric/Wallpaper/horsehead-wide.jpg
++			"M2 Globular Cluster"			Exec exec xv -root -quit -max /home/alaric/Wallpaper/m2_globular_cluster.jpg
++			"NGC-1232 Spiral Galaxy"		Exec exec xv -root -quit -max /home/alaric/Wallpaper/ngc1232.jpg
++			"NGC-1512"				Exec exec xv -root -quit -max /home/alaric/Wallpaper/ngc1512.jpg
++			"NGC-2264"				Exec exec xv -root -quit -max /home/alaric/Wallpaper/ngc2264.jpg
++			"NGC-6286 - Blinking Eye"		Exec exec xv -root -quit -max /home/alaric/Wallpaper/ngc6826.jpg
++			"Pleiades Star Cluster"			Exec exec xv -root -quit -max /home/alaric/Wallpaper/pleiades.jpg
++			"Sagittarius Starfield"			Exec exec xv -root -quit -max /home/alaric/Wallpaper/sagittarius.jpg
++			"Shuttle and Moon"			Exec exec xv -root -quit -max /home/alaric/Wallpaper/shuttle-moon.jpg
++			"Solar Prominences"			Exec exec xv -root -quit -maxpect -rmode 5 /home/alaric/Wallpaper/solar-prominence.jpg
++			"Sombrero Galaxy"			Exec exec xv -root -quit -max /home/alaric/Wallpaper/sombrero_vlt_big.jpg
++			"Space Station"				Exec exec xv -root -quit -max /home/alaric/Wallpaper/station.jpg
++			"Space Station and Earth"		Exec exec xv -root -quit -max /home/alaric/Wallpaper/station-earth.jpg
++			"Starfield"				Exec exec xv -root -quit -max /home/alaric/Wallpaper/starfield.jpg
++			"Stellar Emission Spectra"		Exec exec xv -root -quit -max /home/alaric/Wallpaper/obafgkm.jpg
++			"Three galaxies in Draco"		Exec exec xv -root -quit -max /home/alaric/Wallpaper/draco_galaxies.jpg
++			"Unknown Object HE2-90"			Exec exec xv -root -quit -max /home/alaric/Wallpaper/ObjectHE2-90.jpg
++			"Whirlpool Galaxy"			Exec exec xv -root -quit -max /home/alaric/Wallpaper/whirlpool.jpg
+
+AddToMenu Wallpaper3	"Aurora"				Exec exec xv -root -quit -max /home/alaric/Wallpaper/aurora.jpg
++			"F-18A"					Exec exec xv -root -quit -maxpect -rmode 5 /home/alaric/Wallpaper/F-18.jpg
++			"Five Seven"				Exec exec xv -root -quit -maxpect -rmode 5 /home/alaric/Wallpaper/fiveseven1024.jpg
++			"Tomahawk launch"			Exec exec xv -root -quit -maxpect -rmode 5 /home/alaric/Wallpaper/tlam3.jpg
++			"USS Wisconsin"				Exec exec xv -root -quit -maxpect -rmode 5 /home/alaric/Wallpaper/usswisconsin.jpg
+
+AddToMenu Screensaver1	"Screensaver (a-h)"	Title
++			"Ant"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode ant
++			"Atlantis"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode atlantis
++			"Ball"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode ball
++			"Bat"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode bat
++			"Blank"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode blank
++			"Blot"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode blot
++			"Bouboule"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode bouboule
++			"Bounce"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode bounce
++			"Braid"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode braid
++			"Bubble"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode bubble
++			"Bubble 3D"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode bubble3d
++			"Bug"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode bug
++			"Cage"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode cage
++			"Clock"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode clock
++			"Coral"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode coral
++			"Crystal"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode crystal
++			"Daisy"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode daisy
++			"Dclock"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode dclock
++			"Decay"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode decay
++			"Deco"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode deco
++			"Demon"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode demon
++			"Dilemma"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode dilemma
++			"Discrete"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode discrete
++			"Drift"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode drift
++			"Euler 2D"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode euler2d
++			"Eyes"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode eyes
++			"Fadeplot"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode fadeplot
++			"Fire"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode fire
++			"Flag"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode flag
++			"Flame"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode flame
++			"Flow"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode flow
++			"Forest"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode forest
++			"Galaxy"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode galaxy
++			"Gears"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode gears
++			"Goop"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode goop
++			"Grav"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode grav
++			"Helix"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode helix
++			"Hop"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode hop
++			"Hyper"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode hyper
+
+AddToMenu Screensaver2	"Screensaver (i-q)"	Title
++			"Ico"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode ico
++			"IFS"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode ifs
++			"Image"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode image
++			"Invert"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode invert
++			"Juggle"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode juggle
++			"Julia"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode julia
++			"Kaleid"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode kaleid
++			"Kumppa"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode kumppa
++			"Lament"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode lament
++			"Laser"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode laser
++			"Life"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode life
++			"Life 1D"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode life1d
++			"Life 3D"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode life3d
++			"Lightning"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode lightning
++			"Lisa"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode lisa
++			"Lissie"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode lissie
++			"Loop"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode loop
++			"Lyapunov"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode lyapunov
++			"Mandelbrot"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode mandelbrot
++			"Marquee"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode marquee
++			"Matrix"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode matrix
++			"Maze"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode maze
++			"Moebius"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode moebius
++			"Morph 3D"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode morph3d
++			"Mountain"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode mountain
++			"Munch"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode munch
++			"Nose"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode nose
++			"PacMan"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode pacman
++			"Penrose"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode penrose
++			"Pentominoes"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode pentominoes
++			"Petal"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode petal
++			"Pipes"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode pipes
++			"Puzzle"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode puzzle
++			"Pyro"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode pyro
++			"Qix"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode qix
++			"Random"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode random
++			"Roll"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode roll
++			"Rotor"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode rotor
++			"Rubik"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode rubik
++			"Run"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode run
+
+AddToMenu Screensaver3	"Screensaver (r-z)"	Title
++			"Sballs"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode sballs
++			"Shape"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode shape
++			"Sierpinski"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode sierpinski
++			"Skewb"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode skewb
++			"Slip"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode slip
++			"Solitare"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode solitare
++			"Space"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode space
++			"Sphere"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode sphere
++			"Spiral"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode spiral
++			"Spline"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode spline
++			"Sproingies"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode sproingies
++			"Stairs"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode stairs
++			"Star"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode star
++			"Starfish"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode starfish
++			"Strange"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode strange
++			"Superquadrics"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode superquadrics
++			"Swarm"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode swarm
++			"Swirl"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode swirl
++			"T3D"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode t3d
++			"Tetris"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode tetris
++			"Text 3D"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode text3d
++			"Thornbird"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode thornbird
++			"Tik Tak"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode tik_tak
++			"Triangle"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode triangle
++			"Tube"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode tube
++			"Turtle"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode turtle
++			"Vines"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode vines
++			"Voters"	Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode voters
++			"Wator"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode wator
++			"Wire"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode wire
++			"World"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode world
++			"Worm"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode worm
++			"Xcl"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode xcl
++			"Xjack"		Exec exec /usr/X11R6/bin/xlock -nice 0 -nolock -mode xjack
+
+AddToMenu Screenlock1	"Lock Screen (a-h)"	Title
++			"Ant"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode ant
++			"Atlantis"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode atlantis
++			"Ball"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode ball
++			"Bat"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode bat
++			"Blank"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode blank
++			"Blot"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode blot
++			"Bouboule"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode bouboule
++			"Bounce"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode bounce
++			"Braid"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode braid
++			"Bubble"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode bubble
++			"Bubble 3D"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode bubble3d
++			"Bug"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode bug
++			"Cage"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode cage
++			"Clock"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode clock
++			"Coral"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode coral
++			"Crystal"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode crystal
++			"Daisy"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode daisy
++			"Dclock"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode dclock
++			"Decay"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode decay
++			"Deco"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode deco
++			"Demon"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode demon
++			"Dilemma"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode dilemma
++			"Discrete"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode discrete
++			"Drift"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode drift
++			"Euler 2D"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode euler2d
++			"Eyes"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode eyes
++			"Fadeplot"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode fadeplot
++			"Fire"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode fire
++			"Flag"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode flag
++			"Flame"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode flame
++			"Flow"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode flow
++			"Forest"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode forest
++			"Galaxy"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode galaxy
++			"Gears"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode gears
++			"Goop"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode goop
++			"Grav"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode grav
++			"Helix"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode helix
++			"Hop"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode hop
++			"Hyper"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode hyper
+
+AddToMenu Screenlock2	"Lock Screen (i-q)"	Title
++			"Ico"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode ico
++			"IFS"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode ifs
++			"Image"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode image
++			"Invert"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode invert
++			"Juggle"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode juggle
++			"Julia"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode julia
++			"Kaleid"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode kaleid
++			"Kumppa"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode kumppa
++			"Lament"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode lament
++			"Laser"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode laser
++			"Life"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode life
++			"Life 1D"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode life1d
++			"Life 3D"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode life3d
++			"Lightning"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode lightning
++			"Lisa"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode lisa
++			"Lissie"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode lissie
++			"Loop"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode loop
++			"Lyapunov"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode lyapunov
++			"Mandelbrot"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode mandelbrot
++			"Marquee"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode marquee
++			"Matrix"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode matrix
++			"Maze"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode maze
++			"Moebius"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode moebius
++			"Morph 3D"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode morph3d
++			"Mountain"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode mountain
++			"Munch"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode munch
++			"Nose"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode nose
++			"PacMan"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode pacman
++			"Penrose"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode penrose
++			"Pentominoes"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode pentominoes
++			"Petal"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode petal
++			"Pipes"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode pipes
++			"Puzzle"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode puzzle
++			"Pyro"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode pyro
++			"Qix"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode qix
++			"Random"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode random
++			"Roll"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode roll
++			"Rotor"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode rotor
++			"Rubik"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode rubik
++			"Run"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode run
+
+AddToMenu Screenlock3	"Lock Screen (r-z)"	Title
++			"Sballs"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode sballs
++			"Shape"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode shape
++			"Sierpinski"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode sierpinski
++			"Skewb"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode skewb
++			"Slip"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode slip
++			"Solitare"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode solitare
++			"Space"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode space
++			"Sphere"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode sphere
++			"Spiral"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode spiral
++			"Spline"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode spline
++			"Sproingies"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode sproingies
++			"Stairs"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode stairs
++			"Star"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode star
++			"Starfish"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode starfish
++			"Strange"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode strange
++			"Superquadrics"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode superquadrics
++			"Swarm"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode swarm
++			"Swirl"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode swirl
++			"T3D"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode t3d
++			"Tetris"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode tetris
++			"Text 3D"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode text3d
++			"Thornbird"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode thornbird
++			"Tik Tak"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode tik_tak
++			"Triangle"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode triangle
++			"Tube"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode tube
++			"Turtle"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode turtle
++			"Vines"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode vines
++			"Voters"	Exec exec /usr/X11R6/bin/xlock -nice 0 -mode voters
++			"Wator"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode wator
++			"Wire"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode wire
++			"World"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode world
++			"Worm"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode worm
++			"Xcl"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode xcl
++			"Xjack"		Exec exec /usr/X11R6/bin/xlock -nice 0 -mode xjack
+
+AddToMenu Utilities     "Utilities" Title
++			"Top"		Exec exec xterm -T Top -n Top -e top
++			"Calculator"	Exec exec xcalc
++			"Xman"		Exec exec xman
++			"Xmag"		Exec exec xmag
++                       "Editres"       Exec exec editres
++			""		Nop
++			""		Nop
++                       "XLock%mini.xlock.xpm%"         Exec exec xlock -mode random
++			""		Nop
++                       "Reset X defaults" Exec xrdb -load $HOME/.Xdefaults 
+
+AddToMenu Window-Ops	"Window Ops"	Title		
++			"Move%mini.move.xpm%"		Move
++			"Resize%mini.resize.xpm%"	Resize
++			"Raise%mini.raise.xpm%"		Raise
++			"Lower%mini.lower.xpm%"		Lower 
++		 	"(De)Iconify%mini.iconify.xpm%"	Iconify
++			"(Un)Stick%mini.stick2.xpm%"	Stick		
++			"(Un)Maximize%mini.maximize.xpm%"	Maximize
++			""		Nop
++			"Delete%mini.excl.xpm%"	Delete
++			"Close%mini.cut.xpm%"		Close
++			"Destroy%mini.destroy.xpm%"	Destroy
++			""		Nop
++			"Refresh Window%mini.refresh.xpm%" RefreshWindow
+
+AddToMenu Window-Ops2	"&Move%mini.move.xpm%"		Move
++			"&Resize%mini.resize.xpm%"	Resize
++			"R&aise%mini.raise.xpm%"	Raise   	
++			"&Lower%mini.lower.xpm%"	Lower   	
++			"(De)&Iconify%mini.iconify.xpm%"	Iconify 	
++			"(Un)&Stick%mini.stick2.xpm%"	Stick		
++                       "(Un)Ma&ximize%mini.maximize.xpm%" Maximize
++			""		Nop     	
++			"&Delete%mini.excl.xpm%"	Delete	
++			"&Close%mini.cut.xpm%"	Close
++			"Destroy%mini.destroy.xpm%"	Destroy 	
++			""		Nop
++			"ScrollBar" 	Module FvwmScroll 2 2	
++			"Print"         PrintFunction
+#+                       "Print Reverse" PrintReverseFunction
+
+AddToMenu Module-Popup	"FvwmModules"	Title
++			"Identify"	Module	FvwmIdent
++			"Talk"  	Module	FvwmTalk
++			""		Nop
++			"Button-Bar"	Module	FvwmButtons
++			"Pager"		Module  FvwmPager 0 0
++			"Pager (2 desks)" Module  FvwmPager 0 1
++			"WinList"	Module  FvwmWinList
++			""		Nop
++			"Banner"	Module	FvwmBanner
++                       "ScrollBar"     Module  FvwmScroll 50 50
++			"Background"	Module  FvwmBacker
++                       "AutoRaise"     Module  FvwmAuto 200 Raise Nop
++                       "Stop AutoRaise" KillModule FvwmAuto
++			""		Nop
++			"IconBox"	Module	FvwmIconBox
++                       "IconMan"       Module  FvwmIconMan
++			""		Nop
++                       "Form - Rlogin"      Module FvwmForm Rlogin
++                       "Form - MyFvwmTalk"  Module FvwmForm MyFvwmTalk
++                       "Form - QuitVerify"  Module FvwmForm QuitVerify
+
+AddToMenu Quit-Verify 
++		      	"Restart Fvwm%mini.refresh.xpm%"	    Restart fvwm2
++		      	""		    Nop	
++	      	      	"Start fvwm"        Restart fvwm
++		      	"Start twm"         Restart twm
++		      	"Start ctwm"        Restart ctwm
++		        "Start tvtwm"       Restart tvtwm
++		        "Start vtwm"        Restart vtwm
++		      	"Start mwm"    	    Restart mwm
++	      	      	"Start olwm"        Restart olwm
+
+######################## Sample Functions ##########################
+
+AddToFunc StartXterm		"I" exec xterm -sb -sl 2048 -j -ls -bg 'black' -fg yellow -geometry 80x89
+
+AddToFunc DualXTerm		"I" exec xterm -sb -sl 2048 -j -ls -bg 'black' -fg yellow -geometry 136x89+149+0
++				"I" exec xterm -sb -sl 2048 -j -ls -bg 'black' -fg yellow -geometry 136x89+994+0
+
+AddToFunc ChooseXTerm		"I" exec /usr/local/bin/cxterm
+
+AddToFunc MiniXTerm		"I" exec xterm -sb -sl 512 -j -ls -fn 6x10 -fb 6x10B -bg 'black' -fg yellow -geometry 80x10-1-1
+
+AddToFunc Mozilla		"I" exec nice -5 /opt/mozilla/mozilla
+
+AddToFunc MozMail		"I" exec nice -5 /opt/mozilla/mozilla -mail
+
+AddToFunc XCoral		"I" exec xcoral
+
+AddToFunc DeiconifyAndRearrange
++				"C" Iconify off
++				"C" All (CurrentPage Iconic) RecaptureWindow
+
+AddToFunc Move-or-Raise		"I" Raise
++				"M" Move
++  				"D" Lower
+
+AddToFunc Move-or-Raise2	"M" Raise
++				"M" Move
++  				"D" Lower
+
+AddToFunc Maximize-Func		"M" Maximize	 100 100
++				"C" Maximize	 0 100
++				"D" Maximize	 100 100
+
+AddToFunc Move-or-Iconify	"I" Raise
++				"M" Move
++				"D" Iconify
+
+AddToFunc Resize-or-Raise	"I" Raise
++				"M" Resize
++				"D" Lower
+
+AddToFunc Resize-or-Raise2	"M" Raise
++				"M" Resize
++				"D" Lower
+
+AddToFunc PrintFunction		"I" Raise
++				"I" Exec xdpr -id $w
+
+AddToFunc PrintReverseFunction	"I" Raise
++                               "I" Exec xdpr 1/2 -h -rv -id $w
+
+AddToFunc Iconify-and-Raise	"I" Iconify
++				"I" Raise
+
+AddToFunc FocusAndWarp		"I" Focus
++				"I" WarpToWindow 2p 2p
+
+AddToFunc DeiconifyFocusAndWarp "I" Iconify -1
++                               "I" FocusAndWarp
+
+AddToFunc ChangeDefaultFocus "I" Style "*" $0
++                            "I" Recapture
+
+
+############################################################################ 
+# some simple default key bindings:
+Key Next         A       SCM     Next [*] Focus
+Key Prior        A       SCM     Prev [*] Focus
+
+# some simple default mouse bindings:
+#   for the root window:
+Mouse 1	R   	N       Menu RootMenu Nop
+Mouse 2	R    	N      	Menu Window-Ops Nop
+Mouse 3	R    	N      	WindowList
+
+Mouse 1	R   	C       StartXterm
+Mouse 1	R	CS	ChooseXTerm
+Mouse 2	R	C	MozMail
+Mouse 2	R	CS	XCoral
+Mouse 3	R	C	Mozilla
+Mouse 3	R	SC	MiniXTerm
+
+#   for the title bar buttons:
+Mouse 0	1    	A      	Menu Window-Ops2 Close
+Mouse 0	2    	A     	Maximize-Func
+Mouse 0	4    	A     	Iconify
+
+#   for other parts of the window/borders/icons:
+Mouse 1	FS	A	Resize-or-Raise
+Mouse 1	T	A	Move-or-Raise
+Mouse 1	I	A	Move-or-Iconify
+Mouse 2	I	A	Iconify
+Mouse 2	FS	A	Move-or-Raise
+Mouse 2	T	A	RaiseLower
+Mouse 3	TI	A	Menu Window-Ops2 Nop
+
+############################################################################ 
+# Now some keyboard shortcuts. 
+ 
+# Arrow Keys 
+# press arrow + control anywhere, and scroll by 1 page 
+Key Left	A	C	Scroll -100 0 
+Key Right	A	C	Scroll +100 +0 
+Key Up		A	C	Scroll +0   -100 
+Key Down	A	C	Scroll +0   +100 
+ 
+# press arrow + meta key, and scroll by 1/10 of a page 
+Key Left	A	M	Scroll -10 +0 
+Key Right	A	M	Scroll +10 +0 
+Key Up		A	M	Scroll +0   -10 
+Key Down	A	M	Scroll +0   +10 
+ 
+# press control shift + arrow anywhere, and move the pointer by 1% of a page
+Key Left	A	CS	CursorMove -1 0 
+Key Right	A	CS	CursorMove +1 +0 
+Key Up		A	CS	CursorMove +0   -1 
+Key Down	A	CS	CursorMove +0   +1 
+ 
+# press control meta + arrow anywhere, and move the pointer by 1/10 of a page
+Key Left	A	CM	CursorMove -10 +0 
+Key Right	A	CM	CursorMove +10 +0 
+Key Up		A	CM	CursorMove +0   -10 
+Key Down	A	CM	CursorMove +0   +10 
+ 
+# Keyboard accelerators
+Key F1		A	M	Menu RootMenu
+Key F2		A	M	Menu Window-Ops
+Key F3		A	M	WindowList FvwmWinList
+Key F4		A	M	Destroy
+Key F5		A	M	Iconify
+Key F6		A	M	Move
+Key F7		A	M	Resize
+Key F12		A	M	Maximize 100 100
+Key F30		A	A	CirculateUp
+Key F31		A	A	CirculateDown
+ 
+#Page Up/Page Down keys are used to scroll by one desktop page 
+# in any context, press page up/down + control 
+# in root context, just pressing page up/down is OK 
+#  
+# I prefer the non-wrapping scroll. These are for example purposes only 
+#Key Next	A       C       Scroll 100000 0 
+#Key Next	R       N       Scroll 100000 0   
+#Key Prior	A       C       Scroll -100000 0 
+#Key Prior	R       N       Scroll -100000 0 
+
+################## FvwmButtons button-bar ################################
+*FvwmButtonsBack bisque3
+*FvwmButtons(Frame 2 Padding 2 2 Container(Rows 2 Frame 1 Padding 10 0 \
+                                           Swallow(Respawn)))
+*FvwmButtons(NoSize Title Close, Icon bomb.xpm, Action Close)
+*FvwmButtons(Title Resize Icon mini.resize.xpm Back bisque4 Action Resize)
+*FvwmButtons(Frame -3 Swallow(Respawn,NoHints) xclock \
+       `Exec exec xclock -bg darkolivegreen -padding 0 -geometry +2000+0`)
+*FvwmButtons(3x1 Back darkolivegreen Fore white Frame 2 Padding 2 2 \
+                 Container(Rows 1 Frame -2 Padding 1 1 Back darkolivegreen))
+*FvwmButtons(Frame 2 Title(Side,Right) Mail Fore white \
+         Swallow(UseOld,NoRespawn)\
+         xbiff `Exec exec xbiff -bg darkolivegreen -geometry +200+200`)
+*FvwmButtons(2x1 Swallow (NoHints) "FvwmTalk" "FvwmTalk")
+*FvwmButtons(End)
+*FvwmButtons(End)
+
+
+########################## Window-Identifier ###############################
+# Just choose colors and a fonts
+*FvwmIdentBack MidnightBlue
+*FvwmIdentFore Yellow
+*FvwmIdentFont -adobe-helvetica-medium-r-*-*-12-*-*-*-*-*-*-*
+
+########################### Pager #########################################
+*FvwmPagerGeometry +0+0
+*FvwmPagerFont none
+*FvwmPagerBack rgb:15/15/66
+*FvwmPagerFore rgb:25/25/112
+*FvwmPagerHilight yellow
+*FvwmPagerDeskTopScale 56
+# *FvwmPagerSmallFont 5x8
+*FvwmPagerSolidSeparators
+
+##########################FvwmWinList##################################
+*FvwmWinListBack #908090
+*FvwmWinListFore Black
+*FvwmWinListFont -adobe-helvetica-bold-r-*-*-10-*-*-*-*-*-*-*
+*FvwmWinListAction Click1 Iconify -1,Focus
+*FvwmWinListAction Click2 Iconify
+*FvwmWinListAction Click3 Module "FvwmIdent" FvwmIdent
+*FvwmWinListUseSkipList
+*FvwmWinListGeometry +0-1
+                                      
+
+*FvwmBackerDesk 0 -solid steelblue
+*FvwmBackerDesk 1 -solid midnightblue
+
+*FvwmScrollBack grey40
+*FvwmScrollFore green
+	
+############################################################
+############################################################
+# Note that icons are shown in the module
+#    only if NoIcon commnand is applied.
+#Style     "*"  NoIcon
+
+############################################################
+*FvwmIconBoxIconBack    #cfcfcf
+*FvwmIconBoxIconHiFore  black
+*FvwmIconBoxIconHiBack  LightSkyBlue
+*FvwmIconBoxBack        #5f9ea0
+#*FvwmIconBoxFore       blue
+*FvwmIconBoxGeometry    5x1+0+0
+*FvwmIconBoxMaxIconSize 64x38
+*FvwmIconBoxFont        -adobe-helvetica-medium-r-*-*-12-*-*-*-*-*-*-*
+*FvwmIconBoxSortIcons   IconName
+*FvwmIconBoxPadding     4
+*FvwmIconBoxLines       10
+*FvwmIconBoxSBWidth     11
+*FvwmIconBoxPlacement   Left Top
+*FvwmIconBoxPixmap      fvwm.xpm
+#*FvwmIconBoxHideSC Horizontal
+*FvwmIconBoxSetWMIconSize
+*FvwmIconBoxHilightFocusWin
+#*FvwmIconBoxResolution          Desk
+*FvwmIconBoxMouse       1       Click           RaiseLower
+*FvwmIconBoxMouse       1       DoubleClick     Iconify
+*FvwmIconBoxMouse       2       Click           DeiconifyAndRearrange, Focus
+*FvwmIconBoxMouse       3       Click           Module FvwmIdent
+*FvwmIconBoxKey         r       RaiseLower
+*FvwmIconBoxKey         space   Iconify
+*FvwmIconBoxKey         d       Close
+*FvwmIconBoxKey         n       Next
+*FvwmIconBoxKey         p       Prev
+*FvwmIconBoxKey         h       Left
+*FvwmIconBoxKey         j       Down
+*FvwmIconBoxKey         k       Up
+*FvwmIconBoxKey         l       Right
+#
+# Icon file specifications
+#
+# Mostly, you don't have to specify icon files, as FvwmIconBox now
+# reads icon files specified in Style commands.
+#
+*FvwmIconBox            "Fvwm*"         -
+
+# FvwmForm alias - rlogin or telnet to host via xterm
+*RloginWarpPointer
+*RloginFont         *helvetica*m*r*n*12*
+*RloginButtonFont   *helvetica*m*o*n*12*
+*RloginInputFont    *cour*m*r*n*12*
+*RloginFore         Black
+*RloginBack         White
+*RloginItemFore     Yellow
+*RloginItemBack     Wheat
+# begin items
+*RloginLine         center
+*RloginText         "Login to Remote Host"
+*RloginLine         center
+*RloginText         "Host:"
+*RloginInput        HostName  30   ""
+*RloginLine         center
+*RloginSelection    meth single
+*RloginChoice       TN TN off "telnet"
+*RloginChoice       RL RL on "rlogin"
+*RloginSelection    UserSel   single
+#*RloginChoice       Default   Default   on   "same user"
+#*RloginChoice       Custom    Custom    off  "user:"
+*RloginText         "(Userid:"
+*RloginInput        UserName  10   ""
+*RloginText         ")"
+*RloginLine         center
+*RloginText         "FG:"
+*RloginInput        FgColor 15 ""
+*RloginText         "BG:"
+*RloginInput        BgColor 15 ""
+*RloginLine         expand
+*RloginButton       quit "Login" ^M
+*RloginCommand Exec xterm  $(FgColor?-fg $(FgColor)) $(BgColor?-bg $(BgColor)) -T xterm@$(HostName) -e $(RL?rlogin) $(TN?telnet) $(HostName) $(RL?-8 $(UserName?-l $(UserName)))
+*RloginButton       restart   "Clear"
+*RloginCommand Beep
+*RloginButton       quit "Cancel"
+*RloginCommand Nop
+
+# FvwmForm alias - query exit ala mwm
+*QuitVerifyGrabServer
+*QuitVerifyWarpPointer
+*QuitVerifyFont          *helvetica*m*r*n*14*
+#*QuitVerifyButtonFont    *helvetica*m*o*n*14*
+*QuitVerifyButtonFont    7x13bold
+*QuitVerifyFore          Black
+*QuitVerifyBack          Light Gray
+*QuitVerifyItemFore Wheat
+*QuitVerifyItemBack Gray50
+# begin items
+*QuitVerifyLine          center
+*QuitVerifyText          "Do you really want to exit FVWM?"
+*QuitVerifyLine          expand
+*QuitVerifyButton   quit      " Exit "
+*QuitVerifyCommand  Quit
+*QuitVerifyButton   quit      "Cancel"
+*QuitVerifyCommand  Nop
+
+# MyTalk & MyFvwmTalk from Dave Goldberg
+# MyTalk Form - dissappears after use
+*MyTalkWarpPointer
+*MyTalkFont *helvetica*m*r*n*14*
+*MyTalkButtonFont *helvetica*m*o*n*14*
+*MyTalkInputFont *cour*m*r*n*14*
+*MyTalkFore Red
+*MyTalkBack Gray
+*MyTalkItemFore Blue
+*MyTalkItemBack Gray
+*MyTalkLine center
+*MyTalkText "Fvwm Function"
+*MyTalkInput Func 40 ""
+*MyTalkLine expand
+*MyTalkButton quit "Run" ^M
+*MyTalkCommand $(Func)
+*MyTalkButton restart "Clear" ^R
+*MyTalkButton quit "Cancel" ^C
+*MyTalkCommand Nop
+# MyFvwmTalk Form - sticks around
+*MyFvwmTalkWarpPointer
+*MyFvwmTalkFont *helvetica*m*r*n*14*
+*MyFvwmTalkButtonFont *helvetica*m*o*n*14*
+*MyFvwmTalkInputFont *cour*m*r*n*14*
+*MyFvwmTalkFore Red
+*MyFvwmTalkBack Gray
+*MyFvwmTalkItemFore Blue
+*MyFvwmTalkItemBack Gray
+*MyFvwmTalkLine center
+*MyFvwmTalkText "Fvwm Function"
+*MyFvwmTalkInput Func 40 ""
+*MyFvwmTalkLine expand
+*MyFvwmTalkButton restart "Run" ^M
+*MyFvwmTalkCommand $(Func)
+*MyFvwmTalkButton restart "Clear" ^R
+*MyFvwmTalkCommand Nop
+*MyFvwmTalkButton restart "Iconify" ^Z
+*MyFvwmTalkCommand Next [MyFvwmTalk] Iconify
+*MyFvwmTalkButton quit "Quit" ^C
+*MyFvwmTalkCommand Nop
+
+# to change banner pixmap
+#*FvwmBannerPixmap fvwm3.xpm
+#*FvwmBannerTimeout 2
+

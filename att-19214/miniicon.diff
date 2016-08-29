@@ -1,0 +1,64 @@
+*** add_window.c.orig	Mon Feb 10 14:42:05 1997
+--- add_window.c	Mon Feb 10 17:08:43 1997
+***************
+*** 531,554 ****
+  	  else
+  	    tmp_win->right_w[i] = None;
+  	}
+-       
+- #ifdef MINI_ICONS
+-       if (tmp_win->mini_pixmap_file) {
+- 	tmp_win->mini_icon = CachePicture (dpy, Scr.Root, 
+- 					   IconPath,
+- #ifdef XPM
+- 					   PixmapPath,
+- #else
+- 					   NULL,
+- #endif
+- 					   tmp_win->mini_pixmap_file);
+-       }
+-       else {
+- 	tmp_win->mini_icon = NULL;
+-       }
+- #endif
+      }
+- 
+    if(tmp_win->flags & BORDER)
+      {
+  #if defined(PIXMAP_BUTTONS) && defined(BORDERSTYLE)
+--- 531,537 ----
+***************
+*** 576,582 ****
+        }
+  #endif
+      }
+! 
+    XMapSubwindows (dpy, tmp_win->frame);
+    XRaiseWindow(dpy,tmp_win->Parent);
+    XReparentWindow(dpy, tmp_win->w, tmp_win->Parent,0,0);
+--- 559,582 ----
+        }
+  #endif
+      }
+! #ifdef MINI_ICONS
+!   if (tmp_win->mini_pixmap_file)
+!     {
+!       tmp_win->mini_icon = CachePicture (dpy, Scr.Root, 
+! 					 IconPath,
+! #ifdef XPM
+! 					 PixmapPath,
+! #else
+! 					 NULL,
+! #endif
+! 					 tmp_win->mini_pixmap_file);
+!     }
+!   else
+!     {
+!       tmp_win->mini_icon = NULL;
+!     }
+! #endif
+!   
+    XMapSubwindows (dpy, tmp_win->frame);
+    XRaiseWindow(dpy,tmp_win->Parent);
+    XReparentWindow(dpy, tmp_win->w, tmp_win->Parent,0,0);
+

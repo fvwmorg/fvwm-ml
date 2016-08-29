@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Possible bugs in 2.5.5 from Richard Curnow on 2002-12-20 (fvwm-users)</title>
+<meta name="Author" content="Richard Curnow (Richard.Curnow_at_superh.com)" />
+<meta name="Subject" content="FVWM: Possible bugs in 2.5.5" />
+<meta name="Date" content="2002-12-20" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Possible bugs in 2.5.5</h1>
+<!-- received="Fri Dec 20 08:05:44 2002" -->
+<!-- isoreceived="20021220080544" -->
+<!-- sent="Fri, 20 Dec 2002 14:03:58 +0000" -->
+<!-- isosent="20021220140358" -->
+<!-- name="Richard Curnow" -->
+<!-- email="Richard.Curnow_at_superh.com" -->
+<!-- subject="FVWM: Possible bugs in 2.5.5" -->
+<!-- id="20021220140358.GC477_at_malvern.uk.w2k.superh.com" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start7306" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="7308.html" accesskey="d" title="Mikhael Goikhman: &quot;Re: FVWM: Possible bugs in 2.5.5&quot;">Next message</a> ]
+[ <a href="7305.html" title="Dominik Vogt: &quot;Re: FVWM: Hello,&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="7308.html" accesskey="t" title="Mikhael Goikhman: &quot;Re: FVWM: Possible bugs in 2.5.5&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg7306" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg7306" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg7306" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg7306" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Richard Curnow &lt;<a href="mailto:Richard.Curnow_at_superh.com?Subject=Re%3A%20FVWM%3A%20Possible%20bugs%20in%202.5.5">Richard.Curnow_at_superh.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 20 Dec 2002 14:03:58 +0000</span><br />
+</address>
+<br />
+I think there are a couple of bugs in 2.5.5.
+<br />
+<br />1) The Layer command doesn't seem to be working.  The relevant bits of
+<br />
+&nbsp;&nbsp;&nbsp;my .fvwm2rc file are
+<br />
+<br />AddToFunc &quot;Put-on-top&quot; &quot;I&quot; Layer 0 6
+<br />
++                      &quot;I&quot; RefreshWindow
+<br />
+<br />AddToFunc &quot;Put-on-bottom&quot; &quot;I&quot; Layer 0 2
+<br />
++                      &quot;I&quot; RefreshWindow
+<br />
+<br />AddToFunc &quot;Put-at-default&quot; &quot;I&quot; Layer 0 4
+<br />
++                      &quot;I&quot; RefreshWindow
+<br />
+<br />Mouse 0 3    A Function &quot;Put-on-top&quot;
+<br />
+Mouse 0 5    A Function &quot;Put-on-bottom&quot;
+<br />
+Mouse 0 7    A Function &quot;Put-at-default&quot;
+<br />
+<br />AddToMenu Window-Ops &quot;Window Ops&quot; Title
+<br />
+[snip other stuff]
+<br />
++	&quot;StayOnTop&quot;		Put-on-top
+<br />
++	&quot;StayOnBottom&quot;		Put-on-bottom
+<br />
++	&quot;PutBackToDefault&quot;	Put-at-default
+<br />
+<br />Neither the title bar buttons nor the menu entries change the stacking
+<br />
+order in 2.5.5.  These settings worked OK in earlier 2.5.x releases.
+<br />
+<br />2) The transparency setting is being ignored for some title bar buttons.
+<br />
+&nbsp;&nbsp;&nbsp;Again the relevant bits of ~/.fvwm2rc are
+<br />
+<br />ButtonStyle 7 21 40x0_at_0 40x12_at_1 20x12_at_1 50x42_at_0 10x42_at_1 10x58_at_1 50x58_at_0 20x88_at_1 40x88_at_0 40x100_at_1 60x100_at_0 60x88_at_0 80x88_at_0 50x58_at_0 90x58_at_0 90x42_at_0 50x42_at_1 80x12_at_0 60x12_at_1 60x0_at_0 40x0_at_1 -- Flat
+<br />
+ButtonStyle 7 ActiveDown 21 40x0_at_1 40x12_at_0 20x12_at_0 50x42_at_1 10x42_at_0 10x58_at_0 50x58_at_1 20x88_at_0 40x88_at_1 40x100_at_0 60x100_at_1 60x88_at_1 80x88_at_1 50x58_at_1 90x58_at_1 90x42_at_1 50x42_at_0 80x12_at_1 60x12_at_0 60x0_at_1 40x0_at_0 -- Flat
+<br />
+ButtonStyle 7 - MwmDecorLayer 4
+<br />
+ButtonStyle 9 17 5x20_at_1 20x20_at_1 35x35_at_0 50x35_at_1 65x20_at_1 80x20_at_1 80x45_at_0 100x45_at_1 100x55_at_0 80x55_at_0 80x80_at_0 65x80_at_0 50x65_at_0 35x65_at_0 20x80_at_0 5x80_at_0 5x20_at_1 -- Flat
+<br />
+ButtonStyle 9 ActiveDown 17 5x20_at_0 20x20_at_0 35x35_at_1 50x35_at_0 65x20_at_0 80x20_at_0 80x45_at_1 100x45_at_0 100x55_at_1 80x55_at_1 80x80_at_1 65x80_at_1 50x65_at_1 35x65_at_1 20x80_at_1 5x80_at_1 5x20_at_0 -- Flat
+<br />
+ButtonStyle 9 - MwmDecorStick
+<br />
+Colorset 1 fg white, bg black, Shape, Plain, RootTransparent buffer, tint white 40
+<br />
+ButtonStyle 3 Inactive Colorset 1 -- Flat
+<br />
+ButtonStyle 5 Inactive Colorset 1 -- Flat
+<br />
+ButtonStyle 7 Inactive Colorset 1 -- Flat
+<br />
+ButtonStyle 7 ToggledInactiveDown Colorset 1 -- Flat
+<br />
+ButtonStyle 9 Inactive Colorset 1 -- Flat
+<br />
+ButtonStyle 0 Inactive Colorset 1 -- Flat
+<br />
+ButtonStyle 8 Inactive Colorset 1 -- Flat
+<br />
+ButtonStyle 6 Inactive Colorset 1 -- Flat
+<br />
+ButtonStyle 4 Inactive Colorset 1 -- Flat
+<br />
+ButtonStyle 2 Inactive Colorset 1 -- Flat
+<br />
+TitleStyle	Inactive Colorset 1 -- Flat
+<br />
+BorderStyle Inactive Colorset 1 -- HiddenHandles NoInset Flat
+<br />
+Mouse 0 9    A Stick toggle
+<br />
+<br />With these settings, windows without the focus have translucent borders,
+<br />
+title bars and title bar buttons, except for button 7 which stubbonly
+<br />
+refuses to be drawn transparent.  I've tried playing with the line
+<br />
+that's got &quot;ToggledInactiveDown&quot; in it but can't find a setting that
+<br />
+gives a transparent button in this case.  Similarly, if I click button 9
+<br />
+to make the window sticky, button 9 isn't drawn transparent.  Maybe
+<br />
+the transparency is ignored for buttons which have an active MwmDecor
+<br />
+setting of some kind.
+<br />
+<br />I've a .png file illustrating the behaviour which I can send if required
+<br />
+(it's about 5k in size.)
+<br />
+<br />Any clues, or are these bugs?
+<br />
+<br />Thanks
+<br />
+Richard
+<br />
+<br /><pre>
+-- 
+Richard \\\ SuperH Core+Debug Architect /// .. At home ..
+  P.    /// richard.curnow_at_superh.com  ///  rc_at_rc0&#46;<!--nospam-->org.uk
+Curnow  \\\ <a href="http://www.superh.com/">http://www.superh.com/</a>    ///  www.rc0.org.uk
+Speaking for myself, not on behalf of SuperH
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Dec 20 2002 - 08:05:44 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start7306">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="7308.html" title="Next message in the list">Mikhael Goikhman: "Re: FVWM: Possible bugs in 2.5.5"</a></li>
+<li><dfn>Previous message</dfn>: <a href="7305.html" title="Previous message in the list">Dominik Vogt: "Re: FVWM: Hello,"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="7308.html" title="Next message in this discussion thread">Mikhael Goikhman: "Re: FVWM: Possible bugs in 2.5.5"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="7308.html" title="Message sent in reply to this message">Mikhael Goikhman: "Re: FVWM: Possible bugs in 2.5.5"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg7306" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg7306" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg7306" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg7306" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:54 BST
+</em></small></p>
+</body>
+</html>

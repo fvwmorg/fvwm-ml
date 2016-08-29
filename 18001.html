@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: does any module actually use the SendToModule command? from Albrecht Kadlec on 1996-09-28 (fvwm-users)</title>
+<meta name="Author" content="Albrecht Kadlec (albrecht_at_auto.tuwien.ac.at)" />
+<meta name="Subject" content="FVWM: does any module actually use the SendToModule command?" />
+<meta name="Date" content="1996-09-28" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: does any module actually use the SendToModule command?</h1>
+<!-- received="Fri Sep 27 21:27:25 1996" -->
+<!-- isoreceived="19960927202725" -->
+<!-- sent="Sat, 28 Sep 96 04:27:14 +0200" -->
+<!-- isosent="19960928022714" -->
+<!-- name="Albrecht Kadlec" -->
+<!-- email="albrecht_at_auto.tuwien.ac.at" -->
+<!-- subject="FVWM: does any module actually use the SendToModule command?" -->
+<!-- id="9609280227.AA07815_at_vta_host.auto.tuwien.ac.at" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start18001" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="18002.html" accesskey="d" title="Charles Hines: &quot;FVWM: Re: New FvwmIconMan released, and update on miniicon patch&quot;">Next message</a> ]
+[ <a href="18000.html" title="Brady Montz: &quot;FVWM: New FvwmIconMan released, and update on miniicon patch&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18001" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18001" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18001" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18001" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Albrecht Kadlec &lt;<a href="mailto:albrecht_at_auto.tuwien.ac.at?Subject=Re%3A%20FVWM%3A%20does%20any%20module%20actually%20use%20the%20SendToModule%20command%3F">albrecht_at_auto.tuwien.ac.at</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sat, 28 Sep 96 04:27:14 +0200</span><br />
+</address>
+<br />
+Hi, found an old crashed &amp; forgotten mail to the list:
+<br />
+<br />just wondering...
+<br />
+<br />I looked into FvwmButtons, to see if it were possible to swallow a window
+<br />
+via
+<br />
+<br />SendToModule FvwmButtons *FvwmButtons(4x2, \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Swallow xload &quot;exec rsh remotemachine xload -d $HOSTDISPLAY&quot;)
+<br />
+<br />but it doesn't look like, and it doesn't look like modification is easy for
+<br />
+me either (don't know any of the internals)
+<br />
+<br />I think the pipe is just used for configuration during startup.
+<br />
+Then FvwmButtons goes into the X event loop - no more parameters acepted.
+<br />
+<br />I think, one would have to do sth along
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fork()
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;forever
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{	wait for input on pipe
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parse_input
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+where parse_input accepts new &quot;swallow&quot; commands, &amp; does a reshuffle &amp;
+<br />
+redisplay.
+<br />
+<br />there's just one drawback to this solution: the new swallowed apps are
+<br />
+added at the end, without any control over placement &amp; ordering.
+<br />
+<br />To be able to add an icon to the nth container level, the syntax would have
+<br />
+to be extended drastically.
+<br />
+<br />hmm...,
+<br />
+don't know what to do with this now, just thought, I'd post it,
+<br />
+maybe Jarl is already back and it triggers a thought.
+<br />
+<br />albrecht
+<br />
+<pre>
+-- 
+That makes calamity of so long life;
+For who would bear the whips and scorns of time, [...]
+When he himself might his quietus make
+With a bare bodkin? who would fardels bear,
+To grunt and sweat under a weary life,
+But that the dread of something after death,
+The undiscover'd country from whose bourn
+No traveller returns, puzzles the will
+And makes us rather bear those ills we have
+Than fly to others that we know not of?
+Thus conscience does make cowards of us all	-- Shakespeare: Hamlet
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Sep 27 1996 - 21:27:25 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start18001">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="18002.html" title="Next message in the list">Charles Hines: "FVWM: Re: New FvwmIconMan released, and update on miniicon patch"</a></li>
+<li><dfn>Previous message</dfn>: <a href="18000.html" title="Previous message in the list">Brady Montz: "FVWM: New FvwmIconMan released, and update on miniicon patch"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18001" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18001" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18001" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18001" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

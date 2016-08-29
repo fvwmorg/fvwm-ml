@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: this morning's fvwmrc hack - menus matching key ops from Cameron Simpson on 2002-08-10 (fvwm-users)</title>
+<meta name="Author" content="Cameron Simpson (cs_at_zip.com.au)" />
+<meta name="Subject" content="FVWM: this morning's fvwmrc hack - menus matching key ops" />
+<meta name="Date" content="2002-08-10" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: this morning's fvwmrc hack - menus matching key ops</h1>
+<!-- received="Fri Aug  9 20:41:46 2002" -->
+<!-- isoreceived="20020809194146" -->
+<!-- sent="Sat, 10 Aug 2002 11:40:39 +1000" -->
+<!-- isosent="20020810014039" -->
+<!-- name="Cameron Simpson" -->
+<!-- email="cs_at_zip.com.au" -->
+<!-- subject="FVWM: this morning's fvwmrc hack - menus matching key ops" -->
+<!-- id="20020810014038.GA23087_at_amadeus.home" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start5763" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="5764.html" accesskey="d" title="Cameron Simpson: &quot;Re: Documentation (was: Re: FVWM: How do I start modules automatically?)&quot;">Next message</a> ]
+[ <a href="5762.html" title="Mikhael Goikhman: &quot;Re: FVWM: fvwm-menu-desktop with kde3&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="5766.html" accesskey="t" title="Dominik Vogt: &quot;Re: FVWM: this morning&#0039;s fvwmrc hack - menus matching key ops&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg5763" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg5763" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg5763" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg5763" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Cameron Simpson &lt;<a href="mailto:cs_at_zip.com.au?Subject=Re%3A%20FVWM%3A%20this%20morning's%20fvwmrc%20hack%20-%20menus%20matching%20key%20ops">cs_at_zip.com.au</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sat, 10 Aug 2002 11:40:39 +1000</span><br />
+</address>
+<br />
+Perhaps I have a poor attention span, but I've long had a problem with
+<br />
+keeping my key mappings and functions-present-in-menus in sync; I would
+<br />
+generally like to be able to do most things with a keystroke, and would
+<br />
+still like every such action available in a menu if brain fade prevents
+<br />
+me remembering the magic keystoke.
+<br />
+<br />Thus today's exercise. Two functions, KeyFn and MouseFn to set a key or
+<br />
+mouse mapping and also record it in a menu:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# KeyFn menu desc keyname context mods &quot;cmd-and-args&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DestroyFunc KeyFn
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AddToFunc KeyFn         &quot;I&quot;             Key $2 $3 $4 $5
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+                       &quot;I&quot;             AddToMenu $0 &quot;$1&quot; $5
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# MouseFn menu desc button context mods &quot;cmd-and-args&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DestroyFunc MouseFn
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AddToFunc MouseFn       &quot;I&quot;             Mouse $2 $3 $4 $5
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+                       &quot;I&quot;             AddToMenu $0 &quot;$1&quot; $5
+<br />
+<br />Now my menu definitions are a bit wordier, but nothing will
+<br />
+slip through the cracks:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DestroyMenu WinOps
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AddToMenu WinOps        &quot;Window Ops&quot;    Title
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;KeyFn WinOps &quot;Desk Windows&quot;             L A M           &quot;WindowList (CurrentDesk) Alphabetic SelectOnRelease
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[...]
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;KeyFn WinOps &quot;Raise&quot;                    H W CS          &quot;Raise&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;KeyFn WinOps &quot;Lower&quot;                    H W CS          &quot;Lower&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MouseFn WinOps &quot;Resize&quot;                 1 W M           &quot;Resize&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MouseFn WinOps &quot;Move&quot;                   2 W M           &quot;Move&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mouse                                   3 W M           Move
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[...]
+<br />
+<br />Remark on that last: I often have mouse 3 do what mouse 2 does because I
+<br />
+switch keyboards a lot. So one incantation for M2 to put it in the menu,
+<br />
+and a conventional binding for M3 to match.
+<br />
+<br />Cheers,
+<br />
+<pre>
+-- 
+Cameron Simpson, DoD#743        cs_at_zip.com.au    <a href="http://www.zip.com.au/~cs/">http://www.zip.com.au/~cs/</a>
+The wages of sin are death, but the benefits include dental, major medical,
+two week paid vacation, pension fund, and stock options.  Actually, taken as
+a package, it's a rather attractive deal.
+	- Tim Mefford, tim_at_physics.orst.edu
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Aug 09 2002 - 20:41:46 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start5763">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="5764.html" title="Next message in the list">Cameron Simpson: "Re: Documentation (was: Re: FVWM: How do I start modules automatically?)"</a></li>
+<li><dfn>Previous message</dfn>: <a href="5762.html" title="Previous message in the list">Mikhael Goikhman: "Re: FVWM: fvwm-menu-desktop with kde3"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="5766.html" title="Next message in this discussion thread">Dominik Vogt: "Re: FVWM: this morning&#0039;s fvwmrc hack - menus matching key ops"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="5766.html" title="Message sent in reply to this message">Dominik Vogt: "Re: FVWM: this morning&#0039;s fvwmrc hack - menus matching key ops"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg5763" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg5763" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg5763" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg5763" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:53 BST
+</em></small></p>
+</body>
+</html>

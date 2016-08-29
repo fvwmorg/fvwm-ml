@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: why you *should* use *FvwmPagerGeometry and not *FvwmPagerDeskTopScale from Neil Zanella on 1998-09-10 (fvwm-users)</title>
+<meta name="Author" content="Neil Zanella (nzanella_at_cs.mun.ca)" />
+<meta name="Subject" content="FVWM: why you *should* use *FvwmPagerGeometry and not *FvwmPagerDeskTopScale" />
+<meta name="Date" content="1998-09-10" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: why you *should* use *FvwmPagerGeometry and not *FvwmPagerDeskTopScale</h1>
+<!-- received="Thu Sep 10 16:59:18 1998" -->
+<!-- isoreceived="19980910155918" -->
+<!-- sent="Thu, 10 Sep 1998 19:28:59 -0230 (NDT)" -->
+<!-- isosent="19980910215859" -->
+<!-- name="Neil Zanella" -->
+<!-- email="nzanella_at_cs.mun.ca" -->
+<!-- subject="FVWM: why you *should* use *FvwmPagerGeometry and not *FvwmPagerDeskTopScale" -->
+<!-- id="Pine.OSF.3.91.980910190244.1013A-100000_at_garfield.cs.mun.ca" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start22794" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="22795.html" accesskey="d" title="Neil Zanella: &quot;Re: FVWM: IconPath and PixmapPath: naming conventions&quot;">Next message</a> ]
+[ <a href="22793.html" title="shipwrecked voyage of discovery: &quot;Re: FVWM: IconPath and PixmapPath: naming conventions&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg22794" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg22794" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg22794" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg22794" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Neil Zanella &lt;<a href="mailto:nzanella_at_cs.mun.ca?Subject=Re%3A%20FVWM%3A%20why%20you%20*should*%20use%20*FvwmPagerGeometry%20and%20not%20*FvwmPagerDeskTopScale">nzanella_at_cs.mun.ca</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 10 Sep 1998 19:28:59 -0230 (NDT)</span><br />
+</address>
+<br />
+ello,
+<br />
+<br />This is why you should use *FvwmPagerGeometry instead of *FvwmPagerDeskTopScale:
+<br />
+<br />If you specify
+<br />
+<br />*FvwmPagerGeometry XxY+a+b
+<br />
+<br />and you have a
+<br />
+<br />DeskTopSize mxn
+<br />
+<br />then your X must be of the form X = k * m + (m-1) = (k+1)*m - 1
+<br />
+<br />and similarly Y must be of the form Y = (l+1)*m - 1
+<br />
+<br />simply because the pages must all be of equal height and width for it to
+<br />
+<br />look nice and you have to take into account for the one pixel horizontal and
+<br />
+<br />vertical lines separating the pages. If you have an outer border around your
+<br />
+<br />pager then this one comes from the BorderWidth which by default is set to 1
+<br />
+<br />pixel. To get rid of it (if you really want to) just set it to
+<br />
+<br />BorderWidth 0 . Otherwise, if you have a frame around it then it comes from
+<br />
+<br />the FrameWidth which by default is 7 (which is thicker so you *would* 
+<br />
+<br />notice this one).
+<br />
+<br />... back to what I was saying ...
+<br />
+<br />If you use *FvwmPagerDeskTopScale instead then you risk having the virtual
+<br />
+<br />pages in the FvwmPager looking a pixel or two smaller than the space allocated
+<br />
+<br />for them by the FvwmPager. It's a minor thing but can be annoying.
+<br />
+<br />If you're really concerned about maintaining undistorted aspect ratio then
+<br />
+<br />use *FvwmPagerDeskTopScale and then adjust it by trying to find an
+<br />
+<br />*FvwmPagerGeometry that lies within plus or minus 4 pixels width/height
+<br />
+<br />of that given by the *FvwmPagerDeskTopScale . However, IMHO, undistorted
+<br />
+<br />aspect ratio is not the best feature of *FvwmPagerDeskTopScale : its
+<br />
+<br />best feature is the fact that if you're on a LAN and go from a 15&quot; to
+<br />
+<br />a 17&quot; monitor then you don't risk having the Pager reappear too small.
+<br />
+<br />Best Regards,
+<br />
+<br />Neil
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Sep 10 1998 - 16:59:18 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start22794">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="22795.html" title="Next message in the list">Neil Zanella: "Re: FVWM: IconPath and PixmapPath: naming conventions"</a></li>
+<li><dfn>Previous message</dfn>: <a href="22793.html" title="Previous message in the list">shipwrecked voyage of discovery: "Re: FVWM: IconPath and PixmapPath: naming conventions"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg22794" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg22794" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg22794" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg22794" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

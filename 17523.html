@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Minor placement.c bugs from Dan Astoorian on 1996-08-05 (fvwm-users)</title>
+<meta name="Author" content="Dan Astoorian (djast_at_utopia.csas.com)" />
+<meta name="Subject" content="FVWM: Minor placement.c bugs" />
+<meta name="Date" content="1996-08-05" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Minor placement.c bugs</h1>
+<!-- received="Sun Aug  4 22:09:57 1996" -->
+<!-- isoreceived="19960804210957" -->
+<!-- sent="Sun, 4 Aug 1996 23:01:08 -0400 (EDT)" -->
+<!-- isosent="19960805030108" -->
+<!-- name="Dan Astoorian" -->
+<!-- email="djast_at_utopia.csas.com" -->
+<!-- subject="FVWM: Minor placement.c bugs" -->
+<!-- id="m0unFum-0002a4C_at_utopia.csas.com" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start17523" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="17524.html" accesskey="d" title="Albrecht Kadlec: &quot;Re: FVWM: Compound commands with FvwmButtons&quot;">Next message</a> ]
+[ <a href="17522.html" title="tevis_jim: &quot;FVWM: Simulating a mouse click.&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17523" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17523" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17523" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17523" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Dan Astoorian &lt;<a href="mailto:djast_at_utopia.csas.com?Subject=Re%3A%20FVWM%3A%20Minor%20placement.c%20bugs">djast_at_utopia.csas.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sun, 4 Aug 1996 23:01:08 -0400 (EDT)</span><br />
+</address>
+<br />
+(Warning: horrid ugly poorly-explained details ahead.  Casual fvwm users
+<br />
+probably won't benefit from reading them--this report is intended for
+<br />
+the programmers on the list who are fairly intimate with the source
+<br />
+code.)
+<br />
+<br />placement.c seems to have a subtle bug in the code to avoid placing a
+<br />
+window offscreen.  The behaviour is harder to explain than it is to
+<br />
+fix....
+<br />
+<br />To reproduce the bug: turn on SmartPlacement, and arrange the desktop so
+<br />
+that the next window to be placed should be near (but not touching) the
+<br />
+bottom edge of the screen, where &quot;near&quot; means &quot;within roughly a distance
+<br />
+equal to twice the height of a window's titlebar.&quot;
+<br />
+<br />For instance: if your xterm windows are 350 pixels high including
+<br />
+decorations, and your TitleFont is a 16 point font, arrange the desktop
+<br />
+so that there's roughly, say, 370-380 pixels of open space between the
+<br />
+bottom of an existing window and the bottom edge of the screen; then
+<br />
+create another xterm.
+<br />
+<br />The window gets created at the bottom of the screen instead of just
+<br />
+under the bottom edge of the other window. 
+<br />
+<br />(A similar bug exists for horizontal placement, but it's easier to
+<br />
+exhibit for vertical placement.
+<br />
+<br />English is the wrong language to try to explain the bug, so I'll put it
+<br />
+in terms of the source code...
+<br />
+<br />ll. 201-215 of placement.c:
+<br />
+<br />201|  if(tmp_win-&gt;frame_x + tmp_win-&gt;frame_width +
+<br />
+202|     2*tmp_win-&gt;boundary_width&gt; Scr.MyDisplayWidth)
+<br />
+203|    {
+<br />
+204|      tmp_win-&gt;attr.x = Scr.MyDisplayWidth -tmp_win-&gt;attr.width
+<br />
+205|	- tmp_win-&gt;old_bw +tmp_win-&gt;bw - 2*tmp_win-&gt;boundary_width;
+<br />
+206|      Scr.randomx = 0;
+<br />
+207|    }
+<br />
+208|  if(tmp_win-&gt;frame_y + 2*tmp_win-&gt;boundary_width+tmp_win-&gt;title_height
+<br />
+209|     + tmp_win-&gt;frame_height &gt; Scr.MyDisplayHeight)
+<br />
+210|    {
+<br />
+211|      tmp_win-&gt;attr.y = Scr.MyDisplayHeight -tmp_win-&gt;attr.height
+<br />
+212|	- tmp_win-&gt;old_bw +tmp_win-&gt;bw - tmp_win-&gt;title_height -
+<br />
+213|	  2*tmp_win-&gt;boundary_width;;
+<br />
+214|      Scr.randomy = 0;
+<br />
+215|    }
+<br />
+<br />I believe that the problem is that tmp_win-&gt;frame_width includes the
+<br />
+2*tmp_win-&gt;boundary_width, so they don't need to be re-added into the
+<br />
+calcluation; likewise for tmp_win-&gt;frame_height and
+<br />
+2*tmp_win-&gt;boundary_width and tmp_win-&gt;title_height.  The fix is to
+<br />
+simply remove those terms from the assignments.
+<br />
+<br />Also, at ll.34-37, I think both comparisons should be '&lt;=' instead of '&lt;':
+<br />
+<br />34|  while(((test_y + temp_h) &lt; (Scr.MyDisplayHeight))&amp;&amp;(!loc_ok))
+<br />
+35|    {
+<br />
+36|      test_x = 0;
+<br />
+37|      while(((test_x + temp_w) &lt; (Scr.MyDisplayWidth))&amp;&amp;(!loc_ok))
+<br />
+<br />By disallowing the equality, SmartPlacement isn't allowed to place
+<br />
+windows touching the right side or the bottom edge of the screen.
+<br />
+<br /><br />(The SmartPlacement() routine could also use some optimization.  I'm
+<br />
+thinking about writing a more efficient version of that routine which,
+<br />
+in addition to being smarter about where to try to place windows,
+<br />
+could optionally look for a &quot;pretty good&quot; place to put a window
+<br />
+if it couldn't find a place which didn't overlap any windows at all;
+<br />
+&quot;pretty good&quot; means it would use a combination of strategies such as (a)
+<br />
+overlap the smallest region possible, or a reasonable approximation; (b)
+<br />
+try to avoid overlapping other window's titlebars; (c) try to avoid
+<br />
+positions where it would completely obscure some other window; and/or
+<br />
+(d) try to balance the windows so there aren't some regions covered by
+<br />
+eight overlapping windows and other regions with one.  Some people might
+<br />
+prefer such educated guesses for window placement to simply falling back
+<br />
+to RandomPlacement.  In any case, it's extremely doubtful that such a
+<br />
+patch would make it for 2.1.0, even if there's another beta between now
+<br />
+and then.)
+<br />
+<br />Cheers,
+<br />
+<br />--                          People shouldn't think that it's better to have
+<br />
+Dan Astoorian               loved and lost than never loved at all.  It's
+<br />
+<a href="http://www.utopia.csas.com">http://www.utopia.csas.com</a>  not, it's better to have loved and won.  All
+<br />
+djast_at_utopia.csas.com       the other options really suck.    --Dan Redican
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sun Aug 04 1996 - 22:09:57 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start17523">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="17524.html" title="Next message in the list">Albrecht Kadlec: "Re: FVWM: Compound commands with FvwmButtons"</a></li>
+<li><dfn>Previous message</dfn>: <a href="17522.html" title="Previous message in the list">tevis_jim: "FVWM: Simulating a mouse click."</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17523" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17523" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17523" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17523" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

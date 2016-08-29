@@ -1,0 +1,174 @@
+--- fvwm-2.2.2-orig/extras/FvwmTaskBar/ButtonArray.c	Fri Mar 12 02:24:17 1999
++++ fvwm-2.2.2/extras/FvwmTaskBar/ButtonArray.c	Sun Jul  4 11:35:24 1999
+@@ -26,7 +26,7 @@
+ extern XFontStruct *ButtonFont, *SelButtonFont;
+ extern Display *dpy;
+ extern Window win;
+-extern GC shadow, hilite, graph, whitegc, blackgc, checkered;
++extern GC shadow, hilite, graph, whitegc, blackgc, checkered, icongraph;
+ extern button_width;
+ 
+ extern Button *StartButton;
+@@ -97,6 +97,7 @@
+   new->state = state;
+   new->next  = NULL;
+   new->needsupdate = 1;
++  new->iconified = 0;
+ 
+   return new;
+ }
+@@ -112,11 +113,16 @@
+   XFontStruct *font;
+   XGCValues gcv;
+   unsigned long gcm;
++  GC *drawgc;
+ 
+   if (button == NULL) return;
+   button->needsupdate = 0;
+   state = button->state;
+   Draw3dRect(win, x, y, w, h, state);
++  if (button->iconified)
++    drawgc = &icongraph;
++  else
++    drawgc = &graph;
+ 
+   if (state != BUTTON_UP) { x++; y++; }
+ 
+@@ -127,7 +133,7 @@
+ 
+   gcm = GCFont;
+   gcv.font = font->fid;
+-  XChangeGC(dpy, graph, gcm, &gcv);
++  XChangeGC(dpy, *drawgc, gcm, &gcv);
+ 
+   newx = 4;
+ 
+@@ -166,13 +172,13 @@
+ 
+     /* It seems a little bogus that we don't see if the "..." _itself_
+        will fit on the button; what if it won't?  Oh well.  */
+-    XDrawString(dpy, win, graph, x + x3p, y+ButtonFont->ascent+4, t3p, 3);
++    XDrawString(dpy, win, *drawgc, x + x3p, y+ButtonFont->ascent+4, t3p, 3);
+     button->truncate = True;
+   }
+ 
+   /* Only print as much of the title as will fit.  */
+   if (search_len)
+-    XDrawString(dpy, win, graph,
++    XDrawString(dpy, win, *drawgc,
+ 		x+newx, y+font->ascent+4,
+ 		button->title, search_len);
+ }
+--- fvwm-2.2.2-orig/extras/FvwmTaskBar/ButtonArray.h	Fri Jan  8 17:08:23 1999
++++ fvwm-2.2.2/extras/FvwmTaskBar/ButtonArray.h	Sun Jul  4 11:31:41 1999
+@@ -26,7 +26,7 @@
+ 
+ typedef struct button {
+   char   *title;
+-  int    state, needsupdate, truncate;
++  int    state, needsupdate, truncate, iconified;
+   struct button *next;
+   Picture p;
+ } Button;
+--- fvwm-2.2.2-orig/extras/FvwmTaskBar/FvwmTaskBar.1	Wed Dec  2 14:09:37 1998
++++ fvwm-2.2.2/extras/FvwmTaskBar/FvwmTaskBar.1	Sun Jul  4 11:53:27 1999
+@@ -75,6 +75,9 @@
+ .IP "*FvwmTaskBarFore \fIcolor\fP"
+ Specifies the color to use for the button names.
+ 
++.IP "*FvwmTaskBarIconFore \fIcolor\fP"
++Specifies the color to use for the button names which represent iconified windows.
++
+ .IP "*FvwmTaskBarBack \fIcolor\fP"
+ Specifies the background color for the bar and buttons.
+ 
+@@ -237,4 +240,9 @@
+ Autohide turned on.
+ 
+ .SH AUTHOR
+-David Barth (barth@di.epfl.ch)
++.IP "\fIDavid Barth\fP <barth@di.epfl.ch>"
++
++.SH ACKNOWLEDGMENTS
++These people have contributed to \fBFvwmTaskBar\fP:
++
++.IP "\fIDanny Dulai\fP <nirva@ishiboo.com>"
+--- fvwm-2.2.2-orig/extras/FvwmTaskBar/FvwmTaskBar.c	Wed Jan 13 19:37:37 1999
++++ fvwm-2.2.2/extras/FvwmTaskBar/FvwmTaskBar.c	Sun Jul  4 11:42:44 1999
+@@ -87,8 +87,8 @@
+ Display *dpy;
+ Window  Root, win;
+ int     screen, d_depth;
+-Pixel   back, fore;
+-GC      graph, shadow, hilite, blackgc, whitegc;
++Pixel   back, fore, iconfore;
++GC      icongraph, graph, shadow, hilite, blackgc, whitegc;
+ XFontStruct *ButtonFont, *SelButtonFont;
+ int fontheight;
+ static Atom wm_del_win;
+@@ -120,6 +120,7 @@
+      *EnterAction,
+      *BackColor      = "white",
+      *ForeColor      = "black",
++     *IconForeColor  = "black",
+      *geometry       = NULL,
+      *font_string    = "fixed",
+      *selfont_string = NULL;
+@@ -422,6 +423,13 @@
+       redraw = 0;
+     }
+     UpdateItemFlags(&windows, body[0], flags);
++    {
++	Button *temp = find_n(&buttons, i);
++	if (temp) {
++	    temp->needsupdate = 1;
++	    temp->iconified = flags & ICONIFIED ? 1 : 0;
++	}
++    }
+     break;
+ 
+   case M_END_WINDOWLIST:
+@@ -588,9 +596,11 @@
+     CopyString(&font_string,&tline[Clength+4]);
+   else if(strncasecmp(tline, CatString3(Module, "SelFont",""),Clength+7)==0)
+     CopyString(&selfont_string,&tline[Clength+7]);
+-  else if(strncasecmp(tline,CatString3(Module,"Fore",""), Clength+4)==0) {
++  else if(strncasecmp(tline,CatString3(Module,"Fore",""), Clength+4)==0)
+     CopyString(&ForeColor,&tline[Clength+4]);
+-  } else if(strncasecmp(tline,CatString3(Module, "Geometry",""), Clength+8)==0) {
++  else if(strncasecmp(tline,CatString3(Module,"IconFore",""), Clength+8)==0)
++    CopyString(&IconForeColor,&tline[Clength+8]);
++  else if(strncasecmp(tline,CatString3(Module, "Geometry",""), Clength+8)==0) {
+     str = &tline[Clength+9];
+     while(((isspace(*str))&&(*str != '\n'))&&(*str != 0))	str++;
+     str[strlen(str)-1] = 0;
+@@ -1078,9 +1088,11 @@
+    if(d_depth < 2) {
+      back = GetColor("white");
+      fore = GetColor("black");
++     iconfore = GetColor("black");
+    } else {
+      back = GetColor(BackColor);
+      fore = GetColor(ForeColor);
++     iconfore = GetColor(IconForeColor);
+    }
+ 
+    win=XCreateSimpleWindow(dpy,Root,hints.x,hints.y,
+@@ -1109,6 +1121,8 @@
+    gcval.font = SelButtonFont->fid;
+    gcval.graphics_exposures = False;
+    graph = XCreateGC(dpy,Root,gcmask,&gcval);
++   gcval.foreground = iconfore;
++   icongraph = XCreateGC(dpy,Root,gcmask,&gcval);
+ 
+    if(d_depth < 2)
+      gcval.foreground = GetShadow(fore);
+@@ -1158,6 +1172,7 @@
+   FreeList(&windows);
+   FreeAllButtons(&buttons);
+   XFreeGC(dpy,graph);
++  XFreeGC(dpy,icongraph);
+   XDestroyWindow(dpy, win);
+   XCloseDisplay(dpy);
+   exit(exitstat);
+

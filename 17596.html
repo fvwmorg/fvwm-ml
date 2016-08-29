@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Patch to title-bar patch from Richard Lister on 1996-08-11 (fvwm-users)</title>
+<meta name="Author" content="Richard Lister (listerrj_at_helios.aston.ac.uk)" />
+<meta name="Subject" content="FVWM: Patch to title-bar patch" />
+<meta name="Date" content="1996-08-11" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Patch to title-bar patch</h1>
+<!-- received="Sun Aug 11 15:10:16 1996" -->
+<!-- isoreceived="19960811141016" -->
+<!-- sent="Sun, 11 Aug 1996 21:00:23 +0100" -->
+<!-- isosent="19960811200023" -->
+<!-- name="Richard Lister" -->
+<!-- email="listerrj_at_helios.aston.ac.uk" -->
+<!-- subject="FVWM: Patch to title-bar patch" -->
+<!-- id="3827.199608112000_at_sun.aston.ac.uk" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start17596" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="17597.html" accesskey="d" title="John Dawkins: &quot;FVWM: processes&quot;">Next message</a> ]
+[ <a href="17595.html" title="Scary Guy: &quot;FVWM: FVWM2 and configure?&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17596" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17596" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17596" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17596" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Richard Lister &lt;<a href="mailto:listerrj_at_helios.aston.ac.uk?Subject=Re%3A%20FVWM%3A%20Patch%20to%20title-bar%20patch">listerrj_at_helios.aston.ac.uk</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sun, 11 Aug 1996 21:00:23 +0100</span><br />
+</address>
+<br />
+Hi folks
+<br />
+<br />I started using Andrew Veliath's title-bar patch fvwm-2.0.43.tbp4.diff,
+<br />
+and it's fun! I like using something like:
+<br />
+<br />&nbsp;&nbsp;TitleStyle ActiveUp (Solid &lt;backcolor&gt;)
+<br />
+<br />But I also wanted to change the foreground colour, so here's a patch
+<br />
+to do that. Now you say:
+<br />
+<br />&nbsp;&nbsp;TitleStyle ActiveUp (Solid &lt;forecolor&gt;/&lt;backcolor&gt;)
+<br />
+<br />You need to start with a new fvwm-2.0.43, apply fvwm-2.0.43.tbp4.diff
+<br />
+to the whole distribution, then apply the patch below in the fvwm-2.0.43
+<br />
+directory. 
+<br />
+<br />Cheers
+<br />
+Ric
+<br />
+<br />Richard J. Lister, Research Assistant    
+<br />
+Neural Computing Research Group, Aston University
+<br />
+r.j.lister_at_aston.ac.uk 
+<br />
+<a href="http://www.ncrg.aston.ac.uk/~listerrj/">http://www.ncrg.aston.ac.uk/~listerrj/</a> 
+<br />
+<br /><br /><br />diff -u fvwm.orig/borders.c fvwm/borders.c
+<br />
+--- fvwm.orig/borders.c	Sun Aug 11 20:43:53 1996
+<br />
++++ fvwm/borders.c	Sun Aug 11 20:51:31 1996
+<br />
+_at_&#64; -483,7 +483,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;&amp; (Scr.TitleStyle.appearance!=TITLE_FLAT)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;&amp; (button_type == FullSolidButton))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--h;
+<br />
+-	XSetWindowBackground(dpy, win, bf-&gt;u.back);
+<br />
++	XSetWindowBackground(dpy, win, bf-&gt;u.solid.back);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XClearArea(dpy, win, border, border,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w - border * 2, h - border * 2,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;False);
+<br />
+_at_&#64; -517,7 +517,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case SolidButton:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case FullSolidButton:
+<br />
+-	bf.u.back = Scr.TitleStyle.face[state].u.back;
+<br />
++	bf.u.solid.back = Scr.TitleStyle.face[state].u.solid.back;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DrawButton(t, win, 11, t-&gt;title_width, t-&gt;title_height, &amp;bf, False);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
+&nbsp;
+<br />
+_at_&#64; -536,6 +536,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
++
+<br />
+&nbsp;}
+<br />
+&nbsp;
+<br />
+&nbsp;/****************************************************************************
+<br />
+_at_&#64; -607,7 +608,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hor_off = (t-&gt;title_width - w)/2;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
+&nbsp;&nbsp;&nbsp;}
+<br />
+-  
+<br />
++
+<br />
+&nbsp;&nbsp;&nbsp;NewFontAndColor(Scr.WindowFont.font-&gt;fid,Forecolor, BackColor);
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;if (onoroff)
+<br />
+_at_&#64; -618,7 +619,7 &#64;&#64;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;if (Scr.TitleStyle.face[state].style == SolidButton
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|| Scr.TitleStyle.face[state].style == FullSolidButton)
+<br />
+-      XSetWindowBackground(dpy,t-&gt;title_w,Scr.TitleStyle.face[state].u.back);
+<br />
++      XSetWindowBackground(dpy,t-&gt;title_w,Scr.TitleStyle.face[state].u.solid.back);
+<br />
+&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XSetWindowBackground(dpy,t-&gt;title_w,BackColor);
+<br />
+&nbsp;
+<br />
+_at_&#64; -661,6 +662,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DrawTitlebar(t, t-&gt;title_w, state);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(t-&gt;name != (char *)NULL)
+<br />
++      NewFontAndColor(Scr.WindowFont.font-&gt;fid,Scr.TitleStyle.face[state].u.solid.fore, BackColor); /* change title foreground color */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XDrawString (dpy, t-&gt;title_w,Scr.ScratchGC3,hor_off, Scr.WindowFont.y+1, 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t-&gt;name, strlen(t-&gt;name));
+<br />
+&nbsp;&nbsp;&nbsp;}
+<br />
+diff -u fvwm.orig/builtins.c fvwm/builtins.c
+<br />
+--- fvwm.orig/builtins.c	Sun Aug 11 20:43:54 1996
+<br />
++++ fvwm/builtins.c	Sun Aug 11 20:36:50 1996
+<br />
+_at_&#64; -1413,7 +1413,7 &#64;&#64;
+<br />
+&nbsp;void ReadTitleFace(char *s, TitleFace *tf)
+<br />
+&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int offset;
+<br />
+-    char style[256], *file;
+<br />
++    char style[256], *file, *tmp_color;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (sscanf(s, &quot;%s%n&quot;, style, &amp;offset) &lt; 1) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fvwm_msg(ERR, &quot;ReadTitleFace&quot;, &quot;error in title face: %s&quot;, s);
+<br />
+_at_&#64; -1447,7 +1447,21 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s = GetNextToken(s, &amp;file);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (file &amp;&amp; *file) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tf-&gt;style = !mystrncasecmp(style,&quot;Solid&quot;,5) ? SolidButton : FullSolidButton;
+<br />
+-	    tf-&gt;u.back = GetColor(file);
+<br />
++
+<br />
++      /* parse out fore and back colors */
+<br />
++      tmp_color = strtok(file, &quot;/&quot;);
+<br />
++      tf-&gt;u.solid.fore = GetColor(tmp_color);
+<br />
++
+<br />
++      if ( tmp_color = strtok(NULL, &quot;/&quot;) ) {
+<br />
++        tf-&gt;u.solid.back = GetColor(tmp_color);
+<br />
++      }
+<br />
++      else {
+<br />
++        /* just in case only one color is given go to old behaviour */
+<br />
++        tf-&gt;u.solid.back = tf-&gt;u.solid.fore;
+<br />
++        tf-&gt;u.solid.fore = Scr.HiColors.fore;
+<br />
++        fvwm_msg(ERR, &quot;ReadTitleFace&quot;, &quot;TitleStyle Solid Color spec is now 'fore/back'&quot;);
+<br />
++        return;
+<br />
++      }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fvwm_msg(ERR,&quot;ReadTitleFace&quot;, &quot;no color given for Solid face type&quot;);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+diff -u fvwm.orig/fvwm2.man fvwm/fvwm2.man
+<br />
+--- fvwm.orig/fvwm2.man	Sun Aug 11 20:43:58 1996
+<br />
++++ fvwm/fvwm2.man	Sun Aug 11 20:36:51 1996
+<br />
+_at_&#64; -1309,7 +1309,8 &#64;&#64;
+<br />
+&nbsp;ButtonStyle command).  Only pixmap button types are supported from the
+<br />
+&nbsp;standard button style types, and only one pixmap can be given.  There
+<br />
+&nbsp;are two additional styles, &quot;Solid&quot; and &quot;FullSolid.&quot;  These styles,
+<br />
+-followed by a color, change the title-bar color in the given state.
+<br />
++followed by a color pair (foreground/background), change the title-bar
+<br />
++color in the given state.
+<br />
+&nbsp;
+<br />
+&nbsp;Pixmap justification flags are supported, and can optionally be
+<br />
+&nbsp;prepended by &quot;Tiled&quot; (tiled pixmaps are not transparent).  Examples:
+<br />
+diff -u fvwm.orig/screen.h fvwm/screen.h
+<br />
+--- fvwm.orig/screen.h	Sun Aug 11 20:44:01 1996
+<br />
++++ fvwm/screen.h	Sun Aug 11 20:36:50 1996
+<br />
+_at_&#64; -117,7 +117,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ButtonFaceStyle style;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;union {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;struct { Picture *up, *down; } picture;
+<br />
+-	Pixel back;
+<br />
++  ColorPair solid;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} u;
+<br />
+&nbsp;} ButtonFace;
+<br />
+&nbsp;
+<br />
+_at_&#64; -126,7 +126,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ButtonFaceStyle style;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;union {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Picture *picture;
+<br />
+-	Pixel back;
+<br />
++	ColorPair solid;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} u;
+<br />
+&nbsp;} TitleFace;
+<br />
+&nbsp;
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sun Aug 11 1996 - 15:10:16 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start17596">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="17597.html" title="Next message in the list">John Dawkins: "FVWM: processes"</a></li>
+<li><dfn>Previous message</dfn>: <a href="17595.html" title="Previous message in the list">Scary Guy: "FVWM: FVWM2 and configure?"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17596" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17596" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17596" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17596" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

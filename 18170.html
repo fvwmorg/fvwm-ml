@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: fvwm 1.24r problems with &quot;active focus&quot; applications from Scott Raney on 1996-10-22 (fvwm-users)</title>
+<meta name="Author" content="Scott Raney (raney_at_metacard.com)" />
+<meta name="Subject" content="FVWM: fvwm 1.24r problems with &quot;active focus&quot; applications" />
+<meta name="Date" content="1996-10-22" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: fvwm 1.24r problems with &quot;active focus&quot; applications</h1>
+<!-- received="Mon Oct 21 22:16:55 1996" -->
+<!-- isoreceived="19961021211655" -->
+<!-- sent="Mon, 21 Oct 1996 20:52:41 -0600 (MDT)" -->
+<!-- isosent="19961022025241" -->
+<!-- name="Scott Raney" -->
+<!-- email="raney_at_metacard.com" -->
+<!-- subject="FVWM: fvwm 1.24r problems with &quot;active focus&quot; applications" -->
+<!-- id="199610220252.UAA04607_at_deck.metacard.com" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start18170" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="18171.html" accesskey="d" title="Trent Piepho: &quot;FVWM: windowlist patch&quot;">Next message</a> ]
+[ <a href="18169.html" title="Robert Nicholson: &quot;FVWM: code base merge for fvwm95?&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="18193.html" accesskey="t" title="Alan Shutko: &quot;Re: FVWM: fvwm 1.24r problems with &#0034;active focus&#0034; applications&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18170" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18170" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18170" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18170" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Scott Raney &lt;<a href="mailto:raney_at_metacard.com?Subject=Re%3A%20FVWM%3A%20fvwm%201.24r%20problems%20with%20%22active%20focus%22%20applications">raney_at_metacard.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 21 Oct 1996 20:52:41 -0600 (MDT)</span><br />
+</address>
+<br />
+We've discovered a couple of problems with fvwm 1.24r that make it
+<br />
+difficult to use with our application MetaCard.  The first two are
+<br />
+caused by the fact that MetaCard unusual in that it is an &quot;active
+<br />
+focus&quot; application that *requests* the keyboard focus when it needs it
+<br />
+(the XWMHints.input field is False, and the WM_TAKE_FOCUS atom is
+<br />
+set).  These are all with maximum mwm compatibility specified in the
+<br />
+config files, yet aren't a problem with mwm or olwm.
+<br />
+<br />You can verify all of these problems by getting MetaCard 2.0.1 from
+<br />
+<a href="ftp://ftp.metacard.com/MetaCard">ftp://ftp.metacard.com/MetaCard</a>.  You'll need an engine (precompiled
+<br />
+binary) for whichever platform you're using (e.g., SPARC.gz, Linux.gz,
+<br />
+etc.), the Home stack (mchome.mc.gz) and the tools stack
+<br />
+&quot;mctools.mc.gz&quot;.  Gunzip all three parts, chmod +x the engine, then
+<br />
+run it.
+<br />
+<br />1) In the explict/click-to-type focus model, clicking in a window
+<br />
+incorrectly automatically moves the keyboard focus to that window.
+<br />
+The focus should remain in the source window until the application
+<br />
+specifically requests it with XSetInputFocus.  Reproduce by clicking
+<br />
+in a window other than the MetaCard Home stack, then clicking back in
+<br />
+the MetaCard window.  It should only set the focus to the window if
+<br />
+you click on one of the icons in that window.
+<br />
+<br />2) In the pointer focuse model, moving the mouse to a window doesn't
+<br />
+always focus that window.  Reproduce by opening the MetaCard Message
+<br />
+Box and moving the mouse back and forth between it an the Home stack.
+<br />
+<br />3) Calling XRaiseWindow does not cause a configureNotify event to be
+<br />
+sent to the application like it does with mwm.  Our application raises
+<br />
+the menu bar window when the user clicks on a menu button, and needs
+<br />
+the configureNotify message to confirm that the menu has been raised
+<br />
+before opening the menu panel (otherwise, the menu bar can be raised
+<br />
+*after* the panel is opened if the window manager is slow to respond).
+<br />
+MetaCard has a 500 msec timeout for the wait for the message, but this
+<br />
+problem makes opening menus with fvwm very tedious.  Reproduce by
+<br />
+opening the MetaCard menu bar and clicking on a menu: there is a delay
+<br />
+between the click and the panel opening (this isn't a problem with
+<br />
+mwm).
+<br />
+<br />======================================================================
+<br />
+And now for a plea for a change of default focus policy in fvwm from
+<br />
+pointer to explicit focus.  The current default of pointer focus is
+<br />
+provably inferior to explicit focus, and really puts Linux in
+<br />
+particular at a major disadvantage to Micro$oft products in the
+<br />
+marketplace because it is user-hostile and industry non-standard.  All
+<br />
+other workstations and/or operating systems ship with explicit (click
+<br />
+to type) focus by default, including Sun, HP, IBM, all vendors that
+<br />
+ship the COSE Desktop, Apple, NeXT, and Microsoft.  This industry
+<br />
+standard is the mode that 99.9% of current computer users are familiar
+<br />
+with, and has been shown to be easier for novice computer users to
+<br />
+grasp.
+<br />
+<br />As for the provably inferior part, here are a few scenarios using our
+<br />
+product MetaCard, among the commercial X products that is most like
+<br />
+applications found on MS-Windows and the Mac:
+<br />
+<br />A) Like many Mac and Windows applications, when the user opens or
+<br />
+traverses to editable text fields in MetaCard dialogs, the text in the
+<br />
+field is automatically selected to make it more efficient to change
+<br />
+the value (since you just type in the new value instead of having to
+<br />
+delete the old value first).  This doesn't work very well with pointer
+<br />
+focus, because every time you move the mouse out of the window, it
+<br />
+selects the text in some other window.  Not only is the flashing very
+<br />
+annoying, but it also makes it impossible to use the menu bar to
+<br />
+cut/copy/paste selections, since the selection changes when you move
+<br />
+the mouse up to the menu bar (which is in another window).  There is
+<br />
+no workaround for this problem other than using explicit focus.
+<br />
+<br />B) Like many Mac and Windows applications, MetaCard relies heavily on
+<br />
+floating palettes and other modeless dialogs.  To facilitate this,
+<br />
+MetaCard is an &quot;active focus&quot; application, which means that the
+<br />
+keyboard focus doesn't necessarily go to these windows when the user
+<br />
+clicks in them (to select a tool, choose a menu, or run a layout
+<br />
+script).  This allows the user to designate the window to which the
+<br />
+operation should be applied by making it the focused window.  This
+<br />
+technique doesn't work with pointer focus, because the mere act of
+<br />
+moving to a tool palette focuses that palette, a useless operation
+<br />
+with potentially devistating consequences as the user may then lose
+<br />
+track of which window the operation will be applied to.
+<br />
+<br />Continued use of pointer focus as the default will just demonstrate a
+<br />
+total lack of respect for industry standards by the fvwm developers,
+<br />
+prevents many advanced applications (such as MetaCard) from working
+<br />
+well on many Linux systems, annoys and confuses novice users, and is
+<br />
+generally detrimental to the success of products such as Linux that
+<br />
+deserve all the help they can get.
+<br />
+&nbsp;&nbsp;Regards,
+<br />
+&nbsp;&nbsp;&nbsp;Scott
+<br />
+<br /><pre>
+-- 
+***************************************************************
+Scott Raney   raney_at_metacard.com   <a href="http://www.metacard.com">http://www.metacard.com</a>
+Tcl and ksh: syntactic gymnastics
+MetaCard: it does what you think
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon Oct 21 1996 - 22:16:55 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start18170">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="18171.html" title="Next message in the list">Trent Piepho: "FVWM: windowlist patch"</a></li>
+<li><dfn>Previous message</dfn>: <a href="18169.html" title="Previous message in the list">Robert Nicholson: "FVWM: code base merge for fvwm95?"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="18193.html" title="Next message in this discussion thread">Alan Shutko: "Re: FVWM: fvwm 1.24r problems with &#0034;active focus&#0034; applications"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="18193.html" title="Message sent in reply to this message">Alan Shutko: "Re: FVWM: fvwm 1.24r problems with &#0034;active focus&#0034; applications"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18170" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18170" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18170" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18170" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

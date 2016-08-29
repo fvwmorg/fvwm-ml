@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: bug in 2.0.42 from Dan Calle on 1996-05-29 (fvwm-users)</title>
+<meta name="Author" content="Dan Calle (dcalle_at_lucifer.gu.sbc.edu)" />
+<meta name="Subject" content="FVWM: bug in 2.0.42" />
+<meta name="Date" content="1996-05-29" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: bug in 2.0.42</h1>
+<!-- received="Tue May 28 18:43:10 1996" -->
+<!-- isoreceived="19960528174310" -->
+<!-- sent="Tue, 28 May 1996 19:11:20 -0400 (EDT)" -->
+<!-- isosent="19960528231120" -->
+<!-- name="Dan Calle" -->
+<!-- email="dcalle_at_lucifer.gu.sbc.edu" -->
+<!-- subject="FVWM: bug in 2.0.42" -->
+<!-- id="9605282311.AA00664_at_lucifer.gu.sbc.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start16947" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="16948.html" accesskey="d" title="James Elson: &quot;FVWM: FvwmForm&quot;">Next message</a> ]
+[ <a href="16946.html" title="Lars Wirzenius: &quot;Re: FVWM: Global fvwm configuration&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="16957.html" accesskey="t" title="Steffen Hansen: &quot;Re: FVWM: bug in 2.0.42&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16947" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16947" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16947" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16947" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Dan Calle &lt;<a href="mailto:dcalle_at_lucifer.gu.sbc.edu?Subject=Re%3A%20FVWM%3A%20bug%20in%202.0.42">dcalle_at_lucifer.gu.sbc.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 28 May 1996 19:11:20 -0400 (EDT)</span><br />
+</address>
+<br />
+Apologies if this bug is listed somewhere, I looked in all the usual
+<br />
+places and couldn't find it.
+<br />
+<br />Background: 
+<br />
+I run my initial X clients from my .xsession which is set
+<br />
+up thus: a bunch of random junk (X settings, variable settings, etc)
+<br />
+runs, some of it asynchronously, then an xterm runs asynchronously,
+<br />
+then a bunch of other X clients run, most of them asynchronously but
+<br />
+also mostly preceded by sleeps so that they don't slow down that first
+<br />
+xterm, and then finally fvwm2 runs, using FvwmM4 to process the rc
+<br />
+file.
+<br />
+<br />Problem:
+<br />
+If I do something to take the xterm binary out of RAM and then log in,
+<br />
+running the .xsession described above, that first xterm will not get
+<br />
+*any* style attributes, not those specifically for xterms nor those
+<br />
+for &quot;*&quot;.  It's the wrong color, isn't SloppyFocused, the borders are
+<br />
+too thick, etc.  Any other xterms, either the second one run from my
+<br />
+.xsession or those run from fvwm or a command line, get all the style
+<br />
+attributes correctly.  And if I restart fvwm, the first one will
+<br />
+suddenly get all the right attributes.  This makes me think it's a
+<br />
+timing problem related to the order the .xsession processes finish in.
+<br />
+<br />If I log out and log back in, it doesn't happen again, presumably
+<br />
+because the xterm binary is still in RAM and runs faster next time
+<br />
+through the .xsession.  But if I kill all my xterms, run a bunch of
+<br />
+Netscapes to eat up my RAM and thus take the xterm binary out of RAM,
+<br />
+and *then* log out and log back in, it happens again.  Same thing if I
+<br />
+reboot, clearing RAM, and then log in.
+<br />
+<br />OS: Digital UNIX 3.0 and 3.2a (tried on two machines)
+<br />
+<br />X: X11R5
+<br />
+<br />Fvwm: Version 2.0.42
+<br />
+<br />Compiler: DEC OSF/1 C compiler 3.11 (comes with DU 3.0 and 3.2a)
+<br />
+<br />Compiler opts: 
+<br />
+Compiled &quot;out of the box&quot; from the instructions in INSTALL.  That
+<br />
+means that the cc options (besides all the include and lib stuff) were
+<br />
+&quot;-O2 -Olimit 2000&quot;.  The only change I made was to set the bin and
+<br />
+module directories to be /usr/local/{bin,lib}/X11.
+<br />
+<br /><br />I'm only subscribed to fvwm-announce so if anyone wants more info,
+<br />
+please mail me.
+<br />
+<br />Thanks.
+<br />
+<br />PS - There's another bug, one that's been around since 1.24.  I
+<br />
+mention briefly it here in a postscript 'cause I'm not sure if it
+<br />
+might be one of the mouse-related bugs listed in TO-DO.  I think it
+<br />
+might be in FvwmAuto 'cause it went away when I used 1.24's built in
+<br />
+autoraise - something I obviously can't do with 2.0.x.  But it seems
+<br />
+to be another timing problem so it could just be within the raise or
+<br />
+lower functions themselves.  I'm not exactly sure what causes it but
+<br />
+it usually seems to happen when a window disappears quickly.  Fvwm
+<br />
+gets stuck with the cursor in its intermediate form (the black, filled
+<br />
+circle) until I click somewhere.  Until I do that, X and all my other
+<br />
+apps continue to run but fvwm is stopped.
+<br />
+<br /><pre>
+-- 
+Dan Calle                                  SysAdmin and Research Assistant
+                                   Physics Department, Sweet Briar College
+Email: calle96_at_sbc.edu              Talk/Finger: dcalle_at_lucifer&#46;<!--nospam-->gu.sbc.edu
+Web Page: <a href="http://csugrad.cs.vt.edu/~dcalle/">http://csugrad.cs.vt.edu/~dcalle/</a>            Finger for PGP key.
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue May 28 1996 - 18:43:10 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start16947">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="16948.html" title="Next message in the list">James Elson: "FVWM: FvwmForm"</a></li>
+<li><dfn>Previous message</dfn>: <a href="16946.html" title="Previous message in the list">Lars Wirzenius: "Re: FVWM: Global fvwm configuration"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="16957.html" title="Next message in this discussion thread">Steffen Hansen: "Re: FVWM: bug in 2.0.42"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="16957.html" title="Message sent in reply to this message">Steffen Hansen: "Re: FVWM: bug in 2.0.42"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="16959.html" title="Message sent in reply to this message">Steffen Hansen: "Re: FVWM: bug in 2.0.42"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16947" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16947" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16947" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16947" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

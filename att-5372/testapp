@@ -1,0 +1,33 @@
+#!/bin/sh
+# the next line restarts using wish \
+exec wish "$0" "$@"
+
+proc noclose win {
+    wm protocol $win WM_DELETE_WINDOW { }
+    wm resizable $win 0 0
+    bind $win <Unmap> "wm deiconify $win"
+}
+
+	wm withdraw .
+
+	set w .pw
+	toplevel $w
+	set id [winfo id $w]
+	#exec xev -id $id &
+	wm $argv $w
+	wm title $w "Produktwechsel Linie 1"
+	label $w.l -font {helvetica 18 bold} -text "Produktwechsel Linie 1"
+	frame $w.b
+	button $w.b.ca -text Abbrechen -command "set r 0"
+	button $w.b.ok -text OK -command {set r 1} -default active
+	pack $w.b.ca $w.b.ok -side left -padx 2m
+	bind $w <Return> "$w.b.ok invoke"
+	grid $w.l -row 0
+	grid $w.b -row 1
+	update idletasks
+	wm geometry $w +100+100
+	wm deiconify $w
+	noclose $w
+	tkwait variable r
+	destroy $w
+	exit

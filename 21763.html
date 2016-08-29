@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Mail checking in FvwmTaskBar for fvwm2 (patch) from Marat Boshernitsan on 1998-02-12 (fvwm-users)</title>
+<meta name="Author" content="Marat Boshernitsan (maratb_at_CS.Berkeley.EDU)" />
+<meta name="Subject" content="FVWM: Mail checking in FvwmTaskBar for fvwm2 (patch)" />
+<meta name="Date" content="1998-02-12" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Mail checking in FvwmTaskBar for fvwm2 (patch)</h1>
+<!-- received="Thu Feb 12 02:29:25 1998" -->
+<!-- isoreceived="19980212022925" -->
+<!-- sent="12 Feb 1998 00:29:11 -0800" -->
+<!-- isosent="19980212082911" -->
+<!-- name="Marat Boshernitsan" -->
+<!-- email="maratb_at_CS.Berkeley.EDU" -->
+<!-- subject="FVWM: Mail checking in FvwmTaskBar for fvwm2 (patch)" -->
+<!-- id="tfviuql5iqw.fsf_at_cypress.CS.Berkeley.EDU" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start21763" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="21764.html" accesskey="d" title="A.J.vanWerven: &quot;Re: FVWM: How to do a twm window placement feature in fvwm2?&quot;">Next message</a> ]
+[ <a href="21762.html" title="Os: &quot;Re: FVWM: fvwm2 and SGI&#0039;s desktop&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21763" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21763" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21763" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21763" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Marat Boshernitsan &lt;<a href="mailto:maratb_at_CS.Berkeley.EDU?Subject=Re%3A%20FVWM%3A%20Mail%20checking%20in%20FvwmTaskBar%20for%20fvwm2%20(patch)">maratb_at_CS.Berkeley.EDU</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: 12 Feb 1998 00:29:11 -0800</span><br />
+</address>
+<br />
+There's a bug in FvwmTaskBar which prevents it from correctly parsing
+<br />
+pathname of user-specifed mail inbox.  Here's a little patch to
+<br />
+FvwmTaskBar in fvwm-2.0.46 to fix this problem.  I don't read the
+<br />
+mailing list (just the archives), so e-mail me if there are any
+<br />
+questions.
+<br />
+<br />-- Marat
+<br />
+<br />cypress:/usr/tmp/maratb&gt;diff -w fvwm-2.0.46/extras/FvwmTaskBar/Goodies.c fvwm-2.0.46.mod/extras/FvwmTaskBar/Goodies.c
+<br />
+58,59c58,65
+<br />
+&lt;                               Clength+11)==0) {
+<br />
+&lt;     if (mystrncasecmp(&amp;tline[Clength+11], &quot;None&quot;) == 0) {
+<br />
+<pre>
+---
+&gt;                               Clength+7)==0) {
+&gt;     char *path = (char *)strdup(&amp;tline[Clength + 7]);
+&gt;     char *ptr1 = path;
+&gt;     char *ptr2 = path + strlen(path) - 1;
+&gt;     while (isspace(*ptr1)) ptr1++; /* trim left */
+&gt;     while (isspace(*ptr2)) ptr2--; /* trim right */
+&gt;     *(ptr2 + 1) = 0;
+&gt;     if (mystrncasecmp(ptr1, &quot;None&quot;, 4) == 0) {
+62c68
+&lt;       UpdateString(&amp;mailpath, &amp;tline[Clength+11]); 
+---
+&gt;       UpdateString(&amp;mailpath, ptr1); 
+63a70
+&gt;     free(path);
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Feb 12 1998 - 02:29:25 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start21763">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="21764.html" title="Next message in the list">A.J.vanWerven: "Re: FVWM: How to do a twm window placement feature in fvwm2?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="21762.html" title="Previous message in the list">Os: "Re: FVWM: fvwm2 and SGI&#0039;s desktop"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21763" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21763" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21763" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21763" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

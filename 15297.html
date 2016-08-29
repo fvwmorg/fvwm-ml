@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: Compiling fvwm-2 from Niels Larsen on 1996-01-28 (fvwm-users)</title>
+<meta name="Author" content="Niels Larsen (niels_at_truth.mph.msu.edu)" />
+<meta name="Subject" content="Re: FVWM: Compiling fvwm-2" />
+<meta name="Date" content="1996-01-28" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: Compiling fvwm-2</h1>
+<!-- received="Sun Jan 28 06:05:08 1996" -->
+<!-- isoreceived="19960128060508" -->
+<!-- sent="Sun, 28 Jan 1996 08:01:53 -0600" -->
+<!-- isosent="19960128140153" -->
+<!-- name="Niels Larsen" -->
+<!-- email="niels_at_truth.mph.msu.edu" -->
+<!-- subject="Re: FVWM: Compiling fvwm-2" -->
+<!-- id="199601281401.IAA08295_at_truth.mph.msu.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="Pine.LNX.3.91.960127205447.26899A-100000_at_localhost" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start15297" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="15298.html" accesskey="d" title="Eric F. Kahler (ekahler_at_mars.superlink.net): &quot;FVWM: Linux .au sound player&quot;">Next message</a> ]
+[ <a href="15296.html" title="Al Lovrich: &quot;FVWM: Compiling fvwm-2&quot;">Previous message</a> ]
+[ <a href="15296.html" title="Al Lovrich: &quot;FVWM: Compiling fvwm-2&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="15309.html" accesskey="t" title="Charles Hines: &quot;Re: FVWM: Compiling fvwm-2&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15297" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15297" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15297" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15297" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Niels Larsen &lt;<a href="mailto:niels_at_truth.mph.msu.edu?Subject=Re%3A%20FVWM%3A%20Compiling%20fvwm-2">niels_at_truth.mph.msu.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sun, 28 Jan 1996 08:01:53 -0600</span><br />
+</address>
+<br />
+Al Lovrich,
+<br />
+<br />I had the same problem, as have many others. Time ago a kind person
+<br />
+from .uk (whose name I have forgotten) posted a patch,  which worked
+<br />
+for me. Put the lines below in a file (eg 'make.patch') and use the command 
+<br />
+patch &lt; make.patch makefile.h, where makefile.h is the one being distributed
+<br />
+in the top directory of fvwm just after it untar'ed. It looks like the 
+<br />
+problem is a wrong link command, which has the libraries in the wrong 
+<br />
+order. I wish someone would upload a new copy with this fix included, since
+<br />
+at least all Linux users will have this problem. 
+<br />
+<br />I will now spend the weekend on making .fvwm2rc .. but might some of you 
+<br />
+have such files already, that I or others could build on? Anyway, I shall 
+<br />
+post mine somewhere, if I ever finish it. 
+<br />
+<br />Niels Larsen, niels_at_truth.mph.msu.edu
+<br />
+<br /><br />*** makefile.h.orig	Wed Oct 18 20:10:19 1995
+<br />
+--- makefile.h	Thu Dec 21 12:07:26 1995
+<br />
+***************
+<br />
+*** 58,70 ****
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;#ifdef AlphaArchitecture
+<br />
+! LOCAL_LIBRARIES = XPM_LIBRARIES $(ADD_LIB) $(XLIB) -ldnet_stub -L$(FVWM_SRCDIR)/libs -l$(LIB)
+<br />
+&nbsp;&nbsp;#else
+<br />
+&nbsp;&nbsp;#ifdef HPArchitecture
+<br />
+! LOCAL_LIBRARIES = XPM_LIBRARIES $(ADD_LIB) $(XLIB) -lV3 -L$(FVWM_SRCDIR)/libs -l$(LIB)
+<br />
+&nbsp;&nbsp;#else
+<br />
+&nbsp;&nbsp;#ifdef i386SVR4Architecture
+<br />
+! LOCAL_LIBRARIES = XPM_LIBRARIES $(ADD_LIB) $(XLIB) -lnsl -lsocket -L$(FVWM_SRCDIR)/libs -l$(LIB)
+<br />
+&nbsp;&nbsp;#else
+<br />
+! LOCAL_LIBRARIES = XPM_LIBRARIES $(ADD_LIB) $(XLIB) $(FVWM_SRCDIR)/libs/lib$(LIB).a
+<br />
+&nbsp;&nbsp;#endif /* i386SVR4Architecture */
+<br />
+&nbsp;&nbsp;#endif /* HPArchitecture */
+<br />
+--- 58,70 ----
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;#ifdef AlphaArchitecture
+<br />
+! LOCAL_LIBRARIES = -L$(FVWM_SRCDIR)/libs -l$(LIB) XPM_LIBRARIES $(ADD_LIB) $(XLIB) -ldnet_stub
+<br />
+&nbsp;&nbsp;#else
+<br />
+&nbsp;&nbsp;#ifdef HPArchitecture
+<br />
+! LOCAL_LIBRARIES = -L$(FVWM_SRCDIR)/libs -l$(LIB) XPM_LIBRARIES $(ADD_LIB) $(XLIB) -lV3
+<br />
+&nbsp;&nbsp;#else
+<br />
+&nbsp;&nbsp;#ifdef i386SVR4Architecture
+<br />
+! LOCAL_LIBRARIES = -L$(FVWM_SRCDIR)/libs -l$(LIB) XPM_LIBRARIES $(ADD_LIB) $(XLIB) -lnsl -lsocket
+<br />
+&nbsp;&nbsp;#else
+<br />
+! LOCAL_LIBRARIES = $(FVWM_SRCDIR)/libs/lib$(LIB).a XPM_LIBRARIES $(ADD_LIB) $(XLIB)
+<br />
+&nbsp;&nbsp;#endif /* i386SVR4Architecture */
+<br />
+&nbsp;&nbsp;#endif /* HPArchitecture */
+<br />
+<pre>
+--
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sun Jan 28 1996 - 06:05:08 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start15297">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="15298.html" title="Next message in the list">Eric F. Kahler (ekahler_at_mars.superlink.net): "FVWM: Linux .au sound player"</a></li>
+<li><dfn>Previous message</dfn>: <a href="15296.html" title="Previous message in the list">Al Lovrich: "FVWM: Compiling fvwm-2"</a></li>
+<li><dfn>In reply to</dfn>: <a href="15296.html" title="Message to which this message replies">Al Lovrich: "FVWM: Compiling fvwm-2"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="15309.html" title="Next message in this discussion thread">Charles Hines: "Re: FVWM: Compiling fvwm-2"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="15309.html" title="Message sent in reply to this message">Charles Hines: "Re: FVWM: Compiling fvwm-2"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15297" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15297" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15297" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15297" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

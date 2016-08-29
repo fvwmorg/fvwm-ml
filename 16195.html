@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Two small bugs in fvwm-2.0.42 from Andrew Veliath on 1996-04-17 (fvwm-users)</title>
+<meta name="Author" content="Andrew Veliath (veliaa_at_rpi.edu)" />
+<meta name="Subject" content="FVWM: Two small bugs in fvwm-2.0.42" />
+<meta name="Date" content="1996-04-17" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Two small bugs in fvwm-2.0.42</h1>
+<!-- received="Wed Apr 17 12:18:12 1996" -->
+<!-- isoreceived="19960417111812" -->
+<!-- sent="Wed, 17 Apr 1996 13:17:22 -0400" -->
+<!-- isosent="19960417171722" -->
+<!-- name="Andrew Veliath" -->
+<!-- email="veliaa_at_rpi.edu" -->
+<!-- subject="FVWM: Two small bugs in fvwm-2.0.42" -->
+<!-- id="199604171717.NAA04767_at_fugue.rpi.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="9604170836.AA24999_at_sun3.wfw.wtb.tue.nl" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start16195" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="16196.html" accesskey="d" title="Charles Hines: &quot;Re: FVWM: Beta version 2.0.42 now ready&quot;">Next message</a> ]
+[ <a href="16194.html" title="Andrew Veliath: &quot;Re: FVWM: Problem when iconifying+desiconifying an Xemacs frame&quot;">Previous message</a> ]
+[ <a href="16172.html" title="pieter_at_wfw.wtb.tue.nl: &quot;FVWM: Two small bugs in fvwm-2.0.42&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="16222.html" accesskey="t" title="pieter_at_wfw.wtb.tue.nl: &quot;Re: FVWM: Two small bugs in fvwm-2.0.42&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16195" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16195" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16195" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16195" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Andrew Veliath &lt;<a href="mailto:veliaa_at_rpi.edu?Subject=Re%3A%20FVWM%3A%20Two%20small%20bugs%20in%20fvwm-2.0.42">veliaa_at_rpi.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 17 Apr 1996 13:17:22 -0400</span><br />
+</address>
+<br />
+<em class="quotelev1">&gt;&gt;&gt;&gt;&gt;  The Emperor, with all his courtesy, exclaimed:
+</em><br />
+<em class="quotelev1">&gt;&gt;&gt;&gt;&gt; &quot;All gasp at the words of the skillful pieter !&quot;
+</em><br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;Pieter&gt; 1. In Fvwm.tmpl the variable CFLAGS is set to the value of
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Pieter&gt; FvwmCompilerFlags if the latter has been defined.  This
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Pieter&gt; overwrites the old value which included $(ALLDEFINES) and
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Pieter&gt; thus removes any -I and -D switches to the compiler.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Pieter&gt; Using CCOPTIONS instead of CFLAGS seems more appropriate
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Pieter&gt; to me.
+<br />
+<br />This is only my opinion, but I think CDEBUGFLAGS would be even better,
+<br />
+since if it is defined it would override any optimization flags.  It
+<br />
+is handy for setting debugging flags, and even gets passed down the
+<br />
+environment (however, since Fvwm.tmpl is included, it might not be
+<br />
+neccessary) if you specify the following in the Imakefile (BTW Chuck
+<br />
+knows about this already):
+<br />
+<br />#define PassCDebugFlags 'CDEBUGFLAGS=$(CDEBUGFLAGS)'
+<br />
+<br />About the strerror, I couldn't even find str_errlist on SunOS 4.1.1
+<br />
+(!) so I just replaced it with &quot;sorry!&quot; ;) so it would compile.
+<br />
+<br />PC sellers are Bill collectors.
+<br />
+Andrew Veliath &lt;veliaa_at_rpi.edu&gt;
+<br />
+<a href="http://www.rpi.edu/~veliaa">http://www.rpi.edu/~veliaa</a>
+<br />
+Finger for PGP Key
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Apr 17 1996 - 12:18:12 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start16195">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="16196.html" title="Next message in the list">Charles Hines: "Re: FVWM: Beta version 2.0.42 now ready"</a></li>
+<li><dfn>Previous message</dfn>: <a href="16194.html" title="Previous message in the list">Andrew Veliath: "Re: FVWM: Problem when iconifying+desiconifying an Xemacs frame"</a></li>
+<li><dfn>In reply to</dfn>: <a href="16172.html" title="Message to which this message replies">pieter_at_wfw.wtb.tue.nl: "FVWM: Two small bugs in fvwm-2.0.42"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="16222.html" title="Next message in this discussion thread">pieter_at_wfw.wtb.tue.nl: "Re: FVWM: Two small bugs in fvwm-2.0.42"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="16222.html" title="Message sent in reply to this message">pieter_at_wfw.wtb.tue.nl: "Re: FVWM: Two small bugs in fvwm-2.0.42"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16195" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16195" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16195" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16195" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

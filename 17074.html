@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: PATCH: fvwm 2.0.42 Solaris, Ultrix from Larry Schwimmer on 1996-06-07 (fvwm-users)</title>
+<meta name="Author" content="Larry Schwimmer (rosebud_at_cyclone.Stanford.EDU)" />
+<meta name="Subject" content="FVWM: PATCH: fvwm 2.0.42 Solaris, Ultrix" />
+<meta name="Date" content="1996-06-07" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: PATCH: fvwm 2.0.42 Solaris, Ultrix</h1>
+<!-- received="Fri Jun  7 13:59:59 1996" -->
+<!-- isoreceived="19960607125959" -->
+<!-- sent="Fri, 7 Jun 1996 11:55:04 -0700 (PDT)" -->
+<!-- isosent="19960607185504" -->
+<!-- name="Larry Schwimmer" -->
+<!-- email="rosebud_at_cyclone.Stanford.EDU" -->
+<!-- subject="FVWM: PATCH: fvwm 2.0.42 Solaris, Ultrix" -->
+<!-- id="199606071855.LAA04735_at_cyclone.Stanford.EDU" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start17074" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="17075.html" accesskey="d" title="Ming Lu: &quot;FVWM: libXpm, XpmLibs and XpmIncs&quot;">Next message</a> ]
+[ <a href="17073.html" title="Alan Wild: &quot;FVWM: Buttons/Pager BUG?&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17074" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17074" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17074" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17074" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Larry Schwimmer &lt;<a href="mailto:rosebud_at_cyclone.Stanford.EDU?Subject=Re%3A%20FVWM%3A%20PATCH%3A%20fvwm%202.0.42%20Solaris%2C%20Ultrix">rosebud_at_cyclone.Stanford.EDU</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 7 Jun 1996 11:55:04 -0700 (PDT)</span><br />
+</address>
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This also contains the SunOS patch since it is right
+<br />
+next to the Ultrix patch.  As patched, fvwm compiles under X11R6.1pl1
+<br />
+on:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SunOS4.1.4, Solaris 2.4, OSF/1 2.1, HP-UX 9.05
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IRIX 5.3, Linux 1.2.13, Ultrix 4.4, AIX 3.2.5
+<br />
+<br />For the compiler, I used cc for IRIX and gcc for the others.
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The fixed problems added to the patch include:
+<br />
+<br />1) Fvwm.tmpl does not set up the link environment properly as is
+<br />
+&nbsp;&nbsp;&nbsp;done for X11R6 and later.  This causes the binary to be linked
+<br />
+&nbsp;&nbsp;&nbsp;incorrectly under Solaris using X11R6 or later.
+<br />
+<br />2) Ultrix does not have strdup.
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;One additional problem I noticed but did not patch was in
+<br />
+FvwmScroll.  Both .c files declare storage for the same variables.
+<br />
+The storage for a given variable should only be in one .c file and the
+<br />
+prototypes should go in the header file.  The problem is not critical
+<br />
+under C, but it would be good to fix before the general release.  It
+<br />
+would cause a problem under C++, however, which assumes static linkage
+<br />
+for variables not declared extern.
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yours,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Larry Schwimmer
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;schwim_at_cyclone.stanford.edu
+<br />
+<br />--- Fvwm.tmpl.orig	Mon Apr  8 07:59:50 1996
+<br />
++++ Fvwm.tmpl	Fri Jun  7 01:28:49 1996
+<br />
+_at_&#64; -350,7 +350,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_at_&#64;\
+<br />
+&nbsp;program: $(OBJS) $(DEPLIBS)						_at_&#64;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RemoveTargetProgram($_at_)						&#64;&#64;\
+<br />
+-	$(CC) -o $_at_ $(OBJS) $(LDOPTIONS) $(LOCAL_LIBRARIES) $(LDLIBS) $(EXTRA_LOAD_FLAGS) &#64;&#64;\
+<br />
++	$(CCENVSETUP) $(CC) -o $_at_ $(OBJS) $(LDOPTIONS) $(LOCAL_LIBRARIES) $(LDLIBS) $(EXTRA_LOAD_FLAGS) &#64;&#64;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_at_&#64;\
+<br />
+&nbsp;InstallProgram(program,$(FVWMDIR))					_at_&#64;\
+<br />
+&nbsp;InstallManPage(program,$(MANDIR))					_at_&#64;\
+<br />
+_at_&#64; -375,7 +375,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_at_&#64;\
+<br />
+&nbsp;program: $(OBJS) $(DEPLIBS)						_at_&#64;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RemoveTargetProgram($_at_)						&#64;&#64;\
+<br />
+-	$(CC) -o $_at_ $(OBJS) $(LDOPTIONS) $(LOCAL_LIBRARIES) $(LDLIBS) $(EXTRA_LOAD_FLAGS) &#64;&#64;\
+<br />
++	$(CCENVSETUP) $(CC) -o $_at_ $(OBJS) $(LDOPTIONS) $(LOCAL_LIBRARIES) $(LDLIBS) $(EXTRA_LOAD_FLAGS) &#64;&#64;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_at_&#64;\
+<br />
+&nbsp;InstallProgram(program,$(FVWMBINDIR))					_at_&#64;\
+<br />
+&nbsp;InstallManPage(program,$(MANDIR))					_at_&#64;\
+<br />
+--- libs/Imakefile.orig	Fri Feb 16 17:17:27 1996
+<br />
++++ libs/Imakefile	Fri Jun  7 04:59:34 1996
+<br />
+_at_&#64; -22,6 +22,8 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mystrcasecmp.c \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;safemalloc.c \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sleep.c \
+<br />
++	strdup.c \
+<br />
++	strerror.c \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strncmp.c \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wild.c
+<br />
+&nbsp;
+<br />
+_at_&#64; -43,6 +45,8 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mystrcasecmp.o \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;safemalloc.o \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sleep.o \
+<br />
++	strdup.o \
+<br />
++	strerror.o \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strncmp.o \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wild.o
+<br />
+&nbsp;
+<br />
+--- /dev/null	Fri Jun  7 04:47:43 1996
+<br />
++++ libs/strerror.c	Thu Jun  6 17:41:47 1996
+<br />
+_at_&#64; -0,0 +1,15 &#64;&#64;
+<br />
++extern int sys_nerr;
+<br />
++extern char *sys_errlist[];
+<br />
++
+<br />
++/* strerror
+<br />
++ *
+<br />
++ * Return string corresponding to errno
+<br />
++ * For systems which lack this function.
+<br />
++ */
+<br />
++const char *
+<br />
++strerror(int errnum)
+<br />
++{
+<br />
++  static char unknown[] = &quot;Unknown error&quot;;
+<br />
++
+<br />
++  return ((unsigned int)errnum &lt; sys_nerr) ? sys_errlist[errnum] : unknown;
+<br />
++}
+<br />
+--- /dev/null	Fri Jun  7 04:47:43 1996
+<br />
++++ libs/strdup.c	Fri Jun  7 04:57:02 1996
+<br />
+_at_&#64; -0,0 +1,20 &#64;&#64;
+<br />
++#include &lt;string.h&gt;
+<br />
++
+<br />
++/* strdup
+<br />
++ *
+<br />
++ * Make a duplicate of a string.
+<br />
++ * For systems which lack this function.
+<br />
++ */
+<br />
++char *
+<br />
++strdup (const char *input)
+<br />
++{
+<br />
++  register char *cp, *retval = NULL;
+<br />
++
+<br />
++  if (input == NULL)
+<br />
++    return NULL;
+<br />
++  if ((retval = cp = (char *)malloc((strlen(input)+1)*sizeof(char))) == NULL)
+<br />
++    return NULL;
+<br />
++  while ((*cp++ = *input++) != '\0')
+<br />
++    ;
+<br />
++  return retval;
+<br />
++}
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Jun 07 1996 - 13:59:59 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start17074">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="17075.html" title="Next message in the list">Ming Lu: "FVWM: libXpm, XpmLibs and XpmIncs"</a></li>
+<li><dfn>Previous message</dfn>: <a href="17073.html" title="Previous message in the list">Alan Wild: "FVWM: Buttons/Pager BUG?"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17074" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17074" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17074" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17074" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

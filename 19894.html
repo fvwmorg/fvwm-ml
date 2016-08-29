@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Re: Compiling fvwm2 on SCO 5.0.2 - cpp problems from Andrew Veliath on 1997-05-01 (fvwm-users)</title>
+<meta name="Author" content="Andrew Veliath (veliaa_at_ny.frontiercomm.net)" />
+<meta name="Subject" content="FVWM: Re: Compiling fvwm2 on SCO 5.0.2 - cpp problems" />
+<meta name="Date" content="1997-05-01" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Re: Compiling fvwm2 on SCO 5.0.2 - cpp problems</h1>
+<!-- received="Thu May  1 15:11:34 1997" -->
+<!-- isoreceived="19970501141134" -->
+<!-- sent="Thu, 1 May 1997 16:11:19 -0400" -->
+<!-- isosent="19970501201119" -->
+<!-- name="Andrew Veliath" -->
+<!-- email="veliaa_at_ny.frontiercomm.net" -->
+<!-- subject="FVWM: Re: Compiling fvwm2 on SCO 5.0.2 - cpp problems" -->
+<!-- id="199705012011.QAA00575_at_pluto.solarsystem.org" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="9704302247.aa18045_at_father.pdev.sco.com" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start19894" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="19895.html" accesskey="d" title="Tim Phipps: &quot;FVWM: Resize $1 $2 not working&quot;">Next message</a> ]
+[ <a href="19893.html" title="Mark Scott: &quot;FVWM: help for visually impaired&quot;">Previous message</a> ]
+[ <a href="19889.html" title="Bela Lubkin: &quot;FVWM: Re: Compiling fvwm2 on SCO 5.0.2 - cpp problems&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19894" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19894" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19894" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19894" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Andrew Veliath &lt;<a href="mailto:veliaa_at_ny.frontiercomm.net?Subject=Re%3A%20FVWM%3A%20Re%3A%20Compiling%20fvwm2%20on%20SCO%205.0.2%20-%20cpp%20problems">veliaa_at_ny.frontiercomm.net</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 1 May 1997 16:11:19 -0400</span><br />
+</address>
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Bela&gt; Here's the problem.  Those token-paste operators (&quot;##&quot;) are
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Bela&gt; wrong.  ANSI C requires that in a ## b, all three of &quot;a&quot;,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Bela&gt; &quot;b&quot;, and the resulting pasted token, be valid preprocessor
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Bela&gt; tokens.  &quot;-&gt;TitleHeight&quot; is not a valid token (it's *two*
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Bela&gt; valid tokens).  Token pasting is not wanted here.  The
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Bela&gt; macros should read:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;Bela&gt;   #ifdef USEDECOR /* THIS IS WHAT i WANT TO USE */ #define
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Bela&gt; GetDecor(window,part) ((window)-&gt;fl-&gt;part) #else #define
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Bela&gt; GetDecor(window,part) (Scr.DefaultDecor.part) #endif
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;Bela&gt; The AT&amp;T/USL/SCO compiler differs from gcc in this matter.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Bela&gt; It is not wrong.  gcc is interpreting the ANSI standard more
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Bela&gt; loosely than SCO cc.
+<br />
+<br />Bela: thanks for this solution.  Sorry, this was my blunder.
+<br />
+<br />Chuck: please make sure this change below gets into the next release.
+<br />
+<br />Regards,
+<br />
+Andrew
+<br />
+<br />--- screen.h.orig	Thu May  1 16:03:09 1997
+<br />
++++ screen.h	Thu May  1 16:03:34 1997
+<br />
+_at_&#64; -329,9 +329,9 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;the UseDecor mechanism.
+<br />
+&nbsp;&nbsp;*/
+<br />
+&nbsp;#ifdef USEDECOR
+<br />
+-#define GetDecor(window,part) ((window)-&gt;fl-&gt;##part)
+<br />
++#define GetDecor(window,part) ((window)-&gt;fl-&gt;part)
+<br />
+&nbsp;#else
+<br />
+-#define GetDecor(window,part) (Scr.DefaultDecor.##part)
+<br />
++#define GetDecor(window,part) (Scr.DefaultDecor.part)
+<br />
+&nbsp;#endif
+<br />
+&nbsp;
+<br />
+&nbsp;/* some protos for the decoration structures */
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu May 01 1997 - 15:11:34 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start19894">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="19895.html" title="Next message in the list">Tim Phipps: "FVWM: Resize $1 $2 not working"</a></li>
+<li><dfn>Previous message</dfn>: <a href="19893.html" title="Previous message in the list">Mark Scott: "FVWM: help for visually impaired"</a></li>
+<li><dfn>In reply to</dfn>: <a href="19889.html" title="Message to which this message replies">Bela Lubkin: "FVWM: Re: Compiling fvwm2 on SCO 5.0.2 - cpp problems"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19894" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19894" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19894" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19894" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

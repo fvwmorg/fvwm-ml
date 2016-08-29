@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: X11::Fvwm from Randy J. Ray on 1997-03-21 (fvwm-users)</title>
+<meta name="Author" content="Randy J. Ray (rjray_at_uswest.com)" />
+<meta name="Subject" content="FVWM: X11::Fvwm" />
+<meta name="Date" content="1997-03-21" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: X11::Fvwm</h1>
+<!-- received="Fri Mar 21 15:16:30 1997" -->
+<!-- isoreceived="19970321151630" -->
+<!-- sent="Fri, 21 Mar 1997 14:15:58 -0700" -->
+<!-- isosent="19970321211558" -->
+<!-- name="Randy J. Ray" -->
+<!-- email="rjray_at_uswest.com" -->
+<!-- subject="FVWM: X11::Fvwm" -->
+<!-- id="rjray-9702212115.AA000815941_at_snakepit.ecte.uswc.uswest.com" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start19630" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="19631.html" accesskey="d" title="Barry A. Warsaw: &quot;Re: FVWM: X11::Fvwm&quot;">Next message</a> ]
+[ <a href="19629.html" title="Kirby Bakken: &quot;FVWM: Autoraise bug?&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="19631.html" accesskey="t" title="Barry A. Warsaw: &quot;Re: FVWM: X11::Fvwm&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19630" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19630" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19630" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19630" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Randy J. Ray &lt;<a href="mailto:rjray_at_uswest.com?Subject=Re%3A%20FVWM%3A%20X11%3A%3AFvwm">rjray_at_uswest.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 21 Mar 1997 14:15:58 -0700</span><br />
+</address>
+<br />
+Well, I have only heard from one person thus far about the initial alpha. I
+<br />
+don't know how many people are looking at this API, but if you are I could use
+<br />
+some feedback. If no one is yet, I can make the proposed changes without
+<br />
+remorse! :-)
+<br />
+<br />If you are not a Perl programmer, you won't be interested in the rest of this..
+<br />
+<br />There are two major changes I am considering for alpha-2. The first is in
+<br />
+the parameters that get sent to packet handler routines. Currently, the list
+<br />
+is the packet type followed by three or more args, depending on the packet
+<br />
+type. In this current means, there is no way for a packet to have access to
+<br />
+the X11::Fvwm object itself, unless (a) the object is a global variable, or
+<br />
+(b) the handler is created as a closure (an anonymous subroutine), and as
+<br />
+such you can refer to the object, since it will be visible to the lexical
+<br />
+scope of the closure. I don't like (a). A big part of the reason for doing
+<br />
+this object-oriented is to avoid a glut of globals within the package itself,
+<br />
+so I'm not about to advocate that programmers using my API use globals if they
+<br />
+don't want. As for (b), well, it's not a bad thing, really. But it is not my
+<br />
+place to dictate to the programmer that all packet handlers be closures. Plus,
+<br />
+if I do, then it hamstrings my efforts to develop X11::Fvwm::Defaults.pm, a
+<br />
+collection of simple default packet handlers for packets such as M_ERROR
+<br />
+(without Tk, it uses Perl's carp() to report the error, which includes a
+<br />
+subroutine-trace for debugging aid. Under Tk, would pop up a dialog reporting
+<br />
+the error and giving the user choice of Quit or Continue). Since these pre-
+<br />
+defined routines would not be closures, I can't rely on the scoping to give
+<br />
+me access to either an X11::Fvwm instance, or a Tk object instance.
+<br />
+<br />Which leads in to the second issue. Rather than having the X11::Fvwm class
+<br />
+looking specifically for Tk to be loaded (or defaulting to a simpler event
+<br />
+loop), I find that it might be better to separate the Tk hooks from the general
+<br />
+Fvwm API code. That is, the routine/method X11::Fvwm::eventLoop should only
+<br />
+be running the simple loop. I think it better to have X11::Fvwm::Tk as a 
+<br />
+subclass. The subclass would then define eventLoop to be the Tk one. It would
+<br />
+also have an extra instance variable, for tracking the Tk object that acts as
+<br />
+a TopLevel for this application (so that event handlers such as M_ERROR have
+<br />
+a Tk object from which to derive Dialog boxes, etc). What would this gain?
+<br />
+Well, the one response I did get to my posting of the alpha version was someone
+<br />
+interested in using X11::Fvwm, but would rather use the Perl interface to
+<br />
+XForms instead of Tk. Under this proposed model, that would be as easy as
+<br />
+writing X11::Fvwm::XForms.pm.
+<br />
+<br />Randy
+<br />
+<pre>
+--
+===============================================================================
+Randy J. Ray -- U S WEST Technologies IAD/CSS/DPDS         Phone: (303)595-2869
+                Denver, CO                                     rjray_at_uswest.com
+&quot;It's not denial. I'm just very selective about the reality I accept.&quot; --Calvin
+===============================================================================
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Mar 21 1997 - 15:16:30 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start19630">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="19631.html" title="Next message in the list">Barry A. Warsaw: "Re: FVWM: X11::Fvwm"</a></li>
+<li><dfn>Previous message</dfn>: <a href="19629.html" title="Previous message in the list">Kirby Bakken: "FVWM: Autoraise bug?"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="19631.html" title="Next message in this discussion thread">Barry A. Warsaw: "Re: FVWM: X11::Fvwm"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="19631.html" title="Message sent in reply to this message">Barry A. Warsaw: "Re: FVWM: X11::Fvwm"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19630" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19630" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19630" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19630" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

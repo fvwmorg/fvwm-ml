@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: more on color of resizing grid from Jeff Magill on 1996-10-03 (fvwm-users)</title>
+<meta name="Author" content="Jeff Magill (magill_at_sd.com)" />
+<meta name="Subject" content="FVWM: more on color of resizing grid" />
+<meta name="Date" content="1996-10-03" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: more on color of resizing grid</h1>
+<!-- received="Thu Oct  3 13:07:26 1996" -->
+<!-- isoreceived="19961003120726" -->
+<!-- sent="Thu, 3 Oct 96 11:01:35 PDT" -->
+<!-- isosent="19961003180135" -->
+<!-- name="Jeff Magill" -->
+<!-- email="magill_at_sd.com" -->
+<!-- subject="FVWM: more on color of resizing grid" -->
+<!-- id="9610031801.AA03645_at_sd.com" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start18057" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="18058.html" accesskey="d" title="Dan Miner: &quot;Re: FVWM: crazy idea&quot;">Next message</a> ]
+[ <a href="18056.html" title="William E. Roadcap: &quot;Re: FVWM: crazy idea&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18057" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18057" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18057" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18057" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Jeff Magill &lt;<a href="mailto:magill_at_sd.com?Subject=Re%3A%20FVWM%3A%20more%20on%20color%20of%20resizing%20grid">magill_at_sd.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 3 Oct 96 11:01:35 PDT</span><br />
+</address>
+<br />
+<em class="quotelev1">&gt;Actually, I've been meaning to ask a similar question:
+</em><br />
+<em class="quotelev1">&gt;My background is also mostly black.... after running fvwm 2.0.41 for 
+</em><br />
+<em class="quotelev1">&gt;several hours/days, the grid starts showing up as a different color.
+</em><br />
+<br />I believe that the rubberbands (grid) changes color during your X session
+<br />
+because most of the colors you see are the result of just dipping into the
+<br />
+default colormap and grabbing whatever color happens to be there.
+<br />
+(Someone correct me if FVWM doesn't work this way).  So, as X applications
+<br />
+change the default colormap, the rubberband colors change.  (This may be
+<br />
+only applicable to PseudoColor displays--i.e. displays that have a limited
+<br />
+colormap, often 256 colors.)
+<br />
+<br />The XOR operations are occuring on colormap INDEXES not RGB values.  The
+<br />
+screen is layed out in rows and columns of pixel values which are NOT RGB
+<br />
+values.  The pixel values refer to cells in the colormap.  These cells
+<br />
+contain the RGB value of a pixel and these RGB values of cells are under
+<br />
+control of whatever applications happen to be running.
+<br />
+<br />As the rubberbands are drawn, each pixel value is XOR'd with the XOR value
+<br />
+and the result of the XOR is put in place of the old pixel value.  The new
+<br />
+pixel value refers to some color in the colormap index.  But, FVWM doesn't
+<br />
+change the entire colormap so that the result of the XOR is a predictable
+<br />
+color (doing so would be a bad idea).  So, drawing the rubberband is
+<br />
+basically the same as drawing a line of random colors from the colormap.
+<br />
+You see different colors in the rubberbands because the colors in the
+<br />
+colormap change.
+<br />
+<br />It's easy to setup an XOR value the results in a certain pixel value when
+<br />
+applied to a certain pixel value.  E.g. you can set up the XOR value to
+<br />
+always change white pixels to black pixels and vice-versa.  To do that,
+<br />
+you look up the pixel values for white and black and compute the XOR value
+<br />
+(actually, I think you simply XOR the two pixel values together to get the
+<br />
+right XOR value).  But doing that, you still don't know what color will
+<br />
+result when XOR'ing the XOR value with some other pixel value on the screen.
+<br />
+<br />I think that on a lot of displays, the first two cells in the colormap
+<br />
+are black and white.  That's why the XOR value of 1 works well when you
+<br />
+have a lot black pixels in your root window.  I.e. the XOR operations
+<br />
+look like this (on an 8-bit display):
+<br />
+<br />&nbsp;&nbsp;draw rubberband:   00000000 XOR 00000001 = 00000001 (black)
+<br />
+&nbsp;&nbsp;remove rubberband: 00000001 XOR 00000001 = 00000000 (back to white)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+<br /><br />Jeff
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Oct 03 1996 - 13:07:26 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start18057">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="18058.html" title="Next message in the list">Dan Miner: "Re: FVWM: crazy idea"</a></li>
+<li><dfn>Previous message</dfn>: <a href="18056.html" title="Previous message in the list">William E. Roadcap: "Re: FVWM: crazy idea"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18057" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18057" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18057" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18057" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: strings in icons from Richard Lister on 1996-08-16 (fvwm-users)</title>
+<meta name="Author" content="Richard Lister (listerrj_at_helios.aston.ac.uk)" />
+<meta name="Subject" content="Re: FVWM: strings in icons" />
+<meta name="Date" content="1996-08-16" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: strings in icons</h1>
+<!-- received="Thu Aug 15 18:51:16 1996" -->
+<!-- isoreceived="19960815175116" -->
+<!-- sent="Fri, 16 Aug 1996 00:42:50 +0100" -->
+<!-- isosent="19960815234250" -->
+<!-- name="Richard Lister" -->
+<!-- email="listerrj_at_helios.aston.ac.uk" -->
+<!-- subject="Re: FVWM: strings in icons" -->
+<!-- id="9703.199608152343_at_sun.aston.ac.uk" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="Thu, 15 Aug 1996 10:12:11 -0700&quot;" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start17640" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="17641.html" accesskey="d" title="Jason L Tibbitts III: &quot;FVWM: Re: strings in icons&quot;">Next message</a> ]
+[ <a href="17639.html" title="rgo_at_drmail.dr.lucent.com: &quot;Re: FVWM: Focus and Warp with FvwmIconMan in fvwm2.0.43&quot;">Previous message</a> ]
+[ <a href="17628.html" title="Achyutram Bhamidipaty: &quot;FVWM: strings in icons&quot;">Maybe in reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="17641.html" accesskey="t" title="Jason L Tibbitts III: &quot;FVWM: Re: strings in icons&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17640" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17640" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17640" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17640" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Richard Lister &lt;<a href="mailto:listerrj_at_helios.aston.ac.uk?Subject=Re%3A%20FVWM%3A%20strings%20in%20icons">listerrj_at_helios.aston.ac.uk</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 16 Aug 1996 00:42:50 +0100</span><br />
+</address>
+<br />
+On Thu, 15 Aug 1996 10:12:11 -0700
+<br />
+Achyutram Bhamidipaty &lt;ram_at_epic.com&gt; 
+<br />
+wrote concerning 'Re: FVWM: strings in icons':
+<br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; This patch partly corrects the problem. When I start X up my .xinitrc
+</em><br />
+<em class="quotelev1">&gt; file starts a bunch of xterms iconified, and after a few seconds the
+</em><br />
+<em class="quotelev1">&gt; shell issues some escape sequence that changes the icon name... So in
+</em><br />
+<em class="quotelev1">&gt; this case the icon name for the initially display icon is truncated. If
+</em><br />
+<em class="quotelev1">&gt; I open the window and then re-inconify all is well.
+</em><br />
+<br />Yes, this is a timing problem. Originally fvwm only calculated the
+<br />
+icon width when the icon was created. This was why doing a Restart
+<br />
+fixed the icon width. My patch causes it to be recalculated on every
+<br />
+Iconify (if there is no icon pixmap). The problem here is that
+<br />
+the window is created and the initial iconify happens before the shell
+<br />
+starts and issues its comands to change the icon name. 
+<br />
+<br />Now, perhaps someone out there with better knowledge of X than me will
+<br />
+tell me if I'm wrong, but there is no way for fvwm to be informed of
+<br />
+a change in the icon name. It must make explicit calls to XGetWMIconName().
+<br />
+<br />Hmm, could one write a module (FvwmDaemon) that sat and polled 
+<br />
+windows for a set of properties, and issued fvwm commands based upon
+<br />
+the results? What would the overhead be? Is it a silly late-night idea? :-)
+<br />
+<br />Anyway, Ram, perhaps you could get around your problem by putting a delay
+<br />
+in your .xinitrc, a bit like this:
+<br />
+<br />xterm -iconic &amp;
+<br />
+xterm -iconic &amp;
+<br />
+sleep 10         # enough time for the shells to start
+<br />
+fvwm             # now safe to start wm and iconify windows
+<br />
+<br /><br />Ric
+<br />
+<br />Richard J. Lister, Research Assistant    
+<br />
+Neural Computing Research Group, Aston University
+<br />
+r.j.lister_at_aston.ac.uk 
+<br />
+<a href="http://www.ncrg.aston.ac.uk/~listerrj/">http://www.ncrg.aston.ac.uk/~listerrj/</a> 
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Aug 15 1996 - 18:51:16 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start17640">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="17641.html" title="Next message in the list">Jason L Tibbitts III: "FVWM: Re: strings in icons"</a></li>
+<li><dfn>Previous message</dfn>: <a href="17639.html" title="Previous message in the list">rgo_at_drmail.dr.lucent.com: "Re: FVWM: Focus and Warp with FvwmIconMan in fvwm2.0.43"</a></li>
+<li><dfn>Maybe in reply to</dfn>: <a href="17628.html" title="Message to which this message replies">Achyutram Bhamidipaty: "FVWM: strings in icons"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="17641.html" title="Next message in this discussion thread">Jason L Tibbitts III: "FVWM: Re: strings in icons"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="17641.html" title="Message sent in reply to this message">Jason L Tibbitts III: "FVWM: Re: strings in icons"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17640" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17640" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17640" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17640" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

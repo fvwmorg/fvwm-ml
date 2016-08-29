@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: warping pointer w/ XFree86 4.0 + Xinerama (FIXED) from Danny Dulai on 2000-03-21 (fvwm-users)</title>
+<meta name="Author" content="Danny Dulai (nirva_at_ishiboo.com)" />
+<meta name="Subject" content="Re: FVWM: warping pointer w/ XFree86 4.0 + Xinerama (FIXED)" />
+<meta name="Date" content="2000-03-21" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: warping pointer w/ XFree86 4.0 + Xinerama (FIXED)</h1>
+<!-- received="Tue Mar 21 07:06:26 2000" -->
+<!-- isoreceived="20000321070626" -->
+<!-- sent="21 Mar 2000 13:06:25 -0000" -->
+<!-- isosent="20000321130625" -->
+<!-- name="Danny Dulai" -->
+<!-- email="nirva_at_ishiboo.com" -->
+<!-- subject="Re: FVWM: warping pointer w/ XFree86 4.0 + Xinerama (FIXED)" -->
+<!-- id="Liam.953643985.288068.12875.826516314_at_fizz" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="20000316181408.A665_at_gmx.de" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start526" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="0527.html" accesskey="d" title="Erik Steffl: &quot;Re: FVWM: New member on list.&quot;">Next message</a> ]
+[ <a href="0525.html" title="Mikhael Goikhman: &quot;Re: FVWM: Please help me!&quot;">Previous message</a> ]
+[ <a href="0510.html" title="Dominik Vogt: &quot;Re: FVWM: warping pointer w/ XFree86 4.0 + Xinerama&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg526" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg526" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg526" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg526" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Danny Dulai &lt;<a href="mailto:nirva_at_ishiboo.com?Subject=Re%3A%20FVWM%3A%20warping%20pointer%20w%2F%20XFree86%204.0%20%2B%20Xinerama%20(FIXED)">nirva_at_ishiboo.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: 21 Mar 2000 13:06:25 -0000</span><br />
+</address>
+<br />
+On 03/16/00, Dominik Vogt said:
+<br />
+<em class="quotelev1">&gt;The only thing I can think of is printing out all KeyPress
+</em><br />
+<em class="quotelev1">&gt;events in HandleKeyPress() (events.c) and see if fvwm gets
+</em><br />
+<em class="quotelev1">&gt;the cursor keys at all.  If not try printing out all keys
+</em><br />
+<em class="quotelev1">&gt;that are unbound in libs/Bindings.c in the GrabWindowKey()
+</em><br />
+<em class="quotelev1">&gt;function.  If they're not unbound there, then it must be
+</em><br />
+<em class="quotelev1">&gt;a XFree bug (?).
+</em><br />
+<br />So I tracked it down to the XWarpPointer() call.. the actual numbers fvwm
+<br />
+was coming up with were correct, and it was passing them to XWarpPointer()
+<br />
+correctly too.
+<br />
+<br />The only difference in my xwarppointer code and the fvwm code was that the
+<br />
+src window arg (2nd arg) is set to the root window in fvwm, and its set to
+<br />
+None in my code.
+<br />
+<br />I replaced the 2nd arg with None in builtins.c on line 509 for fvwm-2.1.13
+<br />
+(the only call to XWarpPointer() in the file) and all works for me now with
+<br />
+XFree86 4.0.
+<br />
+<br />Why was this set to the root window at all? From the manpage:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;However, if src_w is a window, the move only takes place if the window
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;src_w contains the pointer and if the specified rectangle of src_w
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;contains the pointer.
+<br />
+<br /><br />I have submitted a bug to XFree86, but if there is no real reason why the
+<br />
+src_w should be root, then can this change be made in the cvs repository so
+<br />
+future fvwms can work with XFree86 4.0?
+<br />
+<br /><br />Now it seems I have random RaiseLower issues.. I wonder if their window
+<br />
+stacking stuff is broken. This one is much harder to reproduce, so it might
+<br />
+take a while.
+<br />
+<br /><pre>
+-- 
+___________________________________________________________________________
+Danny Dulai                                           Feet. Pumice. Lotion.
+<a href="http://www.ishiboo.com/~nirva/">http://www.ishiboo.com/~nirva/</a>                            nirva_at_ishiboo.com
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue Mar 21 2000 - 07:06:26 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start526">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="0527.html" title="Next message in the list">Erik Steffl: "Re: FVWM: New member on list."</a></li>
+<li><dfn>Previous message</dfn>: <a href="0525.html" title="Previous message in the list">Mikhael Goikhman: "Re: FVWM: Please help me!"</a></li>
+<li><dfn>In reply to</dfn>: <a href="0510.html" title="Message to which this message replies">Dominik Vogt: "Re: FVWM: warping pointer w/ XFree86 4.0 + Xinerama"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg526" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg526" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg526" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg526" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:50 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="X-roman8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=X-roman8" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>(unknown charset) FVWM: FVWM 2.0.43 drops characters after blank line from (unknown charset) Larry Daffner on 1996-07-22 (fvwm-users)</title>
+<meta name="Author" content="(unknown charset) Larry Daffner (ldaffner_at_buttons.rsn.hp.com)" />
+<meta name="Subject" content="(unknown charset) FVWM: FVWM 2.0.43 drops characters after blank line" />
+<meta name="Date" content="1996-07-22" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>(unknown charset) FVWM: FVWM 2.0.43 drops characters after blank line</h1>
+<!-- received="Mon Jul 22 17:19:24 1996" -->
+<!-- isoreceived="19960722161924" -->
+<!-- sent="Mon, 22 Jul 1996 17:18:19 -0500" -->
+<!-- isosent="19960722221819" -->
+<!-- name="(unknown charset) Larry Daffner" -->
+<!-- email="ldaffner_at_buttons.rsn.hp.com" -->
+<!-- subject="(unknown charset) FVWM: FVWM 2.0.43 drops characters after blank line" -->
+<!-- id="199607222218.AA124433923_at_hp.com" -->
+<!-- charset="X-roman8" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start17459" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="17460.html" accesskey="d" title="Barry D Benowitz: &quot;FVWM: emacs, gnudoit, and vm&quot;">Next message</a> ]
+[ <a href="17458.html" title="Martin.Wunderli_at_jungle.ch: &quot;Re: FVWM: Netscape Icon&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17459" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17459" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17459" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17459" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: (unknown charset) Larry Daffner &lt;<a href="mailto:ldaffner_at_buttons.rsn.hp.com?Subject=Re%3A%20(unknown%20charset)%20FVWM%3A%20FVWM%202.0.43%20drops%20characters%20after%20blank%20line">ldaffner_at_buttons.rsn.hp.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 22 Jul 1996 17:18:19 -0500</span><br />
+</address>
+<br />
+I'm using fvwm-2.0.43 under HP/UX 10.01 on an HP 712, using a locally
+<br />
+compiled version of X11R6.1, and it eats the first character of a line
+<br />
+following a blank line.  The following change fixes the problem.
+<br />
+<br />-Larry
+<br />
+Keep up the good work!
+<br />
+<br />*** fvwm-2.0.43/fvwm/read.c	Mon Jul  8 10:51:29 1996
+<br />
+--- fvwm-2.0.43l/fvwm/read.c	Mon Jul 22 17:05:33 1996
+<br />
+***************
+<br />
+*** 144,150 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int l;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while(tline &amp;&amp; (l=strlen(line))&lt;sizeof(line) &amp;&amp;
+<br />
+!           line[l-1]=='\n' &amp;&amp; line[l-2]=='\\')
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tline = fgets(line+l-2,sizeof(line)-l,fd);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+--- 144,150 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int l;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while(tline &amp;&amp; (l=strlen(line))&lt;sizeof(line) &amp;&amp;
+<br />
+!           line[l-1]=='\n' &amp;&amp; ((strlen(line) &gt; 1) &amp;&amp; line[l-2]=='\\'))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tline = fgets(line+l-2,sizeof(line)-l,fd);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon Jul 22 1996 - 17:19:24 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start17459">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="17460.html" title="Next message in the list">Barry D Benowitz: "FVWM: emacs, gnudoit, and vm"</a></li>
+<li><dfn>Previous message</dfn>: <a href="17458.html" title="Previous message in the list">Martin.Wunderli_at_jungle.ch: "Re: FVWM: Netscape Icon"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17459" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17459" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17459" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17459" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

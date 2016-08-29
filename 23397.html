@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Possible bug in WinListFunc (and a suggestion... :-) from Kobus Retief on 1999-01-10 (fvwm-users)</title>
+<meta name="Author" content="Kobus Retief (cr16_at_pixie.co.za)" />
+<meta name="Subject" content="FVWM: Possible bug in WinListFunc (and a suggestion... :-)" />
+<meta name="Date" content="1999-01-10" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Possible bug in WinListFunc (and a suggestion... :-)</h1>
+<!-- received="Sun Jan 10 16:20:05 1999" -->
+<!-- isoreceived="19990110162005" -->
+<!-- sent="Mon, 11 Jan 1999 00:22:38 +0200" -->
+<!-- isosent="19990110222238" -->
+<!-- name="Kobus Retief" -->
+<!-- email="cr16_at_pixie.co.za" -->
+<!-- subject="FVWM: Possible bug in WinListFunc (and a suggestion... :-)" -->
+<!-- id="3699282E.41A62D8E_at_pixie.co.za" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start23397" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="23398.html" accesskey="d" title="Dominik Vogt: &quot;Re: FVWM: Mouse bindings broken in 2.1.7?&quot;">Next message</a> ]
+[ <a href="23396.html" title="Kobus Retief: &quot;FVWM: Possible bug in WinListFunc (and a suggestion... :-)&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg23397" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg23397" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg23397" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg23397" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Kobus Retief &lt;<a href="mailto:cr16_at_pixie.co.za?Subject=Re%3A%20FVWM%3A%20Possible%20bug%20in%20WinListFunc%20(and%20a%20suggestion...%20%3A-)">cr16_at_pixie.co.za</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 11 Jan 1999 00:22:38 +0200</span><br />
+</address>
+<br />
+Hi
+<br />
+<br /><br />The (possible) bug:
+<br />
+<br />I'm currently running fvwm 2.1.7 on a (slightly modified)
+<br />
+Slackware Linux (kernel 2.2.0pre6, XFree86 3.3.3) system.
+<br />
+I've modified the WinListFunc as follows in my .fvwm2rc:
+<br />
+<br />DestroyFunc WindowListFunc
+<br />
+AddToFunc WindowListFunc
+<br />
++ &quot;I&quot;	WindowId $0 FlipFocus
+<br />
++ &quot;I&quot;	WindowId $0 Raise
+<br />
++ &quot;I&quot;	WindowId $0 WarpToWindow 0 0
+<br />
++ &quot;I&quot;	WindowId $0 WarpToWindow 50 50
+<br />
+<br />When I select a window from the WindowList builtin, everything
+<br />
+happens as planned (top left corner of window in top left corner
+<br />
+of screen, cursor in middle of window), but fvwm gives me the
+<br />
+window selection cursor (the one you get when [for instance] you 
+<br />
+tell fvwm to &quot;maximize&quot; and then have to select a window), and waits
+<br />
+for me to click before focusing the window.  This obviously shouldn't
+<br />
+happen, as I've stepped through this function using FvwmTalk, and
+<br />
+everything worked perfectly.
+<br />
+<br />I don't _remember_ having this problem under fvwm 2.1.5 (with the same
+<br />
+.fvwm2rc, except for adding the new MenuStyle builtin).
+<br />
+<br /><br />The suggestion or two:
+<br />
+<br />I use the side pixmap on menus (the one you get when you use
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AddToMenu &quot;Utilities_at_utilities.xpm&#64;%navyblue%&quot;
+<br />
+<br />), but find it rather awkward.  What would be pretty cool is
+<br />
+if you could have SidePixmap and SideColor (for instance) as 
+<br />
+MenuStyle options:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MenuStyle &quot;Utilities&quot; SidePixmap utilities.xpm
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MenuStyle &quot;Utilities&quot; SideColor navyblue
+<br />
+<br />Another thing (extension of the first suggestion) would be a 
+<br />
+&quot;WindowList&quot; MenuStyle, which would apply only to the WindowList
+<br />
+builtin menu, as it looks rather drab (in my eyes) without the
+<br />
+side pixmap:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MenuStyle &quot;WindowList&quot; SidePixmap winlist.xpm
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MenuStyle &quot;WindowList&quot; SideColor green
+<br />
+<br />This is a suggestion only; I can live without it if neccessary,
+<br />
+and I'm not going to figure out the source code to patch fvwm.
+<br />
+I'm just too lazy, I guess.
+<br />
+<br /><br />The Grand Finale:
+<br />
+<br />That's it.
+<br />
+I'll find any replies (eventually) in the archives, or mail them
+<br />
+directly to me if you really feel like it (kobus.retief_at_pixie.co.za).
+<br />
+<br />Cheers
+<br />
+Koos
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://fvwm.math.uh.edu/">http://fvwm.math.uh.edu/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sun Jan 10 1999 - 16:20:05 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start23397">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="23398.html" title="Next message in the list">Dominik Vogt: "Re: FVWM: Mouse bindings broken in 2.1.7?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="23396.html" title="Previous message in the list">Kobus Retief: "FVWM: Possible bug in WinListFunc (and a suggestion... :-)"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg23397" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg23397" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg23397" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg23397" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:02 BST
+</em></small></p>
+</body>
+</html>

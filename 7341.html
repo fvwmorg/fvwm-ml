@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: weird WarpToWindow behavior from Norvell Spearman on 2002-12-26 (fvwm-users)</title>
+<meta name="Author" content="Norvell Spearman (norvell_at_houseofspearman.org)" />
+<meta name="Subject" content="FVWM: weird WarpToWindow behavior" />
+<meta name="Date" content="2002-12-26" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: weird WarpToWindow behavior</h1>
+<!-- received="Thu Dec 26 13:35:32 2002" -->
+<!-- isoreceived="20021226133532" -->
+<!-- sent="Thu, 26 Dec 2002 13:34:15 -0600" -->
+<!-- isosent="20021226193415" -->
+<!-- name="Norvell Spearman" -->
+<!-- email="norvell_at_houseofspearman.org" -->
+<!-- subject="FVWM: weird WarpToWindow behavior" -->
+<!-- id="20021226193415.GA4331_at_houseofspearman.org" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start7341" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="7342.html" accesskey="d" title="Thomas Glanzmann: &quot;FVWM: Helper Function to chnages Layers.&quot;">Next message</a> ]
+[ <a href="7340.html" title="Bryan Cassidy: &quot;(no subject)&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="7344.html" accesskey="t" title="Mikhael Goikhman: &quot;Re: FVWM: weird WarpToWindow behavior&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg7341" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg7341" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg7341" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg7341" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Norvell Spearman &lt;<a href="mailto:norvell_at_houseofspearman.org?Subject=Re%3A%20FVWM%3A%20weird%20WarpToWindow%20behavior">norvell_at_houseofspearman.org</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 26 Dec 2002 13:34:15 -0600</span><br />
+</address>
+<br />
+fvwm-2.5.5
+<br />
+xmms-1.2.5
+<br />
+<br />I recently changed my .fvwm2rc so that any new window will get the focus
+<br />
+and get the pointer warped to it.  Everything works fine except for
+<br />
+xmms.  Usually I run xmms with both the equalizer and play list windows
+<br />
+(which are both ``snapped to'' the main xmms window), so starting xmms
+<br />
+actually creates three windows.  These three all move together when the
+<br />
+main window is moved.
+<br />
+<br />What's happening is this:  I have one 2x2 desktop and usually run xmms
+<br />
+from the top right page.  After making the focus and warp changes,
+<br />
+starting xmms causes the pointer to go immediately to the top left
+<br />
+corner of the current page, which then causes the viewport to scroll to
+<br />
+the page immediately to the left.  Depending on what's on the left-hand
+<br />
+page, the main xmms window may or may not be connected to its other
+<br />
+windows.
+<br />
+<br />The following is what I added to my .fvwm2rc (which is from the fvwm
+<br />
+FAQ, question 3.18):
+<br />
+########
+<br />
+*FvwmEvent-NewWindow:	Cmd
+<br />
+*FvwmEvent-NewWindow:	PassId
+<br />
+*FvwmEvent-NewWindow:	StartDelay 4
+<br />
+*FvwmEvent-NewWindow:	add_window FuncFocusWindow
+<br />
+<br />DestroyFunc	FuncFocusWindow
+<br />
+AddToFunc	FuncFocusWindow
+<br />
++ I WindowId $0 Focus
+<br />
++ I WindowId $0	WarpToWindow 50 15p
+<br />
+<br />AddToFunc	StartFunction I	FvwmEvent FvwmEvent-NewWindow
+<br />
+########
+<br />
+<br />What I'd like is for xmms to open on the current page but without
+<br />
+disabling edge scrolling.  Thanks very much for any help with this.
+<br />
+<br /><pre>
+-- 
+Norvell Spearman
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Dec 26 2002 - 13:35:32 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start7341">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="7342.html" title="Next message in the list">Thomas Glanzmann: "FVWM: Helper Function to chnages Layers."</a></li>
+<li><dfn>Previous message</dfn>: <a href="7340.html" title="Previous message in the list">Bryan Cassidy: "(no subject)"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="7344.html" title="Next message in this discussion thread">Mikhael Goikhman: "Re: FVWM: weird WarpToWindow behavior"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="7344.html" title="Message sent in reply to this message">Mikhael Goikhman: "Re: FVWM: weird WarpToWindow behavior"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg7341" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg7341" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg7341" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg7341" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:54 BST
+</em></small></p>
+</body>
+</html>

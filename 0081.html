@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Vector Buttons from Thomas A. Gardiner on 2000-01-13 (fvwm-users)</title>
+<meta name="Author" content="Thomas A. Gardiner (gardiner_at_pas.rochester.edu)" />
+<meta name="Subject" content="FVWM: Vector Buttons" />
+<meta name="Date" content="2000-01-13" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Vector Buttons</h1>
+<!-- received="Thu Jan 13 07:28:01 2000" -->
+<!-- isoreceived="20000113072801" -->
+<!-- sent="Thu, 13 Jan 2000 08:21:30 -0500 (EST)" -->
+<!-- isosent="20000113132130" -->
+<!-- name="Thomas A. Gardiner" -->
+<!-- email="gardiner_at_pas.rochester.edu" -->
+<!-- subject="FVWM: Vector Buttons" -->
+<!-- id="Pine.LNX.3.96URPAS-R.1000113070408.6431A-100000_at_alfalfa.pas.rochester.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start81" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="0082.html" accesskey="d" title="Dan Espen: &quot;(no subject)&quot;">Next message</a> ]
+[ <a href="0080.html" title="Sven Geggus: &quot;FVWM: Section 4.2 of the FAQ&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="0084.html" accesskey="t" title="Dan Espen: &quot;Re: FVWM: Vector Buttons&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg81" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg81" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg81" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg81" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Thomas A. Gardiner &lt;<a href="mailto:gardiner_at_pas.rochester.edu?Subject=Re%3A%20FVWM%3A%20Vector%20Buttons">gardiner_at_pas.rochester.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 13 Jan 2000 08:21:30 -0500 (EST)</span><br />
+</address>
+<br />
+Hi,
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I've got a few quick questions...
+<br />
+<br />1) Is there a maximum number of allowable points which can be used in a
+<br />
+vector button?  Somewhere between 10 and 20 I get an error saying that it
+<br />
+was a &quot;bad button style&quot;.
+<br />
+<br />2) More is not necessarily better!  I wanted to draw a circle, so I wrote
+<br />
+a 5-line c-program to pick points on a circle at regularly spaced angular
+<br />
+increments.  This way I get, 3-&gt; triangle, 4-&gt; diamond or square, ... To
+<br />
+make a circle we want essentially a many sided polygoon.  As the number of
+<br />
+points increases for the same circle radius the button highlighting
+<br />
+becomes distorted.  That is the line becomes distorted.  It stands to
+<br />
+reason that if the input is higher resolution than can be displayed
+<br />
+nothing should happen; it should look just like the lower resolution
+<br />
+counterpart.
+<br />
+<br /><br />Without looking at the code I'd guess that this is caused by the
+<br />
+discretization error of using integers for what should really be a
+<br />
+floating point number (especially since it must be scaled to the titlebar
+<br />
+height).
+<br />
+<br />( I can send examples if desired...)
+<br />
+<br />The nicest circle I can come up with so far is 
+<br />
+<br />#RoundButton: Limits 23-77, radius of 27
+<br />
+########################################
+<br />
+AddButtonStyle 6 \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vector 9 69x31_at_0 77x50_at_0 69x69_at_0 50x77_at_0 31x69_at_0 \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;23x50_at_1 31x31_at_1 50x23_at_1 69x31_at_1
+<br />
+<br />Pushing this up to a radius of 30 gives rise to funny dots in the
+<br />
+coordinate directions like this one.
+<br />
+<br />#RoundButton: Limits 20-80, radius of 30
+<br />
+########################################
+<br />
+AddButtonStyle 6 \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vector 9 71x29_at_0 80x50_at_0 71x71_at_0 50x80_at_0 29x71_at_0 \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20x50_at_1 29x29_at_1 50x20_at_1 71x29_at_1
+<br />
+<br />Manually editing the points to get rid of the points requires changing the
+<br />
+numbers to reflect the first round button like this before the points or
+<br />
+dots go away.
+<br />
+<br />#RoundButton: Limits 20-80, radius of 30 (Manually edited...)
+<br />
+########################################
+<br />
+AddButtonStyle 6 \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vector 9 71x29_at_0 77x50_at_0 71x71_at_0 50x77_at_0 29x71_at_0 \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;23x50_at_1 29x29_at_1 50x23_at_1 71x29_at_1
+<br />
+<br />Any ideas??? The part which bothers me is that if I change the height of
+<br />
+the titlebar then the button appearance will most likely change so that
+<br />
+buttons which work good for me may not work well for others.
+<br />
+<br />Finally one last question. (Wow, and I thought this was going to be
+<br />
+short...)  Is it possible to set the light and dark colors used for vector
+<br />
+buttons?  If not are they fixed or dependent on the button color.
+<br />
+<br />Thanks,
+<br />
+Tom
+<br />
+<br />_________________________________________________________________________
+<br />
+Thomas Gardiner
+<br />
+gardiner_at_pas.rochester.edu
+<br />
+<br />University of Rochester
+<br />
+Department of Physics and Astronomy
+<br />
+P. O. Box 270171
+<br />
+Rochester, NY 14627-0171
+<br />
+<br />(716) 275-9625 Office 2
+<br />
+(716) 275-0537 Office 1
+<br />
+(716) 275-8527 fax
+<br />
+__________________________________________________________________________
+<br />
+<br />The scientist does not study nature because it is useful; he studies it
+<br />
+because he delights in it, and he delights in it because it is beautiful.
+<br />
+If nature were not beautiful, it would not be worth knowing, and if nature
+<br />
+were not worth knowing, life would not be worth living.- Henri Poincare
+<br />
+__________________________________________________________________________
+<br />
+<br /><br /><pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Jan 13 2000 - 07:28:01 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start81">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="0082.html" title="Next message in the list">Dan Espen: "(no subject)"</a></li>
+<li><dfn>Previous message</dfn>: <a href="0080.html" title="Previous message in the list">Sven Geggus: "FVWM: Section 4.2 of the FAQ"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="0084.html" title="Next message in this discussion thread">Dan Espen: "Re: FVWM: Vector Buttons"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Maybe reply</dfn>: <a href="0084.html" title="Message sent in reply to this message">Dan Espen: "Re: FVWM: Vector Buttons"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="0088.html" title="Message sent in reply to this message">Dominik Vogt: "Re: FVWM: Vector Buttons"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="9325.html" title="Message sent in reply to this message">Dan Espen: "Re: FVWM: Vector Buttons"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg81" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg81" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg81" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg81" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:50 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Strange AddToFunc behavior from Kirk Hilliard on 1998-01-29 (fvwm-users)</title>
+<meta name="Author" content="Kirk Hilliard (kirk_at_ghoti.com)" />
+<meta name="Subject" content="FVWM: Strange AddToFunc behavior" />
+<meta name="Date" content="1998-01-29" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Strange AddToFunc behavior</h1>
+<!-- received="Thu Jan 29 11:03:43 1998" -->
+<!-- isoreceived="19980129110343" -->
+<!-- sent="29 Jan 1998 12:00:55 -0500" -->
+<!-- isosent="19980129170055" -->
+<!-- name="Kirk Hilliard" -->
+<!-- email="kirk_at_ghoti.com" -->
+<!-- subject="FVWM: Strange AddToFunc behavior" -->
+<!-- id="87en1rnrjs.fsf_at_ghoti.com" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start21703" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="21704.html" accesskey="d" title="A.J.vanWerven: &quot;FVWM: CustomPlacement&quot;">Next message</a> ]
+[ <a href="21702.html" title="Manfred Bartz: &quot;Re: FVWM: Jump upon overcoming EdgeResistance&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="21706.html" accesskey="t" title="Dan Espen: &quot;Re: FVWM: Strange AddToFunc behavior&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21703" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21703" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21703" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21703" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Kirk Hilliard &lt;<a href="mailto:kirk_at_ghoti.com?Subject=Re%3A%20FVWM%3A%20Strange%20AddToFunc%20behavior">kirk_at_ghoti.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: 29 Jan 1998 12:00:55 -0500</span><br />
+</address>
+<br />
+The ChangeLog for fvmw2 version 2.0.46 includes:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;37. Focus command no longer raises - use an interpreted
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;focus-and-raise function if that's desired
+<br />
+<br />My first attempt at such a function was this:
+<br />
+<br />&nbsp;&nbsp;# The Focus command no longer raises the window automatically.
+<br />
+&nbsp;&nbsp;# Here is a function that emulates the old Focus behavior.
+<br />
+&nbsp;&nbsp;DestroyFunc focus-and-raise
+<br />
+&nbsp;&nbsp;AddToFunc   focus-and-raise
+<br />
+&nbsp;&nbsp;+                           &quot;I&quot; Focus
+<br />
+&nbsp;&nbsp;+                           &quot;I&quot; Raise
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;# And here are the new bindings.
+<br />
+&nbsp;&nbsp;Key Tab         A       M       Next [CurrentDesk] focus-and-raise
+<br />
+&nbsp;&nbsp;Key Tab         A       MS      Prev [CurrentDesk] focus-and-raise
+<br />
+<br />This function did focus and raise the next window, but then focus
+<br />
+immediately returned to the window under the mouse.  (This would
+<br />
+probably not have been the case with ClickToFocus -- I use
+<br />
+SloppyFocus.)
+<br />
+<br />I then discovered that by defining the function like this:
+<br />
+<br />&nbsp;&nbsp;# The Focus command no longer raises the window automatically.
+<br />
+&nbsp;&nbsp;# Here is a function that emulates the old Focus behavior.
+<br />
+&nbsp;&nbsp;DestroyFunc focus-and-raise
+<br />
+&nbsp;&nbsp;AddToFunc   focus-and-raise &quot;I&quot; Focus
+<br />
+&nbsp;&nbsp;+                           &quot;I&quot; Raise
+<br />
+<br />it worked as I expected -- the focus remained with the newly raised
+<br />
+window and did not return to the window under the mouse.  Also, this
+<br />
+second form results in a much faster function -- one which can keep up
+<br />
+with my keyboard repeat rate if I hold down Alt-Tab.  The first
+<br />
+function is considerably slower, with a visible delay between the time
+<br />
+that the next window is raised and it shifts color to indicate that it
+<br />
+has focus.  (This is easier to see when the mouse is moved to the root
+<br />
+window so that focus stays with the newly raised window.)
+<br />
+<br />Is this a bug or a feature?  I initially chose this first style
+<br />
+because it is used in the Debian system.fvwm2rc.  I now see that the
+<br />
+fvwm2 man page only shows the second style for AddToFunc, but it does
+<br />
+not warn against the first style, and that style is used for
+<br />
+AddToDecor.
+<br />
+<br />Kirk Hilliard
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Jan 29 1998 - 11:03:43 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start21703">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="21704.html" title="Next message in the list">A.J.vanWerven: "FVWM: CustomPlacement"</a></li>
+<li><dfn>Previous message</dfn>: <a href="21702.html" title="Previous message in the list">Manfred Bartz: "Re: FVWM: Jump upon overcoming EdgeResistance"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="21706.html" title="Next message in this discussion thread">Dan Espen: "Re: FVWM: Strange AddToFunc behavior"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Maybe reply</dfn>: <a href="21706.html" title="Message sent in reply to this message">Dan Espen: "Re: FVWM: Strange AddToFunc behavior"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21703" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21703" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21703" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21703" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

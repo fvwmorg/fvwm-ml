@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Security fixes for Fvwm 1.24r from Sujal Patel on 1996-01-14 (fvwm-users)</title>
+<meta name="Author" content="Sujal Patel (smpatel_at_sl-009.sl.cybercomm.net)" />
+<meta name="Subject" content="Security fixes for Fvwm 1.24r" />
+<meta name="Date" content="1996-01-14" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Security fixes for Fvwm 1.24r</h1>
+<!-- received="Sat Jan 13 18:45:17 1996" -->
+<!-- isoreceived="19960113184517" -->
+<!-- sent="Sat, 13 Jan 1996 21:45:02 -0500" -->
+<!-- isosent="19960114024502" -->
+<!-- name="Sujal Patel" -->
+<!-- email="smpatel_at_sl-009.sl.cybercomm.net" -->
+<!-- subject="Security fixes for Fvwm 1.24r" -->
+<!-- id="199601140245.VAA00630_at_sl-009.sl.cybercomm.net" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start17110" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="17111.html" accesskey="d" title="Albrecht Kadlec: &quot;Re: FVWM: Swallow and Exec from one FvwmButton&quot;">Next message</a> ]
+[ <a href="17109.html" title="Paul Traina: &quot;FVWM: security problem in fvwm2&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17110" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17110" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17110" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17110" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Sujal Patel &lt;<a href="mailto:smpatel_at_sl-009.sl.cybercomm.net?Subject=Re%3A%20Security%20fixes%20for%20Fvwm%201.24r">smpatel_at_sl-009.sl.cybercomm.net</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sat, 13 Jan 1996 21:45:02 -0500</span><br />
+</address>
+<br />
+<em class="quotelev1">&gt;Number:         944
+</em><br />
+<em class="quotelev1">&gt;Category:       ports
+</em><br />
+<em class="quotelev1">&gt;Synopsis:       Security fixes for Fvwm 1.24r
+</em><br />
+<em class="quotelev1">&gt;Confidential:   no
+</em><br />
+<em class="quotelev1">&gt;Severity:       critical
+</em><br />
+<em class="quotelev1">&gt;Priority:       high
+</em><br />
+<em class="quotelev1">&gt;Responsible:    pst
+</em><br />
+<em class="quotelev1">&gt;State:          open
+</em><br />
+<em class="quotelev1">&gt;Class:          sw-bug
+</em><br />
+<em class="quotelev1">&gt;Submitter-Id:   current-users
+</em><br />
+<em class="quotelev1">&gt;Arrival-Date:   Sat Jan 13 18:50:01 PST 1996
+</em><br />
+<em class="quotelev1">&gt;Last-Modified:  Wed Feb  7 15:56:44 PST 1996
+</em><br />
+<em class="quotelev1">&gt;Originator:     Sujal Patel
+</em><br />
+<em class="quotelev1">&gt;Organization:
+</em><br />
+<em class="quotelev1">&gt;Release:        FreeBSD 2.2-CURRENT i386
+</em><br />
+<em class="quotelev1">&gt;Environment:
+</em><br />
+<br />FreeBSD 2.1+
+<br />
+<br /><em class="quotelev1">&gt;Description:
+</em><br />
+<br />Security problems with mktemp race condition.
+<br />
+<em class="quotelev1">&gt;From Linux Security FAQ Update #10
+</em><br />
+<br />There is a good bit of stuff done between the mktemp() and the actual usage of
+<br />
+the temporary file, so this bug is not very difficult to exploit.  This bug
+<br />
+could allow another local user to execute commands as you, when you start FVWM.
+<br />
+<br /><em class="quotelev1">&gt;How-To-Repeat:
+</em><br />
+<em class="quotelev1">&gt;Fix:
+</em><br />
+<br />This should take care of it.  This is a slightly cleaned up version of
+<br />
+the fix by Debian/GNU Linux.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+diff -ur old/fvwm-1.24r/fvwm/configure.c new/fvwm-1.24r/fvwm/configure.c
+<br />
+--- old/fvwm-1.24r/fvwm/configure.c	Tue Nov 15 09:02:27 1994
+<br />
++++ new/fvwm-1.24r/fvwm/configure.c	Sat Jan 13 20:59:52 1996
+<br />
+_at_&#64; -1976,6 +1976,8 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;char *vc;			/* Visual Class */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FILE *tmpf;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;struct passwd *pwent;
+<br />
++    int fd;
+<br />
++
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* Generate a temporary filename.  Honor the TMPDIR environment variable,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if set. Hope nobody deletes this file! */
+<br />
+&nbsp;
+<br />
+_at_&#64; -1984,14 +1986,21 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strcpy(tmp_name, &quot;/tmp&quot;);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+-    strcat(tmp_name, &quot;/fvwmrcXXXXX&quot;);
+<br />
+-    mktemp(tmp_name);
+<br />
++    strcat(tmp_name, &quot;/fvwmrcXXXXXX&quot;);
+<br />
++    vc = mktemp(tmp_name);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+-    if (*tmp_name == '\0')
+<br />
++    if (vc == NULL)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;perror(&quot;mktemp failed in m4_defs&quot;);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit(0377);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
++
+<br />
++    /* make a directory to guard against following symlinks */
+<br />
++    if (mkdir(tmp_name, 0700) != 0) {
+<br />
++      perror(&quot;exclusive open for tmp_name failed in m4_defs&quot;);
+<br />
++      exit(0377);
+<br />
++    }
+<br />
++    strcat(tmp_name, &quot;/data&quot;); /* what actual tmp file is to be called */
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Create the appropriate command line to run m4, and
+<br />
+diff -ur old/fvwm-1.24r/fvwm/fvwm.c new/fvwm-1.24r/fvwm/fvwm.c
+<br />
+--- old/fvwm-1.24r/fvwm/fvwm.c	Tue Nov 15 09:02:52 1994
+<br />
++++ new/fvwm-1.24r/fvwm/fvwm.c	Sat Jan 13 20:57:49 1996
+<br />
+_at_&#64; -874,11 +874,19 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;if (m4_enable)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;extern char *fvwm_file;
+<br />
++      char *p;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* With m4 processing, a temporary file was created to hold the
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;processed file.  Delete the file now because we don't need it
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;any more.  It will be created again during restart. */ 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unlink(fvwm_file);
+<br />
++      /* get rid of directory it was in as well, since that was created to
+<br />
++        secure access to the file */
+<br />
++      p = strrchr(fvwm_file, '/');
+<br />
++      if (p!=NULL)
+<br />
++       *p='\0'; /* chop off last component of fvwm_file */
+<br />
++      if (rmdir(fvwm_file)!=0)
+<br />
++       fprintf(stderr, &quot;Couldn't rmdir %s\n&quot;, fvwm_file);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;#endif
+<br />
+&nbsp;
+<br />
+<em class="quotelev1">&gt;Audit-Trail:
+</em><br />
+<br />From: Bruce Evans &lt;bde_at_zeta.org.au&gt;
+<br />
+To: FreeBSD-gnats-submit_at_FreeBSD.org, smpatel_at_sl-009&#46;<!--nospam-->sl.cybercomm.net
+<br />
+Cc:  Subject: Re: ports/944: Security fixes for Fvwm 1.24r
+<br />
+Date: Sun, 14 Jan 1996 18:31:18 +1100
+<br />
+<br /><em class="quotelev2"> &gt;&gt;Description:
+</em><br />
+&nbsp;
+<br />
+<em class="quotelev1"> &gt;Security problems with mktemp race condition.
+</em><br />
+<em class="quotelev1"> &gt;From Linux Security FAQ Update #10
+</em><br />
+&nbsp;
+<br />
+<em class="quotelev1"> &gt;There is a good bit of stuff done between the mktemp() and the actual usage of
+</em><br />
+<em class="quotelev1"> &gt;the temporary file, so this bug is not very difficult to exploit.  This bug
+</em><br />
+<em class="quotelev1"> &gt;could allow another local user to execute commands as you, when you start FVWM.
+</em><br />
+&nbsp;
+<br />
+&nbsp;BSD provides mkstemp() to handle this problem properly.  I'm not sure of
+<br />
+&nbsp;it's history, but it is old enough to be in FreeBSD-1.1.5.
+<br />
+&nbsp;
+<br />
+&nbsp;I tried exploiting the bug in mktemp() pointed out by Josh the other day
+<br />
+&nbsp;(mk[s]temp() uses stat(), not lstat(), so mktemp() can return a filename
+<br />
+&nbsp;that is a symlink.  This doesn't seem to be a problem for mkstemp()
+<br />
+&nbsp;since O_EXCL in the open flags stop all (?) existing directory entries
+<br />
+&nbsp;from being openable).
+<br />
+&nbsp;
+<br />
+<em class="quotelev1"> &gt;+    /* make a directory to guard against following symlinks */
+</em><br />
+<em class="quotelev1"> &gt;+    if (mkdir(tmp_name, 0700) != 0) {
+</em><br />
+<em class="quotelev1"> &gt;+      perror(&quot;exclusive open for tmp_name failed in m4_defs&quot;);
+</em><br />
+<em class="quotelev1"> &gt;+      exit(0377);
+</em><br />
+<em class="quotelev1"> &gt;+    }
+</em><br />
+<em class="quotelev1"> &gt;+    strcat(tmp_name, &quot;/data&quot;); /* what actual tmp file is to be called */
+</em><br />
+&nbsp;
+<br />
+&nbsp;I think the O_EXCL method is better.  Except of course if you really
+<br />
+&nbsp;want a directory or another type of non-regular file.  It's surprisingly
+<br />
+&nbsp;hard to get the interface for temporary file [name] creation right.
+<br />
+&nbsp;FreeBSD has 5 BAD interfaces: tempnam(), tmpfile(), tmpnam(), mktemp()
+<br />
+&nbsp;and mkstemp().
+<br />
+&nbsp;
+<br />
+&nbsp;Bruce
+<br />
+Responsible-Changed-From-To: freebsd-bugs-&gt;pst 
+<br />
+Responsible-Changed-By: pst 
+<br />
+Responsible-Changed-When: Wed Feb 7 15:56:28 PST 1996 
+<br />
+Responsible-Changed-Why:  
+<br />
+<em class="quotelev1">&gt;Unformatted:
+</em><br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sat Jan 13 1996 - 18:45:17 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start17110">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="17111.html" title="Next message in the list">Albrecht Kadlec: "Re: FVWM: Swallow and Exec from one FvwmButton"</a></li>
+<li><dfn>Previous message</dfn>: <a href="17109.html" title="Previous message in the list">Paul Traina: "FVWM: security problem in fvwm2"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17110" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17110" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17110" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17110" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Better interaction between Netscape and Fvwm with SloppyFocus from Kai Grossjohann on 1997-07-03 (fvwm-users)</title>
+<meta name="Author" content="Kai Grossjohann (grossjohann_at_charly.cs.uni-dortmund.de)" />
+<meta name="Subject" content="FVWM: Better interaction between Netscape and Fvwm with SloppyFocus" />
+<meta name="Date" content="1997-07-03" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Better interaction between Netscape and Fvwm with SloppyFocus</h1>
+<!-- received="Thu Jul  3 09:56:05 1997" -->
+<!-- isoreceived="19970703085605" -->
+<!-- sent="03 Jul 1997 16:55:41 +0200" -->
+<!-- isosent="19970703145541" -->
+<!-- name="Kai Grossjohann" -->
+<!-- email="grossjohann_at_charly.cs.uni-dortmund.de" -->
+<!-- subject="FVWM: Better interaction between Netscape and Fvwm with SloppyFocus" -->
+<!-- id="vaflo3oi3rm.fsf_at_ls6.cs.uni-dortmund.de" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start20330" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="20331.html" accesskey="d" title="Graeme McCaffery: &quot;FVWM: FvwmButtons bug&quot;">Next message</a> ]
+[ <a href="20329.html" title="Quoc Duong: &quot;FVWM: SendWindowList() existes in fvwm-2.0.45 ?&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="20332.html" accesskey="t" title="Mark Krischer: &quot;Re: FVWM: Better interaction between Netscape and Fvwm with SloppyFocus&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg20330" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg20330" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg20330" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg20330" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Kai Grossjohann &lt;<a href="mailto:grossjohann_at_charly.cs.uni-dortmund.de?Subject=Re%3A%20FVWM%3A%20Better%20interaction%20between%20Netscape%20and%20Fvwm%20with%20SloppyFocus">grossjohann_at_charly.cs.uni-dortmund.de</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: 03 Jul 1997 16:55:41 +0200</span><br />
+</address>
+<br />
+Hi,
+<br />
+<br />I use SloppyFocus.  And I use Netscape.  This means that keyboard
+<br />
+shortcuts don't work the way I would like them to:
+<br />
+<br />I expect to hit Alt-L, say, then enter the URL, then hit Return.
+<br />
+However, it is most unlikely that the mouse pointer is at the right
+<br />
+spot for the popup window of Netscape to receive focus automatically.
+<br />
+Most of the time, I need to hit Alt-L, then move the mouse pointer
+<br />
+into the popup window, then enter the URL, then hit Return.
+<br />
+<br />I positively *hate* this.
+<br />
+<br />I thought that it might be a good idea to hack Fvwm such that the
+<br />
+following rule applies:
+<br />
+<br />&nbsp;&nbsp;If the user is using SloppyFocus and if a popup appears that
+<br />
+&nbsp;&nbsp;`belongs to' the window that currently has focus, give focus to the
+<br />
+&nbsp;&nbsp;popup that has just appeared.
+<br />
+<br />I looked into events.c and it seems that I only need to hack
+<br />
+HandleMapNotify() appropriately.  Is this correct?
+<br />
+<br />However, what I don't know is how to find out wether the window that
+<br />
+has just appeared `belongs to' the window that has currently focus.
+<br />
+How would I do that?  Which fields in the window structure do I have
+<br />
+to compare to find that out?
+<br />
+<br />tia,
+<br />
+kai
+<br />
+<pre>
+-- 
+A large number of young women don't trust men with beards.
+(BFBS Radio)
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Jul 03 1997 - 09:56:05 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start20330">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="20331.html" title="Next message in the list">Graeme McCaffery: "FVWM: FvwmButtons bug"</a></li>
+<li><dfn>Previous message</dfn>: <a href="20329.html" title="Previous message in the list">Quoc Duong: "FVWM: SendWindowList() existes in fvwm-2.0.45 ?"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="20332.html" title="Next message in this discussion thread">Mark Krischer: "Re: FVWM: Better interaction between Netscape and Fvwm with SloppyFocus"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="20332.html" title="Message sent in reply to this message">Mark Krischer: "Re: FVWM: Better interaction between Netscape and Fvwm with SloppyFocus"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="20336.html" title="Message sent in reply to this message">Toshi Isogai: "Re: FVWM: Better interaction between Netscape and Fvwm with SloppyFocus"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="20341.html" title="Message sent in reply to this message">gottlieb_at_research.nj.nec.com: "Re: FVWM: Better interaction between Netscape and Fvwm with SloppyFocus"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg20330" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg20330" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg20330" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg20330" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

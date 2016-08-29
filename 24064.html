@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: setvbuf error from Paul D. Smith on 1999-04-22 (fvwm-users)</title>
+<meta name="Author" content="Paul D. Smith (psmith_at_baynetworks.com)" />
+<meta name="Subject" content="Re: FVWM: setvbuf error" />
+<meta name="Date" content="1999-04-22" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: setvbuf error</h1>
+<!-- received="Thu Apr 22 15:56:24 1999" -->
+<!-- isoreceived="19990422145624" -->
+<!-- sent="22 Apr 1999 16:53:03 -0400" -->
+<!-- isosent="19990422205303" -->
+<!-- name="Paul D. Smith" -->
+<!-- email="psmith_at_baynetworks.com" -->
+<!-- subject="Re: FVWM: setvbuf error" -->
+<!-- id="p54sm88jio.fsf_at_baynetworks.com" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="Tue, 20 Apr 1999 18:38:03 -0700&quot;" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start24064" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="24065.html" accesskey="d" title="Sam Krishnabhat: &quot;FVWM: Is there anyway to change the default size of the title bar&quot;">Next message</a> ]
+[ <a href="24063.html" title="Bob Woodside: &quot;Re: FVWM: Window Shading&quot;">Previous message</a> ]
+[ <a href="24045.html" title="Den Luzon: &quot;FVWM: setvbuf error&quot;">Maybe in reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg24064" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg24064" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg24064" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg24064" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Paul D. Smith &lt;<a href="mailto:psmith_at_baynetworks.com?Subject=Re%3A%20FVWM%3A%20setvbuf%20error">psmith_at_baynetworks.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: 22 Apr 1999 16:53:03 -0400</span><br />
+</address>
+<br />
+%% Den Luzon &lt;dluzon_at_idt.com&gt; writes:
+<br />
+<br />&nbsp;&nbsp;dl&gt;      i'd like to install the fvwm on my Solaris 2.7, but when I
+<br />
+&nbsp;&nbsp;dl&gt; try to run the &quot;./configure&quot; i encoutered an problem . do if you
+<br />
+&nbsp;&nbsp;dl&gt; could help me how to solve this problem it would be great. anyway
+<br />
+&nbsp;&nbsp;dl&gt; here is the error that i've got.
+<br />
+<br />&nbsp;&nbsp;dl&gt; ERROR:
+<br />
+<br />&nbsp;&nbsp;dl&gt; checking whether setvbuf arguments are reversed... configure: error: can
+<br />
+&nbsp;&nbsp;dl&gt; not run test program while cross compiling
+<br />
+<br />This means that configure thinks you're using a cross-compiler.  This
+<br />
+usually means that it found a compiler that appears to run OK, but it
+<br />
+couldn't run even the simplest resulting output file.
+<br />
+<br />Look closely at the output of configure before it gets here and find the
+<br />
+check for a C++ library; it'll say something like &quot;checking for
+<br />
+cross-compiler&quot;; see if it comes up with &quot;yes&quot; instead of &quot;no&quot;.
+<br />
+<br />Whenever this happens to me on Solaris it's because I installed GCC with
+<br />
+the &quot;enable shared libs&quot; option.  The way G++ (the GCC C++ compiler) is
+<br />
+installed, unless you put it in the &quot;standard&quot; place you _MUST_ supply a
+<br />
+-R option to it or it won't work.
+<br />
+<br />G++ requires the libstdc++ library.  If you build this shared, then it
+<br />
+needs to be found at runtime.  On Solaris, using -L on the link line
+<br />
+isn't enough for that, you must use -R (or set LD_RUN_PATH).  So, it
+<br />
+links OK but then when you try to run the executable it doesn't work.
+<br />
+<br />Things to do:
+<br />
+<br />&nbsp;1) Look for the configure output I noted above.
+<br />
+<br />&nbsp;2) Look in the config.log file and find the place where it looks for
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;the C and C++ compilers, and see what errors you got.
+<br />
+<br />&nbsp;3) What I do to get it working is this (note, this only works in
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Bourne-ish shells like sh, ksh, bash, and zsh):
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$ LDFLAGS='-R/usr/local/lib' ./configure ...
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;Replace /usr/local with whatever prefix you used to install GCC.
+<br />
+<br /><pre>
+-- 
+-------------------------------------------------------------------------------
+ Paul D. Smith &lt;psmith_at_baynetworks.com&gt;         Network Management Development
+ &quot;Please remain calm...I may be mad, but I am a professional.&quot; --Mad Scientist
+-------------------------------------------------------------------------------
+   These are my opinions---Nortel Networks takes no responsibility for them.
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Apr 22 1999 - 15:56:24 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start24064">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="24065.html" title="Next message in the list">Sam Krishnabhat: "FVWM: Is there anyway to change the default size of the title bar"</a></li>
+<li><dfn>Previous message</dfn>: <a href="24063.html" title="Previous message in the list">Bob Woodside: "Re: FVWM: Window Shading"</a></li>
+<li><dfn>Maybe in reply to</dfn>: <a href="24045.html" title="Message to which this message replies">Den Luzon: "FVWM: setvbuf error"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg24064" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg24064" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg24064" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg24064" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:02 BST
+</em></small></p>
+</body>
+</html>

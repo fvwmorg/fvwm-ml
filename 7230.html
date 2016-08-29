@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: WarpToWindow question from Ken Marx on 2002-12-14 (fvwm-users)</title>
+<meta name="Author" content="Ken Marx (kmarx_at_vicor.com)" />
+<meta name="Subject" content="Re: FVWM: WarpToWindow question" />
+<meta name="Date" content="2002-12-14" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: WarpToWindow question</h1>
+<!-- received="Fri Dec 13 19:11:15 2002" -->
+<!-- isoreceived="20021213191115" -->
+<!-- sent="Fri, 13 Dec 2002 17:00:33 -0800" -->
+<!-- isosent="20021214010033" -->
+<!-- name="Ken Marx" -->
+<!-- email="kmarx_at_vicor.com" -->
+<!-- subject="Re: FVWM: WarpToWindow question" -->
+<!-- id="3DFA82B1.7020102_at_vicor.com" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="20021211224352.GA13626&#64;unixcab.org" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start7230" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="7231.html" accesskey="d" title="Bob Mroczka: &quot;FVWM: grabfocustransient not working?&quot;">Next message</a> ]
+[ <a href="7229.html" title="Jeremy Slade: &quot;FVWM: fvwm with VNC&quot;">Previous message</a> ]
+[ <a href="7217.html" title="Ken Marx: &quot;FVWM: WarpToWindow question&quot;">Maybe in reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg7230" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg7230" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg7230" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg7230" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Ken Marx &lt;<a href="mailto:kmarx_at_vicor.com?Subject=Re%3A%20FVWM%3A%20WarpToWindow%20question">kmarx_at_vicor.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 13 Dec 2002 17:00:33 -0800</span><br />
+</address>
+<br />
+Hi,
+<br />
+<br />Mikhael Goikhman already graciously addressed my
+<br />
+question, but I was wondering if the below
+<br />
+hack would be of interest to you:
+<br />
+<br />I thought it might be nice to add regex type
+<br />
+name matching to conditions. So I hacked in
+<br />
+some support for things like:
+<br />
+<br />DestroyFunc RaiseWarptoWin
+<br />
+AddToFunc   RaiseWarptoWin
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;+ I Focus
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;+ I Iconify -1
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;+ I Raise
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;+ I WarpToWindow 50 50
+<br />
+<br />Key F2 A N Next (RegexMatch &quot;[Ss]omename.*[0-9]&quot;) RaiseWarptoWin
+<br />
+<br />I'm not sure exactly what !RegexMatch should mean, since
+<br />
+that's (I believe?) kind of handled by '!' in front of
+<br />
+the name itself. Suggestions welcome on this.
+<br />
+<br />Also - PCRE (perl regex) functionality can easily be had
+<br />
+by simply doing #include &lt;pcreposix.h&gt;. This wraps the
+<br />
+posix regcomp/exec calls nicely (see man pcreposix).
+<br />
+<br />I'll include the -c diffs below in case anyone remotely
+<br />
+cares... If not, sorry for the bandwidth, and thanks
+<br />
+again for the help.
+<br />
+<br />k.
+<br />
+<br /><pre>
+-- 
+Ken Marx, kmarx_at_vicor-nb.com
+Examine where the rubber meets the road on the bandwith issues!!
+		- <a href="http://www.bigshed.com/cgi-bin/speak.cgi">http://www.bigshed.com/cgi-bin/speak.cgi</a>
+================================================================
+Of course, a number of more/less elegant ways of 
+incorporating this. Flame away...
+--------------------------------------
+*** fvwm.h.bak0 Fri Dec 13 12:12:00 2002
+--- fvwm.h      Fri Dec 13 12:55:11 2002
+***************
+*** 49,54 ****
+--- 49,56 ----
+  
+  /* ---------------------------- included header files ----------------------- */
+  
++ #include &lt;sys/types.h&gt;
++ #include &lt;regex.h&gt;
+  #include &lt;X11/Xlib.h&gt;
+  #include &lt;X11/Xutil.h&gt;
+  #include &lt;X11/cursorfont.h&gt;
+***************
+*** 435,444 ****
+--- 437,448 ----
+                unsigned use_circulate_hit_icon : 1;
+                unsigned use_circulate_hit_shaded : 1;
+                unsigned use_do_accept_focus : 1;
++               unsigned use_regex_matching : 1;
+        } my_flags;
+        window_flags flags;
+        window_flags flag_mask;
+        char *name;
++       regex_t *regexp;
+        int layer;
+  } WindowConditionMask;
+  
+[sploot.vicor-nb.com] -/work/fvwm-2.5.4/fvwm &lt;64&gt; !!:gs/fvwm.h/conditional.c
+diff -c conditional.c.bak0 conditional.c
+*** conditional.c.bak0  Fri Dec 13 12:11:53 2002
+--- conditional.c       Fri Dec 13 13:30:53 2002
+***************
+*** 327,332 ****
+--- 327,340 ----
+                free(mask-&gt;name - 1);
+        }
+  
++       if (mask-&gt;regexp)
++       {
++           regfree( mask-&gt;regexp );
++           free( mask-&gt;regexp );
++           mask-&gt;regexp = NULL;
++           mask-&gt;my_flags.use_regex_matching = 0;
++       }
++ 
+        return;
+  }
+  
+***************
+*** 469,474 ****
+--- 477,487 ----
+                {
+                        mask-&gt;my_flags.use_circulate_hit_shaded = on;
+                }
++               else if (StrEquals(cond,&quot;RegexMatch&quot;))
++               {
++                       mask-&gt;regexp = (regex_t *)malloc( sizeof( regex_t ) );
++                       mask-&gt;my_flags.use_regex_matching = on;
++               }
+                else if (StrEquals(cond,&quot;State&quot;))
+                {
+                        if (sscanf(tmp, &quot;%d&quot;, &amp;state) &amp;&amp;
+***************
+*** 538,543 ****
+--- 551,565 ----
+                free(prev_condition);
+        }
+  
++       if ( mask-&gt;regexp &amp;&amp; mask-&gt;name )
++       {
++           int ret;
++           ret = regcomp( mask-&gt;regexp, mask-&gt;name, REG_EXTENDED );
++           if (ret)
++           {
++               fprintf( stderr, &quot;Bad regcomp(%s): %d\n&quot;, mask-&gt;name, ret );
++           }
++       }
+        return;
+  }
+  
+***************
+*** 611,622 ****
+  
+        /* Yes, I know this could be shorter, but it's hard to understand then
+         */
+!       fMatchesName = matchWildcards(mask-&gt;name, fw-&gt;name.name);
+!       fMatchesIconName = matchWildcards(mask-&gt;name, fw-&gt;icon_name.name);
+!       fMatchesClass = (fw-&gt;class.res_class &amp;&amp;
+!                        matchWildcards(mask-&gt;name,fw-&gt;class.res_class));
+!       fMatchesResource = (fw-&gt;class.res_name &amp;&amp;
+!                           matchWildcards(mask-&gt;name, fw-&gt;class.res_name));
+        fMatches = (fMatchesName || fMatchesIconName || fMatchesClass ||
+                    fMatchesResource);
+  
+--- 633,659 ----
+  
+        /* Yes, I know this could be shorter, but it's hard to understand then
+         */
+!       if (mask-&gt;regexp)
+!       {
+!           fMatchesName = ! regexec(mask-&gt;regexp, fw-&gt;name.name, 0, 0, 0);
+!           fMatchesIconName = ! regexec(mask-&gt;regexp,
+!                                       fw-&gt;icon_name.name, 0, 0, 0);
+!           fMatchesClass = (fw-&gt;class.res_class &amp;&amp;
+!                        ! regexec(mask-&gt;regexp,fw-&gt;class.res_class, 0, 0, 0));
+!           fMatchesResource = (fw-&gt;class.res_name &amp;&amp;
+!                       ! regexec(mask-&gt;regexp, fw-&gt;class.res_name, 0, 0, 0));
+!       }
+!       else
+!       {
+!           /* Old style wildcard matching
+!           */
+!           fMatchesName = matchWildcards(mask-&gt;name, fw-&gt;name.name);
+!           fMatchesIconName = matchWildcards(mask-&gt;name, fw-&gt;icon_name.name);
+!           fMatchesClass = (fw-&gt;class.res_class &amp;&amp;
+!                            matchWildcards(mask-&gt;name,fw-&gt;class.res_class));
+!           fMatchesResource = (fw-&gt;class.res_name &amp;&amp;
+!                               matchWildcards(mask-&gt;name, fw-&gt;class.res_name));
+!       }
+        fMatches = (fMatchesName || fMatchesIconName || fMatchesClass ||
+                    fMatchesResource);
+Mikhael Goikhman wrote:
+&gt; On 11 Dec 2002 11:37:05 -0800, Ken Marx wrote:
+&gt; 
+&gt;&gt;I've been beating my head on this one for over
+&gt;&gt;a day. I'm hoping I'm just clueless and that
+&gt;&gt;there's a simple way:
+&gt;&gt;
+&gt;&gt;I have an already created window named &quot;window 2&quot;
+&gt;&gt;(in this case it's an xterm, but also want this
+&gt;&gt;for my mozilla browser, mail windows, etc.)
+&gt;&gt;
+&gt;&gt;I'd like to map a function key, say F2, to
+&gt;&gt;raise/focus/warpto said &quot;window 2&quot;.
+&gt;&gt;
+&gt;&gt;I've been trying things like:
+&gt;&gt;
+&gt;&gt;AddToFunc   FuncWindowTest
+&gt;&gt;       + I WindowId window2 Focus
+&gt;&gt;       + I WindowId window2 Raise
+&gt;&gt;       + I WindowId window2 WarpToWindow 50 50
+&gt;&gt;
+&gt;&gt;Key F2 A N FuncWindowTest
+&gt;&gt;
+&gt;&gt;But no dice. Is there a way?
+&gt;&gt;
+&gt;&gt;Thanks for your help.
+&gt;&gt;
+&gt;&gt;(p.s. Please email direct to me, since
+&gt;&gt;I'm not subscribed to any fvwm lists.)
+&gt; 
+&gt; 
+&gt; WindowId operates on ids that X gives to windows, these are very big
+&gt; random numbers that you don't usually know. You only want to execute
+&gt; WindowId on constructed ids, like $0, $w or $[my_previously_stored_id]
+&gt; and not on some known in advance value.
+&gt; 
+&gt; So WindowId will not do you good here. What you need is the Next command.
+&gt; 
+&gt;   DestroyFunc FuncWindowTest
+&gt;   AddToFunc   FuncWindowTest
+&gt;   + I Focus
+&gt;   + I Raise
+&gt;   + I WarpToWindow 50 50
+&gt; 
+&gt;   Next (&quot;Mozila*&quot;) FuncWindowTest
+&gt; 
+&gt; You may want to specify some options for Next, like:
+&gt; 
+&gt;   Next (Mozilla, !Iconic) FuncWindowTest
+&gt;   Next (AllowFocus) Focus
+&gt;   Next (XTerm, !Shaded) WindowShade
+&gt; 
+&gt; If you really want to see how WindowId may be useful here is an obfuscated
+&gt; and redundant way of doing the same as the above:
+&gt; 
+&gt;   DestroyFunc FuncWindowTest
+&gt;   AddToFunc   FuncWindowTest
+&gt;   + I WindowId $0 Focus
+&gt;   + I WindowId $0 Raise
+&gt;   + I WindowId $0 WarpToWindow 50 50
+&gt; 
+&gt;   Next (&quot;Mozila*&quot;) FuncWindowTest $w     # it should be $$w to be sure
+&gt; 
+&gt; In your specific case you may reuse one existing function, but I don't
+&gt; want to suggest this (since this function may be changed), write your own.
+&gt; 
+&gt; Regards,
+&gt; Mikhael.
+&gt; 
+&gt; 
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Dec 13 2002 - 19:11:15 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start7230">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="7231.html" title="Next message in the list">Bob Mroczka: "FVWM: grabfocustransient not working?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="7229.html" title="Previous message in the list">Jeremy Slade: "FVWM: fvwm with VNC"</a></li>
+<li><dfn>Maybe in reply to</dfn>: <a href="7217.html" title="Message to which this message replies">Ken Marx: "FVWM: WarpToWindow question"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg7230" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg7230" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg7230" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg7230" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:54 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Re:proctool &amp; fvwm2.0.42 &amp; BUG from bpm on 1996-06-04 (fvwm-users)</title>
+<meta name="Author" content="bpm (bpm_at_terraweb.com)" />
+<meta name="Subject" content="FVWM: Re:proctool &amp; fvwm2.0.42 &amp; BUG" />
+<meta name="Date" content="1996-06-04" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Re:proctool &amp; fvwm2.0.42 &amp; BUG</h1>
+<!-- received="Tue Jun  4 16:07:14 1996" -->
+<!-- isoreceived="19960604150714" -->
+<!-- sent="Tue, 4 Jun 1996 16:00:57 -0500" -->
+<!-- isosent="19960604210057" -->
+<!-- name="bpm" -->
+<!-- email="bpm_at_terraweb.com" -->
+<!-- subject="FVWM: Re:proctool &amp; fvwm2.0.42 &amp; BUG" -->
+<!-- id="19960604210057.AAA20833_at_vlad.terraweb.com" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="Pine.LNX.3.91.960604143919.21501A-100000_at_mgt.cebaf.gov" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start17034" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="17035.html" accesskey="d" title="Charles Hines: &quot;Re: FVWM: Re:proctool &#0038; fvwm2.0.42 &#0038; BUG&quot;">Next message</a> ]
+[ <a href="17033.html" title="bpm: &quot;FVWM: proctool &#0038; fvwm2.0.42&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="17035.html" accesskey="t" title="Charles Hines: &quot;Re: FVWM: Re:proctool &#0038; fvwm2.0.42 &#0038; BUG&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17034" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17034" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17034" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17034" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: bpm &lt;<a href="mailto:bpm_at_terraweb.com?Subject=Re%3A%20FVWM%3A%20Re%3Aproctool%20%26%20fvwm2.0.42%20%26%20BUG">bpm_at_terraweb.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 4 Jun 1996 16:00:57 -0500</span><br />
+</address>
+<br />
+Michael Tiefenback writes:
+<br />
+&nbsp;|X_GrabButton access violations are generally due to hot keys defined in
+<br />
+&nbsp;|the .fvwmrc which conflict with those used by the process which failed to
+<br />
+&nbsp;|run.  You probably should disable each of your shift/alt mousebutton
+<br />
+&nbsp;|options in fvwm in turn, and hunt down which of them is the conflicting
+<br />
+&nbsp;|item. 
+<br />
+&nbsp;|
+<br />
+&nbsp;|Michael Tiefenback
+<br />
+&nbsp;|
+<br />
+<br />Thanks!  That was it.  The problem was:
+<br />
+<br /># Button 3 in the window, with the Modifier-1 key (usually alt or diamond)
+<br />
+# gives Raise-Lower. Used to use control here, but that interferes with xterm
+<br />
+Mouse 3         W       M       RaiseLower
+<br />
+<br />But I in trying to determine the problem, I think I have found a bug!
+<br />
+<br />Scenario:
+<br />
+&nbsp;I am using a DeskTopSize 2x1.
+<br />
+&nbsp;Take a normal window (xterm 80x24) and place it about 5 or less
+<br />
+pixels from the left edge.  Select the left edge of the window and try
+<br />
+to drag the left edge even further/closer to the desktop edge.
+<br />
+Release and whamo!  The window is now 224x24 in size!  Kind of cool.
+<br />
+<br />Thanks
+<br />
+<br /><pre>
+---
+Brian Millett                    
+Technology Applications Inc.     &quot;Heaven can not exist,
+(314) 530-1981                          If the family is not eternal&quot;
+bpm_at_techapp.com                   F. Ballard Washburn
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue Jun 04 1996 - 16:07:14 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start17034">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="17035.html" title="Next message in the list">Charles Hines: "Re: FVWM: Re:proctool &#0038; fvwm2.0.42 &#0038; BUG"</a></li>
+<li><dfn>Previous message</dfn>: <a href="17033.html" title="Previous message in the list">bpm: "FVWM: proctool &#0038; fvwm2.0.42"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="17035.html" title="Next message in this discussion thread">Charles Hines: "Re: FVWM: Re:proctool &#0038; fvwm2.0.42 &#0038; BUG"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="17035.html" title="Message sent in reply to this message">Charles Hines: "Re: FVWM: Re:proctool &#0038; fvwm2.0.42 &#0038; BUG"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17034" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17034" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17034" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17034" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

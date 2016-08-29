@@ -1,0 +1,591 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: improvements to fvwmrc_convert from Austin Donnelly on 1996-04-19 (fvwm-users)</title>
+<meta name="Author" content="Austin Donnelly (and1000_at_cam.ac.uk)" />
+<meta name="Subject" content="FVWM: improvements to fvwmrc_convert" />
+<meta name="Date" content="1996-04-19" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: improvements to fvwmrc_convert</h1>
+<!-- received="Fri Apr 19 10:29:31 1996" -->
+<!-- isoreceived="19960419092931" -->
+<!-- sent="Fri, 19 Apr 96 16:32 BST" -->
+<!-- isosent="19960419153200" -->
+<!-- name="Austin Donnelly" -->
+<!-- email="and1000_at_cam.ac.uk" -->
+<!-- subject="FVWM: improvements to fvwmrc_convert" -->
+<!-- id="m0uAIAK-000z68C_at_valour.pem.cam.ac.uk" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start16301" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="16302.html" accesskey="d" title="Alexander Sorg: &quot;Re: FVWM: deiconification of windows without an icon&quot;">Next message</a> ]
+[ <a href="16300.html" title="Charles Hines: &quot;Re: FVWM: Memory usage&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16301" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16301" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16301" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16301" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Austin Donnelly &lt;<a href="mailto:and1000_at_cam.ac.uk?Subject=Re%3A%20FVWM%3A%20improvements%20to%20fvwmrc_convert">and1000_at_cam.ac.uk</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 19 Apr 96 16:32 BST</span><br />
+</address>
+<br />
+Here's a patch to fvwmrc_convert, which does:
+<br />
+<br />&nbsp;o corrects order of IconBox translation
+<br />
+<br />&nbsp;o if old .fvwmrc specified to use the built-in pager, then configure
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FvwmPager to be as similar as possible
+<br />
+<br />&nbsp;o fixes problem with old buttonstyle translation conde
+<br />
+<br />&nbsp;o fixed problem where spurious ')' could appear at the start of a
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;line by itself
+<br />
+<br />&nbsp;o handles MWMBorders
+<br />
+<br />&nbsp;o handles Cursor
+<br />
+<br />&nbsp;o handles SloppyFocus
+<br />
+<br />&nbsp;o fixes a few problems with '$0' appearing in output rather than
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;being expanded.
+<br />
+<br />&nbsp;o fixes problems translating menu defns with spaces in the title
+<br />
+<br /><br />Austin
+<br />
+<br /><br />--- .../fvwm-2.0.42.orig/utils/fvwmrc_convert	Thu Oct  5 19:34:18 1995
+<br />
++++ fvwmrc_convert	Fri Apr 19 13:56:38 1996
+<br />
+_at_&#64; -23,10 +23,12 &#64;&#64;
+<br />
+&nbsp;# Originally written by Martin Kraemer &lt;Martin.Kraemer_at_mch.sni.de&gt;
+<br />
+&nbsp;# Corrected, extended, and modified by Grant McDorman &lt;grant_at_isgtec.com&gt;
+<br />
+&nbsp;# 24 May 95
+<br />
++# Further corrections and extensions by Austin Donnelly &lt;and1000_at_cam.ac.uk&gt;
+<br />
++# 19 Apr 96
+<br />
+&nbsp;
+<br />
+&nbsp;echo &quot;fvwmrc-to-2 1.7a&quot;
+<br />
+-if [ ! -x /usr/local/contrib/bin/gnu/gawk ];then
+<br />
+-   echo &quot;gawk (/usr/local/contrib/bin/gnu/gawk) missing, cannot run&quot;
+<br />
++if [ ! -x /usr/bin/gawk ];then
+<br />
++   echo &quot;gawk (/usr/bin/gawk) missing, cannot run&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;exit 1
+<br />
+&nbsp;fi
+<br />
+&nbsp;source=${1:-$HOME/.fvwmrc}
+<br />
+_at_&#64; -61,19 +63,25 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;menustipplecolor=&quot;&quot;;        dflt[&quot;menustipplecolor&quot;] = &quot;grey40&quot;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;font=&quot;&quot;;                    dflt[&quot;font&quot;] = &quot;-adobe-helvetica-medium-r-*-*-18-*-*-*-*-*-iso8859-1&quot;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mwmmenus=&quot;&quot;;                dflt[&quot;mwmmenus&quot;] = &quot;fvwm&quot;;
+<br />
++            dflt[&quot;pagerforecolor&quot;] = &quot;SlateBlue4&quot;;
+<br />
++            dflt[&quot;pagerbackcolor&quot;] = &quot;SlateGrey&quot;;
+<br />
++            dflt[&quot;pagerfont&quot;] = &quot;-*-times-medium-r-*-*-*-80-*-*-*-*-*-*&quot;;
+<br />
++            dflt[&quot;desktopscale&quot;] = &quot;32&quot;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;menustyle=FALSE;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inpopup=FALSE;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;infunc=FALSE;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prefix=&quot;&quot;;
+<br />
+&nbsp;
+<br />
++            seenIconbox=FALSE;
+<br />
++            builtinpager=FALSE;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;/^#/    {   # Comment, pass it thru
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print $0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;next
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;
+<br />
+-/^$/    {   # Empty line, pass it thru
+<br />
++/^[ \t]*$/    {   # Empty line, pass it thru
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print $0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;next;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+_at_&#64; -198,18 +206,62 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;next;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;
+<br />
+-# _at_&#64;&#64;&#64;&#64;&#64;&#64;&#64;&#64;&#64;To Do&#64;&#64;&#64;&#64;&#64;&#64;&#64;&#64;&#64;&#64;&#64;&#64;&#64;&#64;&#64;
+<br />
++
+<br />
++# Config FvwmPager module to look like built-in pager
+<br />
++/^Pager[ \t]+/ {
+<br />
++            builtinpager=TRUE;
+<br />
++            dflt[&quot;pagerx&quot;]=$2;
+<br />
++            dflt[&quot;pagery&quot;]=$3;
+<br />
++            print &quot;#! &quot; $0 &quot; (will configure FvwmPager to emulate builtin pager)&quot;;
+<br />
++            next;
+<br />
++        }
+<br />
+&nbsp;/^PagerForeColor[	 ]/ {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dflt[&quot;pagerforecolor&quot;]=pagerforecolor=$2;
+<br />
+-	    printf (&quot;#!%s (new command=Style FvwmPager)\n&quot;, $0);
+<br />
++            print &quot;#! &quot; $0 &quot; (use FvwmPager module)&quot;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;next;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+-# _at_&#64;&#64;&#64;&#64;&#64;&#64;&#64;&#64;&#64;To Do&#64;&#64;&#64;&#64;&#64;&#64;&#64;&#64;&#64;&#64;&#64;&#64;&#64;&#64;&#64;
+<br />
++
+<br />
+&nbsp;/^PagerBackColor[	 ]/ {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dflt[&quot;pagerbackcolor&quot;]=pagerbackcolor=$2;
+<br />
+-	    printf (&quot;#!%s (new command=Style FvwmPager)\n&quot;, $0);
+<br />
++            print &quot;#! &quot; $0 &quot; (use FvwmPager module)&quot;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;next;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
++/^PagerFont[ \t]+/ {
+<br />
++            dflt[&quot;pagerfont&quot;]=$2;
+<br />
++            print &quot;#! &quot; $0 &quot; (use FvwmPager module)&quot;;
+<br />
++            next;
+<br />
++        }
+<br />
++/^DeskTopScale[ \t]+/ {
+<br />
++            dflt[&quot;desktopscale&quot;]=$2;
+<br />
++            print &quot;#! &quot; $0 &quot; (use FvwmPager module)&quot;;
+<br />
++            next;
+<br />
++}
+<br />
++/^Style &quot;FvwmPager&quot;/ {
+<br />
++            if (builtinpager) {
+<br />
++              print &quot;#! &quot; $0 &quot; (reconfiguring FvwmPager)&quot;;
+<br />
++              next;
+<br />
++            } else {
+<br />
++              print;
+<br />
++              next;
+<br />
++            }
+<br />
++}
+<br />
++/^Style &quot;Fvwm Pager&quot;[ \t]/ {
+<br />
++            if (builtinpager)
+<br />
++              sub(&quot;^Style \&quot;Fvwm Pager\&quot;[ \t]&quot;, &quot;Style \&quot;FvwmPager\&quot; &quot;);
+<br />
++            print;
+<br />
++            next;
+<br />
++}
+<br />
++# now nuke any FvwmPager module config if builtinpager is TRUE, since
+<br />
++# were going to write our own config at the end
+<br />
++/^\*FvwmPager/ { if (builtinpager) {
+<br />
++                   print &quot;#! &quot; $0 &quot; (reconfiguring FvwmPager to emulate builtin pager)&quot;;
+<br />
++		   next;
+<br />
++		 }
+<br />
++                 else {
+<br />
++		   print;
+<br />
++                   next;
+<br />
++		 }
+<br />
++            }
+<br />
+&nbsp;
+<br />
+&nbsp;# Translate both old ButtonStyle formats to the new format:
+<br />
+&nbsp;/^ButtonStyle[	 ]/  {
+<br />
+_at_&#64; -231,7 +283,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x=substr($3,1,p-1)/2;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y=substr($3,p+1)/2;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf (&quot;%s %s 5 %dx%d_at_0 %dx%d_at_0 %dx%d_at_0 %dx%d_at_1 %dx%d_at_1\n&quot;,
+<br />
+-		    $1, $2, 50-x,50+y, 50+x,50+y, 50-x,50-y, 50+x,50-y,
+<br />
++		    $1, $2, 50-x,50+y, 50+x,50+y, 50+x,50-y, 50-x,50-y,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;50-x,50+y);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;next;
+<br />
+_at_&#64; -246,22 +298,29 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;/^StdBackColor[	 ]/ {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dflt[&quot;stdbackcolor&quot;]=stdbackcolor=$2;
+<br />
+-	    printf (&quot;#!%s (new command=Style \&quot;*\&quot; Color f/b)\n)\n&quot;, $0);
+<br />
++	    printf (&quot;#!%s (new command=Style \&quot;*\&quot; Color f/b)\n&quot;, $0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print &quot;Style \&quot;*\&quot; BackColor &quot; $2;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;next;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;/^IconBox[	 ]/ {
+<br />
+-	    print &quot;Style \&quot;*\&quot; &quot; $0;
+<br />
++	    if (!seenIconbox) {
+<br />
++	      print &quot;Style \&quot;*\&quot; &quot; $0;
+<br />
++              seenIconbox=TRUE;
+<br />
++            } else {
+<br />
++              print &quot;#! &quot; $0 &quot; (multiple iconboxes no longer possible)&quot;
+<br />
++            }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;next;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;/^MWMFunctionHints$/ { printf (&quot;Style \&quot;*\&quot; MWMFunctions\n&quot;); next; }
+<br />
+&nbsp;/^MWMDecor$/         { printf (&quot;Style \&quot;*\&quot; MWMDecor\n&quot;); next; }
+<br />
+&nbsp;/^MWMDecorHints$/         { printf (&quot;Style \&quot;*\&quot; MWMDecor\n&quot;); next; }
+<br />
+&nbsp;/^MWMBorder$/        { printf (&quot;Style \&quot;*\&quot; MWMBorder\n&quot;); next; }
+<br />
++/^MWMBorders$/        { printf (&quot;Style \&quot;*\&quot; MWMBorder\n&quot;); next; }
+<br />
+&nbsp;/^MWMButtons$/       { printf (&quot;Style \&quot;*\&quot; MWMButtons\n&quot;); next; }
+<br />
+&nbsp;/^MWMHintOverride$/  { printf (&quot;Style \&quot;*\&quot; HintOverride\n&quot;); next; }
+<br />
+&nbsp;/^RandomPlacement$/ { print &quot;Style \&quot;*\&quot; &quot; $0; next; }
+<br />
+&nbsp;/^SmartPlacement$/ { print &quot;Style \&quot;*\&quot; &quot; $0; next; }
+<br />
++/^Cursor[ 	]/ { print &quot;#! &quot; $0 &quot; (Cursor command withdrawn)&quot;; next; }
+<br />
+&nbsp;/^BorderWidth$/ { print &quot;Style \&quot;*\&quot; &quot; $0; next; }
+<br />
+&nbsp;/^HandleWidth$/ { print &quot;Style \&quot;*\&quot; &quot; $0; next; }
+<br />
+&nbsp;/^NoPPosition$/ { print &quot;Style \&quot;*\&quot; &quot; $0; next; }
+<br />
+_at_&#64; -269,11 +328,12 &#64;&#64;
+<br />
+&nbsp;/^SuppressIcons$/      { print &quot;Style \&quot;*\&quot; NoIcon&quot;; next; }
+<br />
+&nbsp;/^StickyIcons$/      { print &quot;Style \&quot;*\&quot; StickyIcon&quot;; next; }
+<br />
+&nbsp;
+<br />
++/^SloppyFocus$/ { print &quot;Style \&quot;*\&quot; &quot; $0; next; }
+<br />
+&nbsp;/^AutoRaise[	 ]/	{ print &quot;#! &quot; $0 &quot; (use Module FvwmAuto)&quot;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print &quot;AddToFunc \&quot;InitFunction\&quot; \&quot;I\&quot; Module FvwmAuto &quot; $2;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;next;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+-/^ModulePath[	 ]/    { print &quot;ModulePath /isg/proj/x11/contrib/clients/fvwm2&quot;; next; }
+<br />
++/^ModulePath[	 ]/    { print &quot;#! &quot; $0 &quot; (using compiled-in default)&quot;; next; }
+<br />
+&nbsp;/^PixmapPath[	 ]/    { print $0; next; }
+<br />
+&nbsp;/^IconPath[	 ]/      { print $0; next; }
+<br />
+&nbsp;/^Style[	 ]/         { print $0; next; }
+<br />
+_at_&#64; -301,12 +361,7 &#64;&#64;
+<br />
+&nbsp;/^EdgeScroll[	 ]/	{ print $0; next; }
+<br />
+&nbsp;/^EdgeResistance[	 ]/ { print $0; next; }
+<br />
+&nbsp;/^DeskTopSize[	 ]/ { print $0; next; }
+<br />
+-/^DeskTopScale/ {
+<br />
+-	print &quot;#! &quot; $0;
+<br />
+-	print &quot;Warning: &quot; $1 &quot; not in Fvwm2, command dropped&quot;&gt;&quot;/dev/stderr&quot;;
+<br />
+-	next;
+<br />
+- }
+<br />
+-/^WindowListSkip[	 ]/ { print &quot;#! $0 [deleted]&quot;;
+<br />
++/^WindowListSkip[	 ]/ { print &quot;#! &quot; $0 &quot; [deleted]&quot;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (warned[$1]==FALSE)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print &quot;Warning: &quot; $1 &quot; commented out, obsolete&quot; &gt;&quot;/dev/stderr&quot;;
+<br />
+_at_&#64; -314,7 +369,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;next;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+-/^Pager/ { print &quot;#! $0 [deleted]&quot;;
+<br />
++/^Pager/ { print &quot;#! &quot; $0 &quot; [deleted]&quot;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (warned[$1]==FALSE)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print &quot;Warning: &quot; $1 &quot; commented out, obsolete (use FvwmPager)&quot; &gt;&quot;/dev/stderr&quot;;
+<br />
+_at_&#64; -366,14 +421,16 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;next;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;
+<br />
+-/^Popup[	 ]/ {
+<br />
++/^Popup[ \t]+/ {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (inpopup)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print &quot;ERROR: EndPopup missing&quot; &gt;&quot;/dev/stderr&quot;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (infunction)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print &quot;ERROR: EndFunction missing&quot; &gt;&quot;/dev/stderr&quot;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;infunction=FALSE;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inpopup=TRUE;
+<br />
+-	    prefix=&quot;AddToMenu &quot; $2;
+<br />
++            sub(&quot;^Popup[ \t]+&quot;, &quot;&quot;);
+<br />
++            sub(&quot;[ \t]+$&quot;, &quot;&quot;);
+<br />
++	    prefix=&quot;AddToMenu &quot; $0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;next;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;/^EndPopup$/ {
+<br />
+_at_&#64; -445,6 +502,19 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf (&quot;\n#Set the foreground and background color for selected windows\n&quot;);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf (&quot;HilightColor   %s %s\n&quot;, dflt[&quot;hiforecolor&quot;], dflt[&quot;hibackcolor&quot;]);
+<br />
++	    }
+<br />
++	    if (builtinpager)
+<br />
++	    {
+<br />
++	      print &quot;#! FvwmPager config to emulate builtin pager&quot;
+<br />
++	      print &quot;*FvwmPagerBack &quot; dflt[&quot;pagerbackcolor&quot;];
+<br />
++	      print &quot;*FvwmPagerFore Black&quot;;
+<br />
++	      print &quot;*FvwmPagerFont none&quot;;
+<br />
++	      print &quot;*FvwmPagerHilight &quot; dflt[&quot;pagerforecolor&quot;];
+<br />
++	      print &quot;*FvwmPagerGeometry &quot; dflt[&quot;pagerx&quot;] dflt[&quot;pagery&quot;];
+<br />
++	      print &quot;*FvwmPagerSmallFont &quot; dflt[&quot;pagerfont&quot;];
+<br />
++              print &quot;*FvwmPagerDeskTopScale &quot; dflt[&quot;desktopscale&quot;];
+<br />
++	      print &quot;#! Now start pager&quot;;
+<br />
++	      print &quot;Module FvwmPager 0 0&quot;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;'
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Apr 19 1996 - 10:29:31 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start16301">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="16302.html" title="Next message in the list">Alexander Sorg: "Re: FVWM: deiconification of windows without an icon"</a></li>
+<li><dfn>Previous message</dfn>: <a href="16300.html" title="Previous message in the list">Charles Hines: "Re: FVWM: Memory usage"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16301" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16301" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16301" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16301" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

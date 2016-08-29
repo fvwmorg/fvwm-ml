@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Pesky coredumping in FvwmAudio from brian moore on 1998-04-22 (fvwm-users)</title>
+<meta name="Author" content="brian moore (bem_at_cmc.net)" />
+<meta name="Subject" content="FVWM: Pesky coredumping in FvwmAudio" />
+<meta name="Date" content="1998-04-22" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Pesky coredumping in FvwmAudio</h1>
+<!-- received="Tue Apr 21 19:12:40 1998" -->
+<!-- isoreceived="19980421181240" -->
+<!-- sent="Tue, 21 Apr 1998 17:11:46 -0700" -->
+<!-- isosent="19980422001146" -->
+<!-- name="brian moore" -->
+<!-- email="bem_at_cmc.net" -->
+<!-- subject="FVWM: Pesky coredumping in FvwmAudio" -->
+<!-- id="19980421171146.A20279_at_cmc.net" -->
+<!-- charset="iso-8859-1" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start22050" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="22051.html" accesskey="d" title="patrick finerty: &quot;Re: FVWM: fvwm2: numlock&quot;">Next message</a> ]
+[ <a href="22049.html" title="Frank Wilcox, Jr.: &quot;FVWM: fvwm2: numlock&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg22050" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg22050" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg22050" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg22050" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: brian moore &lt;<a href="mailto:bem_at_cmc.net?Subject=Re%3A%20FVWM%3A%20Pesky%20coredumping%20in%20FvwmAudio">bem_at_cmc.net</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 21 Apr 1998 17:11:46 -0700</span><br />
+</address>
+<br />
+I see this every few hours so finally broke down and built FvwmAudio
+<br />
+with -ggdb to get a decent core:
+<br />
+<br />#0  0x8048f85 in Loop (fd=0x6d65622f) at FvwmAudio.c:413
+<br />
+413                 if ((count = read(fd[1],header,
+<br />
+(gdb) print count
+<br />
+$1 = -1073743996
+<br />
+(gdb) list
+<br />
+408             int             body_length,count,count2=0, total;
+<br />
+409             long            code;
+<br />
+410
+<br />
+411             while (1)
+<br />
+412             {
+<br />
+413                 if ((count = read(fd[1],header,
+<br />
+414                                   HEADER_SIZE*sizeof(unsigned long))) &lt;= 0)
+<br />
+415                     done(0);
+<br />
+416
+<br />
+<br />Ah, well, it hasn't completed the read, so I guess that's why count
+<br />
+is bogus...
+<br />
+<br />But let's look a little deeper:
+<br />
+(gdb) print fd[1]
+<br />
+Cannot access memory at address 0x6d656233.
+<br />
+(gdb) print fd[0]
+<br />
+Cannot access memory at address 0x6d65622f.
+<br />
+<br />Hrrrm... that smells like ASCII.
+<br />
+<br />(gdb)  x/32c &amp;fd-32
+<br />
+0xbffff71c &lt;_serv_stayopen+3086459040&gt;: -36 'Ü' -9 '÷'  -1 'ÿ'  -65
+<br />
+'¿' -10 'ö'-8 'ø'   -1 'ÿ'  -65 '¿'
+<br />
+0xbffff724 &lt;_serv_stayopen+3086459048&gt;: 0 '\000'        0 '\000'        0
+<br />
+'\000'0 '\000'        0 '\000'        0 '\000'        0 '\000'        0
+<br />
+'\000'
+<br />
+0xbffff72c &lt;_serv_stayopen+3086459056&gt;: 0 '\000'        0 '\000'        0
+<br />
+'\000'0 '\000'        91 '['  70 'F'  86 'V'  87 'W'
+<br />
+0xbffff734 &lt;_serv_stayopen+3086459064&gt;: 77 'M'  93 ']'  91 '['  101 'e'
+<br />
+120 'x'101 'e'  99 'c'  117 'u'
+<br />
+<br />Id looks like fd[] is being overwritten by:
+<br />
+[FVWM][executeModule]: &lt;&lt;ERROR&gt;&gt; No such module 'DestroyStyle' in
+<br />
+ModulePath '/usr/X11R6....
+<br />
+<br />(Yeah, yeah, but I was having fun rearranging the configs so I could
+<br />
+swap my entire look and feel on the fly without doing a reload, just
+<br />
+a recapture...)
+<br />
+<br />Anyway, it seems that there is an interesting overflow bug in FvwmAudio.
+<br />
+Anyone fixed it yet or should I break out bounds-checking gcc on it?
+<br />
+<br /><pre>
+-- 
+Brian Moore                             Kill A Spammer For Jesus
+Sysadmin, C/Perl Hacker, Usenet Vandal 
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue Apr 21 1998 - 19:12:40 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start22050">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="22051.html" title="Next message in the list">patrick finerty: "Re: FVWM: fvwm2: numlock"</a></li>
+<li><dfn>Previous message</dfn>: <a href="22049.html" title="Previous message in the list">Frank Wilcox, Jr.: "FVWM: fvwm2: numlock"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg22050" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg22050" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg22050" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg22050" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

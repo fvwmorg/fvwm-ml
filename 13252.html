@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Problem choosing panel with EdgeCommand from Rafal Bisingier on 2004-09-14 (fvwm-users)</title>
+<meta name="Author" content="Rafal Bisingier (ravbc_at_man.poznan.pl)" />
+<meta name="Subject" content="FVWM: Problem choosing panel with EdgeCommand" />
+<meta name="Date" content="2004-09-14" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Problem choosing panel with EdgeCommand</h1>
+<!-- received="Tue Sep 14 07:34:45 2004" -->
+<!-- isoreceived="20040914063445" -->
+<!-- sent="Tue, 14 Sep 2004 14:34:24 +0200" -->
+<!-- isosent="20040914123424" -->
+<!-- name="Rafal Bisingier" -->
+<!-- email="ravbc_at_man.poznan.pl" -->
+<!-- subject="FVWM: Problem choosing panel with EdgeCommand" -->
+<!-- id="20040914123424.GA22903_at_localhost" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start13252" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="13253.html" accesskey="d" title="Mark Gray: &quot;FVWM: Parsing window_flags in perl&quot;">Next message</a> ]
+[ <a href="13251.html" title="Eleanor Walsh: &quot;(no subject)&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg13252" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg13252" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg13252" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg13252" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Rafal Bisingier &lt;<a href="mailto:ravbc_at_man.poznan.pl?Subject=Re%3A%20FVWM%3A%20Problem%20choosing%20panel%20with%20EdgeCommand">ravbc_at_man.poznan.pl</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 14 Sep 2004 14:34:24 +0200</span><br />
+</address>
+<br />
+Hi!
+<br />
+<br />There is an example in the fvwm man page showing a method to auto raise
+<br />
+and lower panel when mouse poiter hit edge of the screen. It uses
+<br />
+FvwmAuto and EdgeCommand function. It works very well, but only for 1
+<br />
+panel for each edge (because of using focus to decide if window should
+<br />
+be raised or lowered).
+<br />
+<br />Here begins my problem. I have 3 panels on one edge of the screen (2
+<br />
+FvwmButtons and 1 FvwmPager). I want them to be separate panels. But
+<br />
+using earlier metioned method from man page there isn't any possibility
+<br />
+to decide which panel to raise when hitting edge (well, I can script it
+<br />
+to make a decision based on pointer position when hitting edge, but
+<br />
+it meens aiming without target visibility ;-) ).
+<br />
+<br />Here begins my solution. I've added new command for fvwm
+<br />
+&quot;EdgeLeaveCommand&quot;, based on the EdgeCommand, but reacting on
+<br />
+LeaveNotify Event. So now I can raise all 3 panels to show me &quot;target&quot;,
+<br />
+and set focus on one only, when mouse pointer is leaving edge. This way
+<br />
+I can see where I should move mouse to choose exacly this panel wich I
+<br />
+wanted.
+<br />
+<br />If anyone knows a better solution, no needing patching fvwm, then please
+<br />
+comment here.
+<br />
+<br />I'va attached patch on current CVS with my update's adding
+<br />
+EdgeLeaveCommand.
+<br />
+<br /><pre>
+-- 
+Greetings
+Rafal Bisingier
+
+</pre>
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<div>
+<ul>
+<li>application/x-gzip attachment: <a href="att-13252/EdgeLeaveCommand.patch.gz">EdgeLeaveCommand.patch.gz</a></li>
+</ul>
+<!-- attachment="EdgeLeaveCommand.patch.gz" -->
+</div>
+<span id="received"><dfn>Received on</dfn> Tue Sep 14 2004 - 07:34:45 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start13252">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="13253.html" title="Next message in the list">Mark Gray: "FVWM: Parsing window_flags in perl"</a></li>
+<li><dfn>Previous message</dfn>: <a href="13251.html" title="Previous message in the list">Eleanor Walsh: "(no subject)"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg13252" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg13252" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg13252" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg13252" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:57 BST
+</em></small></p>
+</body>
+</html>

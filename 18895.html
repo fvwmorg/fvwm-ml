@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Icon-Aware CleverPlacement from Anthony Martin on 1997-01-17 (fvwm-users)</title>
+<meta name="Author" content="Anthony Martin (amartin_at_engr.csulb.edu)" />
+<meta name="Subject" content="FVWM: Icon-Aware CleverPlacement" />
+<meta name="Date" content="1997-01-17" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Icon-Aware CleverPlacement</h1>
+<!-- received="Fri Jan 17 03:25:08 1997" -->
+<!-- isoreceived="19970117032508" -->
+<!-- sent="Fri, 17 Jan 1997 01:24:51 -0800 (PST)" -->
+<!-- isosent="19970117092451" -->
+<!-- name="Anthony Martin" -->
+<!-- email="amartin_at_engr.csulb.edu" -->
+<!-- subject="FVWM: Icon-Aware CleverPlacement" -->
+<!-- id="Pine.SGI.3.95.970117010126.6597A-100000_at_heart.engr.csulb.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start18895" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="18896.html" accesskey="d" title="Kai Grossjohann: &quot;Re: FVWM: Window Placement&quot;">Next message</a> ]
+[ <a href="18894.html" title="Makoto MATSUSHITA: &quot;FVWM: [2.0.44] Bug? in Wait function: freeze!&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18895" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18895" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18895" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18895" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Anthony Martin &lt;<a href="mailto:amartin_at_engr.csulb.edu?Subject=Re%3A%20FVWM%3A%20Icon-Aware%20CleverPlacement">amartin_at_engr.csulb.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 17 Jan 1997 01:24:51 -0800 (PST)</span><br />
+</address>
+<br />
+Since I don't normally use icons, I hadn't noticed CleverPlacement's poor
+<br />
+handling of icons.  I have now modified CleverPlacement to place windows
+<br />
+around icons properly.  It also tries to avoid StaysOnTop windows and you
+<br />
+can make it avoid Sticky windows if you want (compile-time option).
+<br />
+<br />To use CleverPlacement in 2.0.44, put the following line in your .fvwm2rc
+<br />
+file:
+<br />
+GlobalOpts SmartPlacementIsReallySmart
+<br />
+<br />The patch also fixes a bug in the placement code that causes windows to be
+<br />
+misplaced by one pixel if the RandomPlacement flag is set.  This fix seems
+<br />
+to have missed 2.0.44.
+<br />
+<br />The patch is attached, but if you prefer, you can get the entire
+<br />
+placement.c file from:
+<br />
+<a href="http://www.engr.csulb.edu/~amartin/placement.c">http://www.engr.csulb.edu/~amartin/placement.c</a>
+<br />
+Just replace the original placement.c and recompile.
+<br />
+<br />Let me know if you have any problems.
+<br />
+<br />Tony.
+<br />
+<br />--- placement.c.orig	Thu Jan 16 20:50:53 1997
+<br />
++++ placement.c	Fri Jan 17 00:41:01 1997
+<br />
+_at_&#64; -33,15 +33,24 &#64;&#64;
+<br />
+&nbsp;int test_fit(FvwmWindow *t, int test_x, int test_y, int aoimin);
+<br />
+&nbsp;void CleverPlacement(FvwmWindow *t, int *x, int *y);
+<br />
+&nbsp;
+<br />
+-/* The AVOIDONTOP factor represents the amount of area that ONTOP windows
+<br />
+- * are counted as.  The default is 5 times as much as normal windows.  To
+<br />
+- * treat ONTOP windows the same as other windows, set this to 1.  To really,
+<br />
+- * really avoid putting windows under ONTOP windows, set this to a high value,
+<br />
+- * say 1000.  A value of 5 will try to avoid ONTOP windows if practical, but if
+<br />
+- * it saves a reasonable amount of area elsewhere, it will place one there.
+<br />
++/* The following factors represent the amount of area that these types of
+<br />
++ * windows are counted as.  For example, by default the area of ONTOP windows
+<br />
++ * is counted 5 times as much as normal windows.  So CleverPlacement will
+<br />
++ * cover 5 times as much area of another window before it will cover an ONTOP
+<br />
++ * window.  To treat ONTOP windows the same as other windows, set this to 1.
+<br />
++ * To really, really avoid putting windows under ONTOP windows, set this to a
+<br />
++ * high value, say 1000.  A value of 5 will try to avoid ONTOP windows if
+<br />
++ * practical, but if it saves a reasonable amount of area elsewhere, it will
+<br />
++ * place one there.  The same rules apply for the other &quot;AVOID&quot; factors.
+<br />
+&nbsp;&nbsp;* (for CleverPlacement)
+<br />
+&nbsp;&nbsp;*/
+<br />
+&nbsp;#define AVOIDONTOP 5
+<br />
++#define AVOIDSTICKY 1
+<br />
++#ifdef NO_STUBBORN_PLACEMENT
+<br />
++#define AVOIDICON 0     /*  Ignore Icons.  Place windows over them  */
+<br />
++#else
+<br />
++#define AVOIDICON 10    /*  Try hard no to place windows over icons */
+<br />
++#endif
+<br />
+&nbsp;
+<br />
+&nbsp;void SmartPlacement(FvwmWindow *t, int width, int height, int *x, int *y)
+<br />
+&nbsp;{
+<br />
+_at_&#64; -174,10 +183,23 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;/* Test the values of the right edges of every window */
+<br />
+&nbsp;&nbsp;&nbsp;for(testw = Scr.FvwmRoot.next ; testw != NULL ; testw = testw-&gt;next)
+<br />
+&nbsp;&nbsp;&nbsp;{
+<br />
+-    if((testw-&gt;Desk == Scr.CurrentDesk) &amp;&amp;
+<br />
+-       !(testw-&gt;flags &amp; ICONIFIED) &amp;&amp; (testw != t) &amp;&amp;
+<br />
+-       (y &lt; (testw-&gt;frame_height+2*testw-&gt;bw+testw-&gt;frame_y)) &amp;&amp;
+<br />
+-       (testw-&gt;frame_y &lt; (t-&gt;frame_height+2*t-&gt;bw+y)))
+<br />
++    if((testw-&gt;Desk != Scr.CurrentDesk) || (testw == t))
+<br />
++      continue;
+<br />
++    if(testw-&gt;flags &amp; ICONIFIED)
+<br />
++    {
+<br />
++      if((y &lt; (testw-&gt;icon_p_height+testw-&gt;icon_w_height+testw-&gt;icon_y_loc))&amp;&amp;
+<br />
++         (testw-&gt;icon_y_loc &lt; (t-&gt;frame_height+2*t-&gt;bw+y)))
+<br />
++      {
+<br />
++        xtest = testw-&gt;icon_p_width+testw-&gt;icon_x_loc;
+<br />
++        if(xtest &gt; x)
+<br />
++          xnew = MIN(xnew, xtest);
+<br />
++        xtest = testw-&gt;icon_x_loc - (t-&gt;frame_width + 2 * t-&gt;bw);
+<br />
++        if(xtest &gt; x)
+<br />
++          xnew = MIN(xnew, xtest);
+<br />
++      }
+<br />
++    }
+<br />
++    else if((y &lt; (testw-&gt;frame_height+2*testw-&gt;bw+testw-&gt;frame_y)) &amp;&amp;
+<br />
++            (testw-&gt;frame_y &lt; (t-&gt;frame_height+2*t-&gt;bw+y)))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xtest = testw-&gt;frame_width+2*testw-&gt;bw+testw-&gt;frame_x;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(xtest &gt; x)
+<br />
+_at_&#64; -203,8 +225,18 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;/* Test the values of the bottom edge of every window */
+<br />
+&nbsp;&nbsp;&nbsp;for(testw = Scr.FvwmRoot.next ; testw != NULL ; testw = testw-&gt;next)
+<br />
+&nbsp;&nbsp;&nbsp;{
+<br />
+-    if((testw-&gt;Desk == Scr.CurrentDesk) &amp;&amp;
+<br />
+-       !(testw-&gt;flags &amp; ICONIFIED) &amp;&amp; (testw != t))
+<br />
++    if((testw-&gt;Desk != Scr.CurrentDesk) || (testw == t))
+<br />
++      continue;
+<br />
++    if(testw-&gt;flags &amp; ICONIFIED)
+<br />
++    {
+<br />
++      ytest = testw-&gt;icon_p_height+testw-&gt;icon_w_height+testw-&gt;icon_y_loc;
+<br />
++      if(ytest &gt; y)
+<br />
++        ynew = MIN(ynew, ytest);
+<br />
++      ytest = testw-&gt;icon_y_loc - (t-&gt;frame_height + 2 * t-&gt;bw);
+<br />
++      if(ytest &gt; y)
+<br />
++        ynew = MIN(ynew, ytest);
+<br />
++    }
+<br />
++    else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ytest = testw-&gt;frame_height+2*testw-&gt;bw+testw-&gt;frame_y;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(ytest &gt; y)
+<br />
+_at_&#64; -227,6 +259,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;int xl, xr, yt, yb; /* xleft, xright, ytop, ybottom */
+<br />
+&nbsp;&nbsp;&nbsp;int aoi = 0;	    /* area of interference */
+<br />
+&nbsp;&nbsp;&nbsp;int anew;
+<br />
++  int avoidance_factor;
+<br />
+&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;x12 = x11 + t-&gt;frame_width  + 2 * t-&gt;bw;
+<br />
+&nbsp;&nbsp;&nbsp;y12 = y11 + t-&gt;frame_height + 2 * t-&gt;bw;
+<br />
+_at_&#64; -237,28 +270,46 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return -2;
+<br />
+&nbsp;&nbsp;&nbsp;for(testw = Scr.FvwmRoot.next ; testw != NULL ; testw = testw-&gt;next)
+<br />
+&nbsp;&nbsp;&nbsp;{
+<br />
+-    x21 = testw-&gt;frame_x;
+<br />
+-    y21 = testw-&gt;frame_y;
+<br />
+-    x22 = x21 + testw-&gt;frame_width  + 2 * testw-&gt;bw;
+<br />
+-    y22 = y21 + testw-&gt;frame_height + 2 * testw-&gt;bw;
+<br />
+-    if((testw-&gt;Desk == Scr.CurrentDesk) &amp;&amp;
+<br />
+-       !(testw-&gt;flags &amp; ICONIFIED) &amp;&amp; (testw != t))
+<br />
++    if((testw == t) || (testw-&gt;Desk != Scr.CurrentDesk))
+<br />
++       continue;
+<br />
++    if((testw-&gt;flags &amp; ICONIFIED)&amp;&amp;
+<br />
++       (testw-&gt;icon_w))
+<br />
++    {
+<br />
++       if(testw-&gt;flags &amp; ICON_UNMAPPED)
+<br />
++	  continue;
+<br />
++       x21 = testw-&gt;icon_x_loc;
+<br />
++       y21 = testw-&gt;icon_y_loc;
+<br />
++       x22 = x21 + testw-&gt;icon_p_width;
+<br />
++       y22 = y21 + testw-&gt;icon_p_height + testw-&gt;icon_w_height;
+<br />
++    }
+<br />
++    else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+-      if((x11 &lt; x22) &amp;&amp; (x12 &gt; x21) &amp;&amp;
+<br />
+-         (y11 &lt; y22) &amp;&amp; (y12 &gt; y21))
+<br />
+-      {
+<br />
+-        /* Windows interfere */
+<br />
+-        xl = MAX(x11, x21);
+<br />
+-        xr = MIN(x12, x22);
+<br />
+-        yt = MAX(y11, y21);
+<br />
+-        yb = MIN(y12, y22);
+<br />
+-        anew = (xr - xl) * (yb - yt);
+<br />
+-        if(testw-&gt;flags &amp; ONTOP)
+<br />
+-          anew *= AVOIDONTOP;
+<br />
+-        aoi += anew;
+<br />
+-        if((aoi &gt; aoimin)&amp;&amp;(aoimin != -1))
+<br />
+-          return aoi;
+<br />
+-      }
+<br />
++       x21 = testw-&gt;frame_x;
+<br />
++       y21 = testw-&gt;frame_y;
+<br />
++       x22 = x21 + testw-&gt;frame_width  + 2 * testw-&gt;bw;
+<br />
++       y22 = y21 + testw-&gt;frame_height + 2 * testw-&gt;bw;
+<br />
++    }
+<br />
++    if((x11 &lt; x22) &amp;&amp; (x12 &gt; x21) &amp;&amp;
+<br />
++       (y11 &lt; y22) &amp;&amp; (y12 &gt; y21))
+<br />
++    {
+<br />
++      /* Windows interfere */
+<br />
++      xl = MAX(x11, x21);
+<br />
++      xr = MIN(x12, x22);
+<br />
++      yt = MAX(y11, y21);
+<br />
++      yb = MIN(y12, y22);
+<br />
++      anew = (xr - xl) * (yb - yt);
+<br />
++      if(testw-&gt;flags &amp; ICONIFIED)
+<br />
++        avoidance_factor = AVOIDICON;
+<br />
++      else if(testw-&gt;flags &amp; ONTOP)
+<br />
++        avoidance_factor = AVOIDONTOP;
+<br />
++      else if(testw-&gt;flags &amp; STICKY)
+<br />
++        avoidance_factor = AVOIDSTICKY;
+<br />
++      else
+<br />
++        avoidance_factor = 1;
+<br />
++      anew *= avoidance_factor;
+<br />
++      aoi += anew;
+<br />
++      if((aoi &gt; aoimin)&amp;&amp;(aoimin != -1))
+<br />
++        return aoi;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;return aoi;
+<br />
+_at_&#64; -382,8 +433,8 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+-        tmp_win-&gt;attr.x = xl - tmp_win-&gt;old_bw;
+<br />
+-        tmp_win-&gt;attr.y = yt - tmp_win-&gt;old_bw;
+<br />
++        tmp_win-&gt;attr.x = xl - tmp_win-&gt;old_bw + tmp_win-&gt;bw;
+<br />
++        tmp_win-&gt;attr.y = yt - tmp_win-&gt;old_bw + tmp_win-&gt;bw;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* patches 11/93 to try to keep the window on the
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* screen */
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Jan 17 1997 - 03:25:08 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start18895">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="18896.html" title="Next message in the list">Kai Grossjohann: "Re: FVWM: Window Placement"</a></li>
+<li><dfn>Previous message</dfn>: <a href="18894.html" title="Previous message in the list">Makoto MATSUSHITA: "FVWM: [2.0.44] Bug? in Wait function: freeze!"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18895" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18895" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18895" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18895" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

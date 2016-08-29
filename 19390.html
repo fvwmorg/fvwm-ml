@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Fvwm 2 FvwmPager &quot;Click-to-Focus&quot; from John Morrow on 1997-03-03 (fvwm-users)</title>
+<meta name="Author" content="John Morrow (morrow_at_newton.crisp.net)" />
+<meta name="Subject" content="FVWM: Fvwm 2 FvwmPager &quot;Click-to-Focus&quot;" />
+<meta name="Date" content="1997-03-03" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Fvwm 2 FvwmPager &quot;Click-to-Focus&quot;</h1>
+<!-- received="Mon Mar  3 12:15:17 1997" -->
+<!-- isoreceived="19970303121517" -->
+<!-- sent="Mon, 3 Mar 1997 13:02:52 -0500 (EST)" -->
+<!-- isosent="19970303180252" -->
+<!-- name="John Morrow" -->
+<!-- email="morrow_at_newton.crisp.net" -->
+<!-- subject="FVWM: Fvwm 2 FvwmPager &quot;Click-to-Focus&quot;" -->
+<!-- id="199703031802.NAA20002_at_newton.crisp.net" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start19390" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="19391.html" accesskey="d" title="Michael Wein: &quot;FVWM: How to simulate &#0034;move -0p 0p&#0034;&quot;">Next message</a> ]
+[ <a href="19389.html" title="Stefan Dalibor: &quot;FVWM: Function for toggling between windows?&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="19392.html" accesskey="t" title="Jim Patterson: &quot;Re: FVWM: Fvwm 2 FvwmPager &#0034;Click-to-Focus&#0034;&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19390" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19390" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19390" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19390" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: John Morrow &lt;<a href="mailto:morrow_at_newton.crisp.net?Subject=Re%3A%20FVWM%3A%20Fvwm%202%20FvwmPager%20%22Click-to-Focus%22">morrow_at_newton.crisp.net</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 3 Mar 1997 13:02:52 -0500 (EST)</span><br />
+</address>
+<br />
+I've been putting off going from 1.24r to 2.0.X for a while now
+<br />
+because quite a few things I'd been using didn't seem to be
+<br />
+implemented yet but now that most of them have appeared, I've decided
+<br />
+to give it a go.  Other than the fact that I liked being able to make
+<br />
+sticky windows a different color (too minor to get annoyed over), the
+<br />
+main difference that has been bothering me is the pager behavior.  I
+<br />
+had generally been using the built-in pager in 1.24r and it allows you
+<br />
+to bring windows into focus by clicking on them inside of the pager.
+<br />
+This is something that I use a heck of alot (I use click-to-focus for
+<br />
+my windows) and the module pager just doesn't seem to do it though you
+<br />
+can *move* a window inside of it and raise and focus it that way.
+<br />
+Since I didn't expect this to be addressed quickly (I'm sure people
+<br />
+have better things to work on right now) but since I consider it a
+<br />
+&quot;must have&quot; feature if I'm going to work with 2.0.X, I took a look at
+<br />
+the code and came up with some changes that seems to add this feature
+<br />
+so long as you stay within the same desktop (I generally use a single
+<br />
+desktop pager like the old built-in, anyway) and don't iconify the
+<br />
+pager (it won't crash the pager in those instances -- it just won't
+<br />
+work to focus the window).  I don't have any X programming experience
+<br />
+and I've only read through some of the pager code (the changes are
+<br />
+taken from the move code) so I'm essentially looking for someone to
+<br />
+comment, help, or adopt this change and incorporate it into 2.0.X.
+<br />
+I'm sure it could be made to work across desktops since moving does
+<br />
+and it might be possible to make it work for the icon and the changes
+<br />
+don't look that complex but since I don't know very much about X
+<br />
+programming, I can only guess at what needs to be done and I'm
+<br />
+reluctant to make more major changes blind.  The patch for my changes
+<br />
+appears below:
+<br />
+<br />John Morrow
+<br />
+<br />========================= x_pager.c.patch =============================
+<br />
+--- x_pager.c.orig	Mon Mar  3 10:26:32 1997
+<br />
++++ x_pager.c	Mon Mar  3 12:28:09 1997
+<br />
+_at_&#64; -55,7 +55,6 &#64;&#64;
+<br />
+&nbsp;int Wait = 0;
+<br />
+&nbsp;XErrorHandler FvwmErrorHandler(Display *, XErrorEvent *);
+<br />
+&nbsp;
+<br />
+-
+<br />
+&nbsp;/* assorted gray bitmaps for decorative borders */
+<br />
+&nbsp;#define g_width 2
+<br />
+&nbsp;#define g_height 2
+<br />
+_at_&#64; -861,6 +860,8 &#64;&#64;
+<br />
+&nbsp;void SwitchToDeskAndPage(int Desk, XEvent *Event)
+<br />
+&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;char command[256];
+<br />
++  PagerWindow *t;
+<br />
++  int NewDesk;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;if (Scr.CurrentDesk != (Desk+desk1))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+_at_&#64; -889,6 +890,73 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SendInfo(fd,command,0);  
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;#endif
+<br />
++
+<br />
++#ifndef NON_VIRTUAL
+<br />
++/****************************************************************************/
+<br />
++/* The following modification allows you to &quot;click to focus&quot; inside of the  */
+<br />
++/* pager window like you could in the 1.24r built-in pager.  This is mostly */
+<br />
++/* just code ripped out of the MoveWindow(Event) function and added here.   */
+<br />
++/* There are a couple of things that this code won't do.  It won't work in  */
+<br />
++/* an iconified pager and it won't work when selecting windows or pages in  */
+<br />
++/* different desktops.  It is possible that both of these could be made to  */
+<br />
++/* work but since I've never really programmed in X before and have only a  */
+<br />
++/* basic idea about how this code works, fixing this further is beyond my   */
+<br />
++/* abilities at this time. -- John Morrow (morrow_at_mice.com)                 */
+<br />
++/****************************************************************************/
+<br />
++  /* THE FOLLOWING &quot;if&quot; LINE IS A HOOK FOR ADDING IN A CONFIG FILE OPTION 
+<br />
++     TO MAKE THIS SELECTABLE FROM WITHIN AN &quot;fvwm2rc&quot; FILE */ 
+<br />
++  if (0 == 0)
+<br />
++    {
+<br />
++      t = Start;
+<br />
++
+<br />
++      while ((t != NULL) &amp;&amp; (t-&gt;PagerView != Event-&gt;xbutton.subwindow))
+<br />
++	t = t-&gt;next;
+<br />
++      
+<br />
++      if (t == NULL)
+<br />
++	return;
+<br />
++      
+<br />
++      NewDesk = t-&gt;desk - desk1;
+<br />
++      
+<br />
++      if ((NewDesk &lt; 0) || (NewDesk &gt;= ndesks))
+<br />
++	return;
+<br />
++      
+<br />
++      XRaiseWindow(dpy, t-&gt;PagerView);
+<br />
++      
+<br />
++      if ((NewDesk + desk1) != t-&gt;desk)
+<br />
++	{
+<br />
++	  if (((t-&gt;flags &amp; ICONIFIED) &amp;&amp; (t-&gt;flags &amp; StickyIcon)) || 
+<br />
++	      (t-&gt;flags &amp; STICKY))
+<br />
++	    {
+<br />
++	      NewDesk = Scr.CurrentDesk - desk1;
+<br />
++	      if (t-&gt;desk != Scr.CurrentDesk)
+<br />
++		ChangeDeskForWindow(t, Scr.CurrentDesk);
+<br />
++	    }
+<br />
++	  else
+<br />
++	    {
+<br />
++	      sprintf(command, &quot;WindowsDesk %d&quot;, NewDesk + desk1);
+<br />
++	      SendInfo(fd, command, t-&gt;w);
+<br />
++	      t-&gt;desk = NewDesk + desk1;
+<br />
++	    };
+<br />
++	};
+<br />
++      
+<br />
++      if ((NewDesk &gt;= 0) &amp;&amp; (NewDesk &lt; ndesks))
+<br />
++	SendInfo(fd, &quot;Raise&quot;, t-&gt;w);
+<br />
++      
+<br />
++      if (Scr.CurrentDesk == t-&gt;desk)
+<br />
++	{
+<br />
++	  XSync(dpy, 0);
+<br />
++	  sleep_a_little(5000);
+<br />
++	  XSync(dpy, 0);
+<br />
++	  XSetInputFocus(dpy, t-&gt;w, RevertToParent, Event-&gt;xbutton.time);
+<br />
++	}
+<br />
++      else
+<br />
++	{
+<br />
++	  /* CODE SHOULD PROBABLY BE PUT *HERE* TO MAKE THIS WORK ACROSS 
+<br />
++	     MULTIPLE DESKTOPS */
+<br />
++	};
+<br />
++    };
+<br />
++#endif
+<br />
++
+<br />
+&nbsp;&nbsp;&nbsp;Wait = 1;
+<br />
+&nbsp;}
+<br />
+&nbsp;
+<br />
+_at_&#64; -904,6 +972,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(icon_h*Scr.MyDisplayHeight));
+<br />
+&nbsp;&nbsp;&nbsp;SendInfo(fd,command,0);  
+<br />
+&nbsp;#endif
+<br />
++
+<br />
+&nbsp;&nbsp;&nbsp;Wait = 1;
+<br />
+&nbsp;}
+<br />
+<br /><br />&nbsp;
+<br />
+<pre>
+--
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon Mar 03 1997 - 12:15:17 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start19390">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="19391.html" title="Next message in the list">Michael Wein: "FVWM: How to simulate &#0034;move -0p 0p&#0034;"</a></li>
+<li><dfn>Previous message</dfn>: <a href="19389.html" title="Previous message in the list">Stefan Dalibor: "FVWM: Function for toggling between windows?"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="19392.html" title="Next message in this discussion thread">Jim Patterson: "Re: FVWM: Fvwm 2 FvwmPager &#0034;Click-to-Focus&#0034;"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="19392.html" title="Message sent in reply to this message">Jim Patterson: "Re: FVWM: Fvwm 2 FvwmPager &#0034;Click-to-Focus&#0034;"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="19394.html" title="Message sent in reply to this message">John Morrow: "Re: FVWM: Fvwm 2 FvwmPager &#0034;Click-to-Focus&#0034;"</a></li>
+<li><dfn>Reply</dfn>: <a href="19448.html" title="Message sent in reply to this message">Albrecht Kadlec: "Re: FVWM: Fvwm 2 FvwmPager &#0034;Click-to-Focus&#0034;"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19390" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19390" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19390" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19390" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

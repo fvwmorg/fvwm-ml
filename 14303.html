@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Colour leaks: Some answers from Jon Mountjoy on 1995-09-26 (fvwm-users)</title>
+<meta name="Author" content="Jon Mountjoy (jon_at_fwi.uva.nl)" />
+<meta name="Subject" content="FVWM: Colour leaks: Some answers" />
+<meta name="Date" content="1995-09-26" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Colour leaks: Some answers</h1>
+<!-- received="Tue Sep 26 14:06:44 1995" -->
+<!-- isoreceived="19950926130644" -->
+<!-- sent="Tue, 26 Sep 1995 20:10:03 +0100 (MET)" -->
+<!-- isosent="19950926191003" -->
+<!-- name="Jon Mountjoy" -->
+<!-- email="jon_at_fwi.uva.nl" -->
+<!-- subject="FVWM: Colour leaks: Some answers" -->
+<!-- id="199509261910.UAA04955_at_adder.fwi.uva.nl" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="9509261342.AA18090_at_loki.pok.ibm.com" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start14303" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="14304.html" accesskey="d" title="Jim Clark: &quot;Re: FVWM: my wish list&quot;">Next message</a> ]
+[ <a href="14302.html" title="Bob Weissman: &quot;Procmail filtering (was Re: FVWM: Click vs. Motion gripe)&quot;">Previous message</a> ]
+[ <a href="14297.html" title="Charles Hines: &quot;Re: FVWM: eek&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg14303" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg14303" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg14303" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg14303" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Jon Mountjoy &lt;<a href="mailto:jon_at_fwi.uva.nl?Subject=Re%3A%20FVWM%3A%20Colour%20leaks%3A%20Some%20answers">jon_at_fwi.uva.nl</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 26 Sep 1995 20:10:03 +0100 (MET)</span><br />
+</address>
+<br />
+Hi Chuck,
+<br />
+<br />Thanks for the modified xcolormap.  It works like a charm except for when
+<br />
+the colourmap is about full, at which time it dumps with the message:
+<br />
+<br />X Error of failed request:  BadValue (integer parameter out of range for operation)
+<br />
+&nbsp;&nbsp;Major opcode of failed request:  86 (X_AllocColorCells)
+<br />
+&nbsp;&nbsp;Value in failed request:  0x0
+<br />
+&nbsp;&nbsp;Serial number of failed request:  5520
+<br />
+&nbsp;&nbsp;Current serial number in output stream:  5520
+<br />
+<br />when one pushes the left mouse button.
+<br />
+<br />Using this program, I was able to track down my colour leaks though.
+<br />
+After startup I have about 203 colours free.  Instantiating netscape
+<br />
+I have about 130 free.  Destroying netscape restores my count to 203. The
+<br />
+same happens for various other programs.  Ghostview, xview etc. etc.
+<br />
+I can run a program, and after exit my colourmap is back to 203. 
+<br />
+<br />BUT, this does not happen with the latest release of xdvi.  After I 
+<br />
+run it, and exit, the colourmap program reports about 120 colours free.
+<br />
+And they don't come back.
+<br />
+<br />My question is then this:
+<br />
+<br />[1]  Whose responsibility is it to retrieve those colours? 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ie.
+<br />
+[2]  Is it xdvi's fault, or fvwm's fault?
+<br />
+<br />Jon
+<br />
+<br /><pre>
+--
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue Sep 26 1995 - 14:06:44 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start14303">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="14304.html" title="Next message in the list">Jim Clark: "Re: FVWM: my wish list"</a></li>
+<li><dfn>Previous message</dfn>: <a href="14302.html" title="Previous message in the list">Bob Weissman: "Procmail filtering (was Re: FVWM: Click vs. Motion gripe)"</a></li>
+<li><dfn>In reply to</dfn>: <a href="14297.html" title="Message to which this message replies">Charles Hines: "Re: FVWM: eek"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg14303" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg14303" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg14303" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg14303" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:57 BST
+</em></small></p>
+</body>
+</html>

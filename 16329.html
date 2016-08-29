@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Small enhancement to Read: Read &quot;| command&quot; from Jacques Gelinas on 1996-04-21 (fvwm-users)</title>
+<meta name="Author" content="Jacques Gelinas (jack_at_solucorp.qc.ca)" />
+<meta name="Subject" content="FVWM: Small enhancement to Read: Read &quot;| command&quot;" />
+<meta name="Date" content="1996-04-21" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Small enhancement to Read: Read &quot;| command&quot;</h1>
+<!-- received="Sat Apr 20 23:39:02 1996" -->
+<!-- isoreceived="19960420223902" -->
+<!-- sent="Sun, 21 Apr 1996 00:42:37 -0400 (EDT)" -->
+<!-- isosent="19960421044237" -->
+<!-- name="Jacques Gelinas" -->
+<!-- email="jack_at_solucorp.qc.ca" -->
+<!-- subject="FVWM: Small enhancement to Read: Read &quot;| command&quot;" -->
+<!-- id="Pine.LNX.3.91.960421002806.698C-100000_at_486dos.solucorp.qc.ca" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start16329" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="16330.html" accesskey="d" title="Grant Beattie: &quot;Re: FVWM: TitleStyle Flat&quot;">Next message</a> ]
+[ <a href="16328.html" title="Brady Montz: &quot;FVWM: MY previous post about window placement problem&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16329" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16329" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16329" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16329" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Jacques Gelinas &lt;<a href="mailto:jack_at_solucorp.qc.ca?Subject=Re%3A%20FVWM%3A%20Small%20enhancement%20to%20Read%3A%20Read%20%22%7C%20command%22">jack_at_solucorp.qc.ca</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sun, 21 Apr 1996 00:42:37 -0400 (EDT)</span><br />
+</address>
+<br />
+I am toying with the reconfiguration of menus &quot;as needed&quot; since the last 
+<br />
+thread &quot;tvtwm reload menu file when they change&quot;. The scheme I am using 
+<br />
+now is pretty simple and work with the following function
+<br />
+<br />AddToFunc fixmenu
+<br />
++	&quot;I&quot; Read &quot;| .fvwmdir/sh/reread $0&quot;
+<br />
++	&quot;I&quot; Menu $0 Nop
+<br />
+<br />*FvwmButtons Apps xchess.xpm	fixmenu user
+<br />
+<br />As you see, I have extended slightly the Read command to do a popen as 
+<br />
+needed. My script .fvwmdir/sh/reread compose a menu and compare it with
+<br />
+what it has previously sent to fvwm. If it is the same, it does nothing.
+<br />
+If it is different, it send a destroymenu command, followed by 
+<br />
+&quot;addtomenu&quot;'s command to reprogram the menu.
+<br />
+<br />Currently &quot;reread&quot; is a script. I will rewrite it in C to make it lighter.
+<br />
+On my Linux DX/2 system, this is already quite confortable.
+<br />
+<br />Here is the patch, followed by the script reread.
+<br />
+<br />btw, I find the idea of reloading menu as needed quite nice. At the office,
+<br />
+we are installing quite a few new users on linux-based X terminals. We are
+<br />
+giving them a standard setup at first. It is a tool bar with few predefined
+<br />
+menus. I will define the first button of the tool bar to be a global menu
+<br />
+containing standard tool/feature everybody should have. The nice thing about
+<br />
+this is that I can manage the menu definition and I don't have to tell all
+<br />
+users to do a reload. It is done transparently. This avoid repeating that a
+<br />
+new command/tool is now available on the network. 
+<br />
+<br />Comments appreciated :-)
+<br />
+<br />---patch to fvwm/read.c------
+<br />
+*** fvwm-2.0.42/fvwm/read.c	Fri Mar 22 15:33:21 1996
+<br />
+--- fvwm-2.0.42-pipe/fvwm/read.c	Sat Apr 20 23:55:33 1996
+<br />
+***************
+<br />
+*** 54,60 ****
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;filename = ofilename;
+<br />
+&nbsp;&nbsp;
+<br />
+!   fd = fopen(filename,&quot;r&quot;);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if((fd == NULL)&amp;&amp;(ofilename[0] != '/'))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* find the home directory to look in */
+<br />
+--- 54,67 ----
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;filename = ofilename;
+<br />
+&nbsp;&nbsp;
+<br />
+!   if (filename[0] == '|')
+<br />
+!     {
+<br />
+!       fd = popen (filename+1,&quot;r&quot;);
+<br />
+!     }
+<br />
+!   else
+<br />
+!     {
+<br />
+!       fd = fopen (filename,&quot;r&quot;);
+<br />
+!     }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if((fd == NULL)&amp;&amp;(ofilename[0] != '/'))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* find the home directory to look in */
+<br />
+***************
+<br />
+*** 122,128 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AddToModList(tline);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tline = fgets(line,(sizeof line)-1,fd);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}              
+<br />
+!   fclose(fd);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(thisfileno == 0)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CaptureAllWindows();
+<br />
+--- 129,142 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AddToModList(tline);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tline = fgets(line,(sizeof line)-1,fd);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}              
+<br />
+!   if (filename[0] == '|')
+<br />
+!     {
+<br />
+!       pclose (fd);
+<br />
+!     }
+<br />
+!   else
+<br />
+!     {
+<br />
+!       fclose (fd);
+<br />
+!     }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(thisfileno == 0)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CaptureAllWindows();
+<br />
+---------------------------------------------
+<br />
+<br />-----------reread script---------------------
+<br />
+#!/bin/sh
+<br />
+MENU=$1
+<br />
+TEMP=.fvwmdir/tmp/$MENU.loaded
+<br />
+<br />upd_menufile()
+<br />
+{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FICH=$1
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ! cmp -s $FICH $TEMP ; then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if [ -f $TEMP ] ; then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo DestroyMenu $MENU
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fi
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cp $FICH $TEMP
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cat $FICH
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fi
+<br />
+}
+<br />
+<br />upd_menudir()
+<br />
+{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DIR=$1
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BUILD=$TEMP.build
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo AddToMenu $MENU $MENU Title &gt;$BUILD
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for i in `(cd $DIR; ls)`
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;do
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if [ -x $DIR/$i ] ; then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo + \&quot;\&quot; Nop &gt;&gt;$BUILD
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if [ -f /usr/lib/X11/icons/$i.xpm ] ; then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo + $i\%$i.xpm exec $DIR/$i &gt;&gt;$BUILD
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;elif [ -f $DIR/$i.xpm ] ; then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo + $i\%$DIR/$i.xpm exec $DIR/$i &gt;&gt;$BUILD
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo + $i\%tools.xpm exec $DIR/$i &gt;&gt;$BUILD
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fi
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fi
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;done
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ! cmp -s $BUILD $TEMP ; then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if [ -f $TEMP ] ; then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo DestroyMenu \&quot;$MENU\&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fi
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mv $BUILD $TEMP
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cat $TEMP
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fi
+<br />
+}
+<br />
+<br /><br /><br />if [ -f .fvwmdir/menus/$MENU ] ; then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;upd_menufile .fvwmdir/menus/$MENU
+<br />
+elif [ -f /usr/lib/X11/fvwm2/menus/$MENU ] ; then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;upd_menufile /usr/lib/X11/fvwm2/menus/$MENU
+<br />
+elif [ -d .fvwmdir/menus/$MENU ] ; then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;upd_menudir .fvwmdir/menus/$MENU
+<br />
+elif [ -d /usr/lib/X11/fvwm2/menus/$MENU ] ; then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;upd_menudir /usr/lib/X11/fvwm2/menus/$MENU
+<br />
+fi
+<br />
+----------------------------------------------------
+<br />
+<br /><br />--------------------------------------------------------
+<br />
+Jacques Gelinas (jacques_at_solucorp.qc.ca)
+<br />
+Use Linux without reformating: Use UMSDOS.
+<br />
+<br /><br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sat Apr 20 1996 - 23:39:02 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start16329">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="16330.html" title="Next message in the list">Grant Beattie: "Re: FVWM: TitleStyle Flat"</a></li>
+<li><dfn>Previous message</dfn>: <a href="16328.html" title="Previous message in the list">Brady Montz: "FVWM: MY previous post about window placement problem"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16329" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16329" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16329" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16329" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

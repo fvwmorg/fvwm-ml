@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Twm-style Button3 placement patch for 2.0.46 from Chris Siebenmann on 1998-04-23 (fvwm-users)</title>
+<meta name="Author" content="Chris Siebenmann (cks_at_hawkwind.utcs.toronto.edu)" />
+<meta name="Subject" content="FVWM: Twm-style Button3 placement patch for 2.0.46" />
+<meta name="Date" content="1998-04-23" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Twm-style Button3 placement patch for 2.0.46</h1>
+<!-- received="Thu Apr 23 17:20:20 1998" -->
+<!-- isoreceived="19980423162020" -->
+<!-- sent="Thu, 23 Apr 1998 18:19:44 -0400" -->
+<!-- isosent="19980423221944" -->
+<!-- name="Chris Siebenmann" -->
+<!-- email="cks_at_hawkwind.utcs.toronto.edu" -->
+<!-- subject="FVWM: Twm-style Button3 placement patch for 2.0.46" -->
+<!-- id="98Apr23.181949edt.229_at_nikwind.utcs.toronto.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start22060" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="22061.html" accesskey="d" title="Manfred Bartz: &quot;Re: FVWM: fvwm: edge scrolling&quot;">Next message</a> ]
+[ <a href="22059.html" title="Jehangir K. Tajik: &quot;Re: FVWM: Fvwm &#0038; CDE&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg22060" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg22060" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg22060" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg22060" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Chris Siebenmann &lt;<a href="mailto:cks_at_hawkwind.utcs.toronto.edu?Subject=Re%3A%20FVWM%3A%20Twm-style%20Button3%20placement%20patch%20for%202.0.46">cks_at_hawkwind.utcs.toronto.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 23 Apr 1998 18:19:44 -0400</span><br />
+</address>
+<br />
+&nbsp;The following patch adds twm-style button 3 placement to window
+<br />
+placement. When manually placing a window, you can click Button3 and the
+<br />
+window will be placed where it is and either extended down to the bottom
+<br />
+of the screen or truncated at the bottom of the screen (if its bottom
+<br />
+is off the bottom of the screen). I don't know enough about how fvwm2
+<br />
+keyboard shortcuts are implemented to know if they can be used for this,
+<br />
+or if you'd have to use a real mouse button.
+<br />
+<br />&nbsp;Comments, feedback, etc is welcome.
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- cks
+<br />
+[apply this patch in any traditional way at the top of your fvwm 2.0.46
+<br />
+&nbsp;source hierarchy and rebuild fvwm2.]
+<br />
+--- 1.1	1998/03/05 06:54:17
+<br />
++++ fvwm/add_window.c	1998/03/05 07:25:03
+<br />
+_at_&#64; -44,8 +44,10 &#64;&#64;
+<br />
+&nbsp;#include &quot;fvwm.h&quot;
+<br />
+&nbsp;#include &lt;X11/Xatom.h&gt;
+<br />
+&nbsp;#include &quot;misc.h&quot;
+<br />
+&nbsp;#include &quot;screen.h&quot;
+<br />
++/* For F_RESIZE, in turn for calling check_allowed_function2	- cks */
+<br />
++#include	&quot;parse.h&quot;
+<br />
+&nbsp;#ifdef SHAPE
+<br />
+&nbsp;#include &lt;X11/extensions/shape.h&gt;
+<br />
+&nbsp;#include &lt;X11/Xresource.h&gt;
+<br />
+&nbsp;#endif /* SHAPE */
+<br />
+_at_&#64; -102,9 +104,9 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;char *decor = NULL;
+<br />
+&nbsp;#endif
+<br />
+&nbsp;&nbsp;&nbsp;unsigned long tflag;
+<br />
+&nbsp;&nbsp;&nbsp;int Desk, border_width, resize_width;
+<br />
+-  extern Bool NeedToResizeToo;
+<br />
++  extern Bool NeedToResizeToo, NeedToMaximizeToo;
+<br />
+&nbsp;&nbsp;&nbsp;extern FvwmWindow *colormap_win;
+<br />
+&nbsp;&nbsp;&nbsp;char *forecolor = NULL, *backcolor = NULL;
+<br />
+&nbsp;&nbsp;&nbsp;int client_argc;
+<br />
+&nbsp;&nbsp;&nbsp;char **client_argv = NULL, *str_type;
+<br />
+_at_&#64; -112,9 +114,9 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;XrmValue rm_value;
+<br />
+&nbsp;&nbsp;&nbsp;XTextProperty text_prop;
+<br />
+&nbsp;&nbsp;&nbsp;extern Bool PPosOverride;
+<br />
+&nbsp;
+<br />
+-  NeedToResizeToo = False;
+<br />
++  NeedToResizeToo = NeedToMaximizeToo = False;
+<br />
+&nbsp;&nbsp;&nbsp;/* allocate space for the fvwm window */
+<br />
+&nbsp;&nbsp;&nbsp;tmp_win = (FvwmWindow *)calloc(1, sizeof(FvwmWindow));
+<br />
+&nbsp;&nbsp;&nbsp;if (tmp_win == (FvwmWindow *)0)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+_at_&#64; -709,8 +711,21 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Event.xbutton.subwindow = None;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Event.xany.window = tmp_win-&gt;w;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;resize_window(&amp;Event , tmp_win-&gt;w, tmp_win, C_WINDOW, &quot;&quot;, 0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
++  if (NeedToMaximizeToo &amp;&amp;
+<br />
++      (check_allowed_function2(F_RESIZE, tmp_win) != 0))
+<br />
++    {
+<br />
++	int	nwidth, nheight;
+<br />
++	nwidth = tmp_win-&gt;frame_width;
+<br />
++	/* Axiomatically tmp_win-&gt;frame_y is less than Scr.MyDisplayHeight.
+<br />
++	   Or at least I hope so.		- cks */
+<br />
++	nheight = Scr.MyDisplayHeight - tmp_win-&gt;frame_y;
+<br />
++	ConstrainSize(tmp_win, &amp;nwidth, &amp;nheight);
+<br />
++        SetupFrame (tmp_win, tmp_win-&gt;frame_x, 
+<br />
++		    tmp_win-&gt;frame_y, nwidth, nheight, FALSE);
+<br />
++    }
+<br />
++
+<br />
+&nbsp;&nbsp;&nbsp;InstallWindowColormaps(colormap_win);
+<br />
+&nbsp;&nbsp;&nbsp;return (tmp_win);
+<br />
+&nbsp;}
+<br />
+&nbsp;
+<br />
+--- 1.1	1998/03/05 06:54:17
+<br />
++++ fvwm/move.c	1998/03/05 06:55:45
+<br />
+_at_&#64; -27,8 +27,9 &#64;&#64;
+<br />
+&nbsp;
+<br />
+&nbsp;extern XEvent Event;
+<br />
+&nbsp;extern int menuFromFrameOrWindowOrTitlebar;
+<br />
+&nbsp;Bool NeedToResizeToo;
+<br />
++Bool NeedToMaximizeToo;
+<br />
+&nbsp;
+<br />
+&nbsp;/****************************************************************************
+<br />
+&nbsp;&nbsp;*
+<br />
+&nbsp;&nbsp;* Start a window move operation
+<br />
+_at_&#64; -168,8 +169,13 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NeedToResizeToo = True;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* Fallthrough to button-release */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
++          else if (Event.xbutton.button == 3)
+<br />
++	    {
+<br />
++	      NeedToMaximizeToo = True;
+<br />
++	      /* Fallthrough to button-release */
+<br />
++ 	    }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;done = 1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Apr 23 1998 - 17:20:20 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start22060">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="22061.html" title="Next message in the list">Manfred Bartz: "Re: FVWM: fvwm: edge scrolling"</a></li>
+<li><dfn>Previous message</dfn>: <a href="22059.html" title="Previous message in the list">Jehangir K. Tajik: "Re: FVWM: Fvwm &#0038; CDE"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg22060" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg22060" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg22060" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg22060" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

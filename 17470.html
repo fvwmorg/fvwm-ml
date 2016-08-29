@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: clock app comes up multiple times (once per restart) from lmyers_at_SSD.intel.com on 1996-07-24 (fvwm-users)</title>
+<meta name="Author" content="lmyers_at_SSD.intel.com (lmyers_at_SSD.intel.com)" />
+<meta name="Subject" content="Re: FVWM: clock app comes up multiple times (once per restart)" />
+<meta name="Date" content="1996-07-24" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: clock app comes up multiple times (once per restart)</h1>
+<!-- received="Wed Jul 24 12:09:34 1996" -->
+<!-- isoreceived="19960724110934" -->
+<!-- sent="Wed, 24 Jul 96 09:57:56 -0700" -->
+<!-- isosent="19960724165756" -->
+<!-- name="lmyers_at_SSD.intel.com" -->
+<!-- email="lmyers_at_SSD.intel.com" -->
+<!-- subject="Re: FVWM: clock app comes up multiple times (once per restart)" -->
+<!-- id="9607241658.AA18740_at_SSD.intel.com" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="199607241630.MAA05546&#64;mondo.mc.ab.com" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start17470" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="17471.html" accesskey="d" title="Dan Calle: &quot;Re: FVWM: clock app comes up multiple times (once per restart)&quot;">Next message</a> ]
+[ <a href="17469.html" title="tim werner: &quot;FVWM: clock app comes up multiple times (once per restart)&quot;">Previous message</a> ]
+[ <a href="17469.html" title="tim werner: &quot;FVWM: clock app comes up multiple times (once per restart)&quot;">Maybe in reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="17471.html" accesskey="t" title="Dan Calle: &quot;Re: FVWM: clock app comes up multiple times (once per restart)&quot;">Next in thread</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17470" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17470" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17470" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17470" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: &lt;<a href="mailto:lmyers_at_SSD.intel.com?Subject=Re%3A%20FVWM%3A%20clock%20app%20comes%20up%20multiple%20times%20(once%20per%20restart)">lmyers_at_SSD.intel.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 24 Jul 96 09:57:56 -0700</span><br />
+</address>
+<br />
+<em class="quotelev1">&gt; I haven't been able to figure out how to get my clock to start up
+</em><br />
+<em class="quotelev1">&gt; automatically since switching to fvwm (it's been a long time).
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<br />It's not that hard, here is a clip from my .fvwmrc:
+<br />
+<br />This is my initialization routine
+<br />
+<br /># Stuff to do at start-up
+<br />
+<br />AddToFunc &quot;InitFunction&quot; &quot;I&quot; Exec xsetroot -solid &quot;#266294&quot;
+<br />
++              &quot;I&quot; Exec /home/lmyers/bin/plan -iconic
+<br />
++              &quot;I&quot; Module FvwmAuto 750
+<br />
++              &quot;I&quot; Exec xterm
+<br />
++              &quot;I&quot; Exec xterm -vb -T &quot;Console&quot; -C
+<br />
++              &quot;I&quot; Module FvwmButtons
+<br />
++              &quot;I&quot; Module FvwmPager 0 6
+<br />
++              &quot;I&quot; Exec xpostit+ -tmpdir /home/lmyers -iconic
+<br />
++              &quot;I&quot; Exec xrefresh
+<br />
++              &quot;I&quot; Exec tkpostage -geometry +423-0   &lt;--  I start this, but it                                                           doesn't get restarted.
+<br />
+<br />AddToFunc &quot;RestartFunction&quot; &quot;I&quot; Exec xsetroot -solid &quot;#266294&quot;
+<br />
+<br />+              &quot;I&quot; Module FvwmButtons    &lt;------ This is what gets restarted.
+<br />
++              &quot;I&quot; Module FvwmPager 0 6
+<br />
++              &quot;I&quot; Module FvwmAuto 750
+<br />
++              &quot;I&quot; Exec xrefresh
+<br />
+<br /><br />And this is how I restart FVWM:
+<br />
+<br /># This menu is invoked as a sub-menu - it allows you to quit,
+<br />
+# restart, or switch to another WM.
+<br />
+AddToMenu &quot;Quit-Verify&quot; &quot;Really Quit Fvwm?&quot; Title
+<br />
++              &quot;Yes, Really Quit&quot; Quit
+<br />
++              &quot;Restart fvwm2&quot; Restart fvwm2  &lt;-------------------- Here it is
+<br />
++              &quot;Start twm&quot; Restart twm
+<br />
++              &quot;Start tvtwm&quot; Restart tvtwm
+<br />
++              &quot;Start mwm&quot; Restart mwm
+<br />
++              &quot;&quot; Nop
+<br />
++              &quot;No, Don't Quit&quot; Nop
+<br />
+<br /><br />Hope this helps
+<br />
+<br /><br />Lee Myers
+<br />
+lmyers_at_ssd.intel.com
+<br />
+<br />--------------------------------------------------------------------------
+<br />
+&nbsp;A computer's attention span is as long as its power cord.
+<br />
+--------------------------------------------------------------------------
+<br />
+&quot;These opinions are mine, however, they may be licensed for a nominal fee.&quot;
+<br />
+<br /><br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Jul 24 1996 - 12:09:34 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start17470">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="17471.html" title="Next message in the list">Dan Calle: "Re: FVWM: clock app comes up multiple times (once per restart)"</a></li>
+<li><dfn>Previous message</dfn>: <a href="17469.html" title="Previous message in the list">tim werner: "FVWM: clock app comes up multiple times (once per restart)"</a></li>
+<li><dfn>Maybe in reply to</dfn>: <a href="17469.html" title="Message to which this message replies">tim werner: "FVWM: clock app comes up multiple times (once per restart)"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="17471.html" title="Next message in this discussion thread">Dan Calle: "Re: FVWM: clock app comes up multiple times (once per restart)"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17470" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17470" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17470" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17470" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

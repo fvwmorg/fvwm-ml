@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: OpaqueResize patch for Fvwm 2.0.45 from Louis P. Kruger on 1997-03-31 (fvwm-users)</title>
+<meta name="Author" content="Louis P. Kruger (lpkruger_at_princeton.edu)" />
+<meta name="Subject" content="FVWM: OpaqueResize patch for Fvwm 2.0.45" />
+<meta name="Date" content="1997-03-31" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: OpaqueResize patch for Fvwm 2.0.45</h1>
+<!-- received="Sun Mar 30 23:24:08 1997" -->
+<!-- isoreceived="19970330222408" -->
+<!-- sent="Mon, 31 Mar 1997 00:19:07 -0500 (EST)" -->
+<!-- isosent="19970331051907" -->
+<!-- name="Louis P. Kruger" -->
+<!-- email="lpkruger_at_princeton.edu" -->
+<!-- subject="FVWM: OpaqueResize patch for Fvwm 2.0.45" -->
+<!-- id="Pine.LNX.3.95.970331001123.10798A-100000_at_valkyrie.princeton.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start19704" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="19705.html" accesskey="d" title="Randy J. Ray: &quot;Re: FVWM: M_MINI_ICON packets&quot;">Next message</a> ]
+[ <a href="19703.html" title="Christoph Gaitzsch: &quot;Re: FVWM: Missing rubberband when resizing.&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19704" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19704" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19704" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19704" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Louis P. Kruger &lt;<a href="mailto:lpkruger_at_princeton.edu?Subject=Re%3A%20FVWM%3A%20OpaqueResize%20patch%20for%20Fvwm%202.0.45">lpkruger_at_princeton.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 31 Mar 1997 00:19:07 -0500 (EST)</span><br />
+</address>
+<br />
+I really like my OpaqueResize.  :)
+<br />
+<br />This is a very trivial patch that puts back the OpaqueResize code from
+<br />
+1.24r.  It is enabled by putting in .fvwn2rc &quot;GlobalOpts OpaqueResize&quot;
+<br />
+<br />There should be no trouble putting this in the current distribution; it
+<br />
+should be trivial to modify to support per-window opaque resizing after
+<br />
+the &quot;great style rewrite&quot;
+<br />
+<br />Please cc: responses directly to me, since I'm not subscribed to the
+<br />
+mailing list.
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Louis
+<br />
+<br />=========================cut here=======================================
+<br />
+diff -u -r fvwm-2.0.45.bak/fvwm/builtins.c fvwm-2.0.45/fvwm/builtins.c
+<br />
+--- fvwm-2.0.45.bak/fvwm/builtins.c	Wed Jan 22 08:37:28 1997
+<br />
++++ fvwm-2.0.45/fvwm/builtins.c	Sun Mar 30 23:58:16 1997
+<br />
+_at_&#64; -3111,6 +3111,10 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Scr.SmartPlacementIsClever = True;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
++    if (StrEquals(opt,&quot;OPAQUERESIZE&quot;))
+<br />
++    {
+<br />
++      Scr.OpaqueResize = True;
+<br />
++    }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if (StrEquals(opt,&quot;SMARTPLACEMENTISNORMAL&quot;))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Scr.SmartPlacementIsClever = False;
+<br />
+diff -u -r fvwm-2.0..45.bak/fvwm/fvwm.c fvwm-2.0.45/fvwm/fvwm.c
+<br />
+--- fvwm-2.0.45.bak/fvwm/fvwm.c	Wed Jan 22 08:37:44 1997
+<br />
++++ fvwm-2.0.45/fvwm/fvwm.c	Sun Mar 30 23:58:29 1997
+<br />
+_at_&#64; -1235,6 +1235,7 &#64;&#64;
+<br />
+&nbsp;#endif
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;Scr.SmartPlacementIsClever = False;
+<br />
++  Scr.OpaqueResize = False;
+<br />
+&nbsp;&nbsp;&nbsp;Scr.ClickToFocusPassesClick = True;
+<br />
+&nbsp;&nbsp;&nbsp;Scr.ClickToFocusRaises = True;
+<br />
+&nbsp;&nbsp;&nbsp;Scr.MouseFocusClickRaises = False;
+<br />
+diff -u -r fvwm-2.0.45.bak/fvwm/resize.c fvwm-2.0.45/fvwm/resize.c
+<br />
+--- fvwm-2.0.45.bak/fvwm/resize.c	Fri Jan 17 09:32:26 1997
+<br />
++++ fvwm-2.0.45/fvwm/resize.c	Mon Mar 31 00:07:34 1997
+<br />
+_at_&#64; -22,6 +22,11 &#64;&#64;
+<br />
+&nbsp;#include &quot;screen.h&quot;
+<br />
+&nbsp;#include &quot;parse.h&quot;
+<br />
+&nbsp;
+<br />
++/* Condition for opaque resizing (can be changed after &quot;great style rewrite&quot;) */
+<br />
++#define NOOPAQUERESIZE ((!(Scr.OpaqueResize))|| \
+<br />
++    ((Scr.OpaqueResize)&amp;&amp;(!(tmp_win-&gt;flags &amp; MAPPED))))
+<br />
++
+<br />
++
+<br />
+&nbsp;static int dragx;       /* all these variables are used */
+<br />
+&nbsp;static int dragy;       /* in resize operations */
+<br />
+&nbsp;static int dragWidth;
+<br />
+_at_&#64; -112,7 +117,9 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;
+<br />
+-  MyXGrabServer(dpy);
+<br />
++
+<br />
++  if(NOOPAQUERESIZE)
+<br />
++    MyXGrabServer(dpy);
+<br />
+&nbsp;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;/* handle problems with edge-wrapping while resizing */
+<br />
+_at_&#64; -170,7 +177,9 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;/* draw the rubber-band window */
+<br />
+-  MoveOutline (Scr.Root, dragx - tmp_win-&gt;bw, dragy - tmp_win-&gt;bw, 
+<br />
++
+<br />
++  if(NOOPAQUERESIZE)
+<br />
++    MoveOutline (Scr.Root, dragx - tmp_win-&gt;bw, dragy - tmp_win-&gt;bw, 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dragWidth + 2 * tmp_win-&gt;bw,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dragHeight + 2 * tmp_win-&gt;bw);
+<br />
+&nbsp;
+<br />
+_at_&#64; -239,18 +248,20 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(!done)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+-	  MoveOutline(Scr.Root,0,0,0,0);
+<br />
++          if(NOOPAQUERESIZE)
+<br />
++	    MoveOutline(Scr.Root,0,0,0,0);
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DispatchEvent();
+<br />
+-
+<br />
+-	  MoveOutline(Scr.Root, dragx - tmp_win-&gt;bw, dragy - tmp_win-&gt;bw,
+<br />
++          if(NOOPAQUERESIZE)
+<br />
++	    MoveOutline(Scr.Root, dragx - tmp_win-&gt;bw, dragy - tmp_win-&gt;bw,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dragWidth + 2 * tmp_win-&gt;bw, dragHeight + 2 * tmp_win-&gt;bw);
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} 
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;/* erase the rubber-band */
+<br />
+-  MoveOutline(Scr.Root, 0, 0, 0, 0);
+<br />
++  if(NOOPAQUERESIZE)
+<br />
++    MoveOutline(Scr.Root, 0, 0, 0, 0);
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;/* pop down the size window */
+<br />
+&nbsp;&nbsp;&nbsp;XUnmapWindow(dpy, Scr.SizeWindow);
+<br />
+_at_&#64; -331,8 +342,16 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (ymotion == 1)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dragy = origy + origHeight - dragHeight;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+-      MoveOutline(Scr.Root, dragx - tmp_win-&gt;bw,dragy - tmp_win-&gt;bw,
+<br />
+-		  dragWidth + 2 * tmp_win-&gt;bw, dragHeight + 2 * tmp_win-&gt;bw);
+<br />
++      if(NOOPAQUERESIZE)
+<br />
++        {
+<br />
++          MoveOutline(Scr.Root, dragx - tmp_win-&gt;bw,dragy - tmp_win-&gt;bw,
+<br />
++	    dragWidth + 2 * tmp_win-&gt;bw, dragHeight + 2 * tmp_win-&gt;bw);
+<br />
++        }
+<br />
++      else
+<br />
++        {
+<br />
++          SetupFrame (tmp_win, dragx - tmp_win-&gt;bw, 
+<br />
++            dragy - tmp_win-&gt;bw, dragWidth, dragHeight,FALSE);  
+<br />
++        }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;DisplaySize(tmp_win, dragWidth, dragHeight,False);
+<br />
+&nbsp;}
+<br />
+diff -u -r fvwm-2.0.45.bak/fvwm/screen.h fvwm-2.0.45/fvwm/screen.h
+<br />
+--- fvwm-2.0.45.bak/fvwm/screen.h	Wed Jan 22 08:37:49 1997
+<br />
++++ fvwm-2.0.45/fvwm/screen.h	Sun Mar 30 23:56:49 1997
+<br />
+_at_&#64; -317,6 +317,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;** specific options later on:
+<br />
+&nbsp;&nbsp;&nbsp;*/
+<br />
+&nbsp;&nbsp;&nbsp;int SmartPlacementIsClever;
+<br />
++  int OpaqueResize;
+<br />
+&nbsp;&nbsp;&nbsp;int ClickToFocusPassesClick;
+<br />
+&nbsp;&nbsp;&nbsp;int ClickToFocusRaises;
+<br />
+&nbsp;&nbsp;&nbsp;int MouseFocusClickRaises;
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sun Mar 30 1997 - 23:24:08 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start19704">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="19705.html" title="Next message in the list">Randy J. Ray: "Re: FVWM: M_MINI_ICON packets"</a></li>
+<li><dfn>Previous message</dfn>: <a href="19703.html" title="Previous message in the list">Christoph Gaitzsch: "Re: FVWM: Missing rubberband when resizing."</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19704" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19704" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19704" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19704" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

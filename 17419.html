@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: fvwm Scroll Resistance Timer Patch from Mike Blatchley on 1996-07-18 (fvwm-users)</title>
+<meta name="Author" content="Mike Blatchley (Mike_Blatchley_at_maxtor.com)" />
+<meta name="Subject" content="FVWM: fvwm Scroll Resistance Timer Patch" />
+<meta name="Date" content="1996-07-18" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: fvwm Scroll Resistance Timer Patch</h1>
+<!-- received="Wed Jul 17 20:00:27 1996" -->
+<!-- isoreceived="19960717190027" -->
+<!-- sent="Wed, 17 Jul 1996 18:47:37 -0600 (MDT)" -->
+<!-- isosent="19960718004737" -->
+<!-- name="Mike Blatchley" -->
+<!-- email="Mike_Blatchley_at_maxtor.com" -->
+<!-- subject="FVWM: fvwm Scroll Resistance Timer Patch" -->
+<!-- id="Pine.SOL.3.91.960717165648.10340B-100000_at_borabora" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start17419" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="17420.html" accesskey="d" title="Yvan Guillemain: &quot;FVWM: Grouping windows from same resource when iconifying&quot;">Next message</a> ]
+[ <a href="17418.html" title="Hector Peraza: &quot;Re: FVWM: 2.0.43 dies horribly&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="17422.html" accesskey="t" title="Richard A. Guay: &quot;Re: FVWM: fvwm Scroll Resistance Timer Patch&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17419" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17419" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17419" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17419" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Mike Blatchley &lt;<a href="mailto:Mike_Blatchley_at_maxtor.com?Subject=Re%3A%20FVWM%3A%20fvwm%20Scroll%20Resistance%20Timer%20Patch">Mike_Blatchley_at_maxtor.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 17 Jul 1996 18:47:37 -0600 (MDT)</span><br />
+</address>
+<br />
+Chuck,
+<br />
+<br />Since the early days of fvwm-2, I have seen a problem when using a 
+<br />
+large value for the EdgeResistance timer such as:
+<br />
+<br />&nbsp;&nbsp;&nbsp;EdgeResistance 1000 50
+<br />
+&nbsp;&nbsp;&nbsp;EdgeScroll 100 100
+<br />
+<br />The 1000 says the pointer must be left at the screen edge for 1second 
+<br />
+before moving the viewport to a different page.  If the pointer is 
+<br />
+_retracted_ within this time period, life is supposed to go on 
+<br />
+uninterrupted.  Normally, it does.
+<br />
+<br />However, if a window is being moved or resized when the pointer hits the 
+<br />
+edge, life does not go on _if the pointer is retracted within this time_ 
+<br />
+period.  Everything is temporarily put on hold for, say, 1second.  If it 
+<br />
+enters and exits the pan frame region multiple times before the mouse 
+<br />
+button is released, things can be put on hold for even longer!
+<br />
+<br />The problem is the Pan Frames are &quot;covered&quot; by the window being 
+<br />
+moved/resized, so the &quot;LeaveWindowMask&quot; event is never seen and we get 
+<br />
+trapped inside of the sleep loop for the entire duration.  The patch 
+<br />
+below fixes this.  It also eliminates the window from lagging behind the 
+<br />
+pointer at the moment you hit the screen edge during a move/resize (a 
+<br />
+little aesthetic fix-up).
+<br />
+<br />I submitted a patch for this a while back, but it seems to have never 
+<br />
+made its way into fvwm.  Here's a cleaner patch to fvwm-2.0.43.
+<br />
+<br /><br />Thanks,
+<br />
+<br />Mike Blatchley
+<br />
+======================================================================
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Mike Blatchley * 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* email: Mike_Blatchley_at_maxtor.com *
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* MIME Mail Reader * PGP Key Available *
+<br />
+======================================================================
+<br />
+<br /><br />File: fvwm-2.0.43-mab.p1
+<br />
+(be careful that the mail reader does not wrap any of the longer lines)
+<br />
+------------------------------ cut here ---------------------------
+<br />
+--- fvwm-2.0.43/fvwm/move.c	Fri Jun 30 09:06:01 1995
+<br />
++++ fvwm-2.0.43.patched/fvwm/move.c	Sun Jul 14 18:38:49 1996
+<br />
+_at_&#64; -111,7 +111,7 &#64;&#64;
+<br />
+&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;Bool finished = False;
+<br />
+&nbsp;&nbsp;&nbsp;Bool done;
+<br />
+-  int xl,yt,delta_x,delta_y;
+<br />
++  int xl,yt,delta_x,delta_y,paged;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;XQueryPointer(dpy, Scr.Root, &amp;JunkRoot, &amp;JunkChild,&amp;xl, &amp;yt,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;JunkX, &amp;JunkY, &amp;JunkMask);
+<br />
+_at_&#64; -202,8 +202,8 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case MotionNotify:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xl = Event.xmotion.x_root;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yt = Event.xmotion.y_root;
+<br />
+-	  HandlePaging(Scr.MyDisplayWidth,Scr.MyDisplayHeight,&amp;xl,&amp;yt,
+<br />
+-		       &amp;delta_x,&amp;delta_y,False);
+<br />
++/*	  HandlePaging(Scr.MyDisplayWidth,Scr.MyDisplayHeight,&amp;xl,&amp;yt,
+<br />
++		       &amp;delta_x,&amp;delta_y,False);  mab */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* redraw the rubberband */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xl += XOffset;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yt += YOffset;
+<br />
+_at_&#64; -220,6 +220,11 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if((yt &lt;= 0)&amp;&amp;(yt &gt; -Scr.MoveResistance))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yt = 0;
+<br />
+&nbsp;
+<br />
++	/* check Paging request once and only once after outline redrawn */
+<br />
++	/* redraw after paging if needed - mab */
+<br />
++	paged=0;
+<br />
++	while(paged&lt;=1)
+<br />
++	 {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(!opaque_move)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MoveOutline(Scr.Root, xl, yt, Width,Height);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+_at_&#64; -242,6 +247,21 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XMoveWindow(dpy,tmp_win-&gt;frame,xl,yt);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DisplayPosition(tmp_win,xl+Scr.Vx,yt+Scr.Vy,False);
+<br />
++
+<br />
++/* prevent window from lagging behind mouse when paging - mab */
+<br />
++	  if(paged==0)
+<br />
++	    {
+<br />
++	    xl = Event.xmotion.x_root;
+<br />
++	    yt = Event.xmotion.y_root;
+<br />
++	    HandlePaging(Scr.MyDisplayWidth,Scr.MyDisplayHeight,&amp;xl,&amp;yt,
+<br />
++		       &amp;delta_x,&amp;delta_y,False);
+<br />
++	    xl += XOffset;
+<br />
++	    yt += YOffset;
+<br />
++	    if ( (delta_x==0) &amp;&amp; (delta_y==0)) break; /* break from while paged */
+<br />
++	    }
+<br />
++	  paged++;
+<br />
++	 }  /* end while paged */
+<br />
++
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;done = TRUE;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
+&nbsp;
+<br />
+--- fvwm-2.0.43/fvwm/resize.c	Fri Jun 30 09:07:23 1995
+<br />
++++ fvwm-2.0.43.patched/fvwm/resize.c	Sun Jul 14 19:30:07 1996
+<br />
+_at_&#64; -214,15 +214,21 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case MotionNotify:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x = Event.xmotion.x_root;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y = Event.xmotion.y_root;
+<br />
++	  /* resize before paging request to prevent resize from lagging mouse - mab */
+<br />
++	  DoResize(x, y, tmp_win);  
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* need to move the viewport */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HandlePaging(Scr.EdgeScrollX,Scr.EdgeScrollY,&amp;x,&amp;y,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;delta_x,&amp;delta_y,False);
+<br />
++	/* redraw outline if we paged - mab */
+<br />
++	if ( (delta_x != 0) || (delta_y != 0) )
+<br />
++	  {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;origx -= delta_x;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;origy -= delta_y;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dragx -= delta_x;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dragy -= delta_y;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DoResize(x, y, tmp_win);
+<br />
++	  }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;done = TRUE;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
+--- fvwm-2.0.43/fvwm/virtual.c	Wed Apr 24 09:45:27 1996
+<br />
++++ fvwm-2.0.43.patched/fvwm/virtual.c	Sun Jul 14 00:36:24 1996
+<br />
+_at_&#64; -42,6 +42,10 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sleep_a_little(10000);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;total+=10;
+<br />
++
+<br />
++  XQueryPointer(dpy, Scr.Root, &amp;JunkRoot, &amp;JunkChild,
+<br />
++		&amp;x, &amp;y, &amp;JunkX, &amp;JunkY, &amp;JunkMask); 
+<br />
++
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(XCheckWindowEvent(dpy,Scr.PanFrameTop.win,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LeaveWindowMask,&amp;Event))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+_at_&#64; -66,6 +70,11 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;StashEventTime(&amp;Event);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
++      /* check actual pointer location since PanFrames can get buried under
+<br />
++         a window being moved or resized - mab */
+<br />
++      if(( x &gt;= SCROLL_REGION )&amp;&amp;( x &lt; Scr.MyDisplayWidth-SCROLL_REGION )&amp;&amp;
+<br />
++         ( y &gt;= SCROLL_REGION )&amp;&amp;( y &lt; Scr.MyDisplayHeight-SCROLL_REGION ))
+<br />
++           return ;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;XQueryPointer(dpy, Scr.Root, &amp;JunkRoot, &amp;JunkChild,
+<br />
+------------------------------ cut here ------------------------------------
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Jul 17 1996 - 20:00:27 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start17419">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="17420.html" title="Next message in the list">Yvan Guillemain: "FVWM: Grouping windows from same resource when iconifying"</a></li>
+<li><dfn>Previous message</dfn>: <a href="17418.html" title="Previous message in the list">Hector Peraza: "Re: FVWM: 2.0.43 dies horribly"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="17422.html" title="Next message in this discussion thread">Richard A. Guay: "Re: FVWM: fvwm Scroll Resistance Timer Patch"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Maybe reply</dfn>: <a href="17422.html" title="Message sent in reply to this message">Richard A. Guay: "Re: FVWM: fvwm Scroll Resistance Timer Patch"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17419" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17419" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17419" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17419" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

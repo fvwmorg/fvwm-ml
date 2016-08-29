@@ -1,0 +1,510 @@
+ModulePath /afs/eda/tools/apps/fvwm/2.3.15/libexec/fvwm/2.3.15
+
+ImagePath $HOME/images/icons:/afs/eda/tools/apps/fvwm/current/icons:+
+ImagePath +:/usr/include/X11/bitmaps:/afs/eda/u/dungan/apps/fvwm/beos_icons
+
+EdgeScroll 100 100
+EdgeResistance 500 50
+
+XORValue 1
+
+WindowFont              7x13bold
+IconFont                7x13bold
+
+HilightColor white steelblue
+DeskTopSize 2x2
+MenuStyle black grey slategrey 7x13bold fvwm
+ClickTime 250
+
+ColormapFocus FollowsMouse
+
+# When is this awesome feature ever going to come back!!
+#
+#StickyColor Black forestgreen
+
+TitleStyle InActive VGradient 4 grey24 grey64
+TitleStyle ActiveUp VGradient 4 violetred4 violetred1
+TitleStyle ActiveDown VGradient 4 violetred1 violetred4
+
+# ButtonStyle defs
+#
+ButtonStyle 10 Pixmap mini.stick.xpm
+ButtonStyle 10 ActiveDown Pixmap mini.stickpressed.xpm
+ButtonStyle 8 Pixmap mini.maximize-horiz.xpm
+ButtonStyle 6 Pixmap mini.maximize-vert.xpm
+ButtonStyle 4 5 45x45@1 55x45@1 55x55@0 45x55@0 45x45@1
+ButtonStyle 3 14 0x0@1 0x20@1 20x20@0 20x0@0 0x0@1 0x25@1 25x25@1 25x0@1 55x0@1 55x55@0 0x55@0 0x60@1 60x60@1 60x0@1
+
+# to pick up the gradients
+ButtonStyle All -- UseTitleStyle
+
+Style "*"           BorderWidth 5, HandleWidth 5
+Style "*"           Icon unknown1.xpm
+Style "*"           Color lightgrey/dimgrey
+Style "*"           SmartPlacement,RandomPlacement,
+Style "*"           MWMFunctions,MWMDecor,HintOverride
+Style "*"           DecorateTransient,IconBox +0 +55 +10 +800
+Style "*"           FocusFollowsMouse, Title, Slippery
+Style "*"           NoPPosition, CirculateSkip
+
+Style "Untitled"    Sticky, NoTitle, Icon unknown1.xpm
+
+Style "Fvwm*"       NoTitle, BorderWidth 0, NoHandles
+Style "Fvwm*"       WindowListSkip, CirculateSkip, CirculateSkipIcon, Sticky
+Style "FvwmButtons" Icon toolbox.xpm
+Style "FvwmIdent"   Title, Slippery
+Style "FvwmPager"   NoTitle
+Style "FvwmTalk"    Title
+
+Style "monitor"     Slippery, WindowListSkip
+Style "Monitor"     Slippery, WindowListSkip
+Style "xmconsole"   WindowListSkip, CirculateSkip, Sticky
+Style "XMconsole"   WindowListSkip, CirculateSkip, Sticky
+Style "XMeter"      Sticky, NoTitle
+Style "*lock"       NoTitle, BorderWidth 0, NoHandles
+Style "*lock"       WindowListSkip, CirculateSkip, Sticky, StaysOnTop
+Style "*biff"       NoTitle, Sticky, WindowListSkip,ClickToFocus
+Style "xcalc"       Icon xcalc.xpm, NoButton 2,RandomPlacement,ClickToFocus
+Style "xmag"        Icon mag_glass.xpm,RandomPlacement, ClickToFocus
+Style "xmosaic"     NoPPosition, color Green/Yellow,ClickToFocus
+Style "Emacs"       Icon xemacs.xpm
+Style "XSession"    Sticky
+Style "ghostview"   Icon ghostview.xpm
+Style "xload"       NoTitle, Slippery, WindowListSkip
+Style "XLoad"       NoTitle, Slippery, WindowListSkip
+Style "WinCenter"   NoTitle, BorderWidth 0, NoHandles
+Style "Toplevel"    Sticky, StaysOnTop
+Style "Xprogress"   Sticky, StaysOnTop
+Style "*xterm"      Icon xterm.xpm, Button 6, Button 8
+Style "aixterm"     Icon term.xpm
+Style "Rxvt"        Icon rterm2.xpm
+Style "*XMX*"       NoTitle, BorderWidth 0, NoHandles, StaysOnTop
+
+# Keybindings
+Key F12         A       CM      Exec /bin/nice -20 /afs/eda/u/hines/bin/xlock -mode random
+Key Next        A       SCM     Next [*] focus
+Key Prior       A       SCM     Prev [*] focus
+
+# press arrow + control anywhere, and scroll by 1 page
+Key Left        A       C       Scroll -100 0
+Key Right       A       C       Scroll +100 +0
+Key Up          A       C       Scroll +0   -100
+Key Down        A       C       Scroll +0   +100
+
+# press arrow + meta key, and scroll by 1/10 of a page
+Key Left        A       CM      Scroll -20 +0
+Key Right       A       CM      Scroll +20 +0
+Key Up          A       CM      Scroll +0   -20
+Key Down        A       CM      Scroll +0   +20
+
+# press F[1-4] + meta to change pages    F-Key  1 2     "Page"  00 10
+#                                               3 4             01 11
+#
+Key F1          A       M       GotoPage 0 0
+Key F2          A       M       GotoPage 1 0
+Key F3          A       M       GotoPage 0 1
+Key F4          A       M       GotoPage 1 1
+
+# press F[1-4] + ctrl + meta to change Desks
+#
+Key F1          A       CM      GotoDesk 0 0
+Key F2          A       CM      GotoDesk 0 1
+Key F3          A       CM      GotoDesk 0 2
+Key F4          A       CM      GotoDesk 0 3
+
+# Mouse button bindings
+Mouse 1 R       N       Popup RootMenu
+Mouse 1 R       C       Popup Window-Ops
+Mouse 2 R       N       Popup Xutils
+Mouse 3 R       C       WindowList
+Mouse 3 R       CM      Module FvwmWinList Transient
+
+Mouse 0 3	A	WindowShade
+Mouse 0 2       A       Maximize 100 90
+Mouse 0 4       A       Iconify
+Mouse 0 6       A       Maximize 0 90
+Mouse 0 8       A       Maximize 100 0
+Mouse 0 10      A       Stick
+Mouse 0 1       A       Menu Window-Ops2 Close
+
+Mouse 1 FS      A       Resize-or-Raise
+Mouse 1 T       A       Move-or-Raise
+Mouse 1 T       M       RaiseLower
+Mouse 1 I       A       Move-or-Iconify
+Mouse 1 IA      M       Move
+Mouse 2 IA      M       Iconify
+Mouse 2 FSIT    M       Menu Window-Ops2 Nop
+Mouse 3 TSIF    N       Lower
+Mouse 3 A       CM      Close
+
+
+########################Initialization Functions ############################
+AddToFunc InitFunction    "I" Module FvwmButtons
++                         "I" Module FvwmAuto 300 raise
+#+                        "I" exec xsetroot -solid black
+#+                        "I" Module FvwmBanner
+#+                        "I" exec xsetroot -mod 2 2 -fg \#554055 -bg \#705070
+
+AddToFunc RestartFunction "I" Module FvwmButtons
++                         "I" Module FvwmAuto 300 raise
+#+                        "I" exec xsetroot -solid black
+#+                        "I" Module FvwmBanner
+#+                        "I" exec xsetroot -mod 2 2 -fg \#554055 -bg \#705070
+
+########################Menus ########################################
+AddToMenu RootMenu      "Root Menu"             Title
++                       "X utilities"           Popup Xutils
++                       ""                      Nop
++                       "Fvwm Modules"          Popup Module-Popup
++                       "Fvwm Window Ops"       Popup Window-Ops
++                       ""                      Nop
++                       "Paging"                Popup PagingMenu
++                       ""                      Nop
++                       "Refresh screen"        Refresh
++                       "Recapture screen"      Recapture
++                       ""                      Nop
++                       "Reset X defaults"      Exec xrdb -load /afs/eds/u/levee/.Xdefaults 
++                       ""                      Nop
++                       "Restart Fvwm2"         Restart /afs/eda/tools/apps/fvwm/2.3.15/bin/fvwm2
++                       ""                      Nop
++                       "Quit"                  Popup Quit-Verify
+
+AddToMenu PagingMenu "Paging Options" Title
++ "Full Paging ON"         EdgeScroll 100 100
++ "Paging OFF"             EdgeScroll 0 0
++ "Horizontal Paging Only" EdgeScroll 100 0
++ "Vertical Paging Only"   EdgeScroll 0 100
++ "Partial Paging"         EdgeScroll 50 50
++ "Full Paging && Desktop wrap" EdgeScroll 100000 100000
+
+AddToMenu NewXtermMenu "XTerms"    Title
++                       "white"     Exec exec xterm -fg white -bg black 
++                       "green"     Exec exec xterm -fg green -bg black 
++                       "red"       Exec exec xterm -fg red -bg black 
++                       "wheat"     Exec exec xterm -fg wheat -bg black 
++                       "thistle"   Exec exec xterm -fg thistle -bg black 
++                       "plum"      Exec exec xterm -fg plum -bg black 
++                       "palegreen" Exec exec xterm -fg palegreen -bg black 
++                       "lightblue" Exec exec xterm -fg lightblue -bg black 
++                       "gold"      Exec exec xterm -fg gold -bg black 
+
+AddToMenu NewAixtermMenu "AixTerms" Title
++                       "white"     Exec exec aixterm -fg white -bg black 
++                       "green"     Exec exec aixterm -fg green -bg black 
++                       "red"       Exec exec aixterm -fg red -bg black 
++                       "wheat"     Exec exec aixterm -fg wheat -bg black 
++                       "thistle"   Exec exec aixterm -fg thistle -bg black 
++                       "plum"      Exec exec aixterm -fg plum -bg black 
++                       "palegreen" Exec exec aixterm -fg palegreen -bg black 
++                       "lightblue" Exec exec aixterm -fg lightblue -bg black 
++                       "gold"      Exec exec aixterm -fg gold -bg black 
+
+AddToMenu Xutils        "Utilities" Title
++ "Read email"          Exec exec /afs/eda/tools/bin/exmh
++ ""                    Nop
++ "xcalc"               Exec xcalc
++ ""                    Nop
++ "Backgrounds"         Popup BackgroundMenu
+
+AddToMenu BackgroundMenu "Backgrounds" Title
++ "Solids"		Popup bgSolids
++ "XColormap"		Exec exec xcolormap -root 
++ "Default"		Exec xsetroot
+
+AddToMenu bgSolids "Solids" Title
++  "black"		Exec xsetroot -solid black 
++  "navy blue"		Exec xsetroot -solid navyblue 
++  "dark slate grey"	Exec xsetroot -solid darkslategrey 
++  "dark green"		Exec xsetroot -solid darkgreen 
++  "dim grey"		Exec xsetroot -solid dimgrey 
++  "firebrick"		Exec xsetroot -solid firebrick 
++  "slate blue"		Exec xsetroot -solid slateblue 
++  "blue violet"	Exec xsetroot -solid blueviolet 
++  "Select color..."	Exec xsetroot -solid `xcolorlist` 
+
+AddToMenu Utilities     "Utilities"     Title
++                       "Xterm"         Exec exec xterm
++                       "Calculator"    Exec exec xcalc
++                       ""              Nop
++                       "Refresh"       Refresh
++                       "Recapture"     Recapture
++                       ""              Nop
++                       "Modules"       Popup Module-Popup
++                       ""              Nop
++                       "Exit Fvwm"     Popup Quit-Verify
+
+AddToMenu Window-Ops    "Window Ops"    Title
++                       "Move"          Move
++                       "Resize"        Resize
++                       "Raise"         Raise
++                       "Lower"         Lower
++                       "(De)Iconify"   Iconify
++                       "(Un)Stick"     Stick
++                       "(Un)Maximize"  Maximize
++                       "(Un)Maxmz Vt"  Maximize 0 90
++                       "(Un)Maxmz Hz"  Maximize 100 0
++                       "(Un)Shade"	WindowShade
++                       ""              Nop
++                       "Delete"        Delete
++                       "Close"         Close
++                       "Destroy"       Destroy
++                       ""              Nop
++                       "Refresh Window" RefreshWindow
+
+AddToMenu Window-Ops2   "&Move"          Move-or-Raise
++                       "&Resize"        Resize-or-Raise
++                       "R&aise"         Raise
++                       "&Lower"         Lower
++                       "(De)&Iconify"       Iconify
++                       "(Un)&Stick"     Stick
++                       "(Un)Ma&ximize"  Maximize
++                       "(Un)Maxmz &Vt"  Maximize 0 90
++                       "(Un)Maxmz H&z"  Maximize 100 0
++                       "(Un)S&hade"	WindowShade
++                       ""               Nop
++                       "&Delete"        Delete
++                       "&Close"         Close
++                       "Destroy"       Destroy
++                       ""              Nop
++                       "ScrollBar"     Module FvwmScroll 2 2
++                       "Print"         PrintFunction
++                       "&Print Reverse" PrintReverseFunction
++                       ""              Nop
++                       "Root Menu"     Popup RootMenu
+
+AddToMenu Module-Popup  "Modules"       Title
++                       "Identify"      Module  FvwmIdent
++                       "Talk"          Module  FvwmTalk
++                       "Button-Bar"    Module  FvwmButtons
++                       "Banner"        Module  FvwmBanner
++                       "Pager (1 desk)"        Module  FvwmPager 0 0
++                       "Pager (2 desk)"        Module  FvwmPager 0 1 
++                       "Pager (3 desk)"        Module  FvwmPager 0 2 
++                       "Pager (4 desk)"        Module  FvwmPager 0 3 
++                       "Pager (5 desk)"        Module  FvwmPager 0 4 
++                       "WinList"       Module  FvwmWinList
++                       "ScrollBar"     Module  FvwmScroll 50 50
++                       "Background"    Module  FvwmBacker
++                       "IconBox"       Module  FvwmIconBox
++                       "IconMan"       Module  FvwmIconMan
++                       "Kill Debug Module" KillModule FvwmDebug
++                       "AutoRaise"     Module  FvwmAuto 200
++                       "Form - Rlogin"      Module FvwmForm Rlogin
++                       "Form - MyTalk"      Module FvwmForm MyTalk
++                       "Form - MyFvwmTalk"  Module FvwmForm MyFvwmTalk
++                       "Form - QuitVerify"  Module FvwmForm QuitVerify
+
+AddToMenu Quit-Verify   "Really Quit Fvwm?" Title
++                       "Yes, Really Quit"  Quit
++                       ""                  Nop
++                       "Restart Fvwm2"     Restart /afs/eda/tools/apps/fvwm/2.3.15/bin/fvwm2
++                       "Restart Fvwm"      Restart fvwm
++                       ""                  Nop
++                       "No, Don't Quit"    Nop
+
+########################Functions ########################################
+
+AddToFunc Move-or-Raise         "I" Raise
++                               "M" Move
+
+AddToFunc Maximize-Func         "M" Maximize     0 100
++                               "D" Maximize     80 80
++                               "C" Maximize     100 100
+
+AddToFunc Move-or-Iconify       "I" Raise
++                               "M" Move
++                               "D" Iconify
+
+AddToFunc Resize-or-Raise       "I" Raise
++                               "M" Resize
++                               "D" Lower
+
+AddToFunc Resize-or-Raise2      "M" Raise
++                               "M" Resize
++                               "D" Lower
+
+AddToFunc PrintFunction         "I" Raise
++                               "I" Exec xdpr -h -id $w
+
+AddToFunc PrintReverseFunction  "I" Raise
++                               "I" Exec xdpr 1/2 -h -rv -id $w
+
+AddToFunc Close-or-Destroy "I" Close
++                          "D" Destroy
+
+################## FvwmButtons button-bar ################################
+*FvwmButtonsFore Black
+*FvwmButtonsBack Bisque3
+*FvwmButtonsFont -adobe-helvetica-bold-r-*-*-10-*-*-*-*-*-*-*
+*FvwmButtonsGeometry -250-0
+*FvwmButtonsRows 1
+
+*FvwmButtons(Title XTerms,	Icon xterm.xpm,	Action 'Popup "NewXtermMenu"')
+*FvwmButtons(Title Aixterms,	Icon rterm2.xpm,	Action 'Popup "NewAixtermMenu"')
+*FvwmButtons(Fore White Swallow(UseOld,NoRespawn) xbiff `Exec xbiff -bg bisque3 -geometry +200+200`)
+*FvwmButtons(Title Kill,	Icon bomb.xpm,		Action Destroy)
+*FvwmButtons(Title Move,	Icon mini.move.xpm,	Action Move)
+*FvwmButtons(Title Stick,	Icon postit.xpm,	Action Stick)
+*FvwmButtons(Title Mlock,	Icon toolbox.xpm,	Action `Exec "mlock" mlock`)
+*FvwmButtons(5x1, Swallow(UseOld,NoRespawn) "FvwmPager" `FvwmPager 0 3`)
+
+########################## Window-Identifier ###############################
+# Just choose colors and a fonts
+*FvwmIdentBack MidnightBlue
+*FvwmIdentFore Yellow
+*FvwmIdentFont -adobe-helvetica-medium-r-*-*-12-*-*-*-*-*-*-*
+
+
+########################### Pager #########################################
+*FvwmPagerBack #908090
+*FvwmPagerFore #484048
+*FvwmPagerFont none
+*FvwmPagerHilight #cab3ca
+*FvwmPagerGeometry -1-1
+*FvwmPagerLabel 0 Various
+*FvwmPagerLabel 1 RS-32
+*FvwmPagerLabel 2 OEM
+*FvwmPagerLabel 2 tkbox
+*FvwmPagerSmallFont 5x8
+*FvwmPagerDeskTopScale 32
+
+##########################FvwmWinList##################################
+*FvwmWinListGeometry -1-1
+*FvwmWinListFont -adobe-helvetica-bold-r-*-*-10-*-*-*-*-*-*-*
+*FvwmWinListFore Black
+*FvwmWinListBack dimgrey
+*FvwmWinListFocusFore white
+*FvwmWinListFocusBack steelblue
+*FvwmWinListIconFore dimgrey
+*FvwmWinListIconBack black
+*FvwmWinListAction Click1 Iconify -1,Focus
+*FvwmWinListAction Click2 Iconify
+*FvwmWinListAction Click3 Module "FvwmIdent" FvwmIdent
+*FvwmWinListUseSkipList
+
+*FvwmBackerDesk 0 -solid steelblue
+*FvwmBackerDesk 1 -solid midnightblue
+
+*FvwmScrollBack grey40
+*FvwmScrollFore green
+
+######################### FvwmIconBox ###################################
+*FvwmIconBoxIconBack    #cfcfcf
+*FvwmIconBoxIconHiFore  black
+*FvwmIconBoxIconHiBack  LightSkyBlue
+*FvwmIconBoxBack        #5f9ea0
+*FvwmIconBoxGeometry    5x1+0+0
+*FvwmIconBoxMaxIconSize 64x38
+*FvwmIconBoxFont        -adobe-helvetica-medium-r-*-*-12-*-*-*-*-*-*-*
+*FvwmIconBoxSortIcons
+*FvwmIconBoxPadding     4
+*FvwmIconBoxLines       10
+*FvwmIconBoxPlacement   Left Top
+*FvwmIconBoxPixmap      fvwm.xpm
+*FvwmIconBoxMouse       1       Click           RaiseLower
+*FvwmIconBoxMouse       1       DoubleClick     Iconify
+*FvwmIconBoxMouse       2       Click           Iconify -1, Focus
+*FvwmIconBoxMouse       3       Click           Module FvwmIdent
+*FvwmIconBoxKey         r       RaiseLower
+*FvwmIconBoxKey         space   Iconify
+*FvwmIconBoxKey         d       Close
+*FvwmIconBoxKey         n       Next
+*FvwmIconBoxKey         p       Prev
+*FvwmIconBoxKey         h       Left
+*FvwmIconBoxKey         j       Down
+*FvwmIconBoxKey         k       Up
+*FvwmIconBoxKey         l       Right
+*FvwmIconBox            "Fvwm*"         -
+
+# FvwmForm alias - rlogin to host via xterm
+*RloginWarpPointer
+*RloginFont         *helvetica*m*r*n*14*
+*RloginButtonFont   *helvetica*m*o*n*14*
+*RloginInputFont    *cour*m*r*n*14*
+*RloginFore         Black
+*RloginBack         Light Gray
+*RloginItemFore          Wheat
+*RloginItemBack          Gray50
+# begin items
+*RloginLine         center
+*RloginText         "Login to Remote Host"
+*RloginLine         center
+*RloginText         "Host:"
+*RloginInput        HostName  20   ""
+*RloginLine         center
+*RloginSelection    UserSel   single
+*RloginChoice       Default   Default   on   "same user"
+*RloginChoice       Custom    Custom    off  "user:"
+*RloginInput        UserName  10   ""
+*RloginLine         expand
+*RloginButton       quit "Login" ^M
+*RloginCommand Exec xterm  -T xterm@$(HostName) -e rlogin $(HostName) $(Custom?-l $(UserName))
+*RloginButton       restart   "Clear"
+*RloginCommand Beep
+*RloginButton       quit "Cancel"
+*RloginCommand Nop
+
+# FvwmForm alias - query exit ala mwm
+*QuitVerifyGrabServer
+*QuitVerifyWarpPointer
+*QuitVerifyFont          *helvetica*m*r*n*14*
+#*QuitVerifyButtonFont    *helvetica*m*o*n*14*
+*QuitVerifyButtonFont    7x13bold
+*QuitVerifyFore          Black
+*QuitVerifyBack          Light Gray
+*QuitVerifyItemFore Wheat
+*QuitVerifyItemBack Gray50
+# begin items
+*QuitVerifyLine          center
+*QuitVerifyText          "Do you really want to exit FVWM?"
+*QuitVerifyLine          expand
+*QuitVerifyButton   quit      " Exit "
+*QuitVerifyCommand  Quit
+*QuitVerifyButton   quit      "Cancel"
+*QuitVerifyCommand  Nop
+
+# MyTalk & MyFvwmTalk from Dave Goldberg
+# MyTalk Form - dissappears after use
+*MyTalkWarpPointer
+*MyTalkFont *helvetica*m*r*n*14*
+*MyTalkButtonFont *helvetica*m*o*n*14*
+*MyTalkInputFont *cour*m*r*n*14*
+*MyTalkFore Red
+*MyTalkBack Gray
+*MyTalkItemFore Blue
+*MyTalkItemBack Gray
+*MyTalkLine center
+*MyTalkText "Fvwm Function"
+*MyTalkInput Func 40 ""
+*MyTalkLine expand
+*MyTalkButton quit "Run" ^M
+*MyTalkCommand $(Func)
+*MyTalkButton restart "Clear" ^R
+*MyTalkButton quit "Cancel" ^C
+*MyTalkCommand Nop
+# MyFvwmTalk Form - sticks around
+*MyFvwmTalkWarpPointer
+*MyFvwmTalkFont *helvetica*m*r*n*14*
+*MyFvwmTalkButtonFont *helvetica*m*o*n*14*
+*MyFvwmTalkInputFont *cour*m*r*n*14*
+*MyFvwmTalkFore Red
+*MyFvwmTalkBack Gray
+*MyFvwmTalkItemFore Blue
+*MyFvwmTalkItemBack Gray
+*MyFvwmTalkLine center
+*MyFvwmTalkText "Fvwm Function"
+*MyFvwmTalkInput Func 40 ""
+*MyFvwmTalkLine expand
+*MyFvwmTalkButton restart "Run" ^M
+*MyFvwmTalkCommand $(Func)
+*MyFvwmTalkButton restart "Clear" ^R
+*MyFvwmTalkCommand Nop
+*MyFvwmTalkButton restart "Iconify" ^Z
+*MyFvwmTalkCommand Next [MyFvwmTalk] Iconify
+*MyFvwmTalkButton quit "Quit" ^C
+*MyFvwmTalkCommand Nop
+
+*FvwmPromptFore green
+*FvwmPromptBack black
+*FvwmPromptFont 7x13
+

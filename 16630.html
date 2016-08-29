@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="ISO-2022-JP"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-2022-JP" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Patch: an implementation of 'Goto' built-in function from まつしたまこと  on 1996-05-02 (fvwm-users)</title>
+<meta name="Author" content="まつしたまこと  (matusita_at_ics.es.osaka-u.ac.jp)" />
+<meta name="Subject" content="FVWM: Patch: an implementation of 'Goto' built-in function" />
+<meta name="Date" content="1996-05-02" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Patch: an implementation of 'Goto' built-in function</h1>
+<!-- received="Thu May  2 15:31:42 1996" -->
+<!-- isoreceived="19960502143142" -->
+<!-- sent="Fri, 03 May 1996 05:34:13 +0900" -->
+<!-- isosent="19960502203413" -->
+<!-- name="まつしたまこと " -->
+<!-- email="matusita_at_ics.es.osaka-u.ac.jp" -->
+<!-- subject="FVWM: Patch: an implementation of 'Goto' built-in function" -->
+<!-- id="199605022034.FAA16685_at_skylark.ics.es.osaka-u.ac.jp" -->
+<!-- charset="ISO-2022-JP" -->
+<!-- inreplyto="Tue, 30 Apr 1996 10:30:17 -0400&quot;" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start16630" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="16631.html" accesskey="d" title="Mario.Dupuis_at_mfg.canadair.ca: &quot;FVWM: timing bug fixed on 2.0.42&quot;">Next message</a> ]
+[ <a href="16629.html" title="&#12414;&#12388;&#12375;&#12383;&#12414;&#12371;&#12392; : &quot;FVWM: Bug report: Lost keyboard shortcut&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16630" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16630" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16630" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16630" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: まつしたまこと  &lt;<a href="mailto:matusita_at_ics.es.osaka-u.ac.jp?Subject=Re%3A%20FVWM%3A%20Patch%3A%20an%20implementation%20of%20'Goto'%20built-in%20function%1B(B">matusita_at_ics.es.osaka-u.ac.jp</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 03 May 1996 05:34:13 +0900</span><br />
+</address>
+<br />
+chuck_hines&gt; Perhaps something like the following would work better:
+<br />
+chuck_hines&gt;   Goto [Page x y | RelativePage dx dy] [Desk z | RelativeDesk dz]
+<br />
+chuck_hines&gt; Verbose, but no suprises.
+<br />
+<br />I support this idea. To proof this fact, I wrote a code.
+<br />
+<br />***
+<br />
+<br />Here is an implementation of 'Desk' for 2.0.42, to discuss what's the
+<br />
+cool specification of 'Goto'.
+<br />
+<br />Following is the BUGS list of this patch:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* It USES the features of old functions.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* It does NOT remove 'GotoPage' and/or 'Desk'.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* It does NOT update manual.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* It's NOT THE SAME SYNTAX of Chuck's idea, i.e.,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Goto [Page x y |
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RelativePage dx dy |
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Desk z |
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RelativeDesk dz]*
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* It's DIRTY. I've never write such a code :-p, and
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Author is very SLEEPY (See Data: field of this mail).
+<br />
+<br />I hope that anybody writes more cool implementation :-) It should be
+<br />
+avoided that this code is included to the next release of fvwm :-)
+<br />
+<br />- -
+<br />
+Makoto `MAR_kun' MATSUSHITA
+<br />
+<br />--- fvwm/functions.c.dist	Fri Mar 29 00:24:23 1996
+<br />
++++ fvwm/functions.c	Fri May  3 04:02:17 1996
+<br />
+_at_&#64; -56,6 +56,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;{&quot;Focus&quot;,        focus_func,       F_FOCUS,               FUNC_NEEDS_WINDOW},
+<br />
+&nbsp;&nbsp;&nbsp;{&quot;Function&quot;,     ComplexFunction,  F_FUNCTION,            FUNC_NO_WINDOW},
+<br />
+&nbsp;&nbsp;&nbsp;{&quot;GotoPage&quot;,     goto_page_func,   F_GOTO_PAGE,           FUNC_NO_WINDOW},
+<br />
++  {&quot;Goto&quot;,         goto_func,        F_GOTO,                FUNC_NO_WINDOW},
+<br />
+&nbsp;&nbsp;&nbsp;{&quot;HilightColor&quot;, SetHiColor,       F_HICOLOR,             FUNC_NO_WINDOW},
+<br />
+&nbsp;&nbsp;&nbsp;{&quot;Iconify&quot;,      iconify_function, F_ICONIFY,             FUNC_NEEDS_WINDOW},
+<br />
+&nbsp;&nbsp;&nbsp;{&quot;IconFont&quot;,     LoadIconFont,     F_ICONFONT,            FUNC_NO_WINDOW},
+<br />
+--- fvwm/misc.h.dist	Fri Apr  5 08:47:30 1996
+<br />
++++ fvwm/misc.h	Fri May  3 04:03:01 1996
+<br />
+_at_&#64; -376,6 +376,8 &#64;&#64;
+<br />
+&nbsp;int GetOneArgument(char *action, long *val1, int *val1_unit);
+<br />
+&nbsp;void goto_page_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long context, char *action, int *Module);
+<br />
++void goto_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
++		    unsigned long context, char *action, int *Module);
+<br />
+&nbsp;
+<br />
+&nbsp;void wait_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long context,char *action, int *Module);
+<br />
+--- fvwm/parse.h.dist	Fri Mar 29 00:24:48 1996
+<br />
++++ fvwm/parse.h	Fri May  3 04:02:37 1996
+<br />
+_at_&#64; -73,6 +73,7 &#64;&#64;
+<br />
+&nbsp;#define F_COLORMAP_FOCUS        55
+<br />
+&nbsp;#define F_TITLESTYLE            56
+<br />
+&nbsp;#define F_EXEC_SETUP            57
+<br />
++#define F_GOTO                  58
+<br />
+&nbsp;/* Functions which require a target window */
+<br />
+&nbsp;#define F_RESIZE		100
+<br />
+&nbsp;#define F_RAISE			101
+<br />
+--- fvwm/virtual.c.dist	Wed Apr  3 03:24:38 1996
+<br />
++++ fvwm/virtual.c	Fri May  3 04:56:53 1996
+<br />
+_at_&#64; -593,6 +593,107 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;MoveViewport(x,y,True);
+<br />
+&nbsp;}
+<br />
+&nbsp;
+<br />
++void goto_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
++		    unsigned long context,char *action, int *Module)
+<br />
++{
+<br />
++  int val1, val2, val1_unit, val2_unit, n, x, y, delta_x, delta_y;
+<br />
++  char *directive;	/* Should be freed when used */
+<br />
++
+<br />
++  action = GetNextToken(action, &amp;directive);
+<br />
++  while((directive != NULL) &amp;&amp; (strcmp(directive, &quot;&quot;) != 0)) {
+<br />
++    if(mystrcasecmp(directive, &quot;Page&quot;) == 0) {
+<br />
++      n = GetTwoArguments(action, &amp;val1, &amp;val2, &amp;val1_unit, &amp;val2_unit);
+<br />
++      if (n != 2) {
+<br />
++	fvwm_msg(ERR, &quot;goto_func&quot;, &quot;Goto/Page requires two arguments&quot;);
+<br />
++	free(directive);
+<br />
++	return;
+<br />
++      }
+<br />
++      if((val1_unit != Scr.MyDisplayWidth)||
+<br />
++	 (val2_unit != Scr.MyDisplayHeight)) {
+<br />
++	 fvwm_msg(ERR, &quot;goto_func&quot;, &quot;Goto/Page arguments should be unitless&quot;);
+<br />
++      }
+<br />
++      /* calculate where to go */
+<br />
++      x = val1 * Scr.MyDisplayWidth;
+<br />
++      y = val2 * Scr.MyDisplayHeight;
+<br />
++      /* Let's go */
+<br />
++      MoveViewport(x, y, True);
+<br />
++      free(directive);
+<br />
++      /* XXX: too dirty to skip arguments */
+<br />
++      action = GetNextToken(action, &amp;directive); free(directive);
+<br />
++      action = GetNextToken(action, &amp;directive); free(directive);
+<br />
++    } else if (mystrcasecmp(directive, &quot;RelativePage&quot;) == 0) {
+<br />
++      n = GetTwoArguments(action, &amp;val1, &amp;val2, &amp;val1_unit, &amp;val2_unit);
+<br />
++      if (n != 2) {
+<br />
++	fvwm_msg(ERR, &quot;goto_func&quot;, &quot;Goto/RelativePage requires two arguments&quot;);
+<br />
++	free(directive);
+<br />
++	return;
+<br />
++      }
+<br />
++      if((val1_unit != Scr.MyDisplayWidth)||
+<br />
++	 (val2_unit != Scr.MyDisplayHeight)) {
+<br />
++	 fvwm_msg(ERR, &quot;goto_func&quot;, &quot;Goto/RelativePage arguments should be unitless&quot;);
+<br />
++      }
+<br />
++      /* calculate where to go */
+<br />
++      delta_x = val1 * Scr.MyDisplayWidth;
+<br />
++      delta_y = val2 * Scr.MyDisplayHeight;
+<br />
++      /* boundary checking */
+<br />
++      if(Scr.Vx + delta_x &lt; 0)
+<br />
++	delta_x = -Scr.Vx;
+<br />
++      if(Scr.Vy + delta_y &lt; 0)
+<br />
++	delta_y = -Scr.Vy;
+<br />
++      if(Scr.Vx + delta_x &gt; Scr.VxMax)
+<br />
++	delta_x = Scr.VxMax - Scr.Vx;
+<br />
++      if(Scr.Vy + delta_y &gt; Scr.VyMax)
+<br />
++	delta_y = Scr.VyMax - Scr.Vy;
+<br />
++#if 0
+<br />
++      /* boundary checking continued: Should be needed ? */
+<br />
++      x = (Scr.Vx + delta_x) / Scr.MyDisplayWidth * Scr.MyDisplayWidth;
+<br />
++      y = (Scr.Vy + delta_y) / Scr.MyDisplayHeight * Scr.MyDisplayHeight;
+<br />
++#else
+<br />
++      x = Scr.Vx + delta_x;
+<br />
++      y = Scr.Vy + delta_y;
+<br />
++#endif
+<br />
++      /* Let's go */
+<br />
++      MoveViewport(x, y, True);
+<br />
++      free(directive);
+<br />
++      /* XXX: too dirty to skip arguments */
+<br />
++      action = GetNextToken(action, &amp;directive); free(directive);
+<br />
++      action = GetNextToken(action, &amp;directive); free(directive);
+<br />
++    } else if (mystrcasecmp(directive, &quot;Desk&quot;) == 0) {
+<br />
++      n = GetOneArgument(action, &amp;val1, &amp;val1_unit);
+<br />
++      if (n != 1) {
+<br />
++	fvwm_msg(ERR, &quot;goto_func&quot;, &quot;Goto/Desk requires one arguments&quot;);
+<br />
++	free(directive);
+<br />
++	return;
+<br />
++      }
+<br />
++      /* XXX: call old function */
+<br />
++      changeDesks(0, val1);
+<br />
++      free(directive);
+<br />
++      /* XXX: too dirty to skip argument */
+<br />
++      action = GetNextToken(action, &amp;directive); free(directive);
+<br />
++    } else if (mystrcasecmp(directive, &quot;RelativeDesk&quot;) == 0) {
+<br />
++      n = GetOneArgument(action, &amp;val1, &amp;val1_unit);
+<br />
++      if (n != 1) {
+<br />
++	fvwm_msg(ERR, &quot;goto_func&quot;, &quot;Goto/RelativeDesk requires one arguments&quot;);
+<br />
++	free(directive);
+<br />
++	return;
+<br />
++      }
+<br />
++      /* XXX: call old function */
+<br />
++      changeDesks(val1, 0);
+<br />
++      free(directive);
+<br />
++      /* XXX: too dirty to skip argument */
+<br />
++      action = GetNextToken(action, &amp;directive); free(directive);
+<br />
++    } else {
+<br />
++      fvwm_msg(ERR, &quot;goto_func&quot;, &quot;No such directive: %s&quot;, directive);
+<br />
++      free(directive);
+<br />
++      return;
+<br />
++    }
+<br />
++
+<br />
++    /* Prepare for the next directive */
+<br />
++    action = GetNextToken(action, &amp;directive);
+<br />
++  }
+<br />
++  if(directive) free(directive);
+<br />
++}
+<br />
++
+<br />
+&nbsp;void goto_page_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long context,char *action, int *Module)
+<br />
+&nbsp;{
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu May 02 1996 - 15:31:42 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start16630">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="16631.html" title="Next message in the list">Mario.Dupuis_at_mfg.canadair.ca: "FVWM: timing bug fixed on 2.0.42"</a></li>
+<li><dfn>Previous message</dfn>: <a href="16629.html" title="Previous message in the list">&#12414;&#12388;&#12375;&#12383;&#12414;&#12371;&#12392; : "FVWM: Bug report: Lost keyboard shortcut"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16630" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16630" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16630" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16630" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

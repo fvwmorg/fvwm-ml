@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Re: strange keybindings - patch from Dominik Vogt on 2002-08-05 (fvwm-users)</title>
+<meta name="Author" content="Dominik Vogt (dominik.vogt_at_gmx.de)" />
+<meta name="Subject" content="FVWM: Re: strange keybindings - patch" />
+<meta name="Date" content="2002-08-05" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Re: strange keybindings - patch</h1>
+<!-- received="Sun Aug  4 20:10:24 2002" -->
+<!-- isoreceived="20020804191024" -->
+<!-- sent="Mon, 5 Aug 2002 02:09:08 +0200" -->
+<!-- isosent="20020805000908" -->
+<!-- name="Dominik Vogt" -->
+<!-- email="dominik.vogt_at_gmx.de" -->
+<!-- subject="FVWM: Re: strange keybindings - patch" -->
+<!-- id="20020805020908.A2843_at_gmx.de" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="20020802190737.GA26274_at_old.homeip.net" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start5735" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="5736.html" accesskey="d" title="Dominik Vogt: &quot;Re: FVWM: configure do not recognize xpm&quot;">Next message</a> ]
+[ <a href="5734.html" title="Mikhael Goikhman: &quot;Re: FVWM: configure do not recognize xpm&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="5741.html" accesskey="t" title="Martin Renold: &quot;FVWM: Re: strange keybindings - patch&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg5735" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg5735" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg5735" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg5735" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Dominik Vogt &lt;<a href="mailto:dominik.vogt_at_gmx.de?Subject=Re%3A%20FVWM%3A%20Re%3A%20strange%20keybindings%20-%20patch">dominik.vogt_at_gmx.de</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 5 Aug 2002 02:09:08 +0200</span><br />
+</address>
+<br />
+On Fri, Aug 02, 2002 at 09:07:37PM +0200, Martin Renold wrote:
+<br />
+<em class="quotelev1">&gt; Hi there,
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; I just tried fvwm, and decided have a closer look.
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; So I wrote a config file to get the same keybindings as I use in wmaker,
+</em><br />
+<em class="quotelev1">&gt; but suddenly found the &quot;s&quot;-key was now bound to one of my actions too.
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; The problem was that the &quot;section&quot; keysym I used is bound on the german
+</em><br />
+<em class="quotelev1">&gt; keyboard also to the &quot;s&quot;-key in combination with some unknown modifier
+</em><br />
+<em class="quotelev1">&gt; (I've never used this). It is the same with some other keys.
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; A simple patch is attached. Please CC me any response, I am not
+</em><br />
+<em class="quotelev1">&gt; subscribed to the list.
+</em><br />
+<br />Ah yes, I unserstand the problem.  I've made a different patch
+<br />
+that does not prevent this bindings in general but only when there
+<br />
+are no &quot;better&quot; matches for the keysym (i.e. if there are no keys
+<br />
+that generate the keysym without any modifiers or with just shift
+<br />
+or caps-lock).   Try this code in place of the &quot;default&quot; clause
+<br />
+you modified in Bindings.c:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* key generates the key sym with unknown modifiers depressed -
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* can't map that to specific modifiers - treat as no modifiers */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (modifiers != AnyModifier)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* but don't bind it again if already bound with shift, caps-lock
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* or no modifiers */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;check_bound_mask = 0x7;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
+<br />Bye
+<br />
+<br />Dominik ^_^  ^_^
+<br />
+<br />&nbsp;--
+<br />
+Dominik Vogt, dominik.vogt_at_gmx.de
+<br />
+Reply-To: dominik.vogt_at_gmx.de
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sun Aug 04 2002 - 20:10:24 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start5735">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="5736.html" title="Next message in the list">Dominik Vogt: "Re: FVWM: configure do not recognize xpm"</a></li>
+<li><dfn>Previous message</dfn>: <a href="5734.html" title="Previous message in the list">Mikhael Goikhman: "Re: FVWM: configure do not recognize xpm"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="5741.html" title="Next message in this discussion thread">Martin Renold: "FVWM: Re: strange keybindings - patch"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="5741.html" title="Message sent in reply to this message">Martin Renold: "FVWM: Re: strange keybindings - patch"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg5735" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg5735" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg5735" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg5735" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:53 BST
+</em></small></p>
+</body>
+</html>

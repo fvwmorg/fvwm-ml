@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>re: FVWM: Color identified windows from Steve Tynor on 1997-03-03 (fvwm-users)</title>
+<meta name="Author" content="Steve Tynor (tynor_at_atlanta.twr.com)" />
+<meta name="Subject" content="re: FVWM: Color identified windows" />
+<meta name="Date" content="1997-03-03" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>re: FVWM: Color identified windows</h1>
+<!-- received="Mon Mar  3 14:21:22 1997" -->
+<!-- isoreceived="19970303142122" -->
+<!-- sent="Mon, 3 Mar 1997 14:55:22 -0500" -->
+<!-- isosent="19970303195522" -->
+<!-- name="Steve Tynor" -->
+<!-- email="tynor_at_atlanta.twr.com" -->
+<!-- subject="re: FVWM: Color identified windows" -->
+<!-- id="9703031957.AA04188_at_atlanta.twr.com" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="199703030411.MAA16042_at_eleusis.ucs.uwa.edu.au" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start19396" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="19397.html" accesskey="d" title="Choksing Taweponsomkiat: &quot;FVWM: FwmPager&#0039;s miniIcons &#0038; muti-manager IconMan&quot;">Next message</a> ]
+[ <a href="19395.html" title="Dwayne T. Cox: &quot;FVWM: fvwm 1.??? to 2.???&quot;">Previous message</a> ]
+[ <a href="19380.html" title="Toivo Pedaste: &quot;FVWM: Color identified windows&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19396" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19396" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19396" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19396" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Steve Tynor &lt;<a href="mailto:tynor_at_atlanta.twr.com?Subject=re%3A%20FVWM%3A%20Color%20identified%20windows">tynor_at_atlanta.twr.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 3 Mar 1997 14:55:22 -0500</span><br />
+</address>
+<br />
+| I use colors to identify which machine a window is connected to, I do
+<br />
+| this using styles and window titles.
+<br />
+| 
+<br />
+| What I would like to do is that when the window is active only the title
+<br />
+| bar changes and the rest of the decoration stays the identifying color.
+<br />
+| It seems that it should be possible using .45 but I haven't been able to
+<br />
+| find anything that works.
+<br />
+<br />It's not possible in stock fvwm2 -- however, I've patched .43 to do it
+<br />
+(since I use frame colors for the same purpose!). I've not had a chance
+<br />
+to upgrade to .45 though.  My 2.0.43-based patch is attached below --
+<br />
+perhaps you can adapt it to .45 (shouldn't be hard).  I'd really like to
+<br />
+see this get adopted into the baseline release...
+<br />
+<br />=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+<br />
+Writing about music is like dancing about architecture. -- Frank Zappa
+<br />
+Eschew obfuscation.
+<br />
+<br />Steve Tynor		Email:   Steve.Tynor_at_atlanta.twr.com
+<br />
+Tower Technology 	WWW:     <a href="http://www.twr.com/">http://www.twr.com/</a>
+<br />
+<br /><br />---- cut here ---
+<br />
+*** borders.c.orig	Thu Apr 11 11:27:10 1996
+<br />
+--- borders.c	Tue Dec 10 23:30:09 1996
+<br />
+***************
+<br />
+*** 98,110 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Scr.Hilite !=t)&amp;&amp;(!(t-&gt;flags &amp;SUPPRESSICON)))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w = t-&gt;icon_w;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Scr.Hilite = t;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+!     TextColor = Scr.HiColors.fore;
+<br />
+!     BackPixmap= Scr.gray_pixmap;
+<br />
+!     BackColor = Scr.HiColors.back;
+<br />
+!     ReliefGC = Scr.HiReliefGC;
+<br />
+!     ShadowGC = Scr.HiShadowGC;
+<br />
+!     BorderColor = Scr.HiRelief.back;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+--- 98,134 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Scr.Hilite !=t)&amp;&amp;(!(t-&gt;flags &amp;SUPPRESSICON)))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w = t-&gt;icon_w;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Scr.Hilite = t;
+<br />
++ 
+<br />
++     
+<br />
++     if (Scr.HiBordersOnly) 
+<br />
++     {
+<br />
++       /* Hilight only the borders; not also the title */
+<br />
++ 
+<br />
++        TextColor =t-&gt;TextPixel;
+<br />
++        BackPixmap = Scr.light_gray_pixmap;
+<br />
++        if(t-&gt;flags &amp; STICKY)
+<br />
++ 	  BackPixmap = Scr.sticky_gray_pixmap;
+<br />
++        BackColor = t-&gt;BackPixel;
+<br />
++        Globalgcv.foreground = t-&gt;ReliefPixel;
+<br />
++        Globalgcm = GCForeground;
+<br />
++        XChangeGC(dpy,Scr.ScratchGC1,Globalgcm,&amp;Globalgcv); 
+<br />
++        ReliefGC = Scr.HiReliefGC; /* Scr.ScratchGC1;*/
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+!        Globalgcv.foreground = t-&gt;ShadowPixel;
+<br />
+!        XChangeGC(dpy,Scr.ScratchGC2,Globalgcm,&amp;Globalgcv); 
+<br />
+!        ShadowGC = Scr.ScratchGC2;
+<br />
+! 
+<br />
+!        BorderColor = t-&gt;ShadowPixel;
+<br />
+!     }
+<br />
+!     else
+<br />
+!     {
+<br />
+!       TextColor = Scr.HiColors.fore;
+<br />
+!       BackPixmap= Scr.gray_pixmap;
+<br />
+!       BackColor = Scr.HiColors.back;
+<br />
+!       ReliefGC = Scr.HiReliefGC;
+<br />
+!       ShadowGC = Scr.HiShadowGC;
+<br />
+!       BorderColor = Scr.HiRelief.back;
+<br />
+!     }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+*** builtins.c.orig	Thu Jun 27 10:34:19 1996
+<br />
+--- builtins.c	Tue Dec 10 22:44:43 1996
+<br />
+***************
+<br />
+*** 1197,1202 ****
+<br />
+--- 1197,1208 ----
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;
+<br />
++ void SetHiBordersOnly(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
++ 		unsigned long context, char *action,int* Module)
+<br />
++ {
+<br />
++    Scr.HiBordersOnly = 1;
+<br />
++ }
+<br />
++ 
+<br />
+&nbsp;&nbsp;void SetHiColor(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long context, char *action,int* Module)
+<br />
+&nbsp;&nbsp;{
+<br />
+*** functions.c.orig	Wed Jun 19 20:01:56 1996
+<br />
+--- functions.c	Tue Dec 10 23:01:13 1996
+<br />
+***************
+<br />
+*** 59,64 ****
+<br />
+--- 59,65 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{&quot;Function&quot;,     ComplexFunction,  F_FUNCTION,            FUNC_NO_WINDOW},
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{&quot;GotoPage&quot;,     goto_page_func,   F_GOTO_PAGE,           FUNC_NO_WINDOW},
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{&quot;HilightColor&quot;, SetHiColor,       F_HICOLOR,             FUNC_NO_WINDOW},
+<br />
++   {&quot;HilightBordersOnly&quot;, SetHiBordersOnly, F_HIBORDER, 	    FUNC_NO_WINDOW},
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{&quot;Iconify&quot;,      iconify_function, F_ICONIFY,             FUNC_NEEDS_WINDOW},
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{&quot;IconFont&quot;,     LoadIconFont,     F_ICONFONT,            FUNC_NO_WINDOW},
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{&quot;IconPath&quot;,     setIconPath,      F_ICON_PATH,           FUNC_NO_WINDOW},
+<br />
+*** misc.h.orig	Wed Jun 19 21:31:15 1996
+<br />
+--- misc.h	Tue Dec 10 22:59:56 1996
+<br />
+***************
+<br />
+*** 439,444 ****
+<br />
+--- 439,446 ----
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;void ProcessNewStyle(XEvent *eventp,Window w,FvwmWindow *tmp_win,unsigned long context,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;char *action, int *Module);
+<br />
++ void SetHiBordersOnly(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
++ 		      unsigned long context, char *action,int* Module);
+<br />
+&nbsp;&nbsp;void SetHiColor(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long context, char *action,int* Module);
+<br />
+&nbsp;&nbsp;void SetMenuColor(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
+*** parse.h.orig	Thu May 30 14:03:10 1996
+<br />
+--- parse.h	Tue Dec 10 22:40:11 1996
+<br />
+***************
+<br />
+*** 89,94 ****
+<br />
+--- 89,95 ----
+<br />
+&nbsp;&nbsp;#define F_SEND_STRING           112
+<br />
+&nbsp;&nbsp;#define F_ADD_MOD               113
+<br />
+&nbsp;&nbsp;#define F_DESTROY_MOD           114
+<br />
++ #define F_HIBORDER		115
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;/* Functions for use by modules only! */
+<br />
+&nbsp;&nbsp;#define F_SEND_WINDOW_LIST     1000
+<br />
+*** screen.h.orig	Thu Apr  4 19:18:23 1996
+<br />
+--- screen.h	Tue Dec 10 22:42:50 1996
+<br />
+***************
+<br />
+*** 144,149 ****
+<br />
+--- 144,150 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ColorPair MenuStippleColors;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ColorPair MenuRelief;
+<br />
+&nbsp;&nbsp;
+<br />
++   int HiBordersOnly;	/* if non-zero, Hilight the borders, but not the Title */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ColorPair StdColors; 	/* standard fore/back colors */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ColorPair HiColors; 	/* standard fore/back colors */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ColorPair StdRelief;
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon Mar 03 1997 - 14:21:22 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start19396">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="19397.html" title="Next message in the list">Choksing Taweponsomkiat: "FVWM: FwmPager&#0039;s miniIcons &#0038; muti-manager IconMan"</a></li>
+<li><dfn>Previous message</dfn>: <a href="19395.html" title="Previous message in the list">Dwayne T. Cox: "FVWM: fvwm 1.??? to 2.???"</a></li>
+<li><dfn>In reply to</dfn>: <a href="19380.html" title="Message to which this message replies">Toivo Pedaste: "FVWM: Color identified windows"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19396" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19396" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19396" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19396" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

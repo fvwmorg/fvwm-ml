@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: FVWM2.0.26 &amp; egcs from Andrew Veliath on 1998-01-23 (fvwm-users)</title>
+<meta name="Author" content="Andrew Veliath (veliaa_at_frontiernet.net)" />
+<meta name="Subject" content="Re: FVWM: FVWM2.0.26 &amp; egcs" />
+<meta name="Date" content="1998-01-23" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: FVWM2.0.26 &amp; egcs</h1>
+<!-- received="Fri Jan 23 07:28:12 1998" -->
+<!-- isoreceived="19980123072812" -->
+<!-- sent="Fri, 23 Jan 1998 08:25:31 -0500" -->
+<!-- isosent="19980123132531" -->
+<!-- name="Andrew Veliath" -->
+<!-- email="veliaa_at_frontiernet.net" -->
+<!-- subject="Re: FVWM: FVWM2.0.26 &amp; egcs" -->
+<!-- id="199801231325.IAA01347_at_thinkpad.velsoft.com" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="199801231124.FAA27995&#64;sina.hpc.uh.edu" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start21662" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="21663.html" accesskey="d" title="&#10359;&#29295;&#28263;&#8307;&#29810;&#26990;&#26409;&#8421;&#29284;: &quot;FVWM: PATCH: icon pixmap update&quot;">Next message</a> ]
+[ <a href="21661.html" title="Bruce Stephens: &quot;Re: FVWM: FVWM2.0.26 &#0038; egcs&quot;">Previous message</a> ]
+[ <a href="21651.html" title="Scott Lampert: &quot;FVWM: FVWM2.0.26 &#0038; egcs&quot;">Maybe in reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21662" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21662" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21662" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21662" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Andrew Veliath &lt;<a href="mailto:veliaa_at_frontiernet.net?Subject=Re%3A%20FVWM%3A%20FVWM2.0.26%20%26%20egcs">veliaa_at_frontiernet.net</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 23 Jan 1998 08:25:31 -0500</span><br />
+</address>
+<br />
+I had the same problem with LinuxMachineDefines and egcs 1.0 about a
+<br />
+month ago or so.  The spec files of the new gccs are different, and
+<br />
+somehow break the Imake preprocessing.  I forgot how I worked around
+<br />
+it, I probably just reinstalled 2.7.2.3 for the meantime.
+<br />
+<br />I just had a quick look.  It seems that when /lib/cpp is called by
+<br />
+itself, it does not get the options listed in the *cpp: section of the
+<br />
+spec file (maybe this is intended).  It receives those options when
+<br />
+called from the gcc driver though.
+<br />
+<br />As a *workaround*, I put the following script as /lib/cpp2:
+<br />
+<br />#! /bin/sh
+<br />
+gcc -E &quot;$_at_&quot;
+<br />
+<br />Then, in my shell, exported IMAKECPP:
+<br />
+<br />IMAKECPP=/lib/cpp2; export IMAKECPP
+<br />
+<br />Then you should be able to use xmkmf as usual.
+<br />
+<br /><pre>
+--
+Regards,
+Andrew Veliath
+veliaa_at_frontiernet.net, veliaa_at_rpi&#46;<!--nospam-->edu
+&gt;&gt;&gt;&gt;&gt; Bruce Stephens writes:
+    Bruce&gt; This still seems unlikely.  I mean, configure --srcdir
+    Bruce&gt; pretty much requires -c and -o!
+    Bruce&gt; fortunato_at_heavymetal.org said:
+    &gt;&gt; gcc -Wall -O2 -I. -I../../libs -I/usr/X11R6/include -I/include
+    &gt;&gt; -Dlinux LinuxMachineDefines -D_POSIX_C_SOURCE=199309L
+    &gt;&gt; -D_POSIX_SOURCE -D_BSD_SOURCE -D_SVID_SOURCE
+    &gt;&gt; -DNO_MESSAGE_CATALOG -DFUNCPROTO=15 -DNARROWPROTO -DSHAPE
+    &gt;&gt; -DACTIVEDOWN_BTNS -DINACTIVE_BTNS -DMINI_ICONS -DVECTOR_BUTTONS
+    &gt;&gt; -DPIXMAP_BUTTONS -DGRADIENT_BUTTONS -DMULTISTYLE
+    &gt;&gt; -DEXTENDED_TITLESTYLE -DBORDERSTYLE -DUSEDECOR -DWINDOWSHADE
+    &gt;&gt; -DXPM -c FvwmButtons.c -o FvwmButtons.o
+    &gt;&gt; gcc: cannot specify -o with -c and multiple compilations
+    &gt;&gt; make[1]: *** [FvwmButtons.o] Error 1
+    &gt;&gt; Why it thinks this is multiple compilations I have no idea, but
+    &gt;&gt; this fails with gcc-2.8.0, egcs 1.0.1 and pgcc 1.0.1 as well.
+    Bruce&gt; Hmm, the isolated LinuxMachineDefines looks dodgy.  I
+    Bruce&gt; suspect that.
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Jan 23 1998 - 07:28:12 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start21662">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="21663.html" title="Next message in the list">&#10359;&#29295;&#28263;&#8307;&#29810;&#26990;&#26409;&#8421;&#29284;: "FVWM: PATCH: icon pixmap update"</a></li>
+<li><dfn>Previous message</dfn>: <a href="21661.html" title="Previous message in the list">Bruce Stephens: "Re: FVWM: FVWM2.0.26 &#0038; egcs"</a></li>
+<li><dfn>Maybe in reply to</dfn>: <a href="21651.html" title="Message to which this message replies">Scott Lampert: "FVWM: FVWM2.0.26 &#0038; egcs"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21662" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21662" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21662" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21662" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

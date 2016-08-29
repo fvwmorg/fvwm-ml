@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: windows move across restart [fixed] from Gregory Margo on 1995-12-11 (fvwm-users)</title>
+<meta name="Author" content="Gregory Margo (gmargo_at_newton.vip.best.com)" />
+<meta name="Subject" content="Re: FVWM: windows move across restart [fixed]" />
+<meta name="Date" content="1995-12-11" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: windows move across restart [fixed]</h1>
+<!-- received="Mon Dec 11 14:21:22 1995" -->
+<!-- isoreceived="19951211142122" -->
+<!-- sent="Mon, 11 Dec 1995 12:21:06 -0800 (PST)" -->
+<!-- isosent="19951211202106" -->
+<!-- name="Gregory Margo" -->
+<!-- email="gmargo_at_newton.vip.best.com" -->
+<!-- subject="Re: FVWM: windows move across restart [fixed]" -->
+<!-- id="199512112021.MAA03231_at_newton.vip.best.com" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="199512072106.NAA01793_at_newton.vip.best.com" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start15032" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="15033.html" accesskey="d" title="Mike Blatchley: &quot;FVWM: IconBox Style, Meta-Q Command&quot;">Next message</a> ]
+[ <a href="15031.html" title="Albrecht Kadlec: &quot;FVWM: Documentation: SloppyFocus&quot;">Previous message</a> ]
+[ <a href="15002.html" title="Gregory Margo: &quot;FVWM: windows move across restart&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15032" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15032" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15032" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15032" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Gregory Margo &lt;<a href="mailto:gmargo_at_newton.vip.best.com?Subject=Re%3A%20FVWM%3A%20windows%20move%20across%20restart%20%5Bfixed%5D">gmargo_at_newton.vip.best.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 11 Dec 1995 12:21:06 -0800 (PST)</span><br />
+</address>
+<br />
+Since it seems that no one has reproduced the bug I was seeing, here
+<br />
+is both an improved procedure for seeing the problem, and the fix.
+<br />
+<br />Please try this out if you are so inclined.  It would be nice if someone
+<br />
+was able to reproduce the problem and verify that the patch fixes it.
+<br />
+<br />To recap: Any window that fvwm places with SmartPlacement and
+<br />
+RandomPlacement will exhibit this behavior:  when fvwm is first restarted
+<br />
+after window creation, that window will move slightly.
+<br />
+<br /><br />How to reproduce the &quot;Windows Move Across Restart&quot; bug.
+<br />
+<br />1. Create simple demonstration control files (.xinitrc and .fvwm2rc)
+<br />
+<br />&nbsp;&nbsp;&nbsp;a. .xinitrc contents:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#!/bin/sh
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fvwm2 &amp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# sleep to be sure fvwm starts before xterm starts
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sleep 2
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exec xterm -C -title CONSOLE
+<br />
+<br />&nbsp;&nbsp;&nbsp;b. ~/.fvwm2rc contents:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Create ~/.fvwm2rc from the default system.fvwmrc and change the
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;ActivePlacement&quot; style default to &quot;RandomPlacement&quot;. [And other
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;changes as needed for ModulePath or fvwm filename differences.]
+<br />
+<br />2. Start X
+<br />
+<br />3. The &quot;CONSOLE&quot; xterm should be placed at geometry 80x24+1+1.
+<br />
+&nbsp;&nbsp;&nbsp;Use both xwininfo and FvwmIndent to verify.
+<br />
+<br />4. Restart fvwm from the menu.
+<br />
+<br />5. The &quot;CONSOLE&quot; xterm should have moved to geometry 80x24+0+0.
+<br />
+&nbsp;&nbsp;&nbsp;Both xwininfo and FvwmIdent should agree.
+<br />
+<br /><br />This &quot;-1,-1&quot; translation is a bug in the placement code that occurs
+<br />
+only if the window is placed with RandomPlacement/SmartPlacement,
+<br />
+and then fvwm is restarted.
+<br />
+<br />The following patch fixes the problem.  The x,y and xdiff,ydiff values
+<br />
+will be recorded similar to the ActivePlacement/SmartPlacement code.
+<br />
+<br />--- fvwm-2.0.39/fvwm/placement.c	Mon Apr 24 11:14:08 1995
+<br />
++++ fvwm2-new/fvwm/placement.c	Mon Dec 11 11:41:37 1995
+<br />
+_at_&#64; -185,13 +185,13 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Scr.randomx = Scr.TitleHeight;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ((Scr.randomy += 2*Scr.TitleHeight) &gt; Scr.MyDisplayHeight / 2)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Scr.randomy = 2 * Scr.TitleHeight;
+<br />
+-	      tmp_win-&gt;attr.x = Scr.randomx - tmp_win-&gt;old_bw;
+<br />
+-	      tmp_win-&gt;attr.y = Scr.randomy - tmp_win-&gt;old_bw;
+<br />
++	      tmp_win-&gt;attr.x = Scr.randomx - tmp_win-&gt;old_bw + tmp_win-&gt;bw;
+<br />
++	      tmp_win-&gt;attr.y = Scr.randomy - tmp_win-&gt;old_bw + tmp_win-&gt;bw;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+-	      tmp_win-&gt;attr.x = xl - tmp_win-&gt;old_bw;
+<br />
+-	      tmp_win-&gt;attr.y = yt - tmp_win-&gt;old_bw;
+<br />
++	      tmp_win-&gt;attr.x = xl - tmp_win-&gt;old_bw + tmp_win-&gt;bw;
+<br />
++	      tmp_win-&gt;attr.y = yt - tmp_win-&gt;old_bw + tmp_win-&gt;bw;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* patches 11/93 to try to keep the window on the
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* screen */
+<br />
+_at_&#64; -214,8 +214,8 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Scr.randomy = 0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;
+<br />
+-	  tmp_win-&gt;xdiff = tmp_win-&gt;attr.x - tmp_win-&gt;bw;
+<br />
+-	  tmp_win-&gt;ydiff = tmp_win-&gt;attr.y - tmp_win-&gt;bw;
+<br />
++	  tmp_win-&gt;xdiff = tmp_win-&gt;attr.x + tmp_win-&gt;old_bw - tmp_win-&gt;bw;
+<br />
++	  tmp_win-&gt;ydiff = tmp_win-&gt;attr.y + tmp_win-&gt;old_bw - tmp_win-&gt;bw;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{	  
+<br />
+<br /><br /><br />Please let me know if you can exhibit the problem, if the patch works,
+<br />
+if I'm totally out of my mind, or if your sister is single :-)
+<br />
+<br />In case it matters, this is my environment:
+<br />
+Linux-1.2.13
+<br />
+GCC-2.7.0
+<br />
+Libc-5.0.9
+<br />
+XFree86-3.1.2-elf
+<br />
+Screen set to 1024x768, 256 colors.
+<br />
+<br />thanks,
+<br />
+gm
+<br />
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+<br />
+Gregory H. Margo                 No free speech restrictions on the Internet!
+<br />
+gmargo_at_newton.vip.best.com
+<br />
+<pre>
+--
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon Dec 11 1995 - 14:21:22 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start15032">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="15033.html" title="Next message in the list">Mike Blatchley: "FVWM: IconBox Style, Meta-Q Command"</a></li>
+<li><dfn>Previous message</dfn>: <a href="15031.html" title="Previous message in the list">Albrecht Kadlec: "FVWM: Documentation: SloppyFocus"</a></li>
+<li><dfn>In reply to</dfn>: <a href="15002.html" title="Message to which this message replies">Gregory Margo: "FVWM: windows move across restart"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15032" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15032" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15032" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15032" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:57 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,899 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: StartsOnPage? here it is! from Robert Joop on 1997-04-10 (fvwm-users)</title>
+<meta name="Author" content="Robert Joop (rj_at_home.in-berlin.de)" />
+<meta name="Subject" content="FVWM: StartsOnPage? here it is!" />
+<meta name="Date" content="1997-04-10" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: StartsOnPage? here it is!</h1>
+<!-- received="Thu Apr 10 11:12:39 1997" -->
+<!-- isoreceived="19970410101239" -->
+<!-- sent="Thu, 10 Apr 1997 18:11:12 +0200" -->
+<!-- isosent="19970410161112" -->
+<!-- name="Robert Joop" -->
+<!-- email="rj_at_home.in-berlin.de" -->
+<!-- subject="FVWM: StartsOnPage? here it is!" -->
+<!-- id="19970410181112.53897_at_outa.fokus.gmd.de" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start19793" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="19794.html" accesskey="d" title="Ronald A Slusser: &quot;FVWM: fvwm and the year 2000&quot;">Next message</a> ]
+[ <a href="19792.html" title="gottlieb_at_research.nj.nec.com: &quot;FVWM: xbuffy&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19793" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19793" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19793" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19793" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Robert Joop &lt;<a href="mailto:rj_at_home.in-berlin.de?Subject=Re%3A%20FVWM%3A%20StartsOnPage%3F%20here%20it%20is!">rj_at_home.in-berlin.de</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 10 Apr 1997 18:11:12 +0200</span><br />
+</address>
+<br />
+a few weeks ago, i asked about StartsOnPage and the only answers i got
+<br />
+were 'yes, please, implement it'.
+<br />
+<br />well, here it is, hacked together in some 90 minutes.
+<br />
+<br />*** WARNING: use at your own risk! ***
+<br />
+<br />in fvwm/misc.h all the 32 bits of an int are already taken for the
+<br />
+values for name_list flags. i had to use one of the bits and chose the
+<br />
+one that is used by MINIICON_FLAG, and therefore my patch only works
+<br />
+when MINI_ICONS is disabled in Fvwm.tmpl. (the patch takes care of that.)
+<br />
+<br />you'll find a short description of the StartsOnPage feature in both the
+<br />
+(unmodified) TO-DO file and in the (patched) manual.
+<br />
+<br />best,
+<br />
+&nbsp;rj
+<br />
+<br />diff -ru o/fvwm-2.0.45/Fvwm.tmpl fvwm-2.0.45/Fvwm.tmpl
+<br />
+--- o/fvwm-2.0.45/Fvwm.tmpl	Wed Jan 22 14:38:49 1997
+<br />
++++ fvwm-2.0.45/Fvwm.tmpl	Thu Apr 10 12:55:12 1997
+<br />
+_at_&#64; -256,7 +256,8 &#64;&#64;
+<br />
+&nbsp;#else
+<br />
+&nbsp;
+<br />
+&nbsp;/* the works, not using '+=': */
+<br />
+-OPTION_DEFINES  = -DSHAPE -DACTIVEDOWN_BTNS -DINACTIVE_BTNS -DMINI_ICONS -DVECTOR_BUTTONS -DPIXMAP_BUTTONS -DGRADIENT_BUTTONS -DMULTISTYLE -DEXTENDED_TITLESTYLE -DBORDERSTYLE -DUSEDECOR -DWINDOWSHADE
+<br />
++/* OPTION_DEFINES  = -DSHAPE -DACTIVEDOWN_BTNS -DINACTIVE_BTNS -DMINI_ICONS -DVECTOR_BUTTONS -DPIXMAP_BUTTONS -DGRADIENT_BUTTONS -DMULTISTYLE -DEXTENDED_TITLESTYLE -DBORDERSTYLE -DUSEDECOR -DWINDOWSHADE */
+<br />
++OPTION_DEFINES  = -DSHAPE -DACTIVEDOWN_BTNS -DINACTIVE_BTNS -DVECTOR_BUTTONS -DPIXMAP_BUTTONS -DGRADIENT_BUTTONS -DMULTISTYLE -DEXTENDED_TITLESTYLE -DBORDERSTYLE -DUSEDECOR -DWINDOWSHADE
+<br />
+&nbsp;
+<br />
+&nbsp;#endif
+<br />
+&nbsp;
+<br />
+diff -ru o/fvwm-2.0.45/fvwm/add_window.c fvwm-2.0.45/fvwm/add_window.c
+<br />
+--- o/fvwm-2.0.45/fvwm/add_window.c	Wed Jan 22 16:46:54 1997
+<br />
++++ fvwm-2.0.45/fvwm/add_window.c	Thu Apr 10 12:57:24 1997
+<br />
+_at_&#64; -102,7 +102,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;char *decor = NULL;
+<br />
+&nbsp;#endif
+<br />
+&nbsp;&nbsp;&nbsp;unsigned long tflag;
+<br />
+-  int Desk, border_width, resize_width;
+<br />
++  int Desk, PageX, PageY, border_width, resize_width;
+<br />
+&nbsp;&nbsp;&nbsp;extern Bool NeedToResizeToo;
+<br />
+&nbsp;&nbsp;&nbsp;extern FvwmWindow *colormap_win;
+<br />
+&nbsp;&nbsp;&nbsp;char *forecolor = NULL, *backcolor = NULL;
+<br />
+_at_&#64; -202,7 +202,7 &#64;&#64;
+<br />
+&nbsp;#ifdef USEDECOR
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;decor,
+<br />
+&nbsp;#endif
+<br />
+-                     &amp;Desk,
+<br />
++                     &amp;Desk, &amp;PageX, &amp;PageY,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;border_width, &amp;resize_width,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;forecolor,&amp;backcolor,&amp;tmp_win-&gt;buttons, 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tmp_win-&gt;IconBox,&amp;(tmp_win-&gt;BoxFillMethod));
+<br />
+_at_&#64; -274,11 +274,16 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Desk = atoi(rm_value.addr);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tflag |= STARTSONDESK_FLAG;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
++      status = XrmGetResource (db, &quot;fvwm.page&quot;, &quot;Fvwm.Page&quot;, &amp;str_type, &amp;rm_value);
+<br />
++      if ((status == True) &amp;&amp; (rm_value.size != 0)) {
+<br />
++          if (sscanf (rm_value.addr, &quot;%d %d&quot;, &amp;PageX, &amp;PageY) == 2)
+<br />
++	      tflag |= STARTSONPAGE_FLAG;
+<br />
++      }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XrmDestroyDatabase (db);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;db = NULL;
+<br />
+&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;
+<br />
+-  if(!PlaceWindow(tmp_win, tflag, Desk))
+<br />
++  if(!PlaceWindow(tmp_win, tflag, Desk, PageX, PageY))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return NULL;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;/*
+<br />
+_at_&#64; -977,7 +982,7 &#64;&#64;
+<br />
+&nbsp;#ifdef USEDECOR
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;char **decor,
+<br />
+&nbsp;#endif
+<br />
+-                         int *Desk, int *border_width,
+<br />
++                         int *Desk, int *PageX, int *PageY, int *border_width,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int *resize_width, char **forecolor, char **backcolor,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long * buttons, int *IconBox,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int *BoxFillMethod)
+<br />
+_at_&#64; -995,6 +1000,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;*forecolor = NULL;
+<br />
+&nbsp;&nbsp;&nbsp;*backcolor = NULL;
+<br />
+&nbsp;&nbsp;&nbsp;*Desk = 0;
+<br />
++  *PageX = *PageY = 0;
+<br />
+&nbsp;&nbsp;&nbsp;*buttons = 0;
+<br />
+&nbsp;&nbsp;&nbsp;*BoxFillMethod = 0;
+<br />
+&nbsp;&nbsp;&nbsp;*border_width = 0;
+<br />
+_at_&#64; -1021,6 +1027,11 &#64;&#64;
+<br />
+&nbsp;#endif
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(nptr-&gt;off_flags &amp; STARTSONDESK_FLAG)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Desk = nptr-&gt;Desk;
+<br />
++	      if(nptr-&gt;off_flags &amp; STARTSONPAGE_FLAG)
+<br />
++	      {
+<br />
++		*PageX = nptr-&gt;PageX;
+<br />
++		*PageY = nptr-&gt;PageY;
+<br />
++	      }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(nptr-&gt;off_flags &amp; BW_FLAG)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*border_width = nptr-&gt;border_width;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(nptr-&gt;off_flags &amp; FORE_COLOR_FLAG)
+<br />
+_at_&#64; -1056,6 +1067,11 &#64;&#64;
+<br />
+&nbsp;#endif
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(nptr-&gt;off_flags &amp; STARTSONDESK_FLAG)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Desk = nptr-&gt;Desk;
+<br />
++	      if(nptr-&gt;off_flags &amp; STARTSONPAGE_FLAG)
+<br />
++	      {
+<br />
++		*PageX = nptr-&gt;PageX;
+<br />
++		*PageY = nptr-&gt;PageY;
+<br />
++	      }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(nptr-&gt;off_flags &amp; FORE_COLOR_FLAG)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*forecolor = nptr-&gt;ForeColor;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(nptr-&gt;off_flags &amp; BACK_COLOR_FLAG)
+<br />
+_at_&#64; -1091,6 +1107,11 &#64;&#64;
+<br />
+&nbsp;#endif
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(nptr-&gt;off_flags &amp; STARTSONDESK_FLAG)	   
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Desk = nptr-&gt;Desk;
+<br />
++	  if(nptr-&gt;off_flags &amp; STARTSONPAGE_FLAG)
+<br />
++	  {
+<br />
++	    *PageX = nptr-&gt;PageX;
+<br />
++	    *PageY = nptr-&gt;PageY;
+<br />
++	  }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(nptr-&gt;off_flags &amp; FORE_COLOR_FLAG)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*forecolor = nptr-&gt;ForeColor;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(nptr-&gt;off_flags &amp; BACK_COLOR_FLAG)
+<br />
+diff -ru o/fvwm-2.0.45/fvwm/builtins.c fvwm-2.0.45/fvwm/builtins.c
+<br />
+--- o/fvwm-2.0.45/fvwm/builtins.c	Wed Jan 22 14:37:28 1997
+<br />
++++ fvwm-2.0.45/fvwm/builtins.c	Thu Apr 10 13:02:09 1997
+<br />
+_at_&#64; -713,7 +713,7 &#64;&#64;
+<br />
+&nbsp;#ifdef USEDECOR
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;junkC,
+<br />
+&nbsp;#endif
+<br />
+-		 &amp;junkD, &amp;junkD, &amp;junkD, &amp;junkC, &amp;junkC, &amp;junkN,
+<br />
++		 &amp;junkD, &amp;junkD, &amp;junkD, &amp;junkD, &amp;junkD, &amp;junkC, &amp;junkC, &amp;junkN,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BoxJunk,  &amp;method)&amp; STAYSONTOP_FLAG)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tmp_win-&gt;flags |= ONTOP;
+<br />
+&nbsp;&nbsp;&nbsp;KeepOnTop();
+<br />
+_at_&#64; -1166,7 +1166,7 &#64;&#64;
+<br />
+&nbsp;#ifdef USEDECOR
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;junkC,
+<br />
+&nbsp;#endif
+<br />
+-                   &amp;junkD,&amp;junkD, &amp;junkD, &amp;junkC,&amp;junkC,&amp;junkN,BoxJunk,
+<br />
++                   &amp;junkD,&amp;junkD, &amp;junkD, &amp;junkD, &amp;junkD, &amp;junkC,&amp;junkC,&amp;junkN,BoxJunk,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;method)&amp;STAYSONTOP_FLAG)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tmp_win-&gt;flags |= ONTOP;	    
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;KeepOnTop();
+<br />
+diff -ru o/fvwm-2.0.45/fvwm/fvwm.man fvwm-2.0.45/fvwm/fvwm.man
+<br />
+--- o/fvwm-2.0.45/fvwm/fvwm.man	Wed Jan 22 17:13:38 1997
+<br />
++++ fvwm-2.0.45/fvwm/fvwm.man	Thu Apr 10 14:06:56 1997
+<br />
+_at_&#64; -1459,7 +1459,7 &#64;&#64;
+<br />
+&nbsp;NoTitle/Title, NoHandles/Handles, WindowListSkip/WindowListHit,
+<br />
+&nbsp;CirculateSkip/CirculateHit, StaysOnTop/StaysPut, Sticky/Slippery,
+<br />
+&nbsp;StartIconic/StartNormal, Color, ForeColor, BackColor,
+<br />
+-StartsOnDesk/StartsAnyWhere, IconTitle/NoIconTitle,
+<br />
++StartsOnDesk/StartsOnPage/StartsAnyWhere, IconTitle/NoIconTitle,
+<br />
+&nbsp;MWMButtons/FvwmButtons, MWMBorder/FvwmBorder, MWMDecor/NoDecorHint,
+<br />
+&nbsp;MWMFunctions/NoFuncHint, HintOverride/NoOverride, NoButton/Button,
+<br />
+&nbsp;OLDecor/NoOLDecor, StickyIcon/SlipperyIcon,
+<br />
+_at_&#64; -1496,6 +1496,10 &#64;&#64;
+<br />
+&nbsp;which the window should be initially placed.  Note that standard Xt
+<br />
+&nbsp;programs can also specify this via a resource (e.g. &quot;-xrm '*Desk: 1'&quot;).
+<br />
+&nbsp;
+<br />
++StartsOnPage takes two numeric arguments which are the page on the desktop on
+<br />
++which the window should be initially placed.  Note that standard Xt
+<br />
++programs can also specify this via a resource (e.g. &quot;-xrm '*Page: 1 0'&quot;).
+<br />
++
+<br />
+&nbsp;StaysOnTop makes the window always try to stay on top of the other
+<br />
+&nbsp;windows.  This might be handy for clocks or mailboxes that you would
+<br />
+&nbsp;always like to be visible.  If the window is explicitly lowered it
+<br />
+_at_&#64; -1550,7 +1554,7 &#64;&#64;
+<br />
+&nbsp;without retyping.  For example: 'Style &quot;rxvt&quot; UseStyle &quot;XTerm&quot;'.
+<br />
+&nbsp;
+<br />
+&nbsp;SkipMapping tells fvwm not to switch to the desk the window is on when
+<br />
+-it gets mapped initially (useful with StartsOnDesk).
+<br />
++it gets mapped initially (useful with StartsOnDesk (and StartsOnPage?)).
+<br />
+&nbsp;
+<br />
+&nbsp;Lenience instructs fvwm to ignore the convention in the ICCCM which
+<br />
+&nbsp;states that if an application sets the input field of the wm_hints
+<br />
+_at_&#64; -1605,7 +1609,7 &#64;&#64;
+<br />
+&nbsp;
+<br />
+&nbsp;Style &quot;rxvt&quot;      Icon term.xpm
+<br />
+&nbsp;Style &quot;xterm&quot;     Icon rterm.xpm
+<br />
+-Style &quot;xcalc&quot;     Icon xcalc.xpm
+<br />
++Style &quot;xcalc&quot;     Icon xcalc.xpm, StartsOnPage 1 1
+<br />
+&nbsp;Style &quot;xbiff&quot;     Icon mail1.xpm
+<br />
+&nbsp;Style &quot;xmh&quot;       Icon mail1.xpm, StartsOnDesk 2
+<br />
+&nbsp;Style &quot;xman&quot;      Icon xman.xpm
+<br />
+diff -ru o/fvwm-2.0.45/fvwm/fvwm2.man fvwm-2.0.45/fvwm/fvwm2.man
+<br />
+--- o/fvwm-2.0.45/fvwm/fvwm2.man	Wed Jan 22 17:13:38 1997
+<br />
++++ fvwm-2.0.45/fvwm/fvwm2.man	Thu Apr 10 14:06:56 1997
+<br />
+_at_&#64; -1459,7 +1459,7 &#64;&#64;
+<br />
+&nbsp;NoTitle/Title, NoHandles/Handles, WindowListSkip/WindowListHit,
+<br />
+&nbsp;CirculateSkip/CirculateHit, StaysOnTop/StaysPut, Sticky/Slippery,
+<br />
+&nbsp;StartIconic/StartNormal, Color, ForeColor, BackColor,
+<br />
+-StartsOnDesk/StartsAnyWhere, IconTitle/NoIconTitle,
+<br />
++StartsOnDesk/StartsOnPage/StartsAnyWhere, IconTitle/NoIconTitle,
+<br />
+&nbsp;MWMButtons/FvwmButtons, MWMBorder/FvwmBorder, MWMDecor/NoDecorHint,
+<br />
+&nbsp;MWMFunctions/NoFuncHint, HintOverride/NoOverride, NoButton/Button,
+<br />
+&nbsp;OLDecor/NoOLDecor, StickyIcon/SlipperyIcon,
+<br />
+_at_&#64; -1496,6 +1496,10 &#64;&#64;
+<br />
+&nbsp;which the window should be initially placed.  Note that standard Xt
+<br />
+&nbsp;programs can also specify this via a resource (e.g. &quot;-xrm '*Desk: 1'&quot;).
+<br />
+&nbsp;
+<br />
++StartsOnPage takes two numeric arguments which are the page on the desktop on
+<br />
++which the window should be initially placed.  Note that standard Xt
+<br />
++programs can also specify this via a resource (e.g. &quot;-xrm '*Page: 1 0'&quot;).
+<br />
++
+<br />
+&nbsp;StaysOnTop makes the window always try to stay on top of the other
+<br />
+&nbsp;windows.  This might be handy for clocks or mailboxes that you would
+<br />
+&nbsp;always like to be visible.  If the window is explicitly lowered it
+<br />
+_at_&#64; -1550,7 +1554,7 &#64;&#64;
+<br />
+&nbsp;without retyping.  For example: 'Style &quot;rxvt&quot; UseStyle &quot;XTerm&quot;'.
+<br />
+&nbsp;
+<br />
+&nbsp;SkipMapping tells fvwm not to switch to the desk the window is on when
+<br />
+-it gets mapped initially (useful with StartsOnDesk).
+<br />
++it gets mapped initially (useful with StartsOnDesk (and StartsOnPage?)).
+<br />
+&nbsp;
+<br />
+&nbsp;Lenience instructs fvwm to ignore the convention in the ICCCM which
+<br />
+&nbsp;states that if an application sets the input field of the wm_hints
+<br />
+_at_&#64; -1605,7 +1609,7 &#64;&#64;
+<br />
+&nbsp;
+<br />
+&nbsp;Style &quot;rxvt&quot;      Icon term.xpm
+<br />
+&nbsp;Style &quot;xterm&quot;     Icon rterm.xpm
+<br />
+-Style &quot;xcalc&quot;     Icon xcalc.xpm
+<br />
++Style &quot;xcalc&quot;     Icon xcalc.xpm, StartsOnPage 1 1
+<br />
+&nbsp;Style &quot;xbiff&quot;     Icon mail1.xpm
+<br />
+&nbsp;Style &quot;xmh&quot;       Icon mail1.xpm, StartsOnDesk 2
+<br />
+&nbsp;Style &quot;xman&quot;      Icon xman.xpm
+<br />
+diff -ru o/fvwm-2.0.45/fvwm/misc.h fvwm-2.0.45/fvwm/misc.h
+<br />
+--- o/fvwm-2.0.45/fvwm/misc.h	Mon Dec 23 23:07:47 1996
+<br />
++++ fvwm-2.0.45/fvwm/misc.h	Thu Apr 10 13:48:56 1997
+<br />
+_at_&#64; -27,6 +27,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;char *Decor;
+<br />
+&nbsp;#endif
+<br />
+&nbsp;&nbsp;&nbsp;int Desk;                        /* Desktop number */
+<br />
++  int PageX, PageY;
+<br />
+&nbsp;&nbsp;&nbsp;unsigned long on_flags; 
+<br />
+&nbsp;&nbsp;&nbsp;unsigned long off_flags; 
+<br />
+&nbsp;&nbsp;&nbsp;int border_width;
+<br />
+_at_&#64; -103,7 +104,10 &#64;&#64;
+<br />
+&nbsp;#define OL_DECOR_FLAG        (1&lt;&lt;30)
+<br />
+&nbsp;
+<br />
+&nbsp;#ifdef MINI_ICONS
+<br />
++#error &quot;MINI_ICONS must not be defined for StartsOnPage to be usable!&quot;
+<br />
+&nbsp;#define MINIICON_FLAG        (1&lt;&lt;31)
+<br />
++#else
+<br />
++#define STARTSONPAGE_FLAG    (1&lt;&lt;31)
+<br />
+&nbsp;#endif
+<br />
+&nbsp;
+<br />
+&nbsp;/* some fancy font handling stuff */
+<br />
+_at_&#64; -138,7 +142,8 &#64;&#64;
+<br />
+&nbsp;#ifdef USEDECOR
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;char **decor,
+<br />
+&nbsp;#endif
+<br />
+-                                int *Desk, int *bw, int *nobw,
+<br />
++                                int *Desk, int *PageX, int *PageY,
+<br />
++				int *bw, int *nobw,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;char **forecolor, char **backcolor, 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long * buttons, int *IconBox, 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int *BoxFillMethod);
+<br />
+_at_&#64; -298,7 +303,7 &#64;&#64;
+<br />
+&nbsp;void WaitForButtonsUp(void);
+<br />
+&nbsp;void FocusOn(FvwmWindow *t,int DeIconifyOnly);
+<br />
+&nbsp;void WarpOn(FvwmWindow *t,int warp_x, int x_unit, int warp_y, int y_unit);
+<br />
+-Bool PlaceWindow(FvwmWindow *tmp_win, unsigned long flags,int Desk);
+<br />
++Bool PlaceWindow(FvwmWindow *tmp_win, unsigned long flags,int Desk, int PageX, int PageY);
+<br />
+&nbsp;void free_window_names (FvwmWindow *tmp, Bool nukename, Bool nukeicon);
+<br />
+&nbsp;
+<br />
+&nbsp;int do_menu (MenuRoot *menu,int style);
+<br />
+_at_&#64; -319,7 +324,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;char *decor,
+<br />
+&nbsp;#endif
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long off_flags, 
+<br />
+-	       unsigned long on_flags, int desk,int bw, int nobw, 
+<br />
++	       unsigned long on_flags, int desk, int pagex, int pagey, int bw, int nobw, 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;char *forecolor, char *backcolor,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long off_buttons, unsigned long on_buttons,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int *IconBox, int BoxFillMethod);
+<br />
+diff -ru o/fvwm-2.0.45/fvwm/placement.c fvwm-2.0.45/fvwm/placement.c
+<br />
+--- o/fvwm-2.0.45/fvwm/placement.c	Fri Jan 17 15:39:21 1997
+<br />
++++ fvwm-2.0.45/fvwm/placement.c	Thu Apr 10 14:01:49 1997
+<br />
+_at_&#64; -322,7 +322,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;* Returns False in the event of a lost window.
+<br />
+&nbsp;&nbsp;*
+<br />
+&nbsp;&nbsp;**************************************************************************/
+<br />
+-Bool PlaceWindow(FvwmWindow *tmp_win, unsigned long tflag,int Desk)
+<br />
++Bool PlaceWindow(FvwmWindow *tmp_win, unsigned long tflag, int Desk, int PageX, int PageY)
+<br />
+&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;FvwmWindow *t;
+<br />
+&nbsp;&nbsp;&nbsp;int xl = -1,yt,DragWidth,DragHeight;
+<br />
+_at_&#64; -375,7 +375,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tmp_win-&gt;Desk = t-&gt;Desk;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}	
+<br />
+-    
+<br />
++
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ((XGetWindowProperty(dpy, tmp_win-&gt;w, _XA_WM_DESKTOP, 0L, 1L, True,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_XA_WM_DESKTOP, &amp;atype, &amp;aformat, &amp;nitems,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;bytes_remain, &amp;prop))==Success)
+<br />
+_at_&#64; -392,8 +392,34 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;if((!PPosOverride)&amp;&amp;(!(tmp_win-&gt;flags &amp; SHOW_ON_MAP)))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;changeDesks(0,tmp_win-&gt;Desk);  
+<br />
+&nbsp;
+<br />
++  /* Select a page to put the window on (in list of priority):
+<br />
++   * 1. Sticky Windows stay on the current page.
+<br />
++   * 2. Windows specified with StartsOnPage go where specified
+<br />
++...while the above two look reasonable, i don't know about the next three:
+<br />
++(while the screen structure knows about its `current desk', it has no such
+<br />
++thing as a `current page'.)
+<br />
++   * 3. Put it on the page it was on before the restart.
+<br />
++	-&gt; this one is probably fully automatic, the window gets its old
+<br />
++	  x/y position
+<br />
++   * 4. Transients go on the same page as their parents.
+<br />
++	-&gt; currently not...?
+<br />
++   * 5. Window groups stay together (completely untested)
+<br />
++	-&gt; dunno...
+<br />
++   */
+<br />
++  if (!(tflag &amp; STICKY_FLAG) &amp;&amp; (tflag &amp; STARTSONPAGE_FLAG))
+<br />
++  {
+<br />
++      /* I think it would be good to switch to the selected desk
+<br />
++       * whenever a new window pops up, except during initialization */
+<br />
++      if((!PPosOverride)&amp;&amp;(!(tmp_win-&gt;flags &amp; SHOW_ON_MAP)))
+<br />
++      {
+<br />
++	  int x = PageX * Scr.MyDisplayWidth;
+<br />
++	  int y = PageY * Scr.MyDisplayHeight;
+<br />
++	  MoveViewport(x,y,True);
+<br />
++      }
+<br />
++  }
+<br />
++
+<br />
+&nbsp;
+<br />
+-  /* Desk has been selected, now pick a location for the window */
+<br />
++  /* Desk and page have been selected, now pick a location for the window */
+<br />
+&nbsp;&nbsp;&nbsp;/*
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;*  If
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;*     o  the window is a transient, or
+<br />
+diff -ru o/fvwm-2.0.45/fvwm/style.c fvwm-2.0.45/fvwm/style.c
+<br />
+--- o/fvwm-2.0.45/fvwm/style.c	Fri Jan 17 15:56:30 1997
+<br />
++++ fvwm-2.0.45/fvwm/style.c	Thu Apr 10 14:03:02 1997
+<br />
+_at_&#64; -52,7 +52,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;int IconBox[4];
+<br />
+&nbsp;&nbsp;&nbsp;int num,i;
+<br />
+&nbsp;
+<br />
+-  int len,desknumber = 0,bw=0, nobw = 0;
+<br />
++  int len,desknumber = 0, pagex = 0, pagey = 0, bw=0, nobw = 0;
+<br />
+&nbsp;&nbsp;&nbsp;unsigned long off_flags = 0;
+<br />
+&nbsp;&nbsp;&nbsp;unsigned long on_flags = 0;
+<br />
+&nbsp;&nbsp;&nbsp;
+<br />
+_at_&#64; -548,7 +548,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;on_flags |= STICKY_FLAG;	  
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;restofline +=8;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+-        else if(mystrncasecmp(restofline,&quot;STARTSONDESK&quot;,12)==0)
+<br />
++        else if(mystrncasecmp(restofline,&quot;StartsOnDesk&quot;,12)==0)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;restofline +=12;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;off_flags |= STARTSONDESK_FLAG;
+<br />
+_at_&#64; -559,6 +559,21 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;restofline++;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while(isspace(*restofline))restofline++;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
++        else if(mystrncasecmp(restofline,&quot;StartsOnPage&quot;,12)==0)
+<br />
++        {
+<br />
++          restofline +=12;
+<br />
++          off_flags |= STARTSONPAGE_FLAG;
+<br />
++          sscanf(restofline,&quot;%d %d&quot;,&amp;pagex,&amp;pagey);
+<br />
++          while(isspace(*restofline))restofline++;
+<br />
++          while((!isspace(*restofline))&amp;&amp;(*restofline!= 0)&amp;&amp;
+<br />
++                (*restofline != ',')&amp;&amp;(*restofline != '\n'))
+<br />
++            restofline++;
+<br />
++          while(isspace(*restofline))restofline++;
+<br />
++          while((!isspace(*restofline))&amp;&amp;(*restofline!= 0)&amp;&amp;
+<br />
++                (*restofline != ',')&amp;&amp;(*restofline != '\n'))
+<br />
++            restofline++;
+<br />
++          while(isspace(*restofline))restofline++;
+<br />
++        }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if(mystrncasecmp(restofline,&quot;STARTSANYWHERE&quot;,14)==0)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;restofline +=14;
+<br />
+_at_&#64; -756,7 +771,7 &#64;&#64;
+<br />
+&nbsp;#ifdef USEDECOR
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;decor,
+<br />
+&nbsp;#endif
+<br />
+-            off_flags,on_flags,desknumber,bw,nobw,
+<br />
++            off_flags,on_flags,desknumber,pagex,pagey,bw,nobw,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;forecolor,backcolor,off_buttons,on_buttons,IconBox,BoxFillMethod);
+<br />
+&nbsp;}
+<br />
+&nbsp;
+<br />
+_at_&#64; -772,6 +787,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long off_flags, 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long on_flags,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int desk,
+<br />
++	       int pagex, int pagey,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int bw,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int nobw,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;char *forecolor,
+<br />
+_at_&#64; -821,6 +837,8 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;nptr-&gt;Decor = decor;
+<br />
+&nbsp;#endif
+<br />
+&nbsp;&nbsp;&nbsp;nptr-&gt;Desk = desk;
+<br />
++  nptr-&gt;PageX = pagex;
+<br />
++  nptr-&gt;PageY = pagey;
+<br />
+&nbsp;&nbsp;&nbsp;nptr-&gt;border_width = bw;
+<br />
+&nbsp;&nbsp;&nbsp;nptr-&gt;resize_width = nobw;
+<br />
+&nbsp;&nbsp;&nbsp;nptr-&gt;ForeColor = forecolor;
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Apr 10 1997 - 11:12:39 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start19793">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="19794.html" title="Next message in the list">Ronald A Slusser: "FVWM: fvwm and the year 2000"</a></li>
+<li><dfn>Previous message</dfn>: <a href="19792.html" title="Previous message in the list">gottlieb_at_research.nj.nec.com: "FVWM: xbuffy"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19793" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19793" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19793" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19793" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

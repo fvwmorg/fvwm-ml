@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: [BUG/PATCH] resize race condition from Albrecht Kadlec on 1996-09-09 (fvwm-users)</title>
+<meta name="Author" content="Albrecht Kadlec (albrecht_at_auto.tuwien.ac.at)" />
+<meta name="Subject" content="FVWM: [BUG/PATCH] resize race condition" />
+<meta name="Date" content="1996-09-09" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: [BUG/PATCH] resize race condition</h1>
+<!-- received="Mon Sep  9 06:32:41 1996" -->
+<!-- isoreceived="19960909053241" -->
+<!-- sent="Mon, 9 Sep 96 13:22:33 +0200" -->
+<!-- isosent="19960909112233" -->
+<!-- name="Albrecht Kadlec" -->
+<!-- email="albrecht_at_auto.tuwien.ac.at" -->
+<!-- subject="FVWM: [BUG/PATCH] resize race condition" -->
+<!-- id="9609091122.AA16752_at_vta_host.auto.tuwien.ac.at" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start17776" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="17777.html" accesskey="d" title="Albrecht Kadlec: &quot;FVWM: call for vote: should menus warp the pointer?&quot;">Next message</a> ]
+[ <a href="17775.html" title="MuD: &quot;FVWM: Cursors&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17776" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17776" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17776" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17776" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Albrecht Kadlec &lt;<a href="mailto:albrecht_at_auto.tuwien.ac.at?Subject=Re%3A%20FVWM%3A%20%5BBUG%2FPATCH%5D%20resize%20race%20condition">albrecht_at_auto.tuwien.ac.at</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 9 Sep 96 13:22:33 +0200</span><br />
+</address>
+<br />
+Hi,
+<br />
+<br />There is an odd interaction between resize stick &amp; paging.
+<br />
+<br />I wanted to resize a sticky perfmeter window:
+<br />
+<br />I select resize from the root window menu (no decorations on my
+<br />
+perfmeters).
+<br />
+<br />When dragging the lower left border of the perfmeter into the lower left
+<br />
+border of the page (lower middle page of my 4x2 desktop), I release the
+<br />
+button, just while the page flips.
+<br />
+<br />Then the window is gone.
+<br />
+<br />Not on any page, of the desktop any more (I use only one desktop)
+<br />
+<br />Simply not mapped.
+<br />
+<br />The process is still there and must be killed.
+<br />
+<br />If I release the button AFTER the pageflip, everything is fine (not
+<br />
+exactly, as I wanted the window to stay on that page, and not to span over
+<br />
+two pages, but well, it's still there at least).
+<br />
+<br />Ok, so I changed my .fvwm2rc for perfmeters to be seen in the windowlist:
+<br />
+<br />When I select the &quot;missing&quot; perfmeter, I get warped to the next (right)
+<br />
+page. 
+<br />
+<br />Strange. nothing's there.
+<br />
+I retry.
+<br />
+I get warped to the next page.
+<br />
+<br />And so on, till I'm at the rightmost page.
+<br />
+<br />A closer look at the windowlist reveals: position: +1400-74
+<br />
+<br /><br />It's now a sticky window with position on &quot;right page&quot; (i.e:
+<br />
+screenxsize+xxx), so it's always just on the _next_ page.
+<br />
+<br />Always just one page away, but forever unreachable.
+<br />
+Unless I could do some &quot;unstick -&gt; select from windowlist&quot; :-(
+<br />
+<br />BTW: Chuck, have you decided on my windowlist/menu changes yet?
+<br />
+<br />so I got 2 possible fixes: read comments for more info.
+<br />
+<br /><br />*** resize.c.orig	Mon Sep  9 11:45:24 1996
+<br />
+--- resize.c	Mon Sep  9 13:08:32 1996
+<br />
+***************
+<br />
+*** 217,224 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* need to move the viewport */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HandlePaging(Scr.EdgeScrollX,Scr.EdgeScrollY,&amp;x,&amp;y,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;delta_x,&amp;delta_y,False);
+<br />
+! 	  origx -= delta_x;
+<br />
+! 	  origy -= delta_y;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dragx -= delta_x;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dragy -= delta_y;
+<br />
+&nbsp;&nbsp;
+<br />
+--- 217,235 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* need to move the viewport */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HandlePaging(Scr.EdgeScrollX,Scr.EdgeScrollY,&amp;x,&amp;y,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;delta_x,&amp;delta_y,False);
+<br />
+! 
+<br />
+! /* This is a little big-sisterish, as a sticky window cannot grow larger than */
+<br />
+! /* the screen now (well you can resize-move-resize-move-... but that's yucky */
+<br />
+! /* Also the not-being-moved border of the sticky window hops to the current page */
+<br />
+! /* after a flip. It's rather, uhm, &quot;unmotivated &amp; not-asked-for hopping around&quot;. */
+<br />
+! #if 1
+<br />
+! /* DON'T adjust origin for sticky windows !!! albrecht */
+<br />
+! 	  if (!(tmp_win-&gt;flags &amp; STICKY))
+<br />
+! #endif
+<br />
+! 	  {
+<br />
+! 	      origx -= delta_x;
+<br />
+! 	      origy -= delta_y;
+<br />
+!           }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dragx -= delta_x;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dragy -= delta_y;
+<br />
+&nbsp;&nbsp;
+<br />
+***************
+<br />
+*** 248,253 ****
+<br />
+--- 259,283 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(!abort)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ConstrainSize (tmp_win, &amp;dragWidth, &amp;dragHeight);
+<br />
++ 
+<br />
++ #if 0
+<br />
++ /* maybe better, less limiting fix for offscreen sticky windows: resize */
+<br />
++ /* normally, then fetch it back to the current screen upon finish, if the */
+<br />
++ /* dammned race condition hit. I know it's not pretty, but I can't find the */
+<br />
++ /* race, I'm no X programmer.		albrecht */
+<br />
++       if (tmp_win-&gt;flags &amp; STICKY) /* if it was a sticky window, move it's */
+<br />
++       {				   /* origin back to the visible page */
+<br />
++ 	  while (origx &gt;= Scr.MyDisplayWidth)
+<br />
++ 	      origx -= Scr.MyDisplayWidth;
+<br />
++ 	  while (origy &gt;= Scr.MyDisplayHeight)
+<br />
++ 	      origx -= Scr.MyDisplayHeight;
+<br />
++ 	  while (origx+dragWidth &lt;= 0)
+<br />
++ 	      origx += Scr.MyDisplayWidth;
+<br />
++     	  while (origy+dragHeight &lt;= 0)
+<br />
++ 	      origy += Scr.MyDisplayHeight;
+<br />
++       }
+<br />
++ #endif
+<br />
++ 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SetupFrame (tmp_win, dragx - tmp_win-&gt;bw, 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dragy - tmp_win-&gt;bw, dragWidth, dragHeight,FALSE);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+<br /><br />albrecht
+<br />
+<br />BTW: what has happened to the workers list, I only get matsushita san's and
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my own postings there since Aug 30th.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Very private, but I'd like to see some more traffic there.
+<br />
+<pre>
+-- 
+My boss thinks that giving developers enough memory helps
+productivity, so as long as nobody tells him that it just makes us
+write bloated software, I don't have a problem.
+						-- Per Abrahamsen
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon Sep 09 1996 - 06:32:41 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start17776">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="17777.html" title="Next message in the list">Albrecht Kadlec: "FVWM: call for vote: should menus warp the pointer?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="17775.html" title="Previous message in the list">MuD: "FVWM: Cursors"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17776" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17776" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17776" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17776" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

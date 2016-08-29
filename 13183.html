@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: taking screenshot of multiple / all desks / pages from Tavis Ormandy on 2004-08-28 (fvwm-users)</title>
+<meta name="Author" content="Tavis Ormandy (taviso_at_sdf.lonestar.org)" />
+<meta name="Subject" content="Re: FVWM: taking screenshot of multiple / all desks / pages" />
+<meta name="Date" content="2004-08-28" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: taking screenshot of multiple / all desks / pages</h1>
+<!-- received="Sat Aug 28 03:36:56 2004" -->
+<!-- isoreceived="20040828023656" -->
+<!-- sent="Sat, 28 Aug 2004 09:36:30 +0100" -->
+<!-- isosent="20040828083630" -->
+<!-- name="Tavis Ormandy" -->
+<!-- email="taviso_at_sdf.lonestar.org" -->
+<!-- subject="Re: FVWM: taking screenshot of multiple / all desks / pages" -->
+<!-- id="20040828083630.GA8313_at_sdf.lonestar.org" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="20040827144801.GA17859_at_pecos.8d.com" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start13183" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="13184.html" accesskey="d" title="Mikhael Goikhman: &quot;Re: FVWM: FvwmScript Window Properties&quot;">Next message</a> ]
+[ <a href="13182.html" title="SoccerBettingClub: &quot;FVWM: Expert+Insider fiksevi&quot;">Previous message</a> ]
+[ <a href="13179.html" title="xavier: &quot;Re: FVWM: taking screenshot of multiple / all desks / pages&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="13220.html" accesskey="t" title="xavier: &quot;Re: FVWM: taking screenshot of multiple / all desks / pages&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg13183" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg13183" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg13183" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg13183" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Tavis Ormandy &lt;<a href="mailto:taviso_at_sdf.lonestar.org?Subject=Re%3A%20FVWM%3A%20taking%20screenshot%20of%20multiple%20%2F%20all%20desks%20%2F%20pages">taviso_at_sdf.lonestar.org</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sat, 28 Aug 2004 09:36:30 +0100</span><br />
+</address>
+<br />
+On Fri, Aug 27, 2004 at 10:48:02AM -0400, xavier wrote:
+<br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; works great.
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; takes 1 mins for 10x7 on one desk.
+</em><br />
+<br />Try this, might be a bit faster:
+<br />
+<br />AddToFunc Screenshot I PipeRead `for ((x=0;x&lt;$[desk.pagesx];x++)); do \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for ((y=0;y&lt;$[desk.pagesy];y++)); \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;do echo GotoPage ${x} ${y}; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xwd -root -silent -out $[FVWM_USERDIR]/page_${x}_${y}.xwd;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;done; done;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;montage -geometry $[vp.width]x$[vp.height] -tile \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$[desk.pagesx]x$[desk.pagesy] $[FVWM_USERDIR]/page_*_*.xwd \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;png:$[HOME]/screenshot.png; rm -f $[FVWM_USERDIR]/page_*_*.xwd`
+<br />
+<br />(makes a screenshot.png in your home dir)
+<br />
+<br /><em class="quotelev1">&gt; however, there is desks where there is nothing ;
+</em><br />
+<em class="quotelev1">&gt; is there a fvwm way to know that ? so that i don't take 
+</em><br />
+<em class="quotelev1">&gt; empty and useless screenshots.
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<br />Sure, use Any (CurrentPage) DoStuff..
+<br />
+<br /><pre>
+-- 
+-------------------------------------
+taviso_at_sdf.lonestar.org | finger me for my gpg key.
+-------------------------------------------------------
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sat Aug 28 2004 - 03:36:56 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start13183">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="13184.html" title="Next message in the list">Mikhael Goikhman: "Re: FVWM: FvwmScript Window Properties"</a></li>
+<li><dfn>Previous message</dfn>: <a href="13182.html" title="Previous message in the list">SoccerBettingClub: "FVWM: Expert+Insider fiksevi"</a></li>
+<li><dfn>In reply to</dfn>: <a href="13179.html" title="Message to which this message replies">xavier: "Re: FVWM: taking screenshot of multiple / all desks / pages"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="13220.html" title="Next message in this discussion thread">xavier: "Re: FVWM: taking screenshot of multiple / all desks / pages"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="13220.html" title="Message sent in reply to this message">xavier: "Re: FVWM: taking screenshot of multiple / all desks / pages"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg13183" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg13183" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg13183" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg13183" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:57 BST
+</em></small></p>
+</body>
+</html>

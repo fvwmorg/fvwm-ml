@@ -1,0 +1,1523 @@
+<html>
+<head>
+<title>FVWM Modules Reference</title>
+</head>
+<body>
+<h1>Fvwm Modules Reference</h1>
+<h2>Synopsis</h2>
+<pre>
+  <b><big>Module Module-Name [Alias] [Parameter]</big></b>
+
+  <b><big>*ModuleNameOption [value]</big></b>
+  <b><big>*AliasOption [value]</big></b>
+</pre>
+<h2>FvwmAnimate </h2>
+The FvwmAnimate module animates iconification and deiconification.
+There are currenly 6 different animation effects.
+<pre>
+*FvwmAnimateColor      color, or none
+*FvwmAnimateDelay      msecs
+*FvwmAnimateIterations iterations
+*FvwmAnimateTwist      twist
+*FvwmAnimateWidth      width, default: 0
+*FvwmAnimateEffect     mode
+                       mode: Frame, Lines, Flip, Turn,
+                             Zoom3D, Twist Random, None
+*FvwmAnimateStop
+*FvwmAnimateSave
+</pre>
+<h2>FvwmAudio</h2>
+The FvwmAudio module communicates with the Fvwm window
+manager to bind audio sounds to window manager actions.
+<pre>
+*FvwmAudioPlayCmd       /usr/bin/X11/demos/auplay, or builtin-rplay
+*FvwmAudioDir           /usr/lib/sounds
+*FvwmAudioDelay         5, default 0
+*FvwmAudioRplayHost     hostname
+*FvwmAudioRplayPriority 0
+*FvwmAudioRplayVolume   127
+*FvwmAudio              window-manager-action audio-filename
+  defaults:
+  *FvwmAudio startup TaDa.au
+  *FvwmAudio shutdown Elvis_Left.au
+  *FvwmAudio unknown doh.au
+  *FvwmAudio add_window drip.au
+  *FvwmAudio raise_window swoosh.au
+  *FvwmAudio lower_window swoosh.au
+  *FvwmAudio focus_change boing.au
+  *FvwmAudio destroy_window explosion.au
+  *FvwmAudio iconify ploop.au
+  *FvwmAudio deiconify ploop.au
+  *FvwmAudio toggle_paging fwop.au
+  *FvwmAudio new_page beam_trek.au
+  *FvwmAudio new_desk beam_trek.au
+  *FvwmAudio configure_window huh.au
+  *FvwmAudio window_name beep.au
+  *FvwmAudio icon_name beep.au
+  *FvwmAudio res_class beep.au
+  *FvwmAudio res_name beep.au
+  *FvwmAudio end_windowlist twang.au
+</pre>
+<h2>FvwmAuto Timeout [EnterCommand [LeaveCommand]]</h2>
+The auto-raise module
+<h2>FvwmBacker</h2>
+The FvwmBacker module provides functionality to change the
+background  when changing desktops.
+<pre>
+*FvwmBackerDesk DeskNumber command, or -solid color
+</pre>
+<h4>EXAMPLE</h4>
+<pre>
+  *FvwmBackerDesk 2 -solid yellow
+  *FvwmBackerDesk 3 Exec xpmroot /usr/include/X11/pixmaps/background.xpm
+</pre>
+<h2>FvwmBanner</h2>
+The FvwmInitBanner displays an Fvwm Logo in the center of
+the screen for 3 seconds.
+<pre>
+*FvwmBannerPixmap file
+*FvwmBannerTimeout sec, default 3
+</pre>
+<h2>FvwmButtons</h2>
+The FvwmButtons module provides a window of buttons which
+sits on the X terminal's root window. The user can press the
+buttons at any time, and trigger invocation of a user-specified
+command by the window manager.
+<pre>
+*FvwmButtonsBack color
+*FvwmButtonsBoxSize   algorithm
+                      algorithm: dump, fixed, smart
+*FvwmButtonsColumns   columns
+*FvwmButtonsFile      filename
+*FvwmButtonsFont      font
+*FvwmButtonsFore      color
+*FvwmButtonsFrame     width
+*FvwmButtonsGeometry  geometry
+*FvwmButtonsPadding   width height
+*FvwmButtonsPanel     title
+*FvwmButtonsPixmap    pixmapfile
+*FvwmButtonsRows      rows
+*FvwmButtons(options) [title icon command]
+             options: geometry (width x hight + x + y)
+                      Action [(Mouse n)] command
+                      Back color
+                      Center, Left, Right
+                      Container [(options)]
+                                  options: Back color
+                                           Font font
+                                           Fore color
+                                           Frame width
+                                           Padding width height
+                                           Title(flags)
+                                           Swallow(flags)
+                                           Columns n
+                                           Rows n
+                      End
+                      Font fontname
+                      Fore color
+                      Frame width
+                      Icon file
+                      Left
+                      NoSize
+                      Padding width height
+                      Panel [(direction)] name
+                              direction: up (default), left, down, right
+                      Right
+                      Size width height
+                      Swallow [(flags)] name-to-match command
+                                flags: NoClose/Close (default)
+                                       NoHints/Hints (default)
+                                       Kill/NoKill (default)
+                                       Respawn/NoRespawn (default)
+                                       UseOld/NoOld (default)
+                                       UseTitle/NoTitle (default)
+                      Title [(options)] name
+                              options: Center, Left, Right, Side
+                      Legacy fields [title icon command]
+                                     title:   see Title, or -
+                                     icon:    see Icon, or -
+                                     command: see command
+             command: Exec [name-to-match] command
+</pre>
+<h4>EXAMPLE</h4>
+<pre>
+  *FvwmButtons(Swallow XClock 'Exec xclock &')
+  *FvwmButtons(Swallow "FvwmPager" "FvwmPager 0 0")
+  *FvwmButtons(Swallow (UseOld) "Console" Nop, Action `Exec "Console" console &`)
+  *FvwmButtons(Swallow "xload" `Exec xload -bg gray60 &`)
+
+  # Make sure FvwmButtons is always there
+  AddToFunc InitFunction     "I" Module FvwmButtons
+  AddToFunc RestartFunction  "I" Module FvwmButtons
+
+  # Make it titlebar-less, sticky, and give it an icon
+  Style "FvwmButtons" Icon toolbox.xpm, NoTitle, Sticky
+
+  # Make the menu/panel look like CDE
+  Style "FvwmButtonsPanel" Title, NoHandles, BorderWidth 0
+  Style "FvwmButtonsPanel" NoButton 2, NoButton 4, Sticky
+
+  *FvwmButtonsFore Black
+  *FvwmButtonsBack rgb:90/80/90
+  *FvwmButtonsGeometry -135-5
+  *FvwmButtonsRows 1
+  *FvwmButtonsBoxSize smart
+  *FvwmButtonsFont -*-helvetica-medium-r-*-*-12-*
+  *FvwmButtonsPadding 2 2
+
+  *FvwmButtons(Title WinOps,Panel WinOps)
+  *FvwmButtons(Title Tools ,Panel Tools)
+
+  *FvwmButtons(Title Resize,Icon resize.xpm ,Action Resize)
+  *FvwmButtons(Title Move  ,Icon arrows2.xpm,Action Move  )
+  *FvwmButtons(Title Lower ,Icon Down       ,Action Lower )
+  *FvwmButtons(Title Raise ,Icon Up         ,Action Raise )
+  *FvwmButtons(Title Kill  ,Icon bomb.xpm   ,Action Destroy)
+
+  *FvwmButtons(1x1,Container(Rows 3,Frame 1))
+  *FvwmButtons(Title Dopey ,Action                          \
+     `Exec "big_win" xterm -T big_win -geometry 80x50 &`)
+  *FvwmButtons(Title Snoopy, Font fixed, Action             \
+     `Exec "small_win" xterm -T small_win &`)
+  *FvwmButtons(Title Smokin')
+  *FvwmButtons(End)
+
+  *FvwmButtons(Title Xcalc, Icon rcalc.xpm,                 \
+              Action `Exec "Calculator" xcalc &`)
+  *FvwmButtons(Title XMag, Icon magnifying_glass2.xpm,      \
+              Action `Exec "xmag" xmag &`)
+  *FvwmButtons(Title Mail, Icon mail2.xpm,                  \
+              Action `Exec "xmh" xmh &`)
+  *FvwmButtons(4x1, Swallow "FvwmPager" `FvwmPager 0 3`     \
+              Frame 3)
+
+  *FvwmButtons(Swallow(UseOld,NoKill) "xload15" `Exec xload \
+      -title xload15 -nolabel -bg rgb:90/80/90 -update 15 &`)
+
+  The last lines are a little tricky - one spawns an FvwmPager
+  module, and captures it to display in a quadruple width but-
+  ton.  is used, the Pager will be as big as  possible  within
+  the button's relief
+
+  The final line is even more magic. Note the  combination  of
+  UseOld  and  NoKill,  which  will try to swallow an existing
+  window with the name "xload15" when starting up (if failing:
+  starting  one  with the specified command), which is unswal-
+  lowed when ending FvwmButtons
+
+  The other panels are specified after the root panel:
+
+  *FvwmButtonsPanel WinOps
+  *FvwmButtonsBack bisque2
+  *FvwmButtonsGeometry -3-3
+  *FvwmButtonsColumns 1
+
+  *FvwmButtons(Title Resize,Icon resize.xpm ,Action Resize)
+  *FvwmButtons(Title Move  ,Icon arrows2.xpm,Action Move  )
+  *FvwmButtons(Title Lower ,Icon Down       ,Action Lower )
+  *FvwmButtons(Title Raise ,Icon Up         ,Action Raise )
+
+  *FvwmButtonsPanel Tools
+  *FvwmButtonsBack bisque2
+  *FvwmButtonsGeometry -1-1
+  *FvwmButtonsColumns 1
+
+  *FvwmButtons(Title Kill  ,Icon bomb.xpm   ,Action Destroy)
+
+  The color specification rgb:90/80/90 is  actually  the  most
+  correct  way  of  specifying  independent  colors  in X, and
+  should be used instead of the older #908090. If  the  latter
+  specification is used in your configuration file, you should
+  be sure to escape the hash in any of the commands which will
+  be  executed,  or  fvwm will consider the rest of the line a
+  comment
+
+  Note that with the x/y geometry specs you can  easily  build
+  button  windows  with gaps. Here is another example. You can
+  not accomplish this without geometry specs for the buttons:
+
+  # Make it titlebar-less, sticky, and give it an icon
+  Style "FvwmButtons" Icon toolbox.xpm, NoTitle, Sticky
+
+  *FvwmButtonsFont        5x7
+  *FvwmButtonsBack        rgb:90/80/90
+  *FvwmButtonsFore        black
+  *FvwmButtonsFrame       1
+  # 9x11 pixels per button, 4x4 pixels for the frame
+  *FvwmButtonsGeometry    580x59+0-0
+  *FvwmButtonsRows        5
+  *FvwmButtonsColumns     64
+  *FvwmButtonsBoxSize     fixed
+  *FvwmButtonsPadding     1 1
+
+  # Menu Popups
+  *FvwmButtons(9x1+3+0, Padding 0, Title "Modules",     \
+    Action `Menu Modulepopup mouse c -8p Nop`)
+  # first row of buttons from left to right:
+  *FvwmButtons(3x2+0+1, Icon my_lock.xpm, Action `Exec xlock`)
+  *FvwmButtons(3x2+3+1, Icon my_recapture.xpm, Action Recapture)
+  *FvwmButtons(3x2+6+1, Icon my_resize.xpm, Action Resize)
+  *FvwmButtons(3x2+9+1, Icon my_move.xpm, Action Move)
+  *FvwmButtons(3x2+12+1, Icon my_fvwmconsole.xpm,       \
+    Action 'Module FvwmConsole')
+  # second row of buttons from left to right:
+  *FvwmButtons(3x2+0+3, Icon my_exit.xpm, Action QuitSave)
+  *FvwmButtons(3x2+3+3, Icon my_restart.xpm, Action Restart)
+  *FvwmButtons(3x2+6+3, Icon my_kill.xpm, Action Destroy)
+  *FvwmButtons(3x2+9+3, Icon my_shell.xpm, Action 'Exec rxvt')
+  # big items
+  *FvwmButtons(10x5, Swallow (NoKill, NoCLose)          \
+    "FvwmPager" 'FvwmPager * * -geometry 40x40-1024-1024')
+  *FvwmButtons(6x5, Swallow "FvwmXclock" `Exec xclock   \
+    -name FvwmXclock -geometry 40x40+0-0 -padding 1     \
+    -analog -chime -bg rgb:90/80/90`)
+  *FvwmButtons(13x5, Left, Swallow (NoClose)            \
+  "FvwmIconMan" 'Module FvwmIconMan')
+  *FvwmButtons(20x5, Padding 0, Swallow "xosview"       \
+    `Exec /usr/X11R6/bin/xosview -cpu -int -page -net   \
+    -geometry 100x50+0-0 -font 5x7`)
+</pre>
+<h2>FvwmCommand</h2>
+<b><big>FvwmCommand [-mrv] [-w time] [-S name] [-i level] [-f name] [-F level] [command...]</big></b>
+<p>FvwmCommand lets you monitor fvwm2 transaction and issue
+fvwm2 command from a shell command line or scripts.
+<pre>
+arguments
+  -F level: 0, 2
+  -f name: name of FIFO
+  -i level: 0, 1, 2, 3
+  -m: monitor
+  -r: wait for reply
+  -s name: name of server
+  -w micro-seconds
+  -v: version
+</pre>
+<h4>WRAPPER</h4>
+FvwmCommand.sh has bourne shell function definitions to keep
+the syntax similar to fvwm2 configuration file. This file is
+to be sourced:
+<pre>
+  . FvwmCommand.sh
+  DesktopSize 5x5
+</pre>
+FvwmCommand.pm is for perl in order to keep the syntax similar
+to fvwm2 configuration file. Commas can be used to separate Fvwm2
+commands' arguments.
+<pre>
+  use FvwmCommand;
+  if( $ARGV[0] eq 'home' ) {
+      Desk 0,0; GotoPage '1 1';
+  }elsif( $ARGV[0] eq 'jump' ) {
+      Desk "0 2"; GotoPage 0, 1;
+  }
+</pre>
+Although arguments in FvwmCommand are not case sensitive as
+fvwm2, the functions defined in FvwmCommand.sh and
+FvwmCommand.pl are case sensitive.
+<h2>FvwmConsole</h2>
+FvwmConsole allows the user to type fvwm configuration commands
+interactively, and have them executed immediately.
+This tool is particularly useful for testing new configuration
+ideas, or for implementing temporary changes to your
+environment. The command "killme" terminates FvwmConsole.
+<pre>
+Module FvwmConsole -g 40x10 -fg black -bg green3
+Module FvwmConsole -e /usr/X11/lib/fvwm2/FvwmConsoleC.pl
+</pre>
+<h2>FvwmCpp file</h2>
+When called, this module will attempt to have /usr/lib/cpp
+pre-process the file specified in its invocation, and then
+have fvwm read the resulting file.
+<p>FvwmCpp can be invoked by inserting the line 'FvwmCpp' in
+the .fvwm2rc file. It can also be called from a menu or
+mouse binding. If the user wants his entire .fvwm2rc file
+pre-processed with FvwmCpp, then fvwm should be invoked as:
+<pre>
+   fvwm2 -cmd "FvwmCpp .fvwm2rc"
+
+   Some options can be specified on the command line:
+
+   -cppopt option
+     Lets you pass an option to the cpp program. Not really
+     needed as any unknown options will be passed on
+     automatically.
+
+   -cppprog name
+     Instead of invoking "/usr/lib/cpp", fvwm will invoke name.
+
+   -outfile filename
+     Instead of creating a random unique name for the temporary
+     file for the preprocessed rc file, this option
+     will let you specify the name of the temporary file it
+     will create.
+
+   -debug
+     Causes the temporary file create by Cpp to be retained.
+     This file is usually called "/tmp/fvwmrcXXXXXX"
+
+   FvwmCpp defines some values for use in the pre-processor file:
+
+     TWM_TYPE
+       Always set to "fvwm".
+
+     SERVERHOST
+       The name of the machine running the X Server.
+
+     CLIENTHOST
+       The name of the machine running fvwm.
+
+     HOSTNAME
+       The hostname of the machine running fvwm. Generally the
+       same as CLIENTHOST.
+
+     OSTYPE
+       The operating system for CLIENTHOST.
+
+     USER
+       The name of the person running fvwm.
+
+     VERSION
+       The X11 version.
+
+     REVISION
+       The X11 revision number.
+
+     VENDOR
+       The X server vendor.
+
+     RELEASE
+       The X server release number.
+
+     WIDTH
+       The screen width in pixels.
+
+     HEIGHT
+       The screen height in pixels.
+
+     X_RESOLUTION
+       Some  distance/pixel measurement for the horizontal
+       direction, I think.
+
+     Y_RESOLUTION
+       Some distance/pixel measurement for the vertical direction, I think.
+
+     PLANES
+       Number of color planes for the X server display
+
+     BITS_PER_RGB
+       Number of bits in each rgb triplet.
+
+     CLASS
+       The X11 visual class, ie PsuedoColor.
+
+     COLOR
+       Yes or No, Yes if the display class is neither StaticGrey
+       or GreyScale.
+
+     FVWM_VERSION
+       The fvwm version number, ie 2.0
+
+     OPTIONS
+       Some combination of SHAPE, XPM, NO_SAVEUNDERS, and Cpp,
+       as defined in configure.h at compile time.
+
+     FVWM_MODULEDIR
+       The directory where fvwm looks for .fvwmrc and modules
+       by default, as determined at compile time.
+
+   EXAMPLE PROLOG
+     #define TWM_TYPE fvwm
+     #define SERVERHOST spx20
+     #define CLIENTHOST grumpy
+     #define HOSTNAME grumpy
+     #define OSTYPE SunOS
+     #define USER nation
+     #define HOME /local/homes/dsp/nation
+     #define VERSION 11
+     #define REVISION 0
+     #define VENDOR HDS human designed systems, inc. (2.1.2-D)
+     #define RELEASE 4
+     #define WIDTH 1280
+     #define HEIGHT 1024
+     #define X_RESOLUTION 3938
+     #define Y_RESOLUTION 3938
+     #define PLANES 8
+     #define BITS_PER_RGB 8
+     #define CLASS PseudoColor
+     #define COLOR Yes
+     #define FVWM_VERSION 2.0 pl 1
+     #define OPTIONS SHAPE XPM Cpp
+     #define FVWM_MODULEDIR /local/homes/dsp/nation/modules
+</pre>
+<h2>FvwmDebug</h2>
+The FvwmDebug captures the stream of module packets coming
+from fvwm, and displays them on stderr.
+<h2>FvwmEvent</h2>
+FvwmEvent is a more versatile replacement for FvwmAudio. It
+can in general be used to hook any fvwm2 function or program
+to any window manager event. E.g: Delete unwanted netscape-
+popups or application error popups as they appear, play
+sounds, log events to a file and the like.
+<pre>
+*FvwmEventCmd           command, or builtin-rplay
+                        command: fvwm-function
+                                 exec external-command
+*FvwmEventDelay         5
+*FvwmEventRplayHost     hostname
+*FvwmEventRplayPriority 0
+*FvwmEventRplayVolume   127
+*FvwmEvent              window-manager-event action-or-filename
+defaults:
+  *FvwmEvent startup TaDa.au
+  *FvwmEvent shutdown Elvis_Left.au
+  *FvwmEvent unknown doh.au
+  *FvwmEvent new_page beam_trek.au
+  *FvwmEvent new_desk beam_trek.au
+  *FvwmEvent add_window drip.au
+  *FvwmEvent raise_window swoosh.au
+  *FvwmEvent lower_window swoosh.au
+  *FvwmEvent configure_window hammer.au
+  *FvwmEvent focus_change boing.au
+  *FvwmEvent destroy_window explosion.au
+  *FvwmEvent iconify ploop.au
+  *FvwmEvent deiconify ploop.au
+  *FvwmEvent window_name huh.au
+  *FvwmEvent icon_name beep.au
+  *FvwmEvent res_class beep.au
+  *FvwmEvent res_name beep.au
+  *FvwmEvent end_windowlist twang.au
+  *FvwmEvent icon_location beep.au
+  *FvwmEvent map beep.au
+  *FvwmEvent error beep.au
+  *FvwmEvent config_info beep.au
+  *FvwmEvent end_config_info beep.au
+  *FvwmEvent icon_file beep.au
+  *FvwmEvent default_icon beep.au
+  *FvwmEvent string plapper.au
+  *FvwmEvent mini_icon beep.au
+  *FvwmEvent windowshade beep.au
+  *FvwmEvent dewindowshade beep.au
+</pre>
+<h2>FvwmForm form-name</h2>
+FvwmForm provides a mechanism to get user input and act
+accordingly. This is achieved by means of a form that the
+user can fill out, and from which the user can select
+actions he wants Fvwm to take. A form consists of five
+types of items: text labels, single-line text inputs,
+mutually-exclusive selections, multiple-choice selections,
+and action buttons. These items are arranged into several
+lines, with a very flexible layout.
+<pre>
+*FvwmFormGrabServer
+*FvwmFormWarpPointer
+*FvwmFormPosition    x y
+*FvwmFormBack        color
+*FvwmFormFore        color
+*FvwmFormItemBack    color
+*FvwmFormItemFore    color
+*FvwmFormFont        font
+*FvwmFormButtonFont  font
+*FvwmFormInputfont   font
+*FvwmFormLine        justification
+                     justification: left, right, center, expand
+*FvwmFormText        string
+*FvwmFormInput       name size init_string
+*FvwmFormSelection   name type
+                          type: single, multiple
+*FvwmFormChoice      name value on | off string
+*FvwmFormButton      type string [key]
+                     type: continue, restart, quit
+*FvwmFormCommand     command [parameter]
+                              parameter: $(name),
+                                         $(name?string),
+                                         $(name!string)
+</pre>
+<h4>EXAMPLE</h4>
+<pre>
+  QuitVerify
+    This example simulates the mwm way of confirming logout
+
+  *QuitVerifyGrabServer
+  *QuitVerifyWarpPointer
+  *QuitVerifyFont          *helvetica*m*r*n*14*
+  *QuitVerifyButtonFont    *helvetica*m*o*n*14*
+  *QuitVerifyFore          Black
+  *QuitVerifyBack          Light Gray
+  *QuitVerifyItemFore      Wheat
+  *QuitVerifyItemBack      Gray50
+  *QuitVerifyCommand       Beep
+  *QuitVerifyLine          center
+  *QuitVerifyText          "Do you really want to logout?"
+  *QuitVerifyLine          expand
+  *QuitVerifyButton        quit "Logout"
+  *QuitVerifyCommand       Quit
+  *QuitVerifyButton        quit "Cancel"
+  *QuitVerifyCommand       Nop
+
+  Remote Login
+    This example lets the user type in a hostname,  and
+    optionally  a  user name on the remote machine, and
+    opens an xterm window from the remote host
+
+  *RloginWarpPointer
+  *RloginFont              *helvetica*m*r*n*14*
+  *RloginButtonFont        *helvetica*m*o*n*14*
+  *RloginInputFont         *cour*m*r*n*14*
+  *RloginFore              Black
+  *RloginBack              Light Gray
+  *RloginItemFore          Wheat
+  *RloginItemBack          Gray50
+  # begin items
+  *RloginLine              center
+  *RloginText              "Login to Remote Host"
+  *RloginLine              center
+  *RloginText              "Host:"
+  *RloginInput             HostName  20   ""
+  *RloginLine              center
+  *RloginSelection         UserSel   single
+  *RloginChoice            Default   Default   on   "same user"
+  *RloginChoice            Custom    Custom    off  "user:"
+  *RloginInput             UserName  10   ""
+  *RloginLine              expand
+  *RloginButton            quit "Login"
+  *RloginCommand           Exec  exec   rsh   $(Custom?-l   $(UserName)) \
+                             $(HostName) xterm -T xterm@$(HostName) -display $HOSTDISPLAY &
+  *RloginButton            restart   "Clear"
+  *RloginButton            quit "Cancel"  ^[
+  *RloginCommand           Nop
+
+  Capture Window
+    This example provides a front-end to xwd, xwud, and xpr
+
+  *CaptureFont             *helvetica*m*r*n*14*
+  *CaptureButtonFont       *helvetica*m*o*n*14*
+  *CaptureInputFont        *cour*m*r*n*14*
+  *CaptureLine             center
+  *CaptureText             "Capture Window"
+  *CaptureLine             left
+  *CaptureText             "File: "
+  *CaptureInput            file      25   "/tmp/Capture"
+  *CaptureLine             left
+  *CaptureText             "Printer: "
+  *CaptureInput            printer        20   "ps1"
+  *CaptureLine             expand
+  *CaptureSelection        PtrType   single
+  *CaptureChoice           PS   ps   on   "PostScript"
+  *CaptureChoice           Ljet ljet off  "HP LaserJet"
+  *CaptureLine             left
+  *CaptureText             "xwd options:"
+  *CaptureLine             expand
+  *CaptureSelection        Options   multiple
+  *CaptureChoice           Brd  -nobdrs   off  "No border"
+  *CaptureChoice           Frm  -frame    on   "With frame"
+  *CaptureChoice           XYZ  -xy  off  "XY format"
+  *CaptureLine             expand
+  *CaptureButton           continue  "Capture"
+  *CaptureCommand          Exec exec xwd -out $(file) $(Options) &
+  *CaptureButton           continue  "Preview"
+  *CaptureCommand          Exec exec xwud -in $(file) &
+  *CaptureButton           continue  "Print"
+  *CaptureCommand          Exec xpr -device  $(PtrType)  $(file) | lpr -P $(printer) &
+  *CaptureButton           quit      "Quit"
+</pre>
+<h2>FvwmGoodStuff</h2>
+The FvwmGoodStuff module provides a button panel which sits
+on the X terminal's root window. The user can press the buttons
+at any time, and trigger invocation of a user-specified
+command by the window manager.
+<pre>
+*FvwmGoodStuffGeometry  geometry
+*FvwmGoodStuffFont      font
+*FvwmGoodStuffRows      rows
+*FvwmGoodStuffColumns   columns
+*FvwmGoodStuffFore      color
+*FvwmGoodStuffBack      color
+*FvwmGoodStuff[(w x h)] label icon command
+</pre>
+<h4>EXAMPLE</h4>
+<pre>
+  Module FvwmGoodStuff
+
+  Style "FvwmGoodStuff" Sticky
+  Style "FvwmGoodStuff" Icon toolbox.xpm
+
+  *FvwmGoodStuffFore     Black
+  *FvwmGoodStuffBack     #908090
+  *FvwmGoodStuffGeometry -135-5
+  *FvwmGoodStuffRows     1
+  *FvwmGoodStuffFont     -adobe-helvetica-medium-r-*-*-12-*-*-*-*-*-*-*
+  *FvwmGoodStuff Resize  resize.xpm  Resize
+  *FvwmGoodStuff Move    arrows2.xpm Move
+  *FvwmGoodStuff Lower   Down        Lower
+  *FvwmGoodStuff Raise   Up          Raise
+  *FvwmGoodStuff Kill    bomb.xpm    Destroy
+  *FvwmGoodStuff Dopey   rterm.xpm   Exec "big_win" xterm -T big_win -geometry 80x50
+  *FvwmGoodStuff Snoopy  rterm.xpm   Exec "small_win" xterm -T small_wi
+  *FvwmGoodStuff Xcalc   rcalc.xpm   Exec "Calculator" xcalc
+  *FvwmGoodStuff XMag    magnifying_glass2.xpm    Exec "xmag" xmag
+  *FvwmGoodStuff Mail    mail2.xpm   Exec "xmh" xmh
+  *FvwmGoodStuff(4x1) - whatever SwallowModule "Fvwm Pager" FvwmPager 0 3
+</pre>
+<h2>FvwmIconBox</h2>
+The FvwmIconBox module provides an icon manager. The user
+can do operations, like iconify and deiconify, for each icon
+shown in the module via mouse and keyboard.
+<pre>
+*FvwmIconBoxFore            color
+*FvwmIconBoxBack            color
+*FvwmIconBoxIconFore        color
+*FvwmIconBoxIconBack        color
+*FvwmIconBoxIconHiFore      color
+*FvwmIconBoxIconHiBack      color
+*FvwmIconBoxPixmap          pixmap
+*FvwmIconBoxFont            fontname
+*FvwmIconBoxSortIcons       option
+                            option: IconName, ResClass, ResName, WindowName
+*FvwmIconBoxPadding         number
+*FvwmIconBoxSBWidth         number
+*FvwmIconBoxPlacement       primary secondary
+                            Left    Top
+                            Left    Bottom
+                            Right   Top
+                            Right   Bottom
+                            Top     Left
+                            Top     Right
+                            Bottom  Left
+                            Bottom  Right
+*FvwmIconBoxLines           n, default: 6
+*FvwmIconBoxHideSC          direction
+                              direction: horizontal, vertical
+*FvwmIconBoxGeometry        width x height [+-]X [+-]Y
+*FvwmIconBoxMaxIconSize     width x height
+*FvwmIconBoxMouse           Button Action Response[, Response]
+*FvwmIconBoxKey             Key Action[, Action]
+                                Action: command or Next, Prev, Left, Right, Up, Down
+*FvwmIconBox                windowname bitmap-file
+*FvwmIconBoxSetWMIconSize
+*FvwmIconBoxHilightFocusWin
+*FvwmIconBoxResolution      Desk
+*FvwmIconBoxFrameWidth      width1 width2
+*FvwmIconBoxUseSkipList
+</pre>
+<h4>EXAMPLE</h4>
+<pre>
+  # Note that icons are shown in the module only if NoIcon attribute is applied
+  Style "*"  NoIcon
+
+  *FvwmIconBoxIconBack    #cfcfcf
+  *FvwmIconBoxIconHiFore  black
+  *FvwmIconBoxIconHiBack  LightSkyBlue
+  *FvwmIconBoxBack        #5f9ea0
+  #*FvwmIconBoxFore       blue
+  *FvwmIconBoxGeometry    5x1+0+0
+  *FvwmIconBoxMaxIconSize 64x38
+  *FvwmIconBoxFont        -adobe-helvetica-medium-r-*-*-12-*-*-*-*-*-*-*
+  *FvwmIconBoxSortIcons    IconName
+  #*FvwmIconBoxSortIcons   ResClass
+  *FvwmIconBoxPadding     4
+  *FvwmIconBoxFrameWidth  9 7
+  *FvwmIconBoxLines       10
+  *FvwmIconBoxSBWidth     11
+  *FvwmIconBoxPlacement   Left Top
+  *FvwmIconBoxPixmap      fvwm.xpm
+  #*FvwmIconBoxHideSC     Horizontal
+  *FvwmIconBoxSetWMIconSize
+  *FvwmIconBoxHilightFocusWin
+  #*FvwmIconBoxResolution       Desk
+
+  # mouse bindings
+  *FvwmIconBoxMouse       1       Click           RaiseLower
+  *FvwmIconBoxMouse       1       DoubleClick     Iconify
+  *FvwmIconBoxMouse       2       Click           Iconify -1, Focus
+  *FvwmIconBoxMouse       3       Click           Module FvwmIdent
+
+  # Key bindings
+  *FvwmIconBoxKey         r       RaiseLower
+  *FvwmIconBoxKey         space   Iconify
+  *FvwmIconBoxKey         d       Close
+
+  # FvwmIconBox built-in functions
+  *FvwmIconBoxKey         n       Next
+  *FvwmIconBoxKey         p       Prev
+  *FvwmIconBoxKey         h       Left
+  *FvwmIconBoxKey         j       Down
+  *FvwmIconBoxKey         k       Up
+  *FvwmIconBoxKey         l       Right
+
+  # Icon file specifications
+  # Mostly, you don't have to specify icon files, as FvwmIconBox now
+  # reads icon files specified in Style commands
+  *FvwmIconBox            "Fvwm*"         -
+</pre>
+<h2>FvwmIconMan</h2>
+FvwmIconMan is an icon manager modeled after the TWM icon
+manager. The user may have multiple icon managers, each of
+which armed with a list of window types which it manages.
+<pre>
+*FvwmIconMan*nummanagers               num
+*FvwmIconMan*[id*]                     action type binding
+                                              type: Key,
+                                                    Mouse,
+                                                    Select
+*FvwmIconMan*[id*]background           color
+*FvwmIconMan*[id*]buttongeometry       geometry
+*FvwmIconMan*[id*]drawicons            value
+*FvwmIconMan*[id*]focusbutton          style [forecolor backcolor]
+*FvwmIconMan*[id*]focusandselectbutton style [forecolor backcolor]
+*FvwmIconMan*[id*]font                 font
+*FvwmIconMan*[id*]foreground           color
+*FvwmIconMan*[id*]format               formatstring
+                                       formatstring: %t = title
+                                                     %i = icon
+                                                     %c = class
+                                                     %r = resource
+*FvwmIconMan*[id*]IconButton
+*FvwmIconMan*[id*]iconname             iconstring
+*FvwmIconMan*[id*]IconColorset         n
+*FvwmIconMan*[id*]managergeometry      geometry
+*FvwmIconMan*[id*]plainbutton          style [forecolor backcolor]
+                                       style: flat, up, down, raisededge, sunkedge
+*FvwmIconMan*[id*]resolution           resolution
+*FvwmIconMan*[id*]selectbutton style   [forecolor backcolor]
+*FvwmIconMan*[id*]shape                boolean
+*FvwmIconMan*[id*]title                titlestring
+*FvwmIconMan*[id*]titlebutton          style [forecolor backcolor]
+*FvwmIconMan*[id*]show                 pattern list
+*FvwmIconMan*[id*]dontshow             pattern list
+*FvwmIconMan*[id*]usewinlist           boolean
+*FvwmIconMan*[id*]followfocus          boolean
+*FvwmIconMan*[id*]sort                 value
+*FvwmIconMan*action                    Mouse Button Modifiers Functionlist
+                                       Key Keysym Modifiers Functionlist
+                                       Select Functionlist
+                                              Function: bif Button  Integer/String
+                                                        bifn Button Integer/String
+                                                        gotobutton  Button
+                                                        gotomanager Manager
+                                                        jmp         Integer/String
+                                                        label       String
+                                                        print       String
+                                                        quit
+                                                        ret
+                                                        select
+                                                        sendcommand String
+</pre>
+<h4>EXAMPLE</h4>
+<pre>
+  This first example is of a the simplest invocation of FvwmIconMan,
+  which only has one manager, and handles all windows:
+
+  # Make FvwmIconMan  title-bar-less, sticky, and give it an icon
+  Style "Fvwm*"       Icon toolbox.xpm,NoTitle,NoHandles,Sticky
+  Style "FvwmIconMan" HandleWidth 5, Handles, BorderWidth 5
+
+  #Definitions used by the modules
+  *FvwmIconMan*nummanagers        1
+  *FvwmIconMan*resolution         global
+  *FvwmIconMan*background         slategrey
+  *FvwmIconMan*foreground         white
+  *FvwmIconMan*font               7x13
+  *FvwmIconMan*buttongeometry     100x0
+  *FvwmIconMan*managergeometry    1x0-0+0
+
+  This example is the Reader's Digest version of  my  personal
+  configuration.  It  has  two managers, one for emacs and one
+  for everything else, minus things with no icon  title.  Only
+  windows  on  the  current page are displayed. The use of the
+  drawicons and shape options requires that fvwm and FvwmIcon-
+  Man  we  compiled  with  the  correct  options. Note how the
+  geometry and show options are specified per manager, and the
+  others are common to all:
+
+  Style "FvwmIconMan"  NoTitle, Sticky, WindowListSkip, BorderWidth 0
+  Style "FvwmIconMan"  HandleWidth 0
+
+  Key F8 A N SendToModule FvwmIconMan bif select Select,\
+                                      bif focus Focus,\
+                                      gotomanager 0, select,\
+                                      sendcommand WarpToWindow,\
+                                      ret, label Focus,\
+                                      gotobutton focus,\
+                                      select, sendcommand WarpToWindow,\
+                                      ret, label Select, gotobutton prev,\
+                                      select, sendcommand WarpToWindow
+  Key F9 A N SendToModule FvwmIconMan bif select Select,\
+                                      bif focus Focus, gotomanager 0, select,\
+                                      sendcommand WarpToWindow, ret,\
+                                      label Focus, gotobutton focus,\
+                                      select, sendcommand WarpToWindow,\
+                                      ret, label Select, gotobutton next,\
+                                      select, sendcommand WarpToWindow
+  *FvwmIconMan*numManagers            2
+  *FvwmIconMan*Resolution             page
+  *FvwmIconMan*background             steelblue
+  *FvwmIconMan*foreground             white
+  *FvwmIconMan*font                   7x13
+  *FvwmIconMan*usewinlist             true
+  *FvwmIconMan*drawicons              true
+  *FvwmIconMan*shape                  true
+  *FvwmIconMan*followfocus            true
+  *FvwmIconMan*sort                   name
+  *FvwmIconMan*plainbutton            up white steelblue
+  *FvwmIconMan*selectbutton           down white steelblue
+  *FvwmIconMan*focusbutton            up white brown
+  *FvwmIconMan*focusandselectButton   down white brown
+  *FvwmIconMan*titleButton            raisededge white steelblue
+
+  *FvwmIconMan*1*title                "Emacs windows"
+  *FvwmIconMan*1*iconname             "FvwmIconMan: Emacs"
+  *FvwmIconMan*1*format               "%i"
+  *FvwmIconMan*1*show                  resource=emacs resource=gemacs
+  *FvwmIconMan*1*managergeometry       1x0-400+0
+  *FvwmIconMan*1*buttongeometry        200x0
+
+  *FvwmIconMan*2*title                 "All windows"
+  *FvwmIconMan*2*iconname              "FvwmIconMan: all"
+  *FvwmIconMan*2*format                "%c: %i"
+  *FvwmIconMan*2*dontshow              icon=Untitled
+  *FvwmIconMan*2*managergeometry       2x4-0+0
+  *FvwmIconMan*2*buttongeometry        200x0
+
+  *FvwmIconMan*transient*geometry      194x100
+  *FvwmIconMan*transient*dontshow      icon=Untitled
+  *FvwmIconMan*transient*action        Mouse 0     A sendcommand select select Iconify
+
+  *FvwmIconMan*action                  Mouse 1     N sendcommand Iconify
+  *FvwmIconMan*action                  Mouse 2     N sendcommand WarpToWindow
+  *FvwmIconMan*action                  Mouse 3     N sendcommand "Module FvwmIdent FvwmIdent"
+  *FvwmIconMan*action                  Key   Left  N gotobutton Left, select
+  *FvwmIconMan*action                  Key   Right N gotobutton Right, select
+  *FvwmIconMan*action                  Key   Up    N gotobutton Up, select
+  *FvwmIconMan*action                  Key   Down  N gotobutton Down, select
+  *FvwmIconMan*action                  Key   q     N quit
+</pre>
+<h2>FvwmIdent</h2>
+The FvwmIdent module prompts the user to select a target
+window, if the module was not launched from within a window
+context in Fvwm. After that, it pops up a window with
+information about the window which was selected.
+<pre>
+  *FvwmIdentFore color
+  *FvwmIdentBack color
+  *FvwmIdentFont fontname
+</pre>
+<h2>FvwmM4 file</h2>
+When called, this module will attempt to have M4 pre-process
+the file specified in its invocation, and then have fvwm
+read the resulting file
+<pre>
+     FvwmM4 can be invoked by inserting the line 'FvwmM4' in  the
+     .fvwm2rc  file.  It  can also be called from a menu or mouse
+     binding.  If the user wants his entire  .fvwm2rc  file  pre-
+     processed with FvwmM4, then fvwm should be invoked as:
+
+          fvwm2 -cmd "FvwmM4 .fvwm2rc"
+
+     Note that the  argument  to  the  option  "-cmd"  should  be
+     enclosed in quotes, and no other quoting should be used. For
+     example, a typical invocation might be:
+
+          fvwm2 -cmd "FvwmM4 -m4-squote { -m4-equote } .fvwm2rc"
+
+     Some options can be specified on the command line:
+
+       -m4-prefix
+         I think this makes all the m4 directives require the
+         prefix "m4_".
+
+       -m4opt option
+         Lets you pass an option to the m4 program. Not really
+         needed as any unknown options will be passed on
+         automatically.
+
+       -m4-squote character
+         Lets you change the m4 start-of-quote character to
+         character.
+
+       -m4-equote character
+         Lets you change the m4 end-of-quote character to
+         character.
+
+       -m4prog name
+         Instead of invoking "m4", fvwm will invoke name.
+
+       -outfile filename
+         Instead of creating a random unique name for the tem-
+         porary file for the preprocessed rc file, this option
+         will let you specify the name of the temporary file it
+         will create.
+
+       -debug
+         Causes the temporary file create by m4 to be retained.
+         This file is usually called "/tmp/fvwmrcXXXXXX"
+
+     FvwmM4 defines some values  for  use  in  the  pre-processor
+     file:
+
+       TWM_TYPE
+         Always set to "fvwm".
+
+       SERVERHOST
+         The name of the machine running the X Server.
+
+       CLIENTHOST
+         The name of the machine running fvwm.
+
+       HOSTNAME
+         The hostname of the machine running fvwm. Generally the
+         same as CLIENTHOST.
+
+       OSTYPE
+         The operating system for CLIENTHOST.
+
+       USER
+         The name of the person running fvwm.
+
+       VERSION
+         The X11 version.
+
+       REVISION
+         The X11 revision number.
+
+       VENDOR
+         The X server vendor.
+
+       RELEASE
+         The X server release number.
+
+       WIDTH
+         The screen width in pixels.
+
+       HEIGHT
+         The screen height in pixels.
+
+       X_RESOLUTION
+         Some distance/pixel measurement for the horizontal
+         direction, I think.
+
+       Y_RESOLUTION
+         Some distance/pixel measurement for the vertical
+         direction, I think.
+
+       PLANES
+         Number of color planes for the X server display
+
+       BITS_PER_RGB
+         Number of bits in each rgb triplet.
+
+       CLASS
+         The X11 visual class, ie PsuedoColor.
+
+       COLOR
+         Yes or No, Yes if the display class is neither StaticGrey
+         or GreyScale.
+
+       FVWM_VERSION
+         The fvwm version number, ie 2.0
+
+       OPTIONS
+         Some combination of SHAPE, XPM, NO_SAVEUNDERS, and  M4,
+         as defined in configure.h at compile time.
+
+       FVWM_MODULEDIR
+         The directory where fvwm looks for .fvwmrc and  modules
+         by default, as determined at compile time.
+
+     EXAMPLE PROLOG
+       define(TWM_TYPE,``fvwm'')dnl
+       define(SERVERHOST,``spx20'')dnl
+       define(CLIENTHOST,``grumpy'')dnl
+       define(HOSTNAME,``grumpy'')dnl
+       define(OSTYPE,``SunOS'')dnl
+       define(USER,``nation'')dnl
+       define(HOME,``/local/homes/dsp/nation'')dnl
+       define(VERSION,``11'')dnl
+       define(REVISION,``0'')dnl
+       define(VENDOR,``HDS human designed systems, inc. (2.1.2-D)'')dnl
+       define(RELEASE,``4'')dnl
+       define(WIDTH,``1280'')dnl
+       define(HEIGHT,``1024'')dnl
+       define(X_RESOLUTION,``3938'')dnl
+       define(Y_RESOLUTION,``3938'')dnl
+       define(PLANES,``8'')dnl
+       define(BITS_PER_RGB,``8'')dnl
+       define(CLASS,``PseudoColor'')dnl
+       define(COLOR,``Yes'')dnl
+       define(FVWM_VERSION,``1.24l'')dnl
+       define(OPTIONS,``SHAPE XPM M4 '')dnl
+       define(FVWM_MODULEDIR,``/local/homes/dsp/nation/modules'')dnl
+</pre>
+<h2>FvwmPager first last, or * *</h2>
+The FvwmPager module shows a miniature view of the Fvwm
+desktops which are specified in the command line. This is a
+useful reminder of where your active windows are. Windows in
+the pager are shown in the same color as their fvwm decorations.
+<pre>
+*FvwmPagerGeometry           geometry
+*FvwmPagerRows               rows
+*FvwmPagerColumns            columns
+*FvwmPagerIconGeometry       geometry
+*FvwmPagerStartIconic
+*FvwmPagerNoStartIconic
+*FvwmPagerFont               font
+*FvwmPagerSmallFont          font
+*FvwmPagerFore               color
+*FvwmPagerBack               color
+*FvwmPagerHilight color
+*FvwmPagerWindowColors       fore back hiFore hiBack
+*FvwmPagerLabel              desk label
+*FvwmPagerDeskColor          desk color
+*FvwmPagerDeskTopScale       number
+*FvwmPagerMiniIcons
+*FvwmPagerBalloons           [type]
+                              type: Pager, Icon
+*FvwmPagerBalloonFore        color
+*FvwmPagerBalloonBack        color
+*FvwmPagerBalloonFont        font
+*FvwmPagerBalloonBorderWidth number
+*FvwmPagerBalloonBorderColor color
+*FvwmPagerBalloonYOffset     number
+*FvwmPagerSolidSeparators
+*FvwmPagerNoSeparators
+</pre>
+<h2>FvwmRearrange arguments</h2>
+This module can be called to tile or cascade windows.
+<pre>
+FvwmRearrange -tile -h 10 10 90 90
+FvwmRearrange -cascade -resize 10 2 80 70
+
+ arguments:
+    -a
+      Causes all window styles to be affected, even ones with
+      the WindowListSkip style.
+
+    -cascade
+      Cascade windows. This argument must be the first on the
+      command line. This is the default.
+
+    -desk
+      Causes all windows on the desk to be cascaded/tiled
+      instead of the current screen only.
+
+    -flatx
+      Inhibits border width increment. Only used when cascading.
+
+    -flaty
+      Inhibits border height increment. Only used when cascading.
+
+    -h
+      Tiles horizontally (default is to tile vertically).
+      Used for tiling only.
+
+    -incx arg
+      Specifies a horizontal increment which is successively
+      added to cascaded windows. arg is a percentage of
+      screen width, or pixel value if a p is suffixed.
+      Default is zero. Used only for cascading.
+
+    -incy arg
+      Specifies a vertical increment which is successively
+      added to cascaded windows. arg is a percentage of
+      screen height, or pixel value if a p is suffixed.
+      Default is zero. Used only for cascading.
+
+    -m
+      Causes maximized windows to also be affected (implied by -all).
+
+    -mn arg
+      Tiles up to arg windows in tile direction. If more
+      windows exist, a new direction row or column is created
+      (in effect, a matrix is created). Used only when tiling
+      windows.
+
+    -noraise
+      Inhibits window raising, leaving the depth ordering
+      intact.
+
+    -noresize
+      Inhibits window resizing, leaving window sizes intact.
+      This is the default when cascading windows.
+
+    -nostretch
+      If tiling: inhibits window growth to fit tile. Windows
+      are shrunk to fit the tile but not expanded.
+
+      If cascading: inhibits window expansion when using the
+      -resize option. Windows will only shrink to fit the
+      maximal width and height (if given).
+
+    -r
+      Reverses the window sequence.
+
+    -resize
+      Forces all windows to resize to the constrained width
+      and height (if given). This is the default when tiling
+      windows.
+
+    -s
+      Causes sticky windows to also be affected (implied by -all).
+
+    -t
+      Causes transient windows to also be affected (implied by -all).
+
+    -tile
+      Tile windows. This argument must be the first on the
+      command line.
+
+    -u
+      Causes untitled windows to also be affected (implied by -all).
+</pre>
+<h2>FvwmSave</h2>
+When called, this module will attempt to save your current
+desktop layout into a file called new.xinitrc. Ideally, this
+file will look just like .xinitrc, but in reality, you will
+have to edit it to get a useable configuration, so be sure
+to keep a backup of your old .xinitrc.
+During initialization, NoClutter will eventually search a
+configuration file which describes the time-outs and actions
+to take. The configuration file is the same file that fvwm
+used during initialization.
+<p>
+If the NoClutter executable is linked to another name, ie ln
+-s NoClutter OtherClutter, then another module called Other-
+Clutter can be started, with a completely different confi-
+guration than NoClutter, simply by changing the keyword
+NoClutter to OtherClutter. This way multiple clutter-
+reduction programs can be used.
+<p>NoClutter can be invoked by inserting the line 'Module
+NoClutter' in the .fvwmrc file. This can be placed on a line
+by itself, if NoClutter is to be spawned during fvwm's ini-
+tialization, or can be bound to a menu or mouse button or
+keystroke to invoke it later. Fvwm will search directory
+specified in the ModulePath configuration option to attempt
+to locate NoClutter.
+<p>NoClutter reads the same .fvwmrc file as fvwm reads when it
+starts up, and looks for lines similar to "*NoClutter 3600
+Iconify". The format of these lines is
+<pre>
+  *NoClutter [time] [command]
+</pre>
+where command is any fvwm built-in command, and
+time is the time in seconds between when a window looses
+focus and when the command is executed. At most 3 actions
+can be specified.
+<h2>FvwmSaveDesk</h2>
+When called, this module will attempt to save your current
+desktop layout as a definition of extra lines for the function
+InitFunction into the file .fvwm2desk in your home
+directory. As explain in the other documation, this function
+is called at startup of fvwm2. You have to include this
+file in .fvwm2rc after the definition of the Function Init-
+function. You can do this by using the module FvwmM4 or
+FvwmCpp.
+<p>The M4 Macro processor substitutes its macros  even  in  the
+middle of a word. Because of that you may have problems with
+predefined macros such as include or define. To avoid this
+the GNU M4 has an extra option to prefix all builtins with
+'m4_'. FvwmM4 can be called with option -m4-prefix and then
+will provide the option -P to M4. I personally use the
+FvwmM4 module this way.
+<pre>
+  fvwm2 -f "FvwmM4 -m4-prefix -m4opt -I$HOME $HOME/.fvwm2rc"
+</pre>
+Simply add the following line to the end of .fvwm2rc:
+<Pre>
+  m4_include(`.fvwm2desk') .
+</pre>
+<p>You may have the problem that the preprocessor directives
+starts with the comment charakter '#' and
+ will complain about unknown directives, if you have comments
+ in your .fvwm2rc.
+<pre>
+  fvwm2 -f "FvwmCpp -C-I$HOME $HOME/.fvwm2rc"
+</pre>
+Simply add the following line to the end of .fvwm2rc:
+<pre>
+  #include ".fvwm2desk"
+</pre>
+<h2>FvwmScript file</h2>
+FvwmScript is a module which allows to build many graphical
+applications such as desktop accessories, button panel with
+popup menu, modal dialog... At the startup, FvwmScript reads
+the file which is specified in the command line. This file
+contains the script. This script is not included in the
+configuration file of Fvwm.
+<p>See the man page for the gory details.
+<h2>FvwmScroll</h2>
+The FvwmScroll module prompts the user to select a target
+window, if the module was not launched from within a window
+context in Fvwm. After that, it adds scroll bars to the
+selected window, to reduce the total desktop space consumed
+by the window.
+<pre>
+*FvwmScrollFore color
+*FvwmScrollBack color
+</pre>
+<h2>FvwmTalk</h2>
+The FvwmTalk allows the user to type fvwm commands into a
+window, and have them executed immediately. These commands
+are usually specfified in the .fvwmrc file, or are bound to
+menu/mouse items as specified in that file. This tools is
+particularly useful for testing new configuration ideas, or
+for implementing temporary changes to your environment.
+<h2>FvwmTaskBar</h2>
+The FvwmTaskBar module provides a taskbar made up of buttons
+arranged by rows, each corresponding to a window that FVWM
+is managing. Clicking on first button gives focus to the
+corresponding toplevel window; clicking on the middle button
+will hide a toplevel window; third mouse button is reserved
+for a future extension (context menu). Like the other
+modules, FvwmTaskBar only works when fvwm is used as the
+window manager.
+<pre>
+*FvwmTaskBarGeometry       [+]X x [+]Y
+*FvwmTaskBarFont           font
+*FvwmTaskBarSelFont        font
+*FvwmTaskBarStatusFont     font
+*FvwmTaskBarFore           color
+*FvwmTaskBarBack           color
+*FvwmTaskBarTipsFore       color
+*FvwmTaskBarTipsBack       color
+*FvwmTaskBarGeometry       geometry
+*FvwmTaskBarAutoStick
+*FvwmTaskBarAutoHide
+*FvwmTaskBarUseSkipList
+*FvwmTaskBarUseIconNames
+*FvwmTaskBarShowTransients
+*FvwmTaskBarAction         action response[,response...]
+*FvwmTaskBarButtonWidth    width
+*FvwmTaskBarHighlightFocus
+*FvwmTaskBarShowTips
+*FvwmTaskBarClockFormat    format-string
+*FvwmTaskBarUpdateInterval seconds
+*FvwmTaskBarBellVolume     volume
+*FvwmTaskBarMailBox        path, default: /var/spool/mail/$USER_LOGIN
+*FvwmTaskBarMailCommand    command
+*FvwmTaskBarIgnoreOldMail
+*FvwmTaskBarStartName      string
+*FvwmTaskBarStartMenu      string
+*FvwmTaskBarStartIcon      icon-name
+</pre>
+<h4>EXAMPLE</h4>
+<pre>
+The  following are excepts from a .fvwm2rc file which
+  describe FvwmTaskBar initialization commands:
+
+AddToFunc "InitFunction" "I" Module FvwmTaskBar
+AddToFunc "RestartFunction" "I" Module FvwmTaskBar
+
+Style "FvwmTaskBar" NoTitle,BorderWidth 4, HandleWidth 4, Sticky,\
+                    StaysOnTop, WindowSkipList, CirculateSkip
+
+*FvwmTaskBarBack           #c3c3c3
+*FvwmTaskBarFore           black
+*FvwmTaskBarTipsBack       bisque
+*FvwmTaskBarTipsFore       black
+*FvwmTaskBarGeometry       1
+*FvwmTaskBarFont           -adobe-helvetica-medium-r-*-*-14-*-*-*-*-*-*-*
+*FvwmTaskBarSelFont        -adobe-helvetica-bold-r-*-*-14-*-*-*-*-*-*-*
+*FvwmTaskBarStatusFont     fixed
+*FvwmTaskBarAction         Click1 Iconify -1, Raise
+*FvwmTaskBarAction         Click2 Iconify , Lower
+*FvwmTaskBarAction         Click3 Iconify -1, Raise
+*FvwmTaskBarUseSkipList
+*FvwmTaskBarUseIconNames
+*FvwmTaskBarAutoStick
+*FvwmTaskBarShowTips
+*FvwmTaskBarButtonWidth    180
+*FvwmTaskBarBellVolume     20
+*FvwmTaskBarMailBox        /var/spool/mail/
+*FvwmTaskBarMailCommand    Exec xterm -e mail
+*FvwmTaskBarClockFormat    %I:%M %p
+*FvwmTaskBarStartName      Start
+*FvwmTaskBarStartMenu      StartMenu
+*FvwmTaskBarStartIcon      mini-exp.xpm
+</pre>
+<h2>FvwmTheme</h2>
+FvwmTheme creates appearance resources that may be shared
+by FVWM and other modules. It reads an initial configuration
+and also reacts to configuration commands and messages
+sent from FVWM so that the resources can be dynamically changed.
+<pre>
+*FvwmThemeColorset n options
+                   n:       number of colorset
+                   options: fg, Fore, Foreground color
+                            bg, Back, Background color or Average
+                            hi, Hilite, Hilight color
+                            sh, Shade, Shadow color
+                            Pixmap, TiledPixmap, AspectPixmap file
+                            Transparent
+                            Shape, TiledShape, AspectShape file
+                            xGradient
+                            NoShape
+                            Plain
+</pre>
+<h4>EXAMPLE</h4>
+<pre>
+  Below you can find a fvwm configuration file  that  demon-
+  strates  the  use  of  the FvwmTheme module.  The order in
+  which FvwmTheme and the other modules are  configured  and
+  started is important.
+
+  # FvwmTheme
+  #
+  # The FvwmTheme setup must be first in the config file,
+  # right after the paths are set.
+  #
+  # Instead of the *FvwmThemeColorset... lines below you
+  # could read in a file with these commands.  So to change
+  # your color scheme you can simply copy a different file
+  # over your palette file and restart fvwm:
+  #
+  # Read /home/my_user_name/.fvwm2_palette
+
+  # 0 = Default colours
+  # 1 = Inactive windows
+  # 2 = Active windows
+  # 3 = Inactive menu entry and menu background
+  # 4 = Active menu entry
+  # 5 = greyed out menu entry (only bg used)
+  # 6 = module foreground and background
+  # 7 = hilight colours
+  *FvwmThemeColorset 0 fg black, bg rgb:b4/aa/94
+  *FvwmThemeColorset 1 fg black, bg rgb:a1/b2/c8, VGradient 100 dtcolour5 rgb:b4/aa/94
+  *FvwmThemeColorset 4 fg black, bg rgb:b4/aa/94
+  *FvwmThemeColorset 5 fg rgb:d2/bf/a8, bg rgb:b4/aa/94
+  *FvwmThemeColorset 6 fg black, bg rgb:b4/aa/94, VGradient 100 dtcolour5 rgb:b4/aa/94
+  *FvwmThemeColorset 7 fg black, bg rgb:94/ab/bf
+
+  # run FvwmTheme before anything else is done
+  ModuleSynchronous Timeout 5 FvwmTheme
+
+  # general setup
+  Style * ForeColor $[fg.cs1]
+  Style * BackColor $[bg.cs1]
+  Style * HilightFore $[fg.cs2]
+  Style * HilightBack $[bg.cs2]
+  MenuStyle * MenuColorset 3
+  MenuStyle * ActiveColorset 4
+  MenuStyle * GreyedColorset 5
+
+  # Applications
+  AddToFunc InitFunction
+  + I Exec exec xterm -fg $[fg.cs0] -bg $[bg.cs0]
+
+  # module setup
+  # ... more FvwmPager config lines ...
+  *FvwmPagerColorset                  * 6
+  *FvwmPagerBalloonColorset           * 6
+  *FvwmPagerHilightColorset           * 7
+  *FvwmPagerWindowColorsets           1 2
+
+  # ... more FvwmIconMan config lines ...
+  *FvwmIconMan*Colorset               6
+  *FvwmIconMan*FocusColorset          2
+  *FvwmIconMan*FocusAndSelectColorset 2
+  *FvwmIconMan*PlainColorset          6
+  *FvwmIconMan*SelectColorset         6
+  *FvwmIconMan*TitleColorset          6
+
+  # ... more FvwmButtons config lines ...
+  *FvwmButtonsFore                    $[fg.cs6]
+  *FvwmButtonsBack                    $[bg.cs6]
+  *FvwmButtonsColorset                6
+  # sample button passing color to xterm
+  *FvwmButtons                        (Title xterm, *FvwmWharfColorset 6)
+
+  # ... more FvwmIdent config lines ...
+  *FvwmIdentColorset                  6
+
+  # ... more FvwmWinList config lines ...
+  *FvwmWinListColorset                1
+  *FvwmWinListFocusColorset           2
+  *FvwmWinListIconColorset            1
+
+  # ... more FvwmTaskBar config lines ...
+  *FvwmTaskBarColorset                6
+  *FvwmTaskBarIconColorset            6
+  *FvwmTaskBarTipsColorset            0
+</pre>
+<h2>FvwmWarf</h2>
+The FvwmWharf module is a free-floating application loader
+that can execute programs, "Swallow" running programs, and
+contain "Folders" of more applications, among other things.
+<pre>
+*FvwmWharfAnimate
+*FvwmWharfAnimateMain
+*FvwmWharfBgColor      color
+*FvwmWharfColumns      columns
+*FvwmWharfForceSize
+*FvwmWharfFullPush
+*FvwmWharfGeometry     geometry
+*FvwmWharfMaxColors    number
+*FvwmWharfNoBorder
+*FvwmWharfPixmap       pixmap
+*FvwmWharfTextureColor from to
+*FvwmWharfTextureType  type
+                       type: 0 - No texture
+                                 use FvwmWharfBgColor to set the desired color
+                             1 - Gradient from upper-left to lower right
+                             2 - Horizontal one way gradient from top to bottom
+                             3 - Horizontal cylindrical gradient from top/bottom to center
+                             4 - Vertical one way gradient from left to right
+                             5 - Vertical cylindrical gradient from left/right to center
+                           128 - User specified pixmap
+                       The default is the builtin FvwmWharf texture pixmap
+*FvwmWharf             label icon command
+                                  command: Exec,
+                                           Swallow,
+                                           MaxSwallow
+                                           files Folders.xpm Folder
+                                           xftp 3DRings.xpm   Exec xftp &
+                                           xdir FolderDeposit.xpm Exec xdir &
+                                           moxfm FilingCabinet.xpm Exec moxfm &
+                                           ~Folders
+                                           nil nil DropExec "program" program %s
+                                           program iconname Exec "program" program
+</pre>
+<h2>FvwmWinList [Transient]</h2>
+The FvwmWinList module provides a window list made up of
+buttons, each corresponding to a window that FVWM is managing.
+<pre>
+*FvwmWinListGeometry         [+]X [+]Y
+*FvwmWinListFont             font
+*FvwmWinListFore             color
+*FvwmWinListBack             color
+*FvwmWinListFocusFore        color
+*FvwmWinListFocusBack        color
+*FvwmWinListIconFore         color
+*FvwmWinListIconBack         color
+*FvwmWinListDontDepressFocus
+*FvwmWinListUseSkipList
+*FvwmWinListNoAnchor
+*FvwmWinListUseIconNames
+*FvwmWinListLeftJustify
+*FvwmWinListMinWidth         width
+*FvwmWinListMaxWidth         width
+*FvwmWinListTruncateLeft
+*FvwmWinListAction           action response[,reponse...]
+                             action: Click1, Click2, Click3
+</pre>
+<h4>EXAMPLE</h4>
+<pre>
+  # Pop up the window list in transient mode on button 3 press & hold
+  Mouse 3   R   A   Module "FvwmWinList" FvwmWinList Transient
+
+  *FvwmWinListBack         DarkOliveGreen
+  *FvwmWinListFore         PaleGoldenRod
+  *FvwmWinListFont         -*-new century schoolbook-bold-r-*-*-*-120-*-*-*-*-*-*
+  *FvwmWinListAction       Click1 Iconify -1, Raise
+  *FvwmWinListAction       Click2 Iconify
+  *FvwmWinListAction       Click3 Module "FvwmIdent" FvwmIdent
+  *FvwmWinListUseSkipList
+  *FvwmWinListUseIconNames
+  *FvwmWinListGeometry     -50-85
+  *FvwmWinListMinWidth     70
+  *FvwmWinListMaxWidth     120
+  # I prefer the text centered
+  #*FvwmWinListLeftJustify
+  # I like it achored
+  #*FvwmWinListNoAnchor
+</pre>
+</body>
+</html>

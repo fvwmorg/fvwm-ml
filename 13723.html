@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Fullscreen + Xinerama from Mark on 2005-01-24 (fvwm-users)</title>
+<meta name="Author" content="Mark (mark_at_sexy.demon.nl)" />
+<meta name="Subject" content="FVWM: Fullscreen + Xinerama" />
+<meta name="Date" content="2005-01-24" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Fullscreen + Xinerama</h1>
+<!-- received="Mon Jan 24 17:09:27 2005" -->
+<!-- isoreceived="20050124170927" -->
+<!-- sent="Tue, 25 Jan 2005 00:08:48 +0100" -->
+<!-- isosent="20050124230848" -->
+<!-- name="Mark" -->
+<!-- email="mark_at_sexy.demon.nl" -->
+<!-- subject="FVWM: Fullscreen + Xinerama" -->
+<!-- id="200501250008.48615.mark_at_sexy.demon.nl" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start13723" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="13724.html" accesskey="d" title="Scott Rubin: &quot;Re: FVWM: Fullscreen + Xinerama&quot;">Next message</a> ]
+[ <a href="13722.html" title="James Kleck: &quot;Re: FVWM: 2.4 -&#0062; 2.5 upgrade question&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="13724.html" accesskey="t" title="Scott Rubin: &quot;Re: FVWM: Fullscreen + Xinerama&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg13723" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg13723" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg13723" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg13723" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Mark &lt;<a href="mailto:mark_at_sexy.demon.nl?Subject=Re%3A%20FVWM%3A%20Fullscreen%20%2B%20Xinerama">mark_at_sexy.demon.nl</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 25 Jan 2005 00:08:48 +0100</span><br />
+</address>
+<br />
+Hi i was wondering if someone knew a nice way to fix a &quot;Fullscreen&quot; function 
+<br />
+that i have here.
+<br />
+<br />The function now as i have it (not written by me, taken from fvwm-crystal) 
+<br />
+basically just saves the current state of a window, moves it to the top left 
+<br />
+corner of the screen, and resizes to the max of the screen.
+<br />
+After that some WindowStyle options are set.
+<br />
+<br />Since i am using Xinerama with these settings:
+<br />
+XineramaSlsScreens 2  1280x1024+1280+0 1280x1024+0+0 
+<br />
+XineramaSls On
+<br />
+XineramaPrimaryScreen 0
+<br />
+Xinerama On
+<br />
+<br />It would be nice if the function:
+<br />
+1. Decides on what Xinerama the window resides and adjusts the Move command to 
+<br />
+move it to the top left corner of the Xinerama screen.
+<br />
+2. Fullscreens only within the XineramaScreen it is in.
+<br />
+<br />Unfortunately i have no idea how to do this.
+<br />
+The Function(s):
+<br />
+###########
+<br />
+DestroyFunc Fullscreen
+<br />
+AddToFunc Fullscreen
+<br />
++ I Fullscreen-Stop
+<br />
++ I Current (!Maximizable) Break
+<br />
++ I TestRc (False) Fullscreen-Start
+<br />
+<br />DestroyFunc Fullscreen-Start
+<br />
+AddToFunc Fullscreen-Start
+<br />
++ I Current (State 0) Break
+<br />
++ I SetEnv OldX-$[w.id] $[w.x]
+<br />
++ I SetEnv OldY-$[w.id] $[w.y]
+<br />
++ I SetEnv OldWidth-$[w.id] $[w.width]
+<br />
++ I SetEnv OldHeight-$[w.id] $[w.height]
+<br />
++ I Move 0p 0p
+<br />
++ I Resize 100 100 frame
+<br />
+#+ I Layer 0 5
+<br />
++ I WindowStyle NoTitle, !Borders, StaysOnTop, !Iconifiable, !Maximizable
+<br />
++ I State 0 true
+<br />
+<br />DestroyFunc Fullscreen-Stop
+<br />
+AddToFunc Fullscreen-Stop
+<br />
+#+ I Current (!State 0) Break
+<br />
++ I DestroyWindowStyle
+<br />
++ I State 0 false
+<br />
+#+ I Layer 0 4
+<br />
++ I PipeRead &quot;echo ResizeMove \\$\\[OldWidth-$[w.id]\\]p 
+<br />
+\\$\\[OldHeight-$[w.id]\\]p \\$\\[OldX-$[w.id]\\]p \\$\\[OldY-$[w.id]\\]p&quot;
+<br />
+##########
+<br />
+<br />Perhaps someone could also tell me how to fix the following problem (The above 
+<br />
+is sort of a workaround for this problem):
+<br />
+Programs that really support fullscreen like mplayer always fullscreen over 
+<br />
+both monitors..? How can i configure my setup so that these programs detect 
+<br />
+the correct width of the monitor there on ?
+<br />
+<br />All the xinerama stuff still behaves somewhat strange on my setup and i really 
+<br />
+don't understand why, other things i notice are:
+<br />
+1 mplayerplug-in: When embedded in a browser it shows half of the screen, only 
+<br />
+when I fullscreen/restore i see the whole &quot;picture&quot;
+<br />
+2 kcontrol (Desktop -&gt; Panels) allows you to identify your xinerama screens, 
+<br />
+when I click &quot;Identify&quot; it shows the &quot;1&quot; in the center of the 2 monitors, and 
+<br />
+the &quot;2&quot; centered (like it should be) on the left/secondary monitor.
+<br />
+<br />Hope u have the awnsers !
+<br />
+<br />Mark
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon Jan 24 2005 - 17:09:27 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start13723">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="13724.html" title="Next message in the list">Scott Rubin: "Re: FVWM: Fullscreen + Xinerama"</a></li>
+<li><dfn>Previous message</dfn>: <a href="13722.html" title="Previous message in the list">James Kleck: "Re: FVWM: 2.4 -&#0062; 2.5 upgrade question"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="13724.html" title="Next message in this discussion thread">Scott Rubin: "Re: FVWM: Fullscreen + Xinerama"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="13724.html" title="Message sent in reply to this message">Scott Rubin: "Re: FVWM: Fullscreen + Xinerama"</a></li>
+<li><dfn>Reply</dfn>: <a href="13725.html" title="Message sent in reply to this message">Mark: "Re: FVWM: Fullscreen + Xinerama"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg13723" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg13723" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg13723" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg13723" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:57 BST
+</em></small></p>
+</body>
+</html>

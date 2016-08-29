@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: fvwm using &quot;compatible&quot; colors from Martin Kraemer on 1996-04-19 (fvwm-users)</title>
+<meta name="Author" content="Martin Kraemer (Martin.Kraemer_at_mch.sni.de)" />
+<meta name="Subject" content="FVWM: fvwm using &quot;compatible&quot; colors" />
+<meta name="Date" content="1996-04-19" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: fvwm using &quot;compatible&quot; colors</h1>
+<!-- received="Fri Apr 19 09:09:54 1996" -->
+<!-- isoreceived="19960419080954" -->
+<!-- sent="Fri, 19 Apr 1996 16:12:17 +0200 (MET DST)" -->
+<!-- isosent="19960419141217" -->
+<!-- name="Martin Kraemer" -->
+<!-- email="Martin.Kraemer_at_mch.sni.de" -->
+<!-- subject="FVWM: fvwm using &quot;compatible&quot; colors" -->
+<!-- id="199604191412.AA07288_at_deejai.mch.sni.de" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start16289" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="16290.html" accesskey="d" title="Martin Kraemer: &quot;Re: FVWM: It isn&#0039;t working. :-)&quot;">Next message</a> ]
+[ <a href="16288.html" title="Romano Giannetti: &quot;Re: FVWM: Two small bugs in fvwm-2.0.42&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="16297.html" accesskey="t" title="Martin Kraemer: &quot;Re: FVWM: fvwm using &#0034;compatible&#0034; colors (addendum)&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16289" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16289" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16289" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16289" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Martin Kraemer &lt;<a href="mailto:Martin.Kraemer_at_mch.sni.de?Subject=Re%3A%20FVWM%3A%20fvwm%20using%20%22compatible%22%20colors">Martin.Kraemer_at_mch.sni.de</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 19 Apr 1996 16:12:17 +0200 (MET DST)</span><br />
+</address>
+<br />
+Hello again,
+<br />
+<br />As you know by now, I still have a X11R4 server. And I like to use fvwm
+<br />
+on this machine as well as on my Linux X11R6 at home. Therefore I think
+<br />
+it would be sensible to make &quot;plain fvwm&quot; runnable on all X11R{4,5,6,6.1}
+<br />
+platforms.
+<br />
+<br />Yesterday, I sent out a list of &quot;not compatible&quot; colors. I re-checked
+<br />
+today (I always had wondered what the error messages from all the fvwm's
+<br />
+I use (1.24, 2.0.41, 2.0.42) meant:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;[FVWM][nocolor]: &lt;&lt;ERROR&gt;&gt; can't parse color slategrey
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;fvwm: can't parse color slategrey
+<br />
+). Here's what I found:
+<br />
+<br />1)  &quot;plain fvwm&quot; has a built-in startup command
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ExecuteFunction(&quot;MenuStyle black grey slategrey fixed fvwm&quot;, ...)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;which references the (X11R5-and-above-only) color slategrey.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;The patch to use grey50 instead follows below.
+<br />
+<br />2)  system.fvwmrc uses (too) many different colors, two of which are
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;completely unknown under X11R4: palevioletred and LightSkyBlue are
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;candidates for replacement by a different &quot;close&quot; color from the set
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;of named colors; The unnamed colors should be chosen from the set of
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;named colors as well. Using Romano &lt;romano_at_iet.unipi.it&gt; Giannetti's
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;pixy&quot; program, the following replacement table comes to mind (the
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;(dist nnnn) tells you how &quot;different&quot; the replacement color is from
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;the original color):
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#40a0c0                            -         sky blue (dist 169.387)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#484048                            -           gray26 (dist  20.793)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#554055                            -           violet (dist  31.169)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#5f9ea0                            -       cadet blue (dist   1.973)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#705070                            -           violet (dist 136.791)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#908090                            -           gray52 (dist 117.541)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#aa80aa                            -      blue violet (dist 198.276)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#cab3ca                            -          thistle (dist  13.309)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#cfcfcf                            -           gray81 (dist   0.000)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Black                              -            black (dist   0.000)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Green                              -            green (dist   0.000)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LightSkyBlue(X11R5)/#87cefa(X11R4) -         sky blue (dist 278.405)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MidnightBlue                       -    midnight blue (dist   0.000)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Yellow                             -           yellow (dist   0.000)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;blue                               -             blue (dist   0.000)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;grey40                             -           gray40 (dist   0.000)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;grey60                             -           gray60 (dist   0.000)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maroon                             -           maroon (dist   0.000)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;palevioletred(X11R5)/#db7093(X11R4)-medium violet red (dist   0.000)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;steelblue                          -       steel blue (dist   0.000)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;(Well, I think I would use gray25/50/80 in place of 26/52/81...)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;THESE ARE NO 1:1 REPLACEMENTS! But they help new users on older
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;platforms to initially use fvwm (without a private .fvwmrc, fvwm won't
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;start correctly unless it has successfully loaded the basic menu colors).
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Using the derived sed script (X11R4.sed) below, and executing
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sed -f X11R4.sed new-system.fvwmrc.orig &gt;new-system.fvwmrc
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;we get the diffs below for an X11R4-capable system.fvwmrc.
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;I do hope that these patches can help anybody out there who's still
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;stuck on X11R4....
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;Have fun,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Martin
+<br />
+<br /><br />--- fvwm/fvwm.c.bak  Thu Apr 11 16:52:19 1996
+<br />
++++ fvwm/fvwm.c      Fri Apr 19 13:54:47 1996
+<br />
+_at_&#64; -338,7 +338,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;/* read config file, set up menus, colors, fonts */
+<br />
+&nbsp;&nbsp;&nbsp;ExecuteFunction(&quot;HilightColor black grey&quot;,NULL,&amp;Event,C_ROOT,-1);
+<br />
+&nbsp;&nbsp;&nbsp;ExecuteFunction(&quot;XORValue 255&quot;,NULL,&amp;Event,C_ROOT,-1);
+<br />
+-  ExecuteFunction(&quot;MenuStyle black grey slategrey fixed fvwm&quot;,
+<br />
++  ExecuteFunction(&quot;MenuStyle black grey grey50 fixed fvwm&quot;,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NULL,&amp;Event,C_ROOT,-1);
+<br />
+&nbsp;&nbsp;&nbsp;ExecuteFunction(&quot;TitleStyle Centered Raised&quot;,NULL,&amp;Event,C_ROOT,-1);
+<br />
+&nbsp;&nbsp;&nbsp;ExecuteFunction(&quot;IconFont fixed&quot;, NULL,&amp;Event,C_ROOT,-1);
+<br />
+<br />--- sample.fvwmrc/new-system.fvwmrc.orig        Fri Apr 19 16:01:56 1996
+<br />
++++ sample.fvwmrc/new-system.fvwmrc    Fri Apr 19 16:04:20 1996
+<br />
+_at_&#64; -451,7 +451,7 &#64;&#64;
+<br />
+&nbsp;#
+<br />
+&nbsp;# Colors
+<br />
+&nbsp;*FvwmButtonsFore Black
+<br />
+-*FvwmButtonsBack #908090
+<br />
++*FvwmButtonsBack gray50
+<br />
+&nbsp;
+<br />
+&nbsp;# Font 
+<br />
+&nbsp;*FvwmButtonsFont	5x8
+<br />
+_at_&#64; -471,10 +471,10 &#64;&#64;
+<br />
+&nbsp;#*FvwmButtons (de)Iconify	eyenew.xpm	Iconify
+<br />
+&nbsp;#*FvwmButtons Restart eye2.xpm     Restart
+<br />
+&nbsp;#*FvwmButtons Xcalc   rcalc.xpm   Exec &quot;Calculator&quot; xcalc &amp;
+<br />
+-#*FvwmButtons junk   3dx.xpm     Swallow &quot;xload&quot;  xload -bg \#908090
+<br />
++#*FvwmButtons junk   3dx.xpm     Swallow &quot;xload&quot;  xload -bg gray50
+<br />
+&nbsp;#*FvwmButtons xmter x.xpm	     Swallow &quot;xmter&quot; xmter &amp;
+<br />
+-#*FvwmButtons &quot;&quot;  clock.xpm   Swallow &quot;xclock&quot; xclock -bg \#908090 -padding 0 &amp;
+<br />
+-#*FvwmButtons &quot;&quot; 3dx.xpm Swallow &quot;Time 3D&quot; t3d -fg \#908090 -mag .3 -wobber 0 &amp;
+<br />
++#*FvwmButtons &quot;&quot;  clock.xpm   Swallow &quot;xclock&quot; xclock -bg gray50 -padding 0 &amp;
+<br />
++#*FvwmButtons &quot;&quot; 3dx.xpm Swallow &quot;Time 3D&quot; t3d -fg gray50 -mag .3 -wobber 0 &amp;
+<br />
+&nbsp;
+<br />
+&nbsp;############################################################################
+<br />
+&nbsp;# FvwmIdent
+<br />
+_at_&#64; -501,7 +501,7 &#64;&#64;
+<br />
+&nbsp;############################################################################
+<br />
+&nbsp;# FvwmWinList
+<br />
+&nbsp;#
+<br />
+-*FvwmWinListBack #908090
+<br />
++*FvwmWinListBack gray50
+<br />
+&nbsp;*FvwmWinListFore Black
+<br />
+&nbsp;*FvwmWinListFont -adobe-helvetica-bold-r-*-*-10-*-*-*-*-*-*-*
+<br />
+&nbsp;*FvwmWinListAction Click1 Iconify -1,Focus
+<br />
+_at_&#64; -520,10 +520,10 &#64;&#64;
+<br />
+&nbsp;# FvwmIconBox
+<br />
+&nbsp;#
+<br />
+&nbsp;# NOTE: Icons will only be shown in module if Style &quot;??&quot; NoIcon is set
+<br />
+-*FvwmIconBoxIconBack    #cfcfcf
+<br />
++*FvwmIconBoxIconBack    gray80
+<br />
+&nbsp;*FvwmIconBoxIconHiFore  black
+<br />
+-*FvwmIconBoxIconHiBack  LightSkyBlue
+<br />
+-*FvwmIconBoxBack        #5f9ea0
+<br />
++*FvwmIconBoxIconHiBack  SkyBlue
+<br />
++*FvwmIconBoxBack        CadetBlue
+<br />
+&nbsp;#*FvwmIconBoxFore       blue
+<br />
+&nbsp;*FvwmIconBoxGeometry    5x1+0+0
+<br />
+&nbsp;*FvwmIconBoxMaxIconSize 64x38
+<br />
+<br />#! /bin/sh
+<br />
+# This is a shell archive.  Remove anything before this line, then unpack
+<br />
+# it by saving it into a file and typing &quot;sh file&quot;.  To overwrite existing
+<br />
+# files, type &quot;sh file -c&quot;.  You can also feed this as standard input via
+<br />
+# unshar, or by typing &quot;sh &lt;file&quot;, e.g..  If this archive is complete, you
+<br />
+# will see the following message at the end:
+<br />
+#		&quot;End of shell archive.&quot;
+<br />
+# Contents:  X11R4.sed
+<br />
+# Wrapped by martin_at_deejai on Fri Apr 19 16:05:08 1996
+<br />
+PATH=/bin:/usr/bin:/usr/ucb ; export PATH
+<br />
+if test -f 'X11R4.sed' -a &quot;${1}&quot; != &quot;-c&quot; ; then 
+<br />
+&nbsp;&nbsp;echo shar: Will not clobber existing file \&quot;'X11R4.sed'\&quot;
+<br />
+else
+<br />
+echo shar: Extracting \&quot;'X11R4.sed'\&quot; \(455 characters\)
+<br />
+sed &quot;s/^X//&quot; &gt;'X11R4.sed' &lt;&lt;'END_OF_FILE'
+<br />
+Xs:\\#40a0c0:SkyBlue:g
+<br />
+Xs:\\#484040:gray25:g
+<br />
+Xs:\\#554050:violet:g
+<br />
+Xs:\\#5f9ea0:CadetBlue:g
+<br />
+Xs:\\#705070:violet:g
+<br />
+Xs:\\#908090:gray50:g
+<br />
+Xs:\\#aa80aa:BlueViolet:g
+<br />
+Xs:\\#cab3ca:thistle:g
+<br />
+Xs:\\#cfcfcf:gray80:g
+<br />
+Xs:#40a0c0:SkyBlue:g
+<br />
+Xs:#484040:gray25:g
+<br />
+Xs:#554050:violet:g
+<br />
+Xs:#5f9ea0:CadetBlue:g
+<br />
+Xs:#705070:violet:g
+<br />
+Xs:#908090:gray50:g
+<br />
+Xs:#aa80aa:BlueViolet:g
+<br />
+Xs:#cab3ca:thistle:g
+<br />
+Xs:#cfcfcf:gray80:g
+<br />
+Xs:[Ll]ight[Ss]ky[Bb]lue:SkyBlue:g
+<br />
+Xs:[Pp]ale[Vv]iolet[Rr]ed:MediumVioletRed:g
+<br />
+END_OF_FILE
+<br />
+if test 455 -ne `wc -c &lt;'X11R4.sed'`; then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;echo shar: \&quot;'X11R4.sed'\&quot; unpacked with wrong size!
+<br />
+fi
+<br />
+# end of 'X11R4.sed'
+<br />
+fi
+<br />
+echo shar: End of shell archive.
+<br />
+exit 0
+<br />
+<pre>
+-- 
+| S I E M E N S |   Martin.Kraemer_at_mch.sni.de   |      Siemens Nixdorf
+| ------------- |   Voice: +49-89-636-46021     |  Informationssysteme AG
+| N I X D O R F |   FAX:   +49-89-636-44994     |   81730 Munich, Germany
+~~~~~~~~~~~~~~~~My opinions only, of course; pgp key available on request
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Apr 19 1996 - 09:09:54 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start16289">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="16290.html" title="Next message in the list">Martin Kraemer: "Re: FVWM: It isn&#0039;t working. :-)"</a></li>
+<li><dfn>Previous message</dfn>: <a href="16288.html" title="Previous message in the list">Romano Giannetti: "Re: FVWM: Two small bugs in fvwm-2.0.42"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="16297.html" title="Next message in this discussion thread">Martin Kraemer: "Re: FVWM: fvwm using &#0034;compatible&#0034; colors (addendum)"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="16297.html" title="Message sent in reply to this message">Martin Kraemer: "Re: FVWM: fvwm using &#0034;compatible&#0034; colors (addendum)"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16289" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16289" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16289" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16289" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

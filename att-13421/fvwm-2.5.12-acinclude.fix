@@ -1,0 +1,86 @@
+--- fvwm-2.5.12/acinclude.m4	2004-07-08 10:51:19.000000000 +0200
++++ /tmp/acinclude.m4	2004-10-28 16:02:07.118269000 +0200
+@@ -1324,6 +1324,29 @@
+ ])
+ 
+ #-----------------------------------------------------------------------------
++# Simple lexicographic version checking.
++AC_DEFUN([FC_LEXCMP_HELPER],[
++lexi_ge() {
++        t1=`echo "$1" | tr -c -d '0-9.'`
++        t2=`echo "$2" | tr -c -d '0-9.'`
++        until test "x$t1" = "x$t2" ; do
++                set x `echo "$t1" | sed -e 's/^\([[0-9]]*\)\.\(.*\)$/\1 \2/g'`
++                h1="$2"
++                t1="$3"
++                set x `echo "$t2" | sed -e 's/^\([[0-9]]*\)\.\(.*\)$/\1 \2/g'`
++                h2="$2"
++                t2="$3"
++                if test "$h1" -gt "$h2" ; then
++                        return 0
++                elif test "$h1" -lt "$h2" ; then
++                        return 1
++                fi      
++        done    
++        # returns the return status from the while loop in stubborn
++        # shells.
++}])
++
++#-----------------------------------------------------------------------------
+ # Configure paths for xft 2
+ # Marcelo Magallon 2001-10-26, based on gtk.m4 by Owen Taylor
+ # modified by olicha for xft
+@@ -1382,37 +1405,14 @@
+     no_xft=yes
+   fi
+ else
++FC_LEXCMP_HELPER
+   XFT_CFLAGS=`$XFT_CONFIG $xft_config_args --cflags`
+   XFT_LIBS=`$XFT_CONFIG $xft_config_args --libs`
+-  xft_config_major_version=`$XFT_CONFIG $xft_config_args --version | \
+-         sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`
+-  xft_config_minor_version=`$XFT_CONFIG $xft_config_args --version | \
+-         sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\2/'`
+-  xft_config_micro_version=`$XFT_CONFIG $xft_config_args --version | \
+-         sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\3/'`
+-  xft_min_major_version=`echo $min_xft_version | \
+-         sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`
+-  xft_min_minor_version=`echo $min_xft_version | \
+-         sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\2/'`
+-  xft_min_micro_version=`echo $min_xft_version | \
+-         sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\3/'`
+   xft_config_is_lt=no
+-  if test $xft_config_major_version -lt $xft_min_major_version ; then
+-    xft_config_is_lt=yes
++  xft_config_version=`$XFT_CONFIG $xft_config_args --version`
++  if lexi_ge "$xft_config_version" "$xft_min_micro_version" ; then
++  	:
+   else
+-    if test $xft_config_major_version -eq $xft_min_major_version ; then
+-      if test $xft_config_minor_version -lt $xft_min_minor_version ; then
+-        xft_config_is_lt=yes
+-      else
+-        if test $xft_config_minor_version -eq $xft_min_minor_version ; then
+-          if test $xft_config_micro_version -lt $xft_min_micro_version ; then
+-            xft_config_is_lt=yes
+-          fi
+-        fi
+-      fi
+-    fi
+-  fi
+-  if test "x$xft_config_is_lt" = "xyes" ; then
+     ifelse([$3], , :, [$3])
+   fi
+ fi
+--- fvwm-2.5.12/configure.in.orig	2004-10-06 02:42:02.000000000 +0200
++++ fvwm-2.5.12/configure.in	2004-10-28 16:17:11.025296695 +0200
+@@ -397,7 +397,7 @@
+   with_xft=no
+   if test x"$have_fontconfig" != xno ; then
+     # Xft 2
+-    AM_CHECK_XFT(2.0.0)
++    AM_CHECK_XFT(2)
+     if test x"$no_xft" = x; then
+       with_xft=yes
+       problem_xft=" (version 2)"
+

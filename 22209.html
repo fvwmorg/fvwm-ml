@@ -1,0 +1,1111 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: NUTS! Can't get rsh working. from Brad Giaccio on 1998-05-14 (fvwm-users)</title>
+<meta name="Author" content="Brad Giaccio (bgiaccio_at_psrw.com)" />
+<meta name="Subject" content="Re: FVWM: NUTS! Can't get rsh working." />
+<meta name="Date" content="1998-05-14" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: NUTS! Can't get rsh working.</h1>
+<!-- received="Thu May 14 06:33:28 1998" -->
+<!-- isoreceived="19980514053328" -->
+<!-- sent="Thu, 14 May 1998 07:32:55 -0400 (EDT)" -->
+<!-- isosent="19980514113255" -->
+<!-- name="Brad Giaccio" -->
+<!-- email="bgiaccio_at_psrw.com" -->
+<!-- subject="Re: FVWM: NUTS! Can't get rsh working." -->
+<!-- id="Pine.SOL.3.96.980514072423.28702B-200000_at_finnegan" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="Pine.SOL.3.95.980514020637.29685A-100000_at_wizard" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start22209" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="22210.html" accesskey="d" title="Maxwell Spangler: &quot;Re: FVWM: NUTS! Can&#0039;t get rsh working.&quot;">Next message</a> ]
+[ <a href="22208.html" title="Pierre-Jean Turpeau: &quot;FVWM: FvwmPipe&quot;">Previous message</a> ]
+[ <a href="22206.html" title="Guangyong Xu: &quot;Re: FVWM: NUTS! Can&#0039;t get rsh working.&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="22210.html" accesskey="t" title="Maxwell Spangler: &quot;Re: FVWM: NUTS! Can&#0039;t get rsh working.&quot;">Next in thread</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg22209" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg22209" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg22209" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg22209" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Brad Giaccio &lt;<a href="mailto:bgiaccio_at_psrw.com?Subject=Re%3A%20FVWM%3A%20NUTS!%20Can't%20get%20rsh%20working.">bgiaccio_at_psrw.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 14 May 1998 07:32:55 -0400 (EDT)</span><br />
+</address>
+<br />
+Well I can see the benifit in running it that way.  For example I work on
+<br />
+a sparc 2 and it takes a good 15 seconds to pop up a xterm on my machine,
+<br />
+but only takes 2 seconds to get the xterm up and give me a shell prompt on
+<br />
+one of the ultras in my subnet.
+<br />
+<br />Now to answer your Maxwell's question the problem is that your quotes are
+<br />
+getting stripped off well before they are supposed to be.  The solution I
+<br />
+came up with is to use xrsh.  Which is a script that I picked up somewhere
+<br />
+along the way and that used to be distributed with X11R3 and R4.  The way
+<br />
+you use it is simple
+<br />
+<br />xrsh machine 
+<br />
+or xrsh machine xcpustate 
+<br />
+or xrsh -l &lt;username&gt; machine &lt;any xapp and args&gt;
+<br />
+the only problem with it is you need to have a .rhosts file on the
+<br />
+destination machine because the script pipes all output to /dev/null
+<br />
+<br />so in fvwm I have
+<br />
+Exec xrsh &lt;machine&gt;
+<br />
+<br />so I'll attach the script and you can use it as you like.
+<br />
+<br />Brad
+<br />
+<br /><br />On Thu, 14 May 1998, Guangyong Xu wrote:
+<br />
+<br /><em class="quotelev1">&gt; That does seem odd. I don't know why you could execute it successfully 
+</em><br />
+<em class="quotelev1">&gt; from command line but not in your .fvwm2rc file. When it freezes your
+</em><br />
+<em class="quotelev1">&gt; display, I don't think killing the rsh process will help. You may have 
+</em><br />
+<em class="quotelev1">&gt; to go to the machine 'toronto' and kill the 'xterm' process you
+</em><br />
+<em class="quotelev1">&gt; started there. 
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; What I don't understand is, why are you running xterm
+</em><br />
+<em class="quotelev1">&gt; on a remote system and displaying it to your local display? It would be
+</em><br />
+<em class="quotelev1">&gt; much simpler and faster to do something like:
+</em><br />
+<em class="quotelev1">&gt; 	xterm -e &quot;ssh -l maxwell toronto&quot; in your .fvwm2rc file.
+</em><br />
+<em class="quotelev1">&gt; Unless you don't have xterm installed on your local LINUX system, I
+</em><br />
+<em class="quotelev1">&gt; really don't see the advantage in running one remotely. This is not a
+</em><br />
+<em class="quotelev1">&gt; solution to your problem, just an alternative. And I think 'ssh' is much
+</em><br />
+<em class="quotelev1">&gt; better to use in you case since it uses the secure X channel and sets 
+</em><br />
+<em class="quotelev1">&gt; your display automatically for you, and 'rsh' is actually something that
+</em><br />
+<em class="quotelev1">&gt; should not be used any more. 
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; -G.Xu
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; On Thu, 14 May 1998, Maxwell Spangler wrote:
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev2">&gt; &gt; I'm on Linux, with, I believe, Fvwm2 2.0.45/46, and I can't get the most
+</em><br />
+<em class="quotelev2">&gt; &gt; basic UNIX networking applet to run:
+</em><br />
+<em class="quotelev2">&gt; &gt; 
+</em><br />
+<em class="quotelev2">&gt; &gt; I start X, start an xterm inside Fvwm2 and then execute manualy:
+</em><br />
+<em class="quotelev2">&gt; &gt; 
+</em><br />
+<em class="quotelev2">&gt; &gt; rsh -l maxwell toronto &quot;/usr/bin/X11/xterm -display maxwax:0.0&quot;
+</em><br />
+<em class="quotelev2">&gt; &gt; 
+</em><br />
+<em class="quotelev2">&gt; &gt; When run on system 'maxwax' It should: 
+</em><br />
+<em class="quotelev2">&gt; &gt;   execute rsh,
+</em><br />
+<em class="quotelev2">&gt; &gt;     rsh connects to toronto as user maxwell
+</em><br />
+<em class="quotelev2">&gt; &gt;     run /usr/bin/X1/xterm on toronto
+</em><br />
+<em class="quotelev2">&gt; &gt;     display a new xterm window on system maxwax's display.
+</em><br />
+<em class="quotelev2">&gt; &gt; 
+</em><br />
+<em class="quotelev2">&gt; &gt; This works fine, but when I attempt to place the same command within my
+</em><br />
+<em class="quotelev2">&gt; &gt; .fvwm2rc file, it hangs when I execute it.
+</em><br />
+<em class="quotelev2">&gt; &gt; 
+</em><br />
+<em class="quotelev2">&gt; &gt; Switching to another virtual console and performing a 'ps' shows two rsh
+</em><br />
+<em class="quotelev2">&gt; &gt; processes sitting there.  Killing them doesn't do anything, I have to kill
+</em><br />
+<em class="quotelev2">&gt; &gt; X or ALT-backspace to shut X down and restart.
+</em><br />
+<em class="quotelev2">&gt; &gt; 
+</em><br />
+<em class="quotelev2">&gt; &gt; What am I missing here?  I'm performing the same function on my SCO OS504
+</em><br />
+<em class="quotelev2">&gt; &gt; system at work with it's rcmd instead of 'rsh'--basically the same
+</em><br />
+<em class="quotelev2">&gt; &gt; thing--without any problems.
+</em><br />
+<em class="quotelev2">&gt; &gt; 
+</em><br />
+<em class="quotelev2">&gt; &gt; ANY suggestions greatly appreciated!
+</em><br />
+<em class="quotelev2">&gt; &gt; 
+</em><br />
+<em class="quotelev2">&gt; &gt; -----------------------------------------------------------------------------
+</em><br />
+<em class="quotelev2">&gt; &gt; Maxwell Spangler, Software Developer, Greenbelt, Maryland, USA!SouthparkKCKSAS!
+</em><br />
+<em class="quotelev2">&gt; &gt; 
+</em><br />
+<em class="quotelev2">&gt; &gt; --
+</em><br />
+<em class="quotelev2">&gt; &gt; Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+</em><br />
+<em class="quotelev2">&gt; &gt; To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+</em><br />
+<em class="quotelev2">&gt; &gt; message to majordomo_at_hpc.uh.edu.
+</em><br />
+<em class="quotelev2">&gt; &gt; To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</em><br />
+<em class="quotelev2">&gt; &gt; 
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; --
+</em><br />
+<em class="quotelev1">&gt; Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+</em><br />
+<em class="quotelev1">&gt; To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+</em><br />
+<em class="quotelev1">&gt; message to majordomo_at_hpc.uh.edu.
+</em><br />
+<em class="quotelev1">&gt; To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<br />--- There are two kinds of knowledge, you either know the answer or
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;you know where to find it
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-Kane, Johnson, and anonymous
+<br />
+<br /><br />
+#!/bin/sh
+<br />
+
+<br />
+# Some System V systems don't understand the #! construct.  
+<br />
+#   If your system does understand it, put &quot;: &quot; at the beginning of the line.
+<br />
+#
+<br />
+XRSH_VER='xrsh version 5.8'
+<br />
+XRSH_RCS='$Header: /usr/u/jjd/xrsh/RCS/xrsh.sh,v 1.12 1994/06/13 15:53:11 jjd Exp $'
+<br />
+XRSH_TIME='Time-stamp: &lt;94/06/13 11:43:59 jjd&gt;'
+<br />
+#
+<br />
+# Copyright 1991 by James J. Dempsey &lt;jjd_at_bbn&#46;<!--nospam-->com&gt;
+<br />
+# 
+<br />
+# Permission to use, copy, modify, distribute, and sell this software and its
+<br />
+# documentation for any purpose is hereby granted without fee, provided that
+<br />
+# the above copyright notice appear in all copies and that both that
+<br />
+# copyright notice and this permission notice appear in supporting
+<br />
+# documentation, James J. Dempsey makes no representations about the
+<br />
+# suitability of this software for any purpose.  It is provided &quot;as is&quot;
+<br />
+# without express or implied warranty.
+<br />
+#
+<br />
+#
+<br />
+# xrsh:  start an X11 client on another host
+<br />
+#
+<br />
+# Usage: xrsh [-help] [-version ] [-l username] [-auth authtype] [-screen #] [-pass envlist] \
+<br />
+#	[-debug] [-debug2] hostname [X-command [arguments...]]
+<br />
+#
+<br />
+# Example usage: xrsh expo.lcs.mit.edu xterm
+<br />
+#
+<br />
+# Runs the given command on another host with $DISPLAY set in the environment.
+<br />
+#    Handles authentication using xhost, xauth, or $XAUTHORITY (or none).
+<br />
+#    Xrsh is very careful not to leave any extra processes waiting
+<br />
+#       around on either machine for the client to exit.  In order
+<br />
+#       to achieve this, csh is used on the remote host and all inputs
+<br />
+#       and outputs are redirected to /dev/null.
+<br />
+#    The -debug switch allows you to see errors, but doesn't worry about
+<br />
+#       leaving extra processes around.
+<br />
+#    The -debug2 switch sets -x so that you can see every command
+<br />
+#       executed by the script  (very verbose)
+<br />
+#    The -l switch allows you to use a different login name on the
+<br />
+#       remote host.  -l and its argument are passed directly to rsh.
+<br />
+#    The -help switch prints out the usage message.
+<br />
+#    The -screen switch allows you to start a client on a different screen.
+<br />
+#    If no X command is given, it defaults to xterm.  This means that
+<br />
+#         'xrsh remotehost' will start an xterm on remotehost.
+<br />
+#    If the given command is a path that ends in &quot;xterm&quot;, it adds the 
+<br />
+#        arguments &quot;-name xterm-$hostname&quot; where $hostname is the name
+<br />
+#        of the remote host.  This allows you to customize your server's
+<br />
+#        xrdb database to set attributes, such as the window color, based 
+<br />
+#        on the name of remote host.  If you dislike this behaviour, specify
+<br />
+#        your own -name argument to xterm on the xrsh command line.
+<br />
+#
+<br />
+#    Xrsh handles authentication based on the value of $XRSH_AUTH_TYPE or
+<br />
+#        the value of the -auth command line switch.  The value can
+<br />
+#        be xhost, xauth, environment or none.  It defaults to xhost.
+<br />
+#             xhost -- run xhost to enable the remote host to open window
+<br />
+#                      run xhost on the host where the server is running
+<br />
+#             xhost-xterminal -- 
+<br />
+#                      run xhost to enable the remote host to open windows
+<br />
+#                      run xhost on the host where xrsh was first run
+<br />
+#             xauth -- merge the auth entry from this host on the remote
+<br />
+#                        host using xauth via rsh
+<br />
+#             environment -- pass the $XAUTHORITY environment variable from the
+<br />
+#                       local host to the remote host so that a common
+<br />
+#                       NFS accessable authority file can be used everywhere
+<br />
+#             none -- do nothing.  Assume the user has handled authentication.
+<br />
+#
+<br />
+#    If the environment variable XRSH_RSH_ERRORS is set to the name of a file, 
+<br />
+#        any rsh errors will appear in that file on the remote host.
+<br />
+#        If that variable is unset, error messages will be thrown away unless
+<br />
+#        the -debug switch is given. (Note: don't use ~ in the filename
+<br />
+#        because it will expand to ~ on the local host, but try to put the
+<br />
+#        errors in that file on the remote host.)    
+<br />
+#
+<br />
+#
+<br />
+#  COMMON PROBLEMS:
+<br />
+#     * Make sure your PATH environment variable on the remote host is
+<br />
+#           set in your .cshrc or .bashrc so that rsh programs have
+<br />
+#           access to it.  (/bin/sh and /bin/ksh users have a hard time
+<br />
+#           time here since their shells don't execute any init files
+<br />
+#           under rsh.  One way to do this is to use the XRSH_ENVS_TO_PASS
+<br />
+#           environment variable to pass PATH to the remote shell.
+<br />
+#           Optionally, you can type a full path to xrsh.
+<br />
+#           E.g.  xrsh remote-host /usr/bin/X11/xterm
+<br />
+#
+<br />
+#     * Make sure your PATH environment variable on the remote host
+<br />
+#           includes the directory containing the X programs.  This is 
+<br />
+#           often /usr/bin/X11 or /usr/local/bin/X11.
+<br />
+#     * Make sure you have rsh configured to work on the remote host.
+<br />
+#           You can test this by typing:  rsh remote-host echo '$PATH'
+<br />
+#           This will prove that rsh works and show you the PATH that
+<br />
+#           will be used on the remote host.  If you get &quot;Permission 
+<br />
+#           denied.&quot; you probably need to update your ~/.rhosts file
+<br />
+#           on the remote host.  See rlogin(1).
+<br />
+#
+<br />
+# Until X11R5, this command used to be called &quot;xon&quot;.  The name was
+<br />
+# changed in order to be more descriptive, to have a name that better
+<br />
+# matches its cousin (xrlogin) and to not collide with a similar command
+<br />
+# written by Keith Packard distributed with X11R5.
+<br />
+#
+<br />
+# ACQUIRING XRSH:
+<br />
+#
+<br />
+# Check for new versions of xrsh via anonymous ftp to ftp.x.org under the 
+<br />
+# contrib subdirectory.  Always do this before reporting a bug to see if 
+<br />
+# the bug has already been fixed.
+<br />
+#
+<br />
+# Written by Jim Dempsey &lt;jjd_at_bbn.com&gt; with help from Stephen Gildea
+<br />
+#   &lt;gildea_at_bbn&#46;<!--nospam-->com&gt; based on an idea by Dave Mankins &lt;dm_at_think&#46;<!--nospam-->com&gt;.
+<br />
+# Some additional features due to dgreen_at_cs&#46;<!--nospam-->ucla.edu,
+<br />
+#   &quot;David B. Rosen&quot; &lt;rosen_at_park&#46;<!--nospam-->bu.edu&gt;, Eero Simoncelli 
+<br />
+#    &lt;eero_at_whitechapel.media.mit.edu&gt; and  Martin Friedmann 
+<br />
+#    &lt;martin_at_whitechapel.media.mit.edu&gt;
+<br />
+#   Originally written around 1987.
+<br />
+#   Last modification by jjd_at_bbn.com.
+<br />
+#   Version 5.1 of xrsh was distributed with X11R5.
+<br />
+
+<br />
+
+<br />
+# initialize some variables
+<br />
+
+<br />
+default_auth_type=xhost   # sites might want to change this
+<br />
+authenv=
+<br />
+foundarg=
+<br />
+progname=`basename $0`
+<br />
+rshoptions=&quot;&quot;
+<br />
+passenvs=                # environment variables to pass along
+<br />
+xhostvar=                # used by auth type xhost-xterminal
+<br />
+usage=&quot;usage: $progname [-help] [-version] [-l username] [-auth authtype] [-screen #] [-debug] [-debug2] host [cmd [args ...]]&quot;
+<br />
+
+<br />
+if [ -z &quot;$DISPLAY&quot; ]; then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;$progname: &quot;'$DISPLAY must be set' 1&gt;&amp;2 ;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;exit 1
+<br />
+fi
+<br />
+
+<br />
+if [ -z &quot;$XRSH_RSH_ERRORS&quot; ]; then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;XRSH_RSH_ERRORS=/dev/null
+<br />
+fi
+<br />
+
+<br />
+# process command line arguments
+<br />
+until [ &quot;$foundarg&quot; = &quot;no&quot; ]
+<br />
+do
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;foundarg=no
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;case $1 in
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-version)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;Version: ${XRSH_VER}&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;RCS info: ${XRSH_RCS}&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;Last saved: ${XRSH_TIME}&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit 0
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-debug)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;debug=t; foundarg=yes; shift;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-debug2)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;set -x; foundarg=yes; shift; 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-help)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo $usage; exit 0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-l)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;shift; rshoptions=&quot;-l $1&quot;; foundarg=yes; shift;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-auth)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;shift; XRSH_AUTH_TYPE=$1; foundarg=yes; shift;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-pass)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;shift; XRSH_ENVS_TO_PASS=$1; foundarg=yes; shift;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-screen)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;shift; 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# this line was blatantly stolen from Keith Packard's xon
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DISPLAY=`echo $DISPLAY|sed 's/:\\([0-9][0-9]*\\)\\.[0-9]/:\1/'`.$1
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;foundarg=yes;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;shift;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;esac
+<br />
+done
+<br />
+
+<br />
+if [ &quot;$#&quot; = &quot;0&quot; ]; then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;echo $usage 1&gt;&amp;2; exit 1;
+<br />
+fi
+<br />
+
+<br />
+clienthost=&quot;$1&quot;; shift      # The full remote host name (as full as possible)
+<br />
+
+<br />
+command=$1
+<br />
+if [ -z &quot;$command&quot; ]; then  # default command to xterm if none specified
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;command=xterm
+<br />
+else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;shift
+<br />
+fi
+<br />
+
+<br />
+# Grab the arguments to the command here so that we don't have to worry
+<br />
+# about restoring them when doing IFS hacking below
+<br />
+xcmdargs=&quot;$_at_&quot;
+<br />
+
+<br />
+# Try to avoid running hostname.  
+<br />
+# Some shells set $HOST or $HOSTNAME automatically.
+<br />
+localhost=${HOST-${HOSTNAME-`hostname`}}           # The local host name
+<br />
+
+<br />
+# Remove domain part from hostname.
+<br />
+
+<br />
+# The following paragraph of IFS based code replaces sed and 
+<br />
+#    runs faster because it doesn't fork.
+<br />
+#       clientshort is remote host name without domain
+<br />
+#clientshort=`echo $clienthost | sed -e 's/\..*$//'` 
+<br />
+oldIFS=$IFS
+<br />
+IFS=.
+<br />
+set  $clienthost
+<br />
+clientshort=$1
+<br />
+IFS=$oldIFS
+<br />
+
+<br />
+# Find display host
+<br />
+
+<br />
+# The following paragraph of IFS based code replaces sed and 
+<br />
+#    runs faster because it doesn't fork.
+<br />
+#displayhost=`echo $DISPLAY | sed 's/:.*//'`
+<br />
+oldIFS=$IFS
+<br />
+IFS=:
+<br />
+set  $DISPLAY
+<br />
+case &quot;$#&quot; in
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;1) displayhost=$localhost;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;*) displayhost=$1;;
+<br />
+esac
+<br />
+IFS=$oldIFS
+<br />
+
+<br />
+case &quot;$displayhost&quot; in
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;unix&quot;|&quot;local&quot;|&quot;&quot;)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;displayhost=$localhost;;
+<br />
+esac
+<br />
+
+<br />
+# People use the -name resource to specify host-specific resources
+<br />
+# such as window color.
+<br />
+if [ `basename &quot;$command&quot;` = &quot;xterm&quot; ]; then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;command=&quot;$command -ls -sb -sl 3000 -name $clientshort -title '$clientshort'&quot;
+<br />
+fi
+<br />
+if [ $# -ge 1 ]; then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;command=&quot;$command $xcmdargs&quot;
+<br />
+fi
+<br />
+
+<br />
+# Some System V hosts have rsh as &quot;restricted shell&quot; and ucb rsh is remsh
+<br />
+if [ -r /usr/bin/remsh ]; then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;rsh=remsh
+<br />
+elif [ -f /usr/bin/rcmd ]; then       # SCO Unix uses &quot;rcmd&quot; instead of rsh
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;rsh=rcmd
+<br />
+else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;rsh=rsh
+<br />
+fi
+<br />
+
+<br />
+# Construct the new $DISPLAY for the remote client
+<br />
+
+<br />
+# The following paragraph of IFS based code replaces sed and 
+<br />
+#    runs faster because it doesn't fork.  It also handles the arp stuff.
+<br />
+# newdisplay=&quot;`echo $DISPLAY | sed \&quot;s/^[^:]*:/${localhost}:/\&quot;`&quot;
+<br />
+oldIFS=$IFS
+<br />
+IFS=:
+<br />
+set  $DISPLAY
+<br />
+if [ $# = 2 ]; then 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;shift
+<br />
+fi
+<br />
+case &quot;$clienthost&quot; in
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;# If the remote host is the localhost, then don't put the hostname
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;#  in $DISPLAY and let X find the fastest display path
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;$displayhost&quot;)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;newdisplay=:$_at_
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;# if a full internet domain name is used, set $DISPLAY
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;# using IP address so remote host will be guaranteed return path
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;*.*)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if [ -f /usr/etc/arp ]; then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;arp=/usr/etc/arp
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;elif [ -f /etc/arp ] ; then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;arp=/etc/arp
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;arp=arp
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fi
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;address=`$arp $displayhost |tr ')' '(' | awk  -F'(' '{print $2}'`
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if [ &quot;$address&quot; ]; then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;newdisplay=&quot;$address:$&#64;&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;newdisplay=&quot;${displayhost}:$&#64;&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fi
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;; 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;# A host in the local domain
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;*)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;newdisplay=&quot;${displayhost}:$_at_&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;
+<br />
+esac
+<br />
+IFS=$oldIFS
+<br />
+
+<br />
+# process env variables to pass early so that we can send them 
+<br />
+# in the xauth commands as well as the actual X client rsh command.
+<br />
+# This is necessary for brain-dead shells like ksh which don't run
+<br />
+# any init files to set the path properly.  The user can instead
+<br />
+# send PATH as an XRSH_ENVS_TO_PASS.
+<br />
+for variable in $XRSH_ENVS_TO_PASS
+<br />
+do
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if eval [ \&quot;&quot;\${$variable-Xyzzy}&quot;\&quot; != &quot;Xyzzy&quot; ]; then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eval passenvs=&quot;\&quot;setenv $variable '\$$variable'; $passenvs&quot;\&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;fi
+<br />
+done
+<br />
+
+<br />
+
+<br />
+
+<br />
+# Use $XRSH_AUTH_TYPE to determine whether to run xhost, xauth, 
+<br />
+# propagate $XAUTHORITY to the remote host, or do nothing
+<br />
+case ${XRSH_AUTH_TYPE-$default_auth_type} in
+<br />
+&nbsp;&nbsp;xhost)      
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if [ &quot;$newdisplay&quot; != &quot;$DISPLAY&quot; ]; then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# If run on the same host as server, allow remote host access X server.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if [ &quot;$debug&quot; ]; then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xhost +_at_$clienthost
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xhost +$clienthost &gt; /dev/null 2&gt;&amp;1
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fi
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# If run on a different host as the server, use rsh to allow
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#    access to the host in DISPLAY.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xhostcmd=&quot;setenv DISPLAY $DISPLAY; exec xhost +$clienthost&quot;
+<br />
+
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if [ &quot;$debug&quot; ]; then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# send $passenvs in case the user has a brain dead remote shell
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# and needs to be able to pass the PATH env var (e.g. ksh)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;Executing \&quot;xhost +$clienthost\&quot; on $displayhost with DISPLAY=$DISPLAY&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$rsh &quot;$displayhost&quot;  exec /bin/csh -cf &quot;\&quot;$passenvs $xhostcmd\&quot;&quot; &lt; /dev/null
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$rsh &quot;$displayhost&quot;  exec /bin/csh -cf &quot;\&quot;$passenvs $xhostcmd &lt; /dev/null &gt;&amp; /dev/null\&quot;&quot; &lt; /dev/null &gt; /dev/null 2&gt;&amp;1
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fi
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fi
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;
+<br />
+&nbsp;&nbsp;xhost-xterminal)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# If run on an X terminal, rsh to the XDMCP host to run xhost
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# if this is the first time, we are on the XDMCP host and 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# we can just run xhost.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if [ &quot;$XHOST&quot; = &quot;&quot; ]; then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xhostvar=&quot;setenv XHOST $localhost; &quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if [ &quot;$debug&quot; ]; then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xhost +$clienthost
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xhost +$clienthost &gt; /dev/null 2&gt;&amp;1 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fi
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xhostvar=&quot;setenv XHOST $XHOST; &quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xhostcmd=&quot;setenv DISPLAY $DISPLAY; exec xhost +$clienthost&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# send $passenvs in case the user has a brain dead remote shell
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# and needs to be able to pass the PATH env var (e.g. ksh)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if [ &quot;$debug&quot; ]; then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;Executing \&quot;xhost +$clienthost\&quot; on $XHOST with DISPLAY=$DISPLAY&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$rsh &quot;$XHOST&quot;  exec /bin/csh -cf &quot;\&quot;$passenvs $xhostcmd\&quot;&quot; &lt; /dev/null
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$rsh &quot;$XHOST&quot;  exec /bin/csh -cf &quot;\&quot;$passenvs $xhostcmd &lt; /dev/null &gt;&amp; /dev/null\&quot;&quot; &gt; /dev/null &lt; /dev/null 2&gt;&amp;1
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fi
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fi
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;
+<br />
+&nbsp;&nbsp;xauth)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# the &quot;xauth remove&quot; is theoretically unnecessary below,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# but due to a bug in the initial X11R5 (fixed in fix-09) xauth,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# entries for MIT-MAGIC-COOKIE-1 get lost if
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# you do merge twice without the remove.  The remove
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# command can be removed when xauth gets fixed.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if [ &quot;$debug&quot; ]; then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xauth extract - $newdisplay | \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$rsh $clienthost $rshoptions exec /bin/csh -cf &quot;\&quot;$passenvs xauth remove $newdisplay ; xauth merge -\&quot;&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Conditionalize this on $passenvs so that we don't pay the price
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# of forking a csh on the remote host if we don't need environment
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# variables evaluated.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if [ &quot;$passenvs&quot; ]; then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xauth extract - $newdisplay | \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$rsh $clienthost $rshoptions exec /bin/csh -cf &quot;\&quot;$passenvs xauth remove $newdisplay ; xauth merge -\&quot;&quot; &gt;/dev/null 2&gt;&amp;1
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xauth extract - $newdisplay | \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$rsh $clienthost $rshoptions xauth remove $newdisplay \;xauth merge - &gt;/dev/null 2&gt;&amp;1
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fi
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fi
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;
+<br />
+&nbsp;&nbsp;none)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;
+<br />
+&nbsp;&nbsp;environment)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;authenv=&quot;setenv XAUTHORITY $XAUTHORITY; &quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;
+<br />
+&nbsp;&nbsp;*)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo -n &quot;$progname: &quot;'$XRSH_AUTH_TYPE must be set to &quot;xhost&quot;, ' 1&gt;&amp;2
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo '&quot;xhost-xterminal&quot;, &quot;xauth&quot;, &quot;environment&quot; or left unset' 1&gt;&amp;2
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit 1
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;
+<br />
+esac
+<br />
+
+<br />
+
+<br />
+# Do the real work using rsh.
+<br />
+# Don't use -n to rsh because SG IRIX doesn't support it.  
+<br />
+# Use &lt; /dev/null instead.
+<br />
+if [ &quot;$debug&quot; ]; then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;Executing \&quot;$command\&quot; on $clienthost with DISPLAY=$newdisplay&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;$rsh $clienthost $rshoptions /bin/csh -cf &quot;\&quot;setenv DISPLAY $newdisplay; $authenv $xhostvar $passenvs $command\&quot;&quot; &lt; /dev/null
+<br />
+else
+<br />
+#
+<br />
+# The redirection inside the innermost quotes is done by csh.  The outer
+<br />
+# redirection is done by whatever shell the user uses on the remote end.
+<br />
+# The inner redirection is necessary for an error log -- the outer 
+<br />
+# redirection is necessary to make sure that the local rsh doesn't hang around.
+<br />
+#
+<br />
+# The outermost &lt; /dev/null is to simulate the -n argument to rsh which 
+<br />
+# we don't want to use for portability reasons.
+<br />
+#
+<br />
+# The three sets of redirections are for the local shell, the login shell
+<br />
+# on the remote host and the csh on the remote host.
+<br />
+#
+<br />
+# We would like the last '&gt;' to be '&gt;&amp;' or equivalent, but that would make this
+<br />
+# code dependent on what flavor of shell the user uses on the remote host
+<br />
+#
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;exec $rsh  $clienthost $rshoptions exec /bin/csh -cf &quot;\&quot;setenv DISPLAY $newdisplay; $authenv $xhostvar $passenvs exec $command &lt; /dev/null &gt;&gt;&amp; $XRSH_RSH_ERRORS \&quot; &lt; /dev/null &gt; /dev/null &quot; &lt; /dev/null 
+<br />
+
+<br />
+fi
+<br />
+
+<br />
+
+<br />
+
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu May 14 1998 - 06:33:28 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start22209">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="22210.html" title="Next message in the list">Maxwell Spangler: "Re: FVWM: NUTS! Can&#0039;t get rsh working."</a></li>
+<li><dfn>Previous message</dfn>: <a href="22208.html" title="Previous message in the list">Pierre-Jean Turpeau: "FVWM: FvwmPipe"</a></li>
+<li><dfn>In reply to</dfn>: <a href="22206.html" title="Message to which this message replies">Guangyong Xu: "Re: FVWM: NUTS! Can&#0039;t get rsh working."</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="22210.html" title="Next message in this discussion thread">Maxwell Spangler: "Re: FVWM: NUTS! Can&#0039;t get rsh working."</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg22209" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg22209" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg22209" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg22209" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

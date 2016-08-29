@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Re: pl36 ready, willing, and able from Thanh Ma on 1995-10-04 (fvwm-users)</title>
+<meta name="Author" content="Thanh Ma (tma_at_encore.com)" />
+<meta name="Subject" content="FVWM: Re: pl36 ready, willing, and able" />
+<meta name="Date" content="1995-10-04" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Re: pl36 ready, willing, and able</h1>
+<!-- received="Wed Oct  4 15:39:21 1995" -->
+<!-- isoreceived="19951004143921" -->
+<!-- sent="Wed, 4 Oct 1995 16:40:13 -0400 (EDT)" -->
+<!-- isosent="19951004204013" -->
+<!-- name="Thanh Ma" -->
+<!-- email="tma_at_encore.com" -->
+<!-- subject="FVWM: Re: pl36 ready, willing, and able" -->
+<!-- id="267379.9510042040_at_dino" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="9510032041.AA25919_at_loki.pok.ibm.com" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start14385" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="14386.html" accesskey="d" title="Charles Hines: &quot;Re: FVWM: Swallow?&quot;">Next message</a> ]
+[ <a href="14384.html" title="Mark Borges: &quot;FVWM: 2.0pl36 not ready for prime time&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg14385" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg14385" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg14385" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg14385" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Thanh Ma &lt;<a href="mailto:tma_at_encore.com?Subject=Re%3A%20FVWM%3A%20Re%3A%20pl36%20ready%2C%20willing%2C%20and%20able">tma_at_encore.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 4 Oct 1995 16:40:13 -0400 (EDT)</span><br />
+</address>
+<br />
+Hi,
+<br />
+<br />1) I prefer a shorter filename like: fvwm-2.0b-pl36.tar.gz
+<br />
+2) Trying to compile it under UnixWare 2.0 and got the below warnings
+<br />
+&nbsp;&nbsp;&nbsp;wherever MWMBorders is referenced:
+<br />
+UX:acomp: WARNING: &quot;borders.c&quot;, line ... : integer overflow detected: op &quot;&lt;&lt;&quot;
+<br />
+<br />&nbsp;&nbsp;&nbsp;I changed fvwm.h from:
+<br />
+#define MWMBorders              (1&lt;&lt;31)
+<br />
+&nbsp;&nbsp;&nbsp;to
+<br />
+#define MWMBorders              ((unsigned int)1&lt;&lt;31)
+<br />
+<br />to get rig of the warmings.
+<br />
+<br />3) gethostbyname is used by FvwmCpp and FvwmM4. The Imakefiles however
+<br />
+&nbsp;&nbsp;&nbsp;do not have -lsocket defined. So I added:
+<br />
+LOCAL_LIBRARIES = $(XLIB) -L../../libs -lfvwmlib     -lsocket
+<br />
+<br />4) FvwmButtons.c: line 459 (return;). Would this statement ever be reachable ?
+<br />
+5) FvwmGrabWindow.c: line 631 (return;). Would this statement ever be reachable ?
+<br />
+6) FvwmTalk/FvwmTalk.c: line 446: changed
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;nitems, &amp;bytes_aft
+<br />
+&nbsp;&nbsp;&nbsp;to:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(unsigned long *) &amp;nitems, (unsigned long *) &amp;bytes_aft
+<br />
+<br />Now, if we could remove the 'return' from 4) and 5). Then I have 100% clean
+<br />
+compilation. That is NO WARNINGS.
+<br />
+<br />Thanh Ma
+<br />
+tma_at_encore.com
+<br />
+<pre>
+--
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Oct 04 1995 - 15:39:21 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start14385">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="14386.html" title="Next message in the list">Charles Hines: "Re: FVWM: Swallow?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="14384.html" title="Previous message in the list">Mark Borges: "FVWM: 2.0pl36 not ready for prime time"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg14385" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg14385" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg14385" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg14385" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:57 BST
+</em></small></p>
+</body>
+</html>

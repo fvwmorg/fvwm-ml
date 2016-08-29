@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Re: For your approval...pl37 from matusita_at_ics.es.osaka-u.ac.jp on 1995-10-10 (fvwm-users)</title>
+<meta name="Author" content="matusita_at_ics.es.osaka-u.ac.jp (matusita_at_ics.es.osaka-u.ac.jp)" />
+<meta name="Subject" content="FVWM: Re: For your approval...pl37" />
+<meta name="Date" content="1995-10-10" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Re: For your approval...pl37</h1>
+<!-- received="Tue Oct 10 09:07:32 1995" -->
+<!-- isoreceived="19951010080732" -->
+<!-- sent="Tue, 10 Oct 1995 23:10:45 +0900" -->
+<!-- isosent="19951010141045" -->
+<!-- name="matusita_at_ics.es.osaka-u.ac.jp" -->
+<!-- email="matusita_at_ics.es.osaka-u.ac.jp" -->
+<!-- subject="FVWM: Re: For your approval...pl37" -->
+<!-- id="199510101411.XAA08332_at_skylark.ics.es.osaka-u.ac.jp" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="Fri, 06 Oct 1995 17:30:16 -0400&quot;" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start14496" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="14497.html" accesskey="d" title="Mehul Sanghvi: &quot;FVWM: fvwm-1.2.4r and solaris2.4&quot;">Next message</a> ]
+[ <a href="14495.html" title="Jean-Marc Lasgouttes: &quot;FVWM: Funny window placement (xcol)&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg14496" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg14496" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg14496" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg14496" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: &lt;<a href="mailto:matusita_at_ics.es.osaka-u.ac.jp?Subject=Re%3A%20FVWM%3A%20Re%3A%20For%20your%20approval...pl37">matusita_at_ics.es.osaka-u.ac.jp</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 10 Oct 1995 23:10:45 +0900</span><br />
+</address>
+<br />
+Well, no-window-name/no-icon-name/no-class patch which is applied to
+<br />
+pl34 is too buggy (I think this code is not tested:), and should go away
+<br />
+(But, I do not think this patch's policy is bad).
+<br />
+<br />chuck_hines&gt; pl 36 to 37
+<br />
+chuck_hines&gt;        1. Fixed coredump due to incomplete backout of NoName/NoClass patch
+<br />
+<br />I doubt this fixes is done:)
+<br />
+<br />In HandlePropertyNotify(), code says:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (!XGetWMName(dpy, Tmp_win-&gt;w, &amp;text_prop))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;free_window_names (Tmp_win, True, False);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tmp_win-&gt;name = (char *)text_prop.value;
+<br />
+<br />In fact, XGetWMName() simply calls XGetTextProperty. Let us see
+<br />
+XGetTextProperty(3X) manuals.
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If the specified property does not exist on the window,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XGetTextProperty sets the value field to NULL,...
+<br />
+<br />So, text_prop.value may be NULL. In old ways, If property is NULL,
+<br />
+property turns to be NoName (yes, this is the internal constant value).
+<br />
+But now, it seems that fvwm allows to set Tmp_win-&gt;name to NULL. I
+<br />
+think this is the policy change of fvwm, and that's o.k.
+<br />
+<br />But, free_window_names() does not consider this fact. see misc.c:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (tmp-&gt;name != tmp-&gt;icon_name &amp;&amp; tmp-&gt;name != NoName)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XFree (tmp-&gt;name);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tmp-&gt;name = NULL;
+<br />
+<br />WOW! we are going to XFree(NULL) :-)
+<br />
+<br />I hope fvwm's iconname/windowname handling is fixed before 2.1 release.
+<br />
+<br />***
+<br />
+<br />If you, all the patch maker, want to release patch, please check your
+<br />
+code does not have a bug, or say &quot;I have not tested&quot; :-)
+<br />
+<br />- -
+<br />
+Makoto 'MAR_kun' MATSUSHITA
+<br />
+<pre>
+--
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue Oct 10 1995 - 09:07:32 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start14496">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="14497.html" title="Next message in the list">Mehul Sanghvi: "FVWM: fvwm-1.2.4r and solaris2.4"</a></li>
+<li><dfn>Previous message</dfn>: <a href="14495.html" title="Previous message in the list">Jean-Marc Lasgouttes: "FVWM: Funny window placement (xcol)"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg14496" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg14496" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg14496" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg14496" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:57 BST
+</em></small></p>
+</body>
+</html>

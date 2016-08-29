@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Re: TaskBar (was Re: 1.24 or 2.x ? ) from Tim_Phipps_at_HP.com on 1997-12-05 (fvwm-users)</title>
+<meta name="Author" content="Tim_Phipps_at_HP.com (Tim_Phipps_at_HP.com)" />
+<meta name="Subject" content="FVWM: Re: TaskBar (was Re: 1.24 or 2.x ? )" />
+<meta name="Date" content="1997-12-05" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Re: TaskBar (was Re: 1.24 or 2.x ? )</h1>
+<!-- received="Fri Dec  5 05:25:19 1997" -->
+<!-- isoreceived="19971205052519" -->
+<!-- sent="Fri, 5 Dec 1997 11:24:54 GMT" -->
+<!-- isosent="19971205112454" -->
+<!-- name="Tim_Phipps_at_HP.com" -->
+<!-- email="Tim_Phipps_at_HP.com" -->
+<!-- subject="FVWM: Re: TaskBar (was Re: 1.24 or 2.x ? )" -->
+<!-- id="199712051124.LAA08790_at_computer.hpl.hp.com" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start21452" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="21453.html" accesskey="d" title="ybamnolk_at_cisco.com: &quot;FVWM: Use of ButtonStyle&quot;">Next message</a> ]
+[ <a href="21451.html" title="Jason L Tibbitts III: &quot;FVWM: Re: tkgoodstuff&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="21618.html" accesskey="t" title="Jim Searle: &quot;Re: FVWM: Re: TaskBar (was Re: 1.24 or 2.x ? )&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21452" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21452" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21452" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21452" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: &lt;<a href="mailto:Tim_Phipps_at_HP.com?Subject=Re%3A%20FVWM%3A%20Re%3A%20TaskBar%20(was%20Re%3A%201.24%20or%202.x%20%3F%20)">Tim_Phipps_at_HP.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 5 Dec 1997 11:24:54 GMT</span><br />
+</address>
+<br />
+<em class="quotelev1">&gt; Well, sure.  Fvwm95 has some nice features which fvwm2 could usefully steal, 
+</em><br />
+<em class="quotelev1">&gt; however.  The TaskBar hiding feature is nice, for example.  I have an 
+</em><br />
+<em class="quotelev1">&gt; FvwmButtons with a bunch of things stuck in it (pager, xclipboard, etc.) which 
+</em><br />
+<em class="quotelev1">&gt; sits at the bottom of my screen.  It would be nice (as an option) to have it 
+</em><br />
+<em class="quotelev1">&gt; disappear like the taskbar can, so I'd get at it by moving my mouse over it.  
+</em><br />
+<em class="quotelev1">&gt; Better than StaysOnTop, because it would only take a couple of pixels.  
+</em><br />
+<em class="quotelev1">&gt; Similarly, I can see this would be nice for icon boxes.
+</em><br />
+<br />Funnily enough I have thought the same and came up with a solution, it uses 
+<br />
+FvwmAuto:
+<br />
+<br />Style FvwmButtons Sticky, NoTitle, CirculateSkip, HandleWidth 0, MouseFocus
+<br />
+AddToFunc my_hide_in    &quot;I&quot; Current [FvwmButtons] Move 0p 880p
+<br />
++                       &quot;I&quot; Current [FvwmButtons] Raise
+<br />
+AddToFunc my_hide_out   &quot;I&quot; Next [FvwmButtons CirculateHit] Move 0p 1000p
+<br />
+FvwmAuto 0 my_hide_in my_hide_out
+<br />
+<br />The coordinates of the Move's move my FvwmButtons partly off the bottom so that 
+<br />
+just the swallowed FvwmIconMan is visible, you will need to adjust these. It 
+<br />
+would be nice to use AnimatedMove (hint hint).  Also it doesn't use StaysOnTop 
+<br />
+but it does raise when the mouse enters.  The hiding/revealing happens without 
+<br />
+delay since you can only give one timeout to FvwmAuto.  I tried the one FvwmAuto 
+<br />
+line with
+<br />
+<br />FvwmAuto 0 my_hide_in
+<br />
+FvwmAuto 500 Nop my_hide_out
+<br />
+<br />to get a more graceful operation, but it didn't work well.  my_hide_out really 
+<br />
+should be &quot;IfPrev [FvwmButtons] Next [FvwmButtons CirculateHit] Move 0p 1000p&quot; 
+<br />
+but there is no IfPrev command (yet).
+<br />
+<br />N.B. sometime this fails to hide the FvwmButtons window, it never fails to show 
+<br />
+the window but sometimes moving the mouse from the FvwmButtons window to another 
+<br />
+leaves the FvwmButtons fully on screen, I guess that FvwmAuto is not getting the 
+<br />
+focus out event.
+<br />
+<br />Cheers,
+<br />
+Tim Phipps.
+<br />
+<br />P.S. sorry the headers of this message aren't right, I'm not getting the mailing 
+<br />
+list and have come in via the mailing list archive web site.  I have a nasty 
+<br />
+feeling that HP have implemented an overzealous UCE filter at the top level mail 
+<br />
+relays.
+<br />
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Dec 05 1997 - 05:25:19 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start21452">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="21453.html" title="Next message in the list">ybamnolk_at_cisco.com: "FVWM: Use of ButtonStyle"</a></li>
+<li><dfn>Previous message</dfn>: <a href="21451.html" title="Previous message in the list">Jason L Tibbitts III: "FVWM: Re: tkgoodstuff"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="21618.html" title="Next message in this discussion thread">Jim Searle: "Re: FVWM: Re: TaskBar (was Re: 1.24 or 2.x ? )"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="21618.html" title="Message sent in reply to this message">Jim Searle: "Re: FVWM: Re: TaskBar (was Re: 1.24 or 2.x ? )"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21452" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21452" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21452" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21452" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

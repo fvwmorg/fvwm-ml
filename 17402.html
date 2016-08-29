@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: A few points on 2.0.43 from H}vard Fosseng on 1996-07-16 (fvwm-users)</title>
+<meta name="Author" content="H}vard Fosseng (havard.fosseng_at_usit.uio.no)" />
+<meta name="Subject" content="FVWM: A few points on 2.0.43" />
+<meta name="Date" content="1996-07-16" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: A few points on 2.0.43</h1>
+<!-- received="Tue Jul 16 11:44:03 1996" -->
+<!-- isoreceived="19960716104403" -->
+<!-- sent="Tue, 16 Jul 1996 18:36:42 +0200" -->
+<!-- isosent="19960716163642" -->
+<!-- name="H}vard Fosseng" -->
+<!-- email="havard.fosseng_at_usit.uio.no" -->
+<!-- subject="FVWM: A few points on 2.0.43" -->
+<!-- id="199607161636.SAA05404_at_tag.uio.no" -->
+<!-- charset="iso-8859-1" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start17402" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="17403.html" accesskey="d" title="Marco Mariani: &quot;FVWM: 2.0.43 dies horribly&quot;">Next message</a> ]
+[ <a href="17401.html" title="Charles Hines: &quot;Re: FVWM: Negative conditions for Next &#0038; Prev&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17402" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17402" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17402" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17402" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: H}vard Fosseng &lt;<a href="mailto:havard.fosseng_at_usit.uio.no?Subject=Re%3A%20FVWM%3A%20A%20few%20points%20on%202.0.43">havard.fosseng_at_usit.uio.no</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 16 Jul 1996 18:36:42 +0200</span><br />
+</address>
+<br />
+Slight trouble building it on OSF1 V3.2 alpha and IRIX 5.3.
+<br />
+<br />On both platforms 'make' gave a lot of messages along the lines of:
+<br />
+<br />Archive: ../libs/libfvwm2.a has no table of contents (not searched)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;add one with 'ar ts'
+<br />
+Unresolved:
+<br />
+matchWildcards
+<br />
+safemalloc
+<br />
+mystrcasecmp
+<br />
+mystrncasecmp
+<br />
+envDupExpand
+<br />
+GetFontOrFixed
+<br />
+DestroyPicture
+<br />
+CachePicture
+<br />
+sleep_a_little
+<br />
+GetFdWidth
+<br />
+mygethostname
+<br />
+InitPictureCMap
+<br />
+findIconFile
+<br />
+make[1]: *** [fvwm2] Error 1
+<br />
+<br />Doing 'ar ts libs/libfvwm2.a' and a new 'make' solved this.
+<br />
+<br /><br /><br /><br />Selecting a window from WindowList will no longer give it focus. I
+<br />
+used to rely on this to transfer focus to window that did not have
+<br />
+their own keystrokes without having to move the pointer.
+<br />
+<br /><br /><br /><br />From the ChangeLog:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;21. Added ExitFunction, to be executed on exit (before restarts too).
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Useful for explicitly killing modules, etc.
+<br />
+<br />Is it practical to implement a hook that is only done before exits
+<br />
+(not before restarts), and, if that's the case, does anyone else see a
+<br />
+use for it? Currently, I'm (kind of) simulating this as follows
+<br />
+<br />AddToFunc Terminer	I Exec sh -c \
+<br />
+&quot;rsh tag gnudoit \'\(hf-save-all-and-terminate\)\'; exec xlogo&quot;
+<br />
++			I Wait xlogo
+<br />
++			I Quit
+<br />
+<br />(The first line has been broken for readability in this mail. In my
+<br />
+.fvwm2rc it's not.)
+<br />
+<br /><br /><br /><br />Does the following qualify as a bug?
+<br />
+<br />Place the pointer in the root window. Transfer focus to an xterm using
+<br />
+a keystroke. Iconify xterm using keystroke (Style NoIcon). Fvwm does
+<br />
+not appear to accept *any* keystrokes until I've moved the pointer
+<br />
+(using the mouse since nothing else works) into some window.
+<br />
+<br />This does not happen if the pointer is inside the xterm when you
+<br />
+iconify.
+<br />
+<br /><br /><br />Håvard Fosseng
+<br />
+<br />Håvard Fosseng       S'il fallait tolérer aux autres tout ce qu'on se permet á
+<br />
+USIT                 soi-même, la vie ne serait plus tenable.
+<br />
+University of Oslo                      -- Georges Courteline
+<br />
+havardf_at_usit.uio.no
+<br />
+<br /><br /><br /><br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue Jul 16 1996 - 11:44:03 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start17402">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="17403.html" title="Next message in the list">Marco Mariani: "FVWM: 2.0.43 dies horribly"</a></li>
+<li><dfn>Previous message</dfn>: <a href="17401.html" title="Previous message in the list">Charles Hines: "Re: FVWM: Negative conditions for Next &#0038; Prev"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17402" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17402" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17402" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17402" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

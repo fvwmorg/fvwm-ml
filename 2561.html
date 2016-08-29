@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Mysterious RaiseOverNativeWindows bug [was: New problems since 2. 3.6] from Adye, TJ (Tim)  on 2001-05-18 (fvwm-users)</title>
+<meta name="Author" content="Adye, TJ (Tim)  ("Adye,)" />
+<meta name="Subject" content="FVWM: Mysterious RaiseOverNativeWindows bug [was: New problems since 2. 3.6]" />
+<meta name="Date" content="2001-05-18" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Mysterious RaiseOverNativeWindows bug [was: New problems since 2. 3.6]</h1>
+<!-- received="Thu May 17 19:51:37 2001" -->
+<!-- isoreceived="20010517185137" -->
+<!-- sent="Fri, 18 May 2001 01:50:57 +0100" -->
+<!-- isosent="20010518005057" -->
+<!-- name="Adye, TJ (Tim) " -->
+<!-- email=""Adye," -->
+<!-- subject="FVWM: Mysterious RaiseOverNativeWindows bug [was: New problems since 2. 3.6]" -->
+<!-- id="A5AF6F04CF7FD311BC5700902773DDC76D3B71_at_exchange13.rl.ac.uk" -->
+<!-- charset="iso-8859-1" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start2561" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="2562.html" accesskey="d" title="Neil Zanella: &quot;FVWM: fvwm2 up and running on Cygwin&quot;">Next message</a> ]
+[ <a href="2560.html" title="Mikhael Goikhman: &quot;Re: FVWM: Vector/Pixmap feature suggestions&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="2592.html" accesskey="t" title="Dominik Vogt: &quot;FVWM: Re: Mysterious RaiseOverNativeWindows bug [was: New problems since 2. 3.6]&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg2561" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg2561" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg2561" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg2561" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Adye, TJ (Tim)  &lt;<a href="mailto:%22Adye%2C?Subject=Re%3A%20FVWM%3A%20Mysterious%20RaiseOverNativeWindows%20bug%20%5Bwas%3A%20New%20problems%20since%202.%203.6%5D">"Adye,</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 18 May 2001 01:50:57 +0100</span><br />
+</address>
+<br />
+Hi Dominik,
+<br />
+<br />I've adjusted the subject line to distinguish my remaining problem (thanks
+<br />
+to you and others on this list, of the other two, one has been fixed and I
+<br />
+have a patch for the other). The following tests are all with a local
+<br />
+fvwm-snap-20010510, built under Cygwin 1.3.1 on Windows 2000, and Exceed
+<br />
+6.2.0.16 as X-server.
+<br />
+<br />On 01 May 2001, I wrote:
+<br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt; 1) I use ClickToFocus. This mostly works correctly with X and 
+</em><br />
+<em class="quotelev1">&gt; native windows together, but if the active X-window is behind 
+</em><br />
+<em class="quotelev1">&gt; a native window, it is raised if the cursor moves over it 
+</em><br />
+<em class="quotelev1">&gt; [...]. I tried turning on BugOpts 
+</em><br />
+<em class="quotelev1">&gt; RaiseOverNativeWindows, but this doesn't seem to make any 
+</em><br />
+<em class="quotelev1">&gt; difference (I guess it's switched on automatically). As one 
+</em><br />
+<em class="quotelev1">&gt; might expect, turning it off prevents X-windows being raised 
+</em><br />
+<em class="quotelev1">&gt; over the native window at all (even by a click).
+</em><br />
+<br />and on 06 May 2001, Dominik Vogt &lt;dominik.vogt_at_gmx.de&gt; wrote:
+<br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt; I searched up and down the code but I can't find any way how
+</em><br />
+<em class="quotelev1">&gt; simply moving the pointer over the focused window could trigger
+</em><br />
+<em class="quotelev1">&gt; raising or lowering windows.  You said that turning of the
+</em><br />
+<em class="quotelev1">&gt; RaiseOverNativeWindows option 'fixes' the problem.  This proves
+</em><br />
+<em class="quotelev1">&gt; that the RaiseOrLowerWindow() function is called when the pointer
+</em><br />
+<em class="quotelev1">&gt; enters the window because it is the only place where the option is
+</em><br />
+<em class="quotelev1">&gt; evaluated.  But fvwm does not call this function.
+</em><br />
+<br />I added debug messages to RaiseOrLowerWindow() and confirmed that it is not
+<br />
+called when I get this mysterious &quot;autoraise&quot;. I have however found some
+<br />
+more clues that might help track down the cause of this problem.
+<br />
+<br />First, I have found some option settings that seem to &quot;cure&quot; the autoraise
+<br />
+problem (but in other respects aren't much to my liking). I also narrowed
+<br />
+down my .fvwm2rc to the simplest that demonstrates it. With just the
+<br />
+following .fvwm2rc (and nothing else), I get the autoraise problem:-
+<br />
+<br />&nbsp;&nbsp;Style * ClickToFocus
+<br />
+&nbsp;&nbsp;BugOpts RaiseOverNativeWindows
+<br />
+&nbsp;&nbsp;EdgeScroll 0 0
+<br />
+&nbsp;&nbsp;EdgeThickness 0
+<br />
+&nbsp;&nbsp;DeskTopSize 1x1
+<br />
+<br />However if I comment out (or explicitly set default values for) the
+<br />
+EdgeScroll, EdgeThickness, and DeskTopSize lines, the problem goes away. If
+<br />
+*any* of the above settings is restored, then the problem returns. This is
+<br />
+very curious, as the connection between window raising and the desktop size
+<br />
+/ scrolling functions seems obscure.
+<br />
+<br />Unfortunately, even with those lines removed, the behaviour still isn't
+<br />
+perfect (though much better). Now the active X-window isn't raised over a
+<br />
+native window, even when I click in it - I have to click on the title bar or
+<br />
+borders. Contrariwise, inactive X-windows are raised correctly if I click
+<br />
+inside the window.
+<br />
+<br />Another observation: although most application windows (eg. FvwmForm, xterm,
+<br />
+emacs, rclock) show the autoraising problem, xlogo and xclock don't. What's
+<br />
+different about these guys? In particular, rclock and xclock seem pretty
+<br />
+similar, but the former shows the autoraise bug.
+<br />
+<br />Finally, I had a look with Exceed's tracing facility. I'm not really
+<br />
+qualified to interpret the results, but I hope I've extracted the relevant
+<br />
+portion that someone else can understand. I append the results to this
+<br />
+message (please let me know if you want more detail).
+<br />
+<br />Does any of this help diagnose the problem?
+<br />
+<br />Thanks,
+<br />
+Tim.
+<br />
+<br />==============================  cut here  ==============================
+<br />
+<br />Extracts from Exceed trace logs
+<br />
+===============================
+<br />
+<br />The format seems to be (taking the first line below as an example): packet
+<br />
+71, 648723 milliseconds from server start, socket 1, protocol request number
+<br />
+42, protocol request name SetInputFocus. This is followed by the request
+<br />
+parameters.
+<br />
+<br />This first sequence occurred when I moved the mouse from a native (Notepad)
+<br />
+window over to an active X-window (xterm) which partially concealed behind
+<br />
+it. The xterm window was (incorrectly) raised (and received input focus).
+<br />
+<br />71: [648723.340] (1) --&gt; Request 42 SetInputFocus
+<br />
+<br />revert to         Parent
+<br />
+focus             0x100000e
+<br />
+time              CurrentTime
+<br />
+<br />73: [648723.0] (1) &lt;-- Event 9 FocusIn
+<br />
+<br />sequence #        0x52e2
+<br />
+detail            NonLinear
+<br />
+event             0x100000e
+<br />
+mode              Normal
+<br />
+<br />77: [648743.20] (1) &lt;-- Event 12 Expose
+<br />
+<br />sequence #        0x52e2
+<br />
+window            0x4000d6
+<br />
+xy                [225, 0]
+<br />
+width x height    403 x 7
+<br />
+count             2
+<br />
+<br />77: [648743.0] (1) &lt;-- Event 12 Expose
+<br />
+<br />sequence #        0x52e2
+<br />
+window            0x4000d6
+<br />
+xy                [621, 7]
+<br />
+width x height    7 x 160
+<br />
+count             1
+<br />
+<br />77: [648743.0] (1) &lt;-- Event 12 Expose
+<br />
+<br />sequence #        0x52e2
+<br />
+window            0x4000d6
+<br />
+xy                [225, 167]
+<br />
+width x height    403 x 7
+<br />
+count             0
+<br />
+<br />78: [648743.0] (1) &lt;-- Event 12 Expose
+<br />
+<br />sequence #        0x52e2
+<br />
+window            0x4000e0
+<br />
+xy                [218, 0]
+<br />
+width x height    396 x 16
+<br />
+count             0
+<br />
+<br />80: [648753.10] (4) --&gt; Request 76 ImageText8
+<br />
+<br />drawable          0x1000015
+<br />
+gc                0x1000018
+<br />
+xy                [37, 17]
+<br />
+text              &quot; &quot;
+<br />
+<br />... followed by lots more.
+<br />
+<br />Next, I did the same, but this time with an inactive xterm window, also
+<br />
+behind the native window. The only result was:-
+<br />
+<br />295: [686548.160] (1) &lt;-- Event 18 UnmapNotify
+<br />
+<br />sequence #        0x5313
+<br />
+event             0x2a
+<br />
+window            0x42
+<br />
+from configure    false
+<br />
+<br />297: [686548.0] (1) &lt;-- Event 7 EnterNotify
+<br />
+<br />sequence #        0x5313
+<br />
+detail            NonLinearVertical
+<br />
+time              686548
+<br />
+root              0x2a
+<br />
+event             0x80000e
+<br />
+child             0x800015
+<br />
+root xy           [437, 600]
+<br />
+event xy          [406, 121]
+<br />
+state             0
+<br />
+mode              Normal
+<br />
+focus             false
+<br />
+same screen       true
+<br />
+<br />Finally, I clicked on the inactive xterm window, bringing it to the front.
+<br />
+<br />560: [215050.541] (3) &lt;-- Event 9 FocusIn
+<br />
+<br />sequence #        0x9f
+<br />
+detail            Pointer
+<br />
+event             0xc0000e
+<br />
+mode              Normal
+<br />
+<br />561: [215050.0] (1) &lt;-- Event 9 FocusIn
+<br />
+<br />sequence #        0x18af
+<br />
+detail            Pointer
+<br />
+event             0xc0000e
+<br />
+mode              Normal
+<br />
+<br />563: [215070.20] (3) --&gt; Request 76 ImageText8
+<br />
+<br />drawable          0xc00015
+<br />
+gc                0xc00018
+<br />
+xy                [37, 17]
+<br />
+text              &quot; &quot;
+<br />
+<br />565: [215150.80] (3) &lt;-- Event 8 LeaveNotify
+<br />
+<br />sequence #        0xa0
+<br />
+detail            Virtual
+<br />
+time              215150
+<br />
+root              0x2a
+<br />
+event             0xc0000e
+<br />
+child             0xc00015
+<br />
+root xy           [180, 780]
+<br />
+event xy          [164, 133]
+<br />
+state             Button1
+<br />
+mode              Grab
+<br />
+focus             true
+<br />
+same screen       true
+<br />
+<br />... followed by lots more.
+<br />
+<br />==============================  cut here  ==============================
+<br />
+Tim Adye, BaBar/DELPHI Groups, Particle Physics Dept.,     _   /|
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rutherford Appleton Laboratory, UK.              \'o.O'   Oop!
+<br />
+e-mail:   T.J.Adye_at_rl.ac.uk or VXCERN::ADYE (HEPNET/SPAN)  =(___)=  Ack!
+<br />
+WWW:      <a href="http://hepwww.rl.ac.uk/Delphi/Adye/homepage.html">http://hepwww.rl.ac.uk/Delphi/Adye/homepage.html</a>    U  Thphft!
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu May 17 2001 - 19:51:37 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start2561">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="2562.html" title="Next message in the list">Neil Zanella: "FVWM: fvwm2 up and running on Cygwin"</a></li>
+<li><dfn>Previous message</dfn>: <a href="2560.html" title="Previous message in the list">Mikhael Goikhman: "Re: FVWM: Vector/Pixmap feature suggestions"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="2592.html" title="Next message in this discussion thread">Dominik Vogt: "FVWM: Re: Mysterious RaiseOverNativeWindows bug [was: New problems since 2. 3.6]"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="2592.html" title="Message sent in reply to this message">Dominik Vogt: "FVWM: Re: Mysterious RaiseOverNativeWindows bug [was: New problems since 2. 3.6]"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg2561" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg2561" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg2561" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg2561" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:51 BST
+</em></small></p>
+</body>
+</html>

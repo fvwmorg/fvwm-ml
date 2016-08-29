@@ -1,0 +1,490 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: fvwm &amp; xlock interaction from Philippe Meunier on 2001-08-17 (fvwm-users)</title>
+<meta name="Author" content="Philippe Meunier (meunier_at_ccs.neu.edu)" />
+<meta name="Subject" content="FVWM: fvwm &amp; xlock interaction" />
+<meta name="Date" content="2001-08-17" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: fvwm &amp; xlock interaction</h1>
+<!-- received="Thu Aug 16 19:04:17 2001" -->
+<!-- isoreceived="20010816180417" -->
+<!-- sent="Thu, 16 Aug 2001 20:04:28 -0400 (EDT)" -->
+<!-- isosent="20010817000428" -->
+<!-- name="Philippe Meunier" -->
+<!-- email="meunier_at_ccs.neu.edu" -->
+<!-- subject="FVWM: fvwm &amp; xlock interaction" -->
+<!-- id="200108170004.f7H04S623946_at_gacrux.ccs.neu.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start2957" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="2958.html" accesskey="d" title="Dominik Vogt: &quot;Re: FVWM: fvwm &#0038; xlock interaction&quot;">Next message</a> ]
+[ <a href="2956.html" title="Dan Espen: &quot;Re: FVWM: cc problem.&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="2958.html" accesskey="t" title="Dominik Vogt: &quot;Re: FVWM: fvwm &#0038; xlock interaction&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg2957" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg2957" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg2957" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg2957" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Philippe Meunier &lt;<a href="mailto:meunier_at_ccs.neu.edu?Subject=Re%3A%20FVWM%3A%20fvwm%20%26%20xlock%20interaction">meunier_at_ccs.neu.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 16 Aug 2001 20:04:28 -0400 (EDT)</span><br />
+</address>
+<br />
+Hi,
+<br />
+<br />I'm writing my own xlock program (yes, I have too much time on my
+<br />
+hands, and I like to play) and I came across some strange interaction
+<br />
+between fvwm and my program. I've appended my .fvwm2rc and my program
+<br />
+below. It's fvwm 2.4.0 on a Solaris 5.6 machine.
+<br />
+<br />What happens: as you can see, I have an fvwm keyboard shorcut (^F12)
+<br />
+to start my xlock program. When I use the keyboard shortcut and the
+<br />
+keyboard focus is in a window, I get an &quot;XGrabKeyboard failed with
+<br />
+code 1&quot; error message from my program on my console (error code 1
+<br />
+being X11's &quot;AlreadyGrabbed&quot;), most of the time. I also get an
+<br />
+&quot;XGrabPointer failed with code 1&quot; error message most of the time when
+<br />
+I try to start my xlock program the same way (i.e. with the focus in a
+<br />
+window), but through a menu (not shown in my .fvwm2rc here). I say
+<br />
+&quot;most of the time&quot;, because from time to time my program actually
+<br />
+works and locks the display... It also always works when no window has
+<br />
+the focus and I use a keyboard shortcut or a menu to start it, and it
+<br />
+also always works when I start it from the command line (regardless of
+<br />
+whether any window has the focus at the time it's started).
+<br />
+<br />Now, since I'm using fvwm's SloppyFocus, I wasn't too surprised to get
+<br />
+an AlreadyGrabbed error when trying to grab the keyboard while a
+<br />
+window had the focus, since I guess fvwm implements that feature by
+<br />
+grabbing the keyboard itself. I'm already less sure about why fvwm
+<br />
+would grab the mouse while openning a menu (I haven't read fvwm's
+<br />
+code, so I might be wrong...) but it seems to be what it does. It
+<br />
+would also explain why my program works when no window has the
+<br />
+focus. I have no idea, then, why, when I use my program from the
+<br />
+command line, it works regardless of whether any window has the focus
+<br />
+or not. I also have no idea why it does actually work from time to
+<br />
+time when some window has the focus and I use a keyboard shortcut or a
+<br />
+menu. I also tried running fvwm without using SloppyFocus, but
+<br />
+basically got the same result: as soon as a window has the focus, my
+<br />
+program doesn't work (most of the time, but not always) if I start it
+<br />
+from fvwm.
+<br />
+<br />The other funny thing is that the system-provided xlock works every
+<br />
+time, regardless of how I start it or whether any window has the
+<br />
+focus.
+<br />
+<br />So I guess I'm either doing something wrong in my program, or I'm
+<br />
+missing something somewhere. Does somebody have a clue ? Any help will
+<br />
+be appreciated...
+<br />
+<br />I haven't actually subscribed to the list, so please put me in copy if
+<br />
+you reply.
+<br />
+<br />Thanks a lot,
+<br />
+<br />Philippe (and yes, I use goto)
+<br />
+<br />============================================================
+<br />
+Style &quot;*&quot; SmartPlacement, ActivePlacement, SloppyFocus
+<br />
+Style &quot;*&quot; NoPPosition
+<br />
+Style &quot;*&quot; BorderWidth 2, HandleWidth 2, Icon unknown1.xpm
+<br />
+<br />Style &quot;Fvwm*&quot;      NoTitle, NoHandles, Sticky, WindowListSkip, BorderWidth 0
+<br />
+Style &quot;xbiff&quot;      NoTitle, NoHandles, Sticky, WindowListSkip, BorderWidth 0
+<br />
+<br />Style &quot;*&quot; MWMFunctions
+<br />
+Style &quot;*&quot; HintOverride
+<br />
+Style &quot;*&quot; MWMDecor
+<br />
+<br />EdgeScroll 0 0
+<br />
+EdgeResistance 10000 0
+<br />
+<br />DeskTopSize 3x2
+<br />
+<br />AddToFunc &quot;Move-or-RaiseLower&quot; &quot;M&quot; Move
+<br />
++              &quot;C&quot; RaiseLower
+<br />
+<br />AddToFunc &quot;Move-or-Iconify&quot; &quot;M&quot; Move
+<br />
++              &quot;C&quot; Iconify
+<br />
+<br />AddToMenu &quot;Utilities&quot; &quot;xterm&quot; Exec exec xterm -e /bin/bash &gt; /dev/console 2&gt;&amp;1
+<br />
++              &quot;&quot; Nop
+<br />
++              &quot;identity&quot; Module FvwmIdent
+<br />
++              &quot;refresh&quot; Refresh
+<br />
++              &quot;destroy&quot; Destroy
+<br />
+<br />Mouse 1		R   	A       Popup &quot;Utilities&quot;
+<br />
+Mouse 1		FS	A	Resize
+<br />
+Mouse 1		T	A	Function &quot;Move-or-RaiseLower&quot;
+<br />
+Mouse 1		I	A	Function &quot;Move-or-Iconify&quot;
+<br />
+Mouse 1         W       M       Function &quot;Move-or-RaiseLower&quot;
+<br />
+<br />Mouse 2		FSTI	A	Function &quot;Move-or-Iconify&quot;
+<br />
+Mouse 2		W	M	Function &quot;Move-or-Iconify&quot;
+<br />
+<br />Key Left	A	C	Scroll -100 0
+<br />
+Key Right	A	C	Scroll +100 +0
+<br />
+Key Up		A	C	Scroll +0   -100
+<br />
+Key Down	A	C	Scroll +0   +100
+<br />
+<br />Key Left	R	A	Scroll -100 0
+<br />
+Key Right	R	A	Scroll +100 +0
+<br />
+Key Up		R	A	Scroll +0   -100
+<br />
+Key Down	R	A	Scroll +0   +100
+<br />
+<br />Key F1		A	A	RaiseLower
+<br />
+Key F1		A	C	Iconify
+<br />
+Key F2		A	A	Maximize 0 100
+<br />
+Key F3		A	A	Maximize 100 0
+<br />
+Key F4		A	A	Maximize 100 100
+<br />
+Key F5		A	A	Maximize 200 200
+<br />
+Key F9		A	A	Exec exec xterm &gt; /dev/console 2&gt;&amp;1
+<br />
+Key F10		A	A	Module	FvwmIdent
+<br />
+Key F11		A	A	Refresh
+<br />
+Key F12		A	C	Exec exec xlock &gt; /dev/console 2&gt;&amp;1
+<br />
+Key F12		A	M	Destroy
+<br />
+<br />============================================================
+<br />
+#include &lt;stdio.h&gt;
+<br />
+#include &lt;stdlib.h&gt;
+<br />
+#include &lt;pwd.h&gt;
+<br />
+#include &lt;string.h&gt;
+<br />
+<br />#include &lt;X11/Xatom.h&gt;
+<br />
+#include &lt;X11/Xlib.h&gt;
+<br />
+#include &lt;X11/Xutil.h&gt;
+<br />
+#include &lt;X11/Xos.h&gt;
+<br />
+<br />extern char *crypt(char *key, char *salt);
+<br />
+<br />int main(void)
+<br />
+{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Display *display;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;XEvent event;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;char input_passwd[9];
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;char keysym_buf[3];
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int input_passwd_pos, keysym_buf_len, i;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;struct passwd *current_passwd;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int exit_value = 0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int error_code;
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;/* this doesn't work if the system is using shadow passwds */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if (!(current_passwd = getpwuid(getuid()))) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(stderr, &quot;unknown user: %d\n&quot;, (int) getuid());
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit_value = -1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goto final_exit;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if ((display = XOpenDisplay(&quot;&quot;)) == NULL) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;char *pt;
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pt = getenv(&quot;DISPLAY&quot;);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (pt)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(stderr, &quot;XOpenDisplay: displaylay %s not found\n&quot;, pt);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(stderr, &quot;XOpenDisplay: DISPLAY not set\n&quot;);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit_value = -1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goto final_exit;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;/* grab mouse */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if ((error_code = XGrabPointer(display, XDefaultRootWindow(display),
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;False, 0, GrabModeAsync, GrabModeAsync,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None, None, CurrentTime))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;!= GrabSuccess) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(stderr, &quot;XGrabPointer failed with code %d\n&quot;, error_code);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit_value = -1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goto close_and_exit;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;/* grab keyboard */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if ((error_code = XGrabKeyboard(display, XDefaultRootWindow(display),
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;False, GrabModeAsync, GrabModeAsync,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CurrentTime))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;!= GrabSuccess) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(stderr, &quot;XGrabKeyboard failed with code %d\n&quot;, error_code);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit_value = -1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goto ungrab_pointer_and_exit;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;do {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input_passwd_pos = 0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;do {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (XNextEvent(display, &amp;event) != 0) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(stderr, &quot;XNextEvent failed\n&quot;);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit_value = -1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goto ungrab_all_and_exit;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (event.type == KeyPress) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;keysym_buf_len = XLookupString((XKeyEvent *) &amp; event, keysym_buf,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3, NULL, NULL);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (i = 0; i &lt; keysym_buf_len; i++) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;switch (keysym_buf[i]) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case 8:	/* ^H */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case 127:	/* DEL */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (input_passwd_pos &gt; 0)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input_passwd_pos--;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case 10:	/* ^J */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case 13:	/* ^M */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input_passwd[input_passwd_pos++] = 0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case 21:	/* ^U */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input_passwd_pos = 0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (input_passwd_pos == 8)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input_passwd[input_passwd_pos++] = 0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input_passwd[input_passwd_pos++] = keysym_buf[i];
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} while (!(input_passwd_pos &amp;&amp; input_passwd[input_passwd_pos - 1] == 0));
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;} while (strcmp(current_passwd-&gt;pw_passwd,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;crypt(input_passwd, current_passwd-&gt;pw_passwd)));
+<br />
+<br />&nbsp;&nbsp;ungrab_all_and_exit:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;XUngrabKeyboard(display, CurrentTime);
+<br />
+&nbsp;&nbsp;ungrab_pointer_and_exit:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;XUngrabPointer(display, CurrentTime);
+<br />
+&nbsp;&nbsp;close_and_exit:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;XCloseDisplay(display);
+<br />
+&nbsp;&nbsp;final_exit:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;return exit_value;
+<br />
+}
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Aug 16 2001 - 19:04:17 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start2957">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="2958.html" title="Next message in the list">Dominik Vogt: "Re: FVWM: fvwm &#0038; xlock interaction"</a></li>
+<li><dfn>Previous message</dfn>: <a href="2956.html" title="Previous message in the list">Dan Espen: "Re: FVWM: cc problem."</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="2958.html" title="Next message in this discussion thread">Dominik Vogt: "Re: FVWM: fvwm &#0038; xlock interaction"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="2958.html" title="Message sent in reply to this message">Dominik Vogt: "Re: FVWM: fvwm &#0038; xlock interaction"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg2957" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg2957" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg2957" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg2957" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:52 BST
+</em></small></p>
+</body>
+</html>

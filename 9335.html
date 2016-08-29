@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: problems with All command from Thomas R. Dean on 2003-06-24 (fvwm-users)</title>
+<meta name="Author" content="Thomas R. Dean (deantr_at_cogeco.ca)" />
+<meta name="Subject" content="FVWM: problems with All command" />
+<meta name="Date" content="2003-06-24" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: problems with All command</h1>
+<!-- received="Mon Jun 23 20:18:51 2003" -->
+<!-- isoreceived="20030623191851" -->
+<!-- sent="Mon, 23 Jun 2003 21:16:59 -0400" -->
+<!-- isosent="20030624011659" -->
+<!-- name="Thomas R. Dean" -->
+<!-- email="deantr_at_cogeco.ca" -->
+<!-- subject="FVWM: problems with All command" -->
+<!-- id="3EF7A68B.1000806_at_cogeco.ca" -->
+<!-- charset="ISO-8859-1" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start9335" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="9336.html" accesskey="d" title="Rouben Rostamian: &quot;FVWM: setting button style per window&quot;">Next message</a> ]
+[ <a href="9334.html" title="Thomas Adam: &quot;FVWM: Fvwm-themes and gnome-session&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="9338.html" accesskey="t" title="Dominik Vogt: &quot;Re: FVWM: problems with All command&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg9335" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg9335" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg9335" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg9335" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Thomas R. Dean &lt;<a href="mailto:deantr_at_cogeco.ca?Subject=Re%3A%20FVWM%3A%20problems%20with%20All%20command">deantr_at_cogeco.ca</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 23 Jun 2003 21:16:59 -0400</span><br />
+</address>
+<br />
+Hi. I've been using fvwm since I don't remember when, somewhere back
+<br />
+around Redhat 5 anyways. Great WM, not as heavyweight as some
+<br />
+of the others, and not as visually busy as the others as well.
+<br />
+<br />Anyhow, I just recently upgraded the Motherboard in my system and
+<br />
+the keyboard.  The new keyboard has multimedia keys and I wanted
+<br />
+to used them to control XMMS.  I also have a mac powerbook and having
+<br />
+the volume keys work regardless of the application is very convenient.
+<br />
+<br />Target System is RedHat 9,  FVWM version 2.4.16.
+<br />
+<br />So i've done the following:
+<br />
+&nbsp;&nbsp;Used xmodmap in .xinitrc to bind XF86AudioRaiseVolume, etc. to the
+<br />
+&nbsp;&nbsp;&nbsp;appropriate keycodes. (and verified with xev)
+<br />
+<br />Added the following to my .fvwm2rc:
+<br />
+<br />Key XF86AudioRaiseVolume A A    ALL (XMMS*) Echo up $[w.id] $[w.name]
+<br />
+Key XF86AudioLowerVolume A A    ALL (XMMS*) Echo down $[w.id] $[w.name]
+<br />
+Key XF86AudioMute A A    ALL (XMMS*) Echo mute $[w.id] $[w.name]
+<br />
+<br />I was going to replace echo with an exec to execute a command that will
+<br />
+send an KP_Up or KP_Down event directly to the XMMS window (which
+<br />
+will adjust the volume).  As I understand the man page, the $[w.id] is 
+<br />
+supposed to return
+<br />
+the window id that the command is called on. There are two xmms windows, the
+<br />
+main control and the playlist window.  Each press of the button should 
+<br />
+echo two window
+<br />
+ids (and the window name).
+<br />
+<br />If the focus is on the root, then the correct window ids  and titles are 
+<br />
+echoed:
+<br />
+<br />&nbsp;&nbsp;0x1400066 XMMS - song title info
+<br />
+&nbsp;&nbsp;0x14000cf  XMMS Playlist
+<br />
+<br />All is well so far. However, if any window has the focus then I get the
+<br />
+window id of the window with the focus -- twice. So if the focus is on
+<br />
+an xterm, I get two lines of:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;up 0x1200026 xterm.
+<br />
+<br />I've looked through several months worth of archive and used google to 
+<br />
+search
+<br />
+the site, but I haven't found any help.
+<br />
+<br />Do I have the correct interpretation of $[w.id]? If not, what should I use?
+<br />
+<br />I supposed I could write a command that searches all windows on the root
+<br />
+for one with the title XMMS, but that seems to be a bit of a waste if it
+<br />
+is already there in the window manager.
+<br />
+<br />Thanks in advance..
+<br />
+<br />Tom.
+<br />
+<br /><br /><pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon Jun 23 2003 - 20:18:51 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start9335">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="9336.html" title="Next message in the list">Rouben Rostamian: "FVWM: setting button style per window"</a></li>
+<li><dfn>Previous message</dfn>: <a href="9334.html" title="Previous message in the list">Thomas Adam: "FVWM: Fvwm-themes and gnome-session"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="9338.html" title="Next message in this discussion thread">Dominik Vogt: "Re: FVWM: problems with All command"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="9338.html" title="Message sent in reply to this message">Dominik Vogt: "Re: FVWM: problems with All command"</a></li>
+<li><dfn>Reply</dfn>: <a href="9340.html" title="Message sent in reply to this message">Kingsly John: "Re: FVWM: problems with All command"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg9335" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg9335" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg9335" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg9335" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:55 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: 1.24r -&gt; 2.0.42 upgrade woes from Barry A. Warsaw on 1996-04-23 (fvwm-users)</title>
+<meta name="Author" content="Barry A. Warsaw (bwarsaw_at_CNRI.Reston.VA.US)" />
+<meta name="Subject" content="FVWM: 1.24r -&gt; 2.0.42 upgrade woes" />
+<meta name="Date" content="1996-04-23" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: 1.24r -&gt; 2.0.42 upgrade woes</h1>
+<!-- received="Mon Apr 22 19:47:43 1996" -->
+<!-- isoreceived="19960422184743" -->
+<!-- sent="Mon, 22 Apr 1996 20:46:40 -0400" -->
+<!-- isosent="19960423004640" -->
+<!-- name="Barry A. Warsaw" -->
+<!-- email="bwarsaw_at_CNRI.Reston.VA.US" -->
+<!-- subject="FVWM: 1.24r -&gt; 2.0.42 upgrade woes" -->
+<!-- id="199604230046.UAA04411_at_anthem.CNRI.Reston.Va.US" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start16378" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="16379.html" accesskey="d" title="kendrick vargas: &quot;Re: FVWM: Bug?&quot;">Next message</a> ]
+[ <a href="16377.html" title="Andrew J Cosgriff: &quot;Re: FVWM: Sun keys (open, close, cut, paste) FVWM 1.24&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="16399.html" accesskey="t" title="Charles Hines: &quot;Re: FVWM: 1.24r -&#0062; 2.0.42 upgrade woes&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16378" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16378" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16378" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16378" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Barry A. Warsaw &lt;<a href="mailto:bwarsaw_at_CNRI.Reston.VA.US?Subject=Re%3A%20FVWM%3A%201.24r%20-%3E%202.0.42%20upgrade%20woes">bwarsaw_at_CNRI.Reston.VA.US</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 22 Apr 1996 20:46:40 -0400</span><br />
+</address>
+<br />
+I'm new both to fvwm and (just minutes ago) fvwm2.  I'd spent the last
+<br />
+few days moving from ctwm to fvwm and had gotten my configuration file
+<br />
+(not located at ~/.fvwmrc) just about how I wanted it.
+<br />
+<br />So I decided to pull down version 2 beta and run it with my version 1
+<br />
+config file: fvwm -f /path/to/my/fvwmrc
+<br />
+<br />Whoa!  Big problem!  The -f command line switch has different
+<br />
+semantics now.  I got a semi-cryptic error from fvwm saying it
+<br />
+couldn't exec my file.  Hmm, I didn't think it should have exec
+<br />
+permission, but okay, I changed it anyway.  Still no good.  On top of
+<br />
+this, fvwm still starts up but with *no way* to exit it!  Fortunately
+<br />
+I start up an XEmacs process too so I can kill fvwm.
+<br />
+<br />So I guess it's time to read the manpage :-).  Sure enough the -f
+<br />
+option should take a command instead of just a file name.  However,
+<br />
+for backwards compatibility sake, I would suggest that -f have the
+<br />
+same semantics as for version 1, and that a different switch be used
+<br />
+for the new semantics.  Also, fvwm should have some failsafe exit
+<br />
+mechanism that is *always* present unless specifically defeated.  No
+<br />
+matter how early the problem in the config file is, there should be a
+<br />
+tidy way to exit fvwm.  These things would help in the conversion
+<br />
+process.
+<br />
+<br />Finally, I have a dual-headed SparcStation, so I tried starting up
+<br />
+fvwm version 1 with the -s option, on :0.0.  Then I tried to start up
+<br />
+fvwm2 with -d :0.1 -s but it complained that another WM was running.
+<br />
+Once I use -s, how can I get another window manager on my second
+<br />
+screen?
+<br />
+<br />Please!  I don't mean the above to sound ungrateful.  I see Chuck
+<br />
+Hines is the maintainer for fvwm now and that's real cool 'cause he's
+<br />
+contributed greatly to XEmacs.  In my couple of days of hacking with
+<br />
+version 1 I've already kill more than one nit I had with ctwm.  fvwm
+<br />
+is great stuff and I look forward to more glowing reports in the
+<br />
+future. :-)  I'm really psyched about doing more integration with
+<br />
+Python and the module subsystem (yup, I've seen Jonathan Kelley's
+<br />
+fvwmmod.py -- again, cool stuff).
+<br />
+<br />Thanks for letting me blow off steam!
+<br />
+<br />-Barry
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon Apr 22 1996 - 19:47:43 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start16378">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="16379.html" title="Next message in the list">kendrick vargas: "Re: FVWM: Bug?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="16377.html" title="Previous message in the list">Andrew J Cosgriff: "Re: FVWM: Sun keys (open, close, cut, paste) FVWM 1.24"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="16399.html" title="Next message in this discussion thread">Charles Hines: "Re: FVWM: 1.24r -&#0062; 2.0.42 upgrade woes"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="16399.html" title="Message sent in reply to this message">Charles Hines: "Re: FVWM: 1.24r -&#0062; 2.0.42 upgrade woes"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="16405.html" title="Message sent in reply to this message">Brian E. Gallew: "Re: FVWM: 1.24r -&#0062; 2.0.42 upgrade woes"</a></li>
+<li><dfn>Reply</dfn>: <a href="16480.html" title="Message sent in reply to this message">Albrecht Kadlec: "Re: FVWM: 1.24r -&#0062; 2.0.42 upgrade woes"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="16561.html" title="Message sent in reply to this message">Barry A. Warsaw: "Re: FVWM: 1.24r -&#0062; 2.0.42 upgrade woes"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="16565.html" title="Message sent in reply to this message">Barry A. Warsaw: "Re: FVWM: 1.24r -&#0062; 2.0.42 upgrade woes"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="16654.html" title="Message sent in reply to this message">Fabien Villard: "Re: FVWM: 1.24r -&#0062; 2.0.42 upgrade woes"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16378" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16378" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16378" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16378" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

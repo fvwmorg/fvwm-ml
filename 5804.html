@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Application resizing failure from John Latham on 2002-08-12 (fvwm-users)</title>
+<meta name="Author" content="John Latham (jtl_at_cs.man.ac.uk)" />
+<meta name="Subject" content="FVWM: Application resizing failure" />
+<meta name="Date" content="2002-08-12" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Application resizing failure</h1>
+<!-- received="Mon Aug 12 12:35:24 2002" -->
+<!-- isoreceived="20020812113524" -->
+<!-- sent="Mon, 12 Aug 2002 18:34:27 +0100" -->
+<!-- isosent="20020812173427" -->
+<!-- name="John Latham" -->
+<!-- email="jtl_at_cs.man.ac.uk" -->
+<!-- subject="FVWM: Application resizing failure" -->
+<!-- id="200208121734.g7CHYRf15674_at_carousel.cs.man.ac.uk" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start5804" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="5805.html" accesskey="d" title="John Latham: &quot;FVWM: PipeRead and mouse grab&quot;">Next message</a> ]
+[ <a href="5803.html" title="John Latham: &quot;FVWM: No focus on start up?&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="5812.html" accesskey="t" title="Dominik Vogt: &quot;Re: FVWM: Application resizing failure&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg5804" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg5804" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg5804" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg5804" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: John Latham &lt;<a href="mailto:jtl_at_cs.man.ac.uk?Subject=Re%3A%20FVWM%3A%20Application%20resizing%20failure">jtl_at_cs.man.ac.uk</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 12 Aug 2002 18:34:27 +0100</span><br />
+</address>
+<br />
+I have a certain application, written in Perl/Tk, which does not work properly
+<br />
+with 2.4.6 or 2.4.8; but did work okay with 2.2.4 and previous, and *does*
+<br />
+work okay with 2.5.2.
+<br />
+<br />The problem: when a certain button is pressed in a Perl/Tk window:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a text box is removed from the window
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;then a new one is added
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;then some text inserted into this new text box
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;then the text box is removed
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;then another new one is added
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;then some text is inserted into this third text box
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;then the size of the third text box is set
+<br />
+<br />Out of context this sounds like a crazy thing to want, but trust me it is
+<br />
+sensible (the window is running a command for the user, first discarding the
+<br />
+old output, then showing standard error during the run, then standard output
+<br />
+after finishing, and resizing to suit the new output text right at the end).
+<br />
+<br />This results in several window resizes, and on 2.4.6 and 2.4.8 the geometry
+<br />
+ends up wrong. Either it ends up being the smallest that was asked for (i.e.
+<br />
+without the text box) or correct in width but smallest in height! The resizes
+<br />
+can happen quite quickly, but I have tried adding in 2 seconds sleeps between
+<br />
+each stage, and it makes no difference. I could try to write a minimal example
+<br />
+program if that would help.
+<br />
+<br />As I said it works okay again in 2.5.2, but I guessed it might be an unknown
+<br />
+bug that has been accidentally fixed, on the grounds that you would have
+<br />
+wanted to fix it in 2.4.8 too. True?
+<br />
+<br />Best wishes, John Latham
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon Aug 12 2002 - 12:35:24 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start5804">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="5805.html" title="Next message in the list">John Latham: "FVWM: PipeRead and mouse grab"</a></li>
+<li><dfn>Previous message</dfn>: <a href="5803.html" title="Previous message in the list">John Latham: "FVWM: No focus on start up?"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="5812.html" title="Next message in this discussion thread">Dominik Vogt: "Re: FVWM: Application resizing failure"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="5812.html" title="Message sent in reply to this message">Dominik Vogt: "Re: FVWM: Application resizing failure"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="5985.html" title="Message sent in reply to this message">John Latham: "Re: FVWM: Application resizing failure"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="6007.html" title="Message sent in reply to this message">John Latham: "Re: FVWM: Application resizing failure"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg5804" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg5804" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg5804" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg5804" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:53 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: pager manipulation from Victor Eijkhout on 2002-03-20 (fvwm-users)</title>
+<meta name="Author" content="Victor Eijkhout (eijkhout_at_cs.utk.edu)" />
+<meta name="Subject" content="FVWM: pager manipulation" />
+<meta name="Date" content="2002-03-20" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: pager manipulation</h1>
+<!-- received="Wed Mar 20 14:50:05 2002" -->
+<!-- isoreceived="20020320145005" -->
+<!-- sent="Wed, 20 Mar 2002 15:49:43 -0500" -->
+<!-- isosent="20020320204943" -->
+<!-- name="Victor Eijkhout" -->
+<!-- email="eijkhout_at_cs.utk.edu" -->
+<!-- subject="FVWM: pager manipulation" -->
+<!-- id="a05101015b8bea4bb81fa_at_[169.254.241.151]" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start4631" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="4632.html" accesskey="d" title="Mikhael Goikhman: &quot;Re: FVWM: TitleStyle gradient - convert to colorset?&quot;">Next message</a> ]
+[ <a href="4630.html" title="Olivier Chapuis: &quot;Re: FVWM: FVWM2 Background and white lines&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="4634.html" accesskey="t" title="Mikhael Goikhman: &quot;Re: FVWM: pager manipulation&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg4631" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg4631" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg4631" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg4631" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Victor Eijkhout &lt;<a href="mailto:eijkhout_at_cs.utk.edu?Subject=Re%3A%20FVWM%3A%20pager%20manipulation">eijkhout_at_cs.utk.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 20 Mar 2002 15:49:43 -0500</span><br />
+</address>
+<br />
+I'm trying to add/delete desktops dynamically.
+<br />
+<br />This is a form for adding a desktop:
+<br />
+DestroyModuleConfig AddDesk: *
+<br />
+*AddDesk: WarpPointer
+<br />
+*AddDesk: Line left
+<br />
+*AddDesk: Text &quot;Add new desktop:&quot;
+<br />
+*AddDesk: Line expand
+<br />
+*AddDesk: Input deskname 20 &quot;&quot;
+<br />
+*AddDesk: Button quit &quot;OK&quot; ^M
+<br />
+*AddDesk: Command Exec cd $HOME/.fvwm ; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo *FvwmPager: Label $d \&quot;$(deskname)\&quot; &gt;&gt; page_labels ; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sort_labels ; count_desks
+<br />
+*AddDesk: Command restart_pager
+<br />
+*AddDesk: Button quit &quot;Cancel&quot;
+<br />
+<br />It calls two shell scripts to keep the labels sorted, and to update 
+<br />
+the number of desks in the Module FvwmPager command, which is also in 
+<br />
+a separate file.
+<br />
+<br />Restarting the pager goes like this:
+<br />
+<br />DestroyFunc restart_pager
+<br />
+AddToFunc restart_pager
+<br />
++ &quot;I&quot; KillModule FvwmPager
+<br />
++ &quot;I&quot; DestroyModuleConfig FvwmPager
+<br />
++ &quot;I&quot; Read $[HOME]/.fvwm/pager_start
+<br />
++ &quot;I&quot; Read $[HOME]/.fvwm/pager_style
+<br />
++ &quot;I&quot; Read $[HOME]/.fvwm/page_labels
+<br />
+<br />The problem is that the pager gets killed and restarted, but it 
+<br />
+doesn't have its proper size. It shows up without the extra desk, 
+<br />
+even though the configuration files that are supposed to get read do 
+<br />
+show the right number.
+<br />
+<br />The weird thing is that if I again issue the restart_pager command
+<br />
+<br />DestroyMenu desktops
+<br />
+AddToMenu desktops &quot;Desktop&quot; Title
+<br />
++ &quot;Add new desk&quot; AddNewDesk
+<br />
++ &quot;Name this desk&quot; NameThisDesk
+<br />
++ &quot;Remove this desk&quot; RemoveThisDesk
+<br />
++ &quot;Restart pager&quot; restart_pager
+<br />
+<br />the new size does become effective. I've tried all sorts of things 
+<br />
+and I don't understand what's happening here.
+<br />
+<br /><pre>
+-- 
+Victor Eijkhout &lt;eijkhout_at_cs.utk.edu&gt;
+tel: 865 974 9308 (W), 865 673 6998 (H), 865 974 8296 (F)
+<a href="http://www.cs.utk.edu/~eijkhout/">http://www.cs.utk.edu/~eijkhout/</a>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Mar 20 2002 - 14:50:05 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start4631">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="4632.html" title="Next message in the list">Mikhael Goikhman: "Re: FVWM: TitleStyle gradient - convert to colorset?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="4630.html" title="Previous message in the list">Olivier Chapuis: "Re: FVWM: FVWM2 Background and white lines"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="4634.html" title="Next message in this discussion thread">Mikhael Goikhman: "Re: FVWM: pager manipulation"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="4634.html" title="Message sent in reply to this message">Mikhael Goikhman: "Re: FVWM: pager manipulation"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg4631" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg4631" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg4631" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg4631" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:52 BST
+</em></small></p>
+</body>
+</html>

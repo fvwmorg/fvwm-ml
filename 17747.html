@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: fvwm-2.0.43 under Digital Unix 4.0: does not die prope from Grant McDorman on 1996-08-30 (fvwm-users)</title>
+<meta name="Author" content="Grant McDorman (grant_at_isgtec.com)" />
+<meta name="Subject" content="Re: FVWM: fvwm-2.0.43 under Digital Unix 4.0: does not die prope" />
+<meta name="Date" content="1996-08-30" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: fvwm-2.0.43 under Digital Unix 4.0: does not die prope</h1>
+<!-- received="Fri Aug 30 15:51:52 1996" -->
+<!-- isoreceived="19960830145152" -->
+<!-- sent="Fri, 30 Aug 1996 16:33:02 -0400 (EDT)" -->
+<!-- isosent="19960830203302" -->
+<!-- name="Grant McDorman" -->
+<!-- email="grant_at_isgtec.com" -->
+<!-- subject="Re: FVWM: fvwm-2.0.43 under Digital Unix 4.0: does not die prope" -->
+<!-- id="XFMail.960830165115.grant_at_isgtec.com" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="Pine.OSF.3.95.960830222042.5534B-100000_at_finwal01.tu-graz.ac.at" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start17747" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="17748.html" accesskey="d" title="Guenther Grau: &quot;Re: FVWM: FvwmButtons bug (and workaround :-)&quot;">Next message</a> ]
+[ <a href="17746.html" title="Thomas Leitner: &quot;Re: FVWM: fvwm-2.0.43 under Digital Unix 4.0: does not die properly when X server dies....&quot;">Previous message</a> ]
+[ <a href="17746.html" title="Thomas Leitner: &quot;Re: FVWM: fvwm-2.0.43 under Digital Unix 4.0: does not die properly when X server dies....&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="17750.html" accesskey="t" title="Thomas Leitner: &quot;Re: FVWM: fvwm-2.0.43 under Digital Unix 4.0: does not die prope&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17747" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17747" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17747" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17747" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Grant McDorman &lt;<a href="mailto:grant_at_isgtec.com?Subject=Re%3A%20FVWM%3A%20fvwm-2.0.43%20under%20Digital%20Unix%204.0%3A%20does%20not%20die%20prope">grant_at_isgtec.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 30 Aug 1996 16:33:02 -0400 (EDT)</span><br />
+</address>
+<br />
+One problem with FvwmButtons is that in its cleanup code it does
+<br />
+&nbsp;&nbsp;&nbsp;signal(SIG_PIPE, SIG_IGN);
+<br />
+and then tries to communicate with the server. If the server connection has
+<br />
+been broken - as in the case here - this results in FvwmButtons going into
+<br />
+a tight CPU-consuming loop [at least on my platform, Sun Solaris 2.4].
+<br />
+<br />This sort of server shutdown/reset also happens on multiscreen displays,
+<br />
+which is how I found it. I have made a change to FvwmButtons to try and
+<br />
+fix this problem (by changing the signal handling to 'exit' instead of
+<br />
+SIG_IGN). I haven't checked to see if other Fvwm modules, or the main
+<br />
+code, has this problem too, though. I also haven't posted the change
+<br />
+to list [yet].
+<br />
+<br /><br />Just checked fvwm itself; it may have this problem too, since it
+<br />
+installs a signal handler (DeadPipe) which, in effect, ignores
+<br />
+the signal (it just reinstalls itself). Problem is, of course, that
+<br />
+fvwm *can* get SIGPIPE signals that it is legitimate to ignore (when
+<br />
+communicating with a module). If the code can check to see if the X
+<br />
+server (connection) is dead in the signal handler, and exit() if it
+<br />
+isn't, then the problem may disappear. Something like:
+<br />
+&nbsp;&nbsp;&nbsp;struct stat buf;
+<br />
+&nbsp;&nbsp;&nbsp;if (fstat(XConnectionNumber(dpy), &amp;buf) == -1) exit(1);
+<br />
+(assuming 'struct stat' and 'fstat' are, in this usage, 100% portable,
+<br />
+*and* presuming fstat returns -1 on a dead, but not closed, pipe.)
+<br />
+<br />I'll try this out shortly (oh, the joys of XNest).
+<br />
+<br />On 31-Aug-96 02:21:26 Thomas Leitner wrote:
+<br />
+<em class="quotelev2">&gt; &gt; 
+</em><br />
+<em class="quotelev1">&gt; Hi Jeff,
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; On Fri, 30 Aug 1996, Jeff Magill wrote:
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev3">&gt; &gt; &gt; Now when I just terminate the session,
+</em><br />
+<em class="quotelev3">&gt; &gt; &gt;by stopping the dxsession manager (which causes the X server to die),
+</em><br />
+<em class="quotelev3">&gt; &gt; &gt;I can see 'fvwm2' and 'FvwmButtons' still running and eating CPU time
+</em><br />
+<em class="quotelev3">&gt; &gt; &gt;when I log-in from a remote terminal.
+</em><br />
+<em class="quotelev2">&gt; &gt; 
+</em><br />
+<em class="quotelev2">&gt; &gt; I guess you're cutting the X server out from underneath fvwm2.
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; Yes. Apparently.
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev2">&gt; &gt; I think usually people exit their X server the other way around.  That is,
+</em><br />
+<em class="quotelev2">&gt; &gt; the X server is usually dependent upon some application still
+</em><br />
+<em class="quotelev2">&gt; &gt; running--usually the window manager.
+</em><br />
+<em class="quotelev2">&gt; &gt; 
+</em><br />
+<em class="quotelev2">&gt; &gt; For example, I use xinit to start my X server.  xinit fires of a shell
+</em><br />
+<em class="quotelev2">&gt; &gt; script, .xinitrc, that fires up fvwm2 and some other applications.  When
+</em><br />
+<em class="quotelev2">&gt; &gt; .xinitrc exits, then the X server shuts down.  My .xinitrc script waits
+</em><br />
+<em class="quotelev2">&gt; &gt; until fvwm2 exits and then it exits.  So when I exit fvwm2 explicitly
+</em><br />
+<em class="quotelev2">&gt; &gt; (using the Quit function), the .xinitrc script notices that the window
+</em><br />
+<em class="quotelev2">&gt; &gt; manager has quit and then it exits.  Then the X server shuts down.
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; Well. I do it like this:
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt;    a.) The X Server is started
+</em><br />
+<em class="quotelev1">&gt;    b.) dtlogin is started and I log-in selecting dxsession
+</em><br />
+<em class="quotelev1">&gt;    c.) dxsession starts up and I've configured it to use
+</em><br />
+<em class="quotelev1">&gt;        /usr/lib/X11/fvwm2/fvwm2 rather than /usr/bin/X11/mwm.
+</em><br />
+<em class="quotelev1">&gt;    d.) dxsession executes the .X11Startup file to startup my
+</em><br />
+<em class="quotelev1">&gt;        initial apps.
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; When I want to log-out, I use the dxsession's logout command which
+</em><br />
+<em class="quotelev1">&gt; apparently causes the x-server to die without fvwm2 noticeing.
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; Please note that this works without problems when I select the
+</em><br />
+<em class="quotelev1">&gt; standard Motif Window manager. It also worked without problems
+</em><br />
+<em class="quotelev1">&gt; using fvwm-1.24r
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; What can I do about it? I mean: What happens if the X server dies
+</em><br />
+<em class="quotelev1">&gt; for other reasons in your configuration? Then you run into the same
+</em><br />
+<em class="quotelev1">&gt; problems and fvwm2 will eat up CPU time as well. I think that fvwm
+</em><br />
+<em class="quotelev1">&gt; should just die when the X server died.
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; Thanks for your reply -- Tom
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; --------------------------------------------------------------------------
+</em><br />
+<em class="quotelev1">&gt; T o m   L e i t n e r                       Dept. of Communications
+</em><br />
+<em class="quotelev1">&gt;                                             Graz University of Technology, 
+</em><br />
+<em class="quotelev1">&gt; e-mail    : tom_at_finwds01.tu-graz.ac.at      Inffeldgasse 12
+</em><br />
+<em class="quotelev1">&gt; Phone     : +43-316-873-7455                A-8010 Graz / Austria / Europe
+</em><br />
+<em class="quotelev1">&gt; Fax       : +43-316-463-697
+</em><br />
+<em class="quotelev1">&gt; Home page : <a href="http://wiis.tu-graz.ac.at/people/tom.html">http://wiis.tu-graz.ac.at/people/tom.html</a>
+</em><br />
+<em class="quotelev1">&gt; PGP public key on : <a href="ftp://wiis.tu-graz.ac.at/pgp-keys/tom.asc">ftp://wiis.tu-graz.ac.at/pgp-keys/tom.asc</a> or send 
+</em><br />
+<em class="quotelev1">&gt; mail with subject &quot;get Thomas Leitner&quot; to pgp-public-keys_at_keys.pgp.net
+</em><br />
+<em class="quotelev1">&gt; --------------------------------------------------------------------------
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; --
+</em><br />
+<em class="quotelev1">&gt; Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+</em><br />
+<em class="quotelev1">&gt; To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+</em><br />
+<em class="quotelev1">&gt; message to majordomo_at_hpc.uh.edu.
+</em><br />
+<em class="quotelev1">&gt; To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+Grant McDorman &lt;grant_at_isgtec.com&gt;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ISG Technologies, Inc.
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Aug 30 1996 - 15:51:52 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start17747">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="17748.html" title="Next message in the list">Guenther Grau: "Re: FVWM: FvwmButtons bug (and workaround :-)"</a></li>
+<li><dfn>Previous message</dfn>: <a href="17746.html" title="Previous message in the list">Thomas Leitner: "Re: FVWM: fvwm-2.0.43 under Digital Unix 4.0: does not die properly when X server dies...."</a></li>
+<li><dfn>In reply to</dfn>: <a href="17746.html" title="Message to which this message replies">Thomas Leitner: "Re: FVWM: fvwm-2.0.43 under Digital Unix 4.0: does not die properly when X server dies...."</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="17750.html" title="Next message in this discussion thread">Thomas Leitner: "Re: FVWM: fvwm-2.0.43 under Digital Unix 4.0: does not die prope"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="17750.html" title="Message sent in reply to this message">Thomas Leitner: "Re: FVWM: fvwm-2.0.43 under Digital Unix 4.0: does not die prope"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17747" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17747" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17747" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17747" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

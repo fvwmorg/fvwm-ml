@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Auto raise/lower particular window from Richard Curnow on 2002-03-26 (fvwm-users)</title>
+<meta name="Author" content="Richard Curnow (Richard.Curnow_at_st.com)" />
+<meta name="Subject" content="FVWM: Auto raise/lower particular window" />
+<meta name="Date" content="2002-03-26" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Auto raise/lower particular window</h1>
+<!-- received="Tue Mar 26 07:33:37 2002" -->
+<!-- isoreceived="20020326073337" -->
+<!-- sent="Tue, 26 Mar 2002 13:26:14 +0000" -->
+<!-- isosent="20020326132614" -->
+<!-- name="Richard Curnow" -->
+<!-- email="Richard.Curnow_at_st.com" -->
+<!-- subject="FVWM: Auto raise/lower particular window" -->
+<!-- id="20020326132614.GA7351_at_malvern.bri.st.com" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start4704" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="4705.html" accesskey="d" title="Dominik Vogt: &quot;Re: FVWM: Auto raise/lower particular window&quot;">Next message</a> ]
+[ <a href="4703.html" title="Tom Alsberg: &quot;FVWM: FVWM FAQ update time&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="4705.html" accesskey="t" title="Dominik Vogt: &quot;Re: FVWM: Auto raise/lower particular window&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg4704" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg4704" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg4704" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg4704" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Richard Curnow &lt;<a href="mailto:Richard.Curnow_at_st.com?Subject=Re%3A%20FVWM%3A%20Auto%20raise%2Flower%20particular%20window">Richard.Curnow_at_st.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 26 Mar 2002 13:26:14 +0000</span><br />
+</address>
+<br />
+I'd like to make FvwmIconMan and FvwmButtons be raised if the mouse goes over
+<br />
+them, and lowered when the mouse leaves them.  My current attempt looks like
+<br />
+<br />Module FvwmAuto 250 &quot;Silent AutoRaiseFunction&quot; &quot;Silent AutoLowerFunction&quot;
+<br />
+<br />DestroyFunc AutoRaiseFunction
+<br />
+AddToFunc AutoRaiseFunction
+<br />
++ I Current (FvwmIconMan) Raise
+<br />
++ I Current (FvwmButtons) Raise
+<br />
+<br />DestroyFunc AutoLowerFunction
+<br />
+AddToFunc AutoLowerFunction
+<br />
++ I Current (FvwmIconMan) Lower
+<br />
++ I Current (FvwmButtons) Lower
+<br />
+<br />, but this doesn't work.  When the mouse enters the FvwmIconMan window, I see
+<br />
+it briefly flashed to the front and then lowered again.  I think the problem is
+<br />
+that AutoLowerFunction is being called for the window that's just been left,
+<br />
+but the current window by then is FvwmIconMan, so the lower action is applied
+<br />
+when I don't want it.  Conversely, when I leave the window, by the time
+<br />
+AutoLowerFunction is called the current window isn't FvwmIconMan any longer, so
+<br />
+the condition doesn't match and nothing happens.
+<br />
+<br />Is there a way of making the actions conditional on the window that was current
+<br />
+when the event was originally signalled?  Or another trick that I'm missing?
+<br />
+Alternatively (and more effieciently!), can FvwmAuto be made to only handle
+<br />
+enter and leave events for particular windows?
+<br />
+<br />Richard
+<br />
+<br /><pre>
+-- 
+Richard \\\ SuperH Core+Debug Architect ///            .... At home ...
+  P.    /// Richard.Curnow_at_st.com      /// richard_at_rrbcurnow&#46;<!--nospam-->freeuk.com
+Curnow  \\\ <a href="http://www.superh.com/">http://www.superh.com/</a>    ///      www.rrbcurnow.freeuk.com
+Speaking for myself, not on behalf of SuperH
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue Mar 26 2002 - 07:33:37 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start4704">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="4705.html" title="Next message in the list">Dominik Vogt: "Re: FVWM: Auto raise/lower particular window"</a></li>
+<li><dfn>Previous message</dfn>: <a href="4703.html" title="Previous message in the list">Tom Alsberg: "FVWM: FVWM FAQ update time"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="4705.html" title="Next message in this discussion thread">Dominik Vogt: "Re: FVWM: Auto raise/lower particular window"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="4705.html" title="Message sent in reply to this message">Dominik Vogt: "Re: FVWM: Auto raise/lower particular window"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg4704" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg4704" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg4704" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg4704" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:52 BST
+</em></small></p>
+</body>
+</html>

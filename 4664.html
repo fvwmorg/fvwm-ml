@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Re: Memory Allocations from Dave Trollope on 2002-03-23 (fvwm-users)</title>
+<meta name="Author" content="Dave Trollope (dave.trollope_at_worldnet.att.net)" />
+<meta name="Subject" content="FVWM: Re: Memory Allocations" />
+<meta name="Date" content="2002-03-23" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Re: Memory Allocations</h1>
+<!-- received="Fri Mar 22 21:49:45 2002" -->
+<!-- isoreceived="20020322214945" -->
+<!-- sent="Fri, 22 Mar 2002 21:30:10 -0600" -->
+<!-- isosent="20020323033010" -->
+<!-- name="Dave Trollope" -->
+<!-- email="dave.trollope_at_worldnet.att.net" -->
+<!-- subject="FVWM: Re: Memory Allocations" -->
+<!-- id="3C9BF6C2.F8C5C956_at_worldnet.att.net" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="20020322180100.C855&#64;lifebits.de" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start4664" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="4665.html" accesskey="d" title="Paul Smith: &quot;Re: FVWM: Re: Memory Allocations&quot;">Next message</a> ]
+[ <a href="4663.html" title="Dominik Vogt: &quot;Re: FVWM: Setting background images for page, speed...&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="4665.html" accesskey="t" title="Paul Smith: &quot;Re: FVWM: Re: Memory Allocations&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg4664" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg4664" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg4664" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg4664" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Dave Trollope &lt;<a href="mailto:dave.trollope_at_worldnet.att.net?Subject=Re%3A%20FVWM%3A%20Re%3A%20Memory%20Allocations">dave.trollope_at_worldnet.att.net</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 22 Mar 2002 21:30:10 -0600</span><br />
+</address>
+<br />
+Hi Dominik,
+<br />
+<br /><br /><em class="quotelev1">&gt; Fvwm's speed depends to 90% or more on how the communication with
+</em><br />
+<em class="quotelev1">&gt; the X server is done.  All other effects of calling functions and
+</em><br />
+<em class="quotelev1">&gt; such only add very little to the CPU load.  Once I profiled fvwm
+</em><br />
+<em class="quotelev1">&gt; for ten minutes using gprof, and as far as I remember it did not
+</em><br />
+<em class="quotelev1">&gt; even consume one second of CPU time.  The things that slow it down
+</em><br />
+<em class="quotelev1">&gt; are file I/O and X server communication.
+</em><br />
+<br />I agree there are bigger fish to fry - this was my first look at fvwm source.
+<br />
+I thought it wiser to start with small steps.... I was thinking I would take a
+<br />
+look at XFree86 too sometime. I need to learn much about X primitives.
+<br />
+<br />In terms of the performance - I felt like the system was more responsive in
+<br />
+cygwin with the modifications. Perhaps it was just my hopeful imagination!
+<br />
+What OS and CPU were you running when you profiled?
+<br />
+<br /><br /><em class="quotelev1">&gt; Talking about the code execution time, there is only one big
+</em><br />
+<em class="quotelev1">&gt; factor, the PositiveWrite() function that sends information to
+</em><br />
+<em class="quotelev1">&gt; the modules.  It can be called hundreds of thousands of times
+</em><br />
+<em class="quotelev1">&gt; during a busy work day.  Much effort has been made to optimize
+</em><br />
+<em class="quotelev1">&gt; that function.
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<br />AddToMessageQueue has 2 safemalloc calls - That equates to &quot;hundreds of
+<br />
+thousands&quot;*2 unnecessary function calls.
+<br />
+<br />If you want to really optimise this, the first call could use malloc directly
+<br />
+dispensing with an unnecessary if (length == 0) as well as the function call.
+<br />
+Shouldn't do this on the second one because size could be any value.
+<br />
+<br /><br /><em class="quotelev2">&gt; &gt; 1) I came across libs/safemalloc.c.
+</em><br />
+<em class="quotelev2">&gt; &gt;
+</em><br />
+<em class="quotelev2">&gt; &gt; I was surprised that malloc was wrapped in a function like this since
+</em><br />
+<em class="quotelev2">&gt; &gt; this is called whenever something is put on the (I think) event queue.
+</em><br />
+<em class="quotelev2">&gt; &gt; Everytime I move the pointer from one window to another, launch tools
+</em><br />
+<em class="quotelev2">&gt; &gt; etc, safemalloc is called. Wrapping malloc in a function is an overhead
+</em><br />
+<em class="quotelev2">&gt; &gt; that will cause branches from the CPU cache probably when only one is
+</em><br />
+<em class="quotelev2">&gt; &gt; necessary (the actual call to malloc itself).
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt; I feel the added code size is not worth the effort most of the
+</em><br />
+<em class="quotelev1">&gt; time.  If individual functions are called ofthen from a certain
+</em><br />
+<em class="quotelev1">&gt; place it may be better to only optimize that place instead of all
+</em><br />
+<em class="quotelev1">&gt; the others where it isn't a problem.  For example, many of the
+</em><br />
+<em class="quotelev1">&gt; safemalloc() calls could be replaced with alloca(), even saving
+</em><br />
+<em class="quotelev1">&gt; the free() call.
+</em><br />
+<br />Hmm that sounds like a good change to do. I will look at that.
+<br />
+<br /><br /><em class="quotelev2">&gt; &gt; So #if 0'd out the safemalloc, safecalloc, saferealloc functions and
+</em><br />
+<em class="quotelev2">&gt; &gt; recoded them as macros. E.G.
+</em><br />
+<em class="quotelev2">&gt; &gt;
+</em><br />
+<em class="quotelev2">&gt; &gt; #define safemalloc(length) \
+</em><br />
+<em class="quotelev2">&gt; &gt;    (malloc((length) &lt;= 0 ? 1 : (length)) ? : (char
+</em><br />
+<em class="quotelev2">&gt; &gt; *)alloc_failed(&quot;malloc&quot;,(length)))
+</em><br />
+<em class="quotelev2">&gt; &gt;
+</em><br />
+<em class="quotelev2">&gt; &gt; The main advantage of this is that only one function call for each
+</em><br />
+<em class="quotelev2">&gt; &gt; malloc is required (malloc itself) instead of two (safemalloc+malloc).
+</em><br />
+<em class="quotelev2">&gt; &gt; ?: is supposed to be more efficient than if () but I'm not sure thats
+</em><br />
+<em class="quotelev2">&gt; &gt; really true. If I could only disassemble the code.... Suggestions? One
+</em><br />
+<em class="quotelev2">&gt; &gt; function call should reduce the number of branches (and therefore cache
+</em><br />
+<em class="quotelev2">&gt; &gt; usage is improved).
+</em><br />
+<em class="quotelev2">&gt; &gt;
+</em><br />
+<em class="quotelev2">&gt; &gt; The biggest disadvantage of this however is that the binary size
+</em><br />
+<em class="quotelev2">&gt; &gt; increases because these decisions (length &lt;= 0) are duplicated
+</em><br />
+<em class="quotelev2">&gt; &gt; everywhere. Somewhat prone to casting issues of length.
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev2">&gt; &gt; 2) The other related issue I found was that in some cases, dynamic
+</em><br />
+<em class="quotelev2">&gt; &gt; memory is used for simple temporary use. Local stack arrays are much
+</em><br />
+<em class="quotelev2">&gt; &gt; more efficient for this, however you don't want to restrict the size of
+</em><br />
+<em class="quotelev2">&gt; &gt; the data being processed. I suggest that the majority of users will have
+</em><br />
+<em class="quotelev2">&gt; &gt; little data and most optimisation can come from putting those into a
+</em><br />
+<em class="quotelev2">&gt; &gt; local array, and only calling on safemalloc when handling larger data
+</em><br />
+<em class="quotelev2">&gt; &gt; quantities.
+</em><br />
+<em class="quotelev2">&gt; &gt;
+</em><br />
+<em class="quotelev2">&gt; &gt; [ code snipped ]
+</em><br />
+<em class="quotelev2">&gt; &gt; This would completely remove the malloc for 90% of users.
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt; Yes, but what is the cost of the malloc?
+</em><br />
+<br />What does the cost matter when it can be reduced to 10% of the cost?
+<br />
+<br /><br /><em class="quotelev1">&gt;  RelieveRectangle is
+</em><br />
+<em class="quotelev1">&gt; perhaps called 20 times when a window changes focus.  I'd guess on
+</em><br />
+<em class="quotelev1">&gt; average you do not do this more than 5 times per minute, giving a
+</em><br />
+<em class="quotelev1">&gt; total of 6000 calls per hour.  I'd estimate that can easily be
+</em><br />
+<em class="quotelev1">&gt; done by any but the slowest machines in less than the tenth of a
+</em><br />
+<em class="quotelev1">&gt; second.
+</em><br />
+<br />My only contention here is that if you don't need to do it, why do it. Even
+<br />
+tenths of seconds here and there add up.
+<br />
+<br /><br /><em class="quotelev1">&gt;  It is likely that more time could be saved by preventing
+</em><br />
+<em class="quotelev1">&gt; unnecessary calls to RelieveRectangle() in a single place in the
+</em><br />
+<em class="quotelev1">&gt; code since it requires communication over the network.
+</em><br />
+<br />Sounds like another promising avenue - I will take a look.
+<br />
+<br /><br /><em class="quotelev2">&gt; &gt; I have half a dozen of these kind of things and a place or two where
+</em><br />
+<em class="quotelev2">&gt; &gt; memset is called prior to a memcpy that overwrites the same block memset
+</em><br />
+<em class="quotelev2">&gt; &gt; cleared.
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt; Do you have a list of these?  Some of the memset() calls are
+</em><br />
+<em class="quotelev1">&gt; redundant.  Not all of these are bad though.  Some are merely
+</em><br />
+<em class="quotelev1">&gt; intended to prevent uninitialised elements of structures if new
+</em><br />
+<em class="quotelev1">&gt; members are added to the structures in the future.
+</em><br />
+<br />The places where I'm thinking of use sizeof in both calls so if one misses a
+<br />
+new element, so would the other.
+<br />
+<br />Here they are:
+<br />
+<br />menus.c NewMenuStyle()
+<br />
+&nbsp;&nbsp;tmpms = (MenuStyle *)safemalloc(sizeof(MenuStyle));
+<br />
+&nbsp;&nbsp;memset(tmpms, 0, sizeof(MenuStyle));
+<br />
+&nbsp;&nbsp;if (ms)
+<br />
+&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;/* copy the structure over our temporary menu face. */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;memcpy(tmpms, ms, sizeof(MenuStyle));
+<br />
+<br />The memset can be safely moved to the else leg of the if.
+<br />
+<br />scanForColor()
+<br />
+&nbsp;&nbsp;/* save instring in case can't find pixmap */
+<br />
+&nbsp;&nbsp;save_instring = (char *)safemalloc(strlen(instring)+1);
+<br />
+&nbsp;&nbsp;name = (char *)safemalloc(strlen(instring)+1);
+<br />
+&nbsp;&nbsp;strcpy(save_instring,instring);
+<br />
+<br />&nbsp;&nbsp;/* Scan whole string        */
+<br />
+&nbsp;&nbsp;for (txt = instring; *txt != '\0'; txt++)
+<br />
+&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;free(name);
+<br />
+&nbsp;&nbsp;free(save_instring);
+<br />
+<br />can become:
+<br />
+&nbsp;&nbsp;&nbsp;int l = strlen(instring) + 1;
+<br />
+&nbsp;&nbsp;/* save instring in case can't find pixmap */
+<br />
+&nbsp;&nbsp;save_instring = (char *)safemalloc(l*2);
+<br />
+&nbsp;&nbsp;name = save_instring + l;
+<br />
+&nbsp;&nbsp;strcpy(save_instring,instring);
+<br />
+<br />&nbsp;&nbsp;/* Scan whole string        */
+<br />
+&nbsp;&nbsp;for (txt = instring; *txt != '\0'; txt++)
+<br />
+&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;free(save_instring);
+<br />
+<br /><br />add_window.c setup_window_structure()
+<br />
+<br />This memset isn't needed its only used in the else leg, and then its copied
+<br />
+over.:
+<br />
+<br />&nbsp;&nbsp;memset(&amp;save_state, '\0', sizeof(FvwmWindow));
+<br />
+<br />I thought I found more, but these were the ones I had written down.
+<br />
+<br /><br /><em class="quotelev2">&gt; &gt; What do you think? While these are trivial changes, for a function that
+</em><br />
+<em class="quotelev2">&gt; &gt; is called hundreds of times, even a small gain adds up. Shall I go ahead
+</em><br />
+<em class="quotelev2">&gt; &gt; and make these changes? Perhaps as I grow more experienced with the
+</em><br />
+<em class="quotelev2">&gt; &gt; fvwm2 source I can find some bigger issues.
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt; I suggest this:
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt;  - Find places where alloca() can be used instead of safemalloc.
+</em><br />
+<em class="quotelev1">&gt;    alloca is either a system function or a replacement from the
+</em><br />
+<em class="quotelev1">&gt;    fvwm library.  This eliminates the additional function call and
+</em><br />
+<em class="quotelev1">&gt;    even cuts down the chances of running out of memory.  A program
+</em><br />
+<em class="quotelev1">&gt;    that can't get more space on the stack is doomed to crash
+</em><br />
+<em class="quotelev1">&gt;    anyway.  It also reduces the chance of memory leaks.
+</em><br />
+<em class="quotelev1">&gt;  - Leave safemalloc as it is.  If there are specific functions
+</em><br />
+<em class="quotelev1">&gt;    that are called frequently, optimizing them is a good thing.
+</em><br />
+<em class="quotelev1">&gt;  - In many places there is code like
+</em><br />
+<em class="quotelev1">&gt;      ptr = safemalloc(size);
+</em><br />
+<em class="quotelev1">&gt;      memset(ptr, 0, size);
+</em><br />
+<em class="quotelev1">&gt;    This could be done faster and smaller with safecalloc().
+</em><br />
+<em class="quotelev1">&gt;  - For the big gain:  optimize the X calls.  Any call that
+</em><br />
+<em class="quotelev1">&gt;    contacts the X server needlessly causes delays.
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<br />I can easily attack the first three. My current inexperience with X limits the
+<br />
+last one, but I am interested in learning X development so I will look around
+<br />
+(I will look at the ReleiveRectangle calls first).
+<br />
+<br /><br /><em class="quotelev1">&gt; And a comment on coding style:
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt;  - Macros with code are evil.  Never use them.  Instead, you can
+</em><br />
+<em class="quotelev1">&gt;    inline the code (although it doesn't work with any compiler).
+</em><br />
+<br />Here we will have to agree to disagree. I believe macros with and without code
+<br />
+have their place. There are certain things that shouldn't be done in macros,
+<br />
+but I wouldn't call them evil!
+<br />
+<br />Cheers
+<br />
+Dave
+<br />
+<br /><em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt; Bye
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt; Dominik ^_^  ^_^
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt; --
+</em><br />
+<em class="quotelev1">&gt; Dominik Vogt, email: d.vogt_at_lifebits.de
+</em><br />
+<em class="quotelev1">&gt; LifeBits Aktiengesellschaft, Albrechtstr. 9, D-72072 Tuebingen
+</em><br />
+<em class="quotelev1">&gt; fon: ++49 (0) 7071/7965-0, fax: ++49 (0) 7071/7965-20
+</em><br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Mar 22 2002 - 21:49:45 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start4664">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="4665.html" title="Next message in the list">Paul Smith: "Re: FVWM: Re: Memory Allocations"</a></li>
+<li><dfn>Previous message</dfn>: <a href="4663.html" title="Previous message in the list">Dominik Vogt: "Re: FVWM: Setting background images for page, speed..."</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="4665.html" title="Next message in this discussion thread">Paul Smith: "Re: FVWM: Re: Memory Allocations"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="4665.html" title="Message sent in reply to this message">Paul Smith: "Re: FVWM: Re: Memory Allocations"</a></li>
+<li><dfn>Reply</dfn>: <a href="4667.html" title="Message sent in reply to this message">Dominik Vogt: "Re: FVWM: Re: Memory Allocations"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg4664" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg4664" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg4664" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg4664" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:52 BST
+</em></small></p>
+</body>
+</html>

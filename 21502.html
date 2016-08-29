@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: FvwmIconMan patch for sort by app_id from Greg Klanderman on 1997-12-12 (fvwm-users)</title>
+<meta name="Author" content="Greg Klanderman (greg_at_alphatech.com)" />
+<meta name="Subject" content="FVWM: FvwmIconMan patch for sort by app_id" />
+<meta name="Date" content="1997-12-12" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: FvwmIconMan patch for sort by app_id</h1>
+<!-- received="Thu Dec 11 19:38:58 1997" -->
+<!-- isoreceived="19971211193858" -->
+<!-- sent="Thu, 11 Dec 1997 20:35:08 -0500" -->
+<!-- isosent="19971212013508" -->
+<!-- name="Greg Klanderman" -->
+<!-- email="greg_at_alphatech.com" -->
+<!-- subject="FVWM: FvwmIconMan patch for sort by app_id" -->
+<!-- id="199712120135.UAA18301_at_pochacco.alphatech.com" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start21502" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="21503.html" accesskey="d" title="A.J.vanWerven: &quot;Re: FVWM: FvwmPager - won&#0039;t take focus bug + patch&quot;">Next message</a> ]
+[ <a href="21501.html" title="Greg Klanderman: &quot;FVWM: FvwmPager - won&#0039;t take focus bug + patch&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="21505.html" accesskey="t" title="Brady Montz: &quot;Re: FVWM: FvwmIconMan patch for sort by app_id&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21502" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21502" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21502" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21502" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Greg Klanderman &lt;<a href="mailto:greg_at_alphatech.com?Subject=Re%3A%20FVWM%3A%20FvwmIconMan%20patch%20for%20sort%20by%20app_id">greg_at_alphatech.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 11 Dec 1997 20:35:08 -0500</span><br />
+</address>
+<br />
+Hi,
+<br />
+<br />If you don't sort the IconMan buttons, the order ends up changing as
+<br />
+you switch back and forth between different desks, and this is highly
+<br />
+irritating.  This is presumably because the module gets the window
+<br />
+messages from fvwm in different orders.  This patch adds a new option,
+<br />
+sortbyappid of type boolean which changes the sort to sort by the
+<br />
+application id, roughly equivalent to order of window creation as twm
+<br />
+does, rather than by the button name.
+<br />
+<br />Eg, you might use
+<br />
+<br />*FvwmIconMan*sortbyappid     true
+<br />
+<br />to set this behavior.  It is false by default.
+<br />
+<br />Patch follows.
+<br />
+<br />Greg
+<br />
+<br /><br />--- /local/mstar/software/fvwm/.backups/!local!mstar!software!fvwm!fvwm-2.0.46!modules!FvwmIconMan!FvwmIconMan.h.~1~	Wed Jul 16 21:31:22 1997
+<br />
++++ FvwmIconMan.h	Thu Dec 11 20:11:22 1997
+<br />
+_at_&#64; -286,6 +286,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;Uchar followFocus;
+<br />
+&nbsp;&nbsp;&nbsp;Uchar usewinlist;
+<br />
+&nbsp;&nbsp;&nbsp;Uchar sort;
+<br />
++  Uchar sort_by_appid;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;/* X11 state */
+<br />
+&nbsp;&nbsp;&nbsp;Window theWindow, theFrame;
+<br />
+--- /local/mstar/software/fvwm/.backups/!local!mstar!software!fvwm!fvwm-2.0.46!modules!FvwmIconMan!globals.c.~1~	Wed Jul 16 21:31:21 1997
+<br />
++++ globals.c	Thu Dec 11 20:12:43 1997
+<br />
+_at_&#64; -69,6 +69,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;globals.managers[id].followFocus = 0;
+<br />
+&nbsp;&nbsp;&nbsp;globals.managers[id].usewinlist = 1;
+<br />
+&nbsp;&nbsp;&nbsp;globals.managers[id].sort = 1;
+<br />
++  globals.managers[id].sort_by_appid = 0;
+<br />
+&nbsp;&nbsp;&nbsp;globals.managers[id].focus_button = NULL;
+<br />
+&nbsp;&nbsp;&nbsp;globals.managers[id].select_button = NULL;
+<br />
+&nbsp;&nbsp;&nbsp;globals.managers[id].bindings[MOUSE]    = ParseMouseEntry (DEFAULT_MOUSE);
+<br />
+--- /local/mstar/software/fvwm/.backups/!local!mstar!software!fvwm!fvwm-2.0.46!modules!FvwmIconMan!readconfig.c.~1~	Wed Jul 16 21:31:21 1997
+<br />
++++ readconfig.c	Thu Dec 11 20:14:40 1997
+<br />
+_at_&#64; -1584,6 +1584,27 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ConsoleDebug (CONFIG, &quot;Setting sort to: %d\n&quot;, i);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SET_MANAGER (manager, sort, i);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
++      else if (!strcasecmp (option1, &quot;sortbyappid&quot;)) {
+<br />
++	p = read_next_cmd (READ_ARG);
+<br />
++	if (!p) {
+<br />
++	  ConsoleMessage (&quot;Bad line: %s\n&quot;, current_line);
+<br />
++	  ConsoleMessage (&quot;Need argument to sortbyappid\n&quot;);
+<br />
++	  continue;
+<br />
++	}
+<br />
++	if (!strcasecmp (p, &quot;true&quot;)) {
+<br />
++	  i = 1;
+<br />
++	}
+<br />
++	else if (!strcasecmp (p, &quot;false&quot;)) {
+<br />
++	  i = 0;
+<br />
++	}
+<br />
++	else {
+<br />
++	  ConsoleMessage (&quot;Bad line: %s\n&quot;, current_line);
+<br />
++	  ConsoleMessage (&quot;What is this: %s?\n&quot;, p);
+<br />
++	  continue;
+<br />
++	}
+<br />
++	ConsoleDebug (CONFIG, &quot;Setting sortbyappid to: %d\n&quot;, i);
+<br />
++	SET_MANAGER (manager, sort_by_appid, i);
+<br />
++      }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if (!strcasecmp (option1, &quot;title&quot;)) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;char *token;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p = read_next_cmd (READ_REST_OF_LINE);
+<br />
+--- /local/mstar/software/fvwm/.backups/!local!mstar!software!fvwm!fvwm-2.0.46!modules!FvwmIconMan!xmanager.c.~1~	Wed Jul 16 21:31:22 1997
+<br />
++++ xmanager.c	Thu Dec 11 20:17:51 1997
+<br />
+_at_&#64; -1403,6 +1403,17 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;XFlush (theDisplay);
+<br />
+&nbsp;}
+<br />
+&nbsp;
+<br />
++
+<br />
++static int compare_windows(int by_appid, WinData *a, WinData *b)
+<br />
++{
+<br />
++  if (by_appid) {
+<br />
++    return a-&gt;app_id - b-&gt;app_id;
+<br />
++  }
+<br />
++  else {
+<br />
++    return strcasecmp (a-&gt;display_string, b-&gt;display_string);
+<br />
++  }
+<br />
++}
+<br />
++
+<br />
+&nbsp;/* find_windows_spot: returns index of button to stick the window in.
+<br />
+&nbsp;&nbsp;*                    checks win-&gt;button to see if it's already in manager.
+<br />
+&nbsp;&nbsp;*                    if it isn't, then gives spot at which it should be,
+<br />
+_at_&#64; -1413,9 +1424,9 &#64;&#64;
+<br />
+&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;WinManager *man = win-&gt;manager;
+<br />
+&nbsp;&nbsp;&nbsp;int num_windows = man-&gt;buttons.num_windows;
+<br />
++  int by_appid = man-&gt;sort_by_appid;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;if (man-&gt;sort) {
+<br />
+-    char *ds = win-&gt;display_string;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int i, cur, start, finish, cmp_dir, correction;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Button **bp;
+<br />
+&nbsp;
+<br />
+_at_&#64; -1425,15 +1436,14 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cur = win-&gt;button-&gt;index;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (cur - 1 &gt; 0 &amp;&amp; 
+<br />
+-	  strcasecmp (ds, bp[cur - 1]-&gt;drawn_state.win-&gt;display_string) &lt; 0) {
+<br />
++	  compare_windows (by_appid, win, bp[cur - 1]-&gt;drawn_state.win) &lt; 0) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start = cur - 1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;finish = -1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cmp_dir = -1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;correction = 1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if (cur &lt; num_windows - 1 &amp;&amp; 
+<br />
+-	       strcasecmp (ds, 
+<br />
+-			   bp[cur + 1]-&gt;drawn_state.win-&gt;display_string) &gt; 0) {
+<br />
++	       compare_windows (by_appid, win, bp[cur + 1]-&gt;drawn_state.win) &gt; 0) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start = cur + 1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;finish = num_windows;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cmp_dir = 1;
+<br />
+_at_&#64; -1450,7 +1460,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;correction = 0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (i = start; i != finish &amp;&amp; bp[i]-&gt;drawn_state.win &amp;&amp; cmp_dir * 
+<br />
+-	   strcasecmp (ds, bp[i]-&gt;drawn_state.win-&gt;display_string) &gt; 0; 
+<br />
++             compare_windows (by_appid, win, bp[i]-&gt;drawn_state.win) &gt; 0; 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i = i + cmp_dir) 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i += correction;
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Dec 11 1997 - 19:38:58 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start21502">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="21503.html" title="Next message in the list">A.J.vanWerven: "Re: FVWM: FvwmPager - won&#0039;t take focus bug + patch"</a></li>
+<li><dfn>Previous message</dfn>: <a href="21501.html" title="Previous message in the list">Greg Klanderman: "FVWM: FvwmPager - won&#0039;t take focus bug + patch"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="21505.html" title="Next message in this discussion thread">Brady Montz: "Re: FVWM: FvwmIconMan patch for sort by app_id"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Maybe reply</dfn>: <a href="21505.html" title="Message sent in reply to this message">Brady Montz: "Re: FVWM: FvwmIconMan patch for sort by app_id"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21502" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21502" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21502" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21502" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

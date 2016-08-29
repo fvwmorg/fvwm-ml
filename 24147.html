@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: A patch and two bugs from Andrew Morton on 1999-05-12 (fvwm-users)</title>
+<meta name="Author" content="Andrew Morton (morton_at_nortelnetworks.com)" />
+<meta name="Subject" content="FVWM: A patch and two bugs" />
+<meta name="Date" content="1999-05-12" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: A patch and two bugs</h1>
+<!-- received="Wed May 12 01:33:18 1999" -->
+<!-- isoreceived="19990512003318" -->
+<!-- sent="Wed, 12 May 1999 06:30:42 +0000" -->
+<!-- isosent="19990512063042" -->
+<!-- name="Andrew Morton" -->
+<!-- email="morton_at_nortelnetworks.com" -->
+<!-- subject="FVWM: A patch and two bugs" -->
+<!-- id="37392012.B13F8E0_at_asiapacificm01.nt.com" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start24147" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="24148.html" accesskey="d" title="Tim Phipps: &quot;Re: FVWM: A patch and two bugs&quot;">Next message</a> ]
+[ <a href="24146.html" title="Josh Beavers: &quot;FVWM: help!  window sizing problem&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="24148.html" accesskey="t" title="Tim Phipps: &quot;Re: FVWM: A patch and two bugs&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg24147" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg24147" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg24147" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg24147" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Andrew Morton &lt;<a href="mailto:morton_at_nortelnetworks.com?Subject=Re%3A%20FVWM%3A%20A%20patch%20and%20two%20bugs">morton_at_nortelnetworks.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 12 May 1999 06:30:42 +0000</span><br />
+</address>
+<br />
+Hello.
+<br />
+<br />I use FVWM2 and the KDE file manager.  As KFM is a single-click browser
+<br />
+I have configured FVWM2 to be single-clickable as well.  This works OK,
+<br />
+except you need a very steady hand to deiconify an icon with a single
+<br />
+click.
+<br />
+<br />This is because the hard-wired three pixel thresholds in
+<br />
+function.c:IsClick() are too small.
+<br />
+<br />The attached patch against fvwm-snap-19990511 makes this distance
+<br />
+configurable (default is still three).  The .fvwm2rc syntax is
+<br />
+<br />MoveDistance 9
+<br />
+<br />I hope I did the diff thing right...
+<br />
+<br />BTW: which Makefile target cleans _everything_ into a diffable form???
+<br />
+<br /><br />Bug reports on fvwm-snap-19990511:
+<br />
+<br />1: I get &quot;Some command line modules have not quit, Starting up after
+<br />
+timeout.`&quot; and a long hang at startup
+<br />
+<br />2: When I run KFM, KFM's icons are _always_ on top of FVWM's windows.
+<br />
+<br /><br />System info:
+<br />
+<br />Pretty stock RedHat 5.2/x86
+<br />
+<br />pwold011:~&gt; rpm -qf /opt/kde/bin/kfm
+<br />
+kdebase-1.1-3rh5x
+<br />
+<br /><br />Cheers,
+<br />
+Andrew.
+<br />
+<br />
+diff -Naur fvwm-snap-19990511/fvwm/builtins.c fvwm.akpm/fvwm/builtins.c
+<br />
+--- fvwm-snap-19990511/fvwm/builtins.c	Thu May  6 21:30:18 1999
+<br />
++++ fvwm.akpm/fvwm/builtins.c	Wed May 12 15:48:16 1999
+<br />
+_at_&#64; -993,6 +993,19 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;Scr.MoveResistance = val[1];
+<br />
+&nbsp;}
+<br />
+&nbsp;
+<br />
++void SetMoveDistance(F_CMD_ARGS)
+<br />
++{
+<br />
++  int val[1];
+<br />
++
+<br />
++  if (GetIntegerArguments(action, NULL, val, 1) != 1)
+<br />
++  {
+<br />
++    fvwm_msg(ERR,&quot;SetMoveDisistance&quot;,&quot;MoveDistance requires one argument&quot;);
+<br />
++    return;
+<br />
++  }
+<br />
++
+<br />
++  Scr.MoveDistance = val[0];
+<br />
++}
+<br />
++
+<br />
+&nbsp;void SetColormapFocus(F_CMD_ARGS)
+<br />
+&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;if (MatchToken(action,&quot;FollowsFocus&quot;))
+<br />
+diff -Naur fvwm-snap-19990511/fvwm/functions.c fvwm.akpm/fvwm/functions.c
+<br />
+--- fvwm-snap-19990511/fvwm/functions.c	Fri May  7 21:30:20 1999
+<br />
++++ fvwm.akpm/fvwm/functions.c	Wed May 12 15:46:09 1999
+<br />
+_at_&#64; -167,6 +167,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;{&quot;modulepath&quot;,   setModulePath,    F_MODULE_PATH,         0},
+<br />
+&nbsp;&nbsp;&nbsp;{&quot;mouse&quot;,        mouse_binding,    F_MOUSE,               0},
+<br />
+&nbsp;&nbsp;&nbsp;{&quot;move&quot;,         move_window,      F_MOVE,                FUNC_NEEDS_WINDOW},
+<br />
++  {&quot;movedistance&quot;,SetMoveDistance, F_MOVE_DIST,           0},
+<br />
+&nbsp;&nbsp;&nbsp;{&quot;movetodesk&quot;,   move_window_to_desk,F_MOVE_TO_DESK,      FUNC_NEEDS_WINDOW},
+<br />
+&nbsp;&nbsp;&nbsp;{&quot;movetopage&quot;,   move_window_to_page,F_MOVE_TO_PAGE,      FUNC_NEEDS_WINDOW},
+<br />
+&nbsp;&nbsp;&nbsp;{&quot;next&quot;,         NextFunc,         F_NEXT,                0},
+<br />
+_at_&#64; -382,16 +383,18 &#64;&#64;
+<br />
+&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;int xcurrent,ycurrent,total = 0;
+<br />
+&nbsp;&nbsp;&nbsp;Time t0;
+<br />
++  int dist;
+<br />
+&nbsp;&nbsp;&nbsp;extern Time lastTimestamp;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;xcurrent = x;
+<br />
+&nbsp;&nbsp;&nbsp;ycurrent = y;
+<br />
+&nbsp;&nbsp;&nbsp;t0 = lastTimestamp;
+<br />
++  dist = Scr.MoveDistance;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;while(((total &lt; Scr.ClickTime &amp;&amp; lastTimestamp - t0 &lt; Scr.ClickTime) ||
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;!may_time_out) &amp;&amp;
+<br />
+-	x - xcurrent &lt; 3 &amp;&amp; x - xcurrent &gt; -3 &amp;&amp;
+<br />
+-	y - ycurrent &lt; 3 &amp;&amp; y - ycurrent &gt; -3)
+<br />
++	x - xcurrent &lt; dist &amp;&amp; x - xcurrent &gt; -dist &amp;&amp;
+<br />
++	y - ycurrent &lt; dist &amp;&amp; y - ycurrent &gt; -dist)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;usleep(20000);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;total+=20;
+<br />
+diff -Naur fvwm-snap-19990511/fvwm/fvwm.c fvwm.akpm/fvwm/fvwm.c
+<br />
+--- fvwm-snap-19990511/fvwm/fvwm.c	Tue May 11 21:30:19 1999
+<br />
++++ fvwm.akpm/fvwm/fvwm.c	Wed May 12 15:42:45 1999
+<br />
+_at_&#64; -1568,6 +1568,7 &#64;&#64;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;Scr.EdgeScrollX = Scr.EdgeScrollY = 100;
+<br />
+&nbsp;&nbsp;&nbsp;Scr.ScrollResistance = Scr.MoveResistance = 0;
+<br />
++  Scr.MoveDistance = 3;
+<br />
+&nbsp;&nbsp;&nbsp;Scr.SnapAttraction = -1;
+<br />
+&nbsp;&nbsp;&nbsp;Scr.SnapMode = 0;
+<br />
+&nbsp;&nbsp;&nbsp;Scr.SnapGridX = 1;
+<br />
+diff -Naur fvwm-snap-19990511/fvwm/fvwm2.1 fvwm.akpm/fvwm/fvwm2.1
+<br />
+--- fvwm-snap-19990511/fvwm/fvwm2.1	Sat May  8 21:30:21 1999
+<br />
++++ fvwm.akpm/fvwm/fvwm2.1	Wed May 12 16:05:57 1999
+<br />
+_at_&#64; -2300,6 +2300,14 &#64;&#64;
+<br />
+&nbsp;See also the &quot;AnimatedMove&quot; command, above.
+<br />
+&nbsp;
+<br />
+&nbsp;
+<br />
++.IP &quot;MoveDistance \fIpixels&quot;
+<br />
++When the user presses a mouse button upon an object \fIfvwm2\fP
+<br />
++waits to see if the action is a click or a drag.  If the mouse
+<br />
++moves by more than \fIpixels\fP pixels it is assumed to be a drag.
+<br />
++
+<br />
++Previous versions of \fIfvwm2\fP hardwired \fIpixels\fP to 3, which
+<br />
++is now the default value.
+<br />
++
+<br />
+&nbsp;.IP &quot;MoveToDesk \fIarg1\fP [ \fIarg2\fP ] [ \fImin max\fP ]&quot;
+<br />
+&nbsp;Moves the selected window to another desktop (workspace, room).
+<br />
+&nbsp;
+<br />
+diff -Naur fvwm-snap-19990511/fvwm/misc.h fvwm.akpm/fvwm/misc.h
+<br />
+--- fvwm-snap-19990511/fvwm/misc.h	Thu May  6 21:30:21 1999
+<br />
++++ fvwm.akpm/fvwm/misc.h	Wed May 12 15:37:53 1999
+<br />
+_at_&#64; -151,6 +151,7 &#64;&#64;
+<br />
+&nbsp;void copy_config(FILE **config_fd);
+<br />
+&nbsp;void SetEdgeScroll(F_CMD_ARGS);
+<br />
+&nbsp;void SetEdgeResistance(F_CMD_ARGS);
+<br />
++void SetMoveDistance(F_CMD_ARGS);
+<br />
+&nbsp;void CursorStyle(F_CMD_ARGS);
+<br />
+&nbsp;void ButtonStyle(F_CMD_ARGS);
+<br />
+&nbsp;#ifdef MULTISTYLE
+<br />
+diff -Naur fvwm-snap-19990511/fvwm/parse.h fvwm.akpm/fvwm/parse.h
+<br />
+--- fvwm-snap-19990511/fvwm/parse.h	Sun Apr 18 21:30:25 1999
+<br />
++++ fvwm.akpm/fvwm/parse.h	Wed May 12 15:36:44 1999
+<br />
+_at_&#64; -122,6 +122,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;F_DESTROY,
+<br />
+&nbsp;&nbsp;&nbsp;F_DELETE,
+<br />
+&nbsp;&nbsp;&nbsp;F_MOVE,
+<br />
++  F_MOVE_DIST,
+<br />
+&nbsp;&nbsp;&nbsp;F_MOVE_TO_PAGE,
+<br />
+&nbsp;&nbsp;&nbsp;F_ICONIFY,
+<br />
+&nbsp;&nbsp;&nbsp;F_STICK,
+<br />
+diff -Naur fvwm-snap-19990511/fvwm/screen.h fvwm.akpm/fvwm/screen.h
+<br />
+--- fvwm-snap-19990511/fvwm/screen.h	Tue May 11 21:30:20 1999
+<br />
++++ fvwm.akpm/fvwm/screen.h	Wed May 12 15:42:10 1999
+<br />
+_at_&#64; -327,6 +327,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;int ClickTime;               /*Max button-click delay for Function built-in*/
+<br />
+&nbsp;&nbsp;&nbsp;int ScrollResistance;        /* resistance to scrolling in desktop */
+<br />
+&nbsp;&nbsp;&nbsp;int MoveResistance;          /* res to moving windows over viewport edge */
+<br />
++  int MoveDistance;            /* number of pixels of mouse motion to decide it's a move operation */
+<br />
+&nbsp;&nbsp;&nbsp;int SnapAttraction;          /* attractiveness of window edges */
+<br />
+&nbsp;&nbsp;&nbsp;int SnapMode;                /* mode of snap attraction */
+<br />
+&nbsp;&nbsp;&nbsp;int SnapGridX;               /* snap grid X size */
+<br />
+<br /><br /><pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed May 12 1999 - 01:33:18 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start24147">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="24148.html" title="Next message in the list">Tim Phipps: "Re: FVWM: A patch and two bugs"</a></li>
+<li><dfn>Previous message</dfn>: <a href="24146.html" title="Previous message in the list">Josh Beavers: "FVWM: help!  window sizing problem"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="24148.html" title="Next message in this discussion thread">Tim Phipps: "Re: FVWM: A patch and two bugs"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="24148.html" title="Message sent in reply to this message">Tim Phipps: "Re: FVWM: A patch and two bugs"</a></li>
+<li><dfn>Reply</dfn>: <a href="24151.html" title="Message sent in reply to this message">Dominik Vogt: "Re: FVWM: A patch and two bugs"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="24157.html" title="Message sent in reply to this message">Andrew Morton: "Re: FVWM: A patch and two bugs"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="24158.html" title="Message sent in reply to this message">Andrew Morton: "Re: FVWM: A patch and two bugs"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="24163.html" title="Message sent in reply to this message">Dan Espen: "Re: FVWM: A patch and two bugs"</a></li>
+<li><dfn>Reply</dfn>: <a href="24169.html" title="Message sent in reply to this message">Dominik Vogt: "Re: FVWM: A patch and two bugs"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="24177.html" title="Message sent in reply to this message">Tim Phipps: "Re: FVWM: A patch and two bugs"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="24178.html" title="Message sent in reply to this message">Tim Phipps: "Re: FVWM: A patch and two bugs"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="24198.html" title="Message sent in reply to this message">Dan Espen: "Re: FVWM: A patch and two bugs"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="24207.html" title="Message sent in reply to this message">Tim Phipps: "Re: FVWM: A patch and two bugs"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="24208.html" title="Message sent in reply to this message">Dan Espen: "Re: FVWM: A patch and two bugs"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg24147" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg24147" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg24147" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg24147" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:02 BST
+</em></small></p>
+</body>
+</html>

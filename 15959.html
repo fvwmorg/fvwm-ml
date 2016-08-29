@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: EdgeResistance and Focus from Henrique Martins on 1996-03-20 (fvwm-users)</title>
+<meta name="Author" content="Henrique Martins (martins_at_martins.hpl.hp.com)" />
+<meta name="Subject" content="Re: FVWM: EdgeResistance and Focus" />
+<meta name="Date" content="1996-03-20" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: EdgeResistance and Focus</h1>
+<!-- received="Wed Mar 20 01:16:17 1996" -->
+<!-- isoreceived="19960320011617" -->
+<!-- sent="Tue, 19 Mar 1996 23:16:06 -0800" -->
+<!-- isosent="19960320071606" -->
+<!-- name="Henrique Martins" -->
+<!-- email="martins_at_martins.hpl.hp.com" -->
+<!-- subject="Re: FVWM: EdgeResistance and Focus" -->
+<!-- id="199603200716.AA133526166_at_martins.hpl.hp.com" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="199603200010.TAA00358&#64;taz.bearden" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start15959" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="15960.html" accesskey="d" title="Kai Grossjohann: &quot;Re: FVWM: EdgeResistance and Focus&quot;">Next message</a> ]
+[ <a href="15958.html" title="Mike Blatchley: &quot;Re: FVWM: EdgeResistance and Focus&quot;">Previous message</a> ]
+[ <a href="15953.html" title="Kai Grossjohann: &quot;FVWM: EdgeResistance and Focus&quot;">Maybe in reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15959" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15959" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15959" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15959" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Henrique Martins &lt;<a href="mailto:martins_at_martins.hpl.hp.com?Subject=Re%3A%20FVWM%3A%20EdgeResistance%20and%20Focus">martins_at_martins.hpl.hp.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 19 Mar 1996 23:16:06 -0800</span><br />
+</address>
+<br />
+kai&gt;  When the mouse pointer is warped to a window (with Focus, say), it
+<br />
+kai&gt;  is warped to the upper left hand corner.  Is there a way to have
+<br />
+kai&gt;  it warpt to the center instead?
+<br />
+<br />david&gt;  I made a suggestion here a while ago that X and Y percentages be
+<br />
+david&gt;  added to the warp function.  So, &quot;warp 0 0&quot; gives the current
+<br />
+david&gt;  behaviour, &quot;warp 0 100&quot; puts the pointer in the lower left corner,
+<br />
+david&gt;  and &quot;warp 50 50&quot; gives the commonly desired behavior of centering
+<br />
+david&gt;  the pointer, all independent of the window size.
+<br />
+<br /><br />&nbsp;&nbsp;Without going into the merits of warping to the middle vs the upper left
+<br />
+&nbsp;&nbsp;corner, the patch below should accomplish what David describes.  
+<br />
+<br />&nbsp;&nbsp;I made Focus == Focus 0 0, i.e. no parameters equals current behavior.
+<br />
+&nbsp;&nbsp;Should this patch have no adverse side effects (aka bugs) and be
+<br />
+&nbsp;&nbsp;integrated in the main version, Focus == Focus 50 50, could be an
+<br />
+&nbsp;&nbsp;alternative.
+<br />
+<br />&nbsp;&nbsp;The patch below was minimally tested. It should apply cleanly against
+<br />
+&nbsp;&nbsp;2.0.41.
+<br />
+<br />&nbsp;&nbsp;-- Henrique (martins_at_hpl.hp.com)
+<br />
+<br /><br />*** misc.h.orig	Tue Mar 19 21:44:59 1996
+<br />
+--- misc.h	Tue Mar 19 21:45:05 1996
+<br />
+***************
+<br />
+*** 274,280 ****
+<br />
+&nbsp;&nbsp;void KeepOnTop(void);
+<br />
+&nbsp;&nbsp;void show_panner(void);
+<br />
+&nbsp;&nbsp;void WaitForButtonsUp(void);
+<br />
+! void FocusOn(FvwmWindow *t,int DeIconifyOnly);
+<br />
+&nbsp;&nbsp;Bool PlaceWindow(FvwmWindow *tmp_win, unsigned long flags,int Desk);
+<br />
+&nbsp;&nbsp;void free_window_names (FvwmWindow *tmp, Bool nukename, Bool nukeicon);
+<br />
+&nbsp;&nbsp;
+<br />
+--- 274,280 ----
+<br />
+&nbsp;&nbsp;void KeepOnTop(void);
+<br />
+&nbsp;&nbsp;void show_panner(void);
+<br />
+&nbsp;&nbsp;void WaitForButtonsUp(void);
+<br />
+! void FocusOn(FvwmWindow *t,int DeIconifyOnly,int percentX,int percentY);
+<br />
+&nbsp;&nbsp;Bool PlaceWindow(FvwmWindow *tmp_win, unsigned long flags,int Desk);
+<br />
+&nbsp;&nbsp;void free_window_names (FvwmWindow *tmp, Bool nukename, Bool nukeicon);
+<br />
+&nbsp;&nbsp;
+<br />
+*** builtins.c.orig	Tue Mar 19 21:23:28 1996
+<br />
+--- builtins.c	Tue Mar 19 23:12:58 1996
+<br />
+***************
+<br />
+*** 150,156 ****
+<br />
+&nbsp;&nbsp;&nbsp;* Moves focus to specified window 
+<br />
+&nbsp;&nbsp;&nbsp;*
+<br />
+&nbsp;&nbsp;&nbsp;*************************************************************************/
+<br />
+! void FocusOn(FvwmWindow *t,int DeIconifyOnly)
+<br />
+&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;#ifndef NON_VIRTUAL
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int dx,dy;
+<br />
+--- 150,156 ----
+<br />
+&nbsp;&nbsp;&nbsp;* Moves focus to specified window 
+<br />
+&nbsp;&nbsp;&nbsp;*
+<br />
+&nbsp;&nbsp;&nbsp;*************************************************************************/
+<br />
+! void FocusOn(FvwmWindow *t,int DeIconifyOnly,int percentX, int percentY)
+<br />
+&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;#ifndef NON_VIRTUAL
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int dx,dy;
+<br />
+***************
+<br />
+*** 191,198 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!     x = t-&gt;frame_x;
+<br />
+!     y = t-&gt;frame_y;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(!(t-&gt;flags &amp; ClickToFocus))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XWarpPointer(dpy, None, Scr.Root, 0, 0, 0, 0, x+2,y+2);
+<br />
+--- 191,200 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!     x = t-&gt;frame_x + (t-&gt;frame_width * percentX) / 100;
+<br />
+!     y = t-&gt;frame_y + (t-&gt;frame_height * percentY) / 100;
+<br />
+!     if (x == t-&gt;frame_x + t-&gt;frame_width) x--;
+<br />
+!     if (y == t-&gt;frame_y + t-&gt;frame_height) y--;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(!(t-&gt;flags &amp; ClickToFocus))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XWarpPointer(dpy, None, Scr.Root, 0, 0, 0, 0, x+2,y+2);
+<br />
+***************
+<br />
+*** 705,715 ****
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(val1 != 0)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!     FocusOn((FvwmWindow *)val1,0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (((FvwmWindow *)(val1))-&gt;flags &amp; ICONIFIED)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DeIconify((FvwmWindow *)val1);
+<br />
+!       FocusOn((FvwmWindow *)val1,0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;}
+<br />
+--- 707,717 ----
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(val1 != 0)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!     FocusOn((FvwmWindow *)val1,0,0,0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (((FvwmWindow *)(val1))-&gt;flags &amp; ICONIFIED)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DeIconify((FvwmWindow *)val1);
+<br />
+!       FocusOn((FvwmWindow *)val1,0,0,0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;}
+<br />
+***************
+<br />
+*** 718,727 ****
+<br />
+&nbsp;&nbsp;void focus_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long context, char *action, int *Module)
+<br />
+&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if (DeferExecution(eventp,&amp;w,&amp;tmp_win,&amp;context,SELECT,ButtonRelease))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+&nbsp;&nbsp;
+<br />
+!   FocusOn(tmp_win,0);
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;
+<br />
+--- 720,738 ----
+<br />
+&nbsp;&nbsp;void focus_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long context, char *action, int *Module)
+<br />
+&nbsp;&nbsp;{
+<br />
++   int val1, val2, val1_unit, val2_unit, n;
+<br />
++   
+<br />
++   n = GetTwoArguments(action, &amp;val1, &amp;val2, &amp;val1_unit, &amp;val2_unit);
+<br />
++ 
+<br />
++   if (n != 2 || val1 &lt; 0 || val1 &gt; 100 || val2 &lt; 0 || val2 &gt; 100) {
+<br />
++     val1 = 0;
+<br />
++     val2 = 0;
+<br />
++   }
+<br />
++ 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if (DeferExecution(eventp,&amp;w,&amp;tmp_win,&amp;context,SELECT,ButtonRelease))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+&nbsp;&nbsp;
+<br />
+!   FocusOn(tmp_win,0,val1,val2);
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;
+<br />
+*** icons.c.orig	Tue Mar 19 21:43:11 1996
+<br />
+--- icons.c	Tue Mar 19 21:43:13 1996
+<br />
+***************
+<br />
+*** 730,741 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(tmp_win-&gt;flags &amp; ClickToFocus)
+<br />
+!     FocusOn(tmp_win,1);
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;KeepOnTop();
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+! }
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;/****************************************************************************
+<br />
+--- 730,743 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(tmp_win-&gt;flags &amp; ClickToFocus)
+<br />
+!     FocusOn(tmp_win,1,0,0);
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;KeepOnTop();
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+! } 
+<br />
+!  
+<br />
+!  
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;/****************************************************************************
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Mar 20 1996 - 01:16:17 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start15959">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="15960.html" title="Next message in the list">Kai Grossjohann: "Re: FVWM: EdgeResistance and Focus"</a></li>
+<li><dfn>Previous message</dfn>: <a href="15958.html" title="Previous message in the list">Mike Blatchley: "Re: FVWM: EdgeResistance and Focus"</a></li>
+<li><dfn>Maybe in reply to</dfn>: <a href="15953.html" title="Message to which this message replies">Kai Grossjohann: "FVWM: EdgeResistance and Focus"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15959" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15959" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15959" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15959" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

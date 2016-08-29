@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: [BUG?] problems with PMinSize hint from Jindrich Makovicka on 2004-02-26 (fvwm-users)</title>
+<meta name="Author" content="Jindrich Makovicka (makovick_at_kmlinux.fjfi.cvut.cz)" />
+<meta name="Subject" content="Re: FVWM: [BUG?] problems with PMinSize hint" />
+<meta name="Date" content="2004-02-26" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: [BUG?] problems with PMinSize hint</h1>
+<!-- received="Thu Feb 26 08:46:13 2004" -->
+<!-- isoreceived="20040226084613" -->
+<!-- sent="Thu, 26 Feb 2004 15:44:15 +0100" -->
+<!-- isosent="20040226144415" -->
+<!-- name="Jindrich Makovicka" -->
+<!-- email="makovick_at_kmlinux.fjfi.cvut.cz" -->
+<!-- subject="Re: FVWM: [BUG?] problems with PMinSize hint" -->
+<!-- id="403E063F.5070906_at_kmlinux.fjfi.cvut.cz" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="20040226135002.GA13393_at_gmx.de" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start11484" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="11485.html" accesskey="d" title="Bob Woodside: &quot;Re: FVWM: Microsoft Patent&quot;">Next message</a> ]
+[ <a href="11483.html" title="Dominik Vogt: &quot;Re: FVWM: [BUG?] problems with PMinSize hint&quot;">Previous message</a> ]
+[ <a href="11483.html" title="Dominik Vogt: &quot;Re: FVWM: [BUG?] problems with PMinSize hint&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg11484" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg11484" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg11484" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg11484" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Jindrich Makovicka &lt;<a href="mailto:makovick_at_kmlinux.fjfi.cvut.cz?Subject=Re%3A%20FVWM%3A%20%5BBUG%3F%5D%20problems%20with%20PMinSize%20hint">makovick_at_kmlinux.fjfi.cvut.cz</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 26 Feb 2004 15:44:15 +0100</span><br />
+</address>
+<br />
+Dominik Vogt wrote:
+<br />
+<em class="quotelev1">&gt; Looks like mplayer doesn't compile without libavcodec.  I'd look
+</em><br />
+<em class="quotelev1">&gt; into the problem if I get it to compile.
+</em><br />
+<br />Thanks for pointing this out, you can fix the bug using the following 
+<br />
+patch (or latest CVS). However, mplayer is not very useful without 
+<br />
+libavcodec. But maybe &quot;dummy&quot; video capture driver will be enough to 
+<br />
+test the window behavior.
+<br />
+<br />Index: vf.c
+<br />
+===================================================================
+<br />
+RCS file: /cvsroot/mplayer/main/libmpcodecs/vf.c,v
+<br />
+retrieving revision 1.102
+<br />
+diff -u -b -B -r1.102 vf.c
+<br />
+--- vf.c	6 Feb 2004 20:31:57 -0000	1.102
+<br />
++++ vf.c	26 Feb 2004 14:30:14 -0000
+<br />
+_at_&#64; -164,7 +164,9 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;vf_info_yuvcsp,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;vf_info_kerndeint,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;vf_info_rgbtest,
+<br />
++#ifdef USE_LIBAVCODEC
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;vf_info_qp,
+<br />
++#endif
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NULL
+<br />
+&nbsp;&nbsp;};
+<br />
+<br /><pre>
+-- 
+Jindrich Makovicka
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Feb 26 2004 - 08:46:13 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start11484">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="11485.html" title="Next message in the list">Bob Woodside: "Re: FVWM: Microsoft Patent"</a></li>
+<li><dfn>Previous message</dfn>: <a href="11483.html" title="Previous message in the list">Dominik Vogt: "Re: FVWM: [BUG?] problems with PMinSize hint"</a></li>
+<li><dfn>In reply to</dfn>: <a href="11483.html" title="Message to which this message replies">Dominik Vogt: "Re: FVWM: [BUG?] problems with PMinSize hint"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg11484" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg11484" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg11484" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg11484" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:56 BST
+</em></small></p>
+</body>
+</html>

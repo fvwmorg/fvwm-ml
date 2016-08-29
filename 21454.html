@@ -1,0 +1,566 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: FvwmWharf ColorLimit from Vladimir Kushnir on 1997-12-06 (fvwm-users)</title>
+<meta name="Author" content="Vladimir Kushnir (kushn_at_olinet.isf.kiev.ua)" />
+<meta name="Subject" content="FVWM: FvwmWharf ColorLimit" />
+<meta name="Date" content="1997-12-06" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: FvwmWharf ColorLimit</h1>
+<!-- received="Sat Dec  6 17:03:26 1997" -->
+<!-- isoreceived="19971206170326" -->
+<!-- sent="Sun, 7 Dec 1997 01:06:19 +0200 (EET)" -->
+<!-- isosent="19971206230619" -->
+<!-- name="Vladimir Kushnir" -->
+<!-- email="kushn_at_olinet.isf.kiev.ua" -->
+<!-- subject="FVWM: FvwmWharf ColorLimit" -->
+<!-- id="Pine.BSF.3.96.971207005204.2247A-100000_at_kushnir.kiev.ua" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start21454" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="21455.html" accesskey="d" title="R Dicaire: &quot;FVWM: StubbornIcons obsoleted in 2.0?&quot;">Next message</a> ]
+[ <a href="21453.html" title="ybamnolk_at_cisco.com: &quot;FVWM: Use of ButtonStyle&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="21456.html" accesskey="t" title="Martin Bialasinski: &quot;FVWM: Starting an app when needed&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21454" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21454" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21454" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21454" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Vladimir Kushnir &lt;<a href="mailto:kushn_at_olinet.isf.kiev.ua?Subject=Re%3A%20FVWM%3A%20FvwmWharf%20ColorLimit">kushn_at_olinet.isf.kiev.ua</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sun, 7 Dec 1997 01:06:19 +0200 (EET)</span><br />
+</address>
+<br />
+Hello,
+<br />
+If there's somebody interested: here is a little (and actually very crude)
+<br />
+patch for those poor souls like myself who still have to run 256 colors
+<br />
+mode but like FvwmWharf module. It somewhat reduces its hunger for colours
+<br />
+(not completely, but with this and with texture buttons and with the
+<br />
+original AfterStep icons my fvwm uses 88 colours instead of 200++). It
+<br />
+requires the original ColorLimit patch, of course.
+<br />
+If somebody would make this better (what, I suppose, is not difficult for
+<br />
+any competent programmer - I'm definitely _not_ the one) please answer me
+<br />
+by e-mail, 'cause unfortunately I'm not on this list.
+<br />
+<br />BTW, if there's somebody using fvwm95, I've got this patch for it as well,
+<br />
+but it's a bit bigger - about 20 kb.
+<br />
+<br />Regards,
+<br />
+Vladimir 
+<br />
+<br />/*------------------------Start patch---------------------------------*/
+<br />
+<br />diff -c FvwmWharf.c.orig FvwmWharf.c
+<br />
+*** FvwmWharf.c.orig	Fri Nov 28 13:10:08 1997
+<br />
+--- FvwmWharf.c	Fri Nov 28 16:17:55 1997
+<br />
+***************
+<br />
+*** 82,87 ****
+<br />
+--- 82,90 ----
+<br />
+&nbsp;&nbsp;#define ANIM_STEP_MAIN	1   /* same for the main folder */
+<br />
+&nbsp;&nbsp;#define ANIM_DELAY	10
+<br />
+&nbsp;&nbsp;
+<br />
++ /* Color limit */
+<br />
++ int save_color_limit;                   /* color limit from config */
+<br />
++ 
+<br />
+&nbsp;&nbsp;#ifdef ENABLE_SOUND
+<br />
+&nbsp;&nbsp;#define WHEV_PUSH		0
+<br />
+&nbsp;&nbsp;#define WHEV_CLOSE_FOLDER	1
+<br />
+***************
+<br />
+*** 261,267 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;display_width = DisplayWidth(dpy, screen);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;display_height = DisplayHeight(dpy, screen);
+<br />
+!   
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;d_depth = DefaultDepth(dpy, screen);
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SetMessageMask(fd, M_NEW_DESK | M_END_WINDOWLIST | M_MAP | M_WINDOW_NAME |
+<br />
+--- 264,271 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;display_width = DisplayWidth(dpy, screen);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;display_height = DisplayHeight(dpy, screen);
+<br />
+! 
+<br />
+!   InitPictureCMap(dpy,Root);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;d_depth = DefaultDepth(dpy, screen);
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SetMessageMask(fd, M_NEW_DESK | M_END_WINDOWLIST | M_MAP | M_WINDOW_NAME |
+<br />
+***************
+<br />
+*** 1688,1693 ****
+<br />
+--- 1692,1703 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CopyString(&amp;pixmapPath,&amp;tline[10]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
++       else if ((strlen(&amp;tline[0])&gt;1)&amp;&amp;(mymymymystrncasecmp(tline,&quot;ColorLimit&quot;,10)==0))
+<br />
++ 	{
+<br />
++           len=sscanf(&amp;tline[Clength+11],&quot;%d&quot;,&amp;save_color_limit);
+<br />
++           if(len &lt; 1)
+<br />
++           save_color_limit = 256;
+<br />
++         }	
+<br />
+&nbsp;&nbsp;#ifdef ENABLE_SOUND	
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if((strlen(&amp;tline[0])&gt;1)&amp;&amp;(mymymymystrncasecmp(tline,&quot;*AudioDir&quot;,9)==0))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+*** icons.c.orig	Mon Jun 23 08:53:34 1997
+<br />
+--- icons.c	Sat Nov 29 16:22:25 1997
+<br />
+***************
+<br />
+*** 39,45 ****
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;#ifdef XPM
+<br />
+&nbsp;&nbsp;#include &lt;X11/xpm.h&gt;
+<br />
+! #endif /* XPM */
+<br />
+&nbsp;&nbsp;#include &quot;stepgfx.h&quot;
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;
+<br />
+--- 39,47 ----
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;#ifdef XPM
+<br />
+&nbsp;&nbsp;#include &lt;X11/xpm.h&gt;
+<br />
+! extern int save_color_limit;
+<br />
+! #endif
+<br />
+! 
+<br />
+&nbsp;&nbsp;#include &quot;stepgfx.h&quot;
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;
+<br />
+***************
+<br />
+*** 208,214 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;XWindowAttributes root_attr;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;XpmAttributes xpm_attributes;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;char *path = NULL;
+<br />
+! 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;path = findIconFile(Buttons[button].icons[ico].file, pixmapPath,R_OK);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(path == NULL) return 0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XGetWindowAttributes(dpy,Root,&amp;root_attr);    
+<br />
+--- 210,218 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;XWindowAttributes root_attr;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;XpmAttributes xpm_attributes;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;char *path = NULL;
+<br />
+!   int rc;
+<br />
+!   XpmImage    my_image;
+<br />
+!   
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;path = findIconFile(Buttons[button].icons[ico].file, pixmapPath,R_OK);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(path == NULL) return 0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XGetWindowAttributes(dpy,Root,&amp;root_attr);    
+<br />
+***************
+<br />
+*** 216,238 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xpm_attributes.closeness = 40000;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xpm_attributes.valuemask = XpmSize | XpmReturnPixels|XpmColormap
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|XpmCloseness;
+<br />
+!     if(XpmReadFileToPixmap(dpy, Root, path,
+<br />
+! 			   &amp;Buttons[button].icons[ico].icon,
+<br />
+! 			   &amp;Buttons[button].icons[ico].mask,
+<br />
+! 			   &amp;xpm_attributes) == XpmSuccess)
+<br />
+!     {
+<br />
+! 	Buttons[button].icons[ico].w = xpm_attributes.width;
+<br />
+! 	Buttons[button].icons[ico].h = xpm_attributes.height;
+<br />
+! 	Buttons[button].icons[ico].depth = d_depth;
+<br />
+! 	free(path);
+<br />
+!     } else {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;free(path);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Buttons[button].icons[ico].icon=None;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if (button==BACK_BUTTON) {
+<br />
+!       BUTTONWIDTH = xpm_attributes.width;
+<br />
+!       BUTTONHEIGHT = xpm_attributes.height;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (ForceSize &amp;&amp; (BUTTONWIDTH &gt; 64 || BUTTONHEIGHT &gt; 64)) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pixmap resized;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+--- 220,253 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xpm_attributes.closeness = 40000;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xpm_attributes.valuemask = XpmSize | XpmReturnPixels|XpmColormap
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|XpmCloseness;
+<br />
+! 
+<br />
+!     rc = XpmReadFileToXpmImage(path, &amp;my_image, NULL);
+<br />
+!     if (rc != XpmSuccess) {
+<br />
+!      fprintf(stderr, &quot;Problem reading pixmap %s, rc %d\n&quot;, path, rc);
+<br />
+!      free(path);
+<br />
+!      return;
+<br />
+!     }
+<br />
+!     color_reduce_pixmap(&amp;my_image,save_color_limit);
+<br />
+!     rc = XpmCreatePixmapFromXpmImage(dpy,Root, &amp;my_image,
+<br />
+!                                      &amp;Buttons[button].icons[ico].icon,
+<br />
+!                                      &amp;Buttons[button].icons[ico].mask,
+<br />
+!                                      &amp;xpm_attributes);
+<br />
+! 
+<br />
+!      if (rc != XpmSuccess)
+<br />
+!     { 	
+<br />
+!         fprintf(stderr, &quot;Problem creating pixmap from image, rc %d\n&quot;, rc);	
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;free(path);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Buttons[button].icons[ico].icon=None;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 0;
+<br />
++     } else {     
+<br />
++    	Buttons[button].icons[ico].w = my_image.width;
+<br />
++    	Buttons[button].icons[ico].h = my_image.height;
+<br />
++ 	Buttons[button].icons[ico].depth = d_depth;
+<br />
++ 	free(path);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if (button==BACK_BUTTON) {
+<br />
+!       BUTTONWIDTH = my_image.width;
+<br />
+!       BUTTONHEIGHT = my_image.height;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (ForceSize &amp;&amp; (BUTTONWIDTH &gt; 64 || BUTTONHEIGHT &gt; 64)) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pixmap resized;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+***************
+<br />
+*** 262,285 ****
+<br />
+&nbsp;&nbsp;#ifdef XPM
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;XWindowAttributes root_attr;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;XpmAttributes xpm_attributes;
+<br />
+! 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if( button != BACK_BUTTON )
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;XGetWindowAttributes(dpy,Root,&amp;root_attr);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;xpm_attributes.colormap = root_attr.colormap;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;xpm_attributes.valuemask = XpmSize | XpmReturnPixels|XpmColormap;
+<br />
+!   if(XpmCreatePixmapFromData(dpy, Root, data,
+<br />
+! 			 &amp;Buttons[button].icons[0].icon,
+<br />
+! 			 &amp;Buttons[button].icons[0].mask,
+<br />
+! 			 &amp;xpm_attributes) == XpmSuccess) 
+<br />
+!     { 
+<br />
+!       BUTTONWIDTH = Buttons[button].icons[0].w = xpm_attributes.width;
+<br />
+!       BUTTONHEIGHT = Buttons[button].icons[0].h = xpm_attributes.height;
+<br />
+!       Buttons[button].icons[0].depth = d_depth;
+<br />
+!     } 
+<br />
+!    else {
+<br />
+!        return 0;
+<br />
+!    }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DrawOutline(Buttons[button].icons[0].icon,BUTTONWIDTH,BUTTONHEIGHT);
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 1;
+<br />
+--- 277,313 ----
+<br />
+&nbsp;&nbsp;#ifdef XPM
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;XWindowAttributes root_attr;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;XpmAttributes xpm_attributes;
+<br />
+!   XpmImage my_image;
+<br />
+!   int rc;
+<br />
+!   
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if( button != BACK_BUTTON )
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;XGetWindowAttributes(dpy,Root,&amp;root_attr);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;xpm_attributes.colormap = root_attr.colormap;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;xpm_attributes.valuemask = XpmSize | XpmReturnPixels|XpmColormap;
+<br />
+!  
+<br />
+!      rc = XpmCreateXpmImageFromData(data, &amp;my_image, NULL);
+<br />
+!      color_reduce_pixmap(&amp;my_image,save_color_limit);
+<br />
+!      if (rc != XpmSuccess) {
+<br />
+!      fprintf(stderr, &quot;Problem creating xpm image from data, rc %d\n&quot;, rc);
+<br />
+!      return 0;
+<br />
+!        }
+<br />
+!        
+<br />
+!      rc = XpmCreatePixmapFromXpmImage(dpy,Root, &amp;my_image,
+<br />
+!                                          &amp;Buttons[button].icons[0].icon,
+<br />
+!                                          &amp;Buttons[button].icons[0].mask,
+<br />
+!                                          &amp;xpm_attributes);
+<br />
+!      if (rc != XpmSuccess) {
+<br />
+!      fprintf(stderr, &quot;Problem creating pixmap from xpm image, rc %d\n&quot;, rc);
+<br />
+!      return 0;
+<br />
+!         }
+<br />
+!     else
+<br />
+!     	{
+<br />
+!    	BUTTONWIDTH = Buttons[button].icons[0].w = my_image.width;
+<br />
+!    	BUTTONHEIGHT = Buttons[button].icons[0].h = my_image.height;
+<br />
+! 	Buttons[button].icons[0].depth = d_depth;
+<br />
+! 	}
+<br />
+! 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DrawOutline(Buttons[button].icons[0].icon,BUTTONWIDTH,BUTTONHEIGHT);
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 1;
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sat Dec 06 1997 - 17:03:26 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start21454">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="21455.html" title="Next message in the list">R Dicaire: "FVWM: StubbornIcons obsoleted in 2.0?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="21453.html" title="Previous message in the list">ybamnolk_at_cisco.com: "FVWM: Use of ButtonStyle"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="21456.html" title="Next message in this discussion thread">Martin Bialasinski: "FVWM: Starting an app when needed"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="21456.html" title="Message sent in reply to this message">Martin Bialasinski: "FVWM: Starting an app when needed"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21454" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21454" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21454" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21454" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

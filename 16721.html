@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Patch to vertically center menu text from John Williams on 1996-05-09 (fvwm-users)</title>
+<meta name="Author" content="John Williams (williams_at_sharkey.us.dynix.com)" />
+<meta name="Subject" content="FVWM: Patch to vertically center menu text" />
+<meta name="Date" content="1996-05-09" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Patch to vertically center menu text</h1>
+<!-- received="Thu May  9 17:30:59 1996" -->
+<!-- isoreceived="19960509163059" -->
+<!-- sent="Thu, 9 May 1996 16:31:17 -0600 (MDT)" -->
+<!-- isosent="19960509223117" -->
+<!-- name="John Williams" -->
+<!-- email="williams_at_sharkey.us.dynix.com" -->
+<!-- subject="FVWM: Patch to vertically center menu text" -->
+<!-- id="Pine.LNX.3.91.960509162406.114B-100000_at_sharkey.us.dynix.com" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="Pine.SUN.3.91.960509140157.9526J-100000_at_wolfcreek" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start16721" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="16722.html" accesskey="d" title="Sherwood Botsford: &quot;FVWM: fvwm &#0038; motif?&quot;">Next message</a> ]
+[ <a href="16720.html" title="Toshi Isogai: &quot;FVWM: FvwmConsole patch for everybody&quot;">Previous message</a> ]
+[ <a href="16720.html" title="Toshi Isogai: &quot;FVWM: FvwmConsole patch for everybody&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16721" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16721" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16721" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16721" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: John Williams &lt;<a href="mailto:williams_at_sharkey.us.dynix.com?Subject=Re%3A%20FVWM%3A%20Patch%20to%20vertically%20center%20menu%20text">williams_at_sharkey.us.dynix.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 9 May 1996 16:31:17 -0600 (MDT)</span><br />
+</address>
+<br />
+One of the items on the fvwm2-TO.DO list is:
+<br />
+<br />&nbsp;&nbsp;- Make left justified pixmaps in menus center align vertically w/
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;any text displayed?
+<br />
+<br />It seems that small pixmaps are already centered with larger text, but
+<br />
+text is not centered with larger pixmaps.
+<br />
+So here is a small patch to fix the vertical alignment.
+<br />
+<br />~John Williams
+<br />
+<br /><br />--- 1.1	1996/05/09 21:41:26
+<br />
++++ menus.c	1996/05/09 22:06:27
+<br />
+_at_&#64; -179,6 +179,14 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;text_y = y_offset + Scr.StdFont.y;
+<br />
+&nbsp;&nbsp;&nbsp;if(mi-&gt;picture)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text_y+=mi-&gt;picture-&gt;height;
+<br />
++  if (mi-&gt;lpicture)
+<br />
++  {
+<br />
++    y = mi-&gt;lpicture-&gt;height - Scr.StdFont.height;
+<br />
++    if (y&gt;1)
+<br />
++      text_y += y&gt;&gt;1;
+<br />
++  }    
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;ShadowGC = Scr.MenuShadowGC;
+<br />
+&nbsp;&nbsp;&nbsp;if(Scr.d_depth&lt;2)
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu May 09 1996 - 17:30:59 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start16721">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="16722.html" title="Next message in the list">Sherwood Botsford: "FVWM: fvwm &#0038; motif?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="16720.html" title="Previous message in the list">Toshi Isogai: "FVWM: FvwmConsole patch for everybody"</a></li>
+<li><dfn>In reply to</dfn>: <a href="16720.html" title="Message to which this message replies">Toshi Isogai: "FVWM: FvwmConsole patch for everybody"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16721" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16721" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16721" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16721" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

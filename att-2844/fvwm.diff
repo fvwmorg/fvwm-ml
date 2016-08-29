@@ -1,0 +1,55 @@
+diff -rubB fvwm-2.4.0.orig/fvwm/virtual.c fvwm-2.4.0/fvwm/virtual.c
+--- fvwm-2.4.0.orig/fvwm/virtual.c	Tue Jun  5 11:42:03 2001
++++ fvwm-2.4.0/fvwm/virtual.c	Sun Jul 29 01:19:55 2001
+@@ -61,6 +61,8 @@
+ static unsigned int prev_page_x = 0;
+ static unsigned int prev_page_y = 0;
+ static int prev_desk = 0;
++static int per_desk_x[10];
++static int per_desk_y[10];
+ 
+ /**************************************************************************
+  *
+@@ -1087,7 +1089,7 @@
+  *   - maps from the top of the stack down
+  *
+  ************************************************************************/
+-static void MapDesk(int desk, Bool grab)
++static void MapDesk(int desk, int newx, int newy, Bool grab)
+ {
+   FvwmWindow *t;
+   FvwmWindow *FocusWin = NULL;
+@@ -1120,6 +1122,10 @@
+       }
+     }
+   }
++  if (newx >= 0) 
++  {
++    MoveViewport(newx, newy, False);
++  }
+   if (grab)
+   {
+     MyXUngrabServer(dpy);
+@@ -1188,9 +1194,11 @@
+   if (Scr.CurrentDesk != desk)
+   {
+     prev_desk = Scr.CurrentDesk;
++    per_desk_x[prev_desk] = Scr.Vx;
++    per_desk_y[prev_desk] = Scr.Vy;
+     UnmapDesk(Scr.CurrentDesk, True);
+     Scr.CurrentDesk = desk;
+-    MapDesk(desk, True);
++    MapDesk(desk, per_desk_x[desk], per_desk_y[desk], True);
+     BroadcastPacket(M_NEW_DESK, 1, Scr.CurrentDesk);
+     /* FIXME: domivogt (22-Apr-2000): Fake a 'restack' for sticky window
+      * upon desk change.  This is a workaround for a problem in FvwmPager:
+@@ -1243,7 +1251,7 @@
+   {
+     prev_desk = Scr.CurrentDesk;
+     Scr.CurrentDesk = val[0];
+-    MapDesk(val[0], True);
++    MapDesk(val[0], -1, -1, True);
+     BroadcastPacket(M_NEW_DESK, 1, Scr.CurrentDesk);
+     /* FIXME: domivogt (22-Apr-2000): Fake a 'restack' for sticky window
+      * upon desk change.  This is a workaround for a problem in FvwmPager:
+Only in fvwm-2.4.0/fvwm: virtual.c.bak

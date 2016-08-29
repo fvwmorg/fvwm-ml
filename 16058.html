@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: patch for using 24-bit ppms as icons from Vladimir Vukicevic on 1996-03-30 (fvwm-users)</title>
+<meta name="Author" content="Vladimir Vukicevic (vladimir_at_intrepid.com)" />
+<meta name="Subject" content="FVWM: patch for using 24-bit ppms as icons" />
+<meta name="Date" content="1996-03-30" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: patch for using 24-bit ppms as icons</h1>
+<!-- received="Sat Mar 30 17:13:08 1996" -->
+<!-- isoreceived="19960330171308" -->
+<!-- sent="Sat, 30 Mar 1996 15:14:19 -0800" -->
+<!-- isosent="19960330231419" -->
+<!-- name="Vladimir Vukicevic" -->
+<!-- email="vladimir_at_intrepid.com" -->
+<!-- subject="FVWM: patch for using 24-bit ppms as icons" -->
+<!-- id="199603302314.PAA01072_at_speedy.intrepid.com" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start16058" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="16059.html" accesskey="d" title="Olivier DUGEON - FT.CNET/LAA/RSL/ATM: &quot;Re: FVWM: patch for using 24-bit ppms as icons&quot;">Next message</a> ]
+[ <a href="16057.html" title="Brady Montz: &quot;FVWM: Suggestion for LastPlacement style option&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="16059.html" accesskey="t" title="Olivier DUGEON - FT.CNET/LAA/RSL/ATM: &quot;Re: FVWM: patch for using 24-bit ppms as icons&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16058" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16058" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16058" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16058" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Vladimir Vukicevic &lt;<a href="mailto:vladimir_at_intrepid.com?Subject=Re%3A%20FVWM%3A%20patch%20for%20using%2024-bit%20ppms%20as%20icons">vladimir_at_intrepid.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sat, 30 Mar 1996 15:14:19 -0800</span><br />
+</address>
+<br />
+Hi, here's a patch to 2.0.41 for using 24-bit ppms as icon files. This
+<br />
+has only been tested on a 24-bit truecolor visual; chances are that it'll
+<br />
+work on a 16-bit visual. It almost definitively won't work on a 8-bit
+<br />
+visual. #define PPM needs to be somewhere, I put it in configure.h.
+<br />
+Enjoy!
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-- Vladimir
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-- vladimir_at_intrepid.com
+<br />
+<br />diff -ur ../fvwm-2.0.41/configure.h fvwm-2.0.41/configure.h
+<br />
+--- ../fvwm-2.0.41/configure.h	Fri Feb 16 17:13:18 1996
+<br />
++++ fvwm-2.0.41/configure.h	Fri Mar 29 21:59:29 1996
+<br />
+_at_&#64; -52,6 +52,8 &#64;&#64;
+<br />
+&nbsp;
+<br />
+&nbsp;#endif /* End of do-it-yourself OS support section */
+<br />
+&nbsp;
+<br />
++/* Define for experimental PPM support */
+<br />
++#define PPM
+<br />
+&nbsp;
+<br />
+&nbsp;/***************************************************************************
+<br />
+&nbsp;&nbsp;* Please translate the strings into the language which you use for 
+<br />
+diff -ur ../fvwm-2.0.41/fvwm/icons.c fvwm-2.0.41/fvwm/icons.c
+<br />
+--- ../fvwm-2.0.41/fvwm/icons.c	Mon Nov  6 08:49:36 1995
+<br />
++++ fvwm-2.0.41/fvwm/icons.c	Sat Mar 30 01:59:54 1996
+<br />
+_at_&#64; -70,6 +70,11 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;if(tmp_win-&gt;icon_bitmap_file != NULL)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GetBitmapFile(tmp_win);
+<br />
+&nbsp;
+<br />
++  /* Next, check for a color PPM */
+<br />
++  if((tmp_win-&gt;icon_bitmap_file != NULL)&amp;&amp;
+<br />
++     (tmp_win-&gt;icon_p_height == 0)&amp;&amp;(tmp_win-&gt;icon_p_width == 0))
+<br />
++    GetPPMFile(tmp_win);
+<br />
++
+<br />
+&nbsp;&nbsp;&nbsp;/* Next, check for a color pixmap */
+<br />
+&nbsp;&nbsp;&nbsp;if((tmp_win-&gt;icon_bitmap_file != NULL)&amp;&amp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(tmp_win-&gt;icon_p_height == 0)&amp;&amp;(tmp_win-&gt;icon_p_width == 0))
+<br />
+_at_&#64; -615,6 +620,90 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;free(path);
+<br />
+&nbsp;#endif /* XPM */
+<br />
+&nbsp;}
+<br />
++
+<br />
++/****************************************************************************
+<br />
++ *
+<br />
++ * Looks for a color PPM icon file
+<br />
++ *
+<br />
++ ****************************************************************************/
+<br />
++void GetPPMFile(FvwmWindow *tmp_win)
+<br />
++{
+<br />
++#ifdef PPM
+<br />
++  Pixmap pix = 0;
+<br />
++  XImage *ximg = NULL;
+<br />
++  char *pixptr = NULL;
+<br />
++  char *buf = NULL;
+<br />
++  FILE *ppmfile = NULL;
+<br />
++  extern char *PixmapPath;
+<br />
++  char *path = NULL;
+<br />
++  int width, height, maxval;
+<br />
++
+<br />
++  /* Only deal with 24-bit depths */
+<br />
++  if (DefaultDepth(dpy, Scr.screen) != 24) return;
+<br />
++
+<br />
++  path = findIconFile (tmp_win-&gt;icon_bitmap_file, PixmapPath, R_OK);
+<br />
++  if (path == NULL) return;
+<br />
++
+<br />
++  if ((ppmfile = fopen(path, &quot;rb&quot;)) == NULL) goto error;
+<br />
++  if ((buf = malloc (sizeof(char) * 256)) == NULL) goto error;
+<br />
++
+<br />
++  /* Read specs about the file */
+<br />
++  fgets(buf, 256, ppmfile);
+<br />
++
+<br />
++  /* If not a binary ppm file... */
+<br />
++  if (strncmp (buf, &quot;P6&quot;, 2) != 0) goto error;
+<br />
++
+<br />
++  /* Read width, height, depth */
+<br />
++  fgets(buf, 256, ppmfile);
+<br />
++  sscanf (buf, &quot;%d %d&quot;, &amp;width, &amp;height);
+<br />
++  fgets(buf, 256, ppmfile);
+<br />
++  sscanf (buf, &quot;%d&quot;, &amp;maxval);
+<br />
++
+<br />
++  /* Allocate &amp; read data */
+<br />
++  if ((pixptr = malloc (sizeof(char) * (width * height * 3 + 1))) == NULL)
+<br />
++	goto error;
+<br />
++
+<br />
++  if (fread ((void *)pixptr, sizeof(char), width*height*3, ppmfile)
+<br />
++	  &lt; width*height*3)
+<br />
++	goto error;
+<br />
++
+<br />
++  /* Now make a pixmap */
+<br />
++  pix = XCreatePixmap (dpy, Scr.Root, width, height, 24);
+<br />
++  ximg = malloc(sizeof(XImage));
+<br />
++  fprintf(dbg, &quot;ppm: 5\n&quot;); fflush(dbg);
+<br />
++  ximg-&gt;width = width;
+<br />
++  ximg-&gt;height = height;
+<br />
++  ximg-&gt;xoffset = 0;
+<br />
++  ximg-&gt;format = ZPixmap;
+<br />
++  ximg-&gt;data = pixptr; pixptr = 0; /* so we don't free it */
+<br />
++  ximg-&gt;byte_order = MSBFirst;
+<br />
++  ximg-&gt;bitmap_unit = 8;
+<br />
++  ximg-&gt;bitmap_bit_order = MSBFirst;
+<br />
++  ximg-&gt;bitmap_pad = 8;
+<br />
++  ximg-&gt;depth = 24;
+<br />
++  ximg-&gt;bytes_per_line = width*3;
+<br />
++  ximg-&gt;bits_per_pixel = 24;
+<br />
++  ximg-&gt;red_mask = 0xff0000;
+<br />
++  ximg-&gt;green_mask = 0x00ff00;
+<br />
++  ximg-&gt;blue_mask = 0x0000ff;
+<br />
++  XInitImage(ximg);
+<br />
++
+<br />
++  XPutImage (dpy, pix, DefaultGC(dpy, Scr.screen), ximg, 0, 0, 0, 0,
+<br />
++			 width, height);
+<br />
++  tmp_win-&gt;iconPixmap = pix;
+<br />
++  tmp_win-&gt;icon_maskPixmap = 0;
+<br />
++  tmp_win-&gt;icon_p_width = width;
+<br />
++  tmp_win-&gt;icon_p_height = height;
+<br />
++  tmp_win-&gt;flags |= PIXMAP_OURS;
+<br />
++  tmp_win-&gt;iconDepth = 24;
+<br />
++error:
+<br />
++  fclose(dbg);
+<br />
++  if (ppmfile) fclose(ppmfile);
+<br />
++  if (buf) free(buf);
+<br />
++  free(path);
+<br />
++#endif /* PPM */
+<br />
++}
+<br />
++
+<br />
+&nbsp;
+<br />
+&nbsp;/****************************************************************************
+<br />
+&nbsp;&nbsp;*
+<br />
+diff -ur ../fvwm-2.0.41/fvwm/misc.h fvwm-2.0.41/fvwm/misc.h
+<br />
+--- ../fvwm-2.0.41/fvwm/misc.h	Sun Feb 18 16:08:32 1996
+<br />
++++ fvwm-2.0.41/fvwm/misc.h	Fri Mar 29 22:00:59 1996
+<br />
+_at_&#64; -231,6 +231,7 &#64;&#64;
+<br />
+&nbsp;int find_func_type(char *action);
+<br />
+&nbsp;extern void       GetBitmapFile(FvwmWindow *tmp_win);
+<br />
+&nbsp;extern void       GetXPMFile(FvwmWindow *tmp_win);
+<br />
++extern void       GetPPMFile(FvwmWindow *tmp_win);
+<br />
+&nbsp;extern void       GetIconWindow(FvwmWindow *tmp_win);
+<br />
+&nbsp;extern void       GetIconBitmap(FvwmWindow *tmp_win);
+<br />
+&nbsp;extern void SmartPlacement(FvwmWindow *t, int width, int height,int *x,int *y);
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sat Mar 30 1996 - 17:13:08 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start16058">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="16059.html" title="Next message in the list">Olivier DUGEON - FT.CNET/LAA/RSL/ATM: "Re: FVWM: patch for using 24-bit ppms as icons"</a></li>
+<li><dfn>Previous message</dfn>: <a href="16057.html" title="Previous message in the list">Brady Montz: "FVWM: Suggestion for LastPlacement style option"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="16059.html" title="Next message in this discussion thread">Olivier DUGEON - FT.CNET/LAA/RSL/ATM: "Re: FVWM: patch for using 24-bit ppms as icons"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Maybe reply</dfn>: <a href="16059.html" title="Message sent in reply to this message">Olivier DUGEON - FT.CNET/LAA/RSL/ATM: "Re: FVWM: patch for using 24-bit ppms as icons"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16058" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16058" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16058" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16058" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

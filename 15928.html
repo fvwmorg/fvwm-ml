@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Small changes to EdgeScroll and Paging from Henrique Martins on 1996-03-16 (fvwm-users)</title>
+<meta name="Author" content="Henrique Martins (martins_at_martins.hpl.hp.com)" />
+<meta name="Subject" content="FVWM: Small changes to EdgeScroll and Paging" />
+<meta name="Date" content="1996-03-16" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Small changes to EdgeScroll and Paging</h1>
+<!-- received="Sat Mar 16 18:51:08 1996" -->
+<!-- isoreceived="19960316185108" -->
+<!-- sent="Fri, 15 Mar 1996 17:23:50 -0800" -->
+<!-- isosent="19960316012350" -->
+<!-- name="Henrique Martins" -->
+<!-- email="martins_at_martins.hpl.hp.com" -->
+<!-- subject="FVWM: Small changes to EdgeScroll and Paging" -->
+<!-- id="199603160123.AA011109430_at_martins.hpl.hp.com" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start15928" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="15929.html" accesskey="d" title="Bill Oswald: &quot;FVWM: Titlebar buttons problem&quot;">Next message</a> ]
+[ <a href="15927.html" title="Christopher M Wolf: &quot;FVWM: Warp or Run Function&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15928" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15928" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15928" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15928" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Henrique Martins &lt;<a href="mailto:martins_at_martins.hpl.hp.com?Subject=Re%3A%20FVWM%3A%20Small%20changes%20to%20EdgeScroll%20and%20Paging">martins_at_martins.hpl.hp.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 15 Mar 1996 17:23:50 -0800</span><br />
+</address>
+<br />
+&nbsp;&nbsp;- The reintroduction of the EdgeScroll x1000 effect, for a cylindrical or
+<br />
+&nbsp;&nbsp;spherical desktop, misbehaves when one of the desktop dimensions is 1,
+<br />
+&nbsp;&nbsp;i.e. either a Nx1 or 1xN DeskTopSize. Try moving against one the edges of
+<br />
+&nbsp;&nbsp;the desktop along that single dimension, and the window will jump to the
+<br />
+&nbsp;&nbsp;other side, but the cursor gets stuck on the edge.
+<br />
+<br />&nbsp;&nbsp;- When EdgeScrollX and/or Y are not 100%, i.e. a full page, moving a
+<br />
+&nbsp;&nbsp;window against one of the edges still pages a full page.
+<br />
+<br />&nbsp;&nbsp;The diffs below fix the two problems above, (if indeed the second is a
+<br />
+&nbsp;&nbsp;problem.) It also eliminates a bunch of what I think is redundant code
+<br />
+&nbsp;&nbsp;from virtual.c, that had to do with implementing the x1000 edge scrolling.
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;-- Henrique
+<br />
+<br /><br />*** move.c.orig Mon Feb 26 19:59:18 1996
+<br />
+--- move.c      Fri Mar 15 15:08:10 1996
+<br />
+***************
+<br />
+*** 202,208 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case MotionNotify:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xl = Event.xmotion.x_root;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yt = Event.xmotion.y_root;
+<br />
+!         HandlePaging(Scr.MyDisplayWidth,Scr.MyDisplayHeight,&amp;xl,&amp;yt,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;delta_x,&amp;delta_y,False);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* redraw the rubberband */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xl += XOffset;
+<br />
+--- 202,208 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case MotionNotify:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xl = Event.xmotion.x_root;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yt = Event.xmotion.y_root;
+<br />
+!         HandlePaging(Scr.EdgeScrollX,Scr.EdgeScrollY,&amp;xl,&amp;yt,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;delta_x,&amp;delta_y,False);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* redraw the rubberband */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xl += XOffset;
+<br />
+*** virtual.c.orig	Fri Mar 15 15:56:18 1996
+<br />
+--- virtual.c	Fri Mar 15 16:10:44 1996
+<br />
+***************
+<br />
+*** 31,40 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;/* need to move the viewport */
+<br />
+!   if(( *xl &gt;= SCROLL_REGION)&amp;&amp;( *xl &lt; Scr.MyDisplayWidth-SCROLL_REGION)&amp;&amp;
+<br />
+!      ( *yt &gt;= SCROLL_REGION)&amp;&amp;( *yt &lt; Scr.MyDisplayHeight-SCROLL_REGION))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+!   
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;total = 0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;while(total &lt; Scr.ScrollResistance)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+--- 31,42 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;/* need to move the viewport */
+<br />
+!   if(( Scr.VxMax == 0 ||
+<br />
+!        (*xl &gt;= SCROLL_REGION &amp;&amp; *xl &lt; Scr.MyDisplayWidth  - SCROLL_REGION)) &amp;&amp;
+<br />
+!      ( Scr.VyMax == 0 ||
+<br />
+!        (*yt &gt;= SCROLL_REGION &amp;&amp; *yt &lt; Scr.MyDisplayHeight - SCROLL_REGION)))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+! 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;total = 0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;while(total &lt; Scr.ScrollResistance)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+***************
+<br />
+*** 82,87 ****
+<br />
+--- 84,90 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*delta_x = HorWarpSize;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*delta_x = 0;
+<br />
++   if (Scr.VxMax == 0) *delta_x = 0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if( y&lt;SCROLL_REGION)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*delta_y = -VertWarpSize;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;else if ( y &gt;= Scr.MyDisplayHeight-SCROLL_REGION)
+<br />
+***************
+<br />
+*** 88,120 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*delta_y = VertWarpSize;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*delta_y = 0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;/* Ouch! lots of bounds checking */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(Scr.Vx + *delta_x &lt; 0) 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!       if (!(Scr.flags &amp; EdgeWrapX ))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+! 	  *delta_x = -Scr.Vx;
+<br />
+! 	  *xl = x - *delta_x;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+-       else 
+<br />
+- 	{
+<br />
+- 	  *delta_x += Scr.VxMax + Scr.MyDisplayWidth;
+<br />
+- 	  *xl = x + *delta_x % Scr.MyDisplayWidth + HorWarpSize;
+<br />
+- 	}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;else if(Scr.Vx + *delta_x &gt; Scr.VxMax)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!       if (!(Scr.flags &amp; EdgeWrapX))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+! 	  *delta_x = Scr.VxMax - Scr.Vx;
+<br />
+! 	  *xl = x - *delta_x;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+-       else 
+<br />
+- 	{
+<br />
+- 	  *delta_x -= Scr.VxMax +Scr.MyDisplayWidth;
+<br />
+- 	  *xl = x + *delta_x % Scr.MyDisplayWidth - HorWarpSize;
+<br />
+- 	}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*xl = x - *delta_x;
+<br />
+--- 91,114 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*delta_y = VertWarpSize;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*delta_y = 0;
+<br />
++   if (Scr.VyMax == 0) *delta_y = 0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;/* Ouch! lots of bounds checking */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(Scr.Vx + *delta_x &lt; 0) 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!       if (Scr.flags &amp; EdgeWrapX)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+! 	  *delta_x = Scr.VxMax;
+<br />
+! 	  *xl = x + Scr.MyDisplayWidth;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;else if(Scr.Vx + *delta_x &gt; Scr.VxMax)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!       if (Scr.flags &amp; EdgeWrapX)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+! 	  *delta_x = -Scr.VxMax;
+<br />
+! 	  *xl = x - Scr.MyDisplayWidth;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*xl = x - *delta_x;
+<br />
+***************
+<br />
+*** 121,148 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(Scr.Vy + *delta_y &lt; 0) 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!       if (!(Scr.flags &amp; EdgeWrapY))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+! 	  *delta_y = -Scr.Vy;
+<br />
+! 	  *yt = y - *delta_y;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+-       else
+<br />
+- 	{
+<br />
+- 	  *delta_y += Scr.VyMax + Scr.MyDisplayHeight;
+<br />
+- 	  *yt = y + *delta_y % Scr.MyDisplayHeight + VertWarpSize;
+<br />
+- 	}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;else if(Scr.Vy + *delta_y &gt; Scr.VyMax) 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!       if (!(Scr.flags &amp; EdgeWrapY))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+! 	  *delta_y = Scr.VyMax - Scr.Vy;
+<br />
+! 	  *yt = y - *delta_y;
+<br />
+! 	}
+<br />
+!       else
+<br />
+! 	{
+<br />
+! 	  *delta_y -= Scr.VyMax + Scr.MyDisplayHeight;
+<br />
+! 	  *yt = y + *delta_y % Scr.MyDisplayHeight - VertWarpSize;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+--- 115,132 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(Scr.Vy + *delta_y &lt; 0) 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!       if (Scr.flags &amp; EdgeWrapY)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+! 	  *delta_y = Scr.VyMax;
+<br />
+! 	  *yt = y + Scr.MyDisplayHeight;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;else if(Scr.Vy + *delta_y &gt; Scr.VyMax) 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!       if (Scr.flags &amp; EdgeWrapY)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+! 	  *delta_y = -Scr.VyMax;
+<br />
+! 	  *yt = y - Scr.MyDisplayHeight;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sat Mar 16 1996 - 18:51:08 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start15928">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="15929.html" title="Next message in the list">Bill Oswald: "FVWM: Titlebar buttons problem"</a></li>
+<li><dfn>Previous message</dfn>: <a href="15927.html" title="Previous message in the list">Christopher M Wolf: "FVWM: Warp or Run Function"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15928" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15928" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15928" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15928" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

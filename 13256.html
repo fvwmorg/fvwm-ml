@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: app starting window on its initial page from Dominik Vogt on 2004-09-15 (fvwm-users)</title>
+<meta name="Author" content="Dominik Vogt (fvwm_at_fvwm.org)" />
+<meta name="Subject" content="Re: FVWM: app starting window on its initial page" />
+<meta name="Date" content="2004-09-15" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: app starting window on its initial page</h1>
+<!-- received="Wed Sep 15 03:17:59 2004" -->
+<!-- isoreceived="20040915021759" -->
+<!-- sent="Wed, 15 Sep 2004 10:16:23 +0200" -->
+<!-- isosent="20040915081623" -->
+<!-- name="Dominik Vogt" -->
+<!-- email="fvwm_at_fvwm.org" -->
+<!-- subject="Re: FVWM: app starting window on its initial page" -->
+<!-- id="20040915081623.GA743_at_gmx.de" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="200409142345.i8ENjW526567_at_darkstar.lsil.com" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start13256" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="13257.html" accesskey="d" title="Mikhael Goikhman: &quot;Re: FVWM: Parsing window_flags in perl&quot;">Next message</a> ]
+[ <a href="13255.html" title="Salvatore Domenick Desiano: &quot;Re: FVWM: Parsing window_flags in perl&quot;">Previous message</a> ]
+[ <a href="13254.html" title="Elliot Sowadsky: &quot;FVWM: app starting window on its initial page&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg13256" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg13256" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg13256" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg13256" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Dominik Vogt &lt;<a href="mailto:fvwm_at_fvwm.org?Subject=Re%3A%20FVWM%3A%20app%20starting%20window%20on%20its%20initial%20page">fvwm_at_fvwm.org</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 15 Sep 2004 10:16:23 +0200</span><br />
+</address>
+<br />
+On Tue, Sep 14, 2004 at 04:45:32PM -0700, Elliot Sowadsky wrote:
+<br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; I have an app that i start on desk x
+</em><br />
+<em class="quotelev1">&gt; I have it open window 2 and then i move window 2 to desk y.
+</em><br />
+<em class="quotelev1">&gt; Going to the window 2 on desk y, i open up window 3.
+</em><br />
+<em class="quotelev1">&gt; App starts window 3 on original desk x.
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; How do i get window 3 to open on desk y, the one i'm on.
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; I cant use StartsOnDesk, cuz i dont always want it on a certain desk,
+</em><br />
+<em class="quotelev1">&gt; just the one i'm on.
+</em><br />
+<br />Fvwm forces new windows onto the same desk if one of two
+<br />
+conditions is met:
+<br />
+<br />&nbsp;&nbsp;1) The new window is a transient of the old one.
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Currently, there is no way to prevent this effect.  All you
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;can do is to use FvwmEvent to move the new window to the
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;current desk.  (A patch is welcome, look at placement.c,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;around line 1250).
+<br />
+<br />&nbsp;&nbsp;2) The new window is in the same window group, and the old
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window is the group leader.
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In this case, use
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Style &lt;appname&gt; ScatterWindowGroups
+<br />
+<br />Ciao
+<br />
+<br />Dominik ^_^  ^_^
+<br />
+<br />&nbsp;--
+<br />
+Dominik Vogt, dominik.vogt_at_gmx.de
+<br />
+<br /><br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<div>
+<ul>
+<li>application/pgp-signature attachment: <a href="att-13256/01-part">stored</a></li>
+</ul>
+<!-- attachment="01-part" -->
+</div>
+<span id="received"><dfn>Received on</dfn> Wed Sep 15 2004 - 03:17:59 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start13256">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="13257.html" title="Next message in the list">Mikhael Goikhman: "Re: FVWM: Parsing window_flags in perl"</a></li>
+<li><dfn>Previous message</dfn>: <a href="13255.html" title="Previous message in the list">Salvatore Domenick Desiano: "Re: FVWM: Parsing window_flags in perl"</a></li>
+<li><dfn>In reply to</dfn>: <a href="13254.html" title="Message to which this message replies">Elliot Sowadsky: "FVWM: app starting window on its initial page"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg13256" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg13256" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg13256" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg13256" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:57 BST
+</em></small></p>
+</body>
+</html>

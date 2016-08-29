@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: WindowList feature, SortLastWord from David Fries on 2002-05-18 (fvwm-users)</title>
+<meta name="Author" content="David Fries (dfries_at_mail.win.org)" />
+<meta name="Subject" content="FVWM: WindowList feature, SortLastWord" />
+<meta name="Date" content="2002-05-18" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: WindowList feature, SortLastWord</h1>
+<!-- received="Sat May 18 17:35:38 2002" -->
+<!-- isoreceived="20020518163538" -->
+<!-- sent="Sat, 18 May 2002 17:35:41 -0500" -->
+<!-- isosent="20020518223541" -->
+<!-- name="David Fries" -->
+<!-- email="dfries_at_mail.win.org" -->
+<!-- subject="FVWM: WindowList feature, SortLastWord" -->
+<!-- id="20020518223541.GA12041_at_spacedout.fries.net" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start5130" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="5131.html" accesskey="d" title="David Fries: &quot;Re: FVWM: WindowList feature, SortLastWord&quot;">Next message</a> ]
+[ <a href="5129.html" title="Mikhael Goikhman: &quot;Re: FVWM: RE shadow title bar text&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="5131.html" accesskey="t" title="David Fries: &quot;Re: FVWM: WindowList feature, SortLastWord&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg5130" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg5130" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg5130" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg5130" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: David Fries &lt;<a href="mailto:dfries_at_mail.win.org?Subject=Re%3A%20FVWM%3A%20WindowList%20feature%2C%20SortLastWord">dfries_at_mail.win.org</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sat, 18 May 2002 17:35:41 -0500</span><br />
+</address>
+<br />
+I made a patch and put up a web page (patch included).
+<br />
+<a href="http://fries.net/~david/fvwm/">http://fries.net/~david/fvwm/</a>
+<br />
+<br />I noticed that a good number of the programs out there list the name
+<br />
+of the program as the last word on their title.  I wanted a way to
+<br />
+group programs in the WindowList.  The Alphabetic option to WindowList
+<br />
+can't do this since it always starts at the beginning of the title, so
+<br />
+I added an option SortLastWord which when used with the Alphabetic
+<br />
+option will sort the entries based on the last word and then start at
+<br />
+the front if the last word matches.  
+<br />
+<br />The patch is applied against today's fvwm CVS tree.  I do have a
+<br />
+couple questions.  I used the variable pscratch in the WindowList, but
+<br />
+I wasn't sure if I had to do anything special becides freeing the
+<br />
+memory before I exited, or do I need to zero it last?
+<br />
+<br />What's the difference between safemalloc and malloc and do I need to
+<br />
+check to see if it succeeded?
+<br />
+<br />Does it sound reasonable to require Alphabetic to use SortLastWord?
+<br />
+<br />If someone could answer my questions I'll attack the gtk version as
+<br />
+well as the fvwm man page and then submit it again.
+<br />
+<br /><pre>
+-- 
+		+---------------------------------+
+		|      David Fries                |
+		|      dfries_at_mail.win.org        |
+		| <a href="http://fries.net/~david/pgp.txt">http://fries.net/~david/pgp.txt</a> |
+		+---------------------------------+
+
+</pre>
+<br />
+<br /><br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<div>
+<ul>
+<li>text/plain attachment: <a href="att-5130/fvwm_menu_sort.patch">fvwm_menu_sort.patch</a></li>
+</ul>
+<!-- attachment="fvwm_menu_sort.patch" -->
+<ul>
+<li>application/pgp-signature attachment: <a href="att-5130/02-part">stored</a></li>
+</ul>
+<!-- attachment="02-part" -->
+</div>
+<span id="received"><dfn>Received on</dfn> Sat May 18 2002 - 17:35:38 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start5130">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="5131.html" title="Next message in the list">David Fries: "Re: FVWM: WindowList feature, SortLastWord"</a></li>
+<li><dfn>Previous message</dfn>: <a href="5129.html" title="Previous message in the list">Mikhael Goikhman: "Re: FVWM: RE shadow title bar text"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="5131.html" title="Next message in this discussion thread">David Fries: "Re: FVWM: WindowList feature, SortLastWord"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="5131.html" title="Message sent in reply to this message">David Fries: "Re: FVWM: WindowList feature, SortLastWord"</a></li>
+<li><dfn>Reply</dfn>: <a href="5132.html" title="Message sent in reply to this message">Mikhael Goikhman: "Re: FVWM: WindowList feature, SortLastWord"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="5144.html" title="Message sent in reply to this message">elliot sowadsky: "Re: FVWM: WindowList feature, SortLastWord"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg5130" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg5130" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg5130" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg5130" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:53 BST
+</em></small></p>
+</body>
+</html>

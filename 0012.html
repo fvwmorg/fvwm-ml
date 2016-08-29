@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: fvwm 2.3.8 &amp; fvwm 2.3.9-2.3.12 incompatibility? from Brennan Cropper on 2000-01-04 (fvwm-users)</title>
+<meta name="Author" content="Brennan Cropper (bcropper_at_nortelnetworks.com)" />
+<meta name="Subject" content="FVWM: fvwm 2.3.8 &amp; fvwm 2.3.9-2.3.12 incompatibility?" />
+<meta name="Date" content="2000-01-04" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: fvwm 2.3.8 &amp; fvwm 2.3.9-2.3.12 incompatibility?</h1>
+<!-- received="Tue Jan  4 09:30:59 2000" -->
+<!-- isoreceived="20000104093059" -->
+<!-- sent="Tue, 04 Jan 2000 15:15:48 +0000" -->
+<!-- isosent="20000104151548" -->
+<!-- name="Brennan Cropper" -->
+<!-- email="bcropper_at_nortelnetworks.com" -->
+<!-- subject="FVWM: fvwm 2.3.8 &amp; fvwm 2.3.9-2.3.12 incompatibility?" -->
+<!-- id="38720EA4.33FB8813_at_europem01.nt.com" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start12" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="0013.html" accesskey="d" title="Brennan Cropper: &quot;Re: FVWM: fvwm 2.3.8 &#0038; fvwm 2.3.9-2.3.12 incompatibility?&quot;">Next message</a> ]
+[ <a href="0011.html" title="Dan Espen: &quot;Re: FVWM: Bug in FvwmConfig&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="0013.html" accesskey="t" title="Brennan Cropper: &quot;Re: FVWM: fvwm 2.3.8 &#0038; fvwm 2.3.9-2.3.12 incompatibility?&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg12" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg12" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg12" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg12" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Brennan Cropper &lt;<a href="mailto:bcropper_at_nortelnetworks.com?Subject=Re%3A%20FVWM%3A%20fvwm%202.3.8%20%26%20fvwm%202.3.9-2.3.12%20incompatibility%3F">bcropper_at_nortelnetworks.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 04 Jan 2000 15:15:48 +0000</span><br />
+</address>
+<br />
+Hi,
+<br />
+<br />In upgrading from 2.3.8 to 2.3.9 and subsequent (up to 2.3.12) releases,
+<br />
+I've run into some unwanted behaviors in both FvwmPager and
+<br />
+FvwmIconMan.  I was wondering if someone could possibly shed some light
+<br />
+on this.
+<br />
+<br />The problems I ran into deal with the displaying of colors.  I did
+<br />
+notice that I had to change a line in my configuration dealing with
+<br />
+highlight colors during the upgrade and I think this may be the culprit
+<br />
+of my problems.  Previously (2.3.8), this section of my config looked
+<br />
+like this:
+<br />
+------------ snip --------------
+<br />
+AddToDecor CurrentDecor
+<br />
++ ....
+<br />
++ HilightColor #ffffff #c0c0c0
+<br />
++ ....
+<br />
+<br />Style &quot;CurrentStyle&quot; UseDecor CurrentDecor
+<br />
+....
+<br />
+Style &quot;*&quot; UseStyle CurrentStyle
+<br />
+------------ snip --------------
+<br />
+<br />I've since changed this to:
+<br />
+------------ snip --------------
+<br />
+AddToDecor CurrentDecor
+<br />
++ ....
+<br />
+[+ HilightColor #ffffff #c0c0c0] &lt;---- removed this line
+<br />
++ ....
+<br />
+<br />Style &quot;CurrentStyle&quot; UseDecor CurrentDecor
+<br />
+Style &quot;MyStyle&quot; HilightFore #ffffff HilightBack #c0c0c0
+<br />
+....
+<br />
+Style &quot;*&quot; UseStyle CurrentStyle
+<br />
+------------ snip --------------
+<br />
+<br />Anyway, after making this change to my configuration and upgrading to a
+<br />
+newer release (&gt; 2.3.8), the colors in FvwmPager and FvwmIconMan have
+<br />
+been behaving strangely.  Here are their config's.
+<br />
+<br />#------------------ Pager
+<br />
+*FvwmPagerBack DarkGreen
+<br />
+*FvwmPagerFore Black
+<br />
+*FvwmPagerHilight grey60
+<br />
+*FvwmPagerFont -adobe-helvetica-bold-r-*-*-10-*-*-*-*-*-*-*
+<br />
+*FvwmPagerGeometry -1-1
+<br />
+*FvwmPagerLabel 0 Home
+<br />
+*FvwmPagerLabel 1 Clearcase
+<br />
+*FvwmPagerLabel 2 Sniff
+<br />
+*FvwmPagerSmallFont 5x8
+<br />
+*FvwmPagerBalloons
+<br />
+*FvwmPagerBalloonFore black
+<br />
+*FvwmPagerBalloonBack wheat
+<br />
+*FvwmPagerBalloonFont 5x8
+<br />
+<br />#------------------ IconMan
+<br />
+*FvwmIconMan*nummanagers 1
+<br />
+*FvwmIconMan*resolution                   desk
+<br />
+*FvwmIconMan*format                       %t
+<br />
+*FvwmIconMan*font         -adobe-helvetica-bold-r-*-*-10-*-*-*-*-*-*-*
+<br />
+<br />*FvwmIconMan*foreground                   Black
+<br />
+*FvwmIconMan*background                   grey70
+<br />
+*FvwmIconMan*plainbutton                  up
+<br />
+*FvwmIconMan*selectbutton                 down
+<br />
+*FvwmIconMan*focusbutton                  down
+<br />
+*FvwmIconMan*focusandselectbutton         down
+<br />
+*FvwmIconMan*followfocus                  true
+<br />
+*FvwmIconMan*drawicons                    true
+<br />
+<br />*FvwmIconMan*action Mouse 1 N sendcommand Deiconify-Raise-Focus
+<br />
+*FvwmIconMan*action Mouse 2 N sendcommand Iconify
+<br />
+*FvwmIconMan*action Mouse 3 N sendcommand &quot;Module FvwmIdent FvwmIdent&quot;
+<br />
+*FvwmIconMan*buttongeometry               200x0
+<br />
+*FvwmIconMan*managergeometry              +0+0
+<br />
+<br />FvwmIconMan's colors become messed up totally.  That is, the buttons
+<br />
+come up as different combinations of fg and bg depending on the colormap
+<br />
+in use, and the selected buttons are sometimes drawn with three or four
+<br />
+lines through them.  It just so happens that the color combinations that
+<br />
+often come up make the buttons unreadable.
+<br />
+<br />FvwmPager's colors behave better, but the window that has the focus
+<br />
+shows up as a solid white window (white on white w/white border), as
+<br />
+where previously it was a window with white as the fg color and #c0c0c0
+<br />
+as the bg color with a white border.
+<br />
+<br />I have attached snapshots obtained with xmag of both FvwmIconMan and
+<br />
+FvwmPager with both the 2.3.8 and 2.3.12 fvwm versions.
+<br />
+<br />Any help with this would be greatly appreciated.  If I can offer any
+<br />
+more information, please let me know.
+<br />
+<br />Thanks a million,
+<br />
+Brennan
+<br />
+<br />P.S.  I'm running on Solaris 2.6.  Incidentally, over the Christmas
+<br />
+break, I upgraded my Linux box to 2.3.12, and did not have the problem I
+<br />
+described above.  Strange?  I think so.
+<br />
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<div>
+<p><img src="att-0012/FvwmIconMan-2.3.8.gif" alt="FvwmIconMan-2.3.8.gif" />
+<br />
+(image/gif attachment: <a href="att-0012/FvwmIconMan-2.3.8.gif">FvwmIconMan-2.3.8.gif</a>)</p>
+<!-- attachment="FvwmIconMan-2.3.8.gif" -->
+<p><img src="att-0012/FvwmPager-2.3.8.gif" alt="FvwmPager-2.3.8.gif" />
+<br />
+(image/gif attachment: <a href="att-0012/FvwmPager-2.3.8.gif">FvwmPager-2.3.8.gif</a>)</p>
+<!-- attachment="FvwmPager-2.3.8.gif" -->
+<p><img src="att-0012/FvwmIconMan-2.3.12.gif" alt="FvwmIconMan-2.3.12.gif" />
+<br />
+(image/gif attachment: <a href="att-0012/FvwmIconMan-2.3.12.gif">FvwmIconMan-2.3.12.gif</a>)</p>
+<!-- attachment="FvwmIconMan-2.3.12.gif" -->
+<p><img src="att-0012/FvwmPager-2.3.12.gif" alt="FvwmPager-2.3.12.gif" />
+<br />
+(image/gif attachment: <a href="att-0012/FvwmPager-2.3.12.gif">FvwmPager-2.3.12.gif</a>)</p>
+<!-- attachment="FvwmPager-2.3.12.gif" -->
+</div>
+<span id="received"><dfn>Received on</dfn> Tue Jan 04 2000 - 09:30:59 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start12">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="0013.html" title="Next message in the list">Brennan Cropper: "Re: FVWM: fvwm 2.3.8 &#0038; fvwm 2.3.9-2.3.12 incompatibility?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="0011.html" title="Previous message in the list">Dan Espen: "Re: FVWM: Bug in FvwmConfig"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="0013.html" title="Next message in this discussion thread">Brennan Cropper: "Re: FVWM: fvwm 2.3.8 &#0038; fvwm 2.3.9-2.3.12 incompatibility?"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="0013.html" title="Message sent in reply to this message">Brennan Cropper: "Re: FVWM: fvwm 2.3.8 &#0038; fvwm 2.3.9-2.3.12 incompatibility?"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg12" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg12" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg12" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg12" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:50 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: FVWM2: Fast Move and Resize? from Armin Richter on 1997-05-28 (fvwm-users)</title>
+<meta name="Author" content="Armin Richter (y0005396_at_ws.rz.tu-bs.de)" />
+<meta name="Subject" content="FVWM: FVWM2: Fast Move and Resize?" />
+<meta name="Date" content="1997-05-28" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: FVWM2: Fast Move and Resize?</h1>
+<!-- received="Wed May 28 15:15:17 1997" -->
+<!-- isoreceived="19970528141517" -->
+<!-- sent="Wed, 28 May 1997 22:14:47 +0200 (MET_DST)" -->
+<!-- isosent="19970528201447" -->
+<!-- name="Armin Richter" -->
+<!-- email="y0005396_at_ws.rz.tu-bs.de" -->
+<!-- subject="FVWM: FVWM2: Fast Move and Resize?" -->
+<!-- id="Pine.A41.3.95.970528220201.83894A-100000_at_rzrtr1.rz.tu-bs.de" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start20096" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="20097.html" accesskey="d" title="Kendrick Vargas: &quot;Re: FVWM: Examples .fvwm2rc&quot;">Next message</a> ]
+[ <a href="20095.html" title="Charles Hines: &quot;Re: FVWM: Status of fvwm?&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg20096" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg20096" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg20096" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg20096" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Armin Richter &lt;<a href="mailto:y0005396_at_ws.rz.tu-bs.de?Subject=Re%3A%20FVWM%3A%20FVWM2%3A%20Fast%20Move%20and%20Resize%3F">y0005396_at_ws.rz.tu-bs.de</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 28 May 1997 22:14:47 +0200 (MET_DST)</span><br />
+</address>
+<br />
+---------- Forwarded message ----------
+<br />
+Date: Thu, 22 May 1997 11:18:02 +0200 (MET_DST)
+<br />
+From: Armin Richter 
+<br />
+To: fvwm_at_hpc.uh.edu
+<br />
+<br />Nice Greetings to everyone.
+<br />
+<br />Maybe someone can help me:
+<br />
+<br />I take part in a Project that develops
+<br />
+a module for fvwm2 2.0.43.
+<br />
+<br />This module has to heavily move and resize windows.
+<br />
+In fact, several windows simultaniously
+<br />
+The resize shall be done in several smaller steps 
+<br />
+(for outlook reasons)
+<br />
+As the resize process takes much time
+<br />
+(at least too much for the project's needs)
+<br />
+here's my question:
+<br />
+<br />Is there a possibility to temporarily stop
+<br />
+X or fvwm from sending refresh messages to
+<br />
+windows (until the resize process has completed entirely)?
+<br />
+To make it clear: the resizing and moving is done by the module,
+<br />
+not by hand, so switching OpaqueResize doesn't change anything.
+<br />
+<br />Of course I could patch fvwm, but maybe there's
+<br />
+a possibility without changing it.
+<br />
+<br />I tried to temporarily disable XMapWindow in events.c:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (Tmp_win-&gt;Desk == Scr.CurrentDesk)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+/*	      XMapWindow(dpy, Tmp_win-&gt;w);*/
+<br />
+/* This should at least keep the borders been redrawn, but in fact it*/
+<br />
+/* doesn't. Any comments? */
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XMapWindow(dpy, Tmp_win-&gt;frame);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tmp_win-&gt;flags |= MAP_PENDING;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SetMapStateProp(Tmp_win, NormalState);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if((Tmp_win-&gt;flags &amp; ClickToFocus)&amp;&amp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((!Scr.Focus)||(Scr.Focus-&gt;flags &amp; ClickToFocus)))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SetFocus(Tmp_win-&gt;w,Tmp_win,1);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+/*	      XMapWindow(dpy, Tmp_win-&gt;w);*/
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SetMapStateProp(Tmp_win, NormalState);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
+<br />But that disables nearly everything.
+<br />
+The borders should be redrawn as always, however, the client's windows
+<br />
+shall only be moved, not resized, as long as the window has not
+<br />
+reached its final destination.
+<br />
+<br />Thank you very much for every hint.
+<br />
+<br />Yours sincerely,
+<br />
+Armin Richter
+<br />
+<br />K. Armin Richter            
+<br />
+Student TU Braunschweig        Uni Hildesheim is alive!
+<br />
+PGP-public-key upon request Key fingerprint: 1997/02/02 
+<br />
+&nbsp;&nbsp;&nbsp;0E 0A D2 9B A6 4E 3F B4  B7 6D F1 D8 F0 23 0F E5
+<br />
+<br /><br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed May 28 1997 - 15:15:17 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start20096">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="20097.html" title="Next message in the list">Kendrick Vargas: "Re: FVWM: Examples .fvwm2rc"</a></li>
+<li><dfn>Previous message</dfn>: <a href="20095.html" title="Previous message in the list">Charles Hines: "Re: FVWM: Status of fvwm?"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg20096" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg20096" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg20096" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg20096" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

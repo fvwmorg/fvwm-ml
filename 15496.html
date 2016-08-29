@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: FvwmM4/m4 problems from Steve Passe on 1996-02-13 (fvwm-users)</title>
+<meta name="Author" content="Steve Passe (clem_at_clem.systemsix.com)" />
+<meta name="Subject" content="FVWM: FvwmM4/m4 problems" />
+<meta name="Date" content="1996-02-13" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: FvwmM4/m4 problems</h1>
+<!-- received="Mon Feb 12 19:23:38 1996" -->
+<!-- isoreceived="19960212192338" -->
+<!-- sent="Mon, 12 Feb 1996 18:23:00 -0700" -->
+<!-- isosent="19960213012300" -->
+<!-- name="Steve Passe" -->
+<!-- email="clem_at_clem.systemsix.com" -->
+<!-- subject="FVWM: FvwmM4/m4 problems" -->
+<!-- id="199602130123.SAA28048_at_clem.systemsix.com" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start15496" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="15497.html" accesskey="d" title="Chris Rode: &quot;Re: FVWM: GoodStuff&quot;">Next message</a> ]
+[ <a href="15495.html" title="Brady Montz: &quot;FVWM: fvwm2 bug&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15496" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15496" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15496" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15496" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Steve Passe &lt;<a href="mailto:clem_at_clem.systemsix.com?Subject=Re%3A%20FVWM%3A%20FvwmM4%2Fm4%20problems">clem_at_clem.systemsix.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 12 Feb 1996 18:23:00 -0700</span><br />
+</address>
+<br />
+Hi,
+<br />
+<br />I just upgraded 2 machines to 2.0.40 and found that my m4 style .fvwmrc
+<br />
+files failed to work correctly.  The basic problem is that certain
+<br />
+options/styles fail to get set.  It also appears to be pseudo-random in
+<br />
+nature, 3 different starts have 3 different results.
+<br />
+<br />Setting DBUG in configure.h I observed that fvwm starts FvwmM4 and then goes
+<br />
+on to do various X11 initializations, finally entering it's HandleEvents loop.
+<br />
+By the time FvwmM4/m4 have processed .fvwm2rc into /tmp/fvwmrcxxxxxx and
+<br />
+returned the SendInfo( &quot;read /tmp/fvwmrcxxxx&quot; ) message MANY X events have
+<br />
+been handled.  I am not an X11 programer, so I have NO idea where the exact
+<br />
+problem is.  My first observation was that placing a &quot;sleep 15&quot; into .xinitrc
+<br />
+immediately after starting fvwm2rc would fix the problem (usually).  So I went
+<br />
+fishing for a way to syncronize fvwm2 and FvwmM4.  The result is the following
+<br />
+set of patches to fvwm/fvwm.c:
+<br />
+<br />------------------------------------- cut -------------------------------------
+<br />
+-
+<br />
+*** fvwm/fvwm.c 1996/02/12 06:34:38     1.1
+<br />
+--- fvwm/fvwm.c 1996/02/12 23:49:47
+<br />
+***************
+<br />
+*** 103,108 ****
+<br />
+--- 103,180 ----
+<br />
+&nbsp;&nbsp;int fd_width, x_fd;
+<br />
+&nbsp;&nbsp;char *display_name = NULL;
+<br />
+&nbsp;&nbsp;
+<br />
++ #define M4_RACE
+<br />
++ #if defined( M4_RACE )
+<br />
++ 
+<br />
++ int raceSync = False;
+<br />
++ 
+<br />
++ /***************************************************************************
+<br />
++  *
+<br />
++  * Bogon alert!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+<br />
++  *  major hack to sync FvwmM4 pre-processor
+<br />
++  *  this routine was hacked from events.c: My_XNextEvent()
+<br />
++  *  may or may not work with FvwmCpp
+<br />
++  *
+<br />
++  * Wait for configuration by pre-processor to complete.
+<br />
++  *
+<br />
++  ****************************************************************************
+<br />
+/
+<br />
++ int M4OutputReady( void )
+<br />
++ {
+<br />
++   extern int fd_width;
+<br />
++   fd_set in_fdset;
+<br />
++   Window targetWindow;
+<br />
++   int i,count;
+<br />
++   int retval;
+<br />
++ 
+<br />
++   DBUG(&quot;M4OutputReady&quot;,&quot;Entered&quot;);
+<br />
++ 
+<br />
++   FD_ZERO(&amp;in_fdset);
+<br />
++   for(i=0; i&lt;npipes; i++)
+<br />
++     {
+<br />
++       if(readPipes[i]&gt;=0)
+<br />
++       {
+<br />
++         FD_SET(readPipes[i], &amp;in_fdset);
+<br />
++       }
+<br />
++     }
+<br />
++ 
+<br />
++ #ifdef __hpux
+<br />
++   retval = select( fd_width, (int *)&amp;in_fdset, 0, 0, NULL );
+<br />
++ #else
+<br />
++   retval = select( fd_width, &amp;in_fdset, 0, 0, NULL );
+<br />
++ #endif
+<br />
++ 
+<br />
++   /* Check for module input. */
+<br />
++   for(i=0;i&lt;npipes;i++)
+<br />
++     {
+<br />
++       if(readPipes[i] &gt;= 0)
+<br />
++       {
+<br />
++         if((retval&gt;0)&amp;&amp;(FD_ISSET(readPipes[i], &amp;in_fdset)))
+<br />
++           {
+<br />
++             if((count = 
+<br />
++                 read(readPipes[i],&amp;targetWindow, sizeof(Window))) &gt;0)
+<br />
++               {
+<br />
++                   DBUG(&quot;M4OutputReady&quot;,&quot;calling HandleModuleInput&quot;);
+<br />
++                 /**
+<br />
++                  * we blindly assume it is the &quot;read /tmp/xxx&quot; message
+<br />
++                  *  from FvwmM4 or FvwmCpp
+<br />
++                  */
+<br />
++                 HandleModuleInput(targetWindow,i);
+<br />
++                 return True;
+<br />
++               }
+<br />
++             if(count &lt;= 0)
+<br />
++               {
+<br />
++                   DBUG(&quot;M4OutputReady&quot;,&quot;calling KillModule&quot;);
+<br />
++                 KillModule(i,10);
+<br />
++               }
+<br />
++           }
+<br />
++       }
+<br />
++     }
+<br />
++   DBUG(&quot;M4OutputReady&quot;,&quot;Leaving&quot;);
+<br />
++   return False;
+<br />
++ }
+<br />
++ #endif /* M4_RACE */
+<br />
++ 
+<br />
++ 
+<br />
+&nbsp;&nbsp;/***********************************************************************
+<br />
+&nbsp;&nbsp;&nbsp;*
+<br />
+&nbsp;&nbsp;&nbsp;*  Procedure:
+<br />
+***************
+<br />
+*** 347,352 ****
+<br />
+--- 419,442 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ExecuteFunction(config_command, NULL,&amp;Event,C_ROOT,-1);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DBUG(&quot;main&quot;,&quot;Done running config_command&quot;);
+<br />
+&nbsp;&nbsp;
+<br />
++ #if defined( M4_RACE )
+<br />
++   if ( (mystrncasecmp( config_command, &quot;FvwmM4&quot;, 6 ) == 0)
+<br />
++        || (mystrncasecmp( config_command, &quot;FvwmCpp&quot;, 7 ) == 0) )
+<br />
++   {
+<br />
++     raceSync = True;
+<br />
++   }
+<br />
++ # if 0
+<br />
++   /**
+<br />
++    *  something not ready for reading m4 processed config file yet,
+<br />
++    *  if we do it now 'Scroll' functionality is hosed.
+<br />
++    */
+<br />
++   if ( raceSync )
+<br />
++   {
+<br />
++     while ( M4OutputReady() != True ) /** spin */;
+<br />
++   }
+<br />
++ # endif /* 0 */
+<br />
++ #endif  /* M4_RACE */ 
+<br />
++ 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(Scr.d_depth&lt;2)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Scr.gray_pixmap = 
+<br />
+***************
+<br />
+*** 425,430 ****
+<br />
+--- 515,532 ----
+<br />
+&nbsp;&nbsp;#endif
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;XUngrabServer(dpy);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;UnBlackoutScreen();
+<br />
++ 
+<br />
++ #if defined( M4_RACE )
+<br />
++   /**
+<br />
++    * WE MUST WAIT for FvwmM4 to finish building file, then &quot;read file&quot;
+<br />
++    * BEFORE we can start handling X events
+<br />
++    */
+<br />
++   if ( raceSync )
+<br />
++   {
+<br />
++     while ( M4OutputReady() != True ) /** spin */;
+<br />
++   }
+<br />
++ #endif  /* M4_RACE */ 
+<br />
++ 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DBUG(&quot;main&quot;,&quot;Entering HandleEvents loop...&quot;);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;HandleEvents();
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DBUG(&quot;main&quot;,&quot;Back from HandleEvents loop?  Exitting...&quot;);
+<br />
+<br />------------------------------------- cut -------------------------------------
+<br />
+-
+<br />
+<br /><br />I also found a bug in FvwmM4 itself, if you don't set '-debug' when invoking
+<br />
+fvwm2rc, FvwmM4 removes /tmp/fvwmrcxxxxxx when it finishes.  This means that 
+<br />
+any
+<br />
+modules started interactively (eg. via pulldown menues) are given the now non-
+<br />
+existant file's name as it's expected config file.
+<br />
+<br />------------------------------------- cut -------------------------------------
+<br />
+-
+<br />
+*** modules/FvwmM4/FvwmM4.c     1996/02/12 06:32:53     1.1
+<br />
+--- modules/FvwmM4/FvwmM4.c     1996/02/12 23:04:33
+<br />
+***************
+<br />
+*** 181,191 ****
+<br />
+--- 181,196 ----
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;/* For a debugging version, we may wish to omit this part. */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;/* I'll let some m4 advocates clean this up */
+<br />
++ #if defined( M4_ERASE )
+<br />
++  /**
+<br />
++   * won't this remove the file used by various modules???
+<br />
++   */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(!m4_debug)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sprintf(delete_string,&quot;exec rm %s\n&quot;,tmp_file);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SendInfo(fd,delete_string,0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
++ #endif /* M4_ERASE */
+<br />
+&nbsp;&nbsp;}
+<br />
+------------------------------------- cut -------------------------------------
+<br />
+-
+<br />
+<br />Both of these will install from the top level directory via:
+<br />
+<br />% patch -p &lt; patch-aa; patch -p &lt; patch-ab
+<br />
+<br />Note that the first patch to fvwm.c is quite GROSS, but it does work.  Perhaps
+<br />
+it will create insite for a more X literate programmer to find a correct
+<br />
+solution.  I have NOT attempted to use these patches with cpp, and am just
+<br />
+assumming that the same problem might exist.  So look expecially hard at them
+<br />
+b4 using with FvwmCpp.
+<br />
+<br /><pre>
+--
+Steve Passe		| powered by
+clem_at_clem.systemsix.com	|            FreeBSD
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon Feb 12 1996 - 19:23:38 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start15496">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="15497.html" title="Next message in the list">Chris Rode: "Re: FVWM: GoodStuff"</a></li>
+<li><dfn>Previous message</dfn>: <a href="15495.html" title="Previous message in the list">Brady Montz: "FVWM: fvwm2 bug"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15496" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15496" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15496" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15496" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

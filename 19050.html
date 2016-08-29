@@ -1,0 +1,2180 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Wait still broken in 2.0.45? from Chris Rode on 1997-01-24 (fvwm-users)</title>
+<meta name="Author" content="Chris Rode (crode_at_iastate.edu)" />
+<meta name="Subject" content="FVWM: Wait still broken in 2.0.45?" />
+<meta name="Date" content="1997-01-24" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Wait still broken in 2.0.45?</h1>
+<!-- received="Fri Jan 24 12:31:15 1997" -->
+<!-- isoreceived="19970124123115" -->
+<!-- sent="Fri, 24 Jan 1997 08:27:09 CST" -->
+<!-- isosent="19970124142709" -->
+<!-- name="Chris Rode" -->
+<!-- email="crode_at_iastate.edu" -->
+<!-- subject="FVWM: Wait still broken in 2.0.45?" -->
+<!-- id="9701241427.AA10977_at_help2.cc.iastate.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start19050" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="19051.html" accesskey="d" title="Ian Spielman: &quot;FVWM: A bug type thing in The CleverPlacement option.&quot;">Next message</a> ]
+[ <a href="19049.html" title="Roel Lascano: &quot;FVWM: Application Placement&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19050" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19050" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19050" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19050" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Chris Rode &lt;<a href="mailto:crode_at_iastate.edu?Subject=Re%3A%20FVWM%3A%20Wait%20still%20broken%20in%202.0.45%3F">crode_at_iastate.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 24 Jan 1997 08:27:09 CST</span><br />
+</address>
+<br />
+I'm running 2.0.45 under
+<br />
+&nbsp;&nbsp;&nbsp;- Ultrix 4.3
+<br />
+&nbsp;&nbsp;&nbsp;- OSF1 3.2
+<br />
+&nbsp;&nbsp;&nbsp;- Irix 5.3
+<br />
+<br />and on all three platforms, when I have a call to &quot;Wait&quot; in my
+<br />
+ExitFunction, like so:
+<br />
+<br />DestroyFunc    ExitFunction
+<br />
+AddToFunc      ExitFunction
+<br />
++      I       KillModule      FvwmButtons
+<br />
++      I       KillModule      ButtonBar
+<br />
++      I       Module          FvwmBanner
+<br />
++      I       Wait            FvwmBanner
+<br />
+<br />when I attempt to restart/quit fvwm, it kills off both FvwmButtons
+<br />
+modules, flashes the banner, then does nothing.  I have to kill fvwm
+<br />
+from the command line.  This (of course) started with 2.0.44.  For the
+<br />
+time being, I've commented out the ExitFunction, but it seems maybe the
+<br />
+fix in 2.0.45 maybe didn't fix it for all cases...?  I attach my
+<br />
+.fvwm2rc below.
+<br />
+<br />--chris.
+<br />
+<br />#==============================================================================
+<br />
+#
+<br />
+#	FVWM 2.0 Init File
+<br />
+#
+<br />
+#	Author: Chris Rode (crode_at_iastate.edu)
+<br />
+#
+<br />
+#------------------------------------------------------------------------------
+<br />
+#
+<br />
+#	Note: As of FVWM 2.0, this file is no longer order dependent. :)
+<br />
+#
+<br />
+#==============================================================================
+<br />
+<br />#==============================================================================
+<br />
+# set up the colors
+<br />
+#==============================================================================
+<br />
+#
+<br />
+#------------------------------------------------------------------------------
+<br />
+# this is used for all windows not explicitly defined later
+<br />
+# (inactive windows)
+<br />
+#-----------------------------------------------------------
+<br />
+<br />Style		&quot;*&quot;		Color		#ffffff/#c0c0c0
+<br />
+<br /># Style		&quot;*&quot;		ForeColor	NavajoWhite3
+<br />
+# Style		&quot;*&quot;		BackColor	brown4
+<br />
+<br />#------------------------------------------------------------------------------
+<br />
+# this is used for the selected window
+<br />
+#--------------------------------------
+<br />
+#
+<br />
+#				Text		Background
+<br />
+#				--------------- -------------------------------
+<br />
+# HilightColor			white		Purple4
+<br />
+HilightColor			#ffffff		#c0c0c0
+<br />
+<br />#==============================================================================
+<br />
+# set up the menu style
+<br />
+#==============================================================================
+<br />
+#
+<br />
+# The syntax here is: MenuStyle forecolor backcolor shadecolor font style
+<br />
+# where
+<br />
+#
+<br />
+#	forecolor	==	Selectable Text Color
+<br />
+#	backcolor	==	Background Color
+<br />
+#	shadecolor	==	Unselectable Text Color
+<br />
+#	font		==	Font (*DUH!*)
+<br />
+#	style		==	MWM or FVWM Menu Style
+<br />
+#
+<br />
+ClickTime 750
+<br />
+MenuStyle 	#000000 #c0c0c0 #808080 \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-*-helvetica-medium-r-*-*-12-*-*-*-*-*-*-* fvwm
+<br />
+# MenuStyle	black	LightGray	LightGray \
+<br />
+#          	-*-helvetica-bold-*-*-*-*-100-*-*-*-*-*-* fvwm
+<br />
+<br />#==============================================================================
+<br />
+# set up fonts: one for window titles, another for icons
+<br />
+#==============================================================================
+<br />
+#
+<br />
+WindowFont	-*-helvetica-bold-r-*-*-12-*-*-*-*-*-*-*
+<br />
+IconFont	-*-helvetica-medium-r-*-*-12-*-*-*-*-*-*-*
+<br />
+<br />#==============================================================================
+<br />
+# icon style stuff
+<br />
+#==============================================================================
+<br />
+#------------------------------------------------------------------------------
+<br />
+# auto place icons in lower left corner
+<br />
+#---------------------------------------
+<br />
+#
+<br />
+Style &quot;*&quot; IconBox -65 5 -5 -5
+<br />
+<br />#------------------------------------------------------------------------------
+<br />
+# If you uncomment this, make sure that the WindowList is bound to
+<br />
+# something, it works pretty much like an icon manager.
+<br />
+#------------------------------------------------------------------
+<br />
+#
+<br />
+# Style &quot;*&quot; NoIcon
+<br />
+<br />#------------------------------------------------------------------------------
+<br />
+# If you want ALL your icons to follow you around the desktop (sticky),
+<br />
+# uncomment the following.
+<br />
+#-----------------------------------------------------------------------
+<br />
+#
+<br />
+Style &quot;*&quot; StickyIcon
+<br />
+<br />#==============================================================================
+<br />
+# MWM style stuff
+<br />
+#==============================================================================
+<br />
+#------------------------------------------------------------------------------
+<br />
+# MWMFunctions make FVWM attempt to recognize and respect the MWM
+<br />
+# prohibited operations hints that appliocations occasionally use.
+<br />
+# HintOverride makes FVWM shade out operations that MWM would prohibit,
+<br />
+# but it lets you perform the operation anyway.
+<br />
+#-----------------------------------------------------------------------
+<br />
+#
+<br />
+# Style &quot;*&quot; MWMFunctions
+<br />
+# Style &quot;*&quot; HintOverride
+<br />
+<br />#------------------------------------------------------------------------------
+<br />
+# MWMDecor make FVWM attempt to recognize and respect the MWM decoration
+<br />
+# hints that applications occasionally use.
+<br />
+#------------------------------------------------------------------------
+<br />
+#
+<br />
+# Style &quot;*&quot; MWMDecor
+<br />
+<br />#------------------------------------------------------------------------------
+<br />
+# MWMBorder makes the 3-D bevel more closely match MWM's.
+<br />
+#---------------------------------------------------------
+<br />
+#
+<br />
+# Style &quot;*&quot; MWMBorder
+<br />
+<br />#------------------------------------------------------------------------------
+<br />
+# MWMButtons makes the Maximize button look &quot;pressed in&quot; when the window
+<br />
+# is maximized.
+<br />
+#------------------------------------------------------------------------
+<br />
+#
+<br />
+# Style &quot;*&quot; MWMButtons
+<br />
+<br />#==============================================================================
+<br />
+# miscellaney style stuff
+<br />
+#==============================================================================
+<br />
+#------------------------------------------------------------------------------
+<br />
+# OpaqueMoveSize tells FVWM the maximum size window with which opaque
+<br />
+# window movement shoud be used.  It has attached to it a percentage,
+<br />
+# which is percent of the total screen area.  With &quot;OpaqueMoveSize 0,&quot; all
+<br />
+# windows will be moved using the traditional rubber-band outline.  With
+<br />
+# &quot;OpaqueMoveSize 100&quot; all windows will be moved as solid windows.  The
+<br />
+# default is &quot;OpaqueMoveSize 5&quot;.
+<br />
+#--------------------------------------------------------------------------
+<br />
+#
+<br />
+OpaqueMoveSize 25
+<br />
+<br />#------------------------------------------------------------------------------
+<br />
+# This changes the value with which bits are XOR'ed when doing
+<br />
+# rubber-band window moving or resizing.  Whatever is used by default
+<br />
+# doesn't work with my (mostly) black background...
+<br />
+#---------------------------------------------------------------------
+<br />
+#
+<br />
+XORvalue 1
+<br />
+<br />#------------------------------------------------------------------------------
+<br />
+# EdgeScroll specifies the percentage of a page to scroll when the
+<br />
+# cursor hits the edge of a page.
+<br />
+#------------------------------------------------------------------
+<br />
+#
+<br />
+EdgeScroll 100 100
+<br />
+<br />#------------------------------------------------------------------------------
+<br />
+# EdgeResistance tells how hard it should be to change the desktop
+<br />
+# viewport by moving the mouse over the edge of the screen and how hard it
+<br />
+# should be to move a window over the edge of the screen.
+<br />
+#
+<br />
+# The first parameter tells how many milliseconds the pointer must spend
+<br />
+# on the screen edge before fvwm will move the viewport.
+<br />
+#
+<br />
+# The second parameter tells how many pixels over the edge of the screen
+<br />
+# a window's edge must move before it actually moves partially off the
+<br />
+# screen.
+<br />
+#--------------------------------------------------------------------------
+<br />
+#
+<br />
+EdgeResistance 50 50
+<br />
+<br />#==============================================================================
+<br />
+# window placement style stuff
+<br />
+#==============================================================================
+<br />
+#------------------------------------------------------------------------------
+<br />
+# RandomPlacement causes windows which would normally require user
+<br />
+# placement to be automatically placed in ever-so-slightly random
+<br />
+# locations.
+<br />
+#
+<br />
+# SmartPlacement causes windows which would normally require user
+<br />
+# placement to be automatically placed in a smart location - a location in
+<br />
+# which they do not overlap any other windows on the screen.
+<br />
+#--------------------------------------------------------------------------
+<br />
+#
+<br />
+Style &quot;*&quot; SmartPlacement, ActivePlacement
+<br />
+GlobalOpts SmartPlacementIsReallySmart
+<br />
+<br />#------------------------------------------------------------------------------
+<br />
+# decorate transient windows
+<br />
+#----------------------------
+<br />
+#
+<br />
+Style &quot;*&quot; DecorateTransient
+<br />
+<br />#------------------------------------------------------------------------------
+<br />
+# title bar setup
+<br />
+#-----------------
+<br />
+&nbsp;TitleStyle	LeftJustified	-- Flat
+<br />
+# TitleStyle	LeftJustified	Raised
+<br />
+# AddTitleStyle	Inactive	HGradient 64 2 black 40 brown4 60 brown4
+<br />
+# AddTitleStyle	ActiveUp	HGradient 64 2 black 40 Purple4 60 Purple4
+<br />
+# AddTitleStyle	ActiveDown	HGradient 64 2 black 40 Purple4 60 Purple4
+<br />
+AddTitleStyle	Inactive	HGradient 64 black brown4
+<br />
+AddTitleStyle	ActiveUp	HGradient 64 black Purple4
+<br />
+AddTitleStyle	ActiveDown	HGradient 64 black Purple4
+<br />
+BorderStyle	-- HiddenHandles NoInset
+<br />
+#==============================================================================
+<br />
+# set up the virtual desktop
+<br />
+#==============================================================================
+<br />
+#------------------------------------------------------------------------------
+<br />
+# set the desktop size in units of physical screen size
+<br />
+#-------------------------------------------------------
+<br />
+#
+<br />
+DeskTopSize 3x3
+<br />
+<br />#==============================================================================
+<br />
+# module path and paths to icons
+<br />
+#==============================================================================
+<br />
+#
+<br />
+ModulePath	/afs/isu/rental/kerplunk/lib/fvwm2:/usr/bin/X11
+<br />
+PixmapPath	/afs/isu/rental/kerplunk/images/icons
+<br />
+IconPath	/afs/isu/rental/kerplunk/images/icons
+<br />
+<br />#==============================================================================
+<br />
+# stuff to do at startup
+<br />
+#
+<br />
+#	FvwmButtons (formerly GoodStuff) is FVWM's button bar module
+<br />
+#	FvwmAuto causes windows with the input focus to autoraise
+<br />
+#
+<br />
+#==============================================================================
+<br />
+#
+<br />
+DestroyFunc	InitFunction
+<br />
+AddToFunc	InitFunction
+<br />
++	I	Exec	/afs/isu/rental/kerplunk/bin/scripts/mklogout_icon
+<br />
++	I	Exec	/afs/isu/users/31/28/crode/.startup.X11-2
+<br />
++	I	Module	FvwmButtons
+<br />
++	I	Module	ButtonBar
+<br />
++	I	Module	FvwmAuto 	750
+<br />
+<br />DestroyFunc	RestartFunction
+<br />
+AddToFunc	RestartFunction	
+<br />
++	I	Exec	/afs/isu/rental/kerplunk/bin/scripts/mklogout_icon
+<br />
++	I	Module	FvwmButtons
+<br />
++	I	Module	ButtonBar
+<br />
++	I	Module	FvwmAuto	750
+<br />
+<br />#DestroyFunc	ExitFunction
+<br />
+#AddToFunc	ExitFunction
+<br />
+#+	I	KillModule	FvwmButtons
+<br />
+#+	I	KillModule	ButtonBar
+<br />
+#+	I	Module		FvwmBanner
+<br />
+#+	I	Wait		FvwmBanner
+<br />
+<br />#==============================================================================
+<br />
+# set the decoration styles and window options
+<br />
+#==============================================================================
+<br />
+#
+<br />
+Style &quot;*&quot;		BorderWidth 4, HandleWidth 4, SloppyFocus, \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MiniIcon mini-x.xpm
+<br />
+Style &quot;Fvwm*&quot;		NoTitle, NoHandles, Sticky, WindowListSkip, \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BorderWidth 0
+<br />
+Style &quot;FvwmButtons&quot;	NoTitle, NoHandles, Sticky, WindowListSkip, \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BorderWidth 0
+<br />
+Style &quot;FvwmTalk&quot;	Sticky, WindowListSkip, BorderWidth 3
+<br />
+Style &quot;xdaliclock&quot;  	NoTitle, NoHandles, Sticky, BorderWidth 0
+<br />
+Style &quot;xlogout&quot;		NoTitle, NoHandles, Sticky, WindowListSkip, \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FvwmBorder, BorderWidth 3
+<br />
+Style &quot;xload&quot;		NoTitle, NoHandles, Sticky
+<br />
+Style &quot;xzwrite&quot;		NoTitle, NoHandles, Sticky
+<br />
+Style &quot;sendWindow&quot;	NoTitle, NoHandles, Sticky, BorderWidth 0
+<br />
+Style &quot;zwgc&quot;		NoTitle, NoHandles, Sticky, WindowListSkip, \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FvwmBorder, BorderWidth 4, BackColor brown4
+<br />
+Style &quot;*lock&quot;		NoTitle, NoHandles, Sticky, WindowListSkip
+<br />
+Style &quot;xv&quot;		NoHandles, BorderWidth 3, Icon xv4_3d.xpm
+<br />
+Style &quot;xmconval_cl&quot;	FvwmBorder, BorderWidth 4, Icon dM.101.xpm
+<br />
+Style &quot;Netscape&quot;	ClickToFocus, NoPPosition
+<br />
+Style &quot;Console&quot;		NoHandles, NoIcon
+<br />
+Style &quot;Emacs&quot;		Icon dM.PersonalJesus.xpm
+<br />
+# Style &quot;XTerm&quot;		Icon dM.IFeelYou.xpm, UseDecor win95, ForeColor Black
+<br />
+Style &quot;XTerm&quot;		Icon dM.IFeelYou.xpm
+<br />
+<br />#==============================================================================
+<br />
+# some handy complex functions
+<br />
+#==============================================================================
+<br />
+#------------------------------------------------------------------------------
+<br />
+# This one moves and then raises the window if you drag the mouse, only
+<br />
+# raises the window if you click, or does a RaiseLowqer if you double
+<br />
+# click
+<br />
+#-----------------------------------------------------------------------
+<br />
+#
+<br />
+DestroyFunc	Move-or-Raise
+<br />
+AddToFunc	Move-or-Raise
+<br />
++	M	Move
+<br />
++	M	Raise
+<br />
++	C	Raise
+<br />
++	D	WindowShade
+<br />
+<br />#------------------------------------------------------------------------------
+<br />
+# This one maximizes vertically if you click (leaving room for the
+<br />
+# FvwmButtons bar at the bottom, or does a full maximization if you double
+<br />
+# click, or a true full vertical maximizationi if you just hold the mouse
+<br />
+# button down.
+<br />
+#--------------------------------------------------------------------------
+<br />
+#
+<br />
+DestroyFunc	maximize_func
+<br />
+AddToFunc	maximize_func
+<br />
++	M	Maximize 0 100
+<br />
++	C	Maximize 0 93
+<br />
++	D	Maximize 100 100
+<br />
+<br />#------------------------------------------------------------------------------
+<br />
+# This one moves and then lowers the window if you drag the mouse, only
+<br />
+# lowers the window if you click, or does a RaiseLower if you double click
+<br />
+#--------------------------------------------------------------------------
+<br />
+#
+<br />
+DestroyFunc	Move-or-Lower
+<br />
+AddToFunc	Move-or-Lower
+<br />
++	M	Move
+<br />
++	M	Lower
+<br />
++	C	Lower
+<br />
++	D	RaiseLower
+<br />
+<br />#------------------------------------------------------------------------------
+<br />
+# This one moves or (de)iconifies
+<br />
+#---------------------------------
+<br />
+#
+<br />
+DestroyFunc	Move-or-Iconify
+<br />
+AddToFunc	Move-or-Iconify
+<br />
++	M	Move
+<br />
++	D	Iconify
+<br />
+<br />#------------------------------------------------------------------------------
+<br />
+# This one resizes and then raises the window if you drag the mouse,
+<br />
+# only rasies the window if you click, or does a RaiseLower if you double
+<br />
+# click
+<br />
+#-------------------------------------------------------------------------
+<br />
+#
+<br />
+DestroyFunc	Resize-or-Raise
+<br />
+AddToFunc	Resize-or-Raise	
+<br />
++	M	Resize
+<br />
++	M	Raise
+<br />
++	C	Raise
+<br />
++	D	RaiseLower
+<br />
+<br />DestroyFunc	LogoutFunc
+<br />
+AddToFunc	LogoutFunc
+<br />
++	I	Quit
+<br />
+<br />DestroyFunc	warp-or-run
+<br />
+AddToFunc	warp-or-run	
+<br />
++	I	Next [$0 CirculateHit] Iconify -1
+<br />
++	I	Next [$0 CirculateHit] Focus
+<br />
++	I	None [$0] $1
+<br />
+<br />DestroyFunc	warp-current-desk-or-run
+<br />
+AddToFunc 	warp-current-desk-or-run
+<br />
++ 	I	Next [$0 CirculateHit CurrentDesk] Iconify -1
+<br />
++	I	Next [$0 CirculateHit CurrentDesk] Focus
+<br />
++	I	None [$0 CirculateHit CurrentDesk] $1
+<br />
+<br />#==============================================================================
+<br />
+# some handy-dandy menus (the order on this is severely hap-hazard)
+<br />
+#==============================================================================
+<br />
+#
+<br />
+#------------------------------------------------------------------------------
+<br />
+# All the fvwm2 Modules
+<br />
+#------------------------------------------------------------------------------
+<br />
+DestroyMenu	Module-Popup
+<br />
+AddToMenu	Module-Popup	&quot;Modules&quot;	Title
+<br />
++	&quot;FvwmButtons&quot;		Module		FvwmButtons
+<br />
++	&quot;&quot;			Nop
+<br />
++	&quot;Kill FvwmButtons&quot;	KillModule	FvwmButtons
+<br />
++	&quot;&quot;			Nop
+<br />
++	&quot;&quot;			Nop
+<br />
++	&quot;Identify Window&quot;	Module		FvwmIdent
+<br />
++	&quot;FvwmWinList&quot;		Module		FvwmWinList
+<br />
++	&quot;Command Line&quot;		Module		FvwmTalk
+<br />
+<br />#------------------------------------------------------------------------------
+<br />
+# Top-Level Menu for different programs
+<br />
+#------------------------------------------------------------------------------
+<br />
+DestroyMenu	Applications
+<br />
+AddToMenu	Applications	&quot;Programs&quot;	Title
+<br />
++	&quot;Accessories&quot;		Popup		Accessories
+<br />
++	&quot;Network&quot;		Popup		NetApps
+<br />
++	&quot;Help Room&quot;		Popup		hrstaff
+<br />
++	&quot;&quot;			Nop
+<br />
++	&quot;Xterm&quot;			Exec	exec	xterm -sl 500&amp;
+<br />
++	&quot;Big Xterm&quot;		Exec	exec	xterm -sl 500 -fn 12x24&amp;
+<br />
+<br />#------------------------------------------------------------------------------
+<br />
+# Network Applications (like web browsers, ftp, etc.)
+<br />
+#------------------------------------------------------------------------------
+<br />
+DestroyMenu	NetApps
+<br />
+AddToMenu	NetApps		&quot;Network Apps&quot;		Title
+<br />
++	&quot;Netscape&quot;		Exec	exec	/afs/isu/rental/kerplunk/bin/_at_sys/netscape &amp;
+<br />
++	&quot;Mosaic&quot;		Exec	exec	/afs/isu/rental/kerplunk/bin/_at_sys/mosaic &amp;
+<br />
+<br />#------------------------------------------------------------------------------
+<br />
+# Accessory Type Applications
+<br />
+#------------------------------------------------------------------------------
+<br />
+DestroyMenu	Accessories
+<br />
+AddToMenu	Accessories	&quot;Accessories&quot;		Title
+<br />
++	&quot;Xdaliclock&quot;		Exec	exec	\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nice /afs/isu/rental/kerplunk/bin/_at_sys/xdaliclock \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-noseconds -fn &quot;-*-helvetica-bold-r-normal-*-34-*-*-*-*-*-*-*&quot; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-fg gray63 -bg DarkOrchid4 -bw 0 -geometry 130x50-1500-1500 &amp;
+<br />
++	&quot;Calculator&quot;		Exec	exec	dxcalc &amp;
+<br />
++	&quot;Emacs&quot;			Exec	exec	emacs &amp;
+<br />
++	&quot;Exmh&quot;			Exec	exec	exmh &amp;
+<br />
++	&quot;XLess&quot;			Exec	exec	xless &amp;
+<br />
++	&quot;Xman&quot;			Exec	exec	xman &amp;
+<br />
++	&quot;XView&quot;			Exec	exec	/afs/isu/rental/kerplunk/bin/_at_sys/xv &amp;
+<br />
+<br />#------------------------------------------------------------------------------
+<br />
+# A Few Root Window Backgrounds
+<br />
+#------------------------------------------------------------------------------
+<br />
+DestroyMenu	Backgrounds
+<br />
+AddToMenu	Backgrounds	&quot;Backgrounds&quot;		Title
+<br />
++	&quot;XEarth&quot;		Exec	exec	/afs/isu/rental/kerplunk/bin/_at_sys/xearth -pos 'sunrel 30 0' -grid &amp;
+<br />
++	&quot;&quot;			Nop
+<br />
++	&quot;Blue&quot;			Exec	exec	xsetroot -solid blue4&amp;
+<br />
++	&quot;Black&quot;			Exec	exec	xsetroot -solid black&amp;
+<br />
++	&quot;Gray&quot;			Exec	exec	xsetroot -gray&amp;
+<br />
++	&quot;Messy&quot;			Exec	exec	xsetroot -def&amp;
+<br />
++	&quot;Green&quot;			Exec	exec	xsetroot -solid green3&amp;
+<br />
+<br />#------------------------------------------------------------------------------
+<br />
+# A Few Bell Settings
+<br />
+#------------------------------------------------------------------------------
+<br />
+DestroyMenu	Bell-Settings
+<br />
+AddToMenu	Bell-Settings	&quot;Bell Settings&quot;		Title
+<br />
++	&quot;Bell Check&quot;		Beep
+<br />
++	&quot;&quot;			Nop
+<br />
++	&quot;Bell Loud&quot;		Exec	exec	xset b 100&amp;
+<br />
++	&quot;Bell Normal&quot;		Exec	exec	xset b 50&amp;
+<br />
++	&quot;Bell Soft&quot;		Exec	exec	xset b 25&amp;
+<br />
++	&quot;&quot;			Nop
+<br />
++	&quot;Bell Off&quot;		Exec	exec	xset b 0&amp;
+<br />
+<br />#------------------------------------------------------------------------------
+<br />
+# A Few Keyboard Click Settings
+<br />
+#------------------------------------------------------------------------------
+<br />
+DestroyMenu	Click-Settings
+<br />
+AddToMenu	Click-Settings	&quot;Click Settings&quot;	Title
+<br />
++	&quot;Click Loud&quot;		Exec	exec	xset c 100&amp;
+<br />
++	&quot;Click Normal&quot;		Exec	exec	xset c 50&amp;
+<br />
++	&quot;Click Soft&quot;		Exec	exec	xset c 25&amp;
+<br />
++	&quot;&quot;			Nop
+<br />
++	&quot;Click Off&quot;		Exec	exec	xset c 0&amp;
+<br />
+<br />#------------------------------------------------------------------------------
+<br />
+# A Few Mouse Speed Settings
+<br />
+#------------------------------------------------------------------------------
+<br />
+DestroyMenu	Mouse-Settings
+<br />
+AddToMenu	Mouse-Settings	&quot;Mouse Settings&quot;	Title
+<br />
++	&quot;Mouse Slow&quot;		Exec	exec	xset m 1 1&amp;
+<br />
++	&quot;Mouse Default&quot;		Exec	exec	xset m default&amp;
+<br />
++	&quot;Mouse Fast&quot;		Exec	exec	xset m 4 2&amp;
+<br />
++	&quot;Speedy Gonzales&quot;	Exec	exec	xset m 10 2&amp;
+<br />
+<br />#------------------------------------------------------------------------------
+<br />
+# Top-Level Settings Menu
+<br />
+#------------------------------------------------------------------------------
+<br />
+DestroyMenu	Setups
+<br />
+AddToMenu	Setups		&quot;Settings&quot;		Title
+<br />
++	&quot;Backgrounds&quot;		Popup	Backgrounds
+<br />
++	&quot;Bell Settings&quot;		Popup	Bell-Settings
+<br />
++	&quot;Click Settings&quot;	Popup	Click-Settings
+<br />
++	&quot;Mouse Settings&quot;	Popup	Mouse-Settings
+<br />
++	&quot;&quot;			Nop
+<br />
++	&quot;Font Selector&quot;		Exec	exec	xfontsel &amp;
+<br />
++	&quot;Color Selector&quot;	Exec	exec	/afs/isu/rental/kerplunk/bin/_at_sys/xcolorsel &amp;
+<br />
+<br />#------------------------------------------------------------------------------
+<br />
+# Computer Science Machines (BLECH!)
+<br />
+#------------------------------------------------------------------------------
+<br />
+DestroyMenu	ComSci
+<br />
+AddToMenu	ComSci		&quot;ComSci Machines&quot;	Title
+<br />
++	&quot;stimpy.cs&quot;		Exec	exec	xterm -sl 500 -T stimpy.cs -e telnet stimpy.cs.iastate.edu&amp;
+<br />
++	&quot;shazam.cs&quot;		Exec	exec	xterm -sl 500 -T shazam.cs -e telnet shazam.cs.iastate.edu&amp;
+<br />
++	&quot;popeye.cs&quot;		Exec	exec	xterm -sl 500 -T popeye.cs -e telnet popeye.cs.iastate.edu&amp;
+<br />
+<br />#------------------------------------------------------------------------------
+<br />
+# Computation Center Staff Machines
+<br />
+#------------------------------------------------------------------------------
+<br />
+DestroyMenu	ISUCC
+<br />
+AddToMenu	ISUCC		&quot;Computation Center&quot;	Title
+<br />
++	&quot;calvin.cc&quot;		Exec	exec	xterm -sl 500 -T calvin.cc -e telnet calvin.cc&amp;
+<br />
++	&quot;spiff.cc&quot;		Exec	exec	xterm -sl 500 -T spiff.cc -e telnet spiff.cc&amp;
+<br />
++	&quot;&quot;			Nop
+<br />
++	&quot;help1.cc&quot;		Exec	exec	xterm -sl 500 -T help1.cc -e telnet help1.cc&amp;
+<br />
++	&quot;help2.cc&quot;		Exec	exec	xterm -sl 500 -T help2.cc -e telnet help2.cc&amp;
+<br />
+<br />#------------------------------------------------------------------------------
+<br />
+# ISU College Communications Servers
+<br />
+#------------------------------------------------------------------------------
+<br />
+DestroyMenu	ComServ
+<br />
+AddToMenu	ComServ		&quot;Communications Servers&quot;	Title
+<br />
++	&quot;ag1&quot;		Exec	exec	xterm -sl 500 -T ag1 -e telnet ag1&amp;
+<br />
++	&quot;ag2&quot;		Exec	exec	xterm -sl 500 -T ag2 -e telnet ag2&amp;
+<br />
++	&quot;&quot;		Nop
+<br />
++	&quot;bus1&quot;		Exec	exec	xterm -sl 500 -T bus1 -e telnet bus1&amp;
+<br />
++	&quot;bus2&quot;		Exec	exec	xterm -sl 500 -T bus2 -e telnet bus2&amp;
+<br />
++	&quot;&quot;		Nop
+<br />
++	&quot;des1&quot;		Exec	exec	xterm -sl 500 -T des1 -e telnet des1&amp;
+<br />
++	&quot;des2&quot;		Exec	exec	xterm -sl 500 -T des2 -e telnet des2&amp;
+<br />
++	&quot;&quot;		Nop
+<br />
++	&quot;educ1&quot;		Exec	exec	xterm -sl 500 -T educ1 -e telnet educ1&amp;
+<br />
++	&quot;educ2&quot;		Exec	exec	xterm -sl 500 -T educ2 -e telnet educ2&amp;
+<br />
++	&quot;&quot;		Nop
+<br />
++	&quot;eng1&quot;		Exec	exec	xterm -sl 500 -T eng1 -e telnet eng1&amp;
+<br />
++	&quot;eng2&quot;		Exec	exec	xterm -sl 500 -T eng2 -e telnet eng2&amp;
+<br />
++	&quot;eng3&quot;		Exec	exec	xterm -sl 500 -T eng3 -e telnet eng3&amp;
+<br />
++	&quot;&quot;		Nop
+<br />
++	&quot;fcs1&quot;		Exec	exec	xterm -sl 500 -T fcs1 -e telnet fcs1&amp;
+<br />
++	&quot;fcs2&quot;		Exec	exec	xterm -sl 500 -T fcs2 -e telnet fcs2&amp;
+<br />
++	&quot;&quot;		Nop
+<br />
++	&quot;las1&quot;		Exec	exec	xterm -sl 500 -T las1 -e telnet las1&amp;
+<br />
++	&quot;las2&quot;		Exec	exec	xterm -sl 500 -T las2 -e telnet las2&amp;
+<br />
++	&quot;las3&quot;		Exec	exec	xterm -sl 500 -T las3 -e telnet las3&amp;
+<br />
++	&quot;&quot;		Nop
+<br />
++	&quot;&quot;		Nop
+<br />
++	&quot;isua1&quot;		Exec	exec	xterm -sl 500 -T isua1 -e telnet isua1&amp;
+<br />
++	&quot;isua2&quot;		Exec	exec	xterm -sl 500 -T isua2 -e telnet isua2&amp;
+<br />
++	&quot;&quot;		Nop
+<br />
++	&quot;isum1&quot;		Exec	exec	xterm -sl 500 -T isum1 -e telnet isum1&amp;
+<br />
++	&quot;isum2&quot;		Exec	exec	xterm -sl 500 -T isum2 -e telnet isum2&amp;
+<br />
++	&quot;&quot;		Nop
+<br />
++	&quot;class1&quot;	Exec	exec	xterm -sl 500 -T class1 -e telnet class1&amp;
+<br />
+<br />#------------------------------------------------------------------------------
+<br />
+# SGI Workstations in Durham 89
+<br />
+#------------------------------------------------------------------------------
+<br />
+DestroyMenu	du89
+<br />
+AddToMenu	du89		&quot;Durham 89&quot;		Title
+<br />
++	&quot;du89-01.cc&quot;	Exec	exec	xterm -sl 500 -T du89-01.cc -e telnet du89-01.cc&amp;
+<br />
++	&quot;du89-02.cc&quot;	Exec	exec	xterm -sl 500 -T du89-02.cc -e telnet du89-02.cc&amp;
+<br />
++	&quot;du89-03.cc&quot;	Exec	exec	xterm -sl 500 -T du89-03.cc -e telnet du89-03.cc&amp;
+<br />
++	&quot;du89-04.cc&quot;	Exec	exec	xterm -sl 500 -T du89-04.cc -e telnet du89-04.cc&amp;
+<br />
++	&quot;du89-05.cc&quot;	Exec	exec	xterm -sl 500 -T du89-05.cc -e telnet du89-05.cc&amp;
+<br />
++	&quot;&quot;		Nop
+<br />
++	&quot;du89-06.cc&quot;	Exec	exec	xterm -sl 500 -T du89-06.cc -e telnet du89-06.cc&amp;
+<br />
++	&quot;du89-07.cc&quot;	Exec	exec	xterm -sl 500 -T du89-07.cc -e telnet du89-07.cc&amp;
+<br />
++	&quot;du89-08.cc&quot;	Exec	exec	xterm -sl 500 -T du89-08.cc -e telnet du89-08.cc&amp;
+<br />
++	&quot;du89-09.cc&quot;	Exec	exec	xterm -sl 500 -T du89-09.cc -e telnet du89-09.cc&amp;
+<br />
++	&quot;du89-10.cc&quot;	Exec	exec	xterm -sl 500 -T du89-10.cc -e telnet du89-10.cc&amp;
+<br />
++	&quot;&quot;		Nop
+<br />
++	&quot;du89-11.cc&quot;	Exec	exec	xterm -sl 500 -T du89-11.cc -e telnet du89-11.cc&amp;
+<br />
++	&quot;du89-12.cc&quot;	Exec	exec	xterm -sl 500 -T du89-12.cc -e telnet du89-12.cc&amp;
+<br />
++	&quot;du89-13.cc&quot;	Exec	exec	xterm -sl 500 -T du89-13.cc -e telnet du89-13.cc&amp;
+<br />
++	&quot;du89-14.cc&quot;	Exec	exec	xterm -sl 500 -T du89-14.cc -e telnet du89-14.cc&amp;
+<br />
++	&quot;du89-15.cc&quot;	Exec	exec	xterm -sl 500 -T du89-15.cc -e telnet du89-15.cc&amp;
+<br />
++	&quot;&quot;		Nop
+<br />
++	&quot;du89-16.cc&quot;	Exec	exec	xterm -sl 500 -T du89-16.cc -e telnet du89-16.cc&amp;
+<br />
++	&quot;du89-17.cc&quot;	Exec	exec	xterm -sl 500 -T du89-17.cc -e telnet du89-17.cc&amp;
+<br />
++	&quot;du89-18.cc&quot;	Exec	exec	xterm -sl 500 -T du89-18.cc -e telnet du89-18.cc&amp;
+<br />
++	&quot;du89-19.cc&quot;	Exec	exec	xterm -sl 500 -T du89-19.cc -e telnet du89-19.cc&amp;
+<br />
++	&quot;du89-20.cc&quot;	Exec	exec	xterm -sl 500 -T du89-20.cc -e telnet du89-20.cc&amp;
+<br />
+<br />#------------------------------------------------------------------------------
+<br />
+# DECstations and Alpha Workstations in Durham 139
+<br />
+#------------------------------------------------------------------------------
+<br />
+DestroyMenu	du139
+<br />
+AddToMenu	du139		&quot;Durham 139&quot;	Title
+<br />
++	&quot;du139-201.cc&quot;	Exec	exec	xterm -sl 500 -T du139-201.cc -e telnet du139-201.cc&amp;
+<br />
++	&quot;du139-202.cc&quot;	Exec	exec	xterm -sl 500 -T du139-202.cc -e telnet du139-202.cc&amp;
+<br />
++	&quot;du139-203.cc&quot;	Exec	exec	xterm -sl 500 -T du139-203.cc -e telnet du139-203.cc&amp;
+<br />
++	&quot;du139-204.cc&quot;	Exec	exec	xterm -sl 500 -T du139-204.cc -e telnet du139-204.cc&amp;
+<br />
++	&quot;du139-205.cc&quot;	Exec	exec	xterm -sl 500 -T du139-205.cc -e telnet du139-205.cc&amp;
+<br />
++	&quot;&quot;		Nop
+<br />
++	&quot;du139-206.cc&quot;	Exec	exec	xterm -sl 500 -T du139-206.cc -e telnet du139-206.cc&amp;
+<br />
++	&quot;du139-207.cc&quot;	Exec	exec	xterm -sl 500 -T du139-207.cc -e telnet du139-207.cc&amp;
+<br />
++	&quot;du139-208.cc&quot;	Exec	exec	xterm -sl 500 -T du139-208.cc -e telnet du139-208.cc&amp;
+<br />
++	&quot;du139-209.cc&quot;	Exec	exec	xterm -sl 500 -T du139-209.cc -e telnet du139-209.cc&amp;
+<br />
++	&quot;du139-210.cc&quot;	Exec	exec	xterm -sl 500 -T du139-210.cc -e telnet du139-210.cc&amp;
+<br />
++	&quot;&quot;		Nop
+<br />
++	&quot;du139-211.cc&quot;	Exec	exec	xterm -sl 500 -T du139-211.cc -e telnet du139-211.cc&amp;
+<br />
++	&quot;du139-212.cc&quot;	Exec	exec	xterm -sl 500 -T du139-212.cc -e telnet du139-212.cc&amp;
+<br />
++	&quot;du139-213.cc&quot;	Exec	exec	xterm -sl 500 -T du139-213.cc -e telnet du139-213.cc&amp;
+<br />
++	&quot;du139-214.cc&quot;	Exec	exec	xterm -sl 500 -T du139-214.cc -e telnet du139-214.cc&amp;
+<br />
++	&quot;&quot;		Nop
+<br />
++	&quot;&quot;		Nop
+<br />
++	&quot;&quot;		Nop
+<br />
++	&quot;du139-215.cc&quot;	Exec	exec	xterm -sl 500 -T du139-215.cc -e telnet du139-215.cc&amp;
+<br />
++	&quot;du139-216.cc&quot;	Exec	exec	xterm -sl 500 -T du139-216.cc -e telnet du139-216.cc&amp;
+<br />
++	&quot;du139-217.cc&quot;	Exec	exec	xterm -sl 500 -T du139-217.cc -e telnet du139-217.cc&amp;
+<br />
++	&quot;du139-218.cc&quot;	Exec	exec	xterm -sl 500 -T du139-218.cc -e telnet du139-218.cc&amp;
+<br />
++	&quot;du139-219.cc&quot;	Exec	exec	xterm -sl 500 -T du139-219.cc -e telnet du139-219.cc&amp;
+<br />
++	&quot;&quot;		Nop
+<br />
++	&quot;du139-220.cc&quot;	Exec	exec	xterm -sl 500 -T du139-220.cc -e telnet du139-220.cc&amp;
+<br />
++	&quot;du139-221.cc&quot;	Exec	exec	xterm -sl 500 -T du139-221.cc -e telnet du139-221.cc&amp;
+<br />
++	&quot;du139-222.cc&quot;	Exec	exec	xterm -sl 500 -T du139-222.cc -e telnet du139-222.cc&amp;
+<br />
++	&quot;du139-223.cc&quot;	Exec	exec	xterm -sl 500 -T du139-223.cc -e telnet du139-223.cc&amp;
+<br />
++	&quot;du139-224.cc&quot;	Exec	exec	xterm -sl 500 -T du139-224.cc -e telnet du139-224.cc&amp;
+<br />
++	&quot;&quot;		Nop
+<br />
++	&quot;du139-225.cc&quot;	Exec	exec	xterm -sl 500 -T du139-225.cc -e telnet du139-225.cc&amp;
+<br />
++	&quot;du139-226.cc&quot;	Exec	exec	xterm -sl 500 -T du139-226.cc -e telnet du139-226.cc&amp;
+<br />
++	&quot;du139-227.cc&quot;	Exec	exec	xterm -sl 500 -T du139-227.cc -e telnet du139-227.cc&amp;
+<br />
++	&quot;du139-228.cc&quot;	Exec	exec	xterm -sl 500 -T du139-228.cc -e telnet du139-228.cc&amp;
+<br />
++	&quot;du139-229.cc&quot;	Exec	exec	xterm -sl 500 -T du139-229.cc -e telnet du139-229.cc&amp;
+<br />
++	&quot;&quot;		Nop
+<br />
++	&quot;du139-230.cc&quot;	Exec	exec	xterm -sl 500 -T du139-230.cc -e telnet du139-230.cc&amp;
+<br />
++	&quot;du139-231.cc&quot;	Exec	exec	xterm -sl 500 -T du139-231.cc -e telnet du139-231.cc&amp;
+<br />
++	&quot;du139-232.cc&quot;	Exec	exec	xterm -sl 500 -T du139-232.cc -e telnet du139-232.cc&amp;
+<br />
++	&quot;du139-233.cc&quot;	Exec	exec	xterm -sl 500 -T du139-233.cc -e telnet du139-233.cc&amp;
+<br />
++	&quot;du139-234.cc&quot;	Exec	exec	xterm -sl 500 -T du139-234.cc -e telnet du139-234.cc&amp;
+<br />
+<br />#------------------------------------------------------------------------------
+<br />
+# DECstations in Durham 248
+<br />
+#------------------------------------------------------------------------------
+<br />
+DestroyMenu	du248
+<br />
+AddToMenu	du248		&quot;Durham 248&quot;	Title
+<br />
++	&quot;du248-01.cc&quot;	Exec	exec	xterm -sl 500 -T du248-01.cc -e telnet du248-01.cc&amp;
+<br />
++	&quot;du248-02.cc&quot;	Exec	exec	xterm -sl 500 -T du248-02.cc -e telnet du248-02.cc&amp;
+<br />
++	&quot;du248-03.cc&quot;	Exec	exec	xterm -sl 500 -T du248-03.cc -e telnet du248-03.cc&amp;
+<br />
++	&quot;du248-04.cc&quot;	Exec	exec	xterm -sl 500 -T du248-04.cc -e telnet du248-04.cc&amp;
+<br />
++	&quot;du248-05.cc&quot;	Exec	exec	xterm -sl 500 -T du248-05.cc -e telnet du248-05.cc&amp;
+<br />
++	&quot;&quot;		Nop
+<br />
++	&quot;du248-06.cc&quot;	Exec	exec	xterm -sl 500 -T du248-06.cc -e telnet du248-06.cc&amp;
+<br />
++	&quot;du248-07.cc&quot;	Exec	exec	xterm -sl 500 -T du248-07.cc -e telnet du248-07.cc&amp;
+<br />
++	&quot;du248-08.cc&quot;	Exec	exec	xterm -sl 500 -T du248-08.cc -e telnet du248-08.cc&amp;
+<br />
++	&quot;du248-09.cc&quot;	Exec	exec	xterm -sl 500 -T du248-09.cc -e telnet du248-09.cc&amp;
+<br />
++	&quot;du248-10.cc&quot;	Exec	exec	xterm -sl 500 -T du248-10.cc -e telnet du248-10.cc&amp;
+<br />
++	&quot;&quot;		Nop
+<br />
++	&quot;du248-11.cc&quot;	Exec	exec	xterm -sl 500 -T du248-11.cc -e telnet du248-11.cc&amp;
+<br />
++	&quot;du248-12.cc&quot;	Exec	exec	xterm -sl 500 -T du248-12.cc -e telnet du248-12.cc&amp;
+<br />
++	&quot;du248-13.cc&quot;	Exec	exec	xterm -sl 500 -T du248-13.cc -e telnet du248-13.cc&amp;
+<br />
++	&quot;du248-14.cc&quot;	Exec	exec	xterm -sl 500 -T du248-14.cc -e telnet du248-14.cc&amp;
+<br />
++	&quot;du248-15.cc&quot;	Exec	exec	xterm -sl 500 -T du248-15.cc -e telnet du248-15.cc&amp;
+<br />
++	&quot;&quot;		Nop
+<br />
++	&quot;du248-16.cc&quot;	Exec	exec	xterm -sl 500 -T du248-16.cc -e telnet du248-16.cc&amp;
+<br />
++	&quot;du248-17.cc&quot;	Exec	exec	xterm -sl 500 -T du248-17.cc -e telnet du248-17.cc&amp;
+<br />
++	&quot;du248-18.cc&quot;	Exec	exec	xterm -sl 500 -T du248-18.cc -e telnet du248-18.cc&amp;
+<br />
++	&quot;du248-19.cc&quot;	Exec	exec	xterm -sl 500 -T du248-19.cc -e telnet du248-19.cc&amp;
+<br />
+<br />#-	-	-	-	-	-	-	-	-	-
+<br />
+<br />DestroyMenu	Remote-Login
+<br />
+AddToMenu	Remote-Login	&quot;Remote Login&quot;	Title
+<br />
++	&quot;Computer Science&quot;		Popup	ComSci
+<br />
++	&quot;&quot;				Nop
+<br />
++	&quot;Computation Center&quot;		Popup	ISUCC
+<br />
++	&quot;&quot;				Nop
+<br />
++	&quot;Communications Servers&quot;	Popup	ComServ
+<br />
++	&quot;&quot;				Nop
+<br />
++	&quot;Durham 89&quot;			Popup	du89
+<br />
++	&quot;Durham 139&quot;			Popup	du139
+<br />
++	&quot;Durham 248&quot;			Popup	du248
+<br />
+<br />#------------------------------------------------------------------------------
+<br />
+# Help Room Staff Only Applications
+<br />
+#------------------------------------------------------------------------------
+<br />
+DestroyMenu	hrstaff
+<br />
+AddToMenu	hrstaff		&quot;Help Room Apps&quot;	Title
+<br />
++	&quot;netconsole&quot;		Exec	exec	xterm -sl 500 -fn 10x20 -T Netconsole -e telnet -l nocol safe.iastate.edu&amp;
+<br />
++	&quot;xmconval&quot;		Exec	exec	xmconval_cl&amp;
+<br />
++	&quot;olcr&quot;			Exec	exec	xterm -sl 500 -fn 10x20 -T &quot;On-Line Consulting&quot; -e olcr&amp;
+<br />
+<br />#------------------------------------------------------------------------------
+<br />
+# Shit I'm playing with
+<br />
+#------------------------------------------------------------------------------
+<br />
+DestroyMenu	shit
+<br />
+AddToMenu	shit		&quot;Shit&quot;		Title
+<br />
++	&quot;MyTalk&quot;				Module	MyTalk
+<br />
++	&quot;MyFvwmTalk&quot;				Module	MyFvwmTalk
+<br />
+<br />#------------------------------------------------------------------------------
+<br />
+# Root Menu
+<br />
+#------------------------------------------------------------------------------
+<br />
+DestroyMenu	Utilities
+<br />
+AddToMenu	Utilities	&quot;Utilities&quot;		Title
+<br />
++	&quot;Programs&quot;		Popup	Applications
+<br />
++	&quot;Settings&quot;		Popup	Setups
+<br />
++	&quot;Modules&quot;		Popup	Module-Popup
+<br />
++	&quot;&quot;			Nop
+<br />
++	&quot;Remote Login&quot;		Popup	Remote-Login
+<br />
++	&quot;&quot;			Nop
+<br />
+# +	&quot;Shit&quot;			Popup	shit
+<br />
+# +	&quot;&quot;			Nop
+<br />
++	&quot;Unfuck (mkpwd)&quot;	Exec	exec	mkpwd
+<br />
++	&quot;&quot;			Nop
+<br />
++	&quot;Refresh Screen&quot;	Refresh
+<br />
++	&quot;Reload Resources&quot;	Exec	exec 	xrdb -load $HOME/.Xresources
+<br />
++	&quot;Lock Display&quot;		Exec	exec	/afs/isu/rental/kerplunk/bin/_at_sys/xlockmore -mode random -nice 10 &amp;
+<br />
++	&quot;Restart/Quit&quot;		Module	RestartLogout
+<br />
+<br />#------------------------------------------------------------------------------
+<br />
+DestroyMenu	Window-Ops
+<br />
+AddToMenu	Window-Ops	&quot;Window Ops&quot;	Title
+<br />
++	&quot;Identity&quot;				Module		FvwmIdent
+<br />
++	&quot;&quot;					Nop
+<br />
++	&quot;Move&quot;					Move
+<br />
++	&quot;Resize&quot;				Resize
+<br />
++	&quot;Raise&quot;					Raise
+<br />
++	&quot;Lower&quot;					Lower
+<br />
++	&quot;(De)Iconify&quot;				Iconify
+<br />
++	&quot;(Un)Stick&quot;				Stick
+<br />
++	&quot;(Un)Maximize&quot;				Function	maximize_func
+<br />
++	&quot;(Un)Maximize Vertical&quot;			Maximize 	0 100
+<br />
++	&quot;&quot;					Nop
+<br />
++	&quot;Destroy&quot;				Destroy
+<br />
++	&quot;Delete&quot;				Delete
+<br />
+<br />#------------------------------------------------------------------------------
+<br />
+DestroyMenu	Window-Ops2
+<br />
+AddToMenu	Window-Ops2
+<br />
++	&quot;Identity&quot;				Module		FvwmIdent
+<br />
++	&quot;&quot;					Nop
+<br />
++	&quot;Move&quot;					Move
+<br />
++	&quot;Resize&quot;				Resize
+<br />
++	&quot;Raise&quot;					Raise
+<br />
++	&quot;Lower&quot;					Lower
+<br />
++	&quot;(De)Iconify&quot;				Iconify
+<br />
++	&quot;(Un)Stick&quot;				Stick
+<br />
++	&quot;(Un)Maximize&quot;				Maximize
+<br />
++	&quot;(Un)Maximize Vertical&quot;			Maximize	0 100
+<br />
++	&quot;&quot;					Nop
+<br />
++	&quot;Destroy&quot;				Destroy
+<br />
++	&quot;Delete&quot;				Delete
+<br />
++	&quot;&quot;					Nop
+<br />
++	&quot;Scroll Bar&quot;				Module		FvwmScroll 2 2
+<br />
+<br />#==============================================================================
+<br />
+# WHEW!  one more complex function now
+<br />
+#==============================================================================
+<br />
+#------------------------------------------------------------------------------
+<br />
+# This creates a motif-ish sticky menu for the title-bar window-ops
+<br />
+# popup.  Menu acts like normal twm menu if you just hold the button down,
+<br />
+# but if you click instead, the menu stays up, motif style
+<br />
+#--------------------------------------------------------------------------
+<br />
+#
+<br />
+DestroyFunc	window_ops_func
+<br />
+AddToFunc	window_ops_func
+<br />
++	C	Menu	Window-Ops2
+<br />
++	M	Menu	Window-Ops2
+<br />
+<br />#==============================================================================
+<br />
+# Mouse and button bindings...
+<br />
+#==============================================================================
+<br />
+#-----------------------------------------------------------------------------
+<br />
+# Call me a loser if you want, but i quite like the Windows 95 title bar
+<br />
+# buttons, so let's define the right hand title bar buttons to be a
+<br />
+# little like those
+<br />
+#------------------------------------------------------------------------
+<br />
+#
+<br />
+ButtonStyle 2 (Solid purple4 -- Flat)
+<br />
+AddButtonStyle 2 Inactive (Solid brown4)
+<br />
+AddButtonStyle 2 (Pixmap close-up.xpm)
+<br />
+AddButtonStyle 2 ActiveDown (Pixmap close-down.xpm)
+<br />
+ButtonStyle 4 (Solid purple4 -- Flat)
+<br />
+AddButtonStyle 4 Inactive (Solid brown4)
+<br />
+AddButtonStyle 4 (Pixmap maximize-up.xpm -- Left)
+<br />
+AddButtonStyle 4 ActiveDown (Pixmap maximize-down.xpm -- Left)
+<br />
+ButtonStyle 6 (Solid purple4 -- Flat)
+<br />
+AddButtonStyle 6 Inactive (Solid brown4)
+<br />
+AddButtonStyle 6 (Pixmap minimize-up.xpm -- Right)
+<br />
+AddButtonStyle 6 ActiveDown (Pixmap minimize-down.xpm -- Right)
+<br />
+<br />#-----------------------------------------------------------------------------
+<br />
+# For the left side, we'll have a &quot;system&quot; button, then we'll define two
+<br />
+# more: a lower (down arrow) and an &quot;identity&quot; (I)
+<br />
+#--------------------------------------------------
+<br />
+#
+<br />
+<br />ButtonStyle 1 Solid black -- Flat
+<br />
+AddButtonStyle 1 MiniIcon
+<br />
+<br />#-----------------------------------------------------------------------------
+<br />
+# First, for the mouse in the root window
+<br />
+#
+<br />
+# Button 1 gives the Utilities menu
+<br />
+# Button 2 gives the Window Ops menu
+<br />
+# Button 3 gives the WindowList (like TwmWindows)
+<br />
+#-------------------------------------------------
+<br />
+#
+<br />
+#     Button	Context Modifi 	Function
+<br />
+Mouse 1		R   	A       Menu Utilities
+<br />
+Mouse 2		R    	A      	Menu Window-Ops
+<br />
+Mouse 3		R    	A      	Module FvwmWinList transient
+<br />
+<br />#-----------------------------------------------------------------------------
+<br />
+# Now the title bar buttons
+<br />
+#
+<br />
+# Any button in the left-left title-bar button (button 1) gives the
+<br />
+#     window ops menu
+<br />
+# Any button in the left-center title-bar button (button 3) gives
+<br />
+#     information about the window (calls FvwmIdent on the window)
+<br />
+# Any button in the left-right title-bar button (button 5) makes the
+<br />
+#     window &quot;sticky&quot;
+<br />
+#
+<br />
+# Any button in the right-left title-bar button (button 8) lowers the
+<br />
+#     window
+<br />
+# Any button in the right-left-center title-bar button (button 6)
+<br />
+#     iconifies the window
+<br />
+# Any button in the right-right-center title-bar button (button 4)
+<br />
+#     maximizes the window
+<br />
+# Any button in the right-right title-bar button (button 2) closes
+<br />
+#     (deletes or destroys - depends on app) the window
+<br />
+#------------------------------------------------------------------------
+<br />
+#
+<br />
+# Button	Context		Modifiers	Function
+<br />
+Mouse 0		1    		A      		Popup Window-Ops2
+<br />
+# Mouse 0		3		A		Module FvwmIdent
+<br />
+# Mouse 0		5		A		Stick
+<br />
+Mouse 0		2		A		Close
+<br />
+Mouse 0		4    		A     		Function maximize_func
+<br />
+Mouse 0		6    		A     		Iconify
+<br />
+<br />#-----------------------------------------------------------------------------
+<br />
+# Now the rest of the frame
+<br />
+#---------------------------
+<br />
+#
+<br />
+#--------------------------------------------------------------------------
+<br />
+# Button 1 in the corner pieces, with any modifiers, gives resize or raise
+<br />
+#
+<br />
+Mouse 1		FS	A	Function Resize-or-Raise
+<br />
+<br />#------------------------------------------------------------------------
+<br />
+# Button 1 in the title, or sides, w/ any modifiers, gives move or raise
+<br />
+Mouse 1		T	A	Function Move-or-Raise
+<br />
+<br />#----------------------------------------------------------------------------
+<br />
+# Button 1 in an icons gives move for a drag, de-iconify for a double-click,
+<br />
+# nothing for a single click
+<br />
+#
+<br />
+Mouse 1		I	A	Function Move-or-Iconify
+<br />
+<br />#---------------------------------------------------------
+<br />
+# Button 2 in an icon, w/ any modifiers, gives de-iconify
+<br />
+#
+<br />
+Mouse 2		I	A	Iconify
+<br />
+<br />#------------------------------------------------------------------------
+<br />
+# Button 2 in the corners, sides, or title-bar gives the window ops menu
+<br />
+#
+<br />
+# Mouse 2		FST	A	Function window_ops_func
+<br />
+Mouse 2		T	A	Stick
+<br />
+<br />#--------------------------------------------------------------------
+<br />
+# Button 3 anywhere in the decoration (except the title-bar buttons)
+<br />
+# does a raise-lower
+<br />
+#
+<br />
+Mouse 3		TSIF	A	RaiseLower
+<br />
+<br />#-----------------------------------------------------------------------------
+<br />
+# Button 1 in the window, with the Modifier-1 key (usually alt or diamond),
+<br />
+# gives Raise-Lower. Used to use control here, but that interferes with
+<br />
+# xterm
+<br />
+#
+<br />
+# Button 2 in the window, with the Modifier-1 key, resizes the window
+<br />
+#
+<br />
+# Button 3 in the window, with the Modifier-1 key, moves the window
+<br />
+#
+<br />
+Mouse 1         W       M       RaiseLower
+<br />
+Mouse 2         W       M       Resize
+<br />
+Mouse 3         A       M       Move
+<br />
+<br />#==============================================================================
+<br />
+# keyboard shortcuts are here
+<br />
+#==============================================================================
+<br />
+#-----------------------------------------------------------------------------
+<br />
+# Arrow Keys
+<br />
+# press arrow + meta anywhere, and scroll by 1 page
+<br />
+#---------------------------------------------------
+<br />
+#
+<br />
+Key Left	A	M	Scroll -100 0
+<br />
+Key Right	A	M	Scroll +100 +0
+<br />
+Key Up		A	M	Scroll +0   -100
+<br />
+Key Down	A	M	Scroll +0   +100
+<br />
+<br />#-----------------------------------------------------------------------------
+<br />
+# press arrow + control key, and scroll by 1/10 of a page
+<br />
+#---------------------------------------------------------
+<br />
+#
+<br />
+Key Left	A	C	Scroll -10  +0
+<br />
+Key Right	A	C	Scroll +10  +0
+<br />
+Key Up		A	C	Scroll +0   -10
+<br />
+Key Down	A	C	Scroll +0   +10
+<br />
+<br />#-----------------------------------------------------------------------------
+<br />
+# press shift arrow + control anywhere, and move the pointer by 1% of a page
+<br />
+#----------------------------------------------------------------------------
+<br />
+#
+<br />
+Key Left	A	SC	CursorMove -1   +0
+<br />
+Key Right	A	SC	CursorMove +1   +0
+<br />
+Key Up		A	SC	CursorMove +0   -1
+<br />
+Key Down	A	SC	CursorMove +0   +1
+<br />
+<br />#-----------------------------------------------------------------------------
+<br />
+# press shift arrow + meta key, and move the pointer by 1/10 of a page
+<br />
+#----------------------------------------------------------------------
+<br />
+#
+<br />
+Key Left	A	SM	CursorMove -10  +0
+<br />
+Key Right	A	SM	CursorMove +10  +0
+<br />
+Key Up		A	SM	CursorMove +0   -10
+<br />
+Key Down	A	SM	CursorMove +0   +10
+<br />
+<br />#-----------------------------------------------------------------------------
+<br />
+# Keyboard accelerators
+<br />
+#-----------------------
+<br />
+#
+<br />
+Key F1		A	M	Popup &quot;Utilities&quot;
+<br />
+Key F2		A	M	Popup &quot;Window Ops&quot;
+<br />
+Key F3		A	M	Module &quot;WindowList&quot; FvwmWinList 
+<br />
+Key F4		A	M	Iconify
+<br />
+Key F5		A	M	Move
+<br />
+Key F6		A	M	Resize
+<br />
+Key F7		A	M	CirculateUp
+<br />
+Key F8		A	M	CirculateDown
+<br />
+Key F9		A	A	Function warp-or-run Emacs &quot;Exec emacs&amp;&quot;
+<br />
+<br />Key Tab		A	M	Next Focus
+<br />
+Key Next	A	A	Next Focus
+<br />
+Key Prior	A	A	Prev Focus
+<br />
+<br />#------------------------------------------------------------------------------
+<br />
+# The following keyboard shortcuts are real handy for moving between our
+<br />
+# desktops, and the pages on them.
+<br />
+#
+<br />
+# PF1, PF2, PF3, PF4 - will change to the desktop numbered 1 less than
+<br />
+# the fcn key number
+<br />
+#
+<br />
+# The numeric keypad numbers (1-9) with the alt/compose/meta character
+<br />
+# will put us on the page corresponding to the key's position.  i.e.,
+<br />
+# M-7 will switch to the top left page, M-3 to the bottom right...
+<br />
+#
+<br />
+# Key KP_F1	A	A	Desk 0 0
+<br />
+# Key KP_F2	A	A	Desk 0 1
+<br />
+<br />#Key KP_1	A	A	GotoPage 0 2
+<br />
+#Key KP_2	A	A	GotoPage 1 2
+<br />
+#Key KP_3	A	A	GotoPage 2 2
+<br />
+#Key KP_4	A	A	GotoPage 0 1
+<br />
+#Key KP_5	A	A	GotoPage 1 1
+<br />
+#Key KP_6	A	A	GotoPage 2 1
+<br />
+#Key KP_7	A	A	GotoPage 0 0
+<br />
+#Key KP_8	A	A	GotoPage 1 0
+<br />
+#Key KP_9	A	A	GotoPage 2 0
+<br />
+<br />#==============================================================================
+<br />
+# Definitions used by the modules
+<br />
+#==============================================================================
+<br />
+#------------------------------------------------------------------------------
+<br />
+# FvwmButtons button-bar
+<br />
+#------------------------
+<br />
+#
+<br />
+*FvwmButtonsBack	LightGray
+<br />
+*FvwmButtonsFore	black
+<br />
+*FvwmButtonsFont	-*-helvetica-bold-r-*-*-10-*-*-*-*-*-*-*
+<br />
+*FvwmButtonsGeometry	+1-1
+<br />
+*FvwmButtonsRows	1
+<br />
+<br />*FvwmButtons(Padding 6 4, Action 'Function warp-or-run Netscape \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;Exec /afs/isu/rental/kerplunk/bin/_at_sys/netscape &amp;&quot;') Mozilla
+<br />
+*FvwmButtons(Action 'Function warp-or-run Mosaic \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;Exec /afs/isu/rental/kerplunk/bin/_at_sys/mosaic &amp;&quot;') Mosaic
+<br />
+*FvwmButtons(Action 'Function warp-or-run Emacs &quot;Exec emacs&amp;&quot;') emacs
+<br />
+*FvwmButtons(Action 'Exec &quot;xterm&quot; xterm&amp;', \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Action(Mouse 3) 'Popup Remote-Login', \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Action(Mouse 2) 'Module RemoteHost') XTerm
+<br />
+*FvwmButtons(Action 'Function warp-or-run olcr &quot;Exec xterm -font 10x20 -e olcr &amp;') olcr
+<br />
+*FvwmButtons(Action 'Function warp-or-run xv &quot;Exec \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/afs/isu/rental/kerplunk/bin/_at_sys/xv &amp;&quot;') xv
+<br />
+*FvwmButtons(Action 'Exec &quot;&quot; /afs/isu/rental/kerplunk/private/panic') PANIC!
+<br />
+*FvwmButtons(Action 'Exec &quot;&quot; /afs/isu/rental/kerplunk/bin/_at_sys/xlockmore -mode \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;random -nice 10&amp;') Lock
+<br />
+*FvwmButtons(Action 'Restart fvwm2') Restart
+<br />
+*FvwmButtons(2x1 Frame -3 Swallow(NoClose, UseOld) &quot;XDaliClock&quot; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Exec nice /afs/isu/rental/kerplunk/bin/_at_sys/xdaliclock \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-noseconds -fn &quot;-*-helvetica-bold-r-*-*-17-*-*-*-*-*-*-*&quot; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-fg black -bg LightGray -bw 0 -geometry 130x50-1500-1500 &amp;')
+<br />
+*FvwmButtons(Back brown4, Fore LightGray, Action 'Quit') Logout
+<br />
+<br /><br />*ButtonBarBack		LightGray
+<br />
+*ButtonBarFore		black
+<br />
+*ButtonBarGeometry	+1-26
+<br />
+*ButtonBarRows		1
+<br />
+*ButtonBar(Frame -2, Size 125 50, Back LightGray, Swallow(NoClose, UseOld) &quot;XLoad&quot; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Exec nice xload -fg black -bg LightGray -geometry -1500-1500 \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-nolabel &amp;')
+<br />
+*ButtonBar(Size 100 50, Swallow &quot;FvwmPager&quot; &quot;FvwmPager 0 1&quot;)
+<br />
+<br /><br />#------------------------------------------------------------------------------
+<br />
+# Window Identifier
+<br />
+#-------------------
+<br />
+#
+<br />
+*FvwmIdentFore		White
+<br />
+*FvwmIdentBack		Purple4
+<br />
+*FvwmIdentFont		-adobe-helvetica-medium-r-normal-*-*-100-*-*-*-*-*-*
+<br />
+<br />#------------------------------------------------------------------------------
+<br />
+# Pager
+<br />
+#-------
+<br />
+#
+<br />
+*FvwmPagerGeometry	+1-1
+<br />
+*FvwmPagerFont		-adobe-helvetica-medium-r-normal-*-*-*-*-*-*-*-*-*
+<br />
+*FvwmPagerFore		LightGray
+<br />
+*FvwmPagerBack		black
+<br />
+*FvwmPagerHilight	Purple4
+<br />
+*FvwmPagerLabel		0	Main
+<br />
+*FvwmPagerLabel		1	Blargh!
+<br />
+<br />#------------------------------------------------------------------------------
+<br />
+# FvwmWinList
+<br />
+#-------------
+<br />
+#
+<br />
+*FvwmWinListGeometry	+0-1
+<br />
+*FvwmWinListFont	-*-helvetica-medium-r-normal-*-*-100-*-*-*-*-*-*
+<br />
+*FvwmWinListFore	black
+<br />
+*FvwmWinListBack	LightGray
+<br />
+*FvwmWinListIconFore	black
+<br />
+*FvwmWinListAction	Click1	Iconify -1,Focus
+<br />
+*FvwmWinListAction	Click2	Iconify
+<br />
+*FvwmWinListAction	Click3	Module	&quot;FvwmIdent&quot;	FvwmIdent
+<br />
+*FvwmWinListUseSkipList
+<br />
+*FvwmWinListLeftJustify
+<br />
+<br />#------------------------------------------------------------------------------
+<br />
+# Restart/Logout Form
+<br />
+#---------------------
+<br />
+*RestartLogoutGrabServer
+<br />
+*RestartLogoutWarpPointer
+<br />
+*RestartLogoutFont		-*-helvetica-*-r-*-*-14-*-*-*-*-*-*-*
+<br />
+*RestartLogoutButtonFont	-*-helvetica-*-o-*-*-14-*-*-*-*-*-*-*
+<br />
+*RestartLogoutFore		Black
+<br />
+*RestartLogoutBack		LightGray
+<br />
+*RestartLogoutItemFore		Wheat
+<br />
+*RestartLogoutItemBack		Gray50
+<br />
+*RestartLogoutLine		center
+<br />
+*RestartLogoutLine		center
+<br />
+*RestartLogoutText		&quot;Restart FVWM or Quit?&quot;
+<br />
+*RestartLogoutLine		center
+<br />
+*RestartLogoutLine		expand
+<br />
+*RestartLogoutButton		quit	&quot;Restart&quot;	^M
+<br />
+*RestartLogoutCommand		Restart fvwm2
+<br />
+*RestartLogoutButton		quit	&quot;Logout&quot;
+<br />
+*RestartLogoutCommand		Quit
+<br />
+*RestartLogoutButton		quit	&quot;Cancel&quot;	^[
+<br />
+*RestartLogoutCommand		Nop
+<br />
+Style &quot;RestartLogout&quot; 		NoTitle,NoHandles,BorderWidth 3
+<br />
+<br />#------------------------------------------------------------------------------
+<br />
+# This is basically just garbage that I'm playing with...
+<br />
+#---------------------------------------------------------
+<br />
+#
+<br />
+# MyTalk Form
+<br />
+*MyTalkWarpPointer
+<br />
+*MyTalkFont *helvetica*m*r*n*14*
+<br />
+*MyTalkButtonFont *helvetica*m*o*n*14*
+<br />
+*MyTalkInputFont *cour*m*r*n*14*
+<br />
+*MyTalkFore Red
+<br />
+*MyTalkBack Gray
+<br />
+*MyTalkItemFore Blue
+<br />
+*MyTalkItemBack Gray
+<br />
+*MyTalkLine center
+<br />
+*MyTalkText &quot;Fvwm Function&quot;
+<br />
+*MyTalkInput Func 40 &quot;&quot;
+<br />
+*MyTalkLine expand
+<br />
+*MyTalkButton quit &quot;Run&quot; ^M
+<br />
+*MyTalkCommand $(Func)
+<br />
+*MyTalkButton restart &quot;Clear&quot; ^R
+<br />
+*MyTalkButton quit &quot;Cancel&quot; ^C
+<br />
+*MyTalkCommand Nop
+<br />
+<br /># MyFvwmTalk Form
+<br />
+*MyFvwmTalkWarpPointer
+<br />
+*MyFvwmTalkFont *helvetica*m*r*n*14*
+<br />
+*MyFvwmTalkButtonFont *helvetica*m*o*n*14*
+<br />
+*MyFvwmTalkInputFont *cour*m*r*n*14*
+<br />
+*MyFvwmTalkFore Red
+<br />
+*MyFvwmTalkBack Gray
+<br />
+*MyFvwmTalkItemFore Blue
+<br />
+*MyFvwmTalkItemBack Gray
+<br />
+*MyFvwmTalkLine center
+<br />
+*MyFvwmTalkText &quot;Fvwm Function&quot;
+<br />
+*MyFvwmTalkInput Func 40 &quot;&quot;
+<br />
+*MyFvwmTalkLine expand
+<br />
+*MyFvwmTalkButton restart &quot;Run&quot; ^M
+<br />
+*MyFvwmTalkCommand $(Func)
+<br />
+*MyFvwmTalkButton restart &quot;Clear&quot; ^R
+<br />
+*MyFvwmTalkCommand Nop
+<br />
+*MyFvwmTalkButton restart &quot;Iconify&quot; ^Z
+<br />
+*MyFvwmTalkCommand Next [MyFvwmTalk] Iconify
+<br />
+*MyFvwmTalkButton quit &quot;Quit&quot; ^C
+<br />
+*MyFvwmTalkCommand Nop
+<br />
+<br /># Form to specify a host to telnet to
+<br />
+*RemoteHostWarpPointer
+<br />
+*RemoteHostBack			Gray
+<br />
+*RemoteHostFore			Red
+<br />
+*RemoteHostItemBack		Gray
+<br />
+*RemoteHostItemFore		Blue
+<br />
+*RemoteHostFont			*helvetica*m*r*n*14*
+<br />
+*RemoteHostButtonFont		*helvetica*m*o*n*14*
+<br />
+*RemoteHostInputFont		*cour*m*r*n*14*
+<br />
+*RemoteHostLine			left
+<br />
+*RemoteHostText			&quot;Enter Remote Host:&quot;
+<br />
+*RemoteHostInput		Host	40	&quot;&quot;
+<br />
+*RemoteHostLine			left
+<br />
+*RemoteHostLine			left
+<br />
+*RemoteHostText			&quot;Enter User (optional):&quot;
+<br />
+*RemoteHostInput		User	8	&quot;&quot;
+<br />
+*RemoteHostLine			left
+<br />
+*RemoteHostLine			expand
+<br />
+*RemoteHostButton		quit	&quot;Connect&quot;	^M
+<br />
+*RemoteHostCommand		Exec	xterm -sl 2048 -T $(Host) -e telnet \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$(User?-l $(User)) $(Host)
+<br />
+*RemoteHostButton		restart	&quot;Clear&quot;		^U
+<br />
+*RemoteHostCommand		Nop
+<br />
+*RemoteHostButton		quit	&quot;Cancel&quot;	^C
+<br />
+*RemoteHostCommand		Nop
+<br />
+<br /><br /><br /><pre>
+--
+&quot;an unbearable pain, a beating in my brain, that leaves the mark of
+ cain, right here inside...what am i supposed to do, when everything
+ that i've done, is leading me to conclude, i'm not the one...whatever
+ i've done, i've been staring down the barrel of a gun...&quot; -- dM.
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Jan 24 1997 - 12:31:15 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start19050">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="19051.html" title="Next message in the list">Ian Spielman: "FVWM: A bug type thing in The CleverPlacement option."</a></li>
+<li><dfn>Previous message</dfn>: <a href="19049.html" title="Previous message in the list">Roel Lascano: "FVWM: Application Placement"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19050" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19050" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19050" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19050" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

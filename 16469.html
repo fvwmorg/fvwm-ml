@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: SunOs4.1.3 &lt;string.h&gt; doesn't &quot;seem&quot; have func: strerror from Keith Carter on 1996-04-25 (fvwm-users)</title>
+<meta name="Author" content="Keith Carter (cartek_at_mcsunx.gs.com)" />
+<meta name="Subject" content="FVWM: SunOs4.1.3 &lt;string.h&gt; doesn't &quot;seem&quot; have func: strerror" />
+<meta name="Date" content="1996-04-25" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: SunOs4.1.3 &lt;string.h&gt; doesn't &quot;seem&quot; have func: strerror</h1>
+<!-- received="Thu Apr 25 13:30:25 1996" -->
+<!-- isoreceived="19960425123025" -->
+<!-- sent="Thu, 25 Apr 1996 13:16:17 -0400" -->
+<!-- isosent="19960425171617" -->
+<!-- name="Keith Carter" -->
+<!-- email="cartek_at_mcsunx.gs.com" -->
+<!-- subject="FVWM: SunOs4.1.3 &lt;string.h&gt; doesn't &quot;seem&quot; have func: strerror" -->
+<!-- id="317FB361.167EB0E7_at_mcsunx.gs.com" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start16469" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="16470.html" accesskey="d" title="Charles Hines: &quot;FVWM: no rc file startup problem solved&quot;">Next message</a> ]
+[ <a href="16468.html" title="Mitch Shaw: &quot;FVWM: Please help. Where can I get libc.so.3.0?&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16469" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16469" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16469" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16469" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Keith Carter &lt;<a href="mailto:cartek_at_mcsunx.gs.com?Subject=Re%3A%20FVWM%3A%20SunOs4.1.3%20%3Cstring.h%3E%20doesn't%20%22seem%22%20have%20func%3A%20strerror">cartek_at_mcsunx.gs.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 25 Apr 1996 13:16:17 -0400</span><br />
+</address>
+<br />
+the replacement for this function is a char array called:
+<br />
+<br />char * sys_errlist[errno]
+<br />
+<br />where errno is the index into the list of error strings
+<br />
+<br /><br />its seems that strerror is only used once in a file builtins.c in the function:
+<br />
+void exec_function(XEvent *eventp,Window w,FvwmWindow *tmp_win,unsigned long context,char
+<br />
+*action, int *Module)
+<br />
+<br />First, place       char *sys_errlist[];        as a global variable
+<br />
+<br />I replaced the commented out line with the line below it
+<br />
+<br />&nbsp;&nbsp;if (!(fork())) /* child process */
+<br />
+&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if (execl(exec_shell_name, exec_shell_name, &quot;-c&quot;, cmd, NULL)==-1)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+/* commented out till sys_errlist[] is figured out */
+<br />
+/*      fvwm_msg(ERR,&quot;exec_function&quot;,&quot;execl failed (%s)&quot;,strerror(errno)); */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fvwm_msg(ERR,&quot;exec_function&quot;,&quot;execl failed (%s)&quot;,sys_errlist[errno]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit(100);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;}
+<br />
+<br />I'm not sure how you'd want to implement this since its probably a SunOS implementation
+<br />
+problem only so if there is any #define that determines the type of system a person has then
+<br />
+that might be useful.
+<br />
+<br />for more information on sys_errlist in SunOs: man sys_errlist
+<br />
+<br /><br /><pre>
+-- 
+Keith Carter
+Email : cartek_at_mcsunx.gs.com
+Work  : 212-902-9180
+Beeper: 917-506-8942
+&quot;An open mind sees more than open eyes&quot;, [kbc] Feb  6, 1996
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Apr 25 1996 - 13:30:25 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start16469">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="16470.html" title="Next message in the list">Charles Hines: "FVWM: no rc file startup problem solved"</a></li>
+<li><dfn>Previous message</dfn>: <a href="16468.html" title="Previous message in the list">Mitch Shaw: "FVWM: Please help. Where can I get libc.so.3.0?"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16469" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16469" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16469" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16469" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

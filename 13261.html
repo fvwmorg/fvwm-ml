@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: Parsing window_flags in perl from Salvatore Domenick Desiano on 2004-09-15 (fvwm-users)</title>
+<meta name="Author" content="Salvatore Domenick Desiano (sal_at_email.arc.nasa.gov)" />
+<meta name="Subject" content="Re: FVWM: Parsing window_flags in perl" />
+<meta name="Date" content="2004-09-15" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: Parsing window_flags in perl</h1>
+<!-- received="Wed Sep 15 11:54:54 2004" -->
+<!-- isoreceived="20040915105454" -->
+<!-- sent="Wed, 15 Sep 2004 12:54:26 -0400 (EDT)" -->
+<!-- isosent="20040915165426" -->
+<!-- name="Salvatore Domenick Desiano" -->
+<!-- email="sal_at_email.arc.nasa.gov" -->
+<!-- subject="Re: FVWM: Parsing window_flags in perl" -->
+<!-- id="Pine.LNX.4.33L.0409151246480.11347-100000_at_ux4.sp.cs.cmu.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="20040915110537.GA6961_at_SDF.LONESTAR.ORG" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start13261" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="13262.html" accesskey="d" title="Mikhael Goikhman: &quot;Re: FVWM: Parsing window_flags in perl&quot;">Next message</a> ]
+[ <a href="13260.html" title="Mark Gray: &quot;Re: FVWM: Parsing window_flags in perl&quot;">Previous message</a> ]
+[ <a href="13257.html" title="Mikhael Goikhman: &quot;Re: FVWM: Parsing window_flags in perl&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="13259.html" accesskey="t" title="Mark Gray: &quot;Re: FVWM: Parsing window_flags in perl&quot;">Next in thread</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg13261" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg13261" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg13261" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg13261" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Salvatore Domenick Desiano &lt;<a href="mailto:sal_at_email.arc.nasa.gov?Subject=Re%3A%20FVWM%3A%20Parsing%20window_flags%20in%20perl">sal_at_email.arc.nasa.gov</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 15 Sep 2004 12:54:26 -0400 (EDT)</span><br />
+</address>
+<br />
+Ah, yes. The correct solution is always to work with both code bases (C
+<br />
+and Perl) to get an efficient cross-platform solution. As JAPH, however, I
+<br />
+tend to fix things in Perl because it means I don't have to risk breaking
+<br />
+other people's code. Nonetheless, Mikhael is right. If someone's going to
+<br />
+do this, and they have the support of the rest of the community, it should
+<br />
+be in the C code base.
+<br />
+<br />That said, I would vote to see the export of all of the flags, or we might
+<br />
+regret our choices later.
+<br />
+<br />Another possibility is to have Fvwm do a dump of flag names and bit
+<br />
+offsets to all modules on startup. This would allow us to use all 384 bits
+<br />
+with a small amount of startup overhead, and would even ensure that
+<br />
+modules work if they are running on different platforms from fvwm (a
+<br />
+situation that I don't personally foresee, but I haven't been thinking
+<br />
+about these things long).
+<br />
+<br />-- Sal
+<br />
+smile.
+<br />
+<br /><br /><br />On Wed, 15 Sep 2004, Mikhael Goikhman wrote:
+<br />
+<br />o On 14 Sep 2004 20:22:39 -0400, Salvatore Domenick Desiano wrote:
+<br />
+o &gt;
+<br />
+o &gt; On 14 Sep 2004, Mark Gray wrote:
+<br />
+o &gt;
+<br />
+o &gt; o I am writing a fvwm perl module and anticipate wanting to parse the
+<br />
+o &gt; o window_flags data upon receiving each M_ADD_WINDOW event.  Looking
+<br />
+o &gt; o through the FVWM perl modules I did not see any function for doing
+<br />
+o &gt; o this, and before going to the trouble to translate the bit-fields in
+<br />
+o &gt; o fvwm.h to perl I thought I would ask if it has already been done (and
+<br />
+o &gt; o I just didn't look hard enough:-)  This will be my first FVWM perl
+<br />
+o &gt; o module so I apologize if this is a FAQ.
+<br />
+o &gt;
+<br />
+o &gt; Unfortunately, the flag locations differs from platform to platform and
+<br />
+o &gt; from compiler to compiler. If you (or anyone) wanted to write a robust
+<br />
+o &gt; version, it would have to do a compile of a C program during the build of
+<br />
+o &gt; fvwm, and produce some perl code from the result.
+<br />
+o &gt;
+<br />
+o &gt; I've done it for individual flags, but my process is entirely manual
+<br />
+o &gt; because I'm only using two or three flags.
+<br />
+o
+<br />
+o The proper solution is to serialize the flags without dumping C
+<br />
+o structures. Here is a discussion:
+<br />
+o <a href="http://www.hpc.uh.edu/fvwm/archive/0407/msg00186.html">http://www.hpc.uh.edu/fvwm/archive/0407/msg00186.html</a>
+<br />
+o
+<br />
+o It is not very hard to implement what is suggested in the link without
+<br />
+o removing the current complier dependent flags. The hard part is to decide
+<br />
+o on the 50 most useful flags to be packed in two integers; I don't think
+<br />
+o we need to pass more flags, no modules use them. But I currently don't
+<br />
+o have a time to implement this in fvwm. Unfortunately.
+<br />
+o
+<br />
+o If someone implements this, I will try to find the time to support these
+<br />
+o packed flags in perl stuff, including FvwmDebug and WindowList tracker.
+<br />
+o
+<br />
+o Regards,
+<br />
+o Mikhael.
+<br />
+o --
+<br />
+o Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+<br />
+o To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+<br />
+o message to majordomo_at_fvwm.org.
+<br />
+o To report problems, send mail to fvwm-owner_at_fvwm.org.
+<br />
+o
+<br />
+o
+<br />
+o
+<br />
+<br />--------------
+<br />
+&nbsp;&nbsp;Salvatore Domenick Desiano
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Research Scientist
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NASA Ames Research Center (QSS Group, Inc.)
+<br />
+<br /><br /><pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Sep 15 2004 - 11:54:54 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start13261">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="13262.html" title="Next message in the list">Mikhael Goikhman: "Re: FVWM: Parsing window_flags in perl"</a></li>
+<li><dfn>Previous message</dfn>: <a href="13260.html" title="Previous message in the list">Mark Gray: "Re: FVWM: Parsing window_flags in perl"</a></li>
+<li><dfn>In reply to</dfn>: <a href="13257.html" title="Message to which this message replies">Mikhael Goikhman: "Re: FVWM: Parsing window_flags in perl"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="13259.html" title="Next message in this discussion thread">Mark Gray: "Re: FVWM: Parsing window_flags in perl"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg13261" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg13261" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg13261" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg13261" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:57 BST
+</em></small></p>
+</body>
+</html>

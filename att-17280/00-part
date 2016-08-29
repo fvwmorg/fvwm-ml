@@ -1,0 +1,64 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+
+One thing doesn't seem to be clear from the docs/modules.tex file about
+the new Send_ConfigInfo command: it doesn't indicate whether or not the
+lines sent from fvwm are each supposed to end with a newline. 
+
+I'm guessing that they are, based on the fact that using the line
+
+    *FvwmButtons Restart eye2.xpm     Restart fvwm2
+
+elicits this error message from fvwm, which is apparently trying to exec
+"fvwm2\n" instead of "fvwm2":
+
+    [FVWM][Done]: <<ERROR>> Call of 'fvwm2
+    ' failed!!!!
+
+...so either FvwmButtons should be stripping the newline, or fvwm
+shouldn't be sending it.  (Right?)
+
+Also: there are a few features I'd like to see in fvwm2 that aren't on
+the TO-DO list as of PL42, in case anyone's interested...
+
+- - there doesn't appear to be any way to move the pointer to an absolute
+  position (e.g. centre of current viewport); CursorMove is relative to
+  the current pointer position, and Focus is relative to some window...
+
+- - Any plans for support routines for modules to be written in Tcl/Tk?
+
+- - There should probably be a builtin configuration command to correspond
+  to the (currently undocumented in the man page) '-blackout' option.
+  It might not be useful during startup, but changing it for recaptures
+  might be useful.  Likewise, it might be helpful to turn -debug on and
+  off....
+
+- - Using '#' as a comment character makes FvwmCpp rather difficult to
+  use; one has to insert a space before each '#', and some cpp's will
+  *still* complain in certain cases.  Could a secondary comment
+  character be added, perhaps?  (Maybe '/', so that comment lines can be
+  surrounded with /* ... */ -- which will also stop cpp from complaining
+  about unterminated character constants whenever your comment contains
+  an apostrophe....)
+
+Cheers,
+
+- --                          People shouldn't think that it's better to have
+Dan Astoorian               loved and lost than never loved at all.  It's
+http://www.utopia.csas.com  not, it's better to have loved and won.  All
+djast@utopia.csas.com       the other options really suck.    --Dan Redican
+
+-----BEGIN PGP SIGNATURE-----
+Version: 2.6.i
+
+iQCVAgUBMdW4rJztKqi7J1ZpAQED+wP9FLYa15c2W2Z9YScWEvGSndLnd6p2yx5H
+35hBAKe+FxWCy8KkXabaSoBfraJzG6fqSADs2JBAJ2udwgY/S/gCMajLerE2lmjt
+EfKe2CuxuaFsmbSbT9X3Rn99LtJa/D8Ae5dnEZXFVQY/AAQ4rl0ATRARURAVk7OM
+lKpbntOR1rI=
+=OIBg
+-----END PGP SIGNATURE-----
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-owner@hpc.uh.edu.
+

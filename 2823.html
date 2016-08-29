@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: unable to compile with gnome libs from Stephane Rosa on 2001-07-23 (fvwm-users)</title>
+<meta name="Author" content="Stephane Rosa (stephane_at_sgi.com)" />
+<meta name="Subject" content="FVWM: unable to compile with gnome libs" />
+<meta name="Date" content="2001-07-23" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: unable to compile with gnome libs</h1>
+<!-- received="Mon Jul 23 05:22:55 2001" -->
+<!-- isoreceived="20010723042255" -->
+<!-- sent="Mon, 23 Jul 2001 12:23:03 +0200 (CEST)" -->
+<!-- isosent="20010723102303" -->
+<!-- name="Stephane Rosa" -->
+<!-- email="stephane_at_sgi.com" -->
+<!-- subject="FVWM: unable to compile with gnome libs" -->
+<!-- id="XFMail.20010723122303.stephane_at_sgi.com" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start2823" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="2824.html" accesskey="d" title="Mikhael Goikhman: &quot;Re: FVWM: unable to compile with gnome libs&quot;">Next message</a> ]
+[ <a href="2822.html" title="Sugarpine.Sierra.West_at_greatbasin.net, LLC: &quot;FVWM: Press Release&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="2824.html" accesskey="t" title="Mikhael Goikhman: &quot;Re: FVWM: unable to compile with gnome libs&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg2823" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg2823" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg2823" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg2823" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Stephane Rosa &lt;<a href="mailto:stephane_at_sgi.com?Subject=Re%3A%20FVWM%3A%20unable%20to%20compile%20with%20gnome%20libs">stephane_at_sgi.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 23 Jul 2001 12:23:03 +0200 (CEST)</span><br />
+</address>
+<br />
+Hi,
+<br />
+<br />it sounds like I can't compile with gnome support. I found this out
+<br />
+when trying to configure fvwm, which tries to compile this
+<br />
+(in ./configure):
+<br />
+<br />#line 5911 &quot;configure&quot;
+<br />
+#include &quot;confdefs.h&quot;
+<br />
+<br />#include &lt;gnome.h&gt;
+<br />
+int main(int c, char **v) {
+<br />
+&nbsp;&nbsp;&nbsp;/* we can't really run this outside of X */
+<br />
+&nbsp;&nbsp;&nbsp;if (!c) gnome_init(&quot;test-app&quot;, &quot;0.0&quot;, c, v);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 0;
+<br />
+}
+<br />
+<br /><br />and there is a conflict between stdio.h and gnomesupport.h which
+<br />
+redefines sprintf and vsnprintf as if they weren't part or standard
+<br />
+include files already :
+<br />
+<br /><br />configure:5921: sgifwcompile -e -q -nostdinc -I.
+<br />
+-I/d3/myroots/proot/usr/freeware/include -I/d3/myroots/proot/usr/include 
+<br />
+-D_BSD_SIGNALS -O3 -OPT:Olimit=0:space=ON -DEBUG:optimize_space=on  -TENV:X=1
+<br />
+-CG:unique_exit=on 
+<br />
+-OPT:IEEE_arithmetic=1:roundoff=0:wrap_around_unsafe_opt=off -n32 -mips3
+<br />
+-nostdlib -L/d3/myroots/proot/usr/freeware/lib32 
+<br />
+-L/d3/myroots/proot/usr/lib32 -woff
+<br />
+1009,1014,1107,1110,1116,1164,1185,1188,1204,1230,1233  -Wl,-woff,85,-woff,84
+<br />
+-rpath /usr/freeware/lib32 -- /d3/myroots/ptoolroot/usr/bin/cc -o conftest -g 
+<br />
+-I/d3/myroots/proot/usr/freeware/include -DNEED_GNOMESUPPORT_H
+<br />
+-I/d3/myroots/proot/usr/freeware/lib32/gnome-libs/include
+<br />
+-I/d3/myroots/proot/usr/freeware/include/glib-1.2
+<br />
+-I/d3/myroots/proot/usr/freeware/lib32/glib/include
+<br />
+-I/d3/myroots/proot/usr/freeware/include/gtk-1.2  conftest.c 
+<br />
+-L/d3/myroots/proot/usr/freeware/lib32 -lgnomeui -lart_lgpl -lgdk_imlib -lSM
+<br />
+-lICE -lgtk -lgdk -lgmodule -lXi -lXext -lX11 -lgnome -lgnomesupport -lesd
+<br />
+-laudio -laudiofile -lm -ldb -lglib 1&gt;&amp;5
+<br />
+cc-1143 cc: ERROR File = /d3/myroots/proot/usr/include/stdio.h, Line = 235
+<br />
+&nbsp;&nbsp;Declaration is incompatible with &quot;int snprintf(char *, size_t, char *, ...)&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(declared at line 36 of
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;/d3/myroots/proot/usr/freeware/lib32/gnome-libs/include/gnomesupport
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.h&quot;).
+<br />
+<br />&nbsp;&nbsp;extern int    snprintf(char *, ssize_t, const char *, ...);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br />
+<br />cc-1143 cc: ERROR File = /d3/myroots/proot/usr/include/stdio.h, Line = 244
+<br />
+&nbsp;&nbsp;Declaration is incompatible with
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;int vsnprintf(char *, size_t, char *, va_list)&quot; (declared at line
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;34 of
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;/d3/myroots/proot/usr/freeware/lib32/gnome-libs/include/gnomesupport
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.h&quot;).
+<br />
+<br />&nbsp;&nbsp;extern int    vsnprintf(char *, ssize_t, const char *, /* va_list */ char *);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br />
+<br />a more straightforward compile command gives the same result :
+<br />
+<br />cc -I/d3/myroots/proot/usr/freeware/lib32/gnome-libs/include
+<br />
+-I/d3/myroots/proot/usr/freeware/include
+<br />
+-I/d3/myroots/proot/usr/freeware/include/gtk-1.2
+<br />
+-I/d3/myroots/proot/usr/freeware/include/glib-1.2
+<br />
+-I/d3/myroots/proot/usr/freeware/lib32/glib/include -o conftest -c conftest.c
+<br />
+<br />Here are the offending prototypes :
+<br />
+<br />stdio.h:
+<br />
+extern int  snprintf(char *, ssize_t, const char *, ...);
+<br />
+extern int  vsnprintf(char *, ssize_t, const char *, char *);
+<br />
+<br />gnomesupport.h:
+<br />
+/* Maximum chars of output to write is MAXLEN.  */
+<br />
+int snprintf  (char *, size_t, char *, ...);
+<br />
+int vsnprintf (char *, size_t, char *, va_list);
+<br />
+<br /><br />just wanted to know if anybody already encountered such a
+<br />
+problem, cuz I have no clue where to look at in the first
+<br />
+place. Any ideas ? Why aren't they &quot;extern&quot; in gnomesupport ?
+<br />
+Can I just fix gnomesupport.h ( I guess not...)
+<br />
+<br /><br />Thanks!
+<br />
+Stephane
+<br />
+<br /><br /><pre>
+-- 
+SILICON GRAPHICS                 EUROPEAN MANUFACTURING CENTER
+##############################################################
+Stephane Rosa                     Tel :     +41 (0)32 843-3638
+Business Analyst                  Fax :     +41 (0)32 843-3909
+APS/FP  Project                   GSM :     +41 (0)79 616-0828
+--------------------------------------------------------------
+ircnoc.neu.sgi.com  SGI Intranet  IRC :   EuroOper on #irchelp
+irc.stealth.net     Euro-IRCNet   IRC :   Clipper on #radionet
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon Jul 23 2001 - 05:22:55 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start2823">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="2824.html" title="Next message in the list">Mikhael Goikhman: "Re: FVWM: unable to compile with gnome libs"</a></li>
+<li><dfn>Previous message</dfn>: <a href="2822.html" title="Previous message in the list">Sugarpine.Sierra.West_at_greatbasin.net, LLC: "FVWM: Press Release"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="2824.html" title="Next message in this discussion thread">Mikhael Goikhman: "Re: FVWM: unable to compile with gnome libs"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="2824.html" title="Message sent in reply to this message">Mikhael Goikhman: "Re: FVWM: unable to compile with gnome libs"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg2823" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg2823" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg2823" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg2823" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:51 BST
+</em></small></p>
+</body>
+</html>

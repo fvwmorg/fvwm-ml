@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: DISPLAY changes on restart from Gregg Dameron on 2002-04-16 (fvwm-users)</title>
+<meta name="Author" content="Gregg Dameron (gregg.dameron_at_lmco.com)" />
+<meta name="Subject" content="Re: FVWM: DISPLAY changes on restart" />
+<meta name="Date" content="2002-04-16" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: DISPLAY changes on restart</h1>
+<!-- received="Tue Apr 16 15:00:21 2002" -->
+<!-- isoreceived="20020416140021" -->
+<!-- sent="Tue, 16 Apr 2002 14:00:41 -0600" -->
+<!-- isosent="20020416200041" -->
+<!-- name="Gregg Dameron" -->
+<!-- email="gregg.dameron_at_lmco.com" -->
+<!-- subject="Re: FVWM: DISPLAY changes on restart" -->
+<!-- id="3CBC82E9.EF0AAB85_at_lmco.com" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="20020414211016.F15432&#64;homemail.com" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start4881" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="4882.html" accesskey="d" title="S. Anderson: &quot;Re: FVWM: Flickering of buttons and mouse focus&quot;">Next message</a> ]
+[ <a href="4880.html" title="Dan Espen: &quot;Re: FVWM: lock screen ?&quot;">Previous message</a> ]
+[ <a href="4856.html" title="Dameron, Gregg: &quot;FVWM: DISPLAY changes on restart&quot;">Maybe in reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg4881" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg4881" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg4881" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg4881" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Gregg Dameron &lt;<a href="mailto:gregg.dameron_at_lmco.com?Subject=Re%3A%20FVWM%3A%20DISPLAY%20changes%20on%20restart">gregg.dameron_at_lmco.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 16 Apr 2002 14:00:41 -0600</span><br />
+</address>
+<br />
+Mikhael Goikhman wrote:
+<br />
+<br /><em class="quotelev1">&gt; &quot;:0.1&quot; and &quot;unix:0.1&quot; are different names for the same thing, so I see
+</em><br />
+<em class="quotelev1">&gt; nothing risky for X applications.
+</em><br />
+<br />Right.  The risk is to processes that are siblings of fvwm2 (other children of
+<br />
+the session manager), who (a) are not X-based, (b) inherited $DISPLAY from the
+<br />
+session manager, and (c) wish to talk to fvwm2 using FvwmCommand -f.  When fvwm2
+<br />
+has a different notion of $DISPLAY than its siblings, FvwmCommand won't work if
+<br />
+$DISPLAY is part of the FIFO's name.
+<br />
+<br /><em class="quotelev1">&gt; If you want to use $DISPLAY as a part of
+</em><br />
+<em class="quotelev1">&gt; a file name you may handle this situation by stripping the leading &quot;unix&quot;
+</em><br />
+<em class="quotelev1">&gt; before using it in the file name.
+</em><br />
+<br />Understood.  In fact, I went a step further - I've got a PipeRead script in my
+<br />
+config that detects a leading &quot;unix&quot;, strips it out, then resets (SetEnv) DISPLAY
+<br />
+before running FvwmCommandS.
+<br />
+<br /><em class="quotelev2">&gt; &gt; I am running a two-headed display under Solaris 7's dtsession (not
+</em><br />
+<em class="quotelev2">&gt; &gt; Xinerama).  At login, twin instances of the default window manager are
+</em><br />
+<em class="quotelev2">&gt; &gt; started.  I bring up an xterm on the right screen (:0.1) and kill the
+</em><br />
+<em class="quotelev2">&gt; &gt; right-side wm instance.  In that same window, I start fvwm2 manually:
+</em><br />
+<em class="quotelev2">&gt; &gt;
+</em><br />
+<em class="quotelev2">&gt; &gt;   % /&lt;path&gt;/fvwm2 -s -f /&lt;path&gt;/&lt;config_file&gt;
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt; Hmm, this is a bit strange way of starting fvwm. :)
+</em><br />
+<br />Yes it is, but it's only temporary while I'm experimenting with fvwm2.  This
+<br />
+setup allows me to do a side-by-side compare between fvwm2 and the other wm
+<br />
+(which, BTW, is fvwm95).  Eventually I'll be starting fvwm2 on both screens at
+<br />
+login (using FAQ 2.2).
+<br />
+<br /><em class="quotelev1">&gt; Especially if dtsession is a session manager. Is it?
+</em><br />
+<br />Yes (for CDE).
+<br />
+<br /><em class="quotelev2">&gt; &gt; I am able to recreate the problem with this minimalist &lt;config_file&gt;:
+</em><br />
+<em class="quotelev2">&gt; &gt;
+</em><br />
+<em class="quotelev2">&gt; &gt;   ModulePath /&lt;path&gt;/modules:+
+</em><br />
+<em class="quotelev2">&gt; &gt;   AddToFunc StartFunction
+</em><br />
+<em class="quotelev2">&gt; &gt;   + I Echo $[DISPLAY]
+</em><br />
+<em class="quotelev2">&gt; &gt;   + I FvwmTaskBar
+</em><br />
+<em class="quotelev2">&gt; &gt;   + I FvwmCommandS
+</em><br />
+<em class="quotelev2">&gt; &gt;
+</em><br />
+<em class="quotelev2">&gt; &gt; On startup, I always see in the xterm:
+</em><br />
+<em class="quotelev2">&gt; &gt;
+</em><br />
+<em class="quotelev2">&gt; &gt;   [FVWM.1][Echo]:  :0.1
+</em><br />
+<em class="quotelev2">&gt; &gt;
+</em><br />
+<em class="quotelev2">&gt; &gt; I restart using fvwm2's built-in root menu on the right screen.  Sometimes
+</em><br />
+<em class="quotelev2">&gt; &gt; on the first restart, I see the &quot;wrong&quot; answer:
+</em><br />
+<em class="quotelev2">&gt; &gt;
+</em><br />
+<em class="quotelev2">&gt; &gt;   [FVWM.1][Echo]:  unix:0.1
+</em><br />
+<em class="quotelev2">&gt; &gt;
+</em><br />
+<em class="quotelev2">&gt; &gt; Sometimes a few dozen restarts are required before I see it.  With my
+</em><br />
+<em class="quotelev2">&gt; &gt; &quot;regular&quot; (bigger) config file, only one or two restarts are required before
+</em><br />
+<em class="quotelev2">&gt; &gt; the problem occurs.
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt; I can only try to explain what happens when you do &quot;Restart&quot; when inside a
+</em><br />
+<em class="quotelev1">&gt; session manager. This is different from what happens without a session
+</em><br />
+<em class="quotelev1">&gt; manager. FVWM asks a session manager to start-me-if-I-exit using a given
+</em><br />
+<em class="quotelev1">&gt; command line that has all original parameters plus -s -d. This logic is in
+</em><br />
+<em class="quotelev1">&gt; session.c. Then FVWM exits and dtsession &quot;re-starts&quot; it as requested.
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt; -d is constructed using XDisplayString(dpy), so the restarted instance
+</em><br />
+<em class="quotelev1">&gt; has -d parameter although the original one may not. This is needed for
+</em><br />
+<em class="quotelev1">&gt; your setup, so only the FVWM on the right screen is restarted although
+</em><br />
+<em class="quotelev1">&gt; the original command could be for all screens (i.e. no -s was specified).
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt; if you run long ps (ps -w -w -w or similar) which -d parameter do you see,
+</em><br />
+<em class="quotelev1">&gt; &quot;unix:0.1&quot; or &quot;:0.1&quot;?
+</em><br />
+<br />Running fvwm2 by hand as I am doing, a restarted fvwm2 shares the same PID and
+<br />
+same argument list as when first started - no &quot;-d&quot; unless I started it that way.
+<br />
+I'll make a note to check it again when fvwm2 is truly parented by dtsession.
+<br />
+<br />Thanks for your response.
+<br />
+<br /><br /><pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue Apr 16 2002 - 15:00:21 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start4881">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="4882.html" title="Next message in the list">S. Anderson: "Re: FVWM: Flickering of buttons and mouse focus"</a></li>
+<li><dfn>Previous message</dfn>: <a href="4880.html" title="Previous message in the list">Dan Espen: "Re: FVWM: lock screen ?"</a></li>
+<li><dfn>Maybe in reply to</dfn>: <a href="4856.html" title="Message to which this message replies">Dameron, Gregg: "FVWM: DISPLAY changes on restart"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg4881" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg4881" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg4881" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg4881" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:53 BST
+</em></small></p>
+</body>
+</html>

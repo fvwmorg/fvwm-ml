@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="koi8-r"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=koi8-r" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Patch for FvwmTaskBar from Victor Vislobokov on 2001-10-30 (fvwm-users)</title>
+<meta name="Author" content="Victor Vislobokov (victor_v_at_permonline.ru)" />
+<meta name="Subject" content="FVWM: Patch for FvwmTaskBar" />
+<meta name="Date" content="2001-10-30" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Patch for FvwmTaskBar</h1>
+<!-- received="Tue Oct 30 12:59:14 2001" -->
+<!-- isoreceived="20011030125914" -->
+<!-- sent="Wed, 31 Oct 2001 04:59:02 +0500" -->
+<!-- isosent="20011030235902" -->
+<!-- name="Victor Vislobokov" -->
+<!-- email="victor_v_at_permonline.ru" -->
+<!-- subject="FVWM: Patch for FvwmTaskBar" -->
+<!-- id="3BDF3EC6.D06D06DA_at_permonline.ru" -->
+<!-- charset="koi8-r" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start3491" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="3492.html" accesskey="d" title="Garv Austin: &quot;FVWM: I Love AnotherLevel in RedHat 7.1 and 7.2&quot;">Next message</a> ]
+[ <a href="3490.html" title="John Latham: &quot;Re: FVWM: WhatAboutAnotherLevel in RedHat 7.1&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="3603.html" accesskey="t" title="Dominik Vogt: &quot;Re: FVWM: Patch for FvwmTaskBar&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg3491" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg3491" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg3491" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg3491" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Victor Vislobokov &lt;<a href="mailto:victor_v_at_permonline.ru?Subject=Re%3A%20FVWM%3A%20Patch%20for%20FvwmTaskBar">victor_v_at_permonline.ru</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 31 Oct 2001 04:59:02 +0500</span><br />
+</address>
+<br />
+Hi All!
+<br />
+<br />There is little patch for FvwmTaskBar module.
+<br />
+It is allow locale depending tip for FvwmTaskBar clock and
+<br />
+change date format in this tip.
+<br />
+<br />There is new configuration parameter FvwmTaskBarDateFormat.
+<br />
+Man page is updated too.
+<br />
+<br /><br />With best wishes
+<br />
+Victor Vislobokov
+<br />
+Perm, Russia
+<br />
+<br />
+diff -u -r FvwmTaskBar/FvwmTaskBar.1 FvwmTaskBar.new/FvwmTaskBar.1
+<br />
+--- FvwmTaskBar/FvwmTaskBar.1	Tue Jul  3 13:21:14 2001
+<br />
++++ FvwmTaskBar.new/FvwmTaskBar.1	Wed Oct 31 04:35:46 2001
+<br />
+_at_&#64; -215,7 +215,14 &#64;&#64;
+<br />
+&nbsp;.IP &quot;*FvwmTaskBar: ClockFormat \fIformat-string\fP&quot;
+<br />
+&nbsp;This option specifies the time format for the digital clock.
+<br />
+&nbsp;It is a \fIstrftime(3)\fP compatible format string.
+<br />
+-By default it is &quot;%R&quot;.
+<br />
++By default it is &quot;%R&quot;. There is 24 characters limit for string
+<br />
++expansion. The string depends of locale settings now.
+<br />
++
+<br />
++.IP &quot;*FvwmTaskBar: DateFormat \fIformat-string\fP&quot;
+<br />
++This option specifies the date and/or time format for clock tip.
+<br />
++It is a \fIstrftime(3)\fP compatible format string.
+<br />
++By default it is &quot;%A, %B %d, %Y&quot;. There is 40 characters limit for
+<br />
++string expansion. The string depends of locale settings now.
+<br />
+&nbsp;
+<br />
+&nbsp;.IP &quot;*FvwmTaskBar: UpdateInterval \fIseconds\fP&quot;
+<br />
+&nbsp;Specifies how often the clock display should be refreshed, so that times of
+<br />
+diff -u -r FvwmTaskBar/FvwmTaskBar.c FvwmTaskBar.new/FvwmTaskBar.c
+<br />
+--- FvwmTaskBar/FvwmTaskBar.c	Tue May 15 19:39:18 2001
+<br />
++++ FvwmTaskBar.new/FvwmTaskBar.c	Wed Oct 31 04:10:46 2001
+<br />
+_at_&#64; -50,6 +50,7 &#64;&#64;
+<br />
+&nbsp;#include &lt;sys/time.h&gt;
+<br />
+&nbsp;#include &lt;sys/stat.h&gt;
+<br />
+&nbsp;#include &lt;stdarg.h&gt;
+<br />
++#include &lt;locale.h&gt;
+<br />
+&nbsp;
+<br />
+&nbsp;#include &lt;unistd.h&gt;
+<br />
+&nbsp;#include &lt;ctype.h&gt;
+<br />
+_at_&#64; -238,6 +239,8 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;char *s;
+<br />
+&nbsp;&nbsp;&nbsp;int i;
+<br />
+&nbsp;
+<br />
++  setlocale(LC_ALL, &quot;&quot;);
+<br />
++
+<br />
+&nbsp;&nbsp;&nbsp;for (i = 3; i &lt; NUMBER_OF_MOUSE_BUTTONS; i++)
+<br />
+&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ClickAction[i] = DEFAULT_CLICK_N;
+<br />
+diff -u -r FvwmTaskBar/Goodies.c FvwmTaskBar.new/Goodies.c
+<br />
+--- FvwmTaskBar/Goodies.c	Sun Dec  3 20:56:08 2000
+<br />
++++ FvwmTaskBar.new/Goodies.c	Wed Oct 31 04:24:26 2001
+<br />
+_at_&#64; -74,6 +74,7 &#64;&#64;
+<br />
+&nbsp;int fontheight, clock_width;
+<br />
+&nbsp;char *mailpath = NULL;
+<br />
+&nbsp;char *clockfmt = NULL;
+<br />
++char *datefmt = NULL;
+<br />
+&nbsp;int BellVolume = DEFAULT_BELL_VOLUME;
+<br />
+&nbsp;Pixmap mailpix = None;
+<br />
+&nbsp;Pixmap wmailpix = None;
+<br />
+_at_&#64; -168,6 +169,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&quot;MailCommand&quot;,
+<br />
+&nbsp;&nbsp;&nbsp;&quot;IgnoreOldMail&quot;,
+<br />
+&nbsp;&nbsp;&nbsp;&quot;ShowTips&quot;,
+<br />
++  &quot;DateFormat&quot;,
+<br />
+&nbsp;&nbsp;&nbsp;NULL
+<br />
+&nbsp;};
+<br />
+&nbsp;
+<br />
+_at_&#64; -237,6 +239,9 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;case 10: /* ShowTips */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ShowTips = True;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
++  case 11: /* DateFormat */
+<br />
++    UpdateString(&amp;datefmt, rest);
+<br />
++    break;
+<br />
+&nbsp;&nbsp;&nbsp;default:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* unknow option */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return False;
+<br />
+_at_&#64; -392,7 +397,11 &#64;&#64;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;time(&amp;timer);
+<br />
+&nbsp;&nbsp;&nbsp;tms = localtime(&amp;timer);
+<br />
+-  strftime(str, 40, &quot;%A, %B %d, %Y&quot;, tms);
+<br />
++  if (datefmt) {
+<br />
++    strftime(str, 40, datefmt, tms);
+<br />
++  } else {
+<br />
++    strftime(str, 40, &quot;%A, %B %d, %Y&quot;, tms);
+<br />
++  }
+<br />
+&nbsp;&nbsp;&nbsp;last_date = tms-&gt;tm_mday;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;PopupTipWindow(win_width, 0, str);
+<br />
+<br /><br /><pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue Oct 30 2001 - 12:59:14 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start3491">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="3492.html" title="Next message in the list">Garv Austin: "FVWM: I Love AnotherLevel in RedHat 7.1 and 7.2"</a></li>
+<li><dfn>Previous message</dfn>: <a href="3490.html" title="Previous message in the list">John Latham: "Re: FVWM: WhatAboutAnotherLevel in RedHat 7.1"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="3603.html" title="Next message in this discussion thread">Dominik Vogt: "Re: FVWM: Patch for FvwmTaskBar"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="3603.html" title="Message sent in reply to this message">Dominik Vogt: "Re: FVWM: Patch for FvwmTaskBar"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg3491" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg3491" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg3491" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg3491" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:52 BST
+</em></small></p>
+</body>
+</html>

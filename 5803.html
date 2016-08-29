@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: No focus on start up? from John Latham on 2002-08-12 (fvwm-users)</title>
+<meta name="Author" content="John Latham (jtl_at_cs.man.ac.uk)" />
+<meta name="Subject" content="FVWM: No focus on start up?" />
+<meta name="Date" content="2002-08-12" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: No focus on start up?</h1>
+<!-- received="Mon Aug 12 12:33:45 2002" -->
+<!-- isoreceived="20020812113345" -->
+<!-- sent="Mon, 12 Aug 2002 18:32:53 +0100" -->
+<!-- isosent="20020812173253" -->
+<!-- name="John Latham" -->
+<!-- email="jtl_at_cs.man.ac.uk" -->
+<!-- subject="FVWM: No focus on start up?" -->
+<!-- id="200208121732.g7CHWr215584_at_carousel.cs.man.ac.uk" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start5803" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="5804.html" accesskey="d" title="John Latham: &quot;FVWM: Application resizing failure&quot;">Next message</a> ]
+[ <a href="5802.html" title="John Latham: &quot;FVWM: Menu items left highlighted&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="5809.html" accesskey="t" title="Dominik Vogt: &quot;Re: FVWM: No focus on start up?&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg5803" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg5803" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg5803" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg5803" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: John Latham &lt;<a href="mailto:jtl_at_cs.man.ac.uk?Subject=Re%3A%20FVWM%3A%20No%20focus%20on%20start%20up%3F">jtl_at_cs.man.ac.uk</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 12 Aug 2002 18:32:53 +0100</span><br />
+</address>
+<br />
+After start up, the mouse pointer is always resting over an xterm in my set
+<br />
+up. Often, but not always, this xterm does not have the focus and I have to
+<br />
+move the pointer out of it and back in again. This also happens every time
+<br />
+after a restart when the mouse pointer is resting over a window. In 2.2 and
+<br />
+previous, the window under the mouse would always get the focus in both these
+<br />
+situations. I have tried this with sloppy and follow-mouse focus, on 2.4.6,
+<br />
+2.4.8 and 2.5.2.
+<br />
+<br />Maybe the last window created (e.g. Pager or buttons) gets the focus instead
+<br />
+of the one under the mouse after the restart has finished?
+<br />
+<br />A possible conection: if I PipeRead from FvwmTalk something which destroys and
+<br />
+creates windows (e.g. Pager, Buttons) then after the PipeRead in 2.2 FvwmTalk
+<br />
+still has the focus with sloppy and follows policy, whereas is loses it with
+<br />
+click focus (as you would expect). However, in 2.4 and 2.5 FvwmTalk has lost
+<br />
+the focus regardless of policy. (Of course, FvwmTalk has changed so this could
+<br />
+be a red herring).
+<br />
+<br />Or, if I select a menu item, which does a PipeRead that causes a new window to
+<br />
+be started (e.g. xbiff), the new window ends up with the focus even though the
+<br />
+mouse is left where it was when it selected the (sub-sub) menu, say now over
+<br />
+an xterm. In 2.2 the xterm would now get the focus (this is with follow
+<br />
+mouse/sloppy focus of course).
+<br />
+<br />I have some PipeReads which are executed via InitFunction and RestartFunction.
+<br />
+So, if PipeRead has changed its behaviour in this way, then that could be the
+<br />
+real cause of the start up / restart non-focus problem.
+<br />
+<br />Bottom line: has something like a ``recheck focus policy and current mouse
+<br />
+position'' operation gone AWOL from the end of a PipeRead? :-) Perhaps
+<br />
+deliberately changed then -- is that really the best functionality? I would
+<br />
+suggest a good principle: with follows mouse/sloppy focus, if the mouse is
+<br />
+over a window that can take focus then that window has the focus -- at least
+<br />
+by the time Fvwm becomes `quiescent' again.
+<br />
+<br />Best wishes, John Latham
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon Aug 12 2002 - 12:33:45 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start5803">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="5804.html" title="Next message in the list">John Latham: "FVWM: Application resizing failure"</a></li>
+<li><dfn>Previous message</dfn>: <a href="5802.html" title="Previous message in the list">John Latham: "FVWM: Menu items left highlighted"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="5809.html" title="Next message in this discussion thread">Dominik Vogt: "Re: FVWM: No focus on start up?"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="5809.html" title="Message sent in reply to this message">Dominik Vogt: "Re: FVWM: No focus on start up?"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="5986.html" title="Message sent in reply to this message">John Latham: "Re: FVWM: No focus on start up?"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="5991.html" title="Message sent in reply to this message">John Latham: "Re: FVWM: No focus on start up?"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg5803" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg5803" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg5803" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg5803" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:53 BST
+</em></small></p>
+</body>
+</html>

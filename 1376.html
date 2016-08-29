@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: maximum # of windows from Mikhael Goikhman on 2000-09-05 (fvwm-users)</title>
+<meta name="Author" content="Mikhael Goikhman (migo_at_cortext.co.il)" />
+<meta name="Subject" content="Re: FVWM: maximum # of windows" />
+<meta name="Date" content="2000-09-05" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: maximum # of windows</h1>
+<!-- received="Tue Sep  5 12:39:56 2000" -->
+<!-- isoreceived="20000905113956" -->
+<!-- sent="Tue, 5 Sep 2000 19:38:09 +0200" -->
+<!-- isosent="20000905173809" -->
+<!-- name="Mikhael Goikhman" -->
+<!-- email="migo_at_cortext.co.il" -->
+<!-- subject="Re: FVWM: maximum # of windows" -->
+<!-- id="20000905193809.A7348_at_cortext.co.il" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="Pine.SOL.3.91.1000905154230.18157J-100000_at_elvis" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start1376" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="1377.html" accesskey="d" title="Sauveron Damien: &quot;FVWM: How to keep the application on the page in which it was started ?&quot;">Next message</a> ]
+[ <a href="1375.html" title="Raymond Toy: &quot;Re: FVWM: FVWM 2.2.4 vs Rational Rose (Solaris)&quot;">Previous message</a> ]
+[ <a href="1373.html" title="Czarina Caro L. Tablante 1995-24644: &quot;FVWM: maximum # of windows&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="1395.html" accesskey="t" title="Czarina Caro L. Tablante 1995-24644: &quot;Re: FVWM: maximum # of windows&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg1376" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg1376" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg1376" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg1376" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Mikhael Goikhman &lt;<a href="mailto:migo_at_cortext.co.il?Subject=Re%3A%20FVWM%3A%20maximum%20%23%20of%20windows">migo_at_cortext.co.il</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 5 Sep 2000 19:38:09 +0200</span><br />
+</address>
+<br />
+On 05 Sep 2000 15:47:16 -0800, Czarina Caro L. Tablante 1995-24644 wrote:
+<br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; I need to make sure the # of netscape windows a user has at any
+</em><br />
+<em class="quotelev1">&gt; single session is limited to, say, 5. how do i make sure that this is
+</em><br />
+<em class="quotelev1">&gt; the case? i have other windows, there are sxpms which would be
+</em><br />
+<em class="quotelev1">&gt; included if i counted the # of windows open. i need to set a maximum
+</em><br />
+<em class="quotelev1">&gt; for the netscape windows only. 
+</em><br />
+<br />Well, this is possible with a little shell+fvwmrc programming.
+<br />
+To find how many Netscape (or other) windows are open execute:
+<br />
+<br />&nbsp;&nbsp;xwininfo -display :0 -tree -root | grep Netscape | wc -l
+<br />
+<br />Use 'grep -v 1x1+0+0' or similar to ignore the first Netscape window.
+<br />
+Now there are 2 choices for you.
+<br />
+<br />1) Define FvwmEvent with add_window like described here (for 2.3 and 2.2):
+<br />
+<br />&nbsp;&nbsp;<a href="http://www.hpc.uh.edu/fvwm/archive/0006/msg00382.html">http://www.hpc.uh.edu/fvwm/archive/0006/msg00382.html</a>
+<br />
+&nbsp;&nbsp;<a href="http://www.hpc.uh.edu/fvwm/archive/0006/msg00393.html">http://www.hpc.uh.edu/fvwm/archive/0006/msg00393.html</a>
+<br />
+<br />Your add_window callback can be like this (works in the betas only):
+<br />
+<br />&nbsp;&nbsp;+ I PipeRead `verify-window &quot;$w&quot; &quot;$n&quot; &quot;$r&quot; &quot;$c&quot;`
+<br />
+<br />verify-window is your shell script, which gets an id of a new window
+<br />
+as the first parameter, name, resource name and resource class as the next
+<br />
+parameters. Now, do what you want with this window: leave it, kill it.
+<br />
+If you want to leave it, just do not output anything, otherwise print
+<br />
+this fvwm command to the standard output: WindowId $w Delete.
+<br />
+<br />2) You can run a cron job, which counts windows and kills (if needed)
+<br />
+some of them (I hate to suggest this fascist mode, poor users). :-)
+<br />
+<br />xwininfo can give you id's of windows, experiment with:
+<br />
+<br />&nbsp;&nbsp;xwininfo -tree -root | grep Netscape | sed 's/  */ /g' | cut -d&quot; &quot; -f2
+<br />
+<br />To kill (dangerous) a window giving its id, execute:
+<br />
+<br />&nbsp;&nbsp;xkill -id 0x1215f2e
+<br />
+<br />Just tried xkill, it does not work well. I.e. it kills entire netscape,
+<br />
+rather than only one window, it does not use X delete protocol.
+<br />
+<br />There is an alternative to xkill. Run FvwmCommandS in user's StartFunction
+<br />
+and then execute a shell command from the cron job:
+<br />
+<br />&nbsp;&nbsp;FvwmCommand 'WindowId 0x1215f2e Delete'
+<br />
+<br />Regards,
+<br />
+Mikhael.
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue Sep 05 2000 - 12:39:56 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start1376">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="1377.html" title="Next message in the list">Sauveron Damien: "FVWM: How to keep the application on the page in which it was started ?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="1375.html" title="Previous message in the list">Raymond Toy: "Re: FVWM: FVWM 2.2.4 vs Rational Rose (Solaris)"</a></li>
+<li><dfn>In reply to</dfn>: <a href="1373.html" title="Message to which this message replies">Czarina Caro L. Tablante 1995-24644: "FVWM: maximum # of windows"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="1395.html" title="Next message in this discussion thread">Czarina Caro L. Tablante 1995-24644: "Re: FVWM: maximum # of windows"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="1395.html" title="Message sent in reply to this message">Czarina Caro L. Tablante 1995-24644: "Re: FVWM: maximum # of windows"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg1376" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg1376" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg1376" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg1376" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:51 BST
+</em></small></p>
+</body>
+</html>

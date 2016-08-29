@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Is this an fvwm bug, or a Tk bug? from Robert Tarrall on 1997-05-08 (fvwm-users)</title>
+<meta name="Author" content="Robert Tarrall (tarrall_at_solarz.Colorado.EDU)" />
+<meta name="Subject" content="FVWM: Is this an fvwm bug, or a Tk bug?" />
+<meta name="Date" content="1997-05-08" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Is this an fvwm bug, or a Tk bug?</h1>
+<!-- received="Thu May  8 13:19:56 1997" -->
+<!-- isoreceived="19970508121956" -->
+<!-- sent="Thu, 08 May 1997 12:18:47 -0600" -->
+<!-- isosent="19970508181847" -->
+<!-- name="Robert Tarrall" -->
+<!-- email="tarrall_at_solarz.Colorado.EDU" -->
+<!-- subject="FVWM: Is this an fvwm bug, or a Tk bug?" -->
+<!-- id="199705081818.MAA19075_at_plutus.colorado.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start19935" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="19936.html" accesskey="d" title="Dan Espen: &quot;Re: FVWM: Re: rxvt as an fvwm module?&quot;">Next message</a> ]
+[ <a href="19934.html" title="Richard Lister: &quot;Re: FVWM: Re: rxvt as an fvwm module?&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19935" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19935" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19935" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19935" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Robert Tarrall &lt;<a href="mailto:tarrall_at_solarz.Colorado.EDU?Subject=Re%3A%20FVWM%3A%20Is%20this%20an%20fvwm%20bug%2C%20or%20a%20Tk%20bug%3F">tarrall_at_solarz.Colorado.EDU</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 08 May 1997 12:18:47 -0600</span><br />
+</address>
+<br />
+I tried posting the following to fvwm-workers but received no response,
+<br />
+so will try the (presumably larger) audience of the main fvwm list.
+<br />
+Anyone have any comments?
+<br />
+<br />[fvwm 2.0.43, Tcl 8.0a2, Tk 8.0a2, IRIX 6.2]
+<br />
+<br />I'm having problems with input focus when using Tcl/Tk 8.0a2 and fvwm2.0.43
+<br />
+together.  Things worked fine with pre-8.0 versions of Tcl/Tk, so I suspect
+<br />
+this is a Tcl/Tk bug rather than an fvwm bug, but I thought I'd run it by
+<br />
+you folks and see what people think.
+<br />
+<br />I'm using MouseFocus, have &quot;DeskTopSize 2x4&quot;, and have bound some keypad
+<br />
+keys to go to various pages on my desktop, i.e.:
+<br />
+<br />Key KP_Home     A       N       GoToPage 0 0
+<br />
+Key KP_Up       A       N       GoToPage 1 0
+<br />
+[etc]
+<br />
+<br />Now, say I have a wish window open on Page 0,0 and an xterm in approximately
+<br />
+the same position on Page 1,0, and I move the mouse into the wish window.
+<br />
+That window gets the input focus, as is appropriate.  If I now switch to
+<br />
+Page 1,0 using KP_Up, the mouse pointer is in the xterm... but input focus
+<br />
+is still in the (no longer visible) wish window.  Wish is the only
+<br />
+application I've found with this annoying habit of retaining the input
+<br />
+focus.
+<br />
+<br />A little playing around with &quot;xev&quot; shows that in this situation the wish
+<br />
+window is probably receiving a FocusOut event, but not a LeaveNotify event...
+<br />
+whereas both events are generated if I switch desktops by moving the
+<br />
+mouse.   I'm guessing that wish is ignoring FocusOut events and only
+<br />
+obeying LeaveNotify events...
+<br />
+<br />I've pretty much reached the limit of my meager X knowledge here.  Should
+<br />
+wish be smart enough to relinquish the input focus on the basis of a
+<br />
+FocusOut event?  Or is this an fvwm bug - should fvwm be sending LeaveNotify
+<br />
+to the current window when I switch to a different desktop page with a
+<br />
+GotoPage function?
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-Robert Tarrall.-
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Unix System/Network Admin
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Laboratory for Computational Dynamics
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CU - Boulder
+<br />
+<br />------- End of Forwarded Message
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu May 08 1997 - 13:19:56 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start19935">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="19936.html" title="Next message in the list">Dan Espen: "Re: FVWM: Re: rxvt as an fvwm module?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="19934.html" title="Previous message in the list">Richard Lister: "Re: FVWM: Re: rxvt as an fvwm module?"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19935" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19935" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19935" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19935" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: FvwmEvent: destroy_window ; is a window transient? from Mikhael Goikhman on 2004-05-24 (fvwm-users)</title>
+<meta name="Author" content="Mikhael Goikhman (migo_at_homemail.com)" />
+<meta name="Subject" content="Re: FVWM: FvwmEvent: destroy_window ; is a window transient?" />
+<meta name="Date" content="2004-05-24" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: FvwmEvent: destroy_window ; is a window transient?</h1>
+<!-- received="Mon May 24 05:06:02 2004" -->
+<!-- isoreceived="20040524040602" -->
+<!-- sent="Mon, 24 May 2004 10:03:24 +0000" -->
+<!-- isosent="20040524100324" -->
+<!-- name="Mikhael Goikhman" -->
+<!-- email="migo_at_homemail.com" -->
+<!-- subject="Re: FVWM: FvwmEvent: destroy_window ; is a window transient?" -->
+<!-- id="20040524100323.GA20965_at_SDF.LONESTAR.ORG" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="Pine.LNX.4.44.0405232251120.7660-100000_at_localhost.localdomain" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start12327" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="12328.html" accesskey="d" title="fred: &quot;FVWM: [fvmw2 4 15] key binding for a peculiar application...&quot;">Next message</a> ]
+[ <a href="12326.html" title="George \: &quot;Re: FVWM: Gigantic processor usage?&quot;">Previous message</a> ]
+[ <a href="12325.html" title="Nicholas Paul Johnson: &quot;FVWM: FvwmEvent: destroy_window ; is a window transient?&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="12332.html" accesskey="t" title="Nicholas Paul Johnson: &quot;Re: FVWM: FvwmEvent: destroy_window ; is a window transient?&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg12327" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg12327" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg12327" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg12327" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Mikhael Goikhman &lt;<a href="mailto:migo_at_homemail.com?Subject=Re%3A%20FVWM%3A%20FvwmEvent%3A%20destroy_window%20%3B%20is%20a%20window%20transient%3F">migo_at_homemail.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 24 May 2004 10:03:24 +0000</span><br />
+</address>
+<br />
+On 23 May 2004 22:58:13 -0400, Nicholas Paul Johnson wrote:
+<br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; I have a function bound to the destroy_window event, whose purpose is to 
+</em><br />
+<em class="quotelev1">&gt; focus another window automatically.  I would like it to only do this if 
+</em><br />
+<em class="quotelev1">&gt; the window being closed is not transient.  Here is my original, which 
+</em><br />
+<em class="quotelev1">&gt; works except that it does not distinguish between transients and 
+</em><br />
+<em class="quotelev1">&gt; non-transients:
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; #---------------------------------\
+</em><br />
+<em class="quotelev1">&gt; DestroyFunc CycleLocally
+</em><br />
+<em class="quotelev1">&gt; AddToFunc CycleLocally
+</em><br />
+<em class="quotelev1">&gt; + &quot;I&quot;           Next (CurrentDesk, !Sticky) \
+</em><br />
+<em class="quotelev1">&gt; 			Function FocusAndRaise
+</em><br />
+<em class="quotelev1">&gt; + &quot;I&quot;           TestRC (0) Next (!Sticky) \
+</em><br />
+<em class="quotelev1">&gt; 			Function FocusAndRaise
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; *FvwmEvent: destroy_window \
+</em><br />
+<em class="quotelev1">&gt; 	'Function CycleLocally'
+</em><br />
+<em class="quotelev1">&gt; #------------------------------------/
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; So, I tried this modification:
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; #----------------------------------\
+</em><br />
+<em class="quotelev1">&gt; *FvwmEvent: destroy_window \
+</em><br />
+<em class="quotelev1">&gt; 	'Current (!Transient) Function CycleLocally'
+</em><br />
+<em class="quotelev1">&gt; #----------------------------------/
+</em><br />
+<br />First, if you want to work on a correct window, never use Current with
+<br />
+FvwmEvent (unless you want to always work on the focused window that may
+<br />
+or may not be the window caused the event). Just call the needed command,
+<br />
+it will be executed under the context of the original window, or use
+<br />
+ThisWindow conditional. I.e. one of these:
+<br />
+<br />&nbsp;&nbsp;*FvwmEvent: add_window Iconify
+<br />
+<br />&nbsp;&nbsp;*FvwmEvent: add_window 'ThisWindow (!Transient) Iconify'
+<br />
+<br />&nbsp;&nbsp;*FvwmEvent: destroy_window 'ThisWindow (!Transient) CycleLocally'
+<br />
+<br /><em class="quotelev1">&gt; But that didn't work; the event seems to be called *after* the window has 
+</em><br />
+<em class="quotelev1">&gt; disappeared.
+</em><br />
+<br />Just tried, although you can't iconify (or move for example) a window
+<br />
+being destroyed, you may still access all its properties. (But you may
+<br />
+iconify or move a different window on destroy_window event of course.)
+<br />
+<br />Regards,
+<br />
+Mikhael.
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon May 24 2004 - 05:06:02 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start12327">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="12328.html" title="Next message in the list">fred: "FVWM: [fvmw2 4 15] key binding for a peculiar application..."</a></li>
+<li><dfn>Previous message</dfn>: <a href="12326.html" title="Previous message in the list">George \: "Re: FVWM: Gigantic processor usage?"</a></li>
+<li><dfn>In reply to</dfn>: <a href="12325.html" title="Message to which this message replies">Nicholas Paul Johnson: "FVWM: FvwmEvent: destroy_window ; is a window transient?"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="12332.html" title="Next message in this discussion thread">Nicholas Paul Johnson: "Re: FVWM: FvwmEvent: destroy_window ; is a window transient?"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="12332.html" title="Message sent in reply to this message">Nicholas Paul Johnson: "Re: FVWM: FvwmEvent: destroy_window ; is a window transient?"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg12327" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg12327" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg12327" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg12327" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:56 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Changing titlebar button positions on the fly from Dorothy Robinson on 2004-10-18 (fvwm-users)</title>
+<meta name="Author" content="Dorothy Robinson (mokuren_at_aracnet.com)" />
+<meta name="Subject" content="FVWM: Changing titlebar button positions on the fly" />
+<meta name="Date" content="2004-10-18" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Changing titlebar button positions on the fly</h1>
+<!-- received="Sun Oct 17 21:34:42 2004" -->
+<!-- isoreceived="20041017203442" -->
+<!-- sent="Sun, 17 Oct 2004 19:34:17 -0700" -->
+<!-- isosent="20041018023417" -->
+<!-- name="Dorothy Robinson" -->
+<!-- email="mokuren_at_aracnet.com" -->
+<!-- subject="FVWM: Changing titlebar button positions on the fly" -->
+<!-- id="41732BA9.7060205_at_aracnet.com" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start13393" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="13394.html" accesskey="d" title="Thomas Adam: &quot;Re: FVWM: Changing titlebar button positions on the fly&quot;">Next message</a> ]
+[ <a href="13392.html" title="Greg BOGNAR: &quot;Re: FVWM: maximize and fullscreen&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="13394.html" accesskey="t" title="Thomas Adam: &quot;Re: FVWM: Changing titlebar button positions on the fly&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg13393" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg13393" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg13393" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg13393" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Dorothy Robinson &lt;<a href="mailto:mokuren_at_aracnet.com?Subject=Re%3A%20FVWM%3A%20Changing%20titlebar%20button%20positions%20on%20the%20fly">mokuren_at_aracnet.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sun, 17 Oct 2004 19:34:17 -0700</span><br />
+</address>
+<br />
+Is there any way to make FVWM completely &quot;forget&quot; a titlebar button once 
+<br />
+it's there?  For instance, I define these functions:
+<br />
+<br />AddToFunc ButtonFunctions
+<br />
++ I Mouse 1         $[MaxButton]   A   Maximize 0 100
+<br />
++ I Mouse 2         $[MaxButton]   A   Maximize 100 0
+<br />
++ I Mouse 3         $[MaxButton]   A   Maximize
+<br />
++ I Mouse 1         $[KillButton]  A   Delete
+<br />
++ I Mouse 1         $[MinButton]   A   Iconify
+<br />
+<br />AddToFunc TwmButtonOrder
+<br />
+# Buttons 2-4 in TWM &quot;native&quot; order
+<br />
++ I SetEnv MenuButton 1
+<br />
++ I SetEnv MaxButton  2
+<br />
++ I SetEnv KillButton 3
+<br />
++ I SetEnv MinButton  4
+<br />
++ I Function ButtonFunctions
+<br />
+<br />AddToFunc WindozeButtonOrder
+<br />
+# These do the buttons in windoze order
+<br />
++ I SetEnv MenuButton 1
+<br />
++ I SetEnv KillButton 2
+<br />
++ I SetEnv MaxButton  4
+<br />
++ I SetEnv MinButton  6
+<br />
++ I Function ButtonFunctions
+<br />
+<br />Then I re-load the ButtonStyles like so:
+<br />
+AddButtonStyle $[MenuButton] Inactive pixmap buttons/AquaGray.xpm
+<br />
+<br /><br />If I start with TwmButtonOrder and then do &quot;Function WindozeButtonOrder, 
+<br />
+I can't figure out how to make Button 3 disappear.  I can undefine its 
+<br />
+function or give it an invisible icon, but it's still in the titlebar, 
+<br />
+as can be seen if the buttons are raised or sunken.
+<br />
+<br />-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+<br />
+Dorothy Robinson
+<br />
+<a href="http://www.twobarleycorns.net">http://www.twobarleycorns.net</a>
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sun Oct 17 2004 - 21:34:42 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start13393">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="13394.html" title="Next message in the list">Thomas Adam: "Re: FVWM: Changing titlebar button positions on the fly"</a></li>
+<li><dfn>Previous message</dfn>: <a href="13392.html" title="Previous message in the list">Greg BOGNAR: "Re: FVWM: maximize and fullscreen"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="13394.html" title="Next message in this discussion thread">Thomas Adam: "Re: FVWM: Changing titlebar button positions on the fly"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="13394.html" title="Message sent in reply to this message">Thomas Adam: "Re: FVWM: Changing titlebar button positions on the fly"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg13393" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg13393" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg13393" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg13393" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:57 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,101 @@
+EdgeScroll 0 0
+EdgeThickness 1
+SetEnv fvwm_wallpaper_dir $[HOME]/.fvwm/images/backgrounds
+SetEnv fvwm_wallpaper $[fvwm_wallpaper_dir]/test2.xpm
+
+DestroyFunc StartFunction
+AddToFunc StartFunction
++ I Module FvwmPager * *
++ I Test (Init) Exec exec fvwm-root --dither --retain-pixmap $[fvwm_wallpaper]
+
+Mouse 1 R A Popup RootMenu
+
+Key Left A M GoToPage -1p +0p
+Key Up A M GoToPage +0p -1p
+Key Down A M GoToPage +0p +1p
+Key Right A M GoToPage +1p +0p
+
+# - = S T Y L E = -  S e t t i n g s
+ImagePath $HOME/.fvwm/images:$HOME/.fvwm/images/temp-icons:$HOME/.fvwm/images/backgrounds:$HOME/.fvwm/images/icons
+DefaultFont "xft:Aquafont:size=12 Cyberbit:encoding=iso10646-1"
+
+ColorSet 0 fg white, bg black, Translucent #4A516A 50
+ColorSet 1 RootTransparent Buffer, Tint #4A516A 50, fg white, bg black
+Colorset 2 Transparent, IconAlpha 50, fgAlpha 50
+
+Style * DecorateTransient, IconBox 1280x960-0-0, IconGrid 3 3, IconFill left bottom, ForeColor #313431, IconTitleRelief 0, IconBackgroundRelief -1, IconTitleColorset 2, HilightIconTitleColorset 2, NoHandles, BorderWidth 1 -- flat
+
+MenuStyle * MenuColorset 0, ItemFormat "%s %i %| %l %|% %> ", \
+         PopupOffset -0 100, BorderWidth 1, Hilight3DThin
+
+TitleStyle (Colorset 1 -- flat)
+ButtonStyle All (Colorset 1 -- flat)
+AddButtonStyle 1 MiniIcon (HiddenHandles NoInset Hilight3Doff -- flat)
+
+Mouse 1 1 A Popup WindowOpsMenu
+Mouse 3 R A Popup WindowOpsMenu
+
+#M E N U S
+DestroyMenu WindowOpsMenu
+AddToMenu WindowOpsMenu
++ "Stripped out" Nop
+
+
+DestroyMenu RootMenu
+AddToMenu RootMenu
++ "-= M E N U =- " Title
++ "XTerm" Exec exec xterm -bg black -fg white
++ "Console" Module FvwmConsole -g 40x10 -fg green -bg black
++ "Apps" Popup AppsMenu
++ "Systems" Popup SystemsMenu
++ "Scripts" Popup ScriptsMenu
++ "" Nop
++ "Settings" Popup SettingsMenu
++ "Restart" Restart
++ "Exit X" Quit
++ "" Nop
++ "%lock.png%LOCK TERMINAL" Exec exec xlock -mode matrix
+
+DestroyMenu ScriptsMenu
+AddToMenu ScriptsMenu
++ "Fvwm Scripts -- stripped" Nop
++ "Other Scripts -- stripped " Nop
+
+DestroyMenu AppsMenu
+AddToMenu AppsMenu
++ "Devel" Popup DevelMenu
++ "Net" Popup NetMenu
++ "Media" Popup MediaMenu
+
+DestroyMenu DevelMenu
+AddToMenu DevelMenu
++ "Vim" Exec exec xterm -bg black -fg white -e vim
++ "Eclipse 2.0" Exec exec eclipse-2
++ "Eclipse 3.1" Exec exec eclipse-3.1
++ "TK CVS" Exec exec tkcvs
+
+DestroyMenu MediaMenu
+AddToMenu MediaMenu
++ "XMMS" Exec exec xmms
++ "Media Player" Exec exec gmplayer
++ "Gimp" Exec exec gimp
++ "AbiWord" Exec exec abiword-2.0
++ "Office" Exec exec oofice
++ "Xine" Exec exec xine
+
+DestroyMenu NetMenu
+AddToMenu NetMenu
++ "Firefox" Exec exec firefox
+
+DestroyMenu SettingsMenu
+AddToMenu SettingsMenu
+#+ MissingSubmenuFunction WallpaperBrowser
++ "Volume" Exec exec aumix
++ "Gtk Theme" Exec exec switch2
+#+ "Change Wallpapers" Popup $[fvwm_wallpaper_dir]
+
+DestroyMenu SystemsMenu
+AddToMenu SystemsMenu
++ "Earth - stripped" Nop
+
+

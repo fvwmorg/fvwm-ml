@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: [Toggled]ActiveUp/Down button styles from Neil Bird on 2000-01-27 (fvwm-users)</title>
+<meta name="Author" content="Neil Bird (neil.bird_at_rdel.co.uk)" />
+<meta name="Subject" content="FVWM: [Toggled]ActiveUp/Down button styles" />
+<meta name="Date" content="2000-01-27" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: [Toggled]ActiveUp/Down button styles</h1>
+<!-- received="Thu Jan 27 10:14:38 2000" -->
+<!-- isoreceived="20000127101438" -->
+<!-- sent="Thu, 27 Jan 2000 16:13:54 +0000" -->
+<!-- isosent="20000127161354" -->
+<!-- name="Neil Bird" -->
+<!-- email="neil.bird_at_rdel.co.uk" -->
+<!-- subject="FVWM: [Toggled]ActiveUp/Down button styles" -->
+<!-- id="38906EC2.EBC91BFF_at_rdel.co.uk" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start193" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="0194.html" accesskey="d" title="Dominik Vogt: &quot;Re: FVWM: [Toggled]ActiveUp/Down button styles&quot;">Next message</a> ]
+[ <a href="0192.html" title="Dominik Vogt: &quot;Re: FVWM: pinnable transient windows&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="0194.html" accesskey="t" title="Dominik Vogt: &quot;Re: FVWM: [Toggled]ActiveUp/Down button styles&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg193" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg193" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg193" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg193" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Neil Bird &lt;<a href="mailto:neil.bird_at_rdel.co.uk?Subject=Re%3A%20FVWM%3A%20%5BToggled%5DActiveUp%2FDown%20button%20styles">neil.bird_at_rdel.co.uk</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 27 Jan 2000 16:13:54 +0000</span><br />
+</address>
+<br />
+&nbsp;&nbsp;OK, having re-read the manual page, and scanned through border.c, I
+<br />
+finally think I understand how these states should work, and I think they
+<br />
+should do what I want. However, they don't (!).
+<br />
+<br />&nbsp;&nbsp;What I *want* is for my maximise button to have a standard tiled pixmap,
+<br />
+with another pixmap on top, this top pixmap to change dependant upon the
+<br />
+maximised status of the window. Gottit?
+<br />
+<br />&nbsp;&nbsp;Here's what I use:
+<br />
+<br />AddToDecor StandardDecor  ButtonStyle All  -- UseTitleStyle Raised
+<br />
+...
+<br />
+AddToDecor StandardDecor  AddButtonStyle 2  - MWMDecorMax  \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ActiveUp           (  \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pixmap FNX-window-maximise-on.xpm)  \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ActiveDown         (  \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Solid White)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ToggledActiveUp    (  \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pixmap FNX-window-maximise-off.xpm)  \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ToggledActiveDown  (  \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Solid White)
+<br />
+<br />&nbsp;&nbsp;AFAIUI, this should:
+<br />
+<br />&nbsp;- set the MWM flag stating that it's a maximise button (which I think it
+<br />
+does)
+<br />
+<br />&nbsp;- set solid white for the button-depressed state whether toggled max. or
+<br />
+not (it only does this for !max - when maximised, holding clicker-1 down
+<br />
+doesn't make it go white)
+<br />
+<br />&nbsp;- set the &quot;on&quot; pixmap whem !max, and set the &quot;off&quot; when max. (I actually
+<br />
+get the default MWM 'square' vector, not my pixmap. Mind you, it *does*
+<br />
+toggle correctly when max/!max).
+<br />
+<br /><br />&nbsp;&nbsp;What I've missed out is the generic non-active pixmap. If I add that as
+<br />
+a default, I lose the default square &amp; only have *it*, not the ones I've
+<br />
+specified (which, as I've said, seem to not work anyway).
+<br />
+<br /><br />&nbsp;&nbsp;Thinking about it now, though: &quot;ToggledActiveUp&quot; ... surely that implies
+<br />
+it'll only display diff. toggled statuses when the window's active!?
+<br />
+<br /><br />&nbsp;&nbsp;I'm suspecting at this point that it *isn't* working right, but I'd like
+<br />
+some confirmation: is anyone else actually *using* this style??
+<br />
+<br /><pre>
+-- 
+=====================- <a href="http://www.racaldefence.com/">http://www.racaldefence.com/</a> -===================
+  Neil Bird                      |
+                                 |            This .signature is
+    mailto:neil.bird_at_rdel.co.uk  |          certified Y2K compliant
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Jan 27 2000 - 10:14:38 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start193">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="0194.html" title="Next message in the list">Dominik Vogt: "Re: FVWM: [Toggled]ActiveUp/Down button styles"</a></li>
+<li><dfn>Previous message</dfn>: <a href="0192.html" title="Previous message in the list">Dominik Vogt: "Re: FVWM: pinnable transient windows"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="0194.html" title="Next message in this discussion thread">Dominik Vogt: "Re: FVWM: [Toggled]ActiveUp/Down button styles"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="0194.html" title="Message sent in reply to this message">Dominik Vogt: "Re: FVWM: [Toggled]ActiveUp/Down button styles"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="0211.html" title="Message sent in reply to this message">Neil Bird: "Re: FVWM: [Toggled]ActiveUp/Down button styles"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg193" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg193" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg193" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg193" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:50 BST
+</em></small></p>
+</body>
+</html>

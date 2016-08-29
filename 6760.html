@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: CDE Startup &amp; SSH from Dan Espen on 2002-10-31 (fvwm-users)</title>
+<meta name="Author" content="Dan Espen (dane_at_mk.telcordia.com)" />
+<meta name="Subject" content="Re: FVWM: CDE Startup &amp; SSH" />
+<meta name="Date" content="2002-10-31" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: CDE Startup &amp; SSH</h1>
+<!-- received="Thu Oct 31 12:50:10 2002" -->
+<!-- isoreceived="20021031125010" -->
+<!-- sent="Thu, 31 Oct 2002 13:45:06 -0500" -->
+<!-- isosent="20021031184506" -->
+<!-- name="Dan Espen" -->
+<!-- email="dane_at_mk.telcordia.com" -->
+<!-- subject="Re: FVWM: CDE Startup &amp; SSH" -->
+<!-- id="20021031184511.B34FDC708_at_dane-2.cc.telcordia.com" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="80256C63.0064F358.00&#64;daimlerchryslerservices.co.uk" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start6760" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="6761.html" accesskey="d" title="Mikhael Goikhman: &quot;FVWM: Re: Configuration files for recent screenshot on FVWM home&quot;">Next message</a> ]
+[ <a href="6759.html" title="Phil.Daws_at_daimlerchryslerservices-it.co.uk: &quot;Re: FVWM: CDE Startup &#0038; SSH&quot;">Previous message</a> ]
+[ <a href="6749.html" title="Phil.Daws_at_daimlerchryslerservices-it.co.uk: &quot;FVWM: CDE Startup &#0038; SSH&quot;">Maybe in reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="6771.html" accesskey="t" title="Phil.Daws_at_daimlerchryslerservices-it.co.uk: &quot;Re: FVWM: CDE Startup &#0038; SSH&quot;">Next in thread</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg6760" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg6760" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg6760" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg6760" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Dan Espen &lt;<a href="mailto:dane_at_mk.telcordia.com?Subject=Re%3A%20FVWM%3A%20CDE%20Startup%20%26%20SSH">dane_at_mk.telcordia.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 31 Oct 2002 13:45:06 -0500</span><br />
+</address>
+<br />
+Phil.Daws_at_daimlerchryslerservices-it.co.uk writes:
+<br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; Okay getting there :) The problem is that within my script it throws a dialog
+</em><br />
+<em class="quotelev1">&gt; ue
+</em><br />
+<em class="quotelev1">&gt; box to the screen where the user has to enter some data.
+</em><br />
+<em class="quotelev1">&gt; This generates the environment variable that I would like the desktop to use
+</em><br />
+<em class="quotelev1">&gt; throughout. It seems that when it execs the command it then
+</em><br />
+<em class="quotelev1">&gt; carries on through the .fvwm2rc file.  Can I make it pause until the user has
+</em><br />
+<em class="quotelev1">&gt; entered the data ?
+</em><br />
+<br />I must be missing part of the picture.  If you use PipeRead
+<br />
+for an interactive dialog, then Fvwm will stop until the PipeRead
+<br />
+is done.
+<br />
+<br />However, PipeRead is no good for interactive dialogs, 
+<br />
+I don't think you want to try to operate a dialog while Fvwm is frozen.
+<br />
+<br />How about using FvwmCommand?
+<br />
+Start the FvwmCommand server like this:
+<br />
+<br />AddToFunc StartFunction I Module FvwmCommandS
+<br />
+<br />After that, you can send commands to Fvwm with the program
+<br />
+&quot;FvwmCommand&quot;.  So have your dialog do something like:
+<br />
+<br />system (&quot;FvwmCommand \&quot;SetEnv MYVAR test\&quot;&quot;);
+<br />
+<br />Why don't you want the rest of the .fvwm2rc processed?
+<br />
+Is it going to affect sub processes or the .fvwm2rc itself?
+<br />
+<br />Anyway, using FvwmCommand, you can issue an fvwm read command
+<br />
+to read the parts that are affected, if thats the case.
+<br />
+<br /><pre>
+-- 
+Dan Espen                           E-mail: dane_at_mk.telcordia.com
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Oct 31 2002 - 12:50:10 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start6760">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="6761.html" title="Next message in the list">Mikhael Goikhman: "FVWM: Re: Configuration files for recent screenshot on FVWM home"</a></li>
+<li><dfn>Previous message</dfn>: <a href="6759.html" title="Previous message in the list">Phil.Daws_at_daimlerchryslerservices-it.co.uk: "Re: FVWM: CDE Startup &#0038; SSH"</a></li>
+<li><dfn>Maybe in reply to</dfn>: <a href="6749.html" title="Message to which this message replies">Phil.Daws_at_daimlerchryslerservices-it.co.uk: "FVWM: CDE Startup &#0038; SSH"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="6771.html" title="Next message in this discussion thread">Phil.Daws_at_daimlerchryslerservices-it.co.uk: "Re: FVWM: CDE Startup &#0038; SSH"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg6760" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg6760" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg6760" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg6760" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:53 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Major New Pixmap/Title/Border Patch Released (Beta) from Andrew Veliath on 1996-12-05 (fvwm-users)</title>
+<meta name="Author" content="Andrew Veliath (veliaa_at_rpi.edu)" />
+<meta name="Subject" content="FVWM: Major New Pixmap/Title/Border Patch Released (Beta)" />
+<meta name="Date" content="1996-12-05" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Major New Pixmap/Title/Border Patch Released (Beta)</h1>
+<!-- received="Wed Dec  4 18:28:07 1996" -->
+<!-- isoreceived="19961204182807" -->
+<!-- sent="Wed, 4 Dec 1996 19:28:18 -0500" -->
+<!-- isosent="19961205002818" -->
+<!-- name="Andrew Veliath" -->
+<!-- email="veliaa_at_rpi.edu" -->
+<!-- subject="FVWM: Major New Pixmap/Title/Border Patch Released (Beta)" -->
+<!-- id="199612050028.TAA19576_at_pluto.solarsystem.org" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start18605" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="18606.html" accesskey="d" title="System Administrator: &quot;FVWM: trying to compile/make fvwm under solaris&quot;">Next message</a> ]
+[ <a href="18604.html" title="Markus Gutschke: &quot;Re: FVWM: Fvwm configuration questions: ClickToRaise &#0038; WindowName style&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18605" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18605" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18605" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18605" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Andrew Veliath &lt;<a href="mailto:veliaa_at_rpi.edu?Subject=Re%3A%20FVWM%3A%20Major%20New%20Pixmap%2FTitle%2FBorder%20Patch%20Released%20(Beta)">veliaa_at_rpi.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 4 Dec 1996 19:28:18 -0500</span><br />
+</address>
+<br />
+Okay folks,
+<br />
+<br />I've put up a new borderstyle patch (this patch has all the latest of
+<br />
+my patch stuff now).  There are many changes.  Only some are listed
+<br />
+here.  Obviously, it needs testing.  Although it is rewritten and
+<br />
+might have some intial bugs, the rewrite cleaned up interaction
+<br />
+between the pixmap button / titlebar code.
+<br />
+<br />All of the new features are explained in the man page from the patch.
+<br />
+Please read it carefully!  It might not be obvious the way this works
+<br />
+at first.
+<br />
+<br />Some Changes
+<br />
+-----------
+<br />
+<br />* For starters, you can now stack button and title styles on top of
+<br />
+one another (AddButtonStyle/AddTitleStyle). E.g.:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Titlestyle ActiveUp (VGradient 16 grey #001133)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AddTitlestyle ActiveUp (Pixmap xterm.xpm)
+<br />
+<br />This would first render a gradient followed by a centered pixmap (as
+<br />
+many stacked styles as you want can be put).
+<br />
+<br />* The &quot;Normal&quot; style was name changed to &quot;Vector.&quot;
+<br />
+<br />* All the Full styles are gone, replaced by the Flat button flag
+<br />
+(handling should be cleaner as well, now it is truly flat).  Also,
+<br />
+ButtonStyle syntax was *changed*.  You can now specify *completely*
+<br />
+different style *stacks* for both up and down if you want.
+<br />
+<br />* Buttons and titlebars have the same styles selection (i.e. buttons can
+<br />
+use gradients and titlebars can use *vectors*).
+<br />
+<br />* There are now *face* style flags and *general* style flags. 
+<br />
+<br />* UseTitleStyle is gone, and should be replaced by the new features.
+<br />
+UseBorderStyle and MWMButton are now a *general* style flags.
+<br />
+<br />It can be found at:
+<br />
+<a href="http://www.rpi.edu/~veliaa/projects/fvwm_patches/fvwm_border_picture.html">http://www.rpi.edu/~veliaa/projects/fvwm_patches/fvwm_border_picture.html</a>
+<br />
+<br />Regards,
+<br />
+Andrew
+<br />
+<br /><pre>
+--
+Andrew Veliath &lt;veliaa_at_rpi.edu&gt;        <a href="http://www.rpi.edu/~veliaa">http://www.rpi.edu/~veliaa</a>
+One day, all forms of communication will be superseded by a FAQ.
+Finger for PGP Public Key
+Key fingerprint =  51 56 5D 3E 51 43 8B 74  7C B2 E4 B6 84 8E 8B 08
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Dec 04 1996 - 18:28:07 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start18605">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="18606.html" title="Next message in the list">System Administrator: "FVWM: trying to compile/make fvwm under solaris"</a></li>
+<li><dfn>Previous message</dfn>: <a href="18604.html" title="Previous message in the list">Markus Gutschke: "Re: FVWM: Fvwm configuration questions: ClickToRaise &#0038; WindowName style"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18605" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18605" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18605" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18605" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

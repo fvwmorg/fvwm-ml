@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>RE: FVWM: Starting an app when needed from Martin Bialasinski on 1997-12-10 (fvwm-users)</title>
+<meta name="Author" content="Martin Bialasinski (martin_at_internet-treff.uni-koeln.de)" />
+<meta name="Subject" content="RE: FVWM: Starting an app when needed" />
+<meta name="Date" content="1997-12-10" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>RE: FVWM: Starting an app when needed</h1>
+<!-- received="Wed Dec 10 05:56:40 1997" -->
+<!-- isoreceived="19971210055640" -->
+<!-- sent="Wed, 10 Dec 1997 12:42:32 +0100 (CET)" -->
+<!-- isosent="19971210114232" -->
+<!-- name="Martin Bialasinski" -->
+<!-- email="martin_at_internet-treff.uni-koeln.de" -->
+<!-- subject="RE: FVWM: Starting an app when needed" -->
+<!-- id="Pine.LNX.3.96.971210123459.1090A-100000_at_haitech.internet-treff.de" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="XFMail.971209220544.proteus_at_pcnet.com" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start21493" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="21494.html" accesskey="d" title="Dan Espen: &quot;Re: FVWM: window flags bitfield&quot;">Next message</a> ]
+[ <a href="21492.html" title="Bob Woodside: &quot;RE: FVWM: Starting an app when needed&quot;">Previous message</a> ]
+[ <a href="21492.html" title="Bob Woodside: &quot;RE: FVWM: Starting an app when needed&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21493" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21493" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21493" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21493" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Martin Bialasinski &lt;<a href="mailto:martin_at_internet-treff.uni-koeln.de?Subject=RE%3A%20FVWM%3A%20Starting%20an%20app%20when%20needed">martin_at_internet-treff.uni-koeln.de</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 10 Dec 1997 12:42:32 +0100 (CET)</span><br />
+</address>
+<br />
+On Tue, 9 Dec 1997, Bob Woodside wrote:
+<br />
+<br /><em class="quotelev1">&gt;         Ok, I'm a little dense. Now I see what the problem is - I thought
+</em><br />
+<em class="quotelev1">&gt; it was just the timing between starting X-IXP and trying to send it a signal.
+</em><br />
+<em class="quotelev1">&gt; Handling the case where X-IXP is already active is a job for a shell script,
+</em><br />
+<br />Well, fvwm2 can handle this really good. No problems so far :-)
+<br />
+<br />+ &quot;connect&quot; connect-xisp
+<br />
++ &quot;disconnect&quot; exec kill -SIGUSR2 `/sbin/pidof xisp`       
+<br />
+<br />DestroyFunc start-and-wait
+<br />
+AddToFunc start-and-wait
+<br />
++  &quot;I&quot;  Exec $0
+<br />
++  &quot;I&quot;  Wait $1
+<br />
+<br />DestroyFunc connect-xisp
+<br />
+AddToFunc connect-xisp
+<br />
++ &quot;I&quot; None [X-ISP] start-and-wait &quot;xisp -bgcol '#0000b0'&quot; &quot;X-ISP&quot;
+<br />
++ &quot;I&quot; Exec kill -SIGUSR1 `/sbin/pidof xisp`         
+<br />
+<br /><em class="quotelev1">&gt;         Alternatively, two menu items and functions could be used - one for
+</em><br />
+<em class="quotelev1">&gt; when X-ISP is active, one for when it's not. 
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+Sure, but this isn't that neat :-)
+<br />
+&nbsp;
+<br />
+<em class="quotelev1">&gt;         It's part of the sysvinit package for Linux systems. (pidof is
+</em><br />
+<em class="quotelev1">&gt; actually a symlink to killall5, in the /sbin directory.) If you're using 
+</em><br />
+<em class="quotelev1">&gt; Debian Linux, I would think it would be installed as part of the base system.
+</em><br />
+<br />Yes, it is. I tried a &quot;which pidof&quot; as joe user, so I didn't find it in
+<br />
+/sbin/ . I think I better use &quot;locate whatever|grep bin/&quot; next time.
+<br />
+<br />Thanks,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Martin
+<br />
+<br /><br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Dec 10 1997 - 05:56:40 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start21493">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="21494.html" title="Next message in the list">Dan Espen: "Re: FVWM: window flags bitfield"</a></li>
+<li><dfn>Previous message</dfn>: <a href="21492.html" title="Previous message in the list">Bob Woodside: "RE: FVWM: Starting an app when needed"</a></li>
+<li><dfn>In reply to</dfn>: <a href="21492.html" title="Message to which this message replies">Bob Woodside: "RE: FVWM: Starting an app when needed"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21493" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21493" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21493" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21493" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

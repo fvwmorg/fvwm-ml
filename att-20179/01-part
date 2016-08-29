@@ -1,0 +1,402 @@
+*** builtins.c.orig	Wed Jan 22 13:37:28 1997
+--- builtins.c	Tue May 27 12:26:39 1997
+***************
+*** 2839,2844 ****
+--- 2839,2845 ----
+   *
+   * Direction = 1 ==> "Next" operation
+   * Direction = -1 ==> "Previous" operation 
++  * Direction = 0 ==> operation on current window (returns pass or fail)
+   *
+   **************************************************************************/
+  FvwmWindow *Circulate(char *action, int Direction, char **restofline)
+***************
+*** 2847,2861 ****
+    FvwmWindow *fw, *found = NULL;
+    char *t,*tstart,*name = NULL, *expression, *condition, *prev_condition=NULL;
+    char *orig_expr;
+-   Bool needsIconic = 0;
+-   Bool needsNormal = 0;
+    Bool needsCurrentDesk = 0;
+    Bool needsCurrentPage = 0;
+!   Bool needsVisible = 0;
+!   Bool needsInvisible = 0;
+!   char *AnyWindow = "*";
+!   Bool useCirculateHit = 0;
+!   Bool useCirculateHitIcon = 0;
+  
+    l=0;
+  
+--- 2848,2861 ----
+    FvwmWindow *fw, *found = NULL;
+    char *t,*tstart,*name = NULL, *expression, *condition, *prev_condition=NULL;
+    char *orig_expr;
+    Bool needsCurrentDesk = 0;
+    Bool needsCurrentPage = 0;
+!   Bool needsName = 0;
+!   Bool needsNotName = 0;
+!   Bool useCirculateHit = (Direction) ? 0 : 1; /* override for Current [] */
+!   Bool useCirculateHitIcon = (Direction) ? 0 : 1;
+!   unsigned long onFlags = 0;
+!   unsigned long offFlags = 0;
+  
+    l=0;
+  
+***************
+*** 2889,2898 ****
+      expression = GetNextToken(expression,&condition);
+      while((condition != NULL)&&(strlen(condition) > 0))
+      {
+!       if(mystrcasecmp(condition,"iconic")==0)
+!         needsIconic = 1;
+!       else if(mystrcasecmp(condition,"!iconic")==0)
+!         needsNormal = 1;
+        else if(mystrcasecmp(condition,"CurrentDesk")==0)
+          needsCurrentDesk = 1;
+        else if(mystrcasecmp(condition,"CurrentPage")==0)
+--- 2889,2918 ----
+      expression = GetNextToken(expression,&condition);
+      while((condition != NULL)&&(strlen(condition) > 0))
+      {
+!       if     (mystrcasecmp(condition,"Iconic")==0)
+!         onFlags |= ICONIFIED;
+!       else if(mystrcasecmp(condition,"!Iconic")==0)
+!         offFlags |= ICONIFIED;
+!       else if(mystrcasecmp(condition,"Visible")==0)
+!         onFlags |= VISIBLE;
+!       else if(mystrcasecmp(condition,"!Visible")==0)
+!         offFlags |= VISIBLE;
+!       else if(mystrcasecmp(condition,"Sticky")==0)
+!         onFlags |= STICKY;
+!       else if(mystrcasecmp(condition,"!Sticky")==0)
+!         offFlags |= STICKY;
+!       else if(mystrcasecmp(condition,"Maximized")==0)
+!         onFlags |= MAXIMIZED;
+!       else if(mystrcasecmp(condition,"!Maximized")==0)
+!         offFlags |= MAXIMIZED;
+!       else if(mystrcasecmp(condition,"Transient")==0)
+!         onFlags |= TRANSIENT;
+!       else if(mystrcasecmp(condition,"!Transient")==0)
+!         offFlags |= TRANSIENT;
+!       else if(mystrcasecmp(condition,"Raised")==0)
+!         onFlags |= RAISED;
+!       else if(mystrcasecmp(condition,"!Raised")==0)
+!         offFlags |= RAISED;
+        else if(mystrcasecmp(condition,"CurrentDesk")==0)
+          needsCurrentDesk = 1;
+        else if(mystrcasecmp(condition,"CurrentPage")==0)
+***************
+*** 2900,2909 ****
+          needsCurrentDesk = 1;
+          needsCurrentPage = 1;
+        }
+-       else if(mystrcasecmp(condition,"Visible")==0)
+-         needsVisible = 1;
+-       else if(mystrcasecmp(condition,"!Visible")==0)
+-         needsInvisible = 1;
+        else if(mystrcasecmp(condition,"CurrentPageAnyDesk")==0 ||
+                mystrcasecmp(condition,"CurrentScreen")==0)
+          needsCurrentPage = 1;
+--- 2920,2925 ----
+***************
+*** 2911,2920 ****
+          useCirculateHit = 1;
+        else if(mystrcasecmp(condition,"CirculateHitIcon")==0)
+          useCirculateHitIcon = 1;
+!       else
+        {
+          name = condition;
+          condition = NULL;
+        }
+        if(prev_condition)free(prev_condition);
+        prev_condition = condition;
+--- 2927,2943 ----
+          useCirculateHit = 1;
+        else if(mystrcasecmp(condition,"CirculateHitIcon")==0)
+          useCirculateHitIcon = 1;
+!       else if(!needsName && !needsNotName) /* only 1st name to avoid mem leak */
+        {
+          name = condition;
+          condition = NULL;
++         if (name[0] == '!')
++         {
++           needsNotName = 1;
++           name++;
++         }
++         else
++           needsName = 1;
+        }
+        if(prev_condition)free(prev_condition);
+        prev_condition = condition;
+***************
+*** 2928,2942 ****
+    else
+      *restofline = t;
+  
+-   if(name == NULL)
+-     name = AnyWindow;
+- 
+    if(Scr.Focus != NULL)
+    {
+      if(Direction == 1)
+        fw = Scr.Focus->prev;
+!     else
+        fw = Scr.Focus->next;
+    }
+    else
+      fw = Scr.FvwmRoot.prev;  
+--- 2951,2964 ----
+    else
+      *restofline = t;
+  
+    if(Scr.Focus != NULL)
+    {
+      if(Direction == 1)
+        fw = Scr.Focus->prev;
+!     else if(Direction == -1)
+        fw = Scr.Focus->next;
++     else
++       fw = Scr.Focus;
+    }
+    else
+      fw = Scr.FvwmRoot.prev;  
+***************
+*** 2946,2969 ****
+      while((fw != NULL)&&(found==NULL)&&(fw != &Scr.FvwmRoot))
+      {
+        /* Make CirculateUp and CirculateDown take args. by Y.NOMURA */
+!       if (((matchWildcards(name, fw->name)) ||
+!            (matchWildcards(name, fw->icon_name))||
+!            (fw->class.res_class &&
+!             matchWildcards(name, fw->class.res_class))||
+!            (fw->class.res_name &&
+!             matchWildcards(name, fw->class.res_name)))&&
+!           ((useCirculateHit)||!(fw->flags & CirculateSkip))&&
+!           (((useCirculateHitIcon)&&(fw->flags & ICONIFIED))||
+!            !((fw->flags & CirculateSkipIcon)&&(fw->flags & ICONIFIED)))&&
+!           (((!needsIconic)||(fw->flags & ICONIFIED))&&
+!            ((!needsNormal)||(!(fw->flags & ICONIFIED)))&&
+!            ((!needsCurrentDesk)||(fw->Desk == Scr.CurrentDesk))&&
+!            ((!needsVisible)||(fw->flags & VISIBLE))&&
+!            ((!needsInvisible)||(!(fw->flags & VISIBLE)))&&
+!            ((!needsCurrentPage)||((fw->frame_x < Scr.MyDisplayWidth)&&
+!                                   (fw->frame_y < Scr.MyDisplayHeight)&&
+!                                   (fw->frame_x+fw->frame_width > 0)&&
+!                                   (fw->frame_y+fw->frame_height > 0)))))
+          found = fw;
+        else
+        {
+--- 2968,2998 ----
+      while((fw != NULL)&&(found==NULL)&&(fw != &Scr.FvwmRoot))
+      {
+        /* Make CirculateUp and CirculateDown take args. by Y.NOMURA */
+!       if ((onFlags & fw->flags) == onFlags &&
+!           (offFlags & fw->flags) == 0 &&
+!           (useCirculateHit || !(fw->flags & CirculateSkip)) &&
+!           ((useCirculateHitIcon && fw->flags & ICONIFIED) ||
+!            !(fw->flags & CirculateSkipIcon && fw->flags & ICONIFIED)) &&
+!           (!needsCurrentDesk || fw->Desk == Scr.CurrentDesk) &&
+!           (!needsCurrentPage || (fw->frame_x < Scr.MyDisplayWidth &&
+!                                  fw->frame_y < Scr.MyDisplayHeight &&
+!                                  fw->frame_x + fw->frame_width > 0 &&
+!                                  fw->frame_y + fw->frame_height > 0)
+!           ) &&
+!           (!needsName ||
+!            matchWildcards(name, fw->name) ||
+!            matchWildcards(name, fw->icon_name) ||
+!            fw->class.res_class && matchWildcards(name, fw->class.res_class) ||
+!            fw->class.res_name && matchWildcards(name, fw->class.res_name)
+!           ) &&
+!           (!needsNotName ||
+!            !(matchWildcards(name, fw->name) ||
+!              matchWildcards(name, fw->icon_name) ||
+!              fw->class.res_class && matchWildcards(name, fw->class.res_class) ||
+!              fw->class.res_name && matchWildcards(name, fw->class.res_name)
+!             )
+!            )
+!          )
+          found = fw;
+        else
+        {
+***************
+*** 2972,2977 ****
+--- 3001,3014 ----
+          else
+            fw = fw->next;
+        }
++       if (Direction == 0)
++       {
++         if (needsName)
++           free(name);
++         else if (needsNotName)
++           free(name - 1);
++         return found;
++       }
+      }
+      if((fw == NULL)||(fw == &Scr.FvwmRoot))
+      {
+***************
+*** 2992,2999 ****
+      }
+      pass++;
+    }
+!   if((name != NULL)&&(name != AnyWindow))
+      free(name);
+    return found;
+  
+  }
+--- 3029,3038 ----
+      }
+      pass++;
+    }
+!   if (needsName)
+      free(name);
++   else if (needsNotName)
++     free(name - 1);
+    return found;
+  
+  }
+***************
+*** 3037,3042 ****
+--- 3076,3094 ----
+    if(found == NULL)
+    {
+      ExecuteFunction(restofline,NULL,eventp,C_ROOT,*Module);
++   }
++ }
++ 
++ void CurrentFunc(XEvent *eventp,Window junk,FvwmWindow *tmp_win,
++               unsigned long context, char *action,int* Module)
++ {
++   FvwmWindow *found;
++   char *restofline;
++ 
++   found = Circulate(action, 0, &restofline);
++   if(found != NULL)
++   {
++     ExecuteFunction(restofline,found,eventp,C_WINDOW,*Module);
+    }
+  }
+  
+*** functions.c.orig	Tue Jan 14 14:06:33 1997
+--- functions.c	Fri May 23 14:21:16 1997
+***************
+*** 58,63 ****
+--- 58,64 ----
+    {"ClickTime",    SetClick,         F_CLICK,               FUNC_NO_WINDOW},
+    {"Close",        close_function,   F_CLOSE,               FUNC_NEEDS_WINDOW},
+    {"ColormapFocus",SetColormapFocus, F_COLORMAP_FOCUS,      FUNC_NO_WINDOW},
++   {"Current",      CurrentFunc,      F_CURRENT,             FUNC_NO_WINDOW},
+    {"CursorMove",   movecursor,       F_MOVECURSOR,          FUNC_NO_WINDOW},
+    {"Delete",       delete_function,  F_DELETE,              FUNC_NEEDS_WINDOW},
+    {"DesktopSize",  SetDeskSize,       F_SETDESK,            FUNC_NO_WINDOW},
+*** fvwm2.man.orig	Wed May 21 14:47:03 1997
+--- fvwm2.man	Tue May 27 11:59:22 1997
+***************
+*** 833,838 ****
+--- 833,850 ----
+  keyboard focus.
+  
+  
++ .IP "Current [\fIconditions\fP] \fIcommand\fP"
++ Performs \fIcommand\fP on the current window if it
++ satisfies all \fIconditions\fP.  Conditions include "Iconic",
++ "!Iconic", "Visible", "!Visible", "Sticky", "!Sticky", "Maximized", "!Maximized",
++ "Transient", "!Transient", "Raised", "!Raised", "CurrentDesk", "CurrentPage", and
++ "CurrentPageAnyDesk".  In addition, the condition may include a window
++ name to match to.  The window name may include the wildcards * and ?.
++ The window name, icon name, class, and resource will be considered when
++ attempting to find a match.  The window name can begin with ! which will prevent
++ \fIcommand\fP if any of the window name, icon name, class or resource match.
++ 
++ 
+  .IP "CursorMove \fIhorizontal vertical\fP"
+  Moves the mouse pointer by \fIhorizontal\fP pages in the X direction
+  and \fIvertical\fP pages in the Y direction.  Either or both entries
+***************
+*** 1228,1249 ****
+  
+  .IP "Next [\fIconditions\fP] \fIcommand\fP"
+  Performs \fIcommand\fP (typically Focus) on the next window which
+! satisfies all \fIconditions\fP.  Conditions include "iconic",
+! "!iconic", "Visible", "!Visible", "CurrentDesk", "CurrentPage", and
+! "CurrentPageAnyDesk".  In addition, the condition may include a window
+! name to match to.  The window name may include the wildcards * and ?.
+! The window name, class, and resource will be considered when
+! attempting to find a match.
+  
+  
+  .IP "None [\fIarguments\fP] \fIcommand\fP"
+  Performs \fIcommand\fP if no window which satisfies all
+! \fIconditions\fP exists.  Conditions include "iconic", "!iconic",
+! "Visible", "!Visible", "CurrentDesk", "CurrentPage", and
+! "CurrentPageAnyDesk".  In addition, the condition may include a window
+! name to match to.  The window name may include the wildcards * and ?.
+! The window name, class, and resource will be considered when
+! attempting to find a match.
+  
+  
+  .IP "OpaqueMoveSize \fIpercentage\fP"
+--- 1240,1254 ----
+  
+  .IP "Next [\fIconditions\fP] \fIcommand\fP"
+  Performs \fIcommand\fP (typically Focus) on the next window which
+! satisfies all \fIconditions\fP.  Conditions are the same as for \fICurrent\fP
+! with the addition of CirculateHit which overrides the CirculateSkip style
+! attribute and CirculateHitIcon which overrides the CirculateSkipIcon style
+! attribute for iconified windows.
+  
+  
+  .IP "None [\fIarguments\fP] \fIcommand\fP"
+  Performs \fIcommand\fP if no window which satisfies all
+! \fIconditions\fP exists.  Conditions are the same as for \fINext\fP.
+  
+  
+  .IP "OpaqueMoveSize \fIpercentage\fP"
+***************
+*** 1336,1347 ****
+  
+  .IP "Prev"
+  Performs \fIcommand\fP (typically Focus) on the previous window which
+! satisfies all \fIconditions\fP.  Conditions include "iconic",
+! "!iconic", "Visible", "!Visible", "CurrentDesk", "CurrentPage", and
+! "CurrentPageAnyDesk".  In addition, the condition may include a window
+! name to match to.  The window name may include the wildcards * and ?.
+! The window name, class, and resource will be considered when
+! attempting to find a match.
+  
+  
+  .IP "Quit"
+--- 1341,1347 ----
+  
+  .IP "Prev"
+  Performs \fIcommand\fP (typically Focus) on the previous window which
+! satisfies all \fIconditions\fP.  Conditions are the same as for \fINext\fP.
+  
+  
+  .IP "Quit"
+*** misc.h.orig	Mon Dec 23 22:07:47 1996
+--- misc.h	Fri May 23 14:19:08 1997
+***************
+*** 522,527 ****
+--- 522,529 ----
+  	      unsigned long context, char *action,int* Module);
+  void NoneFunc(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+  	      unsigned long context, char *action,int* Module);
++ void CurrentFunc(XEvent *eventp,Window w,FvwmWindow *tmp_win,
++ 	      unsigned long context, char *action,int* Module);
+  void WindowIdFunc(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+                    unsigned long context, char *action,int* Module);
+  void ReadFile(XEvent *eventp,Window junk,FvwmWindow *tmp_win,
+*** parse.h.orig	Mon Dec 23 22:07:47 1996
+--- parse.h	Fri May 23 14:17:39 1997
+***************
+*** 73,78 ****
+--- 73,79 ----
+  #define F_COLORMAP_FOCUS        55
+  #define F_TITLESTYLE            56
+  #define F_EXEC_SETUP            57
++ #define F_CURRENT               58
+  /* Functions which require a target window */
+  #define F_RESIZE		100
+  #define F_RAISE			101

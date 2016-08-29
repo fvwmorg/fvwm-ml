@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: Modules, Perl, and Perl Modules from Mikhael Goikhman on 2005-05-09 (fvwm-users)</title>
+<meta name="Author" content="Mikhael Goikhman (migo_at_homemail.com)" />
+<meta name="Subject" content="Re: FVWM: Modules, Perl, and Perl Modules" />
+<meta name="Date" content="2005-05-09" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: Modules, Perl, and Perl Modules</h1>
+<!-- received="Mon May  9 04:55:45 2005" -->
+<!-- isoreceived="20050509035545" -->
+<!-- sent="Mon, 9 May 2005 09:54:53 +0000" -->
+<!-- isosent="20050509095453" -->
+<!-- name="Mikhael Goikhman" -->
+<!-- email="migo_at_homemail.com" -->
+<!-- subject="Re: FVWM: Modules, Perl, and Perl Modules" -->
+<!-- id="20050509095453.GA7560_at_SDF.LONESTAR.ORG" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="20050509095207.GA29903_at_xeno" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start14117" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="14118.html" accesskey="d" title="Yang Yang: &quot;FVWM: Tab window switching more informative??&quot;">Next message</a> ]
+[ <a href="14116.html" title="Nick Fortune: &quot;FVWM: Modules, Perl, and Perl Modules&quot;">Previous message</a> ]
+[ <a href="14116.html" title="Nick Fortune: &quot;FVWM: Modules, Perl, and Perl Modules&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg14117" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg14117" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg14117" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg14117" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Mikhael Goikhman &lt;<a href="mailto:migo_at_homemail.com?Subject=Re%3A%20FVWM%3A%20Modules%2C%20Perl%2C%20and%20Perl%20Modules">migo_at_homemail.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 9 May 2005 09:54:53 +0000</span><br />
+</address>
+<br />
+On 09 May 2005 10:52:08 +0100, Nick Fortune wrote:
+<br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; I'm tending towards saying &quot;create a directory $FVWM_USERDIR/perl and
+</em><br />
+<em class="quotelev1">&gt; put the .pm files in there&quot; and then pointing the script at the modules
+</em><br />
+<em class="quotelev1">&gt; with a &quot;use lib&quot; directive. The trouble is that's fragile. If I
+</em><br />
+<em class="quotelev1">&gt; hardcode the location and they can't use it, or don't want to use it,
+</em><br />
+<em class="quotelev1">&gt; then the module breaks.
+</em><br />
+<br />This is the way to go. Personally I would use $FVWM_USERDIR/perllib name
+<br />
+to match FVWM_DATADIR/perllib, since it is for classes, not for scripts.
+<br />
+<br />If you want to handle the situation, you may do it in your module.
+<br />
+<br />BEGIN {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my $user_perllib_dir = &quot;$ENV{FVWM_USERDIR}/perllib&quot;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;die &quot;Please create $user_perllib_dir with .pm files from <a href="http://url">http://url</a>\n&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unless -d $user_perllib_dir;
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;use lib $user_perllib_dir;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;use MyModule1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;use MyModule2;
+<br />
+}
+<br />
+<br />This will show all possible errors on STDERR. If you also want to
+<br />
+show them in some X message box, you may use this solution instead:
+<br />
+<br />BEGIN {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my $user_perllib_dir = &quot;$ENV{FVWM_USERDIR}/perllib&quot;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;use FVWM::Module::Toolkit;
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FVWM::Module::Toolkit-&gt;showError(&quot;Please create ...&quot;, &quot;My Error&quot;)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unless -d $user_perllib_dir;
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;use lib $user_perllib_dir;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;use FVWM::Module::Toolkit qw(MyModule1 MyModule2);
+<br />
+}
+<br />
+<br />If there will be ever a practical problem (and not just theoretical,
+<br />
+there are no many perl module writters) I will add the built-in support,
+<br />
+and it will be just &quot;use FVWM::Module::Toolkit qw(~ MyModule1 MyModule2)&quot;.
+<br />
+<br />P.S. About the terminology, please use &quot;perl classes&quot;, not &quot;perl modules&quot;
+<br />
+to avoid the confusion with &quot;fvwm modules&quot;.
+<br />
+<br />Regards,
+<br />
+Mikhael.
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon May 09 2005 - 04:55:45 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start14117">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="14118.html" title="Next message in the list">Yang Yang: "FVWM: Tab window switching more informative??"</a></li>
+<li><dfn>Previous message</dfn>: <a href="14116.html" title="Previous message in the list">Nick Fortune: "FVWM: Modules, Perl, and Perl Modules"</a></li>
+<li><dfn>In reply to</dfn>: <a href="14116.html" title="Message to which this message replies">Nick Fortune: "FVWM: Modules, Perl, and Perl Modules"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg14117" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg14117" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg14117" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg14117" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:57 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Fvwm focus / geometry control problems from Stephen Riehm on 1997-05-28 (fvwm-users)</title>
+<meta name="Author" content="Stephen Riehm (sr_at_pc-plus.de)" />
+<meta name="Subject" content="FVWM: Fvwm focus / geometry control problems" />
+<meta name="Date" content="1997-05-28" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Fvwm focus / geometry control problems</h1>
+<!-- received="Wed May 28 10:37:04 1997" -->
+<!-- isoreceived="19970528093704" -->
+<!-- sent="Wed, 28 May 1997 17:31:23 +0200" -->
+<!-- isosent="19970528153123" -->
+<!-- name="Stephen Riehm" -->
+<!-- email="sr_at_pc-plus.de" -->
+<!-- subject="FVWM: Fvwm focus / geometry control problems" -->
+<!-- id="C12564A5.0052E98B.00_at_bavaria2.pc-plus.de" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start20092" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="20093.html" accesskey="d" title="Stephen Riehm: &quot;FVWM: Status of fvwm?&quot;">Next message</a> ]
+[ <a href="20091.html" title="Jim Nicholson: &quot;FVWM: TkGoodStuff --- one button popped in, other --- out&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg20092" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg20092" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg20092" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg20092" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Stephen Riehm &lt;<a href="mailto:sr_at_pc-plus.de?Subject=Re%3A%20FVWM%3A%20Fvwm%20focus%20%2F%20geometry%20control%20problems">sr_at_pc-plus.de</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 28 May 1997 17:31:23 +0200</span><br />
+</address>
+<br />
+Hello,
+<br />
+<br /><br /><br />I had a neat idea, but it's been blown to hell due to implementation
+<br />
+problems.
+<br />
+<br />I'm trying to make an application which automatically iconifies itself (in
+<br />
+fact, it
+<br />
+<br />just shrinks the window, and moves itself to a predeturmined corner
+<br />
+somewhere)
+<br />
+<br />when the application no longer has the focus, and automatically grows to
+<br />
+full
+<br />
+<br />size again when the application gets the focus. This would be a neat
+<br />
+feature
+<br />
+<br />to add to the windowlist for example!
+<br />
+<br /><br /><br />Anyway, the problems I'm having are that the focus events get repeated (4
+<br />
+times
+<br />
+<br />for each real FocusIn/FocusOut event), which causes the shrink event to get
+<br />
+called
+<br />
+<br />4 times instead of once, and likewise the grow callback. If the user
+<br />
+decides to move the
+<br />
+<br />window by dragging the title bar for example, then the focus is taken away
+<br />
+from the
+<br />
+<br />application too - which with this example produces truly entertaining,
+<br />
+albeit useless, results.
+<br />
+<br /><br /><br />On top of that, the geometry information doesn't seem to match up properly,
+<br />
+by asking
+<br />
+<br />for and storing the current geometry before shrinking or growing, and then
+<br />
+re-using
+<br />
+<br />the values that fvwm gives back, the window's geometry moves slowly to the
+<br />
+top left corner
+<br />
+<br />of the screen.
+<br />
+<br /><br /><br />To make it all a little more mysterious, these problems only happen on
+<br />
+fvwm. I tested the
+<br />
+<br />program under mwm and it worked fine (although the resising bit didn't
+<br />
+quite work as expected.)
+<br />
+<br /><br /><br />Any ideas?
+<br />
+<br />Is there a way to &quot;optimise&quot; X events (preferably from fvwm directly)?
+<br />
+<br />Has anyone else tried making a toy like this before?
+<br />
+<br /><br /><br />Thanks in advance,
+<br />
+<br /><br /><br />Steve
+<br />
+<br /><br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed May 28 1997 - 10:37:04 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start20092">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="20093.html" title="Next message in the list">Stephen Riehm: "FVWM: Status of fvwm?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="20091.html" title="Previous message in the list">Jim Nicholson: "FVWM: TkGoodStuff --- one button popped in, other --- out"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg20092" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg20092" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg20092" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg20092" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

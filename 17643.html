@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: strings in icons from Richard Lister on 1996-08-16 (fvwm-users)</title>
+<meta name="Author" content="Richard Lister (listerrj_at_helios.aston.ac.uk)" />
+<meta name="Subject" content="Re: FVWM: strings in icons" />
+<meta name="Date" content="1996-08-16" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: strings in icons</h1>
+<!-- received="Fri Aug 16 06:50:38 1996" -->
+<!-- isoreceived="19960816055038" -->
+<!-- sent="Fri, 16 Aug 1996 12:41:23 +0100" -->
+<!-- isosent="19960816114123" -->
+<!-- name="Richard Lister" -->
+<!-- email="listerrj_at_helios.aston.ac.uk" -->
+<!-- subject="Re: FVWM: strings in icons" -->
+<!-- id="10352.199608161141_at_sun.aston.ac.uk" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="Fri, 16 Aug 1996 00:42:50 +0100&quot;" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start17643" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="17644.html" accesskey="d" title="Marco Mariani: &quot;FVWM: Fvwm / FvwmButtons features&quot;">Next message</a> ]
+[ <a href="17642.html" title="Lionel Cons: &quot;FVWM: Bug or Feature of Restart?&quot;">Previous message</a> ]
+[ <a href="17628.html" title="Achyutram Bhamidipaty: &quot;FVWM: strings in icons&quot;">Maybe in reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17643" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17643" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17643" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17643" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Richard Lister &lt;<a href="mailto:listerrj_at_helios.aston.ac.uk?Subject=Re%3A%20FVWM%3A%20strings%20in%20icons">listerrj_at_helios.aston.ac.uk</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 16 Aug 1996 12:41:23 +0100</span><br />
+</address>
+<br />
+On Fri, 16 Aug 1996 00:42:50 +0100
+<br />
+Richard Lister &lt;listerrj_at_hpc.uh.edu&gt; 
+<br />
+wrote concerning 'Re: FVWM: strings in icons':
+<br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; Now, perhaps someone out there with better knowledge of X than me will
+</em><br />
+<em class="quotelev1">&gt; tell me if I'm wrong, but there is no way for fvwm to be informed of
+</em><br />
+<em class="quotelev1">&gt; a change in the icon name. It must make explicit calls to XGetWMIconName().
+</em><br />
+<br />Well, duh! Repeat after me, Ric: &quot;I will not try to think about difficult
+<br />
+X things while half-asleep&quot;. :-)
+<br />
+<br />OK, I wasn't thinking. *Obviously* fvwm is informed of the icon_name change
+<br />
+since it redraws the name string in the icon. It just doesn't do a redraw
+<br />
+of the whole icon window.
+<br />
+<br />So, here's what happens. Fvwm get a PropertyNotify event with value
+<br />
+XA_WM_ICON_NAME, and HandlePropertyNotify() calls RedoIconName().
+<br />
+It also does a BroadcastName() so that modules know about it, too. 
+<br />
+<br />RedoIconName() just does a redraw of the icon_name string in the icon
+<br />
+window. So, here's a patch to it that does a whole new Iconify() for
+<br />
+icons with no pixmap. (Can someone smart please check my call to
+<br />
+Iconify() isn't bogus). Note: if the icon name gets wider and the icon
+<br />
+window no longer fits in the icon box without overlap, the icon will move
+<br />
+to a new location. I find this OK ... do other people find this desirable? 
+<br />
+<br />Anyway, Ram, try this (in addition to my other patch) and see if it fixes
+<br />
+your problem.
+<br />
+<br /><br />--- fvwm/icons.c.orig	Fri Aug 16 11:30:38 1996
+<br />
++++ fvwm/icons.c	Fri Aug 16 12:38:30 1996
+<br />
+_at_&#64; -334,9 +334,15 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;Tmp_win-&gt;icon_t_width = XTextWidth(Scr.IconFont.font,Tmp_win-&gt;icon_name, 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strlen(Tmp_win-&gt;icon_name));
+<br />
+-  /* clear the icon window, and trigger a re-draw via an expose event */
+<br />
+-  if (Tmp_win-&gt;flags &amp; ICONIFIED)
+<br />
+-    XClearArea(dpy, Tmp_win-&gt;icon_w, 0, 0, 0, 0, True);
+<br />
++
+<br />
++  if (Tmp_win-&gt;flags &amp; ICONIFIED) {
+<br />
++    /* if no pixmap make new icon as the title may have changed size */
+<br />
++    if( Tmp_win-&gt;icon_pixmap_w == None )
+<br />
++      Iconify(Tmp_win, 0, 0);
+<br />
++    else
+<br />
++      /* clear the icon window, and trigger a re-draw via an expose event */
+<br />
++      XClearArea(dpy, Tmp_win-&gt;icon_w, 0, 0, 0, 0, True);
+<br />
++  }
+<br />
+&nbsp;&nbsp;&nbsp;return;
+<br />
+&nbsp;}
+<br />
+&nbsp;
+<br />
+&nbsp;
+<br />
+<br />Ric
+<br />
+<br />Richard J. Lister, Research Assistant    
+<br />
+Neural Computing Research Group, Aston University
+<br />
+r.j.lister_at_aston.ac.uk 
+<br />
+<a href="http://www.ncrg.aston.ac.uk/~listerrj/">http://www.ncrg.aston.ac.uk/~listerrj/</a> 
+<br />
+<br /><br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Aug 16 1996 - 06:50:38 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start17643">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="17644.html" title="Next message in the list">Marco Mariani: "FVWM: Fvwm / FvwmButtons features"</a></li>
+<li><dfn>Previous message</dfn>: <a href="17642.html" title="Previous message in the list">Lionel Cons: "FVWM: Bug or Feature of Restart?"</a></li>
+<li><dfn>Maybe in reply to</dfn>: <a href="17628.html" title="Message to which this message replies">Achyutram Bhamidipaty: "FVWM: strings in icons"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17643" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17643" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17643" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17643" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

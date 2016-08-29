@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: PATCH: fvwm-2.0.43 from Larry Schwimmer on 1996-07-26 (fvwm-users)</title>
+<meta name="Author" content="Larry Schwimmer (rosebud_at_cyclone.Stanford.EDU)" />
+<meta name="Subject" content="FVWM: PATCH: fvwm-2.0.43" />
+<meta name="Date" content="1996-07-26" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: PATCH: fvwm-2.0.43</h1>
+<!-- received="Fri Jul 26 02:29:48 1996" -->
+<!-- isoreceived="19960726012948" -->
+<!-- sent="Fri, 26 Jul 1996 00:19:55 -0700 (PDT)" -->
+<!-- isosent="19960726071955" -->
+<!-- name="Larry Schwimmer" -->
+<!-- email="rosebud_at_cyclone.Stanford.EDU" -->
+<!-- subject="FVWM: PATCH: fvwm-2.0.43" -->
+<!-- id="199607260719.AAA26497_at_cyclone.Stanford.EDU" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start17484" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="17485.html" accesskey="d" title="Manoj Kasichainula: &quot;Re: FVWM: (long) startup timing bug patch to test&quot;">Next message</a> ]
+[ <a href="17483.html" title="Chris Laas: &quot;Re: FVWM: &#0039;module failed:&#0039; ??&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17484" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17484" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17484" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17484" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Larry Schwimmer &lt;<a href="mailto:rosebud_at_cyclone.Stanford.EDU?Subject=Re%3A%20FVWM%3A%20PATCH%3A%20fvwm-2.0.43">rosebud_at_cyclone.Stanford.EDU</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 26 Jul 1996 00:19:55 -0700 (PDT)</span><br />
+</address>
+<br />
+1) Ultrix still lacks strdup.  This should ensure that it is
+<br />
+&nbsp;&nbsp;&nbsp;only used on Ultrix.  [libs/Imakefile]
+<br />
+<br />2) I don't like adding any default include and lib path for
+<br />
+&nbsp;&nbsp;&nbsp;linking (in this case for Audio), but at least only add it if you
+<br />
+&nbsp;&nbsp;&nbsp;are using that feature. [Imakefile]
+<br />
+<br />3) As with 2.0.42, fvwm does not link properly on Solaris, at least
+<br />
+&nbsp;&nbsp;&nbsp;under R6.  [Imakefile]
+<br />
+<br />4) strdup implementation to make Ultrix happy. [libs/strdup.c]
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yours,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Larry Schwimmer
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;schwim_at_cyclone.stanford.edu
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Distributed Computing Operations
+<br />
+<br />--- libs/Imakefile.orig	Fri Feb 16 17:17:27 1996
+<br />
++++ libs/Imakefile	Fri Jul 26 00:01:34 1996
+<br />
+_at_&#64; -4,6 +4,11 &#64;&#64;
+<br />
+&nbsp;
+<br />
+&nbsp;#include &quot;../Fvwm.tmpl&quot;
+<br />
+&nbsp;
+<br />
++#if defined(UltrixArchitecture)
+<br />
++PORTSRC = strdup.c
+<br />
++PORTOBJ = strdup.o
+<br />
++#endif
+<br />
++
+<br />
+&nbsp;SRCS = \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CatString3.c \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CopyString.c \
+<br />
+_at_&#64; -23,7 +28,8 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;safemalloc.c \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sleep.c \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strncmp.c \
+<br />
+-	wild.c
+<br />
++	wild.c \
+<br />
++	$(PORTSRC)
+<br />
+&nbsp;
+<br />
+&nbsp;OBJS = \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CatString3.o \
+<br />
+_at_&#64; -44,7 +50,8 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;safemalloc.o \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sleep.o \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strncmp.o \
+<br />
+-	wild.o
+<br />
++	wild.o \
+<br />
++	$(PORTOBJ)
+<br />
+&nbsp;
+<br />
+&nbsp;NormalLibraryTarget($(LIB), $(OBJS))
+<br />
+&nbsp;
+<br />
+--- Fvwm.tmpl.orig	Thu Jun 27 07:57:21 1996
+<br />
++++ Fvwm.tmpl	Thu Jul 18 15:22:20 1996
+<br />
+_at_&#64; -77,8 +77,10 &#64;&#64;
+<br />
+&nbsp;&nbsp;* This currently only effects the FvwmAudio module.
+<br />
+&nbsp;&nbsp;***************************************************************************/
+<br />
+&nbsp;#define HasRPlay NO     /* YES */
+<br />
++#if HasRPlay
+<br />
+&nbsp;#define AudioLibs -L/usr/local/lib
+<br />
+&nbsp;#define AudioIncs -I/usr/local/include
+<br />
++#endif
+<br />
+&nbsp;
+<br />
+&nbsp;
+<br />
+&nbsp;/**************************************************************************
+<br />
+_at_&#64; -359,7 +361,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_at_&#64;\
+<br />
+&nbsp;program: $(OBJS) $(DEPLIBS)						_at_&#64;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RemoveTargetProgram($_at_)						&#64;&#64;\
+<br />
+-	$(CC) -o $_at_ $(OBJS) $(LDOPTIONS) $(LOCAL_LIBRARIES) $(LDLIBS) $(EXTRA_LOAD_FLAGS) &#64;&#64;\
+<br />
++	$(CCENVSETUP) $(CC) -o $_at_ $(OBJS) $(LDOPTIONS) $(LOCAL_LIBRARIES) $(LDLIBS) $(EXTRA_LOAD_FLAGS) &#64;&#64;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_at_&#64;\
+<br />
+&nbsp;InstallProgram(program,$(FVWMDIR))					_at_&#64;\
+<br />
+&nbsp;InstallManPage(program,$(MANDIR))					_at_&#64;\
+<br />
+_at_&#64; -384,7 +386,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_at_&#64;\
+<br />
+&nbsp;program: $(OBJS) $(DEPLIBS)						_at_&#64;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RemoveTargetProgram($_at_)						&#64;&#64;\
+<br />
+-	$(CC) -o $_at_ $(OBJS) $(LDOPTIONS) $(LOCAL_LIBRARIES) $(LDLIBS) $(EXTRA_LOAD_FLAGS) &#64;&#64;\
+<br />
++	$(CCENVSETUP) $(CC) -o $_at_ $(OBJS) $(LDOPTIONS) $(LOCAL_LIBRARIES) $(LDLIBS) $(EXTRA_LOAD_FLAGS) &#64;&#64;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_at_&#64;\
+<br />
+&nbsp;InstallProgram(program,$(FVWMBINDIR))					_at_&#64;\
+<br />
+&nbsp;InstallManPage(program,$(MANDIR))					_at_&#64;\
+<br />
+--- /dev/null	Thu Jul 25 23:57:15 1996
+<br />
++++ libs/strdup.c	Thu Jul 25 12:30:45 1996
+<br />
+_at_&#64; -0,0 +1,22 &#64;&#64;
+<br />
++#include &lt;string.h&gt;
+<br />
++
+<br />
++/* strdup
+<br />
++ *
+<br />
++ * Make a duplicate of a string.
+<br />
++ * For systems which lack this function.
+<br />
++ *
+<br />
++ * Larry Schwimmer (schwim_at_cs.stanford.edu)
+<br />
++ */
+<br />
++char *
+<br />
++strdup (const char *input)
+<br />
++{
+<br />
++  register char *cp, *retval = NULL;
+<br />
++
+<br />
++  if (input == NULL)
+<br />
++    return NULL;
+<br />
++  if ((retval = cp = (char *)malloc((strlen(input)+1)*sizeof(char))) == NULL)
+<br />
++    return NULL;
+<br />
++  while ((*cp++ = *input++) != '\0')
+<br />
++    ;
+<br />
++  return retval;
+<br />
++}
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Jul 26 1996 - 02:29:48 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start17484">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="17485.html" title="Next message in the list">Manoj Kasichainula: "Re: FVWM: (long) startup timing bug patch to test"</a></li>
+<li><dfn>Previous message</dfn>: <a href="17483.html" title="Previous message in the list">Chris Laas: "Re: FVWM: &#0039;module failed:&#0039; ??"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17484" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17484" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17484" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17484" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

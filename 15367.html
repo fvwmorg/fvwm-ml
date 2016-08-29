@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: FVWM2.0.39 gcc compilation and linking on Sun-OS 4.1.4 from Jan-Erik Borg on 1996-02-01 (fvwm-users)</title>
+<meta name="Author" content="Jan-Erik Borg (jeb_at_sehaf.abb.se)" />
+<meta name="Subject" content="FVWM: FVWM2.0.39 gcc compilation and linking on Sun-OS 4.1.4" />
+<meta name="Date" content="1996-02-01" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: FVWM2.0.39 gcc compilation and linking on Sun-OS 4.1.4</h1>
+<!-- received="Thu Feb  1 10:38:44 1996" -->
+<!-- isoreceived="19960201103844" -->
+<!-- sent="Thu, 1 Feb 96 17:28:16 +0100" -->
+<!-- isosent="19960201162816" -->
+<!-- name="Jan-Erik Borg" -->
+<!-- email="jeb_at_sehaf.abb.se" -->
+<!-- subject="FVWM: FVWM2.0.39 gcc compilation and linking on Sun-OS 4.1.4" -->
+<!-- id="9602011628.AA09042_at_milo.hafo" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start15367" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="15368.html" accesskey="d" title="Charles Hines: &quot;Re: FVWM: FVWM2.0.39 gcc compilation and linking on Sun-OS 4.1.4&quot;">Next message</a> ]
+[ <a href="15366.html" title="Dave Goldberg: &quot;FVWM: Re: StartsOnPage&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="15368.html" accesskey="t" title="Charles Hines: &quot;Re: FVWM: FVWM2.0.39 gcc compilation and linking on Sun-OS 4.1.4&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15367" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15367" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15367" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15367" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Jan-Erik Borg &lt;<a href="mailto:jeb_at_sehaf.abb.se?Subject=Re%3A%20FVWM%3A%20FVWM2.0.39%20gcc%20compilation%20and%20linking%20on%20Sun-OS%204.1.4">jeb_at_sehaf.abb.se</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 1 Feb 96 17:28:16 +0100</span><br />
+</address>
+<br />
+Hello!
+<br />
+<br />When linking FVWM2.0.39 using gcc on Sun-OS 4.1.4 with Openwindows 3.0
+<br />
+I get an &quot;Undefined symbol _basename&quot; fatal error message from ld, which 
+<br />
+then exits. (For details see below.)
+<br />
+<br />Question: Does any one have an idea how I can avoid this?
+<br />
+<br />There is a similar problem for module FvwmPrompt, shown at the end.
+<br />
+<br />(I'm more or less a novice in X, C and Unix programming, so the issue
+<br />
+might be silly. I just don't have any more experiended person available
+<br />
+locally.)
+<br />
+<br />Thanks in advance!
+<br />
+<br />Jan-Erik Borg
+<br />
+<br />ABB HAFO AB
+<br />
+Sweden
+<br />
+<br />E-Mail: jeb_at_sehaf.abb.se
+<br />
+Phone:  +46 8 580 24 709
+<br />
+Fax:    +46 8 580 20 190
+<br />
+-----------------------------------------------------------------------------
+<br />
+<br />Here is an extract from the compilation and the complete link command with 
+<br />
+error output:
+<br />
+<br /><em class="quotelev1">&gt; make all
+</em><br />
+:
+<br />
+:
+<br />
+gcc -g -Wall -O   -I/usr/include -I/usr/openwin/include  -I.       -target sun4 -c  fvwm.c
+<br />
+fvwm.c: In function `main':
+<br />
+fvwm.c:163: warning: implicit declaration of function `fprintf'
+<br />
+fvwm.c:251: warning: implicit declaration of function `putenv'
+<br />
+fvwm.c: In function `CatchFatal':
+<br />
+fvwm.c:1010: warning: control reaches end of non-void function
+<br />
+fvwm.c: In function `usage':
+<br />
+fvwm.c:1056: warning: implicit declaration of function `basename'
+<br />
+fvwm.c:1056: warning: format argument is not a pointer (arg 3)
+<br />
+fvwm.c: At top level:
+<br />
+fvwm.c:92: warning: `s_g_bits' defined but not used
+<br />
+:
+<br />
+:
+<br />
+rm -f fvwm2
+<br />
+gcc -g -Wall -o fvwm2 add_window.o  bindings.o  borders.o  builtins.o  colormaps.o  colors.o  complex.o  decorations.o  events.o  focus.o  functions.o  fvwm.o  icons.o  menus.o  misc.o  module.o  move.o  placement.o  read.o  resize.o  style.o  virtual.o  windows.o -O  -lXpm  -lXext -lX11 ../libs/libfvwm2.a   
+<br />
+collect2: ld returned 2 exit status
+<br />
+ld: Undefined symbol 
+<br />
+&nbsp;&nbsp;&nbsp;_basename 
+<br />
+*** Error code 1
+<br />
+make: Fatal error: Command failed for target `fvwm2'
+<br />
+<br />-----------------------------------------------------------------------------
+<br />
+<br />OS:       Sun-OS 4.1.4
+<br />
+X11:      Openwindows 3.0    Which I think is based on X11R5.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(We don't have libraries for Motif application 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;development. We only have the standard 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Openwindows installation.)
+<br />
+FVWM:     fvwm2.0.39
+<br />
+XPM:      xpm-3.4a           (libXpm.so.4.1 + libXpm.a +xpm.h)
+<br />
+Compiler: gcc 2.7.2          Used for both FVWM and XPM.
+<br />
+<br />-----------------------------------------------------------------------------
+<br />
+Some notes:
+<br />
+<br />I've noted that there is a call to &quot;basename&quot; (without leading &quot;_&quot;) 
+<br />
+in function &quot;usage&quot; in file &quot;fvwm.c&quot;. During the compilation I get 
+<br />
+an get warning(s) for it, as show in the listing below.
+<br />
+<br />Using &quot;nm -og&quot; on /usr/openwin/lib/lib* ( and /lib/lib* ) gives the
+<br />
+following information relating to &quot;_basename&quot; :
+<br />
+<br /><em class="quotelev1">&gt; nm -og /usr/openwin/lib/lib* |grep -i basename
+</em><br />
+/usr/openwin/lib/libtt.a:tt_path.o:0000004c T __Tt_basename__FPCci
+<br />
+/usr/openwin/lib/libtt.so.1.1:0006e124 T __Tt_basename__FPCci
+<br />
+<br />Trying to add &quot;/usr/openwin/lib/libtt.a&quot; to the linking does not help.
+<br />
+<br />-----------------------------------------------------------------------------
+<br />
+<br />I get a similar error in FvwmPrompt. Does it have the same reason?
+<br />
+<br />gcc -g -Wall -O   -I/usr/include -I/usr/openwin/include  -I.       -target sun4 -c  FvwmPrompt.c
+<br />
+FvwmPrompt.c: In function `main':
+<br />
+FvwmPrompt.c:66: warning: implicit declaration of function `strrchr'
+<br />
+FvwmPrompt.c:66: warning: assignment makes pointer from integer without a cast
+<br />
+FvwmPrompt.c:77: warning: implicit declaration of function `fprintf'
+<br />
+FvwmPrompt.c:78: warning: too many arguments for format
+<br />
+FvwmPrompt.c:163: warning: implicit declaration of function `strtok'
+<br />
+FvwmPrompt.c:57: warning: unused variable `file'
+<br />
+rm -f FvwmPrompt
+<br />
+gcc -g -Wall -o FvwmPrompt FvwmPrompt.o -O  -lXpm -lXaw -lXmu -lXt -lXext -lX11 -lXext -lX11 ../../libs/libfvwm2.a   
+<br />
+collect2: ld returned 2 exit status
+<br />
+ld: Undefined symbol
+<br />
+&nbsp;&nbsp;&nbsp;_sin
+<br />
+&nbsp;&nbsp;&nbsp;_cos
+<br />
+&nbsp;&nbsp;&nbsp;_pow
+<br />
+&nbsp;&nbsp;&nbsp;_floor
+<br />
+&nbsp;&nbsp;&nbsp;_get_wmShellWidgetClass
+<br />
+&nbsp;&nbsp;&nbsp;_get_applicationShellWidgetClass
+<br />
+*** Error code 1
+<br />
+-----------------------------------------------------------------------------
+<br />
+<pre>
+--
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Feb 01 1996 - 10:38:44 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start15367">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="15368.html" title="Next message in the list">Charles Hines: "Re: FVWM: FVWM2.0.39 gcc compilation and linking on Sun-OS 4.1.4"</a></li>
+<li><dfn>Previous message</dfn>: <a href="15366.html" title="Previous message in the list">Dave Goldberg: "FVWM: Re: StartsOnPage"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="15368.html" title="Next message in this discussion thread">Charles Hines: "Re: FVWM: FVWM2.0.39 gcc compilation and linking on Sun-OS 4.1.4"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="15368.html" title="Message sent in reply to this message">Charles Hines: "Re: FVWM: FVWM2.0.39 gcc compilation and linking on Sun-OS 4.1.4"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15367" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15367" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15367" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15367" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

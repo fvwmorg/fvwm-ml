@@ -1,0 +1,724 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Patch for FvwmAudio with HP-UX Audio from Mark Boyns on 1997-07-22 (fvwm-users)</title>
+<meta name="Author" content="Mark Boyns (boyns_at_sdsu.edu)" />
+<meta name="Subject" content="FVWM: Patch for FvwmAudio with HP-UX Audio" />
+<meta name="Date" content="1997-07-22" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Patch for FvwmAudio with HP-UX Audio</h1>
+<!-- received="Tue Jul 22 16:36:24 1997" -->
+<!-- isoreceived="19970722153624" -->
+<!-- sent="22 Jul 1997 14:36:02 -0700" -->
+<!-- isosent="19970722213602" -->
+<!-- name="Mark Boyns" -->
+<!-- email="boyns_at_sdsu.edu" -->
+<!-- subject="FVWM: Patch for FvwmAudio with HP-UX Audio" -->
+<!-- id="x0wwmi22il.fsf_at_sdsu.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start20496" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="20497.html" accesskey="d" title="B. David Wren-Hardin: &quot;FVWM: App specific Pager windows&quot;">Next message</a> ]
+[ <a href="20495.html" title="Jonathan Boyd: &quot;FVWM: j.boyd_at_virgin.net&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="20497.html" accesskey="t" title="B. David Wren-Hardin: &quot;FVWM: App specific Pager windows&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg20496" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg20496" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg20496" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg20496" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Mark Boyns &lt;<a href="mailto:boyns_at_sdsu.edu?Subject=Re%3A%20FVWM%3A%20Patch%20for%20FvwmAudio%20with%20HP-UX%20Audio">boyns_at_sdsu.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: 22 Jul 1997 14:36:02 -0700</span><br />
+</address>
+<br />
+I received the following FvwmAudio patches from Ricky Ralston.  I
+<br />
+don't have the ability to test them and was hoping someone on the list
+<br />
+could give it a whirl.
+<br />
+<br />------- Start of forwarded message -------
+<br />
+From: Ricky Ralston &lt;rlr_at_wscoe5.atl.hp.com&gt;
+<br />
+Message-Id: &lt;199707071838.OAA10940_at_wscoe5.atl.hp.com&gt;
+<br />
+Subject: FvwmAudio with HP-UX Audio
+<br />
+To: boyns_at_sdsu.edu (Mark Boyns)
+<br />
+Date: Mon, 07 Jul 1997 14:38:58 EDT
+<br />
+Cc: mscott_at_mcd.mot.com, rlr_at_atl&#46;<!--nospam-->hp.com
+<br />
+<br /><br />Hi Mark and Mark,
+<br />
+<br />Here's the modifications that I promised.  These mods should allow someone
+<br />
+to play &quot;au&quot; files via the HP Audio Server.  I had a nice setup that allowed
+<br />
+more formats like &quot;wav&quot;, but I found a memory leak in the Alib library that
+<br />
+could/would cause some problems. :(  
+<br />
+<br />I also took one liberty with the base code.  I added a couple of lines to
+<br />
+the config() routine to setup the message mask.  I thought it might be
+<br />
+nice and a little faster to remove unconfigured messages.  
+<br />
+<br />Let me know what you think,
+<br />
+<br /><br /><br />Ricky
+<br />
+<br /># This is a shell archive.  Remove anything before this line,
+<br />
+# then unpack it by saving it in a file and typing &quot;sh file&quot;.
+<br />
+#
+<br />
+# Wrapped by Development &lt;wscoe_at_h0000rlr&gt; on Mon Jul  7 14:40:34 1997
+<br />
+#
+<br />
+# This archive contains:
+<br />
+#	Fvwm.tmpl.diff	FvwmAudio.diff	
+<br />
+#
+<br />
+<br />LANG=&quot;&quot;; export LANG
+<br />
+PATH=/bin:/usr/bin:$PATH; export PATH
+<br />
+<br />echo x - Fvwm.tmpl.diff
+<br />
+cat &gt;Fvwm.tmpl.diff &lt;&lt;'_at_EOF'
+<br />
+*** /tmp/Fvwm.tmpl	Mon Jul  7 14:35:48 1997
+<br />
+--- Fvwm.tmpl	Mon Jul  7 14:38:30 1997
+<br />
+***************
+<br />
+*** 80,86 ****
+<br />
+--- 80,101 ----
+<br />
+&nbsp;&nbsp;#define AudioLibs -L/usr/local/lib
+<br />
+&nbsp;&nbsp;#define AudioIncs -I/usr/local/include
+<br />
+&nbsp;&nbsp;
+<br />
++ /***************************************************************************
+<br />
++  * #define HasHPAudio
+<br />
++  *
+<br />
++  * To add builtin support for the HP-UX Audio library.  Also make sure that the
+<br />
++  * include and lib settings are correct for your rplay installation.
+<br />
++  * This currently only effects the FvwmAudio module.
+<br />
++  *
+<br />
++  *  NOTE:  Use the following for 10.X versions of HP-UX
+<br />
++  *  #define HPAudioLibs -L/opt/audio/lib
+<br />
++  *  #define HPAudioIncs -I/opt/audio/include
+<br />
++  ***************************************************************************/
+<br />
++ #define HasHPAudio NO     /* YES */
+<br />
++ #define HPAudioLibs
+<br />
++ #define HPAudioIncs -I/usr/include/audio
+<br />
+&nbsp;&nbsp;
+<br />
++ 
+<br />
+&nbsp;&nbsp;/**************************************************************************
+<br />
+&nbsp;&nbsp;&nbsp;* InstallSample
+<br />
+&nbsp;&nbsp;&nbsp;*
+<br />
+***************
+<br />
+*** 312,317 ****
+<br />
+--- 327,335 ----
+<br />
+&nbsp;&nbsp;#ifndef HasRPlay
+<br />
+&nbsp;&nbsp;#define HasRPlay NO
+<br />
+&nbsp;&nbsp;#endif
+<br />
++ #ifndef HasHPAudio
+<br />
++ #define HasHPAudio NO
+<br />
++ #endif
+<br />
+&nbsp;&nbsp;#ifndef InstallLibs
+<br />
+&nbsp;&nbsp;#define InstallLibs NO
+<br />
+&nbsp;&nbsp;#endif
+<br />
+***************
+<br />
+*** 346,351 ****
+<br />
+--- 364,382 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AUDIO_INCLUDES = AudioIncs
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AUDIO_LIBRARIES = AudioLibs -lrplay
+<br />
+&nbsp;&nbsp;#endif
+<br />
++ 
+<br />
++ #if HasHPAudio
+<br />
++ #if HasRPlay
+<br />
++    AUDIO_DEFINES = -DHAVE_RPLAY -DHAVE_HPAUDIO
+<br />
++    AUDIO_INCLUDES = AudioIncs HPAudioIncs
+<br />
++   AUDIO_LIBRARIES = AudioLibs -lrplay HPAudioLibs -lAlib
+<br />
++ #else
+<br />
++ #endif
+<br />
++    AUDIO_DEFINES = -DHAVE_HPAUDIO
+<br />
++    AUDIO_INCLUDES = HPAudioIncs
+<br />
++   AUDIO_LIBRARIES = HPAudioLibs -lAlib
+<br />
++ #endif
+<br />
++ 
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;#ifdef FvwmCompiler
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CC = FvwmCompiler
+<br />
+_at_EOF
+<br />
+<br />chmod 644 Fvwm.tmpl.diff
+<br />
+<br />echo x - FvwmAudio.diff
+<br />
+cat &gt;FvwmAudio.diff &lt;&lt;'_at_EOF'
+<br />
+*** FvwmAudio.c	Fri Jan 17 11:10:49 1997
+<br />
+--- /tmp/FvwmAudio.c	Mon Jul  7 14:31:42 1997
+<br />
+***************
+<br />
+*** 96,101 ****
+<br />
+--- 96,111 ----
+<br />
+&nbsp;&nbsp;#undef M_ERROR /* Solaris fix */
+<br />
+&nbsp;&nbsp;#endif
+<br />
+&nbsp;&nbsp;
+<br />
++ /* HP-UX Aserver includes */
+<br />
++ #if defined (hpux) &amp;&amp; defined (HAVE_HPAUDIO)
+<br />
++ #include &lt;sys/socket.h&gt;
+<br />
++ #include &lt;netinet/in.h&gt;
+<br />
++ #include &quot;Alib.h&quot;
+<br />
++ 
+<br />
++ int HPAudio(short sound);
+<br />
++ int HPAudioServer = 0;
+<br />
++ #endif
+<br />
++ 
+<br />
+&nbsp;&nbsp;#include &quot;../../configure.h&quot;
+<br />
+&nbsp;&nbsp;#include &quot;../../fvwm/module.h&quot;
+<br />
+&nbsp;&nbsp;#include &quot;../../version.h&quot;
+<br />
+***************
+<br />
+*** 231,236 ****
+<br />
+--- 241,247 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;char	*sound;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;char	*p;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int	i, found;
+<br />
++   long  mask = 0L;
+<br />
+&nbsp;&nbsp;#ifdef HAVE_RPLAY
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int	volume = RPLAY_DEFAULT_VOLUME;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int	priority = RPLAY_DEFAULT_PRIORITY;
+<br />
+***************
+<br />
+*** 368,373 ****
+<br />
+--- 379,385 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RPLAY_VOLUME,	volume,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NULL);
+<br />
+&nbsp;&nbsp;#endif
+<br />
++                       if (i &lt; MAX_MESSAGES) mask |= (1&lt;&lt;i);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sound_table[i]=sound;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;found++;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+***************
+<br />
+*** 394,399 ****
+<br />
+--- 406,419 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;#endif
+<br />
++ 
+<br />
++ #if defined (hpux) &amp;&amp; defined (HAVE_HPAUDIO)
+<br />
++   if (mystrcasecmp(audio_play_cmd_line, &quot;builtin-hpux&quot;) == 0)
+<br />
++       HPAudioServer = 1;
+<br />
++ #endif
+<br />
++ 
+<br />
++   if (mask) SetMessageMask(fd, mask);
+<br />
++ 
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;/***********************************************************************
+<br />
+***************
+<br />
+*** 481,486 ****
+<br />
+--- 501,509 ----
+<br />
+&nbsp;&nbsp;void	done(int n)
+<br />
+&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;audio_play(BUILTIN_SHUTDOWN);
+<br />
++ #if defined (hpux) &amp;&amp; defined (HAVE_HPAUDIO)
+<br />
++         if (HPAudioServer) HPAudio(-1);
+<br />
++ #endif
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit(n);
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+***************
+<br />
+*** 509,514 ****
+<br />
+--- 532,546 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;#endif
+<br />
++ 
+<br />
++ #if defined (hpux) &amp;&amp; defined (HAVE_HPAUDIO)
+<br />
++         if (HPAudioServer)
+<br />
++         {
+<br />
++             if ((HPAudio(sound))) last_time = now;
+<br />
++             return(0);
+<br />
++         }
+<br />
++ #endif
+<br />
++ 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (sound_table[sound])
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;memset(buf,0,BUFSIZE);
+<br />
+***************
+<br />
+*** 528,532 ****
+<br />
+--- 560,673 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return ret;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}  
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 1;
+<br />
++ }
+<br />
++ 
+<br />
++ int HPAudio( short sound )
+<br />
++ {
+<br />
++     static Audio *audio = NULL;
+<br />
++     static AGainMatrix *spmatrix;
+<br />
++     AudioAttrMask AttribsMask;
+<br />
++     AudioAttributes Attribs;
+<br />
++     ATransID xid;
+<br />
++     AByteOrder byte_order;
+<br />
++     SStream audioStream;
+<br />
++     SSPlayParams playParams;
+<br />
++     char *inBuf, *buf;
+<br />
++     int len, len_written;
+<br />
++     int fd;
+<br />
++     int streamSocket;
+<br />
++     long seekOffset, data_length;
+<br />
++     FILE *pfile;
+<br />
++     char afile[1024];
+<br />
++ 
+<br />
++     if ( sound == -1)
+<br />
++     {
+<br />
++         if (audio)
+<br />
++         {
+<br />
++             ASetCloseDownMode( audio, AKeepTransactions, NULL );
+<br />
++             ACloseAudio( audio, NULL );
+<br />
++         }
+<br />
++         return(0);
+<br />
++     }
+<br />
++ 
+<br />
++ 
+<br />
++     if (sound_table[sound])
+<br />
++     {
+<br />
++         if (audio_play_dir[0] == '\0' || sound_table[sound][0] == '/')
+<br />
++             strcpy(afile, sound_table[sound]);
+<br />
++         else
+<br />
++         {
+<br />
++             sprintf(afile,&quot;%s/%s&quot;, audio_play_dir, sound_table[sound]);
+<br />
++         }
+<br />
++     }
+<br />
++     else return(0);
+<br />
++ 
+<br />
++ 
+<br />
++     if (!audio)
+<br />
++     {
+<br />
++          audio = AOpenAudio( NULL, NULL );
+<br />
++          spmatrix = ASimplePlayer(audio);
+<br />
++     }
+<br />
++ 
+<br />
++     if((fd = open( afile, O_RDONLY )) &lt; 0)
+<br />
++     {
+<br />
++       perror( &quot;file open failed&quot; );
+<br />
++       return(0);
+<br />
++     }
+<br />
++     pfile = fdopen( fd, &quot;r&quot;);
+<br />
++ 
+<br />
++     AChooseSourceAttributes( audio, NULL, pfile, AFFUnknown,
+<br />
++                              0L, &amp;Attribs, &amp;seekOffset, &amp;data_length,
+<br />
++                              &amp;byte_order, NULL);
+<br />
++ 
+<br />
++     playParams.gain_matrix = *spmatrix;
+<br />
++     playParams.play_volume = AUnityGain;
+<br />
++     playParams.priority    = APriorityNormal;
+<br />
++     playParams.event_mask  = 0;
+<br />
++ 
+<br />
++     AttribsMask = ~0;
+<br />
++     xid = APlaySStream( audio, AttribsMask, &amp;Attribs, &amp;playParams,
+<br />
++                         &amp;audioStream, NULL );
+<br />
++ 
+<br />
++     if ((streamSocket = socket( AF_INET, SOCK_STREAM, 0 )) &lt; 0)
+<br />
++     {
+<br />
++         /* Socket create failed */
+<br />
++         return(0);
+<br />
++     }
+<br />
++ 
+<br />
++     if ((connect( streamSocket,
+<br />
++                   (struct sockaddr *)&amp;audioStream.tcp_sockaddr,
+<br />
++                   sizeof(struct sockaddr_in) )) &lt; 0)
+<br />
++     {
+<br />
++         /* Connect failed */
+<br />
++         return(0);
+<br />
++     }
+<br />
++ 
+<br />
++ 
+<br />
++     lseek( fd, seekOffset, SEEK_SET );
+<br />
++ 
+<br />
++     inBuf = malloc(audioStream.max_block_size );
+<br />
++     while(( len = read( fd, inBuf, audioStream.max_block_size )) &gt; 0 )
+<br />
++     {
+<br />
++         buf = inBuf;
+<br />
++ 
+<br />
++         while( len &gt; 0 )
+<br />
++         {
+<br />
++             if (( len_written = write( streamSocket, buf, len )) &lt; 0 )
+<br />
++             {
+<br />
++                 /* Write Failed */
+<br />
++                 return(1);
+<br />
++             }
+<br />
++             buf += len_written;
+<br />
++             len -= len_written;
+<br />
++ 
+<br />
++         }
+<br />
++     }
+<br />
++ 
+<br />
++     free( inBuf );
+<br />
++     close( fd );
+<br />
++     close( streamSocket );
+<br />
++ 
+<br />
++     return(1);
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+_at_EOF
+<br />
+<br />chmod 644 FvwmAudio.diff
+<br />
+<br />exit 0
+<br />
+<br />------- End of forwarded message -------
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue Jul 22 1997 - 16:36:24 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start20496">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="20497.html" title="Next message in the list">B. David Wren-Hardin: "FVWM: App specific Pager windows"</a></li>
+<li><dfn>Previous message</dfn>: <a href="20495.html" title="Previous message in the list">Jonathan Boyd: "FVWM: j.boyd_at_virgin.net"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="20497.html" title="Next message in this discussion thread">B. David Wren-Hardin: "FVWM: App specific Pager windows"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="20497.html" title="Message sent in reply to this message">B. David Wren-Hardin: "FVWM: App specific Pager windows"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg20496" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg20496" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg20496" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg20496" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

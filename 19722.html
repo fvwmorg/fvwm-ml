@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: fvwm2 bug? from unknown on 1997-04-02 (fvwm-users)</title>
+<meta name="Author" content="unknown (_at_hermes.berkshire.net)" />
+<meta name="Subject" content="FVWM: fvwm2 bug?" />
+<meta name="Date" content="1997-04-02" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: fvwm2 bug?</h1>
+<!-- received="Wed Apr  2 20:32:36 1997" -->
+<!-- isoreceived="19970402193236" -->
+<!-- sent="Wed, 2 Apr 97 17:24 EST" -->
+<!-- isosent="19970402222400" -->
+<!-- name="unknown" -->
+<!-- email="_at_hermes.berkshire.net" -->
+<!-- subject="FVWM: fvwm2 bug?" -->
+<!-- id="m0wCYSG-000HoZC_at_hermes.berkshire.net" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start19722" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="19723.html" accesskey="d" title="Bob Woodside: &quot;FVWM: Re: Exec vs. exec&quot;">Next message</a> ]
+[ <a href="19721.html" title="Dan Espen: &quot;Re: FVWM: problems with fvwm2&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="19754.html" accesskey="t" title="Norman Walsh: &quot;Re: FVWM: fvwm2 bug?&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19722" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19722" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19722" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19722" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: unknown &lt;<a href="mailto:_at_hermes.berkshire.net?Subject=Re%3A%20FVWM%3A%20fvwm2%20bug%3F">_at_hermes.berkshire.net</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 2 Apr 97 17:24 EST</span><br />
+</address>
+<br />
+Hello World,
+<br />
+<br />I have a fairly complex setup where I have some common files shared among
+<br />
+several machines and some machine-specific files.  I seem to be having a
+<br />
+little trouble getting Style to work right in this environment.
+<br />
+<br />In my ~/.fvwm2rc file, I have (among a lot of other things) the line
+<br />
+<br />&nbsp;&nbsp;FvwmM4 -m4-prefix .fvwm2rc-machine
+<br />
+<br />.fvwm2rc-machine is
+<br />
+<br />&nbsp;&nbsp;m4_define(`machine_fvwm2rc', `m4_esyscmd(echo &quot;/home/norm/.$SHORTNAME/.fvwm2rc&quot;)')
+<br />
+&nbsp;&nbsp;Read machine_fvwm2rc
+<br />
+<br />The practical upshot of this is that fvwm2 encounters
+<br />
+<br />&nbsp;&nbsp;Read /home/norm/.hermes/.fvwm2rc
+<br />
+<br />in the file processed by FvwmM4 (on my laptop, anyway).  In
+<br />
+/home/norm/.hermes/.fvwm2rc I have:
+<br />
+<br />&nbsp;&nbsp;# This is the fragment of the .fvwm2rc file specific to the host 
+<br />
+&nbsp;&nbsp;# hermes.berkshire.net
+<br />
+&nbsp;&nbsp;#
+<br />
+<br />&nbsp;&nbsp;HilightColor black palevioletred
+<br />
+&nbsp;&nbsp;MenuStyle maroon black grey40 -adobe-times-bold-r-*-*-14-*-*-*-*-*-*-* fvwm
+<br />
+<br />&nbsp;&nbsp;Style &quot;xapm&quot;   NoTitle, NoHandles, Sticky, WindowListSkip
+<br />
+&nbsp;&nbsp;Style &quot;xapm&quot;   BorderWidth 0, CirculateSkip, ClickToFocus
+<br />
+&nbsp;&nbsp;Style &quot;xapm&quot;   Color black/#aa80aa
+<br />
+<br />What is interesting is that MenuStyle _works_ but the Style attributes
+<br />
+for xapm are ignored.  If I copy these lines back into my top-level
+<br />
+.fvwm2rc file, they work fine.
+<br />
+<br />Have I described the problem sufficiently?  Is this a bug or a feature? ;-)
+<br />
+<br />--norm
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Apr 02 1997 - 20:32:36 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start19722">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="19723.html" title="Next message in the list">Bob Woodside: "FVWM: Re: Exec vs. exec"</a></li>
+<li><dfn>Previous message</dfn>: <a href="19721.html" title="Previous message in the list">Dan Espen: "Re: FVWM: problems with fvwm2"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="19754.html" title="Next message in this discussion thread">Norman Walsh: "Re: FVWM: fvwm2 bug?"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="19754.html" title="Message sent in reply to this message">Norman Walsh: "Re: FVWM: fvwm2 bug?"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19722" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19722" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19722" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19722" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

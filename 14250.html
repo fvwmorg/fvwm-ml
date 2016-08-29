@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: still having prob with emacs 19.25-29 initial resize from Eric Ding on 1995-09-21 (fvwm-users)</title>
+<meta name="Author" content="Eric Ding (ericding_at_San-Jose.ate.slb.com)" />
+<meta name="Subject" content="FVWM: still having prob with emacs 19.25-29 initial resize" />
+<meta name="Date" content="1995-09-21" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: still having prob with emacs 19.25-29 initial resize</h1>
+<!-- received="Wed Sep 20 19:44:33 1995" -->
+<!-- isoreceived="19950920184433" -->
+<!-- sent="Wed, 20 Sep 1995 17:48:04 -0700" -->
+<!-- isosent="19950921004804" -->
+<!-- name="Eric Ding" -->
+<!-- email="ericding_at_San-Jose.ate.slb.com" -->
+<!-- subject="FVWM: still having prob with emacs 19.25-29 initial resize" -->
+<!-- id="9509210048.AA00991_at_San-Jose.ate.slb.com" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start14250" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="14251.html" accesskey="d" title="chitturi_at_dns1.state.mi.us: &quot;FVWM: Buttons on GoodStuff&quot;">Next message</a> ]
+[ <a href="14249.html" title="chitturi_at_dns1.state.mi.us: &quot;FVWM: New address again please&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg14250" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg14250" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg14250" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg14250" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Eric Ding &lt;<a href="mailto:ericding_at_San-Jose.ate.slb.com?Subject=Re%3A%20FVWM%3A%20still%20having%20prob%20with%20emacs%2019.25-29%20initial%20resize">ericding_at_San-Jose.ate.slb.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 20 Sep 1995 17:48:04 -0700</span><br />
+</address>
+<br />
+Hi,
+<br />
+<br />I'm still having probs with emacs 19.25 and .29 (and I assume all in
+<br />
+between) here on a Sparc 5 running SunOS 4.1.3_U1 and fvwm pre-2.0pl35.
+<br />
+Emacs was configured with sparc-sun-sunos4shr --with-x-toolkit=athena
+<br />
+&nbsp;--with-gcc.
+<br />
+<br />This problem does *not* happen in any other window manager (twm, mwm,
+<br />
+vtwm.gamma), including fvwm 1.24r, so I'm still inclined to think it's an
+<br />
+fvwm pre-2.0 bug, not an emacs bug.  I'm hoping someone can help...
+<br />
+<br />If the first X-related thing done to a frame is to turn off the menu bar,
+<br />
+then the window doesn't resize appropriately; it shrinks down when the menu
+<br />
+bar disappears, but doesn't resize (increase height by 1) when emacs
+<br />
+resizes its buffer to take advantage of the extra room.  This results in a
+<br />
+hidden minibuffer, until I manually resize the window using the window
+<br />
+manager.  I can duplicate this with a test file:
+<br />
+<br />(menu-bar-mode nil)
+<br />
+<br />and then loading it, i.e.,
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;emacs -q -l test-menu.el &amp;
+<br />
+<br />The results are even more dramatic -- big white space at the bottom of a
+<br />
+resized window -- if I have the line
+<br />
+<br />(setq default-frame-alist '((width . 80) (height . 49) (menu-bar-lines . 0)))
+<br />
+<br />instead (with no X resources set; the default height is 40).
+<br />
+<br />I believe this is an fvwm bug, though I can't check the emacs because the
+<br />
+frame operations, I think, are primitive.  Help?
+<br />
+<br />Thanks,
+<br />
+Eric
+<br />
+--                                         |
+<br />
+1601 Technology Drive                     -*- ericding_at_San-Jose.ate.slb.com
+<br />
+San Jose, CA 95110-1397                    |          PHONE: (408) 437-5068
+<br />
+<a href="http://web.mit.edu/ericding/www/home.html">http://web.mit.edu/ericding/www/home.html</a>  |            <a href="FAX">FAX</a>: (408) 437-5246
+<br />
+<pre>
+--
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Sep 20 1995 - 19:44:33 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start14250">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="14251.html" title="Next message in the list">chitturi_at_dns1.state.mi.us: "FVWM: Buttons on GoodStuff"</a></li>
+<li><dfn>Previous message</dfn>: <a href="14249.html" title="Previous message in the list">chitturi_at_dns1.state.mi.us: "FVWM: New address again please"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg14250" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg14250" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg14250" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg14250" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:57 BST
+</em></small></p>
+</body>
+</html>

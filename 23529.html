@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: fvwm2.1.10 and Xpm3.4k from Paul D. Smith on 1999-01-29 (fvwm-users)</title>
+<meta name="Author" content="Paul D. Smith (psmith_at_baynetworks.com)" />
+<meta name="Subject" content="Re: FVWM: fvwm2.1.10 and Xpm3.4k" />
+<meta name="Date" content="1999-01-29" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: fvwm2.1.10 and Xpm3.4k</h1>
+<!-- received="Fri Jan 29 15:36:59 1999" -->
+<!-- isoreceived="19990129153659" -->
+<!-- sent="29 Jan 1999 16:35:12 -0500" -->
+<!-- isosent="19990129213512" -->
+<!-- name="Paul D. Smith" -->
+<!-- email="psmith_at_baynetworks.com" -->
+<!-- subject="Re: FVWM: fvwm2.1.10 and Xpm3.4k" -->
+<!-- id="p5btjhg3u7.fsf_at_baynetworks.com" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="Fri, 29 Jan 1999 15:08:44 -0500 (EST)&quot;" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start23529" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="23530.html" accesskey="d" title="Eddy J. Gurney: &quot;FVWM: Can FvwmButtons swallow an iconified app?&quot;">Next message</a> ]
+[ <a href="23528.html" title="Andrew Laden: &quot;Re: FVWM: fvwm2.1.10 and Xpm3.4k&quot;">Previous message</a> ]
+[ <a href="23509.html" title="Andrew Laden: &quot;FVWM: fvwm2.1.10 and Xpm3.4k&quot;">Maybe in reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg23529" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg23529" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg23529" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg23529" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Paul D. Smith &lt;<a href="mailto:psmith_at_baynetworks.com?Subject=Re%3A%20FVWM%3A%20fvwm2.1.10%20and%20Xpm3.4k">psmith_at_baynetworks.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: 29 Jan 1999 16:35:12 -0500</span><br />
+</address>
+<br />
+%% Andrew Laden &lt;andrew_at_sgc.com&gt; writes:
+<br />
+<br />&nbsp;&nbsp;al&gt;  Compiled with no problem or errors. When I tried to run it i got.
+<br />
+<br />&nbsp;&nbsp;al&gt; # ./conftest    
+<br />
+&nbsp;&nbsp;al&gt; ld.so.1: ./conftest: fatal: libXpm.so.4.11: can't open file: errno=2
+<br />
+&nbsp;&nbsp;al&gt; Killed
+<br />
+<br />This means that, while the linker can find the shared lib just fine
+<br />
+because you specified -L, the runtime can't find it.  Note that there is
+<br />
+a distinction between linktime paths and runtime paths--older systems
+<br />
+like SunOS didn't make this distinction (or not easily), but newer ones
+<br />
+do.
+<br />
+<br />This means that you don't have your ld.so environment set up correctly.
+<br />
+On Solaris, for example, you can specify the runtime path by either
+<br />
+setting the LD_RUN_PATH env. variable or the -R option at link time.  If
+<br />
+your xpm libraries are in a non-standard place, you _must_ provide one
+<br />
+or the other of these methods for finding it a runtime (or set
+<br />
+LD_LIBRARY_PATH at runtime).
+<br />
+<br />Unfortunately, at this time GNU autoconf (and thus fvwm) doesn't handle
+<br />
+this situation very well :(.  We hope to improve this in the future (see
+<br />
+the BUGS file).  Until then, you'll have to do something like:
+<br />
+<br />&nbsp;&nbsp;$ LDFLAGS=-R/opt/fvwm/lib ./configure --prefix=/opt/fvwm ...
+<br />
+<br />to explicitly set the -R option.
+<br />
+<br />What really confuses me is why you didn't see this output (or any other
+<br />
+output) in the config.log file.  It should have been there...
+<br />
+<br />Oh well.
+<br />
+<br /><pre>
+-- 
+-------------------------------------------------------------------------------
+ Paul D. Smith &lt;psmith_at_baynetworks.com&gt;         Network Management Development
+ &quot;Please remain calm...I may be mad, but I am a professional.&quot; --Mad Scientist
+-------------------------------------------------------------------------------
+   These are my opinions---Nortel Networks takes no responsibility for them.
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://fvwm.math.uh.edu/">http://fvwm.math.uh.edu/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Jan 29 1999 - 15:36:59 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start23529">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="23530.html" title="Next message in the list">Eddy J. Gurney: "FVWM: Can FvwmButtons swallow an iconified app?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="23528.html" title="Previous message in the list">Andrew Laden: "Re: FVWM: fvwm2.1.10 and Xpm3.4k"</a></li>
+<li><dfn>Maybe in reply to</dfn>: <a href="23509.html" title="Message to which this message replies">Andrew Laden: "FVWM: fvwm2.1.10 and Xpm3.4k"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg23529" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg23529" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg23529" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg23529" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:02 BST
+</em></small></p>
+</body>
+</html>

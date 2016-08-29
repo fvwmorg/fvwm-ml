@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: NearestEdgeResizing from Gert Brinkmann on 2004-05-01 (fvwm-users)</title>
+<meta name="Author" content="Gert Brinkmann (g111_at_netcologne.de)" />
+<meta name="Subject" content="FVWM: NearestEdgeResizing" />
+<meta name="Date" content="2004-05-01" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: NearestEdgeResizing</h1>
+<!-- received="Sat May  1 10:41:00 2004" -->
+<!-- isoreceived="20040501094100" -->
+<!-- sent="Sat, 01 May 2004 17:38:39 +0200" -->
+<!-- isosent="20040501153839" -->
+<!-- name="Gert Brinkmann" -->
+<!-- email="g111_at_netcologne.de" -->
+<!-- subject="FVWM: NearestEdgeResizing" -->
+<!-- id="4093C47F.7010208_at_netcologne.de" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start12075" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="12076.html" accesskey="d" title="Nicholas Paul Johnson: &quot;Re: FVWM: Intricacies of the Next() function / Conditionals&quot;">Next message</a> ]
+[ <a href="12074.html" title="Stan Benoit: &quot;FVWM: Many thanks to fvwm team&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="12083.html" accesskey="t" title="Mikhael Goikhman: &quot;Re: FVWM: NearestEdgeResizing&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg12075" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg12075" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg12075" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg12075" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Gert Brinkmann &lt;<a href="mailto:g111_at_netcologne.de?Subject=Re%3A%20FVWM%3A%20NearestEdgeResizing">g111_at_netcologne.de</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sat, 01 May 2004 17:38:39 +0200</span><br />
+</address>
+<br />
+Hello,
+<br />
+<br />I have tried to configure fvwm so that it behaves the same as other 
+<br />
+window-manager on resizing and moving: When pressing ALT, clicking into 
+<br />
+a window with the left mousebutton should move the window, clicking the 
+<br />
+right mousebutton should grep the nearest edge (or border, what I had to 
+<br />
+add to the shellscript) of the window and do a resize.
+<br />
+<br />Below you see the configuration for this. The attached script (that 
+<br />
+certainly has to be executable and stored in the search path; it 
+<br />
+probably requires bash.) calculates the nearest corner and prints out 
+<br />
+the statement to move the mouse cursor to it.
+<br />
+<br />Moving works fine. On resizing the problem is that you have to release 
+<br />
+the right mousebutton before resizing is started. Is there a way to 
+<br />
+change this behaviour to directly starting the resizing on mouse press?
+<br />
+<br />(I have started this experiments some months ago, but did not find the 
+<br />
+time to work on it for longer now)
+<br />
+<br />Thank you,
+<br />
+<br />Gert
+<br />
+<br /><br />#---- Alt+Mouse to handle windows.
+<br />
+DestroyFunc MyMove
+<br />
+AddToFunc MyMove
+<br />
++ M Move
+<br />
++ C RaiseLower
+<br />
+<br />DestroyFunc MyResize
+<br />
+AddToFunc MyResize
+<br />
++ I StoreMousePos
+<br />
++ I WarpToNearestEdge
+<br />
++ I Resize
+<br />
++ I RecallMousePos
+<br />
+<br />DestroyFunc StoreMousePos
+<br />
+AddToFunc StoreMousePos
+<br />
++ I SetEnv POINTERX $[pointer.wx]
+<br />
++ I SetEnv POINTERY $[pointer.wy]
+<br />
+<br />DestroyFunc RecallMousePos
+<br />
+AddToFunc RecallMousePos
+<br />
++ I WarpToWindow $[POINTERX]p $[POINTERY]p
+<br />
+<br />DestroyFunc WarpToNearestEdge
+<br />
+AddToFunc WarpToNearestEdge
+<br />
++ I PipeRead `FvwmWarpToNearestEdge  $[w.width] $[w.height] 
+<br />
+$[pointer.wx] $[pointer.wy]`
+<br />
+<br />Mouse 1 WTSF M MyMove
+<br />
+Mouse 3 WTSF M MyResize
+<br />
+<br /><br /><br />
+#!/bin/bash
+<br />
+<br /># required Parameters:
+<br />
+# $1 w.width
+<br />
+# $2 w.height
+<br />
+# $3 pointer.wx
+<br />
+# $4 pointer.wy
+<br />
+<br /><br /># some default, just to be sure.
+<br />
+WARPX=100
+<br />
+WARPY=100
+<br />
+<br /># define x position
+<br />
+if [[ $[ $1/2 - $3 ] &gt; 0 ]]; then WARPX=0; else WARPX=100; fi
+<br />
+<br /># define y position
+<br />
+if [[ $[ $2/2 - $4 ] &gt; 0 ]]; then WARPY=0; else WARPY=100; fi
+<br />
+<br />echo &quot;WarpToWindow $WARPX $WARPY&quot;
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sat May 01 2004 - 10:41:00 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start12075">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="12076.html" title="Next message in the list">Nicholas Paul Johnson: "Re: FVWM: Intricacies of the Next() function / Conditionals"</a></li>
+<li><dfn>Previous message</dfn>: <a href="12074.html" title="Previous message in the list">Stan Benoit: "FVWM: Many thanks to fvwm team"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="12083.html" title="Next message in this discussion thread">Mikhael Goikhman: "Re: FVWM: NearestEdgeResizing"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="12083.html" title="Message sent in reply to this message">Mikhael Goikhman: "Re: FVWM: NearestEdgeResizing"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg12075" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg12075" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg12075" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg12075" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:56 BST
+</em></small></p>
+</body>
+</html>

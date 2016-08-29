@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: &quot;I've found a bug&quot; (hints) from Vincent Pomey CAP SESA 62145678 on 1996-11-20 (fvwm-users)</title>
+<meta name="Author" content="Vincent Pomey CAP SESA 62145678 (pomey_at_stna.dgac.fr)" />
+<meta name="Subject" content="FVWM: &quot;I've found a bug&quot; (hints)" />
+<meta name="Date" content="1996-11-20" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: &quot;I've found a bug&quot; (hints)</h1>
+<!-- received="Wed Nov 20 04:09:20 1996" -->
+<!-- isoreceived="19961120040920" -->
+<!-- sent="Wed, 20 Nov 1996 11:08:48 +0100" -->
+<!-- isosent="19961120100848" -->
+<!-- name="Vincent Pomey CAP SESA 62145678" -->
+<!-- email="pomey_at_stna.dgac.fr" -->
+<!-- subject="FVWM: &quot;I've found a bug&quot; (hints)" -->
+<!-- id="9611201008.AA21521_at_hibou.stna7.stna.dgac.fr" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start18435" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="18436.html" accesskey="d" title="Kai Grossjohann: &quot;Re: FVWM: [q] ActivePlacement/RandomPlacement&quot;">Next message</a> ]
+[ <a href="18434.html" title="Romano Giannetti: &quot;FVWM: A Buglet?&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18435" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18435" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18435" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18435" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Vincent Pomey CAP SESA 62145678 &lt;<a href="mailto:pomey_at_stna.dgac.fr?Subject=Re%3A%20FVWM%3A%20%22I've%20found%20a%20bug%22%20(hints)">pomey_at_stna.dgac.fr</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 20 Nov 1996 11:08:48 +0100</span><br />
+</address>
+<br />
+I'm using fvwm 2.0.43 under DEC OSF 3.2c X11R5.
+<br />
+<br />When using our application, which previously runned under MWM, I've
+<br />
+noticed the following problems :
+<br />
+<br />- Under DEC OSF/1, the PropMotifWmHints structure uses 64 bits
+<br />
+members. Since 32 bits members are defined in the file decorations.c,
+<br />
+the protocol is not understood by FVWM.
+<br />
+<br />Here is an extract of the MwmUtil.h that I have on my system :
+<br />
+<br />typedef struct
+<br />
+{
+<br />
+#ifndef OSF_v1_2_4
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CARD32	flags;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CARD32	functions;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CARD32	decorations;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INT32	inputMode;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CARD32	status;
+<br />
+#else /* OSF_v1_2_4 */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;/* 32-bit property items are stored as long on the client (whether
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* that means 32 bits or 64).  XChangeProperty handles the conversion
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* to the actual 32-bit quantities sent to the server.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;unsigned long	flags;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;unsigned long	functions;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;unsigned long	decorations;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;long 	        inputMode;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;unsigned long	status;
+<br />
+#endif /* OSF_v1_2_4 */
+<br />
+} PropMotifWmHints;
+<br />
+<br />Updating this definition in decorations.c fix the problem.
+<br />
+<br />- I've a window with MWM Decoration = TITLE and MWM Function = none, it
+<br />
+is still possible to move the window using the title bar. It is not
+<br />
+allowed under MWM. I've found that the move_window (move.c) function
+<br />
+does not use the check_allowed_function2 (decoration.c) to check
+<br />
+MWM_FUNC_MOVE, as it is done for iconify/close etc. Moreover,
+<br />
+check_allowed_function2 does not support the F_MOVE argument.
+<br />
+<br />- Our application has two process, and we want the window of process 1
+<br />
+to be over the window of process 2. When both process are started,
+<br />
+process 2 send message containing its window id, and process 1 use
+<br />
+XSetTransientForHint to make its window transient for the other
+<br />
+window.
+<br />
+Unfortunately, it seems that FVWM doesn't not support that. The
+<br />
+TransientFor property is read for new window only, the property
+<br />
+notify event handler does not check the TransientFor property.
+<br />
+<br /><br />Are these last two bugs really bugs and already known ? Would you like
+<br />
+me to send patchs for that ?
+<br />
+<br /><pre>
+--
+pomey_at_stna.dgac.fr
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Nov 20 1996 - 04:09:20 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start18435">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="18436.html" title="Next message in the list">Kai Grossjohann: "Re: FVWM: [q] ActivePlacement/RandomPlacement"</a></li>
+<li><dfn>Previous message</dfn>: <a href="18434.html" title="Previous message in the list">Romano Giannetti: "FVWM: A Buglet?"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18435" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18435" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18435" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18435" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

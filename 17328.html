@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Patch to 2.0.43 for transient placement from Grant McDorman on 1996-07-09 (fvwm-users)</title>
+<meta name="Author" content="Grant McDorman (grant_at_isgtec.com)" />
+<meta name="Subject" content="FVWM: Patch to 2.0.43 for transient placement" />
+<meta name="Date" content="1996-07-09" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Patch to 2.0.43 for transient placement</h1>
+<!-- received="Tue Jul  9 11:32:56 1996" -->
+<!-- isoreceived="19960709103256" -->
+<!-- sent="Tue, 09 Jul 1996 12:12:42 -0400 (EDT)" -->
+<!-- isosent="19960709161242" -->
+<!-- name="Grant McDorman" -->
+<!-- email="grant_at_isgtec.com" -->
+<!-- subject="FVWM: Patch to 2.0.43 for transient placement" -->
+<!-- id="XFMail.960709122132.grant_at_isgtec.com" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start17328" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="17329.html" accesskey="d" title="Grant McDorman: &quot;FVWM: Compatibility patch to FvwmButtons&quot;">Next message</a> ]
+[ <a href="17327.html" title="Mark Boyns: &quot;FVWM: [2.0.43] FvwmAudio patch&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17328" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17328" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17328" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17328" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Grant McDorman &lt;<a href="mailto:grant_at_isgtec.com?Subject=Re%3A%20FVWM%3A%20Patch%20to%202.0.43%20for%20transient%20placement">grant_at_isgtec.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 09 Jul 1996 12:12:42 -0400 (EDT)</span><br />
+</address>
+<br />
+The enclosed patch changes fvwm's placement of transient windows which do
+<br />
+*not* have any PPosition.
+<br />
+<br />With this patch, transient windows (i.e. popups) which have no location
+<br />
+specified have RandomPlacement forced on. SmartPlacement, if specified in
+<br />
+the window flags, will take precedence.
+<br />
+<br />Prior to this, any transient with no location specified would be placed in
+<br />
+the upper left corner.
+<br />
+<br />I made this change so our application wouldn't have to, in effect, duplicate
+<br />
+RandomPlacement code.
+<br />
+<br />Note, however, that neither mwm (Motif) nor twm do this; they both put the
+<br />
+window at (0,0). I haven't checked other window managers.
+<br />
+<br />It may be desirable to delay this until after the Great Style Flags Rewrite
+<br />
+so that this behavior can be controlled on a per-window basis, just like the
+<br />
+other placement options.
+<br />
+<br />Grant McDorman &lt;grant_at_isgtec.com&gt;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ISG Technologies, Inc.
+<br />
+<br /><br />
+*** placement.c	Mon Apr 24 14:14:08 1995
+<br />
+--- ../../../incoming/fvwm-2.0.41-ISG/fvwm/placement.c	Mon May 27 12:34:21 1996
+<br />
+***************
+<br />
+*** 162,168 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*   If RandomPlacement was specified,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*       then place the window in a psuedo-random location
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<br />
+!   if (!(tmp_win-&gt;flags &amp; TRANSIENT) &amp;&amp; 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;!(tmp_win-&gt;hints.flags &amp; USPosition) &amp;&amp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((tflag &amp; NO_PPOSITION_FLAG)||
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;!(tmp_win-&gt;hints.flags &amp; PPosition)) &amp;&amp;
+<br />
+--- 162,168 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*   If RandomPlacement was specified,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*       then place the window in a psuedo-random location
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<br />
+!   if (!((tmp_win-&gt;flags &amp; TRANSIENT) &amp;&amp; (tmp_win-&gt;hints.flags &amp; PPosition)) &amp;&amp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;!(tmp_win-&gt;hints.flags &amp; USPosition) &amp;&amp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((tflag &amp; NO_PPOSITION_FLAG)||
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;!(tmp_win-&gt;hints.flags &amp; PPosition)) &amp;&amp;
+<br />
+***************
+<br />
+*** 172,178 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(tmp_win-&gt;wmhints-&gt;initial_state == IconicState)) )
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* Get user's window placement, unless RandomPlacement is specified */  
+<br />
+&nbsp;
+<br />
+!       if(tflag &amp; RANDOM_PLACE_FLAG)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(tflag &amp; SMART_PLACE_FLAG)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SmartPlacement(tmp_win,tmp_win-&gt;frame_width+2*tmp_win-&gt;bw,
+<br />
+--- 172,178 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(tmp_win-&gt;wmhints-&gt;initial_state == IconicState)) )
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* Get user's window placement, unless RandomPlacement is specified */  
+<br />
+&nbsp;
+<br />
+!       if(tflag &amp; RANDOM_PLACE_FLAG || (tmp_win-&gt;flags &amp; TRANSIENT))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(tflag &amp; SMART_PLACE_FLAG)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SmartPlacement(tmp_win,tmp_win-&gt;frame_width+2*tmp_win-&gt;bw,
+<br />
+<br />End of MIME message
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue Jul 09 1996 - 11:32:56 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start17328">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="17329.html" title="Next message in the list">Grant McDorman: "FVWM: Compatibility patch to FvwmButtons"</a></li>
+<li><dfn>Previous message</dfn>: <a href="17327.html" title="Previous message in the list">Mark Boyns: "FVWM: [2.0.43] FvwmAudio patch"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17328" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17328" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17328" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17328" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

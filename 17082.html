@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Patch for icon title width from Richard Lister on 1996-06-09 (fvwm-users)</title>
+<meta name="Author" content="Richard Lister (listerrj_at_helios.aston.ac.uk)" />
+<meta name="Subject" content="FVWM: Patch for icon title width" />
+<meta name="Date" content="1996-06-09" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Patch for icon title width</h1>
+<!-- received="Sun Jun  9 15:47:33 1996" -->
+<!-- isoreceived="19960609144733" -->
+<!-- sent="Sun, 09 Jun 1996 21:38:23 +0100" -->
+<!-- isosent="19960609203823" -->
+<!-- name="Richard Lister" -->
+<!-- email="listerrj_at_helios.aston.ac.uk" -->
+<!-- subject="FVWM: Patch for icon title width" -->
+<!-- id="6290.199606092038_at_sun.aston.ac.uk" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start17082" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="17083.html" accesskey="d" title="Yamashita Takenori: &quot;FVWM: (no subject)&quot;">Next message</a> ]
+[ <a href="17081.html" title="Hector Peraza: &quot;FVWM: Re: FVWM-2 WindowList (patch)&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17082" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17082" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17082" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17082" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Richard Lister &lt;<a href="mailto:listerrj_at_helios.aston.ac.uk?Subject=Re%3A%20FVWM%3A%20Patch%20for%20icon%20title%20width">listerrj_at_helios.aston.ac.uk</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sun, 09 Jun 1996 21:38:23 +0100</span><br />
+</address>
+<br />
+Hi Folks
+<br />
+<br />This is something that's been bugging me for a long time, so I finally
+<br />
+lost my fvwm-hacking virginity and fixed it :-) 
+<br />
+<br />On some applications I use the titlebar/icon name to convey useful
+<br />
+information: e.g. current working directory for xterms, buffer name for
+<br />
+emacs, etc. In the hope of being able to see this info even when iconised
+<br />
+I prefer not to use a pixmap for the icon, using:
+<br />
+<br />Style &quot;XTerm&quot;       Icon none.xpm
+<br />
+<br />My icon box runs across the top of the screen, so the icons take up little
+<br />
+(vertical) space and it actually looks quite smart (IMHO). 
+<br />
+<br />When the app is first iconised the icon title bar is made just the right
+<br />
+width for the icon's title text (in CreateIconWindow()). However, if the
+<br />
+title changes and the window re-iconised its width doesn't change and it
+<br />
+is now either too wide or too narrow.
+<br />
+<br />This patch to icons.c fixes this in every Iconify() without the overhead
+<br />
+of another call to CreateIconWindow().
+<br />
+<br />Ric
+<br />
+<br /><br />--- icons.c	Sun Jun  9 20:57:11 1996
+<br />
++++ icons.c.new	Sun Jun  9 21:05:19 1996
+<br />
+_at_&#64; -809,6 +809,15 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CreateIconWindow(tmp_win, def_x, def_y);
+<br />
+&nbsp;
+<br />
++  /* if no pixmap we want icon width to change to text width every iconify */
+<br />
++  if( (tmp_win-&gt;icon_w != None) &amp;&amp; (tmp_win-&gt;icon_pixmap_w == None) ) {
+<br />
++    tmp_win-&gt;icon_t_width =
+<br />
++      XTextWidth(Scr.IconFont.font,tmp_win-&gt;icon_name, 
+<br />
++                 strlen(tmp_win-&gt;icon_name));
+<br />
++    tmp_win-&gt;icon_p_width = tmp_win-&gt;icon_t_width+6;
+<br />
++    tmp_win-&gt;icon_w_width = tmp_win-&gt;icon_p_width; 
+<br />
++  }
+<br />
++
+<br />
+&nbsp;&nbsp;&nbsp;AutoPlace(tmp_win);
+<br />
+&nbsp;&nbsp;&nbsp;tmp_win-&gt;flags |= ICONIFIED;
+<br />
+&nbsp;&nbsp;&nbsp;tmp_win-&gt;flags &amp;= ~ICON_UNMAPPED;
+<br />
+<br /><br /><br /><br />&nbsp;~~~~~~~~~~~~~~ Richard J. Lister    r.j.lister_at_aston.ac.uk ~~~~~~~~~~~~~~~~
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Research Assistant, Neural Computing Research Group
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Aston University, Birmingham B4 7ET, UK
+<br />
+&nbsp;~~~~~~~~~~~~~~~~~ <a href="http://www.ncrg.aston.ac.uk/~listerrj/">http://www.ncrg.aston.ac.uk/~listerrj/</a> ~~~~~~~~~~~~~~~~~~
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sun Jun 09 1996 - 15:47:33 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start17082">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="17083.html" title="Next message in the list">Yamashita Takenori: "FVWM: (no subject)"</a></li>
+<li><dfn>Previous message</dfn>: <a href="17081.html" title="Previous message in the list">Hector Peraza: "FVWM: Re: FVWM-2 WindowList (patch)"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17082" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17082" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17082" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17082" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

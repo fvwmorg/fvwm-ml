@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Proposal on modules/languages from Brady Montz on 1998-05-01 (fvwm-users)</title>
+<meta name="Author" content="Brady Montz (bradym_at_cs.arizona.edu)" />
+<meta name="Subject" content="FVWM: Proposal on modules/languages" />
+<meta name="Date" content="1998-05-01" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Proposal on modules/languages</h1>
+<!-- received="Fri May  1 12:37:52 1998" -->
+<!-- isoreceived="19980501113752" -->
+<!-- sent="01 May 1998 10:37:26 -0700" -->
+<!-- isosent="19980501173726" -->
+<!-- name="Brady Montz" -->
+<!-- email="bradym_at_cs.arizona.edu" -->
+<!-- subject="FVWM: Proposal on modules/languages" -->
+<!-- id="t8d8dxj3jd.fsf_at_helvetica.cs.arizona.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start22111" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="22112.html" accesskey="d" title="Michael Corrieri: &quot;FVWM: Re: fvwm language, swing, python&quot;">Next message</a> ]
+[ <a href="22110.html" title="Brady Montz: &quot;Re: FVWM: Re: Tcl, fvwm, etc.,&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="22132.html" accesskey="t" title="tma_at_nettest.dk: &quot;Re: FVWM: Proposal on modules/languages&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg22111" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg22111" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg22111" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg22111" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Brady Montz &lt;<a href="mailto:bradym_at_cs.arizona.edu?Subject=Re%3A%20FVWM%3A%20Proposal%20on%20modules%2Flanguages">bradym_at_cs.arizona.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: 01 May 1998 10:37:26 -0700</span><br />
+</address>
+<br />
+This discussion on extension languages is quickly going to descend into
+<br />
+chaos. I see the following desires:
+<br />
+<br />1. A better internal language. I feel that the configuration language used by
+<br />
+&nbsp;&nbsp;&nbsp;fvwm is both (a) starting to creak and (b) a good basis for something
+<br />
+&nbsp;&nbsp;&nbsp;better. I imagine that some who want to put a language like tcl into fvwm
+<br />
+&nbsp;&nbsp;&nbsp;are doing so to enable doing some cool configuration stuff, like generating 
+<br />
+&nbsp;&nbsp;&nbsp;menus or determining which colors to use, or writing real functions (not
+<br />
+&nbsp;&nbsp;&nbsp;just event handlers) which can do cool things like loop over the window
+<br />
+&nbsp;&nbsp;&nbsp;list and move windows around, etc. 
+<br />
+<br />2. The ability to use features inherent in a given language to make deep
+<br />
+&nbsp;&nbsp;&nbsp;changes to the behavior of fvwm. Perhaps using java to make a portable
+<br />
+&nbsp;&nbsp;&nbsp;graphical system, or python to be able to write embedded/tightly integrated 
+<br />
+&nbsp;&nbsp;&nbsp;modules.
+<br />
+<br />3. The ability to write more sophisticated modules in general.
+<br />
+<br />I suspect there is wide agreement with these two points:
+<br />
+<br />1. Fvwm's internal configuration language could be changed for the better.
+<br />
+2. If we add a new language, it should be done as a module. Most likely people 
+<br />
+&nbsp;&nbsp;&nbsp;would want this module to be as tightly coupled to fvwm as possible for
+<br />
+&nbsp;&nbsp;&nbsp;speed, using whichever dlopen, mmap, and threading facilities available on
+<br />
+&nbsp;&nbsp;&nbsp;the various architectures. 
+<br />
+<br />So, my proposal:
+<br />
+<br />Lets table the discussion on tcl/perl/python/java/icon/scheme/... and focus on
+<br />
+improving the internal language and the module interface(s). Both are
+<br />
+necessary before we dive into grafting on an interpreter, and it's quite
+<br />
+possible that if done right, they will obviate the desire for such a grafting.
+<br />
+<br />(I argue that if we add an interpreter, we will have to change the internal
+<br />
+language for two reasons: it's likely we will want to refer to services
+<br />
+provided by modules written in language X in the .fvwm2rc, and we might wish
+<br />
+to unload some of the bloat in the internal language to language X.)
+<br />
+<br /><br /><pre>
+-- 
+ Brady Montz
+ bradym_at_cs.arizona.edu
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri May 01 1998 - 12:37:52 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start22111">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="22112.html" title="Next message in the list">Michael Corrieri: "FVWM: Re: fvwm language, swing, python"</a></li>
+<li><dfn>Previous message</dfn>: <a href="22110.html" title="Previous message in the list">Brady Montz: "Re: FVWM: Re: Tcl, fvwm, etc.,"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="22132.html" title="Next message in this discussion thread">tma_at_nettest.dk: "Re: FVWM: Proposal on modules/languages"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Maybe reply</dfn>: <a href="22132.html" title="Message sent in reply to this message">tma_at_nettest.dk: "Re: FVWM: Proposal on modules/languages"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="22133.html" title="Message sent in reply to this message">Manfred Bartz: "Re: FVWM: Proposal on modules/languages"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="22136.html" title="Message sent in reply to this message">Brady Montz: "Re: FVWM: Proposal on modules/languages"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="22144.html" title="Message sent in reply to this message">Brady Montz: "Re: FVWM: Proposal on modules/languages"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="22145.html" title="Message sent in reply to this message">tma_at_nettest.dk: "Re: FVWM: Proposal on modules/languages"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="22146.html" title="Message sent in reply to this message">tma_at_nettest.dk: "Re: FVWM: Proposal on modules/languages"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="22150.html" title="Message sent in reply to this message">Albrecht Kadlec: "Re: FVWM: Proposal on modules/languages"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="22155.html" title="Message sent in reply to this message">Brady Montz: "Re: FVWM: Proposal on modules/languages"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="22160.html" title="Message sent in reply to this message">Dan Espen: "Re: FVWM: Proposal on modules/languages"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="22164.html" title="Message sent in reply to this message">Brady Montz: "Re: FVWM: Proposal on modules/languages"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="22166.html" title="Message sent in reply to this message">Nathan Froyd: "Re: FVWM: Proposal on modules/languages"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="22171.html" title="Message sent in reply to this message">Chris Siebenmann: "Re: FVWM: Proposal on modules/languages"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="22174.html" title="Message sent in reply to this message">Albrecht Kadlec: "Re: FVWM: Proposal on modules/languages"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg22111" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg22111" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg22111" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg22111" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

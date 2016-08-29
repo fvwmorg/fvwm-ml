@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: PATCH: icon pixmap update from (wrong string) ård on 1998-01-23 (fvwm-users)</title>
+<meta name="Author" content="(wrong string) ård (f91-men_at_nada.kth.se)" />
+<meta name="Subject" content="FVWM: PATCH: icon pixmap update" />
+<meta name="Date" content="1998-01-23" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: PATCH: icon pixmap update</h1>
+<!-- received="Fri Jan 23 08:19:33 1998" -->
+<!-- isoreceived="19980123081933" -->
+<!-- sent="Fri, 23 Jan 1998 15:19:23 +0100 (MET)" -->
+<!-- isosent="19980123141923" -->
+<!-- name="(wrong string) ård" -->
+<!-- email="f91-men_at_nada.kth.se" -->
+<!-- subject="FVWM: PATCH: icon pixmap update" -->
+<!-- id="199801231419.PAA21122_at_dront.nada.kth.se" -->
+<!-- charset="iso-8859-1" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start21663" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="21664.html" accesskey="d" title="A.J.vanWerven: &quot;FVWM: Two faces&quot;">Next message</a> ]
+[ <a href="21662.html" title="Andrew Veliath: &quot;Re: FVWM: FVWM2.0.26 &#0038; egcs&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21663" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21663" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21663" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21663" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: (wrong string) ård &lt;<a href="mailto:f91-men_at_nada.kth.se?Subject=Re%3A%20FVWM%3A%20PATCH%3A%20icon%20pixmap%20update">f91-men_at_nada.kth.se</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 23 Jan 1998 15:19:23 +0100 (MET)</span><br />
+</address>
+<br />
+When changing icon pixmap from within a program, fvwm2 destroys the current
+<br />
+icon window and creates a new one with the new pixmap, even if it has the
+<br />
+same size. This causes:
+<br />
+<br />a) an annoying flash as the icon is removed/recreated
+<br />
+b) a possible jump to a different location on the screen
+<br />
+c) the new icon window is placed on top of any window that was previously
+<br />
+&nbsp;&nbsp;&nbsp;over it.
+<br />
+<br />The patch below (applies on 2.0.46) cures this.
+<br />
+<br />Cheers,
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mattias Engdegård.
+<br />
+<br />(please CC: any response to me, not just post it on the list)
+<br />
+<br />--- events.c.orig	Fri Jan 23 14:26:43 1998
+<br />
++++ events.c	Fri Jan 23 15:10:12 1998
+<br />
+_at_&#64; -392,6 +392,7 &#64;&#64;
+<br />
+&nbsp;void HandlePropertyNotify()
+<br />
+&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;XTextProperty text_prop;
+<br />
++  long old_wmflags;
+<br />
+&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;DBUG(&quot;HandlePropertyNotify&quot;,&quot;Routine Entered&quot;);
+<br />
+&nbsp;
+<br />
+_at_&#64; -443,21 +444,40 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case XA_WM_HINTS:
+<br />
+-      if (Tmp_win-&gt;wmhints) 
+<br />
++      if (Tmp_win-&gt;wmhints) {
+<br />
++	old_wmflags = Tmp_win-&gt;wmhints-&gt;flags;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XFree ((char *) Tmp_win-&gt;wmhints);
+<br />
++      }
+<br />
++
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tmp_win-&gt;wmhints = XGetWMHints(dpy, Event.xany.window);
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(Tmp_win-&gt;wmhints == NULL)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if((Tmp_win-&gt;wmhints-&gt;flags &amp; IconPixmapHint)||
+<br />
+-	 (Tmp_win-&gt;wmhints-&gt;flags &amp; IconWindowHint))
+<br />
+-	if(Tmp_win-&gt;icon_bitmap_file == Scr.DefaultIcon)
+<br />
+-	  Tmp_win-&gt;icon_bitmap_file = (char *)0;
+<br />
+-      
+<br />
+-      if((Tmp_win-&gt;wmhints-&gt;flags &amp; IconPixmapHint)||
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Tmp_win-&gt;wmhints-&gt;flags &amp; IconWindowHint))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
++	  if(Tmp_win-&gt;icon_bitmap_file == Scr.DefaultIcon)
+<br />
++	    Tmp_win-&gt;icon_bitmap_file = (char *)0;
+<br />
++      
+<br />
++	  if(Tmp_win-&gt;wmhints-&gt;flags == old_wmflags
+<br />
++	     &amp;&amp; (old_wmflags &amp; IconPixmapHint) &amp;&amp; Tmp_win-&gt;wmhints-&gt;icon_pixmap
+<br />
++	     &amp;&amp; (Tmp_win-&gt;flags &amp; ICONIFIED) &amp;&amp; (Tmp_win-&gt;flags &amp; ICON_OURS)) {
+<br />
++	      unsigned w, h;
+<br />
++	      XGetGeometry(dpy, Tmp_win-&gt;wmhints-&gt;icon_pixmap, &amp;JunkRoot,
+<br />
++			   &amp;JunkX, &amp;JunkY, &amp;w, &amp;h, &amp;JunkBW, &amp;JunkDepth);
+<br />
++	      w += 4; h += 4;	/* for border */
+<br />
++	      if(w == Tmp_win-&gt;icon_p_width &amp;&amp; h == Tmp_win-&gt;icon_p_height) {
+<br />
++		  /* Only the icon pixmap has changed (size remains the same),
+<br />
++		     don't destroy and recreate the icon */
+<br />
++		  GetIconBitmap(Tmp_win);
+<br />
++		  Tmp_win-&gt;icon_p_width += 4;
+<br />
++		  Tmp_win-&gt;icon_p_height += 4;
+<br />
++		  DrawIconWindow(Tmp_win);
+<br />
++		  break;
+<br />
++	      }
+<br />
++	  }
+<br />
++	     
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (!(Tmp_win-&gt;flags &amp; SUPPRESSICON))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (Tmp_win-&gt;icon_w)
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Jan 23 1998 - 08:19:33 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start21663">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="21664.html" title="Next message in the list">A.J.vanWerven: "FVWM: Two faces"</a></li>
+<li><dfn>Previous message</dfn>: <a href="21662.html" title="Previous message in the list">Andrew Veliath: "Re: FVWM: FVWM2.0.26 &#0038; egcs"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21663" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21663" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21663" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21663" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

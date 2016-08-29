@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Problem with an X11 app from Robert H. Ford II on 1997-03-18 (fvwm-users)</title>
+<meta name="Author" content="Robert H. Ford II (rhford2_at_lucent.com)" />
+<meta name="Subject" content="FVWM: Problem with an X11 app" />
+<meta name="Date" content="1997-03-18" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Problem with an X11 app</h1>
+<!-- received="Tue Mar 18 14:33:38 1997" -->
+<!-- isoreceived="19970318143338" -->
+<!-- sent="Tue, 18 Mar 1997 14:32:59 -0600" -->
+<!-- isosent="19970318203259" -->
+<!-- name="Robert H. Ford II" -->
+<!-- email="rhford2_at_lucent.com" -->
+<!-- subject="FVWM: Problem with an X11 app" -->
+<!-- id="9703181433.ZM24572_at_ihgp95b.ih.lucent.com" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start19574" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="19575.html" accesskey="d" title="Rajesh Raman: &quot;FVWM: fvwm-2.0.45 on SunOS 4.1.3&quot;">Next message</a> ]
+[ <a href="19573.html" title="Gary James Whitehead: &quot;FVWM: fvwm menus&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19574" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19574" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19574" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19574" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Robert H. Ford II &lt;<a href="mailto:rhford2_at_lucent.com?Subject=Re%3A%20FVWM%3A%20Problem%20with%20an%20X11%20app">rhford2_at_lucent.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 18 Mar 1997 14:32:59 -0600</span><br />
+</address>
+<br />
+The following is from the FAQ:
+<br />
+<br />31) I try to run some program under FVWM, but it dies with an X11
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;error like BadAccess.  The same program works just fine under MWM
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;or OLWM.  What's going on?
+<br />
+<br />A: The error message usually looks something like this:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;X Error of failed request:  BadAccess (attempt to access private
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;resource denied)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Major opcode of failed request:  28 (X_GrabButton)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Serial number of failed request:  1595
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Current serial number in output stream:  1596
+<br />
+<br />&nbsp;&nbsp;&nbsp;Well, this is telling you that there is a conflict in key/button
+<br />
+&nbsp;&nbsp;&nbsp;assignments.  In your .fvwm2rc you have bound some key/button that
+<br />
+&nbsp;&nbsp;&nbsp;this program really wants to bind to an action, but it can't since
+<br />
+&nbsp;&nbsp;&nbsp;FVWM has already done so (but you weren't doing it in the rc file
+<br />
+&nbsp;&nbsp;&nbsp;for your previous window manager).  Figure out what the offending
+<br />
+&nbsp;&nbsp;&nbsp;key binding is and remove it from your .fvwm2rc, or temporarily via
+<br />
+&nbsp;&nbsp;&nbsp;FvwmTalk by removing the FVWM binding (see the man page for the Key
+<br />
+&nbsp;&nbsp;&nbsp;&amp; Mouse commands).
+<br />
+<br /><br />I am runing Fvwm2 pl 43 on a Solaris 2.5.1 box with x11r6.1.
+<br />
+<br />Well with that said and done.  My problem is this, when I try iconifying my
+<br />
+application with a title button selection (the following is from my button
+<br />
+style file for this button:
+<br />
+<br />ButtonStyle 4 ActiveUp (-- raised) ActiveDown (-- sunk) Inactive (-- flat)
+<br />
+AddButtonStyle 4 ActiveUp (Pixmap /home/misha21/icon/Re-jlower.xpm) ActiveDown
+<br />
+(
+<br />
+Pixmap /home/misha21/icon/Re-mini.xpm) Inactive (Pixmap
+<br />
+/home/misha21/icon/Re-jx
+<br />
+.xpm)
+<br />
+<br />and this is the mouse settings for this button:
+<br />
+<br />Mouse 0 4       A       Iconify), my application dies like the above FAQ, but
+<br />
+when I use the keyboard selection (Key L7 on the sun keyborad, and here is the
+<br />
+setting:
+<br />
+Key L7          A       A       Iconify) it iconifies just fine.
+<br />
+<br />Does anyone out there have any idea why the same &quot;Iconify&quot; works from the
+<br />
+keyboard but not from the title bar?
+<br />
+<br />Any and all help would be greatly appreciated.
+<br />
+<br />BTW here is the error message I am getting:
+<br />
+<br />xtent: fatal error encountered at line 1401, message 3.
+<br />
+X Error of failed request:  BadMatch (invalid parameter attributes)
+<br />
+&nbsp;&nbsp;Major opcode of failed request:  42 (X_SetInputFocus)
+<br />
+&nbsp;&nbsp;Serial number of failed request:  2006
+<br />
+&nbsp;&nbsp;Current serial number in output stream:  2006
+<br />
+<br /><br />Thank You
+<br />
+<br /><pre>
+-- 
+    _/_/_/     _/  _/   _/_/_/_/   _/_/_/_/_/_/ Robert H. Ford II
+   _/   _/    _/  _/   _/           _/    _/    Lucent Technologies
+  _/_/_/     _/_/_/   _/_/_/       _/    _/     Bell Labs Innovations
+ _/   _/    _/  _/   _/           _/    _/      Naperville IL, 60566-7045
+_/    _/   _/  _/   _/         _/_/_/_/_/_/     Email: RHFORD2_at_LUCENT.COM
+                                                Voice: (630) 713-4957
+__________________________________________________
+|  M R spiders!                    |      |   |  |
+|  M N O spiders!                  |      |   |  |
+|  O S A R - C D E D B D I's?      |      |   |  |
+|  Y I B, M R spiders...           |      |   *  |
+|                                  *      |      |
+|                                         *      |
+--------------------------------------------------
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue Mar 18 1997 - 14:33:38 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start19574">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="19575.html" title="Next message in the list">Rajesh Raman: "FVWM: fvwm-2.0.45 on SunOS 4.1.3"</a></li>
+<li><dfn>Previous message</dfn>: <a href="19573.html" title="Previous message in the list">Gary James Whitehead: "FVWM: fvwm menus"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19574" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19574" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19574" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19574" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

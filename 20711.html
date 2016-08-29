@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: FvwmButtons bug from Graeme McCaffery on 1997-08-21 (fvwm-users)</title>
+<meta name="Author" content="Graeme McCaffery (Graeme.McCaffery_at_astro.cf.ac.uk)" />
+<meta name="Subject" content="FVWM: FvwmButtons bug" />
+<meta name="Date" content="1997-08-21" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: FvwmButtons bug</h1>
+<!-- received="Thu Aug 21 10:35:13 1997" -->
+<!-- isoreceived="19970821093513" -->
+<!-- sent="Thu, 21 Aug 1997 16:32:47 +0100 (BST)" -->
+<!-- isosent="19970821153247" -->
+<!-- name="Graeme McCaffery" -->
+<!-- email="Graeme.McCaffery_at_astro.cf.ac.uk" -->
+<!-- subject="FVWM: FvwmButtons bug" -->
+<!-- id="199708211532.QAA01637_at_crystal" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start20711" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="20712.html" accesskey="d" title="Jason L Tibbitts III: &quot;FVWM: Re: fvwm 2.0.46 ready at last...&quot;">Next message</a> ]
+[ <a href="20710.html" title="Brian Sayatovic: &quot;FVWM: Repositioning FvwmButtons&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg20711" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg20711" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg20711" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg20711" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Graeme McCaffery &lt;<a href="mailto:Graeme.McCaffery_at_astro.cf.ac.uk?Subject=Re%3A%20FVWM%3A%20FvwmButtons%20bug">Graeme.McCaffery_at_astro.cf.ac.uk</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 21 Aug 1997 16:32:47 +0100 (BST)</span><br />
+</address>
+<br />
+This is a bug which I found on the last release.
+<br />
+basically FvwmButtons won't accept a colour in
+<br />
+<br />#??????  format because of the #  it does some 
+<br />
+unnecessary string processing looking for #'s
+<br />
+when it only has to search for a # at a beginning
+<br />
+of a line.
+<br />
+<br />A patch to fix this is below (sorry if this is wrong 
+<br />
+I'm not too sure about patches yet)
+<br />
+<br />apply as 
+<br />
+<br />patch fvwm-2.0.46/modules/FvwmButtons/parse.c &lt;name of this patch file&gt;
+<br />
+<br />---------------------------------
+<br />
+<br />*** fvwm-2.0.46/modules/FvwmButtons/parse.c	Thu Jun 26 22:32:33 1997
+<br />
+--- fvwm-2.0.46/modules/FvwmButtons/parse.c.new	Thu Aug 21 15:42:07 1997
+<br />
+***************
+<br />
+*** 784,800 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while((l=strlen(s))&lt;sizeof(s) &amp;&amp; s[l-1]=='\n' &amp;&amp; s[l-2]=='\\')
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fgets(s+l-2,sizeof(s)-l,f);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* And comments: */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t=s;
+<br />
+!       while(*t)
+<br />
+! 	{
+<br />
+! 	  if(*t=='#' &amp;&amp; (t==s || *(t-1)!='\\'))
+<br />
+! 	    {
+<br />
+! 	      *t=0;
+<br />
+! 	      break;
+<br />
+! 	    }
+<br />
+! 	  t++;
+<br />
+! 	}
+<br />
+!       t=s;trimleft(t);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(*t)ParseConfigLine(&amp;ub,t);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+--- 784,795 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while((l=strlen(s))&lt;sizeof(s) &amp;&amp; s[l-1]=='\n' &amp;&amp; s[l-2]=='\\')
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fgets(s+l-2,sizeof(s)-l,f);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* And comments: */
+<br />
++ 
+<br />
++ 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t=s;
+<br />
+!       trimleft(t);
+<br />
+!       if (t[0]=='#')*t=0;
+<br />
+! 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(*t)ParseConfigLine(&amp;ub,t);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Aug 21 1997 - 10:35:13 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start20711">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="20712.html" title="Next message in the list">Jason L Tibbitts III: "FVWM: Re: fvwm 2.0.46 ready at last..."</a></li>
+<li><dfn>Previous message</dfn>: <a href="20710.html" title="Previous message in the list">Brian Sayatovic: "FVWM: Repositioning FvwmButtons"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg20711" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg20711" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg20711" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg20711" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

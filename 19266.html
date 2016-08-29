@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Perl5 version of fvwmperl.pl from Randy J. Ray on 1997-02-16 (fvwm-users)</title>
+<meta name="Author" content="Randy J. Ray (rjray_at_uswest.com)" />
+<meta name="Subject" content="FVWM: Perl5 version of fvwmperl.pl" />
+<meta name="Date" content="1997-02-16" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Perl5 version of fvwmperl.pl</h1>
+<!-- received="Sat Feb 15 18:39:07 1997" -->
+<!-- isoreceived="19970215183907" -->
+<!-- sent="Sat, 15 Feb 1997 17:38:18 -0700" -->
+<!-- isosent="19970216003818" -->
+<!-- name="Randy J. Ray" -->
+<!-- email="rjray_at_uswest.com" -->
+<!-- subject="FVWM: Perl5 version of fvwmperl.pl" -->
+<!-- id="rjray-9701160038.AA000222664_at_snakepit.ecte.uswc.uswest.com" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start19266" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="19267.html" accesskey="d" title="Y.Mao: &quot;FVWM: HELP: Escape key lost in HP keyboard&quot;">Next message</a> ]
+[ <a href="19265.html" title="T: &quot;FVWM: Missing icons on button bar (goodstuff bar ?)  ?&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19266" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19266" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19266" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19266" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Randy J. Ray &lt;<a href="mailto:rjray_at_uswest.com?Subject=Re%3A%20FVWM%3A%20Perl5%20version%20of%20fvwmperl.pl">rjray_at_uswest.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sat, 15 Feb 1997 17:38:18 -0700</span><br />
+</address>
+<br />
+I have finished an alpha version of a re-write of fvwmperl.pl in Perl 5. The
+<br />
+new version features:
+<br />
+<br />* Package structure, allowing inclusion via &quot;use&quot;, selective symbol importing
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;You would now utilize this via:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;use X11::Fvwm qw(list of synbols to use); # Or just &quot;:all&quot;
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;See example below.
+<br />
+<br />* Compiled code for the constants from fvwm.h and module.h
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I use an XS module to compile a C routine that uses fvwm.h and module.h
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;directly to supply values for parameters such as M_WINDOW_NAME and
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C_ALL.
+<br />
+<br />* Improved registering and activation of event handlers
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Event handlers are now stored in lists within a hash table keyed by
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;an event mask. Handlers are passed as subroutine references rather than
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;by names, allowing you to pass a closure rather than a &quot;real&quot; 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;subroutine. No longer is there need for &quot;GenerateHandlers&quot;, or for a
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;code-eval that contains more if-comparisons than necessary. See below
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for sample code.
+<br />
+<br />* Easy fit with other Perl 5 extensions such as Penguin and Tk
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Because of the namespace-protection, there is little hazard of names
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;like &quot;InitModule&quot; and &quot;EndModule&quot; colliding with other utilities and/or
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libraries.
+<br />
+<br />Here is the simple text-only window list example from fvwmperl.doc, re-written
+<br />
+for the new style:
+<br />
+<br />#!/usr/bin/perl
+<br />
+<br /># MiniPerl - small, instructive example of a fvwm module implemented
+<br />
+# in Perl.
+<br />
+# (c)1996 Dan Astoorian &lt;djast_at_utopia.csas.com&gt;
+<br />
+<br />use X11::Fvwm qw(InitModule AddHandler SendInfo EventLoop EndModule
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;M_WINDOW_NAME M_END_WINDOWLIST);
+<br />
+use IO::File;
+<br />
+<br />$fh = new IO::File &quot;&gt; /dev/console&quot;;
+<br />
+<br />($winId, $context, _at_args) = InitModule(M_WINDOW_NAME | M_END_WINDOWLIST);
+<br />
+<br /># Register the event handlers
+<br />
+AddHandler(M_WINDOW_NAME,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sub {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my ($type, $id, $frameid, $ptr, $name) = _at__;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf $::fh (&quot;Window ID %8lx: %s\n&quot;, $id, $name);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# return one, to signal we want the event loop to continue
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});
+<br />
+# This one returns 0 to sigal that it terminates the module.
+<br />
+AddHandler(M_END_WINDOWLIST,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sub { print $::fh &quot;---end of window list\n&quot;; return 0; });
+<br />
+<br />print $fh &quot;---start of window list\n&quot;;
+<br />
+# Ask FVWM to send us its list of windows
+<br />
+SendInfo(0, &quot;Send_WindowList&quot;);
+<br />
+<br /># Enter the main loop
+<br />
+EventLoop;
+<br />
+<br /># We're done; clean up.
+<br />
+EndModule;
+<br />
+<br /><br />Note that module-style usage and Perl 5 syntactic sugar make some things 
+<br />
+clearer-- the imported names do not need their leading &quot;&amp;&quot; when called (note
+<br />
+that the constants like M_END_WINDOWLIST are actually routines of the form
+<br />
+&quot;sub M_END_WINDOWLIST { 16384; }&quot; and thus would be referenced with &amp; rather
+<br />
+than $). The handler routines were not pre-defined, but rather passed to
+<br />
+AddHandler on-the-fly. I also use IO::File to specifically send the output to
+<br />
+the console rather than the STDOUT of fvwm. One could, of course, remove that
+<br />
+and have it go to STDERR or STDOUT. Or to a pipe, or to a socket... :-)
+<br />
+<br />Before I upload the alpha to a CPAN site (the Comprehensive Perl Archive
+<br />
+Network; don't fret, I'll post downloading instructions), I still intend to
+<br />
+port FvwmDebug.pl to this model (where it will be called X11::FvwmDebug),
+<br />
+and possibly (though this may wait for a later alpha release) a module called
+<br />
+X11::FvwmPipe to facilitate stand-alone modules that communicate with Fvwm2
+<br />
+via the FvwmPipe module in the extras directory. This isn't a high-priority,
+<br />
+because when I've run tests with FvwmPipe, I've found it to be of limited
+<br />
+usefuleness, and it hikes my workstations load noticably (could be a SIGIO-
+<br />
+related problem; I know that XEmacs has such an issue, and checks for it at
+<br />
+configuration time).
+<br />
+<br />Anyway, this is mostly a heads-up kind of announcement. I expect to come in
+<br />
+some tomorrow for extra polish (and, unfortunately, to finish some paperwork
+<br />
+for the boss), but by Monday or Tuesday, I should have the alpha release out.
+<br />
+<br />Randy
+<br />
+<pre>
+--
+===============================================================================
+Randy J. Ray -- U S WEST Technologies IAD/CSS/DPDS         Phone: (303)595-2869
+                Denver, CO                                     rjray_at_uswest.com
+&quot;It's not denial. I'm just very selective about the reality I accept.&quot; --Calvin
+===============================================================================
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sat Feb 15 1997 - 18:39:07 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start19266">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="19267.html" title="Next message in the list">Y.Mao: "FVWM: HELP: Escape key lost in HP keyboard"</a></li>
+<li><dfn>Previous message</dfn>: <a href="19265.html" title="Previous message in the list">T: "FVWM: Missing icons on button bar (goodstuff bar ?)  ?"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19266" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19266" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19266" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19266" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

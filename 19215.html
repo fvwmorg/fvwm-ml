@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: fvwm / FvwmAuto problem from Albrecht Kadlec on 1997-02-11 (fvwm-users)</title>
+<meta name="Author" content="Albrecht Kadlec (albrecht_at_auto.tuwien.ac.at)" />
+<meta name="Subject" content="FVWM: fvwm / FvwmAuto problem" />
+<meta name="Date" content="1997-02-11" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: fvwm / FvwmAuto problem</h1>
+<!-- received="Tue Feb 11 13:39:26 1997" -->
+<!-- isoreceived="19970211133926" -->
+<!-- sent="Tue, 11 Feb 97 20:37:59 +0100" -->
+<!-- isosent="19970211193759" -->
+<!-- name="Albrecht Kadlec" -->
+<!-- email="albrecht_at_auto.tuwien.ac.at" -->
+<!-- subject="FVWM: fvwm / FvwmAuto problem" -->
+<!-- id="9702111937.AA02453_at_einstein.auto.tuwien.ac.at" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start19215" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="19216.html" accesskey="d" title="Joey Hess: &quot;Re: FVWM: click on window to raise it&quot;">Next message</a> ]
+[ <a href="19214.html" title="David S. Goldberg: &quot;FVWM: Mini Icons for NoTitle windows&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="19243.html" accesskey="t" title="Jose M. Pereira: &quot;Re: FVWM: fvwm / FvwmAuto problem&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19215" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19215" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19215" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19215" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Albrecht Kadlec &lt;<a href="mailto:albrecht_at_auto.tuwien.ac.at?Subject=Re%3A%20FVWM%3A%20fvwm%20%2F%20FvwmAuto%20problem">albrecht_at_auto.tuwien.ac.at</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 11 Feb 97 20:37:59 +0100</span><br />
+</address>
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start FvwmAuto 100
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;put 2 somewhat overlapping windows on a screen
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;go to window A
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;go to window B, (not touching root)
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;go back to A, _before_ B is _raised_, but be sure to 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stay in	the area, where the 2 windows overlap.
+<br />
+<br /><br />the last 2 steps must happen very quickly (just leave A for 50 ms)	
+<br />
+<br />focus keeps toggling between the two windows and they'll be raiseed
+<br />
+alternatively, until the mouse leaves the space where the 2 windows
+<br />
+overlap.
+<br />
+<br />after a few tries you'll get the feeling how to trigger the effect.
+<br />
+<br />So this is a _very_ bad interaction between fvwm2 &amp; FvwmAuto.
+<br />
+<br /><em class="quotelev1">&gt;From my debug output FvwmAuto behaves correctly, so what seems to happen
+</em><br />
+is: 
+<br />
+<br />apparently, FvwmAuto gets a new focus event _after_ the raise, 
+<br />
+which was originated _before_ the raise.
+<br />
+The raise event triggers a new focus event (since we're in the overlap
+<br />
+area).
+<br />
+<br /><br />time	fvwm:				FvwmAuto:
+<br />
+<br />&nbsp;|	focus B
+<br />
+&nbsp;|	focus A, because we re-entered	timeout expires, while we haven't
+<br />
+&nbsp;|					seen the focus A yet  -&gt; raise B
+<br />
+&nbsp;v	focus B, because it's on top	timeout expires, but we haven't
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seen the focus B yet  -&gt; raise A
+<br />
+and so on.
+<br />
+<br />the 100ms just seem to be &gt;= the round trip delay of the 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FvwmAuto (raise) -&gt; fvwm (focus) -&gt; FvwmAuto (receive new focus)
+<br />
+path.
+<br />
+<br />so the two columns seem to be executed in parallel, with the &quot;left hand not
+<br />
+knowing what the right hand does&quot;
+<br />
+<br /><br />I tried to get an interval where this effect is triggered:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I got down to 70ms
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;raising to 200 ms also
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;raising the timeout to 300 ms, I noticed an interesting effect:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the flipping stops after some time:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I got 6, 65, 3, 5, 4, 16, 63 flips so far
+<br />
+<br />Increasing the time slows down the FvwmAuto column in the above timing
+<br />
+diagram, so at some point the next focus event from fvwm arrives, before
+<br />
+the timeout elapses, so the raise is cancelled.
+<br />
+<br /><br />Can anybody suggest a solution ?
+<br />
+<br />I guess, adding a paragraph to the man page saying:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;don't set timeout below 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;complex-fn-depending-on-system-speed-load-and-windowsizes&quot;
+<br />
+is out of question.
+<br />
+<br />you can get my current developer-version from
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;URL:<a href="http://www.auto.tuwien.ac.at/~albrecht/FvwmAuto.c.gz">http://www.auto.tuwien.ac.at/~albrecht/FvwmAuto.c.gz</a>&gt;
+<br />
+<br />albrecht
+<br />
+<pre>
+-- 
+I was in the kitchen		Seamus, that's the dog was outside
+Well, I was in the kitchen	Seamus, my old hound was outside
+Well, you know the sun was sinking slowly
+But my hound just sat right down and cried	-- Pink Floyd, &quot;Seamus&quot;
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue Feb 11 1997 - 13:39:26 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start19215">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="19216.html" title="Next message in the list">Joey Hess: "Re: FVWM: click on window to raise it"</a></li>
+<li><dfn>Previous message</dfn>: <a href="19214.html" title="Previous message in the list">David S. Goldberg: "FVWM: Mini Icons for NoTitle windows"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="19243.html" title="Next message in this discussion thread">Jose M. Pereira: "Re: FVWM: fvwm / FvwmAuto problem"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="19243.html" title="Message sent in reply to this message">Jose M. Pereira: "Re: FVWM: fvwm / FvwmAuto problem"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19215" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19215" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19215" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19215" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

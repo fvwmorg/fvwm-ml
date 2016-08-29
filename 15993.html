@@ -1,0 +1,1102 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: FvwmSaveDesk bugs from Rob McElrath on 1996-03-24 (fvwm-users)</title>
+<meta name="Author" content="Rob McElrath (mcelrath_at_nwu.edu)" />
+<meta name="Subject" content="FVWM: FvwmSaveDesk bugs" />
+<meta name="Date" content="1996-03-24" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: FvwmSaveDesk bugs</h1>
+<!-- received="Sun Mar 24 16:36:04 1996" -->
+<!-- isoreceived="19960324163604" -->
+<!-- sent="Sun, 24 Mar 1996 16:35:51 -0600 (CST)" -->
+<!-- isosent="19960324223551" -->
+<!-- name="Rob McElrath" -->
+<!-- email="mcelrath_at_nwu.edu" -->
+<!-- subject="FVWM: FvwmSaveDesk bugs" -->
+<!-- id="Pine.SUN.3.91.960324162816.8377B-200000_at_magni.isp.nwu.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start15993" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="15994.html" accesskey="d" title="Kai Grossjohann: &quot;Re: FVWM: Why use fvwm 2.0?&quot;">Next message</a> ]
+[ <a href="15992.html" title="Brandon M. Browning: &quot;Re: FVWM: Command to send arbitrary stuff to modules&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15993" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15993" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15993" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15993" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Rob McElrath &lt;<a href="mailto:mcelrath_at_nwu.edu?Subject=Re%3A%20FVWM%3A%20FvwmSaveDesk%20bugs">mcelrath_at_nwu.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sun, 24 Mar 1996 16:35:51 -0600 (CST)</span><br />
+</address>
+<br />
+I just downloaded and compiled fvwm 2.0.41, and discovered a rather nasty 
+<br />
+bug in FvwmSaveDesk.  You see, I have it set up so that novice users can 
+<br />
+simply click on a menu to save their current window configuration (via 
+<br />
+FvwmSaveDesk) into .fvwmdesk, which is automagically read on startup.  
+<br />
+Now, as FvwmSaveDesk is distributed, if you have windows on desktops 
+<br />
+other than the current desk, it would insert something similar to this:
+<br />
+<br />AddToFunc InitFunction	&quot;I&quot; Desk 3 0
+<br />
++			xterm ....
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Wait &quot;I&quot; xterm
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;I&quot; Desk 2 0 
+<br />
++ 			xterm ....
+<br />
+etc...
+<br />
+<br />The problem is that first, there needs to be a plus in front of the Wait 
+<br />
+and Desk commands, and second, the syntax of the Wait command is wrong: 
+<br />
+the &quot;I&quot; should be first.  I've hacked out a fix for it, and have attached 
+<br />
+the new source to FvwmSaveDesk.c.  This fix is a hack, and not very 
+<br />
+pretty (I had to add the CurCmd global variable -- yuk.) but it works.  
+<br />
+Do with it as you will.  Please include this fix in the next release of 
+<br />
+fvwm.  :)
+<br />
+<br />Also, I think this method of starting things on separate desktops is 
+<br />
+rather clunky.  Has anyone invested any thought in a superior method?  
+<br />
+(that will always work...)
+<br />
+<br />-- Rob
+<br />
+<br />=&lt;##########################################################################&gt;=
+<br />
+&nbsp;&nbsp;| &quot;The meek shall inherit the Earth.  The rest of us                     |
+<br />
+&nbsp;&nbsp;| will go to the stars.&quot; -- Heinlein?                      _/_/_/_/_/_/  |
+<br />
+&nbsp;&nbsp;| Regnant populi.  (The people rule.)                    _/           _/ |
+<br />
+&nbsp;&nbsp;| Pregnant robuli. (The snake will soon lay eggs.)     _/   0     0   _/ |
+<br />
+&nbsp;&nbsp;|                                                     _/       /     _/  |
+<br />
+&nbsp;&nbsp;| Rob McElrath (wraith_at_nwu.edu)                      _/  \________/ _/   |
+<br />
+&nbsp;&nbsp;| Northwestern University                            _/         U _/     |
+<br />
+&nbsp;&nbsp;| Sophomore: ISP, Physics, Math, Computer Science     _/_/_/_/_/_/       |
+<br />
+&nbsp;&nbsp;| 76% nerd, 65% weird, 56% pure, Meyers-Briggs: ENTP                     |
+<br />
+&nbsp;&nbsp;\________________________________________________________________________/
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;O
+<br />
+<br />
+/* This module, and the entire FvwmSaveDesktop program, and the concept for
+<br />
+&nbsp;* interfacing this module to the Window Manager, are all original work
+<br />
+&nbsp;* by Robert Nation and Mr. Per Persson &lt;pp_at_solace&#46;<!--nospam-->mh.se&gt;
+<br />
+&nbsp;*
+<br />
+&nbsp;* The concept to write an function definition instead of an new.xinitrc
+<br />
+&nbsp;* is from Carsten Paeth &lt;calle_at_calle&#46;<!--nospam-->in-berlin.de&gt;
+<br />
+&nbsp;*
+<br />
+&nbsp;* Copyright 1994, Robert Nation and Mr. Per Persson.
+<br />
+&nbsp;*  No guarantees or warantees or anything
+<br />
+&nbsp;* are provided or implied in any way whatsoever. Use this program at your
+<br />
+&nbsp;* own risk. Permission to use this program for any purpose is given,
+<br />
+&nbsp;* as long as the copyright is kept intact.
+<br />
+&nbsp;*
+<br />
+&nbsp;* Copyright 1995, Carsten Paeth.
+<br />
+&nbsp;*  No guarantees or warantees or anything
+<br />
+&nbsp;* are provided or implied in any way whatsoever. Use this program at your
+<br />
+&nbsp;* own risk. Permission to use this program for any purpose is given,
+<br />
+&nbsp;* as long as the copyright is kept intact.
+<br />
+&nbsp;*
+<br />
+&nbsp;*/
+<br />
+
+<br />
+#define TRUE 1
+<br />
+#define FALSE 0
+<br />
+
+<br />
+#include &quot;../../configure.h&quot;
+<br />
+
+<br />
+#include &lt;stdio.h&gt;
+<br />
+#include &lt;signal.h&gt;
+<br />
+#include &lt;fcntl.h&gt;
+<br />
+#include &lt;string.h&gt;
+<br />
+#include &lt;sys/wait.h&gt;
+<br />
+#include &lt;sys/time.h&gt;
+<br />
+#include &lt;unistd.h&gt;
+<br />
+#include &lt;ctype.h&gt;
+<br />
+#include &lt;stdlib.h&gt;
+<br />
+#include &lt;X11/Xlib.h&gt;
+<br />
+#include &lt;X11/Xutil.h&gt;
+<br />
+#include &lt;X11/Xproto.h&gt;
+<br />
+#include &lt;X11/Xatom.h&gt;
+<br />
+#include &lt;X11/Intrinsic.h&gt;
+<br />
+
+<br />
+#include &quot;../../fvwm/module.h&quot;
+<br />
+
+<br />
+#include &quot;FvwmSaveDesk.h&quot;
+<br />
+#include &quot;../../version.h&quot;
+<br />
+
+<br />
+char *MyName;
+<br />
+int fd[2];
+<br />
+
+<br />
+struct list *list_root = NULL;
+<br />
+
+<br />
+Display *dpy;			/* which display are we talking to */
+<br />
+int ScreenWidth, ScreenHeight;
+<br />
+int screen;
+<br />
+
+<br />
+long Vx, Vy;
+<br />
+
+<br />
+long CurDesk = 1;   /* actual Desktop while being called */
+<br />
+long CurCmd = 0;    /* is incremented for each command written to file */
+<br />
+
+<br />
+/***********************************************************************
+<br />
+&nbsp;*
+<br />
+&nbsp;*  Procedure:
+<br />
+&nbsp;*	main - start of module
+<br />
+&nbsp;*
+<br />
+&nbsp;***********************************************************************/
+<br />
+void main(int argc, char **argv)
+<br />
+{
+<br />
+&nbsp;&nbsp;char *temp, *s;
+<br />
+&nbsp;&nbsp;char *display_name = NULL;
+<br />
+
+<br />
+&nbsp;&nbsp;/* Record the program name for error messages */
+<br />
+&nbsp;&nbsp;temp = argv[0];
+<br />
+
+<br />
+&nbsp;&nbsp;s=strrchr(argv[0], '/');
+<br />
+&nbsp;&nbsp;if (s != NULL)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;temp = s + 1;
+<br />
+
+<br />
+&nbsp;&nbsp;MyName = safemalloc(strlen(temp)+2);
+<br />
+&nbsp;&nbsp;strcpy(MyName,&quot;*&quot;);
+<br />
+&nbsp;&nbsp;strcat(MyName, temp);
+<br />
+
+<br />
+&nbsp;&nbsp;if((argc != 6)&amp;&amp;(argc != 7))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(stderr,&quot;%s Version %s should only be executed by fvwm!\n&quot;,MyName,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VERSION);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit(1);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+
+<br />
+&nbsp;&nbsp;/* Open the X display */
+<br />
+&nbsp;&nbsp;if (!(dpy = XOpenDisplay(display_name))) 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(stderr,&quot;%s: can't open display %s&quot;, MyName,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XDisplayName(display_name));
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit (1);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;screen= DefaultScreen(dpy);
+<br />
+&nbsp;&nbsp;ScreenHeight = DisplayHeight(dpy,screen);
+<br />
+&nbsp;&nbsp;ScreenWidth = DisplayWidth(dpy,screen);
+<br />
+
+<br />
+&nbsp;&nbsp;/* We should exit if our fvwm pipes die */
+<br />
+&nbsp;&nbsp;signal (SIGPIPE, DeadPipe);  
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;fd[0] = atoi(argv[1]);
+<br />
+&nbsp;&nbsp;fd[1] = atoi(argv[2]);
+<br />
+
+<br />
+&nbsp;&nbsp;/* Create a list of all windows */
+<br />
+&nbsp;&nbsp;/* Request a list of all windows,
+<br />
+&nbsp;&nbsp;&nbsp;* wait for ConfigureWindow packets */
+<br />
+&nbsp;&nbsp;SendInfo(fd,&quot;Send_WindowList&quot;,0);
+<br />
+
+<br />
+&nbsp;&nbsp;Loop(fd);
+<br />
+}
+<br />
+
+<br />
+
+<br />
+/***********************************************************************
+<br />
+&nbsp;*
+<br />
+&nbsp;*  Procedure:
+<br />
+&nbsp;*	Loop - wait for data to process
+<br />
+&nbsp;*
+<br />
+&nbsp;***********************************************************************/
+<br />
+void Loop(int *fd)
+<br />
+{
+<br />
+&nbsp;&nbsp;unsigned long header[HEADER_SIZE], *body;
+<br />
+&nbsp;&nbsp;char *cbody;
+<br />
+&nbsp;&nbsp;int body_length,count,count2=0,total;
+<br />
+
+<br />
+&nbsp;&nbsp;while(1)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* read a packet */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(count = ReadFvwmPacket(fd[1],header,&amp;body) &gt; 0)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* dispense with the new packet */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;process_message(header[1],body);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;free(body);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+}
+<br />
+&nbsp;
+<br />
+
+<br />
+/***********************************************************************
+<br />
+&nbsp;*
+<br />
+&nbsp;*  Procedure:
+<br />
+&nbsp;*	Process message - examines packet types, and takes appropriate action
+<br />
+&nbsp;*
+<br />
+&nbsp;***********************************************************************/
+<br />
+void process_message(unsigned long type,unsigned long *body)
+<br />
+{
+<br />
+&nbsp;&nbsp;switch(type)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;case M_CONFIGURE_WINDOW:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(!find_window(body[0]))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;add_window(body[0],body);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;case M_NEW_PAGE:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;list_new_page(body);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;case M_NEW_DESK:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CurDesk = (long)body[0];
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;case M_END_WINDOWLIST:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;do_save();
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;default:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+}
+<br />
+
+<br />
+
+<br />
+
+<br />
+/***********************************************************************
+<br />
+&nbsp;*
+<br />
+&nbsp;*  Procedure:
+<br />
+&nbsp;*	find_window - find a window in the current window list 
+<br />
+&nbsp;*
+<br />
+&nbsp;***********************************************************************/
+<br />
+struct list *find_window(unsigned long id)
+<br />
+{
+<br />
+&nbsp;&nbsp;struct list *l;
+<br />
+
+<br />
+&nbsp;&nbsp;if(list_root == NULL)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;return NULL;
+<br />
+
+<br />
+&nbsp;&nbsp;for(l = list_root; l!= NULL; l= l-&gt;next)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(l-&gt;id == id)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return l;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;return NULL;
+<br />
+}
+<br />
+
+<br />
+
+<br />
+
+<br />
+/***********************************************************************
+<br />
+&nbsp;*
+<br />
+&nbsp;*  Procedure:
+<br />
+&nbsp;*	add_window - add a new window in the current window list 
+<br />
+&nbsp;*
+<br />
+&nbsp;***********************************************************************/
+<br />
+void add_window(unsigned long new_win, unsigned long *body)
+<br />
+{
+<br />
+&nbsp;&nbsp;struct list *t;
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;if(new_win == 0)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+
+<br />
+&nbsp;&nbsp;t = (struct list *)safemalloc(sizeof(struct list));
+<br />
+&nbsp;&nbsp;t-&gt;id = new_win;
+<br />
+&nbsp;&nbsp;t-&gt;next = list_root;
+<br />
+&nbsp;&nbsp;t-&gt;frame_height = (int)body[6];
+<br />
+&nbsp;&nbsp;t-&gt;frame_width = (int)body[5];
+<br />
+&nbsp;&nbsp;t-&gt;base_width = (int)body[11];
+<br />
+&nbsp;&nbsp;t-&gt;base_height = (int)body[12];
+<br />
+&nbsp;&nbsp;t-&gt;width_inc  = (int)body[13];
+<br />
+&nbsp;&nbsp;t-&gt;height_inc  = (int)body[14];
+<br />
+&nbsp;&nbsp;t-&gt;frame_x  = (int)body[3];
+<br />
+&nbsp;&nbsp;t-&gt;frame_y  = (int)body[4];;
+<br />
+&nbsp;&nbsp;t-&gt;title_height  = (int)body[9];;
+<br />
+&nbsp;&nbsp;t-&gt;boundary_width  = (int)body[10];
+<br />
+&nbsp;&nbsp;t-&gt;flags = (unsigned long)body[8];
+<br />
+&nbsp;&nbsp;t-&gt;gravity = body[21];
+<br />
+&nbsp;&nbsp;t-&gt;desk = body[7];
+<br />
+&nbsp;&nbsp;list_root = t;
+<br />
+}
+<br />
+
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+
+<br />
+/***********************************************************************
+<br />
+&nbsp;*
+<br />
+&nbsp;*  Procedure:
+<br />
+&nbsp;*	list_new_page - capture new-page info
+<br />
+&nbsp;*
+<br />
+&nbsp;***********************************************************************/
+<br />
+void list_new_page(unsigned long *body)
+<br />
+{
+<br />
+&nbsp;&nbsp;Vx = (long)body[0];
+<br />
+&nbsp;&nbsp;Vy = (long)body[1];
+<br />
+}
+<br />
+/***********************************************************************
+<br />
+&nbsp;*
+<br />
+&nbsp;*  Procedure:
+<br />
+&nbsp;*	SIGPIPE handler - SIGPIPE means fvwm is dying
+<br />
+&nbsp;*
+<br />
+&nbsp;***********************************************************************/
+<br />
+void DeadPipe(int nonsense)
+<br />
+{
+<br />
+&nbsp;&nbsp;exit(0);
+<br />
+}
+<br />
+
+<br />
+
+<br />
+/***********************************************************************
+<br />
+&nbsp;*
+<br />
+&nbsp;*  Procedure:
+<br />
+&nbsp;*	writes a command line argument to file &quot;out&quot;
+<br />
+&nbsp;*      checks for qoutes and stuff
+<br />
+&nbsp;*
+<br />
+&nbsp;***********************************************************************/
+<br />
+void write_string(FILE *out, char *line)
+<br />
+{
+<br />
+&nbsp;&nbsp;int len,space = 0, qoute = 0,i;
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;len = strlen(line);
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;for(i=0;i&lt;len;i++)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(isspace(line[i]))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;space = 1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(line[i]=='\&quot;')
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qoute = 1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;if(space == 1)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;fprintf(out,&quot;\&quot;&quot;);
+<br />
+&nbsp;&nbsp;if(qoute == 0)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;fprintf(out,&quot;%s&quot;,line);
+<br />
+&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for(i=0;i&lt;len;i++)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(line[i]=='\&quot;')
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(out,&quot;\\\&quot;&quot;);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(out,&quot;%c&quot;,line[i]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;if(space == 1)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;fprintf(out,&quot;\&quot;&quot;);
+<br />
+&nbsp;&nbsp;fprintf(out,&quot; &quot;);
+<br />
+
+<br />
+}
+<br />
+
+<br />
+void do_save_command(FILE *out, struct list *t, int *curdesk, int emit_wait)
+<br />
+{
+<br />
+&nbsp;&nbsp;&nbsp;char tname[200],loc[30];
+<br />
+&nbsp;&nbsp;&nbsp;char **command_list;
+<br />
+&nbsp;&nbsp;&nbsp;int dwidth,dheight,xtermline = 0;
+<br />
+&nbsp;&nbsp;&nbsp;int x1,x2,y1,y2,i,command_count;
+<br />
+&nbsp;&nbsp;&nbsp;long tVx, tVy;
+<br />
+
+<br />
+&nbsp;&nbsp;&nbsp;tname[0]=0;
+<br />
+&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;x1 = t-&gt;frame_x;
+<br />
+&nbsp;&nbsp;&nbsp;x2 = ScreenWidth - x1 - t-&gt;frame_width - 2;
+<br />
+&nbsp;&nbsp;&nbsp;if(x2 &lt; 0)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x2 = 0;
+<br />
+&nbsp;&nbsp;&nbsp;y1 = t-&gt;frame_y;
+<br />
+&nbsp;&nbsp;&nbsp;y2 = ScreenHeight - y1 -  t-&gt;frame_height - 2;
+<br />
+&nbsp;&nbsp;&nbsp;if(y2 &lt; 0)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y2 = 0;
+<br />
+&nbsp;&nbsp;&nbsp;dheight = t-&gt;frame_height - t-&gt;title_height - 2*t-&gt;boundary_width;
+<br />
+&nbsp;&nbsp;&nbsp;dwidth = t-&gt;frame_width - 2*t-&gt;boundary_width;
+<br />
+&nbsp;&nbsp;&nbsp;dwidth -= t-&gt;base_width ;
+<br />
+&nbsp;&nbsp;&nbsp;dheight -= t-&gt;base_height ;
+<br />
+&nbsp;&nbsp;&nbsp;dwidth /= t-&gt;width_inc;
+<br />
+&nbsp;&nbsp;&nbsp;dheight /= t-&gt;height_inc;
+<br />
+
+<br />
+&nbsp;&nbsp;&nbsp;if ( t-&gt;flags &amp; STICKY )      
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tVx = 0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tVy = 0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tVx = Vx;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tVy = Vy;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;sprintf(tname,&quot;%dx%d&quot;,dwidth,dheight);
+<br />
+&nbsp;&nbsp;&nbsp;if ((t-&gt;gravity == EastGravity) ||
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(t-&gt;gravity == NorthEastGravity) ||
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(t-&gt;gravity == SouthEastGravity))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sprintf(loc,&quot;-%d&quot;,x2);
+<br />
+&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sprintf(loc,&quot;+%d&quot;,x1+(int)tVx);
+<br />
+&nbsp;&nbsp;&nbsp;strcat(tname, loc);
+<br />
+&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;if((t-&gt;gravity == SouthGravity)||
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(t-&gt;gravity == SouthEastGravity)||
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(t-&gt;gravity == SouthWestGravity))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sprintf(loc,&quot;-%d&quot;,y2);
+<br />
+&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sprintf(loc,&quot;+%d&quot;,y1+(int)tVy);
+<br />
+&nbsp;&nbsp;&nbsp;strcat(tname, loc);
+<br />
+
+<br />
+&nbsp;&nbsp;&nbsp;if ( XGetCommand( dpy, t-&gt;id, &amp;command_list, &amp;command_count ) )
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (*curdesk != t-&gt;desk)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(CurCmd == 0)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf( out, &quot;\t\&quot;I\&quot; Desk %ld 0\n&quot;, t-&gt;desk);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf( out, &quot;+\t\t\&quot;I\&quot; Desk %ld 0\n&quot;, t-&gt;desk);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fflush ( out );
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*curdesk = t-&gt;desk;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CurCmd++;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf( out, &quot;+\t\t\t\&quot;I\&quot; Exec &quot;);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fflush ( out );
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (i=0; i &lt; command_count; i++)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ( strncmp( &quot;-geo&quot;, command_list[i], 4) == 0)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i++;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;continue;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ( strncmp( &quot;-ic&quot;, command_list[i], 3) == 0)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;continue;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ( strncmp( &quot;-display&quot;, command_list[i], 8) == 0)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i++;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;continue;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;write_string(out,command_list[i]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fflush ( out );
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(strstr(command_list[i], &quot;xterm&quot;))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf( out, &quot;-geometry %s &quot;, tname );
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ( t-&gt;flags &amp; ICONIFIED )
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(out, &quot;-ic &quot;);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xtermline = 1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fflush ( out );
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ( command_count &gt; 0 )
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ( xtermline == 0 )
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ( t-&gt;flags &amp; ICONIFIED )
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(out, &quot;-ic &quot;);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf( out, &quot;-geometry %s &amp;\n&quot;, tname);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf( out, &quot;&amp;\n&quot;);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (emit_wait) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf( out, &quot;+\t\t\t\&quot;I\&quot; Wait %s\n&quot;, command_list[0]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fflush( out );
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XFreeStringList( command_list );
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xtermline = 0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+}
+<br />
+
+<br />
+
+<br />
+/***********************************************************************
+<br />
+&nbsp;*
+<br />
+&nbsp;*  Procedure:
+<br />
+&nbsp;*	checks to see if we are supposed to take some action now,
+<br />
+&nbsp;*      finds time for next action to be performed.
+<br />
+&nbsp;*
+<br />
+&nbsp;***********************************************************************/
+<br />
+void do_save(void)
+<br />
+{
+<br />
+&nbsp;&nbsp;struct list *t;
+<br />
+&nbsp;&nbsp;char fnbuf[200];
+<br />
+&nbsp;&nbsp;FILE *out;
+<br />
+&nbsp;&nbsp;int maxdesk = 0;
+<br />
+&nbsp;&nbsp;int actdesk = -1;
+<br />
+&nbsp;&nbsp;int curdesk;
+<br />
+
+<br />
+&nbsp;&nbsp;for (t = list_root; t != NULL; t = t-&gt;next)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (t-&gt;desk &gt; maxdesk)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maxdesk = t-&gt;desk;
+<br />
+
+<br />
+&nbsp;&nbsp;sprintf(fnbuf, &quot;%s/.fvwmdesk&quot;, getenv( &quot;HOME&quot; ) );
+<br />
+&nbsp;&nbsp;out = fopen( fnbuf, &quot;w&quot; );
+<br />
+
+<br />
+&nbsp;&nbsp;fprintf( out, &quot;AddToFunc InitFunction&quot;);
+<br />
+&nbsp;&nbsp;fflush ( out );
+<br />
+
+<br />
+&nbsp;&nbsp;/*
+<br />
+&nbsp;&nbsp;&nbsp;* Generate all Desks except 'CurDesk'
+<br />
+&nbsp;&nbsp;&nbsp;*/
+<br />
+&nbsp;&nbsp;for (curdesk = 0; curdesk &lt;= maxdesk; curdesk++)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (t = list_root; t != NULL; t = t-&gt;next)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (t-&gt;desk != CurDesk &amp;&amp; curdesk == t-&gt;desk)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;do_save_command(out, t, &amp;actdesk, 1);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;/*
+<br />
+&nbsp;&nbsp;&nbsp;* Generate 'CurDesk'
+<br />
+&nbsp;&nbsp;&nbsp;*/
+<br />
+&nbsp;&nbsp;for (t = list_root; t != NULL; t = t-&gt;next)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (t-&gt;desk == CurDesk)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;do_save_command(out, t, &amp;actdesk, 0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+
+<br />
+&nbsp;&nbsp;if (actdesk != CurDesk)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf( out, &quot;+\t\t\&quot;I\&quot; Desk %ld 0\n&quot;, CurDesk);
+<br />
+
+<br />
+&nbsp;&nbsp;fflush( out );
+<br />
+&nbsp;&nbsp;fclose( out );
+<br />
+&nbsp;&nbsp;exit(0);
+<br />
+
+<br />
+}
+<br />
+
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sun Mar 24 1996 - 16:36:04 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start15993">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="15994.html" title="Next message in the list">Kai Grossjohann: "Re: FVWM: Why use fvwm 2.0?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="15992.html" title="Previous message in the list">Brandon M. Browning: "Re: FVWM: Command to send arbitrary stuff to modules"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15993" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15993" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15993" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15993" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

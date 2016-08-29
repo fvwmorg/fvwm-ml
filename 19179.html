@@ -1,0 +1,1229 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: FvwmButtons background from Patrice Fortier on 1997-02-07 (fvwm-users)</title>
+<meta name="Author" content="Patrice Fortier (Patrice.Fortier_at_emi.u-bordeaux.fr)" />
+<meta name="Subject" content="FVWM: FvwmButtons background" />
+<meta name="Date" content="1997-02-07" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: FvwmButtons background</h1>
+<!-- received="Fri Feb  7 09:08:36 1997" -->
+<!-- isoreceived="19970207090836" -->
+<!-- sent="Fri, 7 Feb 1997 16:07:54 +0100 (MET)" -->
+<!-- isosent="19970207150754" -->
+<!-- name="Patrice Fortier" -->
+<!-- email="Patrice.Fortier_at_emi.u-bordeaux.fr" -->
+<!-- subject="FVWM: FvwmButtons background" -->
+<!-- id="199702071507.QAA09140_at_startrek.emi.u-bordeaux.fr" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start19179" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="19180.html" accesskey="d" title="Pete Schmitt: &quot;FVWM: FvwmAuto on fvwm95-2&quot;">Next message</a> ]
+[ <a href="19178.html" title="David S. Goldberg: &quot;FVWM: Re: fvwm &#0038; WABI&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19179" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19179" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19179" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19179" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Patrice Fortier &lt;<a href="mailto:Patrice.Fortier_at_emi.u-bordeaux.fr?Subject=Re%3A%20FVWM%3A%20FvwmButtons%20background">Patrice.Fortier_at_emi.u-bordeaux.fr</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 7 Feb 1997 16:07:54 +0100 (MET)</span><br />
+</address>
+<br />
+Here is the patch I made to put a background pixmap or a transparent
+<br />
+background on an FvwmButtons bar. Anybody has a better name? :)
+<br />
+<br />The new option is FvwmButtonsPixmap. You can use 
+<br />
+<br />*FvwmButtonsPixmap &lt;your_pixmap.xpm&gt;
+<br />
+to put a background pixmap, or
+<br />
+<br />*FvwmButtonsPixmap none 
+<br />
+to make the FvwmButtons background transparent (as with enlightment).
+<br />
+<br />You can check this URL to see a (small) screen shot.
+<br />
+<a href="http://www.emi.u-bordeaux.fr/~fortier/Fvwm/index.html">http://www.emi.u-bordeaux.fr/~fortier/Fvwm/index.html</a>
+<br />
+<br />As I go on holidays, I won't reply to any mail until a week.
+<br />
+Happy Buttoning ;)
+<br />
+<br />Lokh.
+<br />
+<br /><br />---------------------------------cut here----------------------------
+<br />
+diff -cr FvwmButtons.orig/FvwmButtons.c FvwmButtons/FvwmButtons.c
+<br />
+*** FvwmButtons.orig/FvwmButtons.c	Tue Jan 14 17:30:43 1997
+<br />
+--- FvwmButtons/FvwmButtons.c	Fri Feb  7 14:10:36 1997
+<br />
+***************
+<br />
+*** 40,45 ****
+<br />
+--- 40,48 ----
+<br />
+&nbsp;&nbsp;#ifdef XPM
+<br />
+&nbsp;&nbsp;#include &lt;X11/xpm.h&gt;
+<br />
+&nbsp;&nbsp;#endif
+<br />
++ #ifdef SHAPE
+<br />
++ #include &lt;X11/extensions/shape.h&gt;
+<br />
++ #endif
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;#include &quot;../../configure.h&quot;
+<br />
+&nbsp;&nbsp;#include &quot;../../fvwm/module.h&quot;
+<br />
+***************
+<br />
+*** 230,241 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(b-&gt;flags&amp;b_Icon)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DestroyPicture(Dpy,b-&gt;icon);
+<br />
+- /*
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(b-&gt;flags&amp;b_IconBack)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DestroyPicture(Dpy,b-&gt;backicon);
+<br />
+!       if(b-&gt;flags&amp;b_Container &amp;&amp; b-&gt;c-&gt;flags&amp;b_IconBack)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DestroyPicture(Dpy,b-&gt;c-&gt;backicon);
+<br />
+- */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;exit(0);
+<br />
+--- 233,243 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(b-&gt;flags&amp;b_Icon)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DestroyPicture(Dpy,b-&gt;icon);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(b-&gt;flags&amp;b_IconBack)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DestroyPicture(Dpy,b-&gt;backicon);
+<br />
+!       if(b-&gt;flags&amp;b_Container &amp;&amp; b-&gt;c-&gt;flags&amp;b_IconBack
+<br />
+! 	 &amp;&amp; !(b-&gt;c-&gt;flags&amp;b_TransBack))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DestroyPicture(Dpy,b-&gt;c-&gt;backicon);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;exit(0);
+<br />
+***************
+<br />
+*** 323,328 ****
+<br />
+--- 325,404 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;return b-&gt;action[n];
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
++ #ifdef SHAPE
+<br />
++ /**
+<br />
++ *** SetTransparentBackground()
+<br />
++ *** use the Shape extension to create a transparent background.
+<br />
++ ***   Patrice Fortier
+<br />
++ **/
+<br />
++ void SetTransparentBackground(button_info *ub,int w,int h)
+<br />
++ {
+<br />
++   Pixmap pmap_mask;
+<br />
++   button_info *b;
+<br />
++   GC gc;
+<br />
++   XGCValues gvals;
+<br />
++   unsigned long gcm=0;
+<br />
++   Window root_return;
+<br />
++   int x_return, y_return;
+<br />
++   unsigned int width_return, height_return;
+<br />
++   unsigned int border_width_return;
+<br />
++   unsigned int depth_return;
+<br />
++   int number, i;
+<br />
++   XFontStruct *font;
+<br />
++   
+<br />
++   pmap_mask = XCreatePixmap(Dpy,MyWindow,w,h,1);
+<br />
++   gc = XCreateGC(Dpy,pmap_mask,(unsigned long)0,&amp;gvals);
+<br />
++   XSetForeground(Dpy,gc,0);
+<br />
++   XFillRectangle(Dpy,pmap_mask,gc,0,0,w,h);
+<br />
++   XSetForeground(Dpy,gc,1);
+<br />
++   
+<br />
++   /*
+<br />
++    * if button has an icon, draw a rect with the same size as the icon
+<br />
++    * (or the mask of the icon),
+<br />
++    * else draw a rect with the same size as the button.
+<br />
++    */
+<br />
++   
+<br />
++   i=-1;
+<br />
++   while(NextButton(&amp;ub,&amp;b,&amp;i,0))
+<br />
++     {
+<br />
++       if(b-&gt;flags&amp;b_Icon) 
+<br />
++ 	{
+<br />
++ 	  XGetGeometry(Dpy,b-&gt;IconWin,&amp;root_return,&amp;x_return,&amp;y_return,
+<br />
++ 		       &amp;width_return,&amp;height_return,
+<br />
++ 		       &amp;border_width_return,&amp;depth_return);
+<br />
++ 	  
+<br />
++ 	  number=buttonNum(b);
+<br />
++ 	  if (b-&gt;icon-&gt;mask == None)
+<br />
++ 	    XFillRectangle(Dpy,pmap_mask,gc,x_return, y_return,
+<br />
++ 			   b-&gt;icon-&gt;width,b-&gt;icon-&gt;height);
+<br />
++ 	  else
+<br />
++ 	    XCopyArea(Dpy,b-&gt;icon-&gt;mask,pmap_mask,gc,0,0,
+<br />
++ 		      b-&gt;icon-&gt;width,b-&gt;icon-&gt;height,x_return,y_return);
+<br />
++ 	}
+<br />
++       else
+<br />
++ 	{
+<br />
++ 	  number=buttonNum(b);
+<br />
++ 	  XFillRectangle(Dpy,pmap_mask,gc,buttonXPos(b,number),
+<br />
++ 			 buttonYPos(b,number),
+<br />
++ 			 buttonWidth(b),buttonHeight(b));
+<br />
++ 	}
+<br />
++       
+<br />
++       /* handle button's title */
+<br />
++       font=buttonFont(b);
+<br />
++       if(b-&gt;flags&amp;b_Title &amp;&amp; font)
+<br />
++ 	{
+<br />
++ 	  gcm = GCForeground | GCFont; 
+<br />
++ 	  gvals.foreground=1;
+<br />
++ 	  gvals.font = font-&gt;fid;
+<br />
++ 	  XChangeGC(Dpy,gc,gcm,&amp;gvals);
+<br />
++ 	  DrawTitle(b,pmap_mask,gc);
+<br />
++ 	}
+<br />
++     }
+<br />
++   XFreeGC(Dpy,gc);
+<br />
++   XShapeCombineMask(Dpy,MyWindow,ShapeBounding,0,0,pmap_mask,ShapeSet);
+<br />
++ }
+<br />
++ #endif
+<br />
++ 
+<br />
+&nbsp;&nbsp;/**
+<br />
+&nbsp;&nbsp;*** myErrorHandler()
+<br />
+&nbsp;&nbsp;*** Shows X errors made by FvwmButtons.
+<br />
+***************
+<br />
+*** 467,472 ****
+<br />
+--- 543,553 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;while(NextButton(&amp;ub,&amp;b,&amp;i,0))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ConfigureIconWindow(b);
+<br />
+&nbsp;&nbsp;
+<br />
++ # ifdef SHAPE
+<br />
++   if(UberButton-&gt;c-&gt;flags&amp;b_TransBack)
+<br />
++     SetTransparentBackground(UberButton,Width,Height);
+<br />
++ # endif
+<br />
++ 
+<br />
+&nbsp;&nbsp;# ifdef DEBUG_INIT
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;fprintf(stderr,&quot;OK\n%s: Mapping windows...&quot;,MyName);
+<br />
+&nbsp;&nbsp;# endif
+<br />
+***************
+<br />
+*** 815,826 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b-&gt;c-&gt;fc=GetColor(b-&gt;c-&gt;fore);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(b-&gt;c-&gt;flags&amp;b_Back)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+! 	  if(b-&gt;c-&gt;flags&amp;b_IconBack)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+! 	      if(!LoadIconFile(b-&gt;c-&gt;back,&amp;b-&gt;c-&gt;backicon))
+<br />
+! 		b-&gt;c-&gt;flags&amp;=~b_Back;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+! 	  else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b-&gt;c-&gt;bc=GetColor(b-&gt;c-&gt;back);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b-&gt;c-&gt;hc=GetHilite(b-&gt;c-&gt;bc);
+<br />
+--- 896,907 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b-&gt;c-&gt;fc=GetColor(b-&gt;c-&gt;fore);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(b-&gt;c-&gt;flags&amp;b_Back)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+! 	  if(b-&gt;c-&gt;flags&amp;b_IconBack &amp;&amp; !(b-&gt;c-&gt;flags&amp;b_TransBack))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+! 	      if(!LoadIconFile(b-&gt;c-&gt;back_file,&amp;b-&gt;c-&gt;backicon))
+<br />
+! 		b-&gt;c-&gt;flags&amp;=~b_IconBack;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+! 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b-&gt;c-&gt;bc=GetColor(b-&gt;c-&gt;back);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b-&gt;c-&gt;hc=GetHilite(b-&gt;c-&gt;bc);
+<br />
+***************
+<br />
+*** 1070,1075 ****
+<br />
+--- 1151,1160 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MyWindow = XCreateSimpleWindow(Dpy,Root,mysizehints.x,mysizehints.y,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mysizehints.width,mysizehints.height,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1,fore_pix,back_pix);
+<br />
++   if(ub-&gt;c-&gt;flags&amp;b_IconBack &amp;&amp; !(ub-&gt;c-&gt;flags&amp;b_TransBack))
+<br />
++     XSetWindowBackgroundPixmap(Dpy,MyWindow,ub-&gt;c-&gt;backicon-&gt;picture);
+<br />
++ 
+<br />
++ 
+<br />
+&nbsp;&nbsp;# ifdef DEBUG_INIT
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;fprintf(stderr,&quot;properties...&quot;);
+<br />
+&nbsp;&nbsp;# endif
+<br />
+diff -cr FvwmButtons.orig/FvwmButtons.h FvwmButtons/FvwmButtons.h
+<br />
+*** FvwmButtons.orig/FvwmButtons.h	Mon Apr 15 20:45:48 1996
+<br />
+--- FvwmButtons/FvwmButtons.h	Fri Feb  7 12:28:37 1997
+<br />
+***************
+<br />
+*** 53,58 ****
+<br />
+--- 53,60 ----
+<br />
+&nbsp;&nbsp;#define b_Justify   0x0800 /* Has justification info */
+<br />
+&nbsp;&nbsp;#define b_Size      0x1000 /* Has a minimum size, don't guess */
+<br />
+&nbsp;&nbsp;#define b_IconBack  0x2000 /* Has an icon as background */
+<br />
++ #define b_IconParent 0x4000 /* Parent button has an icon as background */
+<br />
++ #define b_TransBack 0x8000 /* Transparent background */
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;/* Flags for b-&gt;swallow */
+<br />
+&nbsp;&nbsp;#define b_Count       0x03 /* Init counter for swallowing */
+<br />
+***************
+<br />
+*** 93,99 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;signed char framew;             /* b_Frame */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;XFontStruct *font;       /* b_Font */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;char *font_string;       /* b_Font */
+<br />
+!   char *back;              /* b_Back */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;char *fore;              /* b_Fore */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Pixel fc;                /* b_Fore */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Pixel bc,hc,sc;          /* b_Back &amp;&amp; !b_IconBack */
+<br />
+--- 95,102 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;signed char framew;             /* b_Frame */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;XFontStruct *font;       /* b_Font */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;char *font_string;       /* b_Font */
+<br />
+!   char *back;              /* b_Back &amp;&amp; !b_IconBack */
+<br />
+!   char *back_file;         /* b_Back &amp;&amp; b_IconBack */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;char *fore;              /* b_Fore */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Pixel fc;                /* b_Fore */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Pixel bc,hc,sc;          /* b_Back &amp;&amp; !b_IconBack */
+<br />
+diff -cr FvwmButtons.orig/button.c FvwmButtons/button.c
+<br />
+*** FvwmButtons.orig/button.c	Fri Apr 12 23:17:58 1996
+<br />
+--- FvwmButtons/button.c	Fri Feb  7 12:21:39 1997
+<br />
+***************
+<br />
+*** 354,360 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;b-&gt;c-&gt;xpos=0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;b-&gt;c-&gt;ypos=0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(b-&gt;parent != NULL)
+<br />
+!     b-&gt;c-&gt;flags=0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;else /* This applies to the UberButton */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b-&gt;c-&gt;flags=b_Font|b_Padding|b_Frame|b_Back|b_Fore;
+<br />
+--- 354,365 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;b-&gt;c-&gt;xpos=0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;b-&gt;c-&gt;ypos=0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(b-&gt;parent != NULL)
+<br />
+!     {
+<br />
+!       if (b-&gt;parent-&gt;c-&gt;flags&amp;b_IconBack || b-&gt;parent-&gt;c-&gt;flags&amp;b_IconParent)
+<br />
+! 	b-&gt;c-&gt;flags=b_IconParent;
+<br />
+!       else
+<br />
+! 	b-&gt;c-&gt;flags=0;
+<br />
+!     }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;else /* This applies to the UberButton */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b-&gt;c-&gt;flags=b_Font|b_Padding|b_Frame|b_Back|b_Fore;
+<br />
+diff -cr FvwmButtons.orig/draw.c FvwmButtons/draw.c
+<br />
+*** FvwmButtons.orig/draw.c	Fri Mar 29 13:25:42 1996
+<br />
+--- FvwmButtons/draw.c	Fri Feb  7 14:29:53 1997
+<br />
+***************
+<br />
+*** 33,38 ****
+<br />
+--- 33,39 ----
+<br />
+&nbsp;&nbsp;#include &quot;misc.h&quot; /* ConstrainSize() */
+<br />
+&nbsp;&nbsp;#include &quot;icons.h&quot; /* ConfigureIconWindow() */
+<br />
+&nbsp;&nbsp;#include &quot;button.h&quot;
+<br />
++ #include &quot;draw.h&quot;
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;/* ---------------- Functions that design and draw buttons ----------------- */
+<br />
+&nbsp;&nbsp;
+<br />
+***************
+<br />
+*** 119,124 ****
+<br />
+--- 120,129 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(!(b-&gt;flags&amp;b_Icon) &amp;&amp; (buttonSwallowCount(b)&lt;3))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+&nbsp;&nbsp;
+<br />
++   /* Check if parent container has an icon as background */
+<br />
++   if (b-&gt;parent-&gt;c-&gt;flags&amp;b_IconBack || b-&gt;parent-&gt;c-&gt;flags&amp;b_IconParent)
+<br />
++     b-&gt;flags|=b_IconParent;
+<br />
++ 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;font = buttonFont(b);
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;GetInternalSize(b,&amp;ix,&amp;iy,&amp;iw,&amp;ih);
+<br />
+***************
+<br />
+*** 176,186 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;XGCValues gcv;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;unsigned long gcm=0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int rev=0;
+<br />
+!   int justify=buttonJustify(b);
+<br />
+! 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;BW = buttonWidth(b);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;BH = buttonHeight(b);
+<br />
+! 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;buttonInfo(b,&amp;x,&amp;y,&amp;px,&amp;py,&amp;f);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;GetInternalSize(b,&amp;ix,&amp;iy,&amp;iw,&amp;ih);
+<br />
+&nbsp;&nbsp;
+<br />
+--- 181,190 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;XGCValues gcv;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;unsigned long gcm=0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int rev=0;
+<br />
+!   
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;BW = buttonWidth(b);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;BH = buttonHeight(b);
+<br />
+!   
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;buttonInfo(b,&amp;x,&amp;y,&amp;px,&amp;py,&amp;f);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;GetInternalSize(b,&amp;ix,&amp;iy,&amp;iw,&amp;ih);
+<br />
+&nbsp;&nbsp;
+<br />
+***************
+<br />
+*** 216,222 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gcm = GCForeground;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gcv.foreground=buttonBack(b);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XChangeGC(Dpy,NormalGC,gcm,&amp;gcv);
+<br />
+! 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(b-&gt;flags&amp;b_Container)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int x1=x+f,y1=y+f;
+<br />
+--- 220,226 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gcm = GCForeground;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gcv.foreground=buttonBack(b);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XChangeGC(Dpy,NormalGC,gcm,&amp;gcv);
+<br />
+!       
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(b-&gt;flags&amp;b_Container)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int x1=x+f,y1=y+f;
+<br />
+***************
+<br />
+*** 224,310 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int w=BW-2*f,h=BH-2*f;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w2+=iw - b-&gt;c-&gt;num_columns*b-&gt;c-&gt;ButtonWidth;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;h2+=ih - b-&gt;c-&gt;num_rows*b-&gt;c-&gt;ButtonHeight;
+<br />
+! 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(w1)XFillRectangle(Dpy,MyWindow,NormalGC,x1,y1,w1,h);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(w2)XFillRectangle(Dpy,MyWindow,NormalGC,x1+w-w2,y1,w2,h);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(h1)XFillRectangle(Dpy,MyWindow,NormalGC,x1,y1,w,h1);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(h2)XFillRectangle(Dpy,MyWindow,NormalGC,x1,y1+h-h2,w,h2);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+!       else 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XFillRectangle(Dpy,MyWindow,NormalGC,x+f,y+f,BW-2*f,BH-2*f);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+! 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;/* ----------------------------------------------------------------------- */
+<br />
+! 
+<br />
+!   /* If a title is to be shown, truncate it until it fits */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(b-&gt;flags&amp;b_Title &amp;&amp; font)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+-       int l,i,xpos;
+<br />
+-       char *s;
+<br />
+-       int just=justify&amp;b_TitleHoriz; /* Left, center, right */
+<br />
+- 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gcm = GCForeground | GCFont; 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gcv.foreground=buttonFore(b);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gcv.font = font-&gt;fid;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XChangeGC(Dpy,NormalGC,gcm,&amp;gcv);
+<br />
+&nbsp;&nbsp;
+<br />
+!       if(justify&amp;b_Horizontal)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+! 	  if(b-&gt;flags&amp;b_Icon)
+<br />
+! 	    {
+<br />
+! 	      ix+=b-&gt;icon-&gt;width+buttonXPad(b);
+<br />
+! 	      iw-=b-&gt;icon-&gt;width+buttonXPad(b);
+<br />
+! 	    }
+<br />
+! 	  else if (buttonSwallowCount(b)==3)
+<br />
+! 	    {
+<br />
+! 	      ix+=b-&gt;icon_w+buttonXPad(b);
+<br />
+! 	      iw-=b-&gt;icon_w+buttonXPad(b);
+<br />
+! 	    }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+! 
+<br />
+!       s=b-&gt;title;
+<br />
+!       l=strlen(s);
+<br />
+!       i=XTextWidth(font,s,l);
+<br />
+! 
+<br />
+!       if(i&gt;iw)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+! 	  if(just==2)
+<br />
+! 	    {
+<br />
+! 	      while(i&gt;iw &amp;&amp; *s)
+<br />
+! 		i=XTextWidth(font,++s,--l);
+<br />
+! 	    }
+<br />
+! 	  else /* Left or center - cut off its tail */
+<br />
+! 	    {
+<br />
+! 	      while(i&gt;iw &amp;&amp; l&gt;0)
+<br />
+! 		i=XTextWidth(font,s,--l);
+<br />
+! 	    }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+!       if(just==0) /* Left */
+<br />
+! 	xpos=ix;
+<br />
+!       else if(just==2) /* Right */
+<br />
+! 	xpos=max(ix,ix+iw-i);
+<br />
+!       else /* Centered, I guess */
+<br />
+!  	xpos=ix+(iw-i)/2;
+<br />
+! 
+<br />
+!       if(*s &amp;&amp; l&gt;0 &amp;&amp; BH&gt;=font-&gt;descent+font-&gt;ascent) /* Clip it somehow? */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+! 	  /* If there is more than the title, put it at the bottom */
+<br />
+!           /* Unless stack flag is set, put it to the right of icon */
+<br />
+! 	  if((b-&gt;flags&amp;b_Icon || (buttonSwallowCount(b)==3)) &amp;&amp;
+<br />
+! 	     !(justify&amp;b_Horizontal))
+<br />
+! 	    {
+<br />
+! 	      XDrawString(Dpy,MyWindow,NormalGC,xpos,
+<br />
+! 			  iy+ih-font-&gt;descent,s,l);
+<br />
+! 	      /* Shrink the space available for icon/window */
+<br />
+! 	      ih-=font-&gt;descent+font-&gt;ascent;
+<br />
+! 	    }
+<br />
+! 	  /* Or else center vertically */
+<br />
+! 	  else
+<br />
+! 	    {
+<br />
+! 	      XDrawString(Dpy,MyWindow,NormalGC,xpos,
+<br />
+! 			  iy+(ih+font-&gt;ascent-font-&gt;descent)/2,s,l);
+<br />
+! 	    }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;}
+<br />
+- 
+<br />
+--- 228,334 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int w=BW-2*f,h=BH-2*f;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w2+=iw - b-&gt;c-&gt;num_columns*b-&gt;c-&gt;ButtonWidth;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;h2+=ih - b-&gt;c-&gt;num_rows*b-&gt;c-&gt;ButtonHeight;
+<br />
+! 	  
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(w1)XFillRectangle(Dpy,MyWindow,NormalGC,x1,y1,w1,h);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(w2)XFillRectangle(Dpy,MyWindow,NormalGC,x1+w-w2,y1,w2,h);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(h1)XFillRectangle(Dpy,MyWindow,NormalGC,x1,y1,w,h1);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(h2)XFillRectangle(Dpy,MyWindow,NormalGC,x1,y1+h-h2,w,h2);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+!       else if(!(b-&gt;flags&amp;b_IconBack) &amp;&amp; !(b-&gt;flags&amp;b_IconParent))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XFillRectangle(Dpy,MyWindow,NormalGC,x+f,y+f,BW-2*f,BH-2*f);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+!   
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;/* ----------------------------------------------------------------------- */
+<br />
+!   
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(b-&gt;flags&amp;b_Title &amp;&amp; font)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gcm = GCForeground | GCFont; 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gcv.foreground=buttonFore(b);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gcv.font = font-&gt;fid;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XChangeGC(Dpy,NormalGC,gcm,&amp;gcv);
+<br />
++       DrawTitle(b,MyWindow,NormalGC);
+<br />
++     }
+<br />
++ }
+<br />
+&nbsp;&nbsp;
+<br />
+! /**
+<br />
+! *** DrawTitle()
+<br />
+! *** Writes out title.
+<br />
+! **/
+<br />
+! void DrawTitle(button_info *b,Window win,GC gc)
+<br />
+! {
+<br />
+!   int BH;
+<br />
+!   int ix,iy,iw,ih;
+<br />
+!   XFontStruct *font=buttonFont(b);
+<br />
+!   int justify=buttonJustify(b);
+<br />
+!   int l,i,xpos;
+<br />
+!   char *s;
+<br />
+!   int just=justify&amp;b_TitleHoriz; /* Left, center, right */
+<br />
+!   
+<br />
+!   BH = buttonHeight(b);
+<br />
+!   
+<br />
+!   GetInternalSize(b,&amp;ix,&amp;iy,&amp;iw,&amp;ih);
+<br />
+!   
+<br />
+!   /* ----------------------------------------------------------------------- */
+<br />
+!   
+<br />
+!   if(!(b-&gt;flags&amp;b_Title) || !font)
+<br />
+!     return;
+<br />
+!   
+<br />
+!   /* If a title is to be shown, truncate it until it fits */
+<br />
+!   if(justify&amp;b_Horizontal)
+<br />
+!     {
+<br />
+!       if(b-&gt;flags&amp;b_Icon)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+! 	  ix+=b-&gt;icon-&gt;width+buttonXPad(b);
+<br />
+! 	  iw-=b-&gt;icon-&gt;width+buttonXPad(b);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+!       else if (buttonSwallowCount(b)==3)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+! 	  ix+=b-&gt;icon_w+buttonXPad(b);
+<br />
+! 	  iw-=b-&gt;icon_w+buttonXPad(b);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+!     }
+<br />
+!   
+<br />
+!   s=b-&gt;title;
+<br />
+!   l=strlen(s);
+<br />
+!   i=XTextWidth(font,s,l);
+<br />
+!   
+<br />
+!   if(i&gt;iw)
+<br />
+!     {
+<br />
+!       if(just==2)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+! 	  while(i&gt;iw &amp;&amp; *s)
+<br />
+! 	    i=XTextWidth(font,++s,--l);
+<br />
+! 	}
+<br />
+!       else /* Left or center - cut off its tail */
+<br />
+! 	{
+<br />
+! 	  while(i&gt;iw &amp;&amp; l&gt;0)
+<br />
+! 	    i=XTextWidth(font,s,--l);
+<br />
+! 	}
+<br />
+!     }
+<br />
+!   if(just==0) /* Left */
+<br />
+!     xpos=ix;
+<br />
+!   else if(just==2) /* Right */
+<br />
+!     xpos=max(ix,ix+iw-i);
+<br />
+!   else /* Centered, I guess */
+<br />
+!     xpos=ix+(iw-i)/2;
+<br />
+!   
+<br />
+!   if(*s &amp;&amp; l&gt;0 &amp;&amp; BH&gt;=font-&gt;descent+font-&gt;ascent) /* Clip it somehow? */
+<br />
+!     {
+<br />
+!       /* If there is more than the title, put it at the bottom */
+<br />
+!       /* Unless stack flag is set, put it to the right of icon */
+<br />
+!       if((b-&gt;flags&amp;b_Icon || (buttonSwallowCount(b)==3)) &amp;&amp;
+<br />
+! 	 !(justify&amp;b_Horizontal))
+<br />
+! 	{
+<br />
+! 	  XDrawString(Dpy,win,gc,xpos,
+<br />
+! 		      iy+ih-font-&gt;descent,s,l);
+<br />
+! 	  /* Shrink the space available for icon/window */
+<br />
+! 	  ih-=font-&gt;descent+font-&gt;ascent;
+<br />
+! 	}
+<br />
+!       /* Or else center vertically */
+<br />
+!       else
+<br />
+! 	{
+<br />
+! 	  XDrawString(Dpy,win,gc,xpos,
+<br />
+! 		      iy+(ih+font-&gt;ascent-font-&gt;descent)/2,s,l);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;}
+<br />
+diff -cr FvwmButtons.orig/draw.h FvwmButtons/draw.h
+<br />
+*** FvwmButtons.orig/draw.h	Fri Mar 29 13:25:42 1996
+<br />
+--- FvwmButtons/draw.h	Fri Feb  7 12:24:54 1997
+<br />
+***************
+<br />
+*** 15,18 ****
+<br />
+--- 15,19 ----
+<br />
+&nbsp;&nbsp;void RelieveWindow(Window,int,int,int,int,int,Pixel,Pixel,int);
+<br />
+&nbsp;&nbsp;void MakeButton(button_info*);
+<br />
+&nbsp;&nbsp;void RedrawButton(button_info*,int);
+<br />
++ void DrawTitle(button_info*,Window,GC);
+<br />
+&nbsp;&nbsp;
+<br />
+diff -cr FvwmButtons.orig/parse.c FvwmButtons/parse.c
+<br />
+*** FvwmButtons.orig/parse.c	Thu Jun 27 16:46:22 1996
+<br />
+--- FvwmButtons/parse.c	Fri Feb  7 12:30:11 1997
+<br />
+***************
+<br />
+*** 695,701 ****
+<br />
+&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;button_info *ub=*ubb;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;char *opts[]={&quot;geometry&quot;,&quot;font&quot;,&quot;padding&quot;,&quot;columns&quot;,&quot;rows&quot;,&quot;back&quot;,&quot;fore&quot;,
+<br />
+! 		  &quot;frame&quot;,&quot;file&quot;,NULL};
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int i,j,k;
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;switch(MatchSeveralLines(s,opts,&amp;s))
+<br />
+--- 695,701 ----
+<br />
+&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;button_info *ub=*ubb;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;char *opts[]={&quot;geometry&quot;,&quot;font&quot;,&quot;padding&quot;,&quot;columns&quot;,&quot;rows&quot;,&quot;back&quot;,&quot;fore&quot;,
+<br />
+! 		  &quot;frame&quot;,&quot;file&quot;,&quot;pixmap&quot;,NULL};
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int i,j,k;
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;switch(MatchSeveralLines(s,opts,&amp;s))
+<br />
+***************
+<br />
+*** 748,753 ****
+<br />
+--- 748,761 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;trimleft(s);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;config_file=seekright(&amp;s);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
++     case 9:/* Pixmap */
+<br />
++       trimleft(s);
+<br />
++       if (mystrncasecmp(s,&quot;none&quot;,4)==0)
+<br />
++ 	ub-&gt;c-&gt;flags|=b_TransBack;
+<br />
++       else
+<br />
++         CopyString(&amp;(ub-&gt;c-&gt;back_file),s);
+<br />
++       ub-&gt;c-&gt;flags|=b_IconBack;
+<br />
++       break;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;trimleft(s);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;match_string(ubb,s);
+<br />
+---------------------------------cut here----------------------------
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Feb 07 1997 - 09:08:36 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start19179">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="19180.html" title="Next message in the list">Pete Schmitt: "FVWM: FvwmAuto on fvwm95-2"</a></li>
+<li><dfn>Previous message</dfn>: <a href="19178.html" title="Previous message in the list">David S. Goldberg: "FVWM: Re: fvwm &#0038; WABI"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19179" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19179" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19179" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19179" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

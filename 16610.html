@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: FlipFocus from Dan Niles on 1996-05-01 (fvwm-users)</title>
+<meta name="Author" content="Dan Niles (dan_at_more.net)" />
+<meta name="Subject" content="FVWM: FlipFocus" />
+<meta name="Date" content="1996-05-01" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: FlipFocus</h1>
+<!-- received="Wed May  1 16:43:13 1996" -->
+<!-- isoreceived="19960501154313" -->
+<!-- sent="Wed, 1 May 1996 16:47:49 -0500" -->
+<!-- isosent="19960501214749" -->
+<!-- name="Dan Niles" -->
+<!-- email="dan_at_more.net" -->
+<!-- subject="FVWM: FlipFocus" -->
+<!-- id="199605012147.QAA19416_at_Jane.apg.more.net" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start16610" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="16611.html" accesskey="d" title="David Peart: &quot;FVWM: FvwmButton enhancement request&quot;">Next message</a> ]
+[ <a href="16609.html" title="Kevin Hilman: &quot;FVWM: mailing list archives&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="16521.html" accesskey="t" title="Michael Kirby: &quot;Re: FVWM: FlipFocus&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16610" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16610" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16610" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16610" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Dan Niles &lt;<a href="mailto:dan_at_more.net?Subject=Re%3A%20FVWM%3A%20FlipFocus">dan_at_more.net</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 1 May 1996 16:47:49 -0500</span><br />
+</address>
+<br />
+After using FlipFocus for a while, I discovered that it didn't work exactly
+<br />
+as I would like.  So I modified it, and I like the new behavior much
+<br />
+better.
+<br />
+<br />Apply the new patch below, and tell me if you like the new version better
+<br />
+too.
+<br />
+<br />The first patch will convert directly from fvwm 2.0.42, the second one will
+<br />
+convert the old FlipFocus to the new one.
+<br />
+<br />I hope that makes sense.
+<br />
+<br />------------------------- fvwm-2.0.42-FlipFocus.patch2 ----------------------
+<br />
+--- parse.h.orig	Thu Mar 28 09:24:48 1996
+<br />
++++ parse.h	Mon Apr 29 17:03:13 1996
+<br />
+_at_&#64; -85,6 +85,7 &#64;&#64;
+<br />
+&nbsp;#define F_RAISELOWER            108
+<br />
+&nbsp;#define F_MAXIMIZE              109
+<br />
+&nbsp;#define F_FOCUS                 110
+<br />
++#define F_FLIP_FOCUS            111
+<br />
+&nbsp;
+<br />
+&nbsp;/* Functions for use by modules only! */
+<br />
+&nbsp;#define F_SEND_WINDOW_LIST     1000
+<br />
+--- misc.h.orig	Thu Apr  4 17:47:30 1996
+<br />
++++ misc.h	Mon Apr 29 17:03:46 1996
+<br />
+_at_&#64; -381,6 +381,8 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long context,char *action, int *Module);
+<br />
+&nbsp;void raise_it_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long context, char *action, int *Module);
+<br />
++void flip_focus_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
++		unsigned long context, char *action, int *Module);
+<br />
+&nbsp;void focus_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long context, char *action, int *Module);
+<br />
+&nbsp;void SendDataToModule(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
+--- functions.c.orig	Thu Mar 28 09:24:23 1996
+<br />
++++ functions.c	Mon Apr 29 17:03:22 1996
+<br />
+_at_&#64; -53,6 +53,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;{&quot;EdgeResistance&quot;,SetEdgeResistance,F_EDGE_RES,           FUNC_NO_WINDOW},
+<br />
+&nbsp;&nbsp;&nbsp;{&quot;Exec&quot;,         exec_function,    F_EXEC,                FUNC_NO_WINDOW},
+<br />
+&nbsp;&nbsp;&nbsp;{&quot;ExecUseSHELL&quot;, exec_setup,       F_EXEC_SETUP,          FUNC_NO_WINDOW},
+<br />
++  {&quot;FlipFocus&quot;,    flip_focus_func,  F_FLIP_FOCUS,          FUNC_NEEDS_WINDOW},
+<br />
+&nbsp;&nbsp;&nbsp;{&quot;Focus&quot;,        focus_func,       F_FOCUS,               FUNC_NEEDS_WINDOW},
+<br />
+&nbsp;&nbsp;&nbsp;{&quot;Function&quot;,     ComplexFunction,  F_FUNCTION,            FUNC_NO_WINDOW},
+<br />
+&nbsp;&nbsp;&nbsp;{&quot;GotoPage&quot;,     goto_page_func,   F_GOTO_PAGE,           FUNC_NO_WINDOW},
+<br />
+--- builtins.c.orig	Wed Apr 10 12:38:25 1996
+<br />
++++ builtins.c	Wed May  1 16:37:07 1996
+<br />
+_at_&#64; -757,6 +757,38 &#64;&#64;
+<br />
+&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;
+<br />
++void flip_focus_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
++		unsigned long context, char *action, int *Module)
+<br />
++{
+<br />
++
+<br />
++  FvwmWindow *scratch;
+<br />
++
+<br />
++  if (DeferExecution(eventp,&amp;w,&amp;tmp_win,&amp;context,SELECT,ButtonRelease))
+<br />
++    return;
+<br />
++
+<br />
++  /* Reorder the window list */
+<br />
++  if( Scr.Focus ){
+<br />
++    if( Scr.Focus-&gt;next ) Scr.Focus-&gt;next-&gt;prev = Scr.Focus-&gt;prev;
+<br />
++    if( Scr.Focus-&gt;prev ) Scr.Focus-&gt;prev-&gt;next = Scr.Focus-&gt;next;
+<br />
++    Scr.Focus-&gt;next = Scr.FvwmRoot.next;
+<br />
++    Scr.Focus-&gt;prev = &amp;Scr.FvwmRoot;
+<br />
++    if(Scr.FvwmRoot.next)Scr.FvwmRoot.next-&gt;prev = Scr.Focus;
+<br />
++    Scr.FvwmRoot.next = Scr.Focus;
+<br />
++  }
+<br />
++  if( tmp_win != Scr.Focus ){
+<br />
++    if( tmp_win-&gt;next ) tmp_win-&gt;next-&gt;prev = tmp_win-&gt;prev;
+<br />
++    if( tmp_win-&gt;prev ) tmp_win-&gt;prev-&gt;next = tmp_win-&gt;next;
+<br />
++    tmp_win-&gt;next = Scr.FvwmRoot.next;
+<br />
++    tmp_win-&gt;prev = &amp;Scr.FvwmRoot;
+<br />
++    if(Scr.FvwmRoot.next)Scr.FvwmRoot.next-&gt;prev = tmp_win;
+<br />
++    Scr.FvwmRoot.next = tmp_win;
+<br />
++  }
+<br />
++
+<br />
++  FocusOn(tmp_win,0);
+<br />
++
+<br />
++}
+<br />
++
+<br />
++
+<br />
+&nbsp;void focus_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long context, char *action, int *Module)
+<br />
+&nbsp;{
+<br />
+---------------------- END ----------------------
+<br />
+<br />------------------------- fvwm-2.0.42-FlipFocus.p1to2 ----------------------
+<br />
+--- builtins.c.first	Wed May  1 16:21:15 1996
+<br />
++++ builtins.c	Wed May  1 16:37:07 1996
+<br />
+_at_&#64; -766,18 +766,23 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;if (DeferExecution(eventp,&amp;w,&amp;tmp_win,&amp;context,SELECT,ButtonRelease))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+&nbsp;
+<br />
+-  if( Scr.Focus == NULL || tmp_win == Scr.Focus ){
+<br />
+-    /* There is no window with focus */
+<br />
+-    FocusOn(tmp_win,0);
+<br />
+-    return;
+<br />
++  /* Reorder the window list */
+<br />
++  if( Scr.Focus ){
+<br />
++    if( Scr.Focus-&gt;next ) Scr.Focus-&gt;next-&gt;prev = Scr.Focus-&gt;prev;
+<br />
++    if( Scr.Focus-&gt;prev ) Scr.Focus-&gt;prev-&gt;next = Scr.Focus-&gt;next;
+<br />
++    Scr.Focus-&gt;next = Scr.FvwmRoot.next;
+<br />
++    Scr.Focus-&gt;prev = &amp;Scr.FvwmRoot;
+<br />
++    if(Scr.FvwmRoot.next)Scr.FvwmRoot.next-&gt;prev = Scr.Focus;
+<br />
++    Scr.FvwmRoot.next = Scr.Focus;
+<br />
++  }
+<br />
++  if( tmp_win != Scr.Focus ){
+<br />
++    if( tmp_win-&gt;next ) tmp_win-&gt;next-&gt;prev = tmp_win-&gt;prev;
+<br />
++    if( tmp_win-&gt;prev ) tmp_win-&gt;prev-&gt;next = tmp_win-&gt;next;
+<br />
++    tmp_win-&gt;next = Scr.FvwmRoot.next;
+<br />
++    tmp_win-&gt;prev = &amp;Scr.FvwmRoot;
+<br />
++    if(Scr.FvwmRoot.next)Scr.FvwmRoot.next-&gt;prev = tmp_win;
+<br />
++    Scr.FvwmRoot.next = tmp_win;
+<br />
+&nbsp;&nbsp;&nbsp;}
+<br />
+-
+<br />
+-  scratch=Scr.Focus-&gt;next;
+<br />
+-  if( (Scr.Focus-&gt;next=tmp_win-&gt;next) ) Scr.Focus-&gt;next-&gt;prev=Scr.Focus;
+<br />
+-  if( (tmp_win-&gt;next=scratch) ) tmp_win-&gt;next-&gt;prev=tmp_win;
+<br />
+-  scratch=Scr.Focus-&gt;prev;
+<br />
+-  if( (Scr.Focus-&gt;prev=tmp_win-&gt;prev) ) Scr.Focus-&gt;prev-&gt;next=Scr.Focus;
+<br />
+-  if( (tmp_win-&gt;prev=scratch) ) tmp_win-&gt;prev-&gt;next=tmp_win;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;FocusOn(tmp_win,0);
+<br />
+&nbsp;
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed May 01 1996 - 16:43:13 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start16610">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="16611.html" title="Next message in the list">David Peart: "FVWM: FvwmButton enhancement request"</a></li>
+<li><dfn>Previous message</dfn>: <a href="16609.html" title="Previous message in the list">Kevin Hilman: "FVWM: mailing list archives"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="16521.html" title="Next message in this discussion thread">Michael Kirby: "Re: FVWM: FlipFocus"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Maybe reply</dfn>: <a href="16521.html" title="Message sent in reply to this message">Michael Kirby: "Re: FVWM: FlipFocus"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="16526.html" title="Message sent in reply to this message">Brady Montz: "Re: FVWM: FlipFocus"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16610" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16610" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16610" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16610" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

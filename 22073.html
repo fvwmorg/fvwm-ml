@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: fvwm95/winNT look and feel differences from Bob Woodside on 1998-04-27 (fvwm-users)</title>
+<meta name="Author" content="Bob Woodside (proteus_at_pcnet.com)" />
+<meta name="Subject" content="Re: FVWM: fvwm95/winNT look and feel differences" />
+<meta name="Date" content="1998-04-27" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: fvwm95/winNT look and feel differences</h1>
+<!-- received="Sun Apr 26 20:14:18 1998" -->
+<!-- isoreceived="19980426191418" -->
+<!-- sent="Sun, 26 Apr 1998 21:01:04 -0400 (EDT)" -->
+<!-- isosent="19980427010104" -->
+<!-- name="Bob Woodside" -->
+<!-- email="proteus_at_pcnet.com" -->
+<!-- subject="Re: FVWM: fvwm95/winNT look and feel differences" -->
+<!-- id="XFMail.980426210104.proteus_at_pcnet.com" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="9804232314.ZM5982_at_unity.ncsu.edu" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start22073" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="22074.html" accesskey="d" title="Brad Giaccio: &quot;Re: FVWM: shells and programs&quot;">Next message</a> ]
+[ <a href="22072.html" title="Frank Wilcox, Jr.: &quot;FVWM: Re: fvwm: FvwmIconMan loads twice&quot;">Previous message</a> ]
+[ <a href="22065.html" title="Frank Wilcox, Jr.: &quot;Re: FVWM: fvwm95/winNT look and feel differences&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg22073" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg22073" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg22073" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg22073" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Bob Woodside &lt;<a href="mailto:proteus_at_pcnet.com?Subject=Re%3A%20FVWM%3A%20fvwm95%2FwinNT%20look%20and%20feel%20differences">proteus_at_pcnet.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sun, 26 Apr 1998 21:01:04 -0400 (EDT)</span><br />
+</address>
+<br />
+On 24-Apr-98 Frank Wilcox, Jr. wrote:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[FW = Frank, DB = Dave Brooks, MH = Mike Han]
+<br />
+DB&gt;&gt; &gt; I would...like...to...Duplicate the ALT+TAB behavior of Windows 95...
+<br />
+DB&gt;&gt; &gt; The closest I've been able to come...
+<br />
+DB&gt;&gt; &gt;
+<br />
+DB&gt;&gt; &gt;     Key Tab        A       M       Next [*] Focus
+<br />
+DB&gt;&gt; &gt;
+<br />
+DB&gt;&gt; &gt; but this only seems to alternate between the two most recent windows
+<br />
+DB&gt;&gt; &gt; (most of the time, there are exceptions)....
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;It took me a while to figure out how to duplicate this...
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The problem here is that you're using some version of mousey-focus
+<br />
+(MouseFocus or SloppyFocus), which butts heads with window list circulation
+<br />
+when you cycle to a window that happens to lie under the mouse cursor. The
+<br />
+FocusFollowsMouse policy takes precedence when FVWM tries to decide where
+<br />
+to assign focus, and this messes up the cycling order. When you cycle to a
+<br />
+window that's under the mouse cursor, try moving the mouse cursor out of
+<br />
+the window onto the desktop, then try to continue cycling with Alt-Tab
+<br />
+(or whatever key combo you'd like to use).
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The code may be slightly buggy: this aberration in the cycling
+<br />
+order only seems to happen when you're switching to a different desktop
+<br />
+or page and land on a window under the mouse cursor. I haven't looked at
+<br />
+this area of the code in a good while, and my memory of it is a bit hazy,
+<br />
+so I can't comment on whether this is really a bug without looking into it
+<br />
+a bit more. But move the mouse and you should be able to continue cycling
+<br />
+through all the windows.
+<br />
+<br />MH&gt;&gt; Incidentally...it's helpful to add:
+<br />
+MH&gt;&gt;
+<br />
+MH&gt;&gt; Key Tab      A       SM      Prev [*] Focus
+<br />
+MH&gt;&gt;
+<br />
+MH&gt;&gt; That way you're not limited to just two windows...
+<br />
+MH&gt;&gt; ...
+<br />
+FW&gt; i put that in, but it doesn't seem to do anything...do i need both lines?
+<br />
+FW&gt; ...does it not use alt-tab?
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;All this does is to give you *another* keyboard shortcut to circulate
+<br />
+through the list backwards with Shift-Alt-Tab. It's a very nice convenience,
+<br />
+but it doesn't alter the behavior that started this thread. (Well, it may
+<br />
+appear to, since you may be able to get to more windows by traversing the
+<br />
+list in reverse. Then, again, you may not.)
+<br />
+<br />DB ? &gt;&gt; ...
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Finally, the original poster (Dave, I think) mentioned having a window-
+<br />
+list window pop up. Is there something about the plain old WindowList command
+<br />
+that you don't like, apart from its not having icons? Try this binding:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Key Tab          R       M       WindowList
+<br />
+<br />(change the &quot;R&quot; to an &quot;A&quot; if you prefer). You can scroll through the popup
+<br />
+list with the cursor movement keys and then hit Enter, or just click directly
+<br />
+on the window you want to go to. I think this is much quicker than Windows'
+<br />
+approach, since I can select the target window with whatever's closest to
+<br />
+my right hand...and it gives you more information about the windows.
+<br />
+<br /><br />&nbsp;
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sun Apr 26 1998 - 20:14:18 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start22073">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="22074.html" title="Next message in the list">Brad Giaccio: "Re: FVWM: shells and programs"</a></li>
+<li><dfn>Previous message</dfn>: <a href="22072.html" title="Previous message in the list">Frank Wilcox, Jr.: "FVWM: Re: fvwm: FvwmIconMan loads twice"</a></li>
+<li><dfn>In reply to</dfn>: <a href="22065.html" title="Message to which this message replies">Frank Wilcox, Jr.: "Re: FVWM: fvwm95/winNT look and feel differences"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg22073" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg22073" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg22073" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg22073" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

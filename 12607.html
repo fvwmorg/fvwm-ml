@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: Placement on whole desk, not on viewport only from Ruslan Kosolapov on 2004-06-28 (fvwm-users)</title>
+<meta name="Author" content="Ruslan Kosolapov (rkosolapov_at_sw-soft.com)" />
+<meta name="Subject" content="Re: FVWM: Placement on whole desk, not on viewport only" />
+<meta name="Date" content="2004-06-28" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: Placement on whole desk, not on viewport only</h1>
+<!-- received="Mon Jun 28 12:52:58 2004" -->
+<!-- isoreceived="20040628115258" -->
+<!-- sent="Tue, 29 Jun 2004 00:50:11 +0700" -->
+<!-- isosent="20040628175011" -->
+<!-- name="Ruslan Kosolapov" -->
+<!-- email="rkosolapov_at_sw-soft.com" -->
+<!-- subject="Re: FVWM: Placement on whole desk, not on viewport only" -->
+<!-- id="873c4fefn0.fsf_at_joemast.plesk.ru" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="20040628021615.GA28432_at_SDF.LONESTAR.ORG" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start12607" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="12608.html" accesskey="d" title="liushidai_at_mails.tsinghua.edu.cn: &quot;FVWM: Howto place a miniicon to the left of title text?&quot;">Next message</a> ]
+[ <a href="12606.html" title="Piotr Zielinski: &quot;Re: FVWM: How to bind action to key release?&quot;">Previous message</a> ]
+[ <a href="12603.html" title="Mikhael Goikhman: &quot;Re: FVWM: Placement on whole desk, not on viewport only&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg12607" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg12607" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg12607" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg12607" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Ruslan Kosolapov &lt;<a href="mailto:rkosolapov_at_sw-soft.com?Subject=Re%3A%20FVWM%3A%20Placement%20on%20whole%20desk%2C%20not%20on%20viewport%20only">rkosolapov_at_sw-soft.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 29 Jun 2004 00:50:11 +0700</span><br />
+</address>
+<br />
+<em class="quotelev2"> &gt;&gt; How I can do that?  
+</em><br />
+&nbsp;MG&gt; I don't think you can easily do this in fvwm. You may try to do
+<br />
+&nbsp;MG&gt; this in X instead; define your screen size 9 times larger than the
+<br />
+&nbsp;MG&gt; physical size using &quot;Virtual&quot; directive (or something like
+<br />
+&nbsp;MG&gt; this). Then you should probably define your desk 1x1, not 3x3, so
+<br />
+&nbsp;MG&gt; it is just one large page.
+<br />
+<br />&nbsp;&nbsp;Hmm...  This behavior is exactly what I want.  But how I can scroll
+<br />
+&nbsp;&nbsp;viewport by fvwm (or by command-line utility) in this case?  I failed
+<br />
+&nbsp;&nbsp;to find solution in google.  Also about sticky windows - if I will use
+<br />
+&nbsp;&nbsp;X features I can't use sticky window, isn't it?
+<br />
+<br />&nbsp;&nbsp;Now I use Scroll command, and all works nicely:
+<br />
+--8&lt;-------------------------------------------------
+<br />
+DestroyFunc CenterViewPort
+<br />
+AddToFunc   CenterViewPort
+<br />
++ I Current Piperead &quot;echo Scroll \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$(( $[w.x]-$[vp.width]/2+$[w.width]/2 ))p \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$(( $[w.y]-$[vp.height]/2+$[w.height]/2 ))p &quot;
+<br />
+<br />DestroyFunc CenterPointer
+<br />
+AddToFunc CenterPointer
+<br />
++ I Piperead &quot;echo CursorMove \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$(( -$[pointer.x]+$[vp.width]/2 ))p \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$(( -$[pointer.y]+$[vp.height]/2 ))p&quot;
+<br />
+<br />DestroyFunc MyFocus
+<br />
+AddToFunc MyFocus
+<br />
++ I Focus
+<br />
++ I Raise
+<br />
++ I Function CenterViewPort
+<br />
++ I CenterPointer
+<br />
+<br />Key p	 A 4 Direction North MyFocus
+<br />
+Key n	 A 4 Direction South MyFocus
+<br />
+Key f	 A 4 Direction East MyFocus
+<br />
+Key b	 A 4 Direction West MyFocus
+<br />
+Key l	 A 4 Function CenterViewPort
+<br />
+-----------------------------------------------&gt;8---
+<br />
+<br />&nbsp;&nbsp;I.e. viewport scrolls for placing focused window in center.
+<br />
+<br />&nbsp;&nbsp;BTW, why WarpToWindow is not moving mouse but moving viewport when
+<br />
+&nbsp;&nbsp;viewport is not equal to page?  Because of such behaviour I need to
+<br />
+&nbsp;&nbsp;use CenterPointer function instead WarpToWindow 50 50 or CursorMove 50
+<br />
+&nbsp;&nbsp;50.
+<br />
+<br /><pre>
+-- 
+Ruslan Kosolapov
+Plesk QA Department Second Manager
+SWsoft, Inc.
+E-mail: rkosolapov_at_sw-soft.com
+Web Site: www.sw-soft.com
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon Jun 28 2004 - 12:52:58 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start12607">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="12608.html" title="Next message in the list">liushidai_at_mails.tsinghua.edu.cn: "FVWM: Howto place a miniicon to the left of title text?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="12606.html" title="Previous message in the list">Piotr Zielinski: "Re: FVWM: How to bind action to key release?"</a></li>
+<li><dfn>In reply to</dfn>: <a href="12603.html" title="Message to which this message replies">Mikhael Goikhman: "Re: FVWM: Placement on whole desk, not on viewport only"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg12607" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg12607" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg12607" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg12607" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:56 BST
+</em></small></p>
+</body>
+</html>

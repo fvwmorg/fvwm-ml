@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Root menu pops up where window border is... from Eddy J. Gurney on 1998-03-11 (fvwm-users)</title>
+<meta name="Author" content="Eddy J. Gurney (eddy_at_ans.net)" />
+<meta name="Subject" content="FVWM: Root menu pops up where window border is..." />
+<meta name="Date" content="1998-03-11" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Root menu pops up where window border is...</h1>
+<!-- received="Wed Mar 11 15:37:37 1998" -->
+<!-- isoreceived="19980311153737" -->
+<!-- sent="Wed, 11 Mar 1998 16:37:18 -0500" -->
+<!-- isosent="19980311213718" -->
+<!-- name="Eddy J. Gurney" -->
+<!-- email="eddy_at_ans.net" -->
+<!-- subject="FVWM: Root menu pops up where window border is..." -->
+<!-- id="980311163718.ZM17165_at_gizmo.aa.ans.net" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start21876" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="21877.html" accesskey="d" title="A. van Werven: &quot;Re: FVWM: Inactive colors&quot;">Next message</a> ]
+[ <a href="21875.html" title="Dan Espen: &quot;Re: FVWM: Inactive colors&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21876" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21876" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21876" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21876" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Eddy J. Gurney &lt;<a href="mailto:eddy_at_ans.net?Subject=Re%3A%20FVWM%3A%20Root%20menu%20pops%20up%20where%20window%20border%20is...">eddy_at_ans.net</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 11 Mar 1998 16:37:18 -0500</span><br />
+</address>
+<br />
+I have noticed an annoying problem with fvwm2 (both 2.0.45 and 2.0.46).
+<br />
+<br />I have my DeskTopSize set to &quot;1 6&quot; (1 wide by 6 high).
+<br />
+<br />My EdgeResistance is set to 750 50.
+<br />
+<br />To see this problem, position a window (an xterm works good) so that the
+<br />
+bottom border of the window is right at the bottom edge of one of the
+<br />
+virtual screens:
+<br />
+<br />| |
+<br />
+| |  xterm
+<br />
+| |
+<br />
+| |____________
+<br />
++============== &lt;-- bottom of virtual screen, border of xterm is actually
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;touching it; there should be no &quot;root window&quot; pixels
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;visible
+<br />
+<br />Now, take the mouse and quickly slide it to the bottom border of the
+<br />
+xterm and click the left button. Since the mouse is in the window's
+<br />
+border region, it SHOULD perform the Mouse 1 action associated with
+<br />
+the window side (in my case, Raise-or-Resize). Unfortunately, what it
+<br />
+does is perform the action associated with clicking in the root window
+<br />
+(in my case, popping up a &quot;Root Menu&quot;).
+<br />
+<br />I've looked at the code in virtual.c, and it appears that fvwm creates
+<br />
+four windows around the edge of the screen that it uses strictly for
+<br />
+&quot;input notification&quot; to tell when the mouse has entered one of these
+<br />
+four &quot;invisible&quot; windows around the edge of the screen (they are 2
+<br />
+pixels wide). I think somehow these windows are interfering with the
+<br />
+desired action, but that is just a guess.
+<br />
+<br />This is important to me because I use this technique to quickly &quot;Raise&quot;
+<br />
+a window by sliding the mouse down to its bottom border (a &quot;hard stop&quot;,
+<br />
+so it doesn't require precise mouse positioning) and clicking the left
+<br />
+button... unfortunately, I get the stupid &quot;Root Menu&quot; instead of the
+<br />
+desired &quot;Raise-or-Resize&quot; action!
+<br />
+<br />Any suggestions on how to fix this? I tried a couple quick hacks in
+<br />
+virtual.c and events.c, but to no avail.
+<br />
+<br />Thanks for any suggestions,
+<br />
+Eddy
+<br />
+<br />P.S. For some reason, this problem does *NOT* exhibit itself when fvwm2
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is first started -- it isn't until you actually MOVE to different
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;virtual screen that this behavior manifests itself. If you stay on
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the first virtual screen, the actions described above work
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;as expected&quot;.
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Mar 11 1998 - 15:37:37 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start21876">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="21877.html" title="Next message in the list">A. van Werven: "Re: FVWM: Inactive colors"</a></li>
+<li><dfn>Previous message</dfn>: <a href="21875.html" title="Previous message in the list">Dan Espen: "Re: FVWM: Inactive colors"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21876" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21876" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21876" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21876" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

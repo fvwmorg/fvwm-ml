@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: I might have a bug fix. from Paul Koshevoy on 2001-06-26 (fvwm-users)</title>
+<meta name="Author" content="Paul Koshevoy (paul_at_bart.aragog.com)" />
+<meta name="Subject" content="Re: FVWM: I might have a bug fix." />
+<meta name="Date" content="2001-06-26" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: I might have a bug fix.</h1>
+<!-- received="Tue Jun 26 12:56:47 2001" -->
+<!-- isoreceived="20010626115647" -->
+<!-- sent="Tue, 26 Jun 2001 11:58:12 -0600 (MDT)" -->
+<!-- isosent="20010626175812" -->
+<!-- name="Paul Koshevoy" -->
+<!-- email="paul_at_bart.aragog.com" -->
+<!-- subject="Re: FVWM: I might have a bug fix." -->
+<!-- id="Pine.LNX.4.33.0106261126030.29764-100000_at_bart.aragog.com" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="20010626102421.F1139_at_lifebits.de" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start2767" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="2768.html" accesskey="d" title="Mikhael Goikhman: &quot;Re: FVWM: fvwm&quot;">Next message</a> ]
+[ <a href="2766.html" title="Keith Kaple: &quot;Re: FVWM: vi movement on windows&quot;">Previous message</a> ]
+[ <a href="2758.html" title="Dominik Vogt: &quot;Re: FVWM: I might have a bug fix.&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="2784.html" accesskey="t" title="Dominik Vogt: &quot;Re: FVWM: I might have a bug fix.&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg2767" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg2767" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg2767" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg2767" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Paul Koshevoy &lt;<a href="mailto:paul_at_bart.aragog.com?Subject=Re%3A%20FVWM%3A%20I%20might%20have%20a%20bug%20fix.">paul_at_bart.aragog.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 26 Jun 2001 11:58:12 -0600 (MDT)</span><br />
+</address>
+<br />
+Hi Dominik.
+<br />
+<br />On Tue, 26 Jun 2001, Dominik Vogt wrote:
+<br />
+<br /><em class="quotelev1">&gt; Anyway, it is almost always a very bad idea to let your
+</em><br />
+<em class="quotelev1">&gt; application move its own windows to absolute positions on the
+</em><br />
+<em class="quotelev1">&gt; screen.  User will usually hate you for it.  Most of the time it
+</em><br />
+<em class="quotelev1">&gt; is safe to assume that the window manager will do a much better
+</em><br />
+<em class="quotelev1">&gt; job in placing the windows than your application since it knows
+</em><br />
+<em class="quotelev1">&gt; about the other windows on screen too.  Most of the applications
+</em><br />
+<em class="quotelev1">&gt; I saw trying that fail miserably anyway ;-)
+</em><br />
+<br />My application is replaying an event trail file. The trail file contrains a
+<br />
+list of user generated events - mouse clicks, keyboard input, window move and
+<br />
+resize events, focus change events, show, hide, repaint, etc.... When the
+<br />
+trail is replayed, the application reassembles events in the trail file into
+<br />
+actual events, and sends them to the event dispatcher, therefore faking user
+<br />
+input. So, if I record a trail where I drag my window to coordinates 0,0 on
+<br />
+the root window, I want the trail replay to put the window in the right spot.
+<br />
+However, under current fvwm2 2.2.5, the window is being placed at -2,-18.
+<br />
+<br />My argument for changing fvwm2:
+<br />
+The application can be run under any window manager, or without a window manager
+<br />
+at all. Therefore, application cannot assume anything about the size of the
+<br />
+decoration frame. When application decides that it should be placed at a
+<br />
+particular location, it specifies where the decoration frame upper left corner
+<br />
+should be, and the dimensions of the inner frame, and does not need to know
+<br />
+anything about the size of decorations the window manager will put on the
+<br />
+window (since those can vary wildly from window manager to window manager, from
+<br />
+theme to theme). With this scheme, I can record my trail under one window
+<br />
+manager, and replay it under another window manager, and expect the window
+<br />
+frame upper left corner to be a 0,0.
+<br />
+<br />The largest problem with what you suggested (to account for frame size inside
+<br />
+the application), is that my application does not know which scheme the window
+<br />
+manager is implementing for window placement. The only real solution to this
+<br />
+problem is to standardise on one scheme. Like I said, I am ready to go rewrite
+<br />
+every significant widnow manager out there. Which programs do you know of that
+<br />
+would not place right with this change? Do you really care about them? Do you
+<br />
+know of any other window manager that implements the same window placement
+<br />
+scheme as FVWM2.
+<br />
+<br />Paul.
+<br />
+<br />PS.
+<br />
+The Qt toolkit is very significant, there is a large number of new projects
+<br />
+being ported to Qt or written in Qt from scratch. These new programs rely on
+<br />
+the window placement behavior advertised by Qt, which will work under kwin,
+<br />
+but will fail under FVWM2 2.2.5. How long do you plan to keep FVWM2 backwards
+<br />
+compatible with some old programs, while not benefiting any new programs?
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue Jun 26 2001 - 12:56:47 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start2767">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="2768.html" title="Next message in the list">Mikhael Goikhman: "Re: FVWM: fvwm"</a></li>
+<li><dfn>Previous message</dfn>: <a href="2766.html" title="Previous message in the list">Keith Kaple: "Re: FVWM: vi movement on windows"</a></li>
+<li><dfn>In reply to</dfn>: <a href="2758.html" title="Message to which this message replies">Dominik Vogt: "Re: FVWM: I might have a bug fix."</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="2784.html" title="Next message in this discussion thread">Dominik Vogt: "Re: FVWM: I might have a bug fix."</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="2784.html" title="Message sent in reply to this message">Dominik Vogt: "Re: FVWM: I might have a bug fix."</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg2767" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg2767" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg2767" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg2767" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:51 BST
+</em></small></p>
+</body>
+</html>

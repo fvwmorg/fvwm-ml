@@ -1,0 +1,135 @@
+Index: fvwm/menus.c
+===================================================================
+RCS file: /home/cvs/fvwm/fvwm/fvwm/menus.c,v
+retrieving revision 1.371
+diff -u -3 -p -r1.371 menus.c
+--- fvwm/menus.c	5 Jul 2003 01:37:47 -0000	1.371
++++ fvwm/menus.c	27 Aug 2003 18:41:49 -0000
+@@ -3202,7 +3202,39 @@ static void paint_menu(
+ 	}
+ 	MR_IS_PAINTED(mr) = 1;
+ 	/* paint the menu background */
+-	if (ms && ST_HAS_MENU_CSET(ms))
++	if (ms && ST_HAS_MENU_CSET(ms) &&
++	    CSET_IS_TRANSPARENT_PR(ST_CSET_MENU(ms)) &&
++	    !MR_IS_TEAR_OFF_MENU(mr))
++	{
++		Pixmap trans = None;
++		FvwmRenderAttributes fra;
++		colorset_t *colorset = &Colorset[ST_CSET_MENU(ms)];
++	
++		fra.mask = 0;
++		if (colorset->tint_percent > 0)
++		{
++			fra.mask = FRAM_HAVE_TINT;
++			fra.tint = colorset->tint;
++			fra.tint_percent = colorset->tint_percent;
++		}
++		if (MR_IS_BACKGROUND_SET(mr) == False)
++		{
++			trans = PGraphicsCreateTranslucent(
++				dpy, MR_WINDOW(mr), &fra,
++				BACK_GC(ST_MENU_INACTIVE_GCS(ms)),
++				MR_X(mr), MR_Y(mr), MR_WIDTH(mr), MR_HEIGHT(mr));
++			XMapRaised(dpy, MR_WINDOW(mr));
++			if (trans != None)
++			{
++				XSetWindowBackgroundPixmap(
++					dpy, MR_WINDOW(mr), trans);
++				MR_IS_BACKGROUND_SET(mr) = True;
++				clear_expose_menu_area(MR_WINDOW(mr), pevent);
++				XFreePixmap(dpy, trans);
++			}
++		}
++	}
++	else if (ms && ST_HAS_MENU_CSET(ms))
+ 	{
+ 		if (MR_IS_BACKGROUND_SET(mr) == False)
+ 		{
+@@ -4172,10 +4204,23 @@ static int pop_menu_up(
+ 	 */
+ 
+ 	XMoveWindow(dpy, MR_WINDOW(mr), x, y);
++	MR_X(mr) = x;
++	MR_Y(mr) = y;
+ 	XSelectInput(dpy, MR_WINDOW(mr), event_mask);
+-	XMapRaised(dpy, MR_WINDOW(mr));
+-	if (popdown_window)
+-		XUnmapWindow(dpy, popdown_window);
++	if (MR_STYLE(mr) && ST_HAS_MENU_CSET(MR_STYLE(mr)) &&
++	    CSET_IS_TRANSPARENT_PR(ST_CSET_MENU(MR_STYLE(mr))) &&
++	    !MR_IS_TEAR_OFF_MENU(mr))
++	{
++		if (popdown_window)
++			XUnmapWindow(dpy, popdown_window);
++		paint_menu(mr, NULL, fw);
++	}
++	else
++	{
++		XMapRaised(dpy, MR_WINDOW(mr));
++		if (popdown_window)
++			XUnmapWindow(dpy, popdown_window);
++	}
+ 	XFlush(dpy);
+ 	MR_MAPPED_COPIES(mr)++;
+ 	MST_USAGE_COUNT(mr)++;
+Index: fvwm/menus.h
+===================================================================
+RCS file: /home/cvs/fvwm/fvwm/fvwm/menus.h,v
+retrieving revision 1.102
+diff -u -3 -p -r1.102 menus.h
+--- fvwm/menus.h	29 Jun 2003 19:53:23 -0000	1.102
++++ fvwm/menus.h	27 Aug 2003 18:41:50 -0000
+@@ -141,6 +141,9 @@ typedef struct MenuRootDynamic
+ 	MenuItem *submenu_item;
+ 	/* x distance window was moved by animation */
+ 	int xanimation;
++	/* x, y XMapRaise */
++	int x;
++	int y;
+ 	/* dynamic temp flags */
+ 	struct
+ 	{
+@@ -182,6 +185,8 @@ typedef struct MenuRootDynamic
+ #define MR_SELECTED_ITEM(m)         ((m)->d->selected_item)
+ #define MR_SUBMENU_ITEM(m)          ((m)->d->submenu_item)
+ #define MR_XANIMATION(m)            ((m)->d->xanimation)
++#define MR_X(m)			    ((m)->d->x)
++#define MR_Y(m)			    ((m)->d->y)
+ #define MR_STORED_ITEM(m)           ((m)->d->stored_item)
+ #define MR_STORED_PIXELS(m)         ((m)->d->stored_pixels)
+ /* flags */
+Index: libs/PictureGraphics.c
+===================================================================
+RCS file: /home/cvs/fvwm/fvwm/libs/PictureGraphics.c,v
+retrieving revision 1.25
+diff -u -3 -p -r1.25 PictureGraphics.c
+--- libs/PictureGraphics.c	27 Aug 2003 13:37:04 -0000	1.25
++++ libs/PictureGraphics.c	27 Aug 2003 18:41:50 -0000
+@@ -1338,7 +1338,7 @@ void PGraphicsTintRectangle(
+ 	}
+ }
+ 
+-#if 0 /* humm... maybe usefull one day with menus */
++#if 1 /* humm... maybe usefull one day with menus */
+ Pixmap PGraphicsCreateTranslucent(
+ 	Display *dpy, Window win, FvwmRenderAttributes *fra, GC gc,
+ 	int x, int y, int width, int height)
+Index: libs/PictureGraphics.h
+===================================================================
+RCS file: /home/cvs/fvwm/fvwm/libs/PictureGraphics.h,v
+retrieving revision 1.12
+diff -u -3 -p -r1.12 PictureGraphics.h
+--- libs/PictureGraphics.h	29 Jun 2003 19:53:24 -0000	1.12
++++ libs/PictureGraphics.h	27 Aug 2003 18:41:50 -0000
+@@ -122,7 +122,9 @@ void PGraphicsTintRectangle(
+ 	Display *dpy, Window win, Pixel tint, int tint_percent,
+ 	Drawable dest, Bool dest_is_a_window, GC gc, GC mono_gc, GC alpha_gc,
+ 	int dest_x, int dest_y, int dest_w, int dest_h);
+-
++Pixmap PGraphicsCreateTranslucent(
++	Display *dpy, Window win, FvwmRenderAttributes *fra, GC gc,
++	int x, int y, int width, int height);
+ /* never used ! */
+ Pixmap PGraphicsCreateDitherPixmap(
+ 	Display *dpy, Window win, Drawable src, Pixmap mask, int depth, GC gc,

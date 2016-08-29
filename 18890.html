@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: colormap bugs from Trent Piepho on 1997-01-17 (fvwm-users)</title>
+<meta name="Author" content="Trent Piepho (xyzzy_at_u.washington.edu)" />
+<meta name="Subject" content="FVWM: colormap bugs" />
+<meta name="Date" content="1997-01-17" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: colormap bugs</h1>
+<!-- received="Thu Jan 16 19:16:17 1997" -->
+<!-- isoreceived="19970116191617" -->
+<!-- sent="Thu, 16 Jan 1997 17:16:10 -0800 (PST)" -->
+<!-- isosent="19970117011610" -->
+<!-- name="Trent Piepho" -->
+<!-- email="xyzzy_at_u.washington.edu" -->
+<!-- subject="FVWM: colormap bugs" -->
+<!-- id="Pine.LNX.3.91.970116164333.4121A-100000_at_s5-171-9.student.washington.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start18890" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="18891.html" accesskey="d" title="Andrew Veliath: &quot;Re: FVWM: Interesting Actions w/WindowShade&quot;">Next message</a> ]
+[ <a href="18889.html" title="Allen Brady Montz: &quot;FVWM: Out of date FvwmIconMan version if fvwm 2.0.44&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18890" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18890" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18890" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18890" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Trent Piepho &lt;<a href="mailto:xyzzy_at_u.washington.edu?Subject=Re%3A%20FVWM%3A%20colormap%20bugs">xyzzy_at_u.washington.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 16 Jan 1997 17:16:10 -0800 (PST)</span><br />
+</address>
+<br />
+I'm trying to write a program what has a child window with a colormap
+<br />
+different from the rest of the window.  If you use xmag to grab a window
+<br />
+with a private colormap, you get the same thing.
+<br />
+<br />I did everything I thought I should do, found a bug in the xforms libarary,
+<br />
+and worked around it, but still no go.  Anyway, the problem is fvwm.
+<br />
+<br />The way you go about having children with different colormaps from the
+<br />
+top-level window is to set WM_COLORMAP_WINDOWS property to the list of child
+<br />
+windows.
+<br />
+<br />What fvwm does when a window with this property gets focus is to install in
+<br />
+reverse order all the colormaps for windows listed in that porperty.
+<br />
+<br />Some systems, notably SGI's, allow for multiple colormaps to be installed at
+<br />
+once.  Many systems do not.  If the number of colormaps the system can
+<br />
+display at the same time is greater than or equal to the number of colormaps
+<br />
+the window and its children use, this works ok.  If the max colormaps is
+<br />
+less, like say its 1 and the window wants 2, this doesn't work.
+<br />
+<br />For systems with fewer colormaps it would be nice if the window manager would
+<br />
+install colormaps when the mouse entered such a window.  xmag does this
+<br />
+with a kludge of modifying the colormap_windows property when the
+<br />
+mouse enters and leaves the window, so that the first window listed is the
+<br />
+one the mouse is in.  fvwm will install this colormap last, so it's the
+<br />
+one that stays.
+<br />
+<br />I think I can fix fvwm to provide this behavior, as well as remove some
+<br />
+bugs and sillyness from colormap.c.  What I need to know is if there is some
+<br />
+way to get fvwm notified when the mouse enters a window that's a child of
+<br />
+a top-level window, but not itsself a top-level window.  If it helps I know
+<br />
+the window ID.
+<br />
+<br />|Gazing up to the breeze of the heavens \ on a quest, meaning, reason  |
+<br />
+|came to be, how it begun \ all alone in the family of the sun         |
+<br />
+|curiosity teasing everyone \ on our home, third stone from the sun.   |
+<br />
+|Trent Piepho (xyzzy_at_u.washington.edu)                   -- Metallica  |
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Jan 16 1997 - 19:16:17 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start18890">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="18891.html" title="Next message in the list">Andrew Veliath: "Re: FVWM: Interesting Actions w/WindowShade"</a></li>
+<li><dfn>Previous message</dfn>: <a href="18889.html" title="Previous message in the list">Allen Brady Montz: "FVWM: Out of date FvwmIconMan version if fvwm 2.0.44"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18890" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18890" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18890" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18890" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

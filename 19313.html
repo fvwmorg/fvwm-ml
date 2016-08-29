@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Multi-screen patch redux from Barry A. Warsaw on 1997-02-20 (fvwm-users)</title>
+<meta name="Author" content="Barry A. Warsaw (bwarsaw_at_anthem.cnri.reston.va.us)" />
+<meta name="Subject" content="FVWM: Multi-screen patch redux" />
+<meta name="Date" content="1997-02-20" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Multi-screen patch redux</h1>
+<!-- received="Thu Feb 20 16:19:47 1997" -->
+<!-- isoreceived="19970220161947" -->
+<!-- sent="Thu, 20 Feb 1997 17:14:38 -0500" -->
+<!-- isosent="19970220221438" -->
+<!-- name="Barry A. Warsaw" -->
+<!-- email="bwarsaw_at_anthem.cnri.reston.va.us" -->
+<!-- subject="FVWM: Multi-screen patch redux" -->
+<!-- id="199702202214.RAA04739_at_anthem.CNRI.Reston.Va.US" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start19313" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="19314.html" accesskey="d" title="Mark Boyns: &quot;Re: FVWM: Multi-screen patch redux&quot;">Next message</a> ]
+[ <a href="19312.html" title="Eric Kahler: &quot;FVWM: A Few new? ButtonStyles&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="19314.html" accesskey="t" title="Mark Boyns: &quot;Re: FVWM: Multi-screen patch redux&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19313" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19313" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19313" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19313" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Barry A. Warsaw &lt;<a href="mailto:bwarsaw_at_anthem.cnri.reston.va.us?Subject=Re%3A%20FVWM%3A%20Multi-screen%20patch%20redux">bwarsaw_at_anthem.cnri.reston.va.us</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 20 Feb 1997 17:14:38 -0500</span><br />
+</address>
+<br />
+On 26 Sep 1996, I posted a patch to fix a problem with handling focus
+<br />
+on multiple screen systems.  The problem manifested itself when moving
+<br />
+the pointer from a window on e.g. screen 0 to the root window of
+<br />
+screen 1.  In these situations, screen 0 would still get focus.  See
+<br />
+my message of that date for details.
+<br />
+<br />The fix was simple, I thought.  But then on 30 Sep 1996, Mark Boyns
+<br />
+followed up with a note that under SloppyFocus there were focus
+<br />
+problems with my patch.  Chuck subsequently did not install my patch
+<br />
+in 2.0.45.
+<br />
+<br />I've just spent some time tracking all this down, and I now think that
+<br />
+Mark's problem has nothing to do with my patch (sorry Mark ;).  I
+<br />
+think the SloppyFocus problem exists in 2.0.45 with or without my
+<br />
+patch.  I'd like Mark (or any other multi-screener) to verify, but I
+<br />
+have been able to reproduce the problem from Mark's description with a
+<br />
+vanilla 2.0.45.  My patch does nothing to fix or hurt this, AFAICT.
+<br />
+<br />I've also come to the conclusion that really good multi-screen support
+<br />
+is hopeless with the way FVWM currently handles multiple screens.  I
+<br />
+don't think there's any way for the screen 0 process to know what's
+<br />
+happening on screen 1 and vice versa.  And if you wanted SloppyFocus
+<br />
+to work correctly, it would have to do this:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;- when moving the pointer from a window in screen 0 to the root
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window in screen 1, the original window keeps focus
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;- when subsequently moving the pointer to a window in screen 1, it
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gets focus and the original window loses focus.
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;- when moving the pointer from a window in screen 0 to a window in
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen 1, the new window gets focus and the original window
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;loses it.
+<br />
+<br />I don't think there's any way to do this because the screen 0 process
+<br />
+never gets EnterNotify events on screen 1, so it will never know
+<br />
+exactly when to de-focus the original screen.  It could be that there
+<br />
+are dark corners of X (or the FVWM sources :) that contain the answer,
+<br />
+but I can't find it, and can't really spend any more time on the
+<br />
+problem.  The ultimate fix is to do what ctwm does and *not* fork a
+<br />
+separate FVWM process for every screen.  That'll take a major effort I
+<br />
+think.
+<br />
+<br />So, I'm reposting my patch (actually a little cleaner this time), and
+<br />
+hope Chuck will put it in the next version.  If not, I'll resign
+<br />
+myself to patching subsequent versions myself...
+<br />
+<br />-Barry
+<br />
+<br /><br /><br />
+*** events.c	1997/02/20 16:09:23	1.1
+<br />
+--- events.c	1997/02/20 21:34:48
+<br />
+***************
+<br />
+*** 1100,1105 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(Event.xany.window == Scr.Root)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!       if((Scr.Focus)&amp;&amp;(!(Scr.Focus-&gt;flags&amp;ClickToFocus))&amp;&amp;
+<br />
+! 	 (!(Scr.Focus-&gt;flags&amp;SloppyFocus)))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SetFocus(Scr.NoFocusWin,NULL,1);
+<br />
+--- 1100,1105 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(Event.xany.window == Scr.Root)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!       if(!Scr.Focus || (!(Scr.Focus-&gt;flags&amp;ClickToFocus)&amp;&amp;
+<br />
+!                         !(Scr.Focus-&gt;flags&amp;SloppyFocus)))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SetFocus(Scr.NoFocusWin,NULL,1);
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Feb 20 1997 - 16:19:47 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start19313">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="19314.html" title="Next message in the list">Mark Boyns: "Re: FVWM: Multi-screen patch redux"</a></li>
+<li><dfn>Previous message</dfn>: <a href="19312.html" title="Previous message in the list">Eric Kahler: "FVWM: A Few new? ButtonStyles"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="19314.html" title="Next message in this discussion thread">Mark Boyns: "Re: FVWM: Multi-screen patch redux"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="19314.html" title="Message sent in reply to this message">Mark Boyns: "Re: FVWM: Multi-screen patch redux"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="19315.html" title="Message sent in reply to this message">Barry A. Warsaw: "Re: FVWM: Multi-screen patch redux"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="19317.html" title="Message sent in reply to this message">Eddy J. Gurney: "Re: FVWM: Multi-screen patch redux"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="19320.html" title="Message sent in reply to this message">Barry A. Warsaw: "Re: FVWM: Multi-screen patch redux"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="19345.html" title="Message sent in reply to this message">Grant McDorman: "Re: FVWM: Multi-screen patch redux"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19313" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19313" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19313" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19313" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Re: Timing problems with Close? from David S. Goldberg on 1997-06-06 (fvwm-users)</title>
+<meta name="Author" content="David S. Goldberg (dsg_at_linus.mitre.org)" />
+<meta name="Subject" content="FVWM: Re: Timing problems with Close?" />
+<meta name="Date" content="1997-06-06" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Re: Timing problems with Close?</h1>
+<!-- received="Fri Jun  6 07:44:08 1997" -->
+<!-- isoreceived="19970606064408" -->
+<!-- sent="06 Jun 1997 08:43:32 -0400" -->
+<!-- isosent="19970606124332" -->
+<!-- name="David S. Goldberg" -->
+<!-- email="dsg_at_linus.mitre.org" -->
+<!-- subject="FVWM: Re: Timing problems with Close?" -->
+<!-- id="m1b4tbbhpfv.fsf_at_blackbird.mitre.org" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="Fri, 6 Jun 1997 12:11:45 +0100 (BST)&quot;" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start20149" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="20150.html" accesskey="d" title="Brady Montz: &quot;Re: FVWM: FvwmIconMan&quot;">Next message</a> ]
+[ <a href="20148.html" title="Bjoern-Bernhard Schad: &quot;FVWM: FvwmIconMan&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="20152.html" accesskey="t" title="luffmann_at_beammeup.knup.de: &quot;Re: FVWM: Re: Timing problems with Close?&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg20149" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg20149" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg20149" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg20149" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: David S. Goldberg &lt;<a href="mailto:dsg_at_linus.mitre.org?Subject=Re%3A%20FVWM%3A%20Re%3A%20Timing%20problems%20with%20Close%3F">dsg_at_linus.mitre.org</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: 06 Jun 1997 08:43:32 -0400</span><br />
+</address>
+<br />
+I don't know if it's possible to do what you want directly in your
+<br />
+fvwm config file, but if you're willing to let an external shell do
+<br />
+the work for you, you can take advantage of the FvwmCommand module
+<br />
+(it's in the extras directory).  For example, I do the following in my
+<br />
+.X11Startup:
+<br />
+<br />doweb(){
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FvwmCommand 'Style &quot;Netscape&quot; StartsOnDesk 5, SkipMapping'
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;$HOME/bin/xcmd netscape -geometry 900x725+1+1
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;until [ `xwininfo -root -tree | grep -c Netscape` -eq 2 ] ; do
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sleep 1
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;done
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FvwmCommand 'Style &quot;Netscape&quot; StartsAnyWhere, ShowMapping'
+<br />
+}
+<br />
+<br />This ensures that when I fire up netscape at login, it's first window
+<br />
+goes on desk number 5.  I look for two windows because (I'm guessing)
+<br />
+netscape seems to have an unmapped second window that actually gets
+<br />
+created first (you can't imagine how long it took me to debug that!).
+<br />
+But anyway, after that, I use browse-url within emacs to pop up web
+<br />
+pages and I don't want to have to jump to desk 5 to see them.  Thus,
+<br />
+after I detect that netscape has started and mapped its window, I
+<br />
+reset the style to StartsAnywhere.  For a long while I'd been doing
+<br />
+this manually with a hardcoded Style and used FvwmTalk and then
+<br />
+FvwmConsole to do the reset to StartsAnywhere.  When I discovered
+<br />
+FvwmCommand, boy was I psyched!  I can see this method being used in
+<br />
+the following manner for your situation:
+<br />
+<br />In a shell script called, say fvwmclose.sh:
+<br />
+<br />#!/bin/sh
+<br />
+until ! xwininfo -id $1 &gt;/dev/null 2&gt;&amp;1 ; do
+<br />
+sleep 1
+<br />
+done
+<br />
+FvwmCommand your_focus_function_here
+<br />
+<br />Where your my_close function calls Close and then Execs the shell
+<br />
+script with $w as argument.
+<br />
+<br />It's almost certainly not very efficient, but it should work well
+<br />
+enough to keep you happy.  Note, though, that I have not tested the
+<br />
+above at all (except for the syntax of the until loop).  Your mileage
+<br />
+may vary and the rest of the usual disclaimers apply.
+<br />
+<br />hth,
+<br />
+<br /><pre>
+--
+Dave Goldberg
+Post: The Mitre Corporation\MS B305\202 Burlington Rd.\Bedford, MA 01730
+Phone: 617-271-3887
+Email: dsg_at_mitre.org
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Jun 06 1997 - 07:44:08 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start20149">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="20150.html" title="Next message in the list">Brady Montz: "Re: FVWM: FvwmIconMan"</a></li>
+<li><dfn>Previous message</dfn>: <a href="20148.html" title="Previous message in the list">Bjoern-Bernhard Schad: "FVWM: FvwmIconMan"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="20152.html" title="Next message in this discussion thread">luffmann_at_beammeup.knup.de: "Re: FVWM: Re: Timing problems with Close?"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="20152.html" title="Message sent in reply to this message">luffmann_at_beammeup.knup.de: "Re: FVWM: Re: Timing problems with Close?"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg20149" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg20149" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg20149" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg20149" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

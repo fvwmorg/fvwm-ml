@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Security hole in FvwmM4 (?) and Manpage patch for FvwmM4 from Raymond Toy on 1996-12-04 (fvwm-users)</title>
+<meta name="Author" content="Raymond Toy (toy_at_rtp.ericsson.se)" />
+<meta name="Subject" content="FVWM: Security hole in FvwmM4 (?) and Manpage patch for FvwmM4" />
+<meta name="Date" content="1996-12-04" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Security hole in FvwmM4 (?) and Manpage patch for FvwmM4</h1>
+<!-- received="Wed Dec  4 09:44:23 1996" -->
+<!-- isoreceived="19961204094423" -->
+<!-- sent="Wed, 04 Dec 1996 10:43:27 -0500" -->
+<!-- isosent="19961204154327" -->
+<!-- name="Raymond Toy" -->
+<!-- email="toy_at_rtp.ericsson.se" -->
+<!-- subject="FVWM: Security hole in FvwmM4 (?) and Manpage patch for FvwmM4" -->
+<!-- id="24265.849714207_at_rtp.ericsson.se" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start18593" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="18594.html" accesskey="d" title="Kai Grossjohann: &quot;FVWM: Strange behavior of ClickToFocus&quot;">Next message</a> ]
+[ <a href="18592.html" title="Charles Hines: &quot;Re: FVWM: RE: fvwmrc_convert&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="18595.html" accesskey="t" title="Brandon Browning: &quot;Re: FVWM: Security hole in FvwmM4 (?) and Manpage patch for FvwmM4&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18593" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18593" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18593" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18593" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Raymond Toy &lt;<a href="mailto:toy_at_rtp.ericsson.se?Subject=Re%3A%20FVWM%3A%20Security%20hole%20in%20FvwmM4%20(%3F)%20and%20Manpage%20patch%20for%20FvwmM4">toy_at_rtp.ericsson.se</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 04 Dec 1996 10:43:27 -0500</span><br />
+</address>
+<br />
+The manpage doesn't quite format correctly for me (values for the
+<br />
+options don't show up).  Appended is a small patch to fix this and a
+<br />
+few other items.  (My knowledge of n/troff is very limited, but the
+<br />
+options show up as expected.)
+<br />
+<br />Also, I noticed that m4 is invoked as &quot;m4&quot;.  Could this be a security
+<br />
+hole?  Should the whole path be used by default, say /usr/bin/m4?  Of
+<br />
+course this breaks things if /usr/bin/m4 doesn't exist (like
+<br />
+Solaris).  However, there's always -m4prog to get the right one.
+<br />
+<br />Ray
+<br />
+<br />*** FvwmM4.man~	Wed May 31 08:09:31 1995
+<br />
+--- FvwmM4.man	Wed Dec  4 10:33:37 1996
+<br />
+***************
+<br />
+*** 33,56 ****
+<br />
+&nbsp;&nbsp;in quotes, and no other quoting should be used. For example, a
+<br />
+&nbsp;&nbsp;typical invocation might be
+<br />
+&nbsp;&nbsp;.EX
+<br />
+! fvwm -f &quot;FvwmM4 -m4-squote { -m4-equote } .fvwmrc&quot;
+<br />
+&nbsp;&nbsp;.EE
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;Some options can be specified on the command line:
+<br />
+! .IP -m4-prefix
+<br />
+! I think this makes all the m4 directives require the prefix &quot;m4_&quot;.
+<br />
+! 
+<br />
+! .IP -m4opt \fIoption\fP
+<br />
+! Lets you pass an option to the m4 program.
+<br />
+! 
+<br />
+! .IP -m4-squote \fIcharacter\fP
+<br />
+&nbsp;&nbsp;Lets you change the m4 start-of-quote character to \fIcharacter\fP.
+<br />
+! .IP -m4-equote \fIcharacter\fP
+<br />
+&nbsp;&nbsp;Lets you change the m4 end-of-quote character to \fIcharacter\fP.
+<br />
+! .IP -m4prog \fIname\fP
+<br />
+&nbsp;&nbsp;Instead of invoking &quot;m4&quot;, fvwm will invoke \fIname\fP.
+<br />
+! .IP -debug
+<br />
+! Causes the temporary file create by m4 to
+<br />
+&nbsp;&nbsp;be retained. This file is usually called &quot;/tmp/fvwmrcXXXXXX&quot;
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;
+<br />
+--- 33,62 ----
+<br />
+&nbsp;&nbsp;in quotes, and no other quoting should be used. For example, a
+<br />
+&nbsp;&nbsp;typical invocation might be
+<br />
+&nbsp;&nbsp;.EX
+<br />
+! fvwm -cmd &quot;FvwmM4 -m4-squote { -m4-equote } .fvwmrc&quot;
+<br />
+&nbsp;&nbsp;.EE
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;Some options can be specified on the command line:
+<br />
+! .TP
+<br />
+! .BI -m4-prefix &quot;&quot;
+<br />
+! This option tells m4 to prefix all m4 directives with &quot;m4_&quot;.  However,
+<br />
+! your version of m4 must understand the option &quot;--prefix-builtins&quot;.
+<br />
+! GNU m4 understands this.
+<br />
+! .TP
+<br />
+! .BI &quot;-m4opt&quot; &quot; option&quot;
+<br />
+! Lets you pass \fIoption\fP to the m4 program.
+<br />
+! .TP
+<br />
+! .BI &quot;-m4-squote&quot; &quot; character&quot;
+<br />
+&nbsp;&nbsp;Lets you change the m4 start-of-quote character to \fIcharacter\fP.
+<br />
+! .TP
+<br />
+! .BI &quot;-m4-equote&quot; &quot; character&quot;
+<br />
+&nbsp;&nbsp;Lets you change the m4 end-of-quote character to \fIcharacter\fP.
+<br />
+! .TP
+<br />
+! .BI &quot;-m4prog&quot; &quot; name&quot;
+<br />
+&nbsp;&nbsp;Instead of invoking &quot;m4&quot;, fvwm will invoke \fIname\fP.
+<br />
+! .TP
+<br />
+! .BI &quot;-debug&quot; &quot;&quot;
+<br />
+! Causes the temporary file created by m4 to
+<br />
+&nbsp;&nbsp;be retained. This file is usually called &quot;/tmp/fvwmrcXXXXXX&quot;
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;
+<br />
+***************
+<br />
+*** 69,74 ****
+<br />
+--- 75,82 ----
+<br />
+&nbsp;&nbsp;The operating system for CLIENTHOST.
+<br />
+&nbsp;&nbsp;.IP USER
+<br />
+&nbsp;&nbsp;The name of the person running fvwm.
+<br />
++ .IP HOME
+<br />
++ Home directory of the user.
+<br />
+&nbsp;&nbsp;.IP VERSION
+<br />
+&nbsp;&nbsp;The X11 version.
+<br />
+&nbsp;&nbsp;.IP REVISION
+<br />
+***************
+<br />
+*** 90,96 ****
+<br />
+&nbsp;&nbsp;.IP BITS_PER_RGB
+<br />
+&nbsp;&nbsp;Number of bits in each rgb triplet.
+<br />
+&nbsp;&nbsp;.IP CLASS
+<br />
+! The X11 visual class, ie PsuedoColor.
+<br />
+&nbsp;&nbsp;.IP COLOR
+<br />
+&nbsp;&nbsp;Yes or No, Yes if the display class is neither StaticGrey or GreyScale.
+<br />
+&nbsp;&nbsp;.IP FVWM_VERSION
+<br />
+--- 98,104 ----
+<br />
+&nbsp;&nbsp;.IP BITS_PER_RGB
+<br />
+&nbsp;&nbsp;Number of bits in each rgb triplet.
+<br />
+&nbsp;&nbsp;.IP CLASS
+<br />
+! The X11 visual class, i.e. PseudoColor.
+<br />
+&nbsp;&nbsp;.IP COLOR
+<br />
+&nbsp;&nbsp;Yes or No, Yes if the display class is neither StaticGrey or GreyScale.
+<br />
+&nbsp;&nbsp;.IP FVWM_VERSION
+<br />
+***************
+<br />
+*** 130,134 ****
+<br />
+&nbsp;&nbsp;.EE
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;.SH AUTHOR
+<br />
+! FvwmM4 is the result of a random bit mutation on a hard disk,
+<br />
+! presumably a result of a  cosmic-ray or some such thing.
+<br />
+--- 138,143 ----
+<br />
+&nbsp;&nbsp;.EE
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;.SH AUTHOR
+<br />
+! The initial version for Fvwm 1.x was written by Raymond Toy who took
+<br />
+! this almost directly from twm.  Robert Nation later converted this to
+<br />
+! a module for Fvwm 2.
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Dec 04 1996 - 09:44:23 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start18593">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="18594.html" title="Next message in the list">Kai Grossjohann: "FVWM: Strange behavior of ClickToFocus"</a></li>
+<li><dfn>Previous message</dfn>: <a href="18592.html" title="Previous message in the list">Charles Hines: "Re: FVWM: RE: fvwmrc_convert"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="18595.html" title="Next message in this discussion thread">Brandon Browning: "Re: FVWM: Security hole in FvwmM4 (?) and Manpage patch for FvwmM4"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Maybe reply</dfn>: <a href="18595.html" title="Message sent in reply to this message">Brandon Browning: "Re: FVWM: Security hole in FvwmM4 (?) and Manpage patch for FvwmM4"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18593" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18593" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18593" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18593" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

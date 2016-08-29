@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Changing Icons for Xemacs from Andrew Jaffe on 1996-04-22 (fvwm-users)</title>
+<meta name="Author" content="Andrew Jaffe (jaffe_at_cita.utoronto.ca)" />
+<meta name="Subject" content="FVWM: Changing Icons for Xemacs" />
+<meta name="Date" content="1996-04-22" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Changing Icons for Xemacs</h1>
+<!-- received="Mon Apr 22 10:48:41 1996" -->
+<!-- isoreceived="19960422094841" -->
+<!-- sent="Mon, 22 Apr 1996 11:51:10 -0400" -->
+<!-- isosent="19960422155110" -->
+<!-- name="Andrew Jaffe" -->
+<!-- email="jaffe_at_cita.utoronto.ca" -->
+<!-- subject="FVWM: Changing Icons for Xemacs" -->
+<!-- id="199604221551.LAA09850_at_hare.cita.utoronto.ca" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start16353" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="16354.html" accesskey="d" title="Dave Goldberg: &quot;FVWM: Re: Changing Icons for Xemacs&quot;">Next message</a> ]
+[ <a href="16352.html" title="31howk_at_wmich.edu: &quot;FVWM:sorry about that....&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="16355.html" accesskey="t" title="Dan Espen: &quot;Re: FVWM: Changing Icons for Xemacs&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16353" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16353" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16353" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16353" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Andrew Jaffe &lt;<a href="mailto:jaffe_at_cita.utoronto.ca?Subject=Re%3A%20FVWM%3A%20Changing%20Icons%20for%20Xemacs">jaffe_at_cita.utoronto.ca</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 22 Apr 1996 11:51:10 -0400</span><br />
+</address>
+<br />
+Hi, folks,
+<br />
+<br />I would think this is a FAQ, but I couldn't find it anywhere...
+<br />
+<br />I want to change the Icon of a window based on its name and/or icon
+<br />
+name. Simple, right? Well, it *almost* works for XEmacs.
+<br />
+<br />In XEmacs, I have 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(setq frame-title-format &quot;%S: %b&quot;)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(setq frame-icon-title-format &quot;%b&quot;)
+<br />
+which sets the name and icon name to &quot;emacs: buffername&quot; and
+<br />
+&quot;buffername&quot; respectively. In my .fvwm2rc, I have
+<br />
+<br />Style &quot;emacs&quot;		Icon gnu-animal.xpm
+<br />
+Style &quot;emacs*INBOX*&quot;	Icon xmail.xpm, StickyIcon
+<br />
+Style &quot;emacs* Summary$&quot;	Icon xmail.xpm, StickyIcon
+<br />
+Style &quot;emacs*mail*&quot;	Icon xmail.xpm, StickyIcon
+<br />
+Style &quot;emacs: *Group*&quot;	Icon news212.xpm
+<br />
+Style &quot;emacs*Summary *&quot;	Icon news212.xpm
+<br />
+<br />The idea is for a normal xemacs icon to be gnu-animal, a mail window to
+<br />
+be xmail, and a news window to be news212. It doesn't quite work: it
+<br />
+seems that the icon is determined by the name of the frame that
+<br />
+&quot;created&quot; the frame in question (since, I think, the new frame-name
+<br />
+isn't assigned until later in the process, after fvwm determines the
+<br />
+icon).
+<br />
+<br />Does this make sense? Is there a fix? I can fix it now by creating new
+<br />
+frames (C-x 5 b) and destroying old ones (C-x 5 0), but that's
+<br />
+considerably less than automatic.
+<br />
+<br />Thanks,
+<br />
+<br />Andrew
+<br />
+<br />----------------------------------------------------------------------
+<br />
+Andrew Jaffe					jaffe_at_cita.utoronto.ca
+<br />
+CITA, U. Toronto				(416) 978-8497, 6879
+<br />
+60 Saint George St.				         -3921 (Fax)
+<br />
+Toronto, ON M5S 1A1 CANADA			
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon Apr 22 1996 - 10:48:41 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start16353">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="16354.html" title="Next message in the list">Dave Goldberg: "FVWM: Re: Changing Icons for Xemacs"</a></li>
+<li><dfn>Previous message</dfn>: <a href="16352.html" title="Previous message in the list">31howk_at_wmich.edu: "FVWM:sorry about that...."</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="16355.html" title="Next message in this discussion thread">Dan Espen: "Re: FVWM: Changing Icons for Xemacs"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Maybe reply</dfn>: <a href="16355.html" title="Message sent in reply to this message">Dan Espen: "Re: FVWM: Changing Icons for Xemacs"</a></li>
+<li><dfn>Reply</dfn>: <a href="16358.html" title="Message sent in reply to this message">Mark Borges: "FVWM: Re: Changing Icons for Xemacs"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16353" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16353" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16353" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16353" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

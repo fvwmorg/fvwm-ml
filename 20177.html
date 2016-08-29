@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: CLock in FvwmButtons from Adam Kopacz on 1997-06-09 (fvwm-users)</title>
+<meta name="Author" content="Adam Kopacz (Adam.Kopacz_at_rhein-neckar.netsurf.de)" />
+<meta name="Subject" content="FVWM: CLock in FvwmButtons" />
+<meta name="Date" content="1997-06-09" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: CLock in FvwmButtons</h1>
+<!-- received="Mon Jun  9 21:28:41 1997" -->
+<!-- isoreceived="19970609202841" -->
+<!-- sent="Mon, 09 Jun 1997 22:55:04 +0200" -->
+<!-- isosent="19970609205504" -->
+<!-- name="Adam Kopacz" -->
+<!-- email="Adam.Kopacz_at_rhein-neckar.netsurf.de" -->
+<!-- subject="FVWM: CLock in FvwmButtons" -->
+<!-- id="339C6DA8.662800AC_at_rhein-neckar.netsurf.de" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start20177" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="20178.html" accesskey="d" title="Thomas J. Moore: &quot;FVWM: Unmap strangeness?&quot;">Next message</a> ]
+[ <a href="20176.html" title="Jason L Tibbitts III: &quot;FVWM: Re: hpc.uh ftp server is down ?&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg20177" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg20177" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg20177" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg20177" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Adam Kopacz &lt;<a href="mailto:Adam.Kopacz_at_rhein-neckar.netsurf.de?Subject=Re%3A%20FVWM%3A%20CLock%20in%20FvwmButtons">Adam.Kopacz_at_rhein-neckar.netsurf.de</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 09 Jun 1997 22:55:04 +0200</span><br />
+</address>
+<br />
+Hi,
+<br />
+<br />i have attached a tcl/tk clock/Date script.
+<br />
+it looks great in FvwmButtons! :-)) =&gt;
+<br />
+<br />*FvwmButtons(1x1) - whatever Swallow &quot;time&quot; Exec /root/scripts/time -geometry +100+600 &amp;
+<br />
+<br />start with './time' or 'wish time' or 'wish8.0 time' .. 
+<br />
+<br /><pre>
+-- 
+Bye,    
+    Adam Kopacz      <a href="http://www.rat.de/Adam">http://www.rat.de/Adam</a>
+
+</pre>
+<br />
+#! /bin/sh
+<br />
+# tcl/tk time/date script by Adam Kopacz [klo_at_writeme.com]
+<br />
+# *-tcl-* \
+<br />
+exec wish &quot;$0&quot; &quot;$_at_&quot;
+<br />
+<br />proc update_digital_time {} {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;global digitalClockFormat digitalClockFrame
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;$digitalClockFrame configure -text [clock format [clock seconds] -format $digitalClockFormat]
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;.lab2 configure -text [clock format [clock seconds] -format &quot;%d.%m.1997&quot;]
+<br />
+<br />}
+<br />
+<br />proc update_digital_time_and_repeat {} {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;update_digital_time
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;after [expr {60 - ([clock seconds] % 60)}]000 update_digital_time_and_repeat
+<br />
+}
+<br />
+<br />proc set_digital_format {format} {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;global digitalClockFormat currentFormatNumber nFormats
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;set nFormats 2
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;case $format {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 {set digitalClockFormat &quot;%I:%M %p&quot;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 {set digitalClockFormat &quot;%H:%M&quot;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;set currentFormatNumber $format
+<br />
+}
+<br />
+<br />proc next_format {} {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;global currentFormatNumber nFormats
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;incr currentFormatNumber
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if {$currentFormatNumber &gt;= $nFormats} {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;set currentFormatNumber 0
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;set_digital_format  $currentFormatNumber
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;update_digital_time
+<br />
+}
+<br />
+<br />proc digital_clock {nframe} {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;global digitalClockFrame
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;set digitalClockFrame $nframe
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;button $nframe -font &quot;-adobe-helvetica-normal-r-*-*-11-*-*-*-*-*-*-&quot; -command next_format -background #908090 -foreground #000040 -pady 2m -activebackground #909090
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;label .lab2  -text &quot;xx.xx.xx&quot; -bg #908090 -font &quot;-adobe-helvetica-normal-r-*-*-10-*-*-*-*-*-*-*&quot; 
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;update_digital_time_and_repeat
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;return
+<br />
+}
+<br />
+<br />set_digital_format 1
+<br />
+<br />proc doit {} {
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;. configure -background #908090
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;digital_clock .dclock
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;pack .dclock -pady 1m -padx 1m -fill both -expand yes   
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;pack .lab2 -anchor c -fill both -expand yes
+<br />
+}
+<br />
+<br />if !$tcl_interactive {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;global errorInfo
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;if {[catch doit result] == 1} {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;puts stderr $errorInfo
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+}
+<br />
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon Jun 09 1997 - 21:28:41 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start20177">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="20178.html" title="Next message in the list">Thomas J. Moore: "FVWM: Unmap strangeness?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="20176.html" title="Previous message in the list">Jason L Tibbitts III: "FVWM: Re: hpc.uh ftp server is down ?"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg20177" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg20177" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg20177" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg20177" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

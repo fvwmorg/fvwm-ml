@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Re: fvwm.el from Dave Goldberg on 1996-05-28 (fvwm-users)</title>
+<meta name="Author" content="Dave Goldberg (dsg_at_linus.mitre.org)" />
+<meta name="Subject" content="FVWM: Re: fvwm.el" />
+<meta name="Date" content="1996-05-28" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Re: fvwm.el</h1>
+<!-- received="Sat Jun  1 14:26:12 1996" -->
+<!-- isoreceived="19960601132612" -->
+<!-- sent="Tue, 28 May 1996 10:36:35 -0400" -->
+<!-- isosent="19960528143635" -->
+<!-- name="Dave Goldberg" -->
+<!-- email="dsg_at_linus.mitre.org" -->
+<!-- subject="FVWM: Re: fvwm.el" -->
+<!-- id="21141.833294195_at_blackbird.mitre.org" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="Mon, 27 May 1996 06:19:31 CDT" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start17023" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="17024.html" accesskey="d" title="steve farrell: &quot;Re: FVWM: HOSTDISPLAY variable&quot;">Next message</a> ]
+[ <a href="17022.html" title="Michael G. Katzmann: &quot;FVWM: FvwmConfig ?? Compiled but no functionality...&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17023" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17023" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17023" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17023" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Dave Goldberg &lt;<a href="mailto:dsg_at_linus.mitre.org?Subject=Re%3A%20FVWM%3A%20Re%3A%20fvwm.el">dsg_at_linus.mitre.org</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 28 May 1996 10:36:35 -0400</span><br />
+</address>
+<br />
+--Multipart_Tue_May_28_10:36:31_1996-1
+<br />
+Content-Type: text/plain; charset=US-ASCII
+<br />
+<br /><br />I think the attached is what you are asking for.  Note that with emacs
+<br />
+19.30 I had to do
+<br />
+<br />(add-hook 'winmgr-mode-hook
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'(lambda ()
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(setq font-lock-defaults
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'(winmgr-font-lock-keywords nil nil nil nil))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(turn-on-font-lock)))
+<br />
+<br />instead of the hook mentioned in the source file.
+<br />
+<br />Dave Goldberg
+<br />
+Post: The Mitre Corporation\MS B305\202 Burlington Rd.\Bedford, MA 01730
+<br />
+Phone: 617-271-3887
+<br />
+Email: dsg_at_mitre.org
+<br />
+<br />--Multipart_Tue_May_28_10:36:31_1996-1
+<br />
+Content-Type: application/octet-stream; type=emacs-lisp
+<br />
+Content-Disposition: attachment; filename=&quot;winmgr-mode.el&quot;
+<br />
+Content-Transfer-Encoding: 7bit
+<br />
+<br />;;; winmgr-mode.el -- window manager mode and the font lock configurations
+<br />
+<br />;; Maintainer: David Konerding (rafael_at_cse.ucsc.edu)
+<br />
+;; Modifications by: Stefan Strobel &lt;strobel_at_lia.univ-savoie.fr&gt;
+<br />
+<br />;;; Commentary:
+<br />
+<br />;; This package is a major mode for editing window configuration files and
+<br />
+;; also defines font-lock keywords for such files.
+<br />
+<br />;; winmgr-mode mode will automatically get turned on if you visit a
+<br />
+;; a file whose name looks like that of a configuration file
+<br />
+;; (IE, .fvwmrc, .mwmrc, .tvtwmrc, etc)
+<br />
+<br />;; The current font-lock keywords are:
+<br />
+<br />;; any word of upper or lower case letters at the start of a line
+<br />
+;; followed by whitespace gets colored using
+<br />
+;; font-lock-function-name-face.
+<br />
+<br />;; any word of upper or lower case letters at the start of a line
+<br />
+;; followed by a &quot;(&quot; (IE, an m4 macro) gets colored using
+<br />
+;; font-lock-comment-face
+<br />
+<br />;; Put this in your .emacs :
+<br />
+;;
+<br />
+;;(setq auto-mode-alist
+<br />
+;;      (append '((&quot;\\.[A-Za-z]*wm$&quot; . winmgr-mode)
+<br />
+;;              (&quot;\\.[A-Za-z]*wmrc&quot; . winmgr-mode) 
+<br />
+;;	      auto-mode-alist))
+<br />
+;;
+<br />
+;;(autoload 'winmgr-mode &quot;winmgr-mode&quot;
+<br />
+;;  &quot;Mode for editing window manager config files&quot;)
+<br />
+;;
+<br />
+;;(add-hook 'winmgr-mode-hook
+<br />
+;;	  '(lambda ()
+<br />
+;;	     (font-lock-mode t)
+<br />
+;;	     (setq font-lock-keywords winmgr-font-lock-keywords)
+<br />
+;;           (font-lock-fontify-buffer)))
+<br />
+;;
+<br />
+<br /><br />;;; Code:
+<br />
+<br /><br />(defvar winmgr-mode-hook nil
+<br />
+&nbsp;&nbsp;&quot;Hook to be run when mode is entered&quot;)
+<br />
+<br /><br />(defvar font-lock-m4-face 'default
+<br />
+&nbsp;&nbsp;&quot;new face for m4 macros&quot;)
+<br />
+<br />(condition-case nil 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;(progn
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(copy-face 'default   'm4-face)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(set-face-foreground  'm4-face &quot;blue&quot;)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(set-face-background  'm4-face &quot;white&quot;)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(setq font-lock-m4-face 'm4-face))
+<br />
+&nbsp;&nbsp;(error nil))
+<br />
+<br />(defvar winmgr-font-lock-keywords 
+<br />
+&nbsp;&nbsp;'((&quot;^[A-Za-z]+[ \n\t]&quot; . font-lock-function-name-face)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;(&quot;^#.*&quot; . font-lock-comment-face)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;(&quot;^[A-Za-z]+(.*)&quot; . font-lock-m4-face))
+<br />
+&nbsp;&nbsp;&quot;default font-lock keywords&quot;)
+<br />
+<br />(defun winmgr-mode ()
+<br />
+&nbsp;&nbsp;&quot;Major mode for editing winmgr config files&quot;
+<br />
+&nbsp;&nbsp;(interactive)
+<br />
+&nbsp;&nbsp;(kill-all-local-variables)
+<br />
+&nbsp;&nbsp;(setq mode-name &quot;Winmgr&quot;)
+<br />
+&nbsp;&nbsp;(setq major-mode 'winmgr-mode)
+<br />
+&nbsp;&nbsp;(run-hooks 'winmgr-mode-hook))
+<br />
+<br />(provide 'winmgr-mode)
+<br />
+<br />--Multipart_Tue_May_28_10:36:31_1996-1--
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sat Jun 01 1996 - 14:26:12 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start17023">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="17024.html" title="Next message in the list">steve farrell: "Re: FVWM: HOSTDISPLAY variable"</a></li>
+<li><dfn>Previous message</dfn>: <a href="17022.html" title="Previous message in the list">Michael G. Katzmann: "FVWM: FvwmConfig ?? Compiled but no functionality..."</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17023" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17023" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17023" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17023" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

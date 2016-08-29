@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: More oddities with fvwm-2.4.16 from Phil Stracchino on 2003-06-19 (fvwm-users)</title>
+<meta name="Author" content="Phil Stracchino (alaric_at_caerllewys.net)" />
+<meta name="Subject" content="FVWM: More oddities with fvwm-2.4.16" />
+<meta name="Date" content="2003-06-19" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: More oddities with fvwm-2.4.16</h1>
+<!-- received="Thu Jun 19 15:55:23 2003" -->
+<!-- isoreceived="20030619145523" -->
+<!-- sent="Thu, 19 Jun 2003 16:53:41 -0400" -->
+<!-- isosent="20030619205341" -->
+<!-- name="Phil Stracchino" -->
+<!-- email="alaric_at_caerllewys.net" -->
+<!-- subject="FVWM: More oddities with fvwm-2.4.16" -->
+<!-- id="20030619205341.GA11691_at_prydain.caerllewys.net" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start9319" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="9320.html" accesskey="d" title="dominik.vogt_at_gmx.de: &quot;Re: FVWM: Next/Prev question&quot;">Next message</a> ]
+[ <a href="9318.html" title="Blixt, Zach: &quot;RE: FVWM: X-Spam-Status: No, hits=1.4 required=6.0 tests=SUBJ_MISSING version=2.31&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg9319" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg9319" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg9319" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg9319" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Phil Stracchino &lt;<a href="mailto:alaric_at_caerllewys.net?Subject=Re%3A%20FVWM%3A%20More%20oddities%20with%20fvwm-2.4.16">alaric_at_caerllewys.net</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 19 Jun 2003 16:53:41 -0400</span><br />
+</address>
+<br />
+A few days ago I reported a problem in which procmeter3 doesn't get any
+<br />
+data from any of its inputs if it's started from fvwm-2.4.16.  I've now
+<br />
+discovered another oddity: If I log in from xdm and start a session
+<br />
+running fvwm-1.24r, functions in both my IRC client (sirc) and my ICB
+<br />
+client (icbm) are able to successfully launch child processes such as
+<br />
+xterms, xcoral (a graphical programmers' editor for X/11), play (a
+<br />
+shell script to play .wav files), etc.
+<br />
+<br />If, leaving those clients open, I start fvwm-2.4.16, I can still launch
+<br />
+xcoral from within them. If, after starting fvwm-2.4.16, I start a new
+<br />
+xterm and launch new instances of the client from it, or if I started an
+<br />
+fvwm2 session in the first place, I cannot launch xcoral from within
+<br />
+sirc or icbm.
+<br />
+<br />The odd thing is that when running under fvwm-2.4.16, I cannot start a
+<br />
+Mozilla client from within icbm or sirc, but I can call a script which
+<br />
+contacts Mozilla and tells it to create a new window.  If I can execute
+<br />
+the Perl process to run the script, why can't I run an xterm, mozilla,
+<br />
+or the play script?
+<br />
+<br />The only thing I could think of was that fvwm-2.4.16 is doing something
+<br />
+cryptic to the environment, but this doesn't appear to be the case.  The
+<br />
+following is a diff of my environment within an Xterm between fvwm-1.24r
+<br />
+and fvwm-2.4.16 sessions:
+<br />
+<br />babylon5:alaric:~:3 $ diff -U3 ENV*
+<br />
+--- ENV.fvwm-1.24r      Thu Jun 19 16:37:43 2003
+<br />
++++ ENV.fvwm-2.4.16     Thu Jun 19 16:38:24 2003
+<br />
+_at_&#64; -10,10 +10,11 &#64;&#64;
+<br />
+&nbsp;ORGANIZATION=Babylon Communications
+<br />
+&nbsp;SHELL=/bin/bash
+<br />
+&nbsp;TERM=xterm-color
+<br />
++FVWM_USERDIR=/home/alaric/.fvwm
+<br />
+&nbsp;HOSTDISPLAY=babylon5:0.0
+<br />
+&nbsp;HTML_TIDY=/home/alaric/.tidy
+<br />
+&nbsp;TRNINIT=-F'] ' -N -x -X -I -G
+<br />
+-WINDOWID=12582926
+<br />
++WINDOWID=20971534
+<br />
+&nbsp;SIRCSERVER=Amsterdam.NL.EU.undernet.org
+<br />
+&nbsp;QTDIR=/opt/qt
+<br />
+&nbsp;SOUNDTYPE=1
+<br />
+_at_&#64; -45,7 +46,7 &#64;&#64;
+<br />
+&nbsp;PS2= -&gt; 
+<br />
+&nbsp;IRCNICK=Alaric
+<br />
+&nbsp;HOME=/home/alaric
+<br />
+-SHLVL=1
+<br />
++SHLVL=2
+<br />
+&nbsp;TAPE=/dev/st0
+<br />
+&nbsp;LOGNAME=alaric
+<br />
+&nbsp;LESS=-ceimnr
+<br />
+_at_&#64; -56,6 +57,7 &#64;&#64;
+<br />
+&nbsp;LESSOPEN=|lesspipe.sh %s
+<br />
+&nbsp;PROMPT_COMMAND=echo -ne &quot;\033]0;${HOSTNAME}:${USER}:${PWD}\007&quot;
+<br />
+&nbsp;ARCH=i686
+<br />
++FVWM_MODULEDIR=/usr/X11R6/libexec/fvwm/2.4.16
+<br />
+&nbsp;RTFLIBDIR=/usr/local/lib/rtf
+<br />
+&nbsp;DISPLAY=:0.0
+<br />
+&nbsp;MM_RUNASROOT=1
+<br />
+<br /><br />Can anyone come up with an explanation or even a *speculation* for THIS
+<br />
+behavior?  It's extremely annoying and inconvenient, and I'm utterly
+<br />
+baffled as to why it's happening.
+<br />
+<br /><br /><pre>
+-- 
+ .*********  Fight Back!  It may not be just YOUR life at risk.  *********.
+ : phil stracchino : unix ronin : renaissance man : mystic zen biker geek :
+ :  alaric_at_caerllewys.net : alaric-ruthven_at_earthlink&#46;<!--nospam-->net : phil_at_latt&#46;<!--nospam-->net  :
+ :   2000 CBR929RR, 1991 VFR750F3 (foully murdered), 1986 VF500F (sold)   :
+ :    Linux Now!   ...Because friends don't let friends use Microsoft.    :
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Jun 19 2003 - 15:55:23 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start9319">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="9320.html" title="Next message in the list">dominik.vogt_at_gmx.de: "Re: FVWM: Next/Prev question"</a></li>
+<li><dfn>Previous message</dfn>: <a href="9318.html" title="Previous message in the list">Blixt, Zach: "RE: FVWM: X-Spam-Status: No, hits=1.4 required=6.0 tests=SUBJ_MISSING version=2.31"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg9319" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg9319" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg9319" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg9319" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:55 BST
+</em></small></p>
+</body>
+</html>

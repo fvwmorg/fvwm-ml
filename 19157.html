@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: RFV: FvwmAudio extension from Albrecht Kadlec on 1997-02-04 (fvwm-users)</title>
+<meta name="Author" content="Albrecht Kadlec (albrecht_at_auto.tuwien.ac.at)" />
+<meta name="Subject" content="FVWM: RFV: FvwmAudio extension" />
+<meta name="Date" content="1997-02-04" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: RFV: FvwmAudio extension</h1>
+<!-- received="Tue Feb  4 16:07:40 1997" -->
+<!-- isoreceived="19970204160740" -->
+<!-- sent="Tue, 4 Feb 97 23:05:21 +0100" -->
+<!-- isosent="19970204220521" -->
+<!-- name="Albrecht Kadlec" -->
+<!-- email="albrecht_at_auto.tuwien.ac.at" -->
+<!-- subject="FVWM: RFV: FvwmAudio extension" -->
+<!-- id="9702042205.AA17826_at_einstein.auto.tuwien.ac.at" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start19157" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="19158.html" accesskey="d" title="Allen Brady Montz: &quot;FVWM: Note on FvwmIconMan 9.0.2&quot;">Next message</a> ]
+[ <a href="19156.html" title="Allen Brady Montz: &quot;FVWM: FvwmIconMan v0.9.2 released&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19157" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19157" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19157" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19157" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Albrecht Kadlec &lt;<a href="mailto:albrecht_at_auto.tuwien.ac.at?Subject=Re%3A%20FVWM%3A%20RFV%3A%20FvwmAudio%20extension">albrecht_at_auto.tuwien.ac.at</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 4 Feb 97 23:05:21 +0100</span><br />
+</address>
+<br />
+what do you think:
+<br />
+<br />as it is FvwmAudio calls an external command via the C system() call.
+<br />
+<br />should FvwmAudio call the fvwm-function audiofunc (changeable via cmdline) 
+<br />
+with the sound as parameter ?
+<br />
+<br />examples:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a) RPlay (still handled internally) call FvwmAudio this way:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Module FvwmAudio builtin_rplay
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b) normal external play cmd
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AddToFunc audiofunc &quot;I&quot; exec /usr/bin/X11/demos/auplay FvwmAudioDir/$1
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Module FvwmAudio
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;or 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Module FvwmAudio audiofunc
+<br />
+<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c) rsynth/say:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AddToFunc audiofunc &quot;I&quot; exec /rsynth/say $1
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Module FvwmAudio
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;or 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Module FvwmAudio audiofunc
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;or
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Module FvwmAudio &quot;exec /rsynth/say&quot;
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;d) echoing the parameters for debugging purposes is faster, 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;using the fvwm internal echo rather than calling a shell:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Module FvwmAudio echo
+<br />
+<br /><br />this somewhat reduces all the cryptic possibilities to two possibilities:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;builtin_rplay
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;arbitrary fvwm function
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;which also takes care of FvwmAudioDir
+<br />
+<br />net effect:
+<br />
+you can attach an arbitrary fvwm function to an fvwm event:
+<br />
+<br /><br />*FvwmAudio focus after_focus_hook
+<br />
+AddToFunction call_hook &quot;I&quot; $1
+<br />
+FvwmAudio call_hook
+<br />
+<br />results in after_focus_hook being called after every focus.
+<br />
+(you might like to rearrange windows)
+<br />
+<br />and lots of other possibilities...
+<br />
+<br />the code size is the same, it just adds flexibility.
+<br />
+<br />what do you think ?
+<br />
+albrecht
+<br />
+<pre>
+-- 
+I used to think that my brain was the most wonderful organ in my body.
+Then I realised who had been telling me this...		-- Stephen Wray
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue Feb 04 1997 - 16:07:40 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start19157">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="19158.html" title="Next message in the list">Allen Brady Montz: "FVWM: Note on FvwmIconMan 9.0.2"</a></li>
+<li><dfn>Previous message</dfn>: <a href="19156.html" title="Previous message in the list">Allen Brady Montz: "FVWM: FvwmIconMan v0.9.2 released"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19157" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19157" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19157" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19157" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

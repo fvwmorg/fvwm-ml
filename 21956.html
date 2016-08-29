@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: [patch] focus warping bug in 2.0.46 from Greg Klanderman on 1998-04-09 (fvwm-users)</title>
+<meta name="Author" content="Greg Klanderman (greg_at_alphatech.com)" />
+<meta name="Subject" content="FVWM: [patch] focus warping bug in 2.0.46" />
+<meta name="Date" content="1998-04-09" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: [patch] focus warping bug in 2.0.46</h1>
+<!-- received="Wed Apr  8 19:55:36 1998" -->
+<!-- isoreceived="19980408185536" -->
+<!-- sent="Wed,  8 Apr 1998 20:51:52 -0400 (EDT)" -->
+<!-- isosent="19980409005152" -->
+<!-- name="Greg Klanderman" -->
+<!-- email="greg_at_alphatech.com" -->
+<!-- subject="FVWM: [patch] focus warping bug in 2.0.46" -->
+<!-- id="199804090051.UAA25300_at_pochacco.alphatech.com" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start21956" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="21957.html" accesskey="d" title="Ami Hofman: &quot;FVWM: fvwm2 problem&quot;">Next message</a> ]
+[ <a href="21955.html" title="Look, Joseph: &quot;FVWM: clean up before quiting&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21956" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21956" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21956" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21956" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Greg Klanderman &lt;<a href="mailto:greg_at_alphatech.com?Subject=Re%3A%20FVWM%3A%20%5Bpatch%5D%20focus%20warping%20bug%20in%202.0.46">greg_at_alphatech.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed,  8 Apr 1998 20:51:52 -0400 (EDT)</span><br />
+</address>
+<br />
+Hello,
+<br />
+<br />The patch below seems to be needed to avoid invalid icon location
+<br />
+fields from being used when focusing to an iconified window which has
+<br />
+no icon window (using FvwmIconMan).  I also fixed an apparent typo
+<br />
+(width/height were swapped), I'm not sure the consequences of that.
+<br />
+I'm still not sure why you'd ever want to call SetupFrame (last line
+<br />
+of context in the patch).
+<br />
+<br />The bug manifests itself if you create a window in one part of a desk,
+<br />
+and move it to a different part of the viewport.  Iconify it, putting
+<br />
+it into FvwmIconMan.  Now, if you have IconMan set as follows, and you
+<br />
+move the mouse over the button for that window, selecting it, the
+<br />
+viewport warps to 0,0 and the window is moved to 0,0.
+<br />
+<br />Let me know if you need more information,
+<br />
+Greg
+<br />
+<br /><br /><br />Style &quot;Fvwm*&quot;       NoTitle, Sticky, WindowListSkip
+<br />
+Style &quot;Fvwm*&quot;       BorderWidth 2, CirculateSkipIcon, CirculateSkip
+<br />
+Style &quot;FvwmIconMan&quot; Title, CirculateHit
+<br />
+<br />*FvwmIconMan*action          Select sendcommand Focus
+<br />
+*FvwmIconMan*resolution      page
+<br />
+*FvwmIconMan*usewinlist      true
+<br />
+*FvwmIconMan*drawicons       true
+<br />
+*FvwmIconMan*followfocus     true
+<br />
+*FvwmIconMan*sort            true
+<br />
+*FvwmIconMan*managergeometry -1+1
+<br />
+*FvwmIconMan*buttongeometry  90x19
+<br />
+*FvwmIconMan*font            -adobe-helvetica-bold-r-normal--10-*
+<br />
+*FvwmIconMan*background           dimgray
+<br />
+*FvwmIconMan*foreground           white
+<br />
+*FvwmIconMan*plainbutton          up
+<br />
+*FvwmIconMan*selectbutton         down
+<br />
+*FvwmIconMan*focusbutton          raisededge white palevioletred
+<br />
+*FvwmIconMan*focusandselectButton raisededge white palevioletred
+<br />
+<br /><br /><br /><br />--- ../.backups/builtins.c!!!proj!mstar!software!fvwm!fvwm-2.0.46!fvwm!.~1~	Tue Aug 19 19:41:27 1997
+<br />
++++ fvwm/builtins.c	Wed Apr  8 20:36:56 1998
+<br />
+_at_&#64; -180,6 +180,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;
+<br />
+&nbsp;#ifndef NON_VIRTUAL
+<br />
++  if (!(t-&gt;flags &amp; ICONIFIED) || t-&gt;icon_w) {
+<br />
+&nbsp;&nbsp;&nbsp;if(t-&gt;flags &amp; ICONIFIED)
+<br />
+&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cx = t-&gt;icon_xl_loc + t-&gt;icon_w_width/2;
+<br />
+_at_&#64; -195,6 +196,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;dy = (cy +Scr.Vy)/Scr.MyDisplayHeight*Scr.MyDisplayHeight;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;MoveViewport(dx,dy,True);
+<br />
++  }
+<br />
+&nbsp;#endif
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;if(t-&gt;flags &amp; ICONIFIED)
+<br />
+_at_&#64; -217,7 +219,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;KeepOnTop();
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;/* If the window is still not visible, make it visible! */
+<br />
+-  if(((t-&gt;frame_x + t-&gt;frame_height)&lt; 0)||(t-&gt;frame_y + t-&gt;frame_width &lt; 0)||
+<br />
++  if(((t-&gt;frame_x + t-&gt;frame_width)&lt; 0)||(t-&gt;frame_y + t-&gt;frame_height &lt; 0)||
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(t-&gt;frame_x &gt;Scr.MyDisplayWidth)||(t-&gt;frame_y&gt;Scr.MyDisplayHeight))
+<br />
+&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SetupFrame(t,0,0,t-&gt;frame_width, t-&gt;frame_height,False);
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Apr 08 1998 - 19:55:36 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start21956">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="21957.html" title="Next message in the list">Ami Hofman: "FVWM: fvwm2 problem"</a></li>
+<li><dfn>Previous message</dfn>: <a href="21955.html" title="Previous message in the list">Look, Joseph: "FVWM: clean up before quiting"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21956" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21956" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21956" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21956" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

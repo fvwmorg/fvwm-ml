@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Bug in pre 2.0 pl 33/34 from Jesper Skovhus Thomsen on 1995-10-05 (fvwm-users)</title>
+<meta name="Author" content="Jesper Skovhus Thomsen (jesper_at_chaos.fys.dtu.dk)" />
+<meta name="Subject" content="FVWM: Bug in pre 2.0 pl 33/34" />
+<meta name="Date" content="1995-10-05" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Bug in pre 2.0 pl 33/34</h1>
+<!-- received="Thu Oct  5 05:03:40 1995" -->
+<!-- isoreceived="19951005040340" -->
+<!-- sent="Thu, 5 Oct 95 11:05:23 MET" -->
+<!-- isosent="19951005100523" -->
+<!-- name="Jesper Skovhus Thomsen" -->
+<!-- email="jesper_at_chaos.fys.dtu.dk" -->
+<!-- subject="FVWM: Bug in pre 2.0 pl 33/34" -->
+<!-- id="9510051003.AA02319_at_hpc.uh.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start14398" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="14399.html" accesskey="d" title="Edward van de Vorst: &quot;FVWM: fvwm2.0-pl36 hangs&quot;">Next message</a> ]
+[ <a href="14397.html" title="bda_at_aime.insa-tlse.fr: &quot;FVWM: 3 questions with fvwm fvwm-2.0-pl35&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg14398" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg14398" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg14398" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg14398" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Jesper Skovhus Thomsen &lt;<a href="mailto:jesper_at_chaos.fys.dtu.dk?Subject=Re%3A%20FVWM%3A%20Bug%20in%20pre%202.0%20pl%2033%2F34">jesper_at_chaos.fys.dtu.dk</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 5 Oct 95 11:05:23 MET</span><br />
+</address>
+<br />
+Hello all.
+<br />
+<br />With the following system:
+<br />
+AMD 486 DX4100 with 20Mb RAM and Tseng ET4000W32i running
+<br />
+Linux 1.2.11 with XFree86 3.1.1 
+<br />
+<br />I have observed a problem with fvwm pre 2.0 pl 33 and pl 34, which do
+<br />
+not occur with fvwm 1.24 and twm.
+<br />
+<br />With some programs e.g. Radiance (a ray tracer) whenever a window in
+<br />
+which the process is running is killed -- either by double clicking
+<br />
+on the &quot;close button&quot; or by giving the process a kill -kill 
+<br />
+X hangs -- or more to the point fvwm hangs.
+<br />
+<br />I think I have isolated the problem to 4 lines of code in the file
+<br />
+misc.c in the fvwm directory.
+<br />
+<br />line 185 to line 188 in fvwm/misc.c:
+<br />
+<br />&nbsp;&nbsp;if (Tmp_win-&gt;class.res_name &amp;&amp; Tmp_win-&gt;class.res_name != NoName)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;XFree ((char *)Tmp_win-&gt;class.res_name);
+<br />
+&nbsp;&nbsp;if (Tmp_win-&gt;class.res_class &amp;&amp; Tmp_win-&gt;class.res_class != NoName)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;XFree ((char *)Tmp_win-&gt;class.res_class);
+<br />
+<br />A printf reveals that 
+<br />
+<br />Tmp_win-&gt;class.res_name  is &quot;NoName&quot;
+<br />
+Tmp_win-&gt;class.res_calss is &quot;NoClass&quot;
+<br />
+NoName                   is &quot;Untitled&quot;
+<br />
+<br />So it looks like fvwm tries to free something that is not &quot;freeable&quot;
+<br />
+<br />I think that the problem lies in add_window.c line 129 to 135:
+<br />
+<br />&nbsp;tmp_win-&gt;class = NoClass;
+<br />
+<br />&nbsp;XGetClassHint(dpy, tmp_win-&gt;w, &amp;tmp_win-&gt;class);
+<br />
+&nbsp;if (tmp_win-&gt;class.res_name == NULL)      &lt;----+
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tmp_win-&gt;class.res_name = NoName;          | 
+<br />
+&nbsp;if (tmp_win-&gt;class.res_class == NULL)     &lt;----+
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tmp_win-&gt;class.res_class = NoName;         |
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;here is tmp_win-&gt;class.res_name &quot;NoName&quot; and
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tmp_win-&gt;class.res_class is &quot;NoClass&quot;.
+<br />
+<br /><br />The same or a related problem have been reported in pl 36 by Karl Eichwalder.
+<br />
+<br />Yesterday I accidently send this message to fvwm-owner_at_hpc.uh.edu
+<br />
+Sorry!
+<br />
+<br />Jesper
+<br />
+<br />-------------------------------------------------------------------------------
+<br />
+&nbsp;Jesper Skovhus Thomsen              | 
+<br />
+&nbsp;(jesper_at_chaos.fys.dtu.dk)           |    Nothing comes from doing nothing
+<br />
+&nbsp;Department of Cell Biology          |    -- except fluff.
+<br />
+&nbsp;Institute of Anatomy                |                            Storm P.
+<br />
+&nbsp;University of Aarhus                |
+<br />
+-------------------------------------------------------------------------------
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LINUX the choice of a GNU-generation
+<br />
+-------------------------------------------------------------------------------
+<br />
+<pre>
+--
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Oct 05 1995 - 05:03:40 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start14398">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="14399.html" title="Next message in the list">Edward van de Vorst: "FVWM: fvwm2.0-pl36 hangs"</a></li>
+<li><dfn>Previous message</dfn>: <a href="14397.html" title="Previous message in the list">bda_at_aime.insa-tlse.fr: "FVWM: 3 questions with fvwm fvwm-2.0-pl35"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg14398" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg14398" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg14398" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg14398" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:57 BST
+</em></small></p>
+</body>
+</html>

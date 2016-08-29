@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Small patch to FvwmPager for the button-impaired from Jay \ on 1996-08-05 (fvwm-users)</title>
+<meta name="Author" content="Jay \ (Jay.Han_at_imag.fr)" />
+<meta name="Subject" content="FVWM: Small patch to FvwmPager for the button-impaired" />
+<meta name="Date" content="1996-08-05" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Small patch to FvwmPager for the button-impaired</h1>
+<!-- received="Mon Aug  5 07:49:42 1996" -->
+<!-- isoreceived="19960805064942" -->
+<!-- sent="Mon, 5 Aug 1996 14:47:32 +0200" -->
+<!-- isosent="19960805124732" -->
+<!-- name="Jay \" -->
+<!-- email="Jay.Han_at_imag.fr" -->
+<!-- subject="FVWM: Small patch to FvwmPager for the button-impaired" -->
+<!-- id="199608051247.OAA15894_at_choiseul.inrialpes.fr" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start17527" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="17528.html" accesskey="d" title="Douglas K. Rand: &quot;FVWM: Buglet with FvwmButtons.c&quot;">Next message</a> ]
+[ <a href="17526.html" title="Kai Grossjohann: &quot;Re: FVWM: fvwm-2.x Installation&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17527" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17527" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17527" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17527" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Jay \ &lt;<a href="mailto:Jay.Han_at_imag.fr?Subject=Re%3A%20FVWM%3A%20Small%20patch%20to%20FvwmPager%20for%20the%20button-impaired">Jay.Han_at_imag.fr</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 5 Aug 1996 14:47:32 +0200</span><br />
+</address>
+<br />
+Hi all,
+<br />
+<br />FVWM is a great piece of software and the best window manager around.
+<br />
+There's a single nagging bit with FvwmPager and the fact that my machine
+<br />
+is a notebook with a PS/2 trackpoint and only 2 mouse buttons. The
+<br />
+button semantics of FvwmPager is hard-coded, and moving windows is
+<br />
+associated with dragging with mouse button 2 down. Under XFree86, button
+<br />
+2 is emulated by pressing both buttons, which is quite a pain. I know I
+<br />
+could have tweaked the Xmodmap to reorder the button, but that would
+<br />
+break the other applications' interface.
+<br />
+<br />So, after this lengthy introduction, here's a tiny patch to FvwmPager.
+<br />
+What it does is add a config option *FvwmPagerSwapButtons to swap
+<br />
+buttons 3 and 2. When that option is specified in .fvwmrc, moving
+<br />
+windows is mapped to button 3 drag and positioning the screen is mapped
+<br />
+to button 2. Additionally, focus without screen change is mapped to
+<br />
+button 3 click. That's it.
+<br />
+<br />It's really a quick hack that isn't destined to get into the official
+<br />
+source. I think I read somewhere sometime ago that a more flexible
+<br />
+button mapping configuration parser was planned for FvwmPager. Until
+<br />
+then, this patch could help the button-impaired. It helps my poor
+<br />
+fingers a lot. :-)
+<br />
+<br />To apply the patch, do &quot;diff &lt; patch.swapbuttons&quot; in the
+<br />
+modules/FvwmPager directory.
+<br />
+<br />------------------------------------------------------------------------
+<br />
+--- FvwmPager.c	Wed Jul 31 19:23:17 1996
+<br />
++++ FvwmPager.c.orig	Wed Jul 31 19:22:57 1996
+<br />
+_at_&#64; -151,8 +151,6 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;Scr.screen= DefaultScreen(dpy);
+<br />
+&nbsp;&nbsp;&nbsp;Scr.Root = RootWindow(dpy, Scr.screen);
+<br />
+-  Scr.SwappedButton2 = 2;
+<br />
+-  Scr.SwappedButton3 = 3;
+<br />
+&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;if(Scr.Root == None) 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+_at_&#64; -961,12 +959,6 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Clength+12)==0))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;StartIconic = 1;
+<br />
+-	}	
+<br />
+-      else if((strlen(&amp;tline[0])&gt;1)&amp;&amp;
+<br />
+-	      (mystrncasecmp(tline,CatString3(&quot;*&quot;,MyName,&quot;SwapButtons&quot;),
+<br />
+-			     Clength+12)==0))
+<br />
+-	{
+<br />
+-        Scr.SwappedButton2 = 3; Scr.SwappedButton3 = 2;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}	
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if((strlen(&amp;tline[0])&gt;1)&amp;&amp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(mystrncasecmp(tline,CatString3(&quot;*&quot;,MyName,&quot;Rows&quot;),
+<br />
+--- FvwmPager.h	Wed Jul 31 19:23:17 1996
+<br />
++++ FvwmPager.h.orig	Wed Jul 31 19:23:02 1996
+<br />
+_at_&#64; -4,7 +4,6 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;int d_depth;	        /* copy of DefaultDepth(dpy, screen) */
+<br />
+&nbsp;&nbsp;&nbsp;int MyDisplayWidth;	/* my copy of DisplayWidth(dpy, screen) */
+<br />
+&nbsp;&nbsp;&nbsp;int MyDisplayHeight;  /* my copy of DisplayHeight(dpy, screen) */
+<br />
+-    int SwappedButton2, SwappedButton3;
+<br />
+&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;char *FvwmRoot;	/* the head of the fvwm window list */
+<br />
+&nbsp;&nbsp;&nbsp;Window Root;		/* the root window */
+<br />
+--- x_pager.c	Wed Jul 31 19:23:23 1996
+<br />
++++ x_pager.c.orig	Wed Jul 31 19:23:07 1996
+<br />
+_at_&#64; -444,7 +444,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case ButtonRelease:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if((Event-&gt;xbutton.button == 1)||
+<br />
+-	 (Event-&gt;xbutton.button == Scr.SwappedButton3))
+<br />
++	 (Event-&gt;xbutton.button == 2))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for(i=0;i&lt;ndesks;i++)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+_at_&#64; -458,7 +458,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IconSwitchPage(Event);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+-      else if (Event-&gt;xbutton.button == Scr.SwappedButton2)
+<br />
++      else if (Event-&gt;xbutton.button == 3)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for(i=0;i&lt;ndesks;i++)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+_at_&#64; -478,14 +478,14 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case ButtonPress:
+<br />
+-      if (((Event-&gt;xbutton.button == Scr.SwappedButton2)||
+<br />
+-	   ((Event-&gt;xbutton.button == Scr.SwappedButton3)&amp;&amp;
+<br />
++      if (((Event-&gt;xbutton.button == 2)||
+<br />
++	   ((Event-&gt;xbutton.button == 3)&amp;&amp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Event-&gt;xbutton.state &amp; Mod1Mask)))&amp;&amp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Event-&gt;xbutton.subwindow != None))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MoveWindow(Event);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+-      else if (Event-&gt;xbutton.button == Scr.SwappedButton3)
+<br />
++      else if (Event-&gt;xbutton.button == 3)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for(i=0;i&lt;ndesks;i++)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+------------------------------------------------------------------------
+<br />
+<br /><pre>
+-- 
+-- Jay &quot;Thierry&quot; Han - Jay.Han_at_imag.fr - +33 76.61.52.70 - Perso: 76.46.11.26
+La SF en francais : &lt;URL:<a href="http://www-bi.inrialpes.fr/cgi-bin/han/francais.html">http://www-bi.inrialpes.fr/cgi-bin/han/francais.html</a>&gt;
+LSR-IMAG. Unite de Recherche INRIA Rhone-Alpes. 
+655 av. de l'Europe. 38330 Montbonnot-St.Martin. France.     Fax: 76.61.52.52
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon Aug 05 1996 - 07:49:42 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start17527">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="17528.html" title="Next message in the list">Douglas K. Rand: "FVWM: Buglet with FvwmButtons.c"</a></li>
+<li><dfn>Previous message</dfn>: <a href="17526.html" title="Previous message in the list">Kai Grossjohann: "Re: FVWM: fvwm-2.x Installation"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17527" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17527" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17527" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17527" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

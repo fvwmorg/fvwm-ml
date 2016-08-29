@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: patch to make debugging fvwmrc easier: add line number to error from jeff (j.d.) sparkes on 1995-10-25 (fvwm-users)</title>
+<meta name="Author" content="jeff (j.d.) sparkes ("jeff)" />
+<meta name="Subject" content="FVWM: patch to make debugging fvwmrc easier: add line number to error" />
+<meta name="Date" content="1995-10-25" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: patch to make debugging fvwmrc easier: add line number to error</h1>
+<!-- received="Wed Oct 25 08:50:14 1995" -->
+<!-- isoreceived="19951025085014" -->
+<!-- sent="Wed, 25 Oct 1995 09:49:00 -0400 " -->
+<!-- isosent="19951025134900" -->
+<!-- name="jeff (j.d.) sparkes" -->
+<!-- email=""jeff" -->
+<!-- subject="FVWM: patch to make debugging fvwmrc easier: add line number to error" -->
+<!-- id=""8088 Wed Oct 25 09:49:24 1995"_at_bnr.ca" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start14661" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="14662.html" accesskey="d" title="Greg Veres: &quot;FVWM: wierd xterm error&quot;">Next message</a> ]
+[ <a href="14660.html" title="Alan Wild: &quot;Re: FVWM: Re: Release 2.1&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg14661" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg14661" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg14661" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg14661" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: jeff (j.d.) sparkes &lt;<a href="mailto:%22jeff?Subject=Re%3A%20FVWM%3A%20patch%20to%20make%20debugging%20fvwmrc%20easier%3A%20add%20line%20number%20to%20error">"jeff</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 25 Oct 1995 09:49:00 -0400 </span><br />
+</address>
+<br />
+-----BEGIN PGP SIGNED MESSAGE-----
+<br />
+<br />When I switched over to fvwm-2, I found this really helped me with debugging
+<br />
+my .fvwmrc since it told on which line it found the problem.  It also adds
+<br />
+the filename in case you use M4 or cpp.
+<br />
+<br />This is against patchlevel 33, but should apply easily to newer ones.
+<br />
+<br />===================================================================
+<br />
+RCS file: fvwm.c,v
+<br />
+retrieving revision 1.1
+<br />
+diff -c -r1.1 fvwm.c
+<br />
+*** fvwm.c	1995/08/10 14:44:05	1.1
+<br />
+- --- fvwm.c	1995/08/10 14:44:59
+<br />
+***************
+<br />
+*** 1032,1040 ****
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;void fvwm_err(char *message, char *arg1, char *arg2, char *arg3)
+<br />
+&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;char line[255];
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;char temp[1000];
+<br />
+!   strcpy(line,&quot;fvwm: &quot;);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;sprintf(temp,message,arg1,arg2,arg3);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;strncat(line,temp,248);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;line[248+6] = 0;
+<br />
+- --- 1032,1043 ----
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;void fvwm_err(char *message, char *arg1, char *arg2, char *arg3)
+<br />
+&nbsp;&nbsp;{
+<br />
++   extern char *fvwm_file;
+<br />
++   extern int LineNumber;
+<br />
++     
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;char line[255];
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;char temp[1000];
+<br />
+!   sprintf(line,&quot;fvwm: at %s:%d: &quot;, fvwm_file, LineNumber);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;sprintf(temp,message,arg1,arg2,arg3);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;strncat(line,temp,248);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;line[248+6] = 0;
+<br />
+===================================================================
+<br />
+RCS file: read.c,v
+<br />
+retrieving revision 1.1
+<br />
+diff -c -r1.1 read.c
+<br />
+*** read.c	1995/08/10 14:41:08	1.1
+<br />
+- --- read.c	1995/08/10 14:44:21
+<br />
+***************
+<br />
+*** 21,26 ****
+<br />
+- --- 21,28 ----
+<br />
+&nbsp;&nbsp;#include &quot;module.h&quot;
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;char *fvwm_file = NULL;
+<br />
++ int   LineNumber = 0;
+<br />
++ 
+<br />
+&nbsp;&nbsp;#include &lt;fcntl.h&gt;
+<br />
+&nbsp;&nbsp;void AddToModList(char *tline);
+<br />
+&nbsp;&nbsp;
+<br />
+***************
+<br />
+*** 105,113 ****
+<br />
+- --- 107,117 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;free(fvwm_file);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;fvwm_file = filename;
+<br />
+&nbsp;&nbsp;
+<br />
++   LineNumber = 0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;tline = fgets(line,(sizeof line)-1,fd);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;while(tline != (char *)0)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
++       LineNumber++;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while(isspace(*tline))tline++;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if((strlen(&amp;tline[0])&gt;1)&amp;&amp;(tline[0]!='#')&amp;&amp;(tline[0]!='*'))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ExecuteFunction(tline,tmp_win,eventp,context,*Module);
+<br />
+<br />-----BEGIN PGP SIGNATURE-----
+<br />
+Version: 2.6.2
+<br />
+Comment: Processed by Mailcrypt 3.3, an Emacs/PGP interface
+<br />
+<br />iQCVAwUBMI5AHqSyilkXM3tNAQGxuQQAmtpdlPieUQeEHjMAL6GauD5rgmCFf9/p
+<br />
+dKFLMbwzWJ8jSFTNDKUu5sT2dda0ITJz/h0AyWVtlX1i3BlqMspXqxjMhAKZtO9e
+<br />
+837UZbX15BktJDBVBG1bj5YR48Z5Kya6xN+sLjXCfiMfwb/x51a4a55FE6Wy9i6+
+<br />
+gGtzSk4WOWw=
+<br />
+=fKlf
+<br />
+-----END PGP SIGNATURE-----
+<br />
+<br /><pre>
+--
+Jeff Sparkes
+jsparkes_at_bnr.ca    Bell-Northern Research, Ottawa, Ontario, Canada
+--
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Oct 25 1995 - 08:50:14 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start14661">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="14662.html" title="Next message in the list">Greg Veres: "FVWM: wierd xterm error"</a></li>
+<li><dfn>Previous message</dfn>: <a href="14660.html" title="Previous message in the list">Alan Wild: "Re: FVWM: Re: Release 2.1"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg14661" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg14661" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg14661" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg14661" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:57 BST
+</em></small></p>
+</body>
+</html>

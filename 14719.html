@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Adjusting contrast of 3D effects. from Jean-Marc Lasgouttes on 1995-11-02 (fvwm-users)</title>
+<meta name="Author" content="Jean-Marc Lasgouttes (Jean-Marc.Lasgouttes_at_inria.fr)" />
+<meta name="Subject" content="FVWM: Adjusting contrast of 3D effects." />
+<meta name="Date" content="1995-11-02" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Adjusting contrast of 3D effects.</h1>
+<!-- received="Thu Nov  2 09:45:40 1995" -->
+<!-- isoreceived="19951102094540" -->
+<!-- sent="Thu, 2 Nov 1995 16:45:02 +0100" -->
+<!-- isosent="19951102154502" -->
+<!-- name="Jean-Marc Lasgouttes" -->
+<!-- email="Jean-Marc.Lasgouttes_at_inria.fr" -->
+<!-- subject="FVWM: Adjusting contrast of 3D effects." -->
+<!-- id="199511021545.QAA18650_at_fantomas.inria.fr" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start14719" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="14720.html" accesskey="d" title="Paul D. Smith: &quot;FVWM: [2.0p34] Delay when iconifying?&quot;">Next message</a> ]
+[ <a href="14718.html" title="Brian P Millett: &quot;FVWM: Please send your .fvwm2rc&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="14723.html" accesskey="t" title="Olly Stephens: &quot;Re: FVWM: Adjusting contrast of 3D effects.&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg14719" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg14719" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg14719" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg14719" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Jean-Marc Lasgouttes &lt;<a href="mailto:Jean-Marc.Lasgouttes_at_inria.fr?Subject=Re%3A%20FVWM%3A%20Adjusting%20contrast%20of%203D%20effects.">Jean-Marc.Lasgouttes_at_inria.fr</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 2 Nov 1995 16:45:02 +0100</span><br />
+</address>
+<br />
+Hi everybody!
+<br />
+<br />I noticed that the shadows used by fvwm for shadow effects are much
+<br />
+brighter than what Motif of Xaw3d yield. I guess it comes from the
+<br />
+lines 
+<br />
+<br />&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;r = bg_color.red % 0xffff;
+<br />
+&nbsp;&nbsp;g = bg_color.green % 0xffff;
+<br />
+&nbsp;&nbsp;b = bg_color.blue % 0xffff;
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;r = r &gt;&gt;1;
+<br />
+&nbsp;&nbsp;g = g &gt;&gt;1;
+<br />
+&nbsp;&nbsp;b = b &gt;&gt;1;
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;bg_color.red = r;
+<br />
+&nbsp;&nbsp;bg_color.green = g;
+<br />
+&nbsp;&nbsp;bg_color.blue = b;
+<br />
+<br /><br />in fvwm/colors.c, or similar snippets in modules. I'd like to see a
+<br />
+common function in libfvwm.a that uses a Contrast setting (either a
+<br />
+global setting in .fvwmrc or a compile time setting in
+<br />
+configure.h). Then we could have something like
+<br />
+<br />&nbsp;&nbsp;bg_color.red = (unsigned short)((bg_color.red*CONTRAST)/100);
+<br />
+&nbsp;&nbsp;bg_color.green = (unsigned short)((bg_color.green*CONTRAST)/100);
+<br />
+&nbsp;&nbsp;bg_color.blue = (unsigned short)((bg_color.blue*CONTRAST)/100);
+<br />
+&nbsp;&nbsp;
+<br />
+<br />Concerning the darker shadows, they seem to be always black. A similar
+<br />
+algorithm would be welcome. I don't know whether we can grab code from
+<br />
+Xaw3d and adapt it (Copyright problems, maybe?).
+<br />
+<br />Anyway, I tried to change these things myself and, as expected, got
+<br />
+no satisfactory result. That's why I transmit this idea to the list.
+<br />
+<br />Jean-Marc.
+<br />
+<pre>
+--
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Nov 02 1995 - 09:45:40 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start14719">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="14720.html" title="Next message in the list">Paul D. Smith: "FVWM: [2.0p34] Delay when iconifying?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="14718.html" title="Previous message in the list">Brian P Millett: "FVWM: Please send your .fvwm2rc"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="14723.html" title="Next message in this discussion thread">Olly Stephens: "Re: FVWM: Adjusting contrast of 3D effects."</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Maybe reply</dfn>: <a href="14723.html" title="Message sent in reply to this message">Olly Stephens: "Re: FVWM: Adjusting contrast of 3D effects."</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg14719" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg14719" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg14719" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg14719" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:57 BST
+</em></small></p>
+</body>
+</html>

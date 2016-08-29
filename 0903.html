@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: Window Placement Problem from Dominik Vogt on 2000-05-31 (fvwm-users)</title>
+<meta name="Author" content="Dominik Vogt (dominik.vogt_at_gmx.de)" />
+<meta name="Subject" content="Re: FVWM: Window Placement Problem" />
+<meta name="Date" content="2000-05-31" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: Window Placement Problem</h1>
+<!-- received="Tue May 30 19:52:18 2000" -->
+<!-- isoreceived="20000530185218" -->
+<!-- sent="Wed, 31 May 2000 02:11:27 +0200" -->
+<!-- isosent="20000531001127" -->
+<!-- name="Dominik Vogt" -->
+<!-- email="dominik.vogt_at_gmx.de" -->
+<!-- subject="Re: FVWM: Window Placement Problem" -->
+<!-- id="20000531021127.A27156_at_gmx.de" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="Pine.SOL.4.21.0005302152460.14289-100000_at_red.csi.cam.ac.uk" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start903" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="0904.html" accesskey="d" title="Dinesh Pullat: &quot;FVWM: exec&#0039;ing an expect script&quot;">Next message</a> ]
+[ <a href="0902.html" title="Dominik Vogt: &quot;Re: FVWM: flat window borders?&quot;">Previous message</a> ]
+[ <a href="0900.html" title="Ben Cohen: &quot;FVWM: Window Placement Problem&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="0905.html" accesskey="t" title="Ben Cohen: &quot;Re: FVWM: Window Placement Problem&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg903" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg903" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg903" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg903" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Dominik Vogt &lt;<a href="mailto:dominik.vogt_at_gmx.de?Subject=Re%3A%20FVWM%3A%20Window%20Placement%20Problem">dominik.vogt_at_gmx.de</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 31 May 2000 02:11:27 +0200</span><br />
+</address>
+<br />
+On Tue, May 30, 2000 at 10:04:38PM +0100, Ben Cohen wrote:
+<br />
+<em class="quotelev1">&gt; (FVWM version 2.2.4)
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; I found the following post in the mailing list archives after having the
+</em><br />
+<em class="quotelev1">&gt; similar problems.  Firstly, a new window on an empty screen will appear at
+</em><br />
+<em class="quotelev1">&gt; (2,2) not (0,0).  Also, a Netscape window (say) that is the full
+</em><br />
+<em class="quotelev1">&gt; screen-size will also appear at (2,2) not (0,0).
+</em><br />
+<br />Ah, now that you rephrase that bug report I finally understand
+<br />
+what the problem is.  This is still happening with 2.3.19.
+<br />
+<br /><em class="quotelev1">&gt; I have found two things which seem to cause this in placement.c; I am
+</em><br />
+<em class="quotelev1">&gt; including a patch which solves the problem as far as I am concerned,
+</em><br />
+<em class="quotelev1">&gt; although I imagine it's not the &quot;most correct&quot; solution (but I don't have
+</em><br />
+<em class="quotelev1">&gt; time to look deeper into it).
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; Please tell me whether this is a bug or if I'm doing something wrong...
+</em><br />
+<br />It's a bug.  The loops over the x and y coordinates are broken.
+<br />
+When the window finally found a proper position, the code adds
+<br />
+one pixel in x and y direction before placing it.  There's another
+<br />
+bug in the collision detection.  Windows are interpreted as
+<br />
+overlapping if they are directly adjacent.  This causes the two
+<br />
+pixel gap between windows.
+<br />
+<br />Here is the proper fix for 2.2.4:
+<br />
+<br />----------------------------- snip -------------------------------
+<br />
+--- placement.c Sat Oct  2 18:42:13 1999
+<br />
++++ placement.c.orig    Wed May 31 02:08:57 2000
+<br />
+_at_&#64; -139,8 +139,8 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;th=test_window-&gt;frame_height+2*test_window-&gt;bw;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tx = test_window-&gt;frame_x - stickyx;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ty = test_window-&gt;frame_y - stickyy;
+<br />
+-            if((tx &lt;= (test_x+width))&amp;&amp;((tx + tw) &gt;= test_x)&amp;&amp;
+<br />
+-               (ty &lt;= (test_y+height))&amp;&amp;((ty + th)&gt;= test_y))
+<br />
++            if((tx &lt; (test_x+width))&amp;&amp;((tx + tw) &gt; test_x)&amp;&amp;
+<br />
++               (ty &lt; (test_y+height))&amp;&amp;((ty + th)&gt; test_y))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;loc_ok = False;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;test_x = tx + tw;
+<br />
+_at_&#64; -149,9 +149,11 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;test_window = test_window-&gt;next;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+-      test_x +=1;
+<br />
++      if (!loc_ok)
+<br />
++       test_x +=1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+-    test_y +=1;
+<br />
++    if (!loc_ok)
+<br />
++      test_y +=1;
+<br />
+&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;/*  RBW - 11/02/1998  */
+<br />
+&nbsp;&nbsp;&nbsp;if(loc_ok == False)
+<br />
+----------------------------- snip -------------------------------
+<br />
+<br />Bye
+<br />
+<br />Dominik ^_^
+<br />
+<br /><pre>
+--
+Dominik Vogt, dominik.vogt_at_gmx.de
+Reply-To: dominik.vogt_at_gmx.de
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue May 30 2000 - 19:52:18 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start903">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="0904.html" title="Next message in the list">Dinesh Pullat: "FVWM: exec&#0039;ing an expect script"</a></li>
+<li><dfn>Previous message</dfn>: <a href="0902.html" title="Previous message in the list">Dominik Vogt: "Re: FVWM: flat window borders?"</a></li>
+<li><dfn>In reply to</dfn>: <a href="0900.html" title="Message to which this message replies">Ben Cohen: "FVWM: Window Placement Problem"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="0905.html" title="Next message in this discussion thread">Ben Cohen: "Re: FVWM: Window Placement Problem"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="0905.html" title="Message sent in reply to this message">Ben Cohen: "Re: FVWM: Window Placement Problem"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg903" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg903" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg903" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg903" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:50 BST
+</em></small></p>
+</body>
+</html>

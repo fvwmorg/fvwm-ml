@@ -1,0 +1,331 @@
+# this is a bare bones sample .fvwm2rc/system.fvwm2rc file for fvwm.
+# It should be customized before install.  See other sample .fvwm2rc files
+# for hints, as well as pointers from the various links on the official
+# fvwm web page (see the FAQ).
+
+ModulePath /usr/libexec/fvwm/2.5.0
+ImagePath /home/rahul:/home/rahul/pics:/usr/share/pixmaps:/usr/local/share/pixmaps:/usr/share/fvwm/images:/usr/X11R6/share/icons/xpm/hicolor/all:/usr/X11R6/share/icons/xpm/locolor/all
+
+#ModuleSynchronous Timeout 5 FvwmTheme
+
+EdgeResistance 10000 10000
+EdgeScroll 0 0
+ClickTime 750
+SetAnimation 10 -.03 0 .03 .08 .18 .3 .60 .85 1.03 .97 .95 .97 .99 1.0
+
+DeskTopSize 2x2
+DefaultLayers 0 4 6
+
+MenuStyle * PopupDelayed, PopupDelay 150
+MenuStyle * Animation, Hilight3DThin
+MenuStyle * PopupOffset 1 100
+MenuStyle * Foreground black
+MenuStyle * Font -*-helvetica-medium-r-*-*-14-*-*-*-*-*-*-*
+MenuStyle *	MenuColorset 1
+
+#SetAnimation 10 0 0.1 .01 .03 .08 .18 .3 \
+.45 .6 .75 .85 .90 .94 .97 .99 1.0
+
+# default Styles:
+Style * StaysPut
+Style *	SloppyFocus
+Style * Font -*-helvetica-*-r-*-*-*-140-*-*-*-77-*-*
+Style * IconFont 9x15
+Style * BorderWidth 4, HandleWidth 4
+Style * DecorateTransient, NoPPosition
+Style * MinOverlapPlacement
+Style *	NoIcon
+Style *	UseDecor FlatDecor
+Style * Colorset 2
+Style * HilightColorset 1
+Style * WindowShadeScrolls
+
+AddToDecor FlatDecor
+ + TitleStyle -- flat
+ + TitleStyle ActiveUp HGradient 26 rgb:57/67/88 rgb:30/40/50 
+ + TitleStyle ActiveDown VGradient 26 rgb:57/67/88 rgb:30/40/50 
+ + TitleStyle Inactive VGradient 26 rgb:57/67/88 rgb:30/40/50 
+ + TitleStyle ActiveUp (-- Flat) ActiveDown  \
+                     (-- Raised) Inactive (-- Flat)
+
+# Styles for various Fvwm modules:
+Style "Fvwm*" NoTitle,  Sticky, WindowListSkip
+Style "Fvwm*" BorderWidth 0, CirculateSkipIcon, CirculateSkip
+Style "FvwmPager" StaysOnTop
+Style "FvwmBanner"  StaysOnTop
+Style "FvwmButtons" NoHandles
+Style "FvwmWinList" Sticky, CirculateSkip, NoTitle, NoHandles
+
+# Styles for various common programs:
+Style "gkrellm" NoTitle, NoHandles, Sticky, WindowListSkip, CirculateSkip
+Style "xmms" NoTitle, NoHandles, WindowListSkip, CirculateSkip, CirculateSkipIcon
+Style "wmbiff" NoTitle, WindowListSkip, Sticky, NoHandles
+Style "wmcube" NoTitle, WindowListSkip, Sticky, NoHandles
+Style "MPlayer"	BorderWidth 0, NoTitle, NoHandles, NakedTransient
+Style "xterm" TitleAtLeft
+Style "ROX-Pinboard" NoTitle, HandleWidth 0, DumbPlacement, Layer 0 0
+Style "licq" NoTitle, HandleWidth 0
+
+
+AddToFunc ShadeWindow
+ +	I WindowShade
+
+AddToFunc DeIconifyAndRaise
+ +	I Iconify false
+ +	I Raise
+
+AddToFunc	GotoAnotherDesk
+ +	I	GotoDesk 0 0
+ +	I	GotoPage 0 0
+
+AddToFunc PrintDesk
+ +	I	exec xwd -root -out Desk
+
+# some simple default key bindings:
+#Key Tab         A       M     Next [*] SelectWindow
+#Key Tab         A       SM    Prev [*] SelectWindow
+Key Q	WFT	M     	Close
+Key F4	W	SM	Destroy
+Key	S	A	CM	PrintDesk
+Key Menu A N PopXterm
+Key Menu A C PopRXterm
+Key Down A SC Iconify
+Key Super_R A N Menu RootMenu Nop
+Key Super_L A N RunRox
+Key Up A SC Maximize-Func
+
+#some simple default mouse bindings:
+#   for the root window:
+Mouse 1	R   	A       Menu RootMenu Nop
+
+#   for the title bar buttons:
+Mouse 0	1    	A      	Menu Window-Ops2 Close
+Mouse 0	2    	A     	Maximize-Func
+Mouse 0	4    	A     	Iconify
+
+#   for other parts of the window/borders/icons:
+Mouse 1	F	A	Resize-or-Raise
+Mouse 1	S	A	Move-or-Raise
+Mouse 1	I	A	Move-or-Iconify
+Mouse 2	I	A	Iconify
+Mouse 2	FST	A	Menu Window-Ops2 Nop
+Mouse 3	TSIF	A	RaiseLower
+
+######################## Initialization Functions ############################
+AddToFunc StartFunction
+ + I Module FvwmButtons
+ + I Module FvwmWinList
+
+AddToFunc InitFunction
+ + I exec xv -root ~/pics/wallpapers/Kajol_Shahrukh.jpg -quit -rmode 5 -maxpect
+ + I exec gkrellm
+ + I exec rox --pinboard=Desktop
+
+# For some SM-s (like gnome-session) there is an internal background setter.
+AddToFunc SessionInitFunction
+ + I Nop
+
+######################## Menus ###################
+AddToMenu RootMenu "root menu" Title
++			"XTerm"		Exec exec xterm -fn 10x20 -fg white -bg black +sb -title xterm
++			"Root"		Exec exec xterm -fn 10x20 -fg white -bg black +sb -title root -e su -
++			"Emacs"		Exec exec emacs
++			"Mozilla"	Exec exec /home/rahul/.script.sh
++			"Yahoo!"	Exec exec gaim
++			"Licq"		Exec exec licq
++			"MPlayer"	Exec exec mplayer
++			"Snooker" Exec exec gtulpas
++			"Tux Racer"	 Exec exec tuxracer
++			"Gimp" Exec exec gimp
++			"StarOffice" Exec exec soffice
++                       "Refresh Screen"   Refresh
++                       "Recapture Screen" Recapture
++			"Exit Fvwm"	Popup Quit-Verify
+
+AddToMenu Online "Connections" Title
++ "Vsnl Phone1" Exec exec xterm -fg white -bg black -fn 10x20 +sb -e sudo wvdial
++ "Vsnl Phone2" Exec exec xterm -fg white -bg black -fn 10x20 +sb -e sudo wvdial phone2
++ "Go Offline" Exec exec sudo skill -c wvdial
+
+AddToMenu MailMenu "Mail" Title
++ "Go Online" Popup Online
++			"Fetchmail" Exec exec xterm -fg white -bg black -fn 10x20 +sb -e fetchmail -v
++			"Sendmail-mailq"	Exec exec xterm -fg white -bg black -fn 10x20 +sb -e sudo sendmail -C /etc/mail/sendmail.cf -q -v
++			"Sendmail-clientmqueue"	Exec exec xterm -fg white -bg black -fn 10x20 +sb -e sudo sendmail -C /etc/mail/submit.cf -q -v
+
+AddToMenu Window-Ops	"Window Ops"	Title
++			"Move"		Move
++			"Resize"	Resize
++			"Raise"		Raise
++			"Lower"		Lower
++		 	"(De)Iconify"	Iconify
++			"(Un)Stick"	Stick
++			"(Un)Maximize"	Maximize
++			""		Nop
++			"Delete"	Delete
++			"Close"		Close
++			"Destroy"	Destroy
++			""		Nop
++			"Refresh Window" RefreshWindow
+
+AddToMenu Window-Ops2	"&Move"		Move
++			"&Resize"	Resize
++			"R&aise"	Raise
++			"&Lower"	Lower
++			"(De)&Iconify"	Iconify
++			"(Un)&Stick"	Stick
++                       "(Un)Ma&ximize" Maximize
++			""		Nop
++			"&Delete"	Delete
++			"&Close"	Close
++			"Destroy"	Destroy
++			""		Nop
++			"ScrollBar" 	Module FvwmScroll 2 2
++			"Print"         PrintFunction
++                       "Print Reverse" PrintReverseFunction
+
+# be sure to fill these in with your correct machine names:
+
+AddToMenu Quit-Verify 	"Really Quit Fvwm?" Title
++		      	"Yes, Really Quit"  Quit
++                       "Restart Fvwm"      Restart
+
+######################## Sample Functions ##########################
+AddToFunc SelectWindow
+ + I Focus
+ + I Raise
+
+AddtoFunc RunRox
+ + I Exec rox
+
+AddToFunc PopXterm
+	+	I	Exec xterm -fn 10x20 -fg white -bg black +sb
+
+AddToFunc PopRXterm
+	+	I	Exec xterm -fn 10x20 -fg white -bg black +sb -e su -
+
+AddToFunc MailFunction	   I Next [$0] Iconify -1
++		           I Next [$0] Focus
++			   I None [$0] Exec $0 $1
+
+AddToFunc Move-or-Raise		I Raise
++				M Move
++  				D Lower
+
+
+AddToFunc Move-or-Raise2	M Raise
++				M Move
++  				D Lower
+
+AddToFunc Maximize-Func		M Maximize	 95 90
++				C Maximize	 95 90
++				D Maximize	 95 90
+
+AddToFunc Move-or-Iconify	I Raise
++				M Move
++				D Iconify
+
+AddToFunc Resize-or-Raise	I Raise
++				M Resize
++				D Lower
+
+AddToFunc Resize-or-Raise2	M Raise
++				M Resize
++				D Lower
+
+AddToFunc PrintFunction		I Raise
++				I Exec xdpr -id $w
+
+AddToFunc PrintReverseFunction  I Raise
++                               I Exec xdpr 1/2 -h -rv -id $w
+
+AddToFunc Iconify-and-Raise     I Iconify
++                               I Raise
+
+# RLOGIN machine fg bg
+AddToFunc RLOGIN I Exec xterm -fg $1 -bg $2 -e rlogin $0 -8
+
+# TELNET machine fg bg
+AddToFunc TELNET I Exec xterm -fg $1 -bg $2 -e telnet $0
+
+AddToFunc FocusAndWarp I Focus
++                      I WarpToWindow 2p 2p
+
+AddToFunc DeiconifyFocusAndWarp I Iconify -1
++                               I FocusAndWarp
+
+AddToFunc ChangeDefaultFocus I Style * $0
++                            I Recapture
+
+################## FvwmButtons button-bar ################################
+*FvwmButtons: Geometry 850x100-1-1
+*FvwmButtons: Colorset 1
+*FvwmButtons: BoxSize smart
+*FvwmButtons: Padding 0 0
+*FvwmButtons: ButtonGeometry 50x50-1-1
+*FvwmButtons: Rows 2
+*FvwmButtons: (9x2, Container(Rows 2, Frame 1))
+*FvwmButtons: (7x1 Colorset 1 Frame 1 Swallow(UseOld,NoHints,Respawn) "mp3term" `Exec exec xterm -T mp3term -fg black +sb`)
+*FvwmButtons: (2x2 Colorset 1 Frame 1 Swallow(UseOld) "FvwmPager" "Module FvwmPager 0 0")
+*FvwmButtons: (7x1 Colorset 1 Frame 1 Center Swallow(UseOld,NoHints,Respawn) "fmterm" `Exec exec xterm -T fmterm -fg black +sb`)
+*FvwmButtons: (End)
+*FvwmButtons: (2x2, Container(Rows 3, Frame 1))
+*FvwmButtons: (1x1 Colorset 1 Frame 1 Icon gimp-doc.xpm, Action Exec mozilla  file:///usr/share/gimp/GUM/GUM.html&)
+*FvwmButtons: (2x2 Colorset 1 Frame 1 Swallow(UseOld,NoHints,Respawn) "wmcube" `Exec exec wmcube -b -r 15 -o /usr/share/wmcube/3dObjects/cube-solid.wmc` )
+*FvwmButtons: (1x1 Colorset 1 Frame 1 Icon gimp.xpm, Action Exec gimp &)
+*FvwmButtons: (1x1 Colorset 1 Frame 1 Icon mail.xpm, Action Menu MailMenu Nop)
+*FvwmButtons: (1x1 Colorset 1 Frame 1 Icon star.xpm, Action Exec soffice &)
+*FvwmButtons: (1x1 Colorset 1 Frame 1 Icon netscape.xpm, Action Exec netscape &)
+*FvwmButtons: (End)
+*FvwmButtons: (2x2, Container(Rows 3, Frame 1))
+*FvwmButtons: (2x2 Colorset 1 Frame 1 Swallow(UseOld,NoHints,Respawn) "wmbiff" `Exec exec wmbiff -c ~/.wmbiffrc` )
+*FvwmButtons: (1x1 Colorset 1 Frame 1 Icon gtulpas.xpm, Action Exec gtulpas &)
+*FvwmButtons: (1x1 Colorset 1 Frame 1 Icon nt.xpm, Action Exec nt &)
+*FvwmButtons: (1x1 Colorset 1 Frame 1 Icon aim.xpm, Action Exec gaim &)
+*FvwmButtons: (1x1 Colorset 1 Frame 1 Icon mzbike.xpm, Action Exec mozilla &)
+*FvwmButtons: (1x1 Colorset 1 Frame 1 Icon licq.xpm, Action Exec licq &)
+*FvwmButtons: (End)
+
+
+########################### Pager #########################################
+*FvwmPagerColorset * 1
+*FvwmPagerHilightColorset * 1
+#*FvwmPagerFont -adobe-helvetica-bold-r-*-*-10-*-*-*-*-*-*-*
+# turn off desktop names for swallowing in above button bar example:
+*FvwmPagerFont none
+*FvwmPagerGeometry -1-1
+*FvwmPagerSmallFont 5x8
+*FvwmPagerBalloons            All
+*FvwmPagerBalloonBack         rgb:57/67/88
+*FvwmPagerBalloonFore         Black
+*FvwmPagerBalloonFont         lucidasanstypewriter-12
+*FvwmPagerBalloonYOffset      +2
+*FvwmPagerBalloonBorderWidth  1
+*FvwmPagerBalloonBorderColor  Black
+
+*FvwmBackerDesk 0 -solid steelblue
+*FvwmBackerDesk 1 -solid midnightblue
+
+*FvwmScrollBack grey40
+*FvwmScrollFore green
+
+########################## Window-Lister ###############################
+*FvwmWinListColorset 1
+*FvwmWinListFocusColorset 2
+*FvwmWinListIconColorset 1
+*FvwmWinListFont -*-tahoma-medium-*-normal-*-*-*-*-*-*-*-ascii-*
+*FvwmWinListAction Click1 SelectWindow
+*FvwmWinListAction Click2 Iconify
+*FvwmWinListAction Click3 Iconify -1,Focus
+*FvwmWinListUseSkipList
+*FvwmWinListDontDepressFocus
+*FvwmWinListGeometry -1160-5
+*FvwmWinList: MinWidth 120
+*FvwmWinList: MaxWidth 120
+
+#*FvwmTheme: 
+Colorset 1 fg black, bg rgb:57/67/88, HGradient 26 rgb:57/67/88 rgb:30/40/50, NoShape
+#*FvwmTheme: 
+Colorset 2 fg black, bg rgb:57/67/88, VGradient 26 rgb:57/67/88 rgb:30/40/50, NoShape
+
+

@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>RE: FVWM: Windows opening partially off screen from Moore, Garron on 2004-08-12 (fvwm-users)</title>
+<meta name="Author" content="Moore, Garron (Garron.Moore_at_boeing.com)" />
+<meta name="Subject" content="RE: FVWM: Windows opening partially off screen" />
+<meta name="Date" content="2004-08-12" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>RE: FVWM: Windows opening partially off screen</h1>
+<!-- received="Thu Aug 12 13:31:02 2004" -->
+<!-- isoreceived="20040812123102" -->
+<!-- sent="Thu, 12 Aug 2004 11:29:04 -0700" -->
+<!-- isosent="20040812182904" -->
+<!-- name="Moore, Garron" -->
+<!-- email="Garron.Moore_at_boeing.com" -->
+<!-- subject="RE: FVWM: Windows opening partially off screen" -->
+<!-- id="FF5A2657765DD04CBE26437E4BABC2CD07A2D6_at_xch-nw-25.nw.nos.boeing.com" -->
+<!-- charset="iso-8859-1" -->
+<!-- inreplyto="FVWM: Windows opening partially off screen" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start13104" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="13105.html" accesskey="d" title="David Vilar: &quot;FVWM: Behaviour of &#0039;All (Condition)&#0039;&quot;">Next message</a> ]
+[ <a href="13103.html" title="Esther Buch: &quot;FVWM: X-Mailer: Microsoft Outlook Express 6.00.2600.0000&quot;">Previous message</a> ]
+[ <a href="13090.html" title="Moore, Garron: &quot;FVWM: Windows opening partially off screen&quot;">Maybe in reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="13115.html" accesskey="t" title="Moore, Garron: &quot;RE: FVWM: Windows opening partially off screen&quot;">Next in thread</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg13104" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg13104" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg13104" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg13104" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Moore, Garron &lt;<a href="mailto:Garron.Moore_at_boeing.com?Subject=RE%3A%20FVWM%3A%20Windows%20opening%20partially%20off%20screen">Garron.Moore_at_boeing.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 12 Aug 2004 11:29:04 -0700</span><br />
+</address>
+<br />
+FvwmEvent is a good suggestion. I have figured out how to create functions
+<br />
+to move a window to the screen edge, but is there a way to check where the
+<br />
+window is and run the appropriate command based on its location? 
+<br />
+<br />I have figured out some functions, but I don't know how to implement
+<br />
+MoveWindowOnScreen. Can someone give me advice?
+<br />
+<br /><br />Module FvwmEvent
+<br />
+<br />*FVWMEvent: PassID
+<br />
+*FVWMEvent: add_window MoveWindowOnScreen
+<br />
+<br />AddToFunc MoveToTop
+<br />
++ I Move keep 0
+<br />
+<br />AddToFunc MoveToBottom
+<br />
++ I Move keep -0
+<br />
+<br />AddToFunc MoveToLeft
+<br />
++ I Move 0 keep
+<br />
+<br />AddToFunc MoveToRight
+<br />
++ I Move -0 keep
+<br />
+<br />AddToFunc MoveWindowOnScreen
+<br />
+# if window is off to left
+<br />
+#	MoveToLeft
+<br />
+# if window is off to right
+<br />
+#	MoveToRight
+<br />
+# if window is off to top
+<br />
+#	MoveToTop
+<br />
+# if window is off to bottom
+<br />
+#	MoveToBottom
+<br />
+<br /><br /><br />Thanks,
+<br />
+Garron Moore
+<br />
+<br /><br />On Wed, Aug 11, 2004 at 04:12:08PM -0700, Moore, Garron wrote:
+<br />
+<br />(Please type replies below the quoted sections of the precvious mail on this list).
+<br />
+<br /><em class="quotelev1">&gt; Does anyone have any ideas? I feel like I have tried everything.
+</em><br />
+<br />I can't think of anything short of using FvwmEvent to execute a script that corrects 
+<br />
+the window position if it's off screen.
+<br />
+<br /><em class="quotelev1">&gt; Also, moving windows works just fine. They won't move off of the 
+</em><br />
+<em class="quotelev1">&gt; Screen. If I move a window that is partially off the screen, it will 
+</em><br />
+<em class="quotelev1">&gt; jump to be completely on the screen.
+</em><br />
+<br />[snip]
+<br />
+<br /><em class="quotelev2">&gt; &gt; Some of the windows in our app are set up to open with their top 
+</em><br />
+<em class="quotelev2">&gt; &gt; left corner where the mouse pointer is. If the mouse pointer is next 
+</em><br />
+<em class="quotelev2">&gt; &gt; to the right or bottom of the screen, the windows are opening up 
+</em><br />
+<em class="quotelev2">&gt; &gt; partially off the screen. Is there a Style that can be set to ensure 
+</em><br />
+<em class="quotelev2">&gt; &gt; the windows will be placed completely on the screen?
+</em><br />
+<br />If you have control over what the application does, why don't you modify the 
+<br />
+application code.  Okay, it does not know the size of the decorations beforehand, 
+<br />
+but it could at least make sure that the window stays almost on screen.
+<br />
+<br />Ciao
+<br />
+<br />Dominik ^_^  ^_^
+<br />
+<br />&nbsp;--
+<br />
+Dominik Vogt, dominik.vogt_at_gmx.de
+<br />
+Reply-To: dominik.vogt_at_gmx.de
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Aug 12 2004 - 13:31:02 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start13104">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="13105.html" title="Next message in the list">David Vilar: "FVWM: Behaviour of &#0039;All (Condition)&#0039;"</a></li>
+<li><dfn>Previous message</dfn>: <a href="13103.html" title="Previous message in the list">Esther Buch: "FVWM: X-Mailer: Microsoft Outlook Express 6.00.2600.0000"</a></li>
+<li><dfn>Maybe in reply to</dfn>: <a href="13090.html" title="Message to which this message replies">Moore, Garron: "FVWM: Windows opening partially off screen"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="13115.html" title="Next message in this discussion thread">Moore, Garron: "RE: FVWM: Windows opening partially off screen"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg13104" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg13104" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg13104" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg13104" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:57 BST
+</em></small></p>
+</body>
+</html>

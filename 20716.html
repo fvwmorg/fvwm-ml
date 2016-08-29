@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Re: parsing in restart_function() in fvwm/builtins.c? from Bob Woodside on 1997-08-22 (fvwm-users)</title>
+<meta name="Author" content="Bob Woodside (proteus_at_pcnet.com)" />
+<meta name="Subject" content="FVWM: Re: parsing in restart_function() in fvwm/builtins.c?" />
+<meta name="Date" content="1997-08-22" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Re: parsing in restart_function() in fvwm/builtins.c?</h1>
+<!-- received="Thu Aug 21 21:09:50 1997" -->
+<!-- isoreceived="19970821200950" -->
+<!-- sent="Thu, 21 Aug 1997 22:04:31 -0400 (EDT)" -->
+<!-- isosent="19970822020431" -->
+<!-- name="Bob Woodside" -->
+<!-- email="proteus_at_pcnet.com" -->
+<!-- subject="FVWM: Re: parsing in restart_function() in fvwm/builtins.c?" -->
+<!-- id="XFMail.970821220431.proteus_at_pcnet.com" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start20716" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="20717.html" accesskey="d" title="Nadim Saeed: &quot;FVWM: Q: fvwm-2.0.46&quot;">Next message</a> ]
+[ <a href="20715.html" title="ybamnolk_at_cisco.com: &quot;Re: FVWM: Re: fvwm 2.0.46 ready at last...&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="20718.html" accesskey="t" title="Dan Astoorian: &quot;Re: FVWM: Re: parsing in restart_function() in fvwm/builtins.c?&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg20716" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg20716" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg20716" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg20716" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Bob Woodside &lt;<a href="mailto:proteus_at_pcnet.com?Subject=Re%3A%20FVWM%3A%20Re%3A%20parsing%20in%20restart_function()%20in%20fvwm%2Fbuiltins.c%3F">proteus_at_pcnet.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 21 Aug 1997 22:04:31 -0400 (EDT)</span><br />
+</address>
+<br />
+On Wed, 20 Aug 1997, Dan Astoorian &lt;djast_at_ppp12.utopia.csas.com&gt; wrote:
+<br />
+<br /><em class="quotelev1">&gt;  I use FvwmButtons, with this line...
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt;      *FvwmButtons Restart icon.xpm     Restart fvwm2
+</em><br />
+<br /><em class="quotelev1">&gt;  When FvwmButtons sends commands to fvwm2, it includes the trailing
+</em><br />
+<em class="quotelev1">&gt;  newline, and fvwm2 isn't parsing it out, so it tries to start a command
+</em><br />
+<em class="quotelev1">&gt;  named &quot;fvwm2\n&quot;.
+</em><br />
+<br /><em class="quotelev1">&gt;  Would it break anything if restart_function() were changed to parse out
+</em><br />
+<em class="quotelev1">&gt;  the first word after the command?
+</em><br />
+<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I wouldn't recommend changing the restart function to compensate for
+<br />
+a bug in the FvwmButtons interface (if that were the case): that would be 
+<br />
+degrading code that's working nicely instead of fixing what's broken.
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;However, I think that if you try something along the following lines 
+<br />
+you'll be more than satisfied with the result:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*FvwmButtons(Title Restart, Icon icon.xpm, Action &quot;Restart fvwm2&quot;)
+<br />
+<br />or whatever your Favorite Virtuous Window Manager is called.
+<br />
+<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cheers,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bob
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Aug 21 1997 - 21:09:50 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start20716">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="20717.html" title="Next message in the list">Nadim Saeed: "FVWM: Q: fvwm-2.0.46"</a></li>
+<li><dfn>Previous message</dfn>: <a href="20715.html" title="Previous message in the list">ybamnolk_at_cisco.com: "Re: FVWM: Re: fvwm 2.0.46 ready at last..."</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="20718.html" title="Next message in this discussion thread">Dan Astoorian: "Re: FVWM: Re: parsing in restart_function() in fvwm/builtins.c?"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Maybe reply</dfn>: <a href="20718.html" title="Message sent in reply to this message">Dan Astoorian: "Re: FVWM: Re: parsing in restart_function() in fvwm/builtins.c?"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg20716" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg20716" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg20716" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg20716" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

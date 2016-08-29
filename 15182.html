@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: fvwm2 and tk window withdrawal from Bill Hails on 1996-01-04 (fvwm-users)</title>
+<meta name="Author" content="Bill Hails (bill_at_clic.co.uk)" />
+<meta name="Subject" content="FVWM: fvwm2 and tk window withdrawal" />
+<meta name="Date" content="1996-01-04" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: fvwm2 and tk window withdrawal</h1>
+<!-- received="Thu Jan  4 03:43:59 1996" -->
+<!-- isoreceived="19960104034359" -->
+<!-- sent="Thu, 04 Jan 1996 09:43:50 +0000" -->
+<!-- isosent="19960104094350" -->
+<!-- name="Bill Hails" -->
+<!-- email="bill_at_clic.co.uk" -->
+<!-- subject="FVWM: fvwm2 and tk window withdrawal" -->
+<!-- id="199601040943.JAA18107_at_maple.clic.co.uk" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start15182" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="15183.html" accesskey="d" title="Adam Porter: &quot;FVWM: IRIX 5.3 xwsh icon titles&quot;">Next message</a> ]
+[ <a href="15181.html" title="Robert Nation 885-9815: &quot;Re: FVWM: fvwm misses mouse-release sometimes&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15182" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15182" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15182" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15182" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Bill Hails &lt;<a href="mailto:bill_at_clic.co.uk?Subject=Re%3A%20FVWM%3A%20fvwm2%20and%20tk%20window%20withdrawal">bill_at_clic.co.uk</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 04 Jan 1996 09:43:50 +0000</span><br />
+</address>
+<br />
+I've noticed a couple of minor irritations when using Tcl/Tk, (both
+<br />
+versions 7.3/3.6 and 7.4/4.0) under fvwm2 which didn't occur with the
+<br />
+version 1 fvwm. Perhaps someonecould look into it?
+<br />
+<br />firstly, with the old fvwm, calling `wm withdraw' would unmap the window
+<br />
+if it was open, or the icon if it was iconified. In fvwm2, if the
+<br />
+window is iconified, the `wm withdraw' command has no effect.
+<br />
+<br />This is slightly irritating because I use the (very good) TkPostit
+<br />
+replacement for xpostit, and in order to hide all the icons, I have to
+<br />
+de-iconify them first.
+<br />
+<br />Secondly, in some cases, clicking a button on a tk application
+<br />
+which causes the window containing the button to withdraw or exit leaves
+<br />
+the cursor as a dot, and I have to click on the root to return the
+<br />
+cursor to its normal state.
+<br />
+<br />Here Is a script which demonstrates these problems. Note that I get the
+<br />
+`dot' behaviour from the Quit button about once in every 5-10 times:
+<br />
+<br />8&lt;---8&lt;---8&lt;---8&lt;---8&lt;---8&lt;---8&lt;---8&lt;---8&lt;---8&lt;---8&lt;---8&lt;---8&lt;---8&lt;---
+<br />
+#!/usr/local/bin/wish -f
+<br />
+<br />button .quit -text quit -command {destroy .}
+<br />
+button .iconify -text {Iconify Demo Window} \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;-command {wm iconify .demowin}
+<br />
+button .deiconify -text {Display Demo Window} \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;-command {wm deiconify .demowin}
+<br />
+button .withdraw -text {Withdraw Demo Window} \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;-command {wm withdraw .demowin}
+<br />
+<br />pack .quit .iconify .deiconify .withdraw
+<br />
+<br />toplevel .demowin
+<br />
+label .demowin.img -text {A Demonstration Window}
+<br />
+<br />pack .demowin.img
+<br />
+<br />wm title . {Main Window}
+<br />
+wm title .demowin {Demo Window}
+<br />
+8&lt;---8&lt;---8&lt;---8&lt;---8&lt;---8&lt;---8&lt;---8&lt;---8&lt;---8&lt;---8&lt;---8&lt;---8&lt;---8&lt;---
+<br />
+<br />Above and beyond all that, Fvwm is by far the best WM I've used, and I
+<br />
+don't want my little problems to detract from what is really an excellent
+<br />
+package. Keep up the good work.
+<br />
+<br /><br />Cheers
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bill
+<br />
+<br />Bill Hails &lt;bill_at_clic.co.uk&gt;
+<br />
+Tel (UK) 01483 300 200 x415
+<br />
+Fax (UK) 01483 461 046
+<br />
+<br /><br /><pre>
+--
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Jan 04 1996 - 03:43:59 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start15182">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="15183.html" title="Next message in the list">Adam Porter: "FVWM: IRIX 5.3 xwsh icon titles"</a></li>
+<li><dfn>Previous message</dfn>: <a href="15181.html" title="Previous message in the list">Robert Nation 885-9815: "Re: FVWM: fvwm misses mouse-release sometimes"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15182" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15182" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15182" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15182" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

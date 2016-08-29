@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: Piperead vs. Exec from Tim Phipps on 2000-05-05 (fvwm-users)</title>
+<meta name="Author" content="Tim Phipps (Tim_Phipps_at_bigfoot.com)" />
+<meta name="Subject" content="Re: FVWM: Piperead vs. Exec" />
+<meta name="Date" content="2000-05-05" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: Piperead vs. Exec</h1>
+<!-- received="Fri May  5 10:18:35 2000" -->
+<!-- isoreceived="20000505091835" -->
+<!-- sent="Fri, 05 May 2000 16:15:50 +0100" -->
+<!-- isosent="20000505151550" -->
+<!-- name="Tim Phipps" -->
+<!-- email="Tim_Phipps_at_bigfoot.com" -->
+<!-- subject="Re: FVWM: Piperead vs. Exec" -->
+<!-- id="3912E5A6.6D98506A_at_bigfoot.com" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="Pine.OSF.4.21.0005041808340.8270-100000_at_garfield.cs.mun.ca" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start744" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="0745.html" accesskey="d" title="Keith Kaple: &quot;Re: FVWM: Fvwm-pager&quot;">Next message</a> ]
+[ <a href="0743.html" title="Michael Freisinger: &quot;FVWM: Fvwm-pager&quot;">Previous message</a> ]
+[ <a href="0735.html" title="Neil Zanella: &quot;FVWM: Piperead vs. Exec&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg744" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg744" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg744" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg744" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Tim Phipps &lt;<a href="mailto:Tim_Phipps_at_bigfoot.com?Subject=Re%3A%20FVWM%3A%20Piperead%20vs.%20Exec">Tim_Phipps_at_bigfoot.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 05 May 2000 16:15:50 +0100</span><br />
+</address>
+<br />
+Neil Zanella wrote:
+<br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; Hello,
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; I cannot see that Piperead would be any more useful than Exec.
+</em><br />
+<em class="quotelev1">&gt; Could anyone give me an example of a useful Piperead command
+</em><br />
+<em class="quotelev1">&gt; that cannot be implemented as an Exec command?
+</em><br />
+<br />/////// shell script called fvwmresizemove ///////
+<br />
+<br />#!/home/tim/SunOS/bin/bash
+<br />
+# script to animate window reposition
+<br />
+# for use by fvwm only
+<br />
+# usage: $0 &lt;windowid&gt; new_width new_height new_x new_y border_width
+<br />
+title_height
+<br />
+# new_things have a `p' on the end which should be removed
+<br />
+id=$1; nw=${2%p}; nh=${3%p}; nx=${4%p}; ny=${5%p}; bw=$6; th=$7
+<br />
+nw=$((nw + 2 * bw))
+<br />
+nh=$((nh + 2 * bw + th))
+<br />
+xwininfo -id $id | {
+<br />
+&nbsp;&nbsp;read z; read z; read z
+<br />
+&nbsp;&nbsp;read z z z ox
+<br />
+&nbsp;&nbsp;read z z z oy
+<br />
+&nbsp;&nbsp;read z; read z
+<br />
+&nbsp;&nbsp;read z ow
+<br />
+&nbsp;&nbsp;read z oh
+<br />
+&nbsp;&nbsp;ox=$((ox - bw))
+<br />
+&nbsp;&nbsp;oy=$((oy - bw - th))
+<br />
+&nbsp;&nbsp;ow=$((ow + 2 * bw))
+<br />
+&nbsp;&nbsp;oh=$((oh + 2 * bw + th))
+<br />
+<br />&nbsp;&nbsp;echo &quot;SendToModule FvwmAnimate animate $ox $oy $ow $oh $nx $ny $nw
+<br />
+$nh&quot;
+<br />
+}
+<br />
+<br />//// fvwm function ////
+<br />
+<br />AddToFunc my_resizemove I PipeRead &quot;fvwmresizemove $w $0 $1 $2 $3 5 17&quot;
+<br />
++                       I ResizeMove $0 $1 $2 $3
+<br />
+<br />AddToFunc my_topleft    I my_resizemove 566p 376p 0p 0p
+<br />
+AddToFunc my_topmid     I my_resizemove 566p 376p 288p 0p
+<br />
+AddToFunc my_topright   I my_resizemove 566p 376p 576p 0p
+<br />
+AddToFunc my_midleft    I my_resizemove 566p 780p 0p 0p
+<br />
+AddToFunc my_midmid     I my_resizemove 566p 780p 288p 0p
+<br />
+AddToFunc my_midright   I my_resizemove 566p 780p 576p 0p
+<br />
+AddToFunc my_botleft    I my_resizemove 566p 376p 0p 403p
+<br />
+AddToFunc my_botmid     I my_resizemove 566p 376p 288p 403p
+<br />
+AddToFunc my_botright   I my_resizemove 566p 376p 576p 403p
+<br />
+Key KP_7        WTSF    M       my_topleft
+<br />
+Key KP_8        WTSF    M       my_topmid
+<br />
+Key KP_9        WTSF    M       my_topright
+<br />
+Key KP_4        WTSF    M       my_midleft
+<br />
+Key KP_5        WTSF    M       my_midmid
+<br />
+Key KP_6        WTSF    M       my_midright
+<br />
+Key KP_1        WTSF    M       my_botleft
+<br />
+Key KP_2        WTSF    M       my_botmid
+<br />
+Key KP_3        WTSF    M       my_botright
+<br />
+<br />////////
+<br />
+<br />I bind the numeric key pads to call my_resizemove so that I can tile
+<br />
+windows easily. The piperead script makes FvwmAnimate draw an animation
+<br />
+of where the window is going to. Using an Exec would mean the animation
+<br />
+happening some indeterminate amount of time _after_ the ResizeMove (not
+<br />
+cool).
+<br />
+<br />I have a similar one for closing windows which animates from the window
+<br />
+frame down to a tiny dot, just like when you switch off an old TV.
+<br />
+<br />Cheers,
+<br />
+Tim.
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri May 05 2000 - 10:18:35 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start744">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="0745.html" title="Next message in the list">Keith Kaple: "Re: FVWM: Fvwm-pager"</a></li>
+<li><dfn>Previous message</dfn>: <a href="0743.html" title="Previous message in the list">Michael Freisinger: "FVWM: Fvwm-pager"</a></li>
+<li><dfn>In reply to</dfn>: <a href="0735.html" title="Message to which this message replies">Neil Zanella: "FVWM: Piperead vs. Exec"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg744" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg744" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg744" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg744" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:50 BST
+</em></small></p>
+</body>
+</html>

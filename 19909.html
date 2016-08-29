@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: fvwm and M4 from jmknoble_at_pobox.com on 1997-05-04 (fvwm-users)</title>
+<meta name="Author" content="jmknoble_at_pobox.com (jmknoble_at_pobox.com)" />
+<meta name="Subject" content="Re: FVWM: fvwm and M4" />
+<meta name="Date" content="1997-05-04" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: fvwm and M4</h1>
+<!-- received="Sun May  4 00:02:50 1997" -->
+<!-- isoreceived="19970503230250" -->
+<!-- sent="Sun, 4 May 1997 01:01:49 -0400 (EDT)" -->
+<!-- isosent="19970504050149" -->
+<!-- name="jmknoble_at_pobox.com" -->
+<!-- email="jmknoble_at_pobox.com" -->
+<!-- subject="Re: FVWM: fvwm and M4" -->
+<!-- id="Pine.LNX.3.95.970504003250.9568J-100000_at_quipu.redhat.com" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="336B2D17.2843_at_me.queensu.ca" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start19909" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="19910.html" accesskey="d" title="Randy J. Ray: &quot;FVWM: Patch: Expand the M_MINI_ICON packet&quot;">Next message</a> ]
+[ <a href="19908.html" title="Andreas Schumann: &quot;FVWM: fvwm and M4&quot;">Previous message</a> ]
+[ <a href="19908.html" title="Andreas Schumann: &quot;FVWM: fvwm and M4&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19909" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19909" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19909" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19909" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: &lt;<a href="mailto:jmknoble_at_pobox.com?Subject=Re%3A%20FVWM%3A%20fvwm%20and%20M4">jmknoble_at_pobox.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sun, 4 May 1997 01:01:49 -0400 (EDT)</span><br />
+</address>
+<br />
+Andreas--
+<br />
+<br />On Sat, 3 May 1997, Andreas Schumann wrote:
+<br />
+<br />: I am using Redhat Linux 4.1 on an Intel Pentium.
+<br />
+: I try to use fvwm2 as a windows manager. My system came preconfigured
+<br />
+: with a line like 
+<br />
+<br />&nbsp;&nbsp;[...]
+<br />
+<br />: What does this M4 stuff do for me? Can I use &quot;normal&quot; .fvwm2rc files
+<br />
+: (e.g. created by dotgenerator) and rename them to .fvwm2rc.m4 to get
+<br />
+: some advantage of using m4. I'm sorry, but I'm totally confused??!:(
+<br />
+<br />The advantages of using m4 for your .fvwmrc are somewhat similar to
+<br />
+the advantages of using the C preprocessor for your .fvwmrc.  For
+<br />
+instance, using m4, the following lines give me either a mini-icon or a
+<br />
+full-size icon, all depending on whether _FvwmUseMiniIcons is 1 or not:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;# ...
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;# Make this 0 for full-size icons.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_define(`_FvwmUseMiniIcons_', `1')
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_ifelse(
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;_FvwmUseMiniIcons_, `1', `
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_define(`_Icon',       `NoIcon,  MiniIcon mini/$1')
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;', `
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_define(`_Icon',       `Icon $1')
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;')
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;# ...
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Style &quot;control-panel&quot;		_Icon(3d/preferences-choose.xpm)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Style &quot;Network Configurator&quot;	_Icon(3d/networking-phone.xpm)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Style &quot;XJed*&quot;			_Icon(3d/editor-app.xpm)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Style &quot;xterm&quot;			_Icon(3d/shell.xpm)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;# ...
+<br />
+<br />This sort of thing can be useful if you run multiple versions of fvwm,
+<br />
+some of which support certain features, and others of which don't; i've
+<br />
+got a set of config files that work cleanly with no modifications
+<br />
+whether i'm using fvwm-1.24r or fvwm-2.0.45.
+<br />
+<br />FvwmM4 also defines variables that can be useful; for instance, the
+<br />
+following menu displays information about the currently running fvwm2
+<br />
+session (note that it uses tabs between labels (`Fvwm version') and
+<br />
+their values (`FVWM_VERSION) for better formatting):
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;AddToMenu &quot;AboutFvwm&quot; &quot;- About -&quot; Title
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;+	&quot;Fvwm version	FVWM_VERSION&quot;		Nop
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;+	&quot;Compiled with	OPTIONS&quot;		Nop
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;+	&quot;&quot;					Nop
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;+	&quot;`X'VERSION Server by	VENDOR&quot;		Nop
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;+	&quot;Running on	SERVERHOST&quot;		Nop
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;+	&quot;Clients on	CLIENTHOST (OSTYPE)&quot;	Nop
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;+	&quot;Display pixels	WIDTH x HEIGHT&quot;		Nop
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;+	&quot;Visual	CLASS (PLANES`bpp')&quot;		Nop
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;+	&quot;Pixels per meter X/Y	X_RESOLUTION/Y_RESOLUTION&quot;	Nop
+<br />
+<br />and this makes sure to look under my home directory for pixmaps:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;PixmapPath `'HOME`'/lib/X11/icons/pixmaps:/usr/include/X11/pixmaps
+<br />
+<br />Look on your Red Hat Linux system in /etc/X11/TheNextLevel/ (use `ls
+<br />
+-a' to see all the files) for interesting uses of m4.
+<br />
+<br />You can use regular .fvwmrc files with FvwmM4, but there are some
+<br />
+things to beware of if you do; for instance, m4 uses keywords such as
+<br />
+`define' and `include', and if you use them in your .fvwmrc 
+<br />
+without meaning m4 to interpret them, the results my not be what you
+<br />
+intend.  You can work around that somewhat by using the `-m4-prefix'
+<br />
+option with FvwmM4.  If you don't like the regular m4 quotes (&lt;`&gt; and
+<br />
+&lt;'&gt;), you can change them with `-m4-squote' and `-m4-equote' (m4 has
+<br />
+other ways to do so as well).
+<br />
+<br />Note, though, that if you don't really want to use m4, you might want
+<br />
+to change your .Xclients script so it instead.
+<br />
+<br />: I found something in the archives but this wasn't very helpful, and yes
+<br />
+: I checked the FvwmM4 man page!
+<br />
+<br />m4 has an info page; you can read it using the `info' program:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;info
+<br />
+<br />peace.
+<br />
+<br />--jim
+<br />
+<br />############### jim knoble ######## jmknoble_at_pobox.com #################
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sun May 04 1997 - 00:02:50 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start19909">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="19910.html" title="Next message in the list">Randy J. Ray: "FVWM: Patch: Expand the M_MINI_ICON packet"</a></li>
+<li><dfn>Previous message</dfn>: <a href="19908.html" title="Previous message in the list">Andreas Schumann: "FVWM: fvwm and M4"</a></li>
+<li><dfn>In reply to</dfn>: <a href="19908.html" title="Message to which this message replies">Andreas Schumann: "FVWM: fvwm and M4"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19909" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19909" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19909" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19909" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

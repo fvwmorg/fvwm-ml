@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: Alt-tab from Stian Sletner on 2002-04-29 (fvwm-users)</title>
+<meta name="Author" content="Stian Sletner (stian_at_sletner.com)" />
+<meta name="Subject" content="Re: FVWM: Alt-tab" />
+<meta name="Date" content="2002-04-29" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: Alt-tab</h1>
+<!-- received="Mon Apr 29 14:12:52 2002" -->
+<!-- isoreceived="20020429131252" -->
+<!-- sent="Mon, 29 Apr 2002 21:10:52 +0200" -->
+<!-- isosent="20020429191052" -->
+<!-- name="Stian Sletner" -->
+<!-- email="stian_at_sletner.com" -->
+<!-- subject="Re: FVWM: Alt-tab" -->
+<!-- id="20020429211052.T1043_at_sletner.com" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="20020426203103.A19821_at_homemail.com" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start4991" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="4992.html" accesskey="d" title="Mikhael Goikhman: &quot;Re: FVWM: Alt-tab&quot;">Next message</a> ]
+[ <a href="4990.html" title="Ripalda-Marin, Miguel-Angel: &quot;RE: FVWM: Shortcut at desktop&quot;">Previous message</a> ]
+[ <a href="4975.html" title="Mikhael Goikhman: &quot;Re: FVWM: Alt-tab&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="4992.html" accesskey="t" title="Mikhael Goikhman: &quot;Re: FVWM: Alt-tab&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg4991" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg4991" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg4991" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg4991" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Stian Sletner &lt;<a href="mailto:stian_at_sletner.com?Subject=Re%3A%20FVWM%3A%20Alt-tab">stian_at_sletner.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 29 Apr 2002 21:10:52 +0200</span><br />
+</address>
+<br />
+* At 2002-04-26T20:31+0000, Mikhael Goikhman wrote:
+<br />
+: 
+<br />
+| What you want is for the Iconify command to move the window to the tail of
+<br />
+| the window list (from the head). This is probably doable now using some
+<br />
+| tricky script, but I don't think it is easy.
+<br />
+| 
+<br />
+| The problem is that the Iconify command already transferes the focus, i.e.
+<br />
+| changes this list, but not in the way you want. A solution may be to add
+<br />
+| a global or Style option, like IconifyBringsToEnd or similar.
+<br />
+| 
+<br />
+| Another solution is to add IconifiedAtEnd option to WindowList.
+<br />
+<br />I hacked this last solution into the code, now.  I've included a patch
+<br />
+for it, since I would really like to see this feature in FVWM.  However,
+<br />
+since I'm new to both using and hacking FVWM, my patch should probably
+<br />
+be thoroughly checked before applied to anything (though it seems to
+<br />
+work).  This patch is against 2.4.6, and thus includes the CurrentAtEnd
+<br />
+patch Jochen Klenner made (I had to make a little addition to it, too,
+<br />
+so that the current window comes behind the iconified ones).
+<br />
+<br />(IconifiedAtEnd patch: diff -c fvwm/windowlist.c.orig fvwm/windowlist.c)
+<br />
+<br />*** fvwm/windowlist.c.orig	Fri Feb 22 23:07:48 2002
+<br />
+--- fvwm/windowlist.c	Mon Apr 29 21:03:09 2002
+<br />
+***************
+<br />
+*** 87,92 ****
+<br />
+--- 87,93 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;char* ret_action = NULL;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FvwmWindow *t;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FvwmWindow **windowList;
+<br />
++   FvwmWindow **iconifiedList;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int numWindows;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int ii;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;char tname[80] = &quot;&quot;;
+<br />
+***************
+<br />
+*** 121,126 ****
+<br />
+--- 122,131 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;/* Condition vars. */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Bool use_condition = False;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Bool do_reverse_sort_order = False;
+<br />
++   Bool current_at_end = False;
+<br />
++   Bool iconified_at_end = False;
+<br />
++   int ic = 0;
+<br />
++   int ij;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WindowConditionMask mask;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;char *cond_flags;
+<br />
+&nbsp;&nbsp;
+<br />
+***************
+<br />
+*** 183,188 ****
+<br />
+--- 188,197 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;flags |= SHOW_ALPHABETIC;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if (StrEquals(tok,&quot;ReverseOrder&quot;))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;do_reverse_sort_order = True;
+<br />
++       else if (StrEquals(tok,&quot;CurrentAtEnd&quot;))
+<br />
++ 	current_at_end = True;
+<br />
++       else if (StrEquals(tok,&quot;IconifiedAtEnd&quot;))
+<br />
++ 	iconified_at_end = True;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if (StrEquals(tok,&quot;NoDeskSort&quot;))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;flags |= NO_DESK_SORT;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if (StrEquals(tok,&quot;UseIconName&quot;))
+<br />
+***************
+<br />
+*** 312,331 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;/* get the windowlist starting from the current window (if any)*/
+<br />
+!   if ((t = get_focus_window()) == NULL)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t = Scr.FvwmRoot.next;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;for (ii = 0; ii &lt; numWindows; ii++)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (do_reverse_sort_order)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;windowList[numWindows - ii - 1] = t;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+!       windowList[ii] = t;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (t-&gt;next)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t = t-&gt;next;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t = Scr.FvwmRoot.next;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;/* Do alphabetic sort */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if (flags &amp; SHOW_ALPHABETIC)
+<br />
+--- 321,364 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
++   if (iconified_at_end)
+<br />
++   {
+<br />
++     iconifiedList = malloc(numWindows*sizeof(t));
+<br />
++     if (iconifiedList == NULL)
+<br />
++       return;
+<br />
++   }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;/* get the windowlist starting from the current window (if any)*/
+<br />
+!   t = get_focus_window();
+<br />
+!   if (t == NULL)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t = Scr.FvwmRoot.next;
+<br />
++   else if (current_at_end) {
+<br />
++     if (t-&gt;next)
+<br />
++       t = t-&gt;next;
+<br />
++     else
+<br />
++       t = Scr.FvwmRoot.next;
+<br />
++   }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;for (ii = 0; ii &lt; numWindows; ii++)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (do_reverse_sort_order)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;windowList[numWindows - ii - 1] = t;
+<br />
++     else if (iconified_at_end &amp;&amp; IS_ICONIFIED(t))
+<br />
++       iconifiedList[ic++] = t;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+!       windowList[ii - ic] = t;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (t-&gt;next)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t = t-&gt;next;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t = Scr.FvwmRoot.next;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
++   if (iconified_at_end &amp;&amp; ic &gt; 0)
+<br />
++   {
+<br />
++     if (current_at_end)
+<br />
++       windowList[numWindows - 1] = windowList[--ii - ic];
+<br />
++     for (ij = 0; ij &lt; ic; ij++)
+<br />
++     {
+<br />
++       windowList[ij + (ii - ic)] = iconifiedList[ij];
+<br />
++     }
+<br />
++   }
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;/* Do alphabetic sort */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if (flags &amp; SHOW_ALPHABETIC)
+<br />
+***************
+<br />
+*** 511,516 ****
+<br />
+--- 544,551 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if (func)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;free(func);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;free(windowList);
+<br />
++   if (iconified_at_end)
+<br />
++     free(iconifiedList);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if (!default_action &amp;&amp; eventp &amp;&amp; eventp-&gt;type == KeyPress)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;teventp = (XEvent *)1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+<br /><pre>
+-- 
+Stian Sletner
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon Apr 29 2002 - 14:12:52 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start4991">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="4992.html" title="Next message in the list">Mikhael Goikhman: "Re: FVWM: Alt-tab"</a></li>
+<li><dfn>Previous message</dfn>: <a href="4990.html" title="Previous message in the list">Ripalda-Marin, Miguel-Angel: "RE: FVWM: Shortcut at desktop"</a></li>
+<li><dfn>In reply to</dfn>: <a href="4975.html" title="Message to which this message replies">Mikhael Goikhman: "Re: FVWM: Alt-tab"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="4992.html" title="Next message in this discussion thread">Mikhael Goikhman: "Re: FVWM: Alt-tab"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="4992.html" title="Message sent in reply to this message">Mikhael Goikhman: "Re: FVWM: Alt-tab"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg4991" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg4991" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg4991" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg4991" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:53 BST
+</em></small></p>
+</body>
+</html>

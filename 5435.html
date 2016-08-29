@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Automatically raise certain windows on mouse enter, flickering of windows and widgets from Tom Alsberg on 2002-07-04 (fvwm-users)</title>
+<meta name="Author" content="Tom Alsberg (alsbergt_at_zoopee.org)" />
+<meta name="Subject" content="FVWM: Automatically raise certain windows on mouse enter, flickering of windows and widgets" />
+<meta name="Date" content="2002-07-04" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Automatically raise certain windows on mouse enter, flickering of windows and widgets</h1>
+<!-- received="Thu Jul  4 14:04:48 2002" -->
+<!-- isoreceived="20020704130448" -->
+<!-- sent="Thu, 4 Jul 2002 22:04:01 +0300" -->
+<!-- isosent="20020704190401" -->
+<!-- name="Tom Alsberg" -->
+<!-- email="alsbergt_at_zoopee.org" -->
+<!-- subject="FVWM: Automatically raise certain windows on mouse enter, flickering of windows and widgets" -->
+<!-- id="20020704190401.GA16194_at_zoopee.org" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start5435" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="5436.html" accesskey="d" title="informacao_at_lojadotelemovel.com: &quot;FVWM: Novidades de Verao&quot;">Next message</a> ]
+[ <a href="5434.html" title="Gregg Dameron: &quot;Re: FVWM: Suppressing separators in AddToMenu ... Title?&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="5444.html" accesskey="t" title="Dominik Vogt: &quot;Re: FVWM: Automatically raise certain windows on mouse enter, flickering of windows and widgets&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg5435" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg5435" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg5435" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg5435" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Tom Alsberg &lt;<a href="mailto:alsbergt_at_zoopee.org?Subject=Re%3A%20FVWM%3A%20Automatically%20raise%20certain%20windows%20on%20mouse%20enter%2C%20flickering%20of%20windows%20and%20widgets">alsbergt_at_zoopee.org</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 4 Jul 2002 22:04:01 +0300</span><br />
+</address>
+<br />
+Hi there.
+<br />
+I would like to automatically raise and lower some certain windows,
+<br />
+like for example XClock, FvwmButtons, icon managers, etc. - raise when
+<br />
+the mouse pointer enters them, and lower when the mouse pointer leaves
+<br />
+them.
+<br />
+I asked this already in a previous thread at the end of last year, and
+<br />
+some-when in that thread Dominik Vogt told that he implemented
+<br />
+enter_window and leave_window events in FvwmEvent, and suggested that
+<br />
+I use those.
+<br />
+Since I started using FVWM 2.5, I have the following in my .fvwm2rc:
+<br />
+<br /># Functions to auto-raise / auto-lower only some specific windows:
+<br />
+DestroyFunc	SelectiveRaise
+<br />
+AddToFunc	SelectiveRaise
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ I WindowId $0 (!raised &quot;FvwmIconMan&quot;) Raise
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ I WindowId $0 (!raised &quot;FvwmButtons&quot;) Raise
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ I WindowId $0 (!raised &quot;xclock&quot;) Raise
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ I WindowId $0 (!raised &quot;xexec&quot;) Raise
+<br />
+<br />DestroyFunc	SelectiveLower
+<br />
+AddToFunc	SelectiveLower
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ I WindowId $0 (raised &quot;FvwmIconMan&quot;) Lower
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ I WindowId $0 (raised &quot;FvwmButtons&quot;) Lower
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ I WindowId $0 (raised &quot;xclock&quot;) Lower
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ I WindowId $0 (raised &quot;xexec&quot;) Lower
+<br />
+<br /># Pass ID of window to actions:
+<br />
+*FvwmEvent:	PassId
+<br />
+<br /># For auto-raise:
+<br />
+*FvwmEvent:	enter_window	&quot;Silent SelectiveRaise&quot;
+<br />
+*FvwmEvent:	leave_window	&quot;Silent SelectiveLower&quot;
+<br />
+<br />But then I started having the problem of some windows/widgets
+<br />
+flickering (acting like losing and getting the focus very fast). For
+<br />
+example buttons in GTK+ applications, Netscape's toolbars, and most
+<br />
+noticable for me - Ghostview (gv), which shows the zoom menu (when
+<br />
+selecting an area with the middle button) for only a very short time,
+<br />
+a fraction of a second, and that menu disappears. Also sometimes
+<br />
+&quot;balloon&quot; labels in the pager flicker in the same way, just as some
+<br />
+other windows sometimes.
+<br />
+<br />I started a thread in the FVWM mailing list then, and was told that my
+<br />
+solution - way to do the raising and lowering with enter_window and
+<br />
+leave_window events is the problem. I was told to look up some more.
+<br />
+<br />Since then I looked up, and did not find a solution yet. CTWM (and
+<br />
+partially TWM) let me do that (automatically raise some windows on
+<br />
+mouse entering and leaving) with the AutoRaise and AutoLower settings,
+<br />
+which worked fine, just as I needed, and didn't cause those kinds of
+<br />
+problems.
+<br />
+<br />I want to use FVWM, though, as it is the best window manager for
+<br />
+me. Except this one thing.
+<br />
+Any idea for a solution for me? Can't such AutoRaise and AutoLower
+<br />
+settings (or styles) or the like be implemented in FVWM too?
+<br />
+<br />This is really the main thing that I have a problem with in FVWM right
+<br />
+now... And I would be happy if that issue would be solved.
+<br />
+<br />&nbsp;&nbsp;Thank you, any help appreciated,
+<br />
+&nbsp;&nbsp;-- Tom
+<br />
+<br /><pre>
+-- 
+  Tom Alsberg - certified insane, complete illiterate.
+        e-mail: &lt;alsbergt_at_softhome.net&gt;
+	Homepage: <a href="http://www.cs.huji.ac.il/~alsbergt/">http://www.cs.huji.ac.il/~alsbergt/</a>
+  * An idea is not responsible for the people who believe in it.
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Jul 04 2002 - 14:04:48 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start5435">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="5436.html" title="Next message in the list">informacao_at_lojadotelemovel.com: "FVWM: Novidades de Verao"</a></li>
+<li><dfn>Previous message</dfn>: <a href="5434.html" title="Previous message in the list">Gregg Dameron: "Re: FVWM: Suppressing separators in AddToMenu ... Title?"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="5444.html" title="Next message in this discussion thread">Dominik Vogt: "Re: FVWM: Automatically raise certain windows on mouse enter, flickering of windows and widgets"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="5444.html" title="Message sent in reply to this message">Dominik Vogt: "Re: FVWM: Automatically raise certain windows on mouse enter, flickering of windows and widgets"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg5435" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg5435" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg5435" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg5435" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:53 BST
+</em></small></p>
+</body>
+</html>

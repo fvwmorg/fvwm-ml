@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Different backgrounds from Fabio Stumbo on 2003-05-21 (fvwm-users)</title>
+<meta name="Author" content="Fabio Stumbo (f.stumbo_at_unife.it)" />
+<meta name="Subject" content="FVWM: Different backgrounds" />
+<meta name="Date" content="2003-05-21" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Different backgrounds</h1>
+<!-- received="Wed May 21 04:35:18 2003" -->
+<!-- isoreceived="20030521033518" -->
+<!-- sent="Wed, 21 May 2003 11:33:36 +0200 (CEST)" -->
+<!-- isosent="20030521093336" -->
+<!-- name="Fabio Stumbo" -->
+<!-- email="f.stumbo_at_unife.it" -->
+<!-- subject="FVWM: Different backgrounds" -->
+<!-- id="Pine.LNX.4.44.0305211116060.19217-100000_at_dns.unife.it" -->
+<!-- charset="ISO-8859-1" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start8959" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="8960.html" accesskey="d" title="Cameron Simpson: &quot;Re: FVWM: Different backgrounds&quot;">Next message</a> ]
+[ <a href="8958.html" title="Felix E. Klee: &quot;Re: FVWM: Switching desktops with cursor keys problematic&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="8960.html" accesskey="t" title="Cameron Simpson: &quot;Re: FVWM: Different backgrounds&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg8959" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg8959" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg8959" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg8959" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Fabio Stumbo &lt;<a href="mailto:f.stumbo_at_unife.it?Subject=Re%3A%20FVWM%3A%20Different%20backgrounds">f.stumbo_at_unife.it</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 21 May 2003 11:33:36 +0200 (CEST)</span><br />
+</address>
+<br />
+Hi all,
+<br />
+<br />I use fvwm2 since 1994 but only now I feel the need to use more than one 
+<br />
+desktop... ;-))
+<br />
+<br />My problem is the following: in my current configuration (1 desktop) I
+<br />
+want a background which should be picked up randomly in a directory with
+<br />
+pictures. Moreover, it should change every hour. The only way I have been
+<br />
+able to obtain this is as follows:
+<br />
+<br />my StartFunction contains the line
+<br />
+<br />+ I Exec exec crontab /usr/local/etc/fvwm/cron.dir/hour
+<br />
+<br />the hour file contains
+<br />
+<br />------
+<br />
+SHELL=/bin/bash
+<br />
+DISPLAY=:0.0
+<br />
+PATH=/usr/local/etc/fvwm/bin
+<br />
+<br />0 * * * * cgbg
+<br />
+-------------
+<br />
+<br />cgbg is a script which simply calls
+<br />
+<br /><br />#!/bin/sh
+<br />
+/usr/X11R6/bin/xv -rb black -maxpect -rmode 5  
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-random /usr/local/etc/fvwm/bgs/* -quit
+<br />
+<br /><br />(I put it in a separate script so that it can also be called directly, 
+<br />
+somewhere else)
+<br />
+<br />I don't know if this is the best way to have the job done but, so far, it 
+<br />
+worked, so I didn't feel the need for another solution (but for being 
+<br />
+forced to install manually xv, which is no longer included in any 
+<br />
+distribution... :-(
+<br />
+<br />Now I use 2 desktops. I realized that my scripts have the effect to put 
+<br />
+the same image in the two desktop. What I want now is: on the first 
+<br />
+desktop (=0), same behavior as before. On the second desktop (=1), I 
+<br />
+would like to have a solid color background, which shouldn't change. I 
+<br />
+made some tries with FvwmBacker, but without success, so I am out of 
+<br />
+ideas: can anybody help me?
+<br />
+<br />Thank you in advance 
+<br />
+<br />Fabio
+<br />
+<br /><br /><pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed May 21 2003 - 04:35:18 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start8959">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="8960.html" title="Next message in the list">Cameron Simpson: "Re: FVWM: Different backgrounds"</a></li>
+<li><dfn>Previous message</dfn>: <a href="8958.html" title="Previous message in the list">Felix E. Klee: "Re: FVWM: Switching desktops with cursor keys problematic"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="8960.html" title="Next message in this discussion thread">Cameron Simpson: "Re: FVWM: Different backgrounds"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="8960.html" title="Message sent in reply to this message">Cameron Simpson: "Re: FVWM: Different backgrounds"</a></li>
+<li><dfn>Reply</dfn>: <a href="8961.html" title="Message sent in reply to this message">Mikhael Goikhman: "Re: FVWM: Different backgrounds"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="8982.html" title="Message sent in reply to this message">Dan Espen: "Re: FVWM: Different backgrounds"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg8959" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg8959" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg8959" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg8959" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:54 BST
+</em></small></p>
+</body>
+</html>

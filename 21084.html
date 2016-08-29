@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: FvwmM4 behaviour, anybody got a major investment in m4 code? from jmknoble_at_pobox.com on 1997-10-07 (fvwm-users)</title>
+<meta name="Author" content="jmknoble_at_pobox.com (jmknoble_at_pobox.com)" />
+<meta name="Subject" content="Re: FVWM: FvwmM4 behaviour, anybody got a major investment in m4 code?" />
+<meta name="Date" content="1997-10-07" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: FvwmM4 behaviour, anybody got a major investment in m4 code?</h1>
+<!-- received="Mon Oct  6 20:39:39 1997" -->
+<!-- isoreceived="19971006193939" -->
+<!-- sent="Mon, 6 Oct 1997 21:28:53 -0400 (EDT)" -->
+<!-- isosent="19971007012853" -->
+<!-- name="jmknoble_at_pobox.com" -->
+<!-- email="jmknoble_at_pobox.com" -->
+<!-- subject="Re: FVWM: FvwmM4 behaviour, anybody got a major investment in m4 code?" -->
+<!-- id="Pine.LNX.3.95.971006211700.1399N-100000_at_quipu.earth" -->
+<!-- charset="ISO-8859-1" -->
+<!-- inreplyto="m24t6uxw41.fsf_at_reddwarf.aup.com.au" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start21084" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="21085.html" accesskey="d" title="Dan Espen: &quot;FVWM: Fvwm IconBoxes patch (1/2)&quot;">Next message</a> ]
+[ <a href="21083.html" title="Manfred Bartz: &quot;FVWM: FvwmM4 behaviour, anybody got a major investment in m4 code?&quot;">Previous message</a> ]
+[ <a href="21083.html" title="Manfred Bartz: &quot;FVWM: FvwmM4 behaviour, anybody got a major investment in m4 code?&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21084" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21084" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21084" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21084" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: &lt;<a href="mailto:jmknoble_at_pobox.com?Subject=Re%3A%20FVWM%3A%20FvwmM4%20behaviour%2C%20anybody%20got%20a%20major%20investment%20in%20m4%20code%3F">jmknoble_at_pobox.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 6 Oct 1997 21:28:53 -0400 (EDT)</span><br />
+</address>
+<br />
+Manfred--
+<br />
+<br />I've been using FvwmM4 with non-standard quote characters for a while
+<br />
+now.  Basically what i do is the following:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;m4_dnl
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_dnl # change to quote characters which aren't likely to be used
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_dnl # in `normal' combinations of characters.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_dnl
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_changequote(`&lt;%',`%&gt;')
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_dnl
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_dnl # a macro to strip `standard' quotes from predefined fvwm
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_dnl # macros; this uses a trick of patsubst where omitting the
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_dnl # third argument causes matching text to be deleted from a
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_dnl # string. 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_dnl
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_define(&lt;%stripquotes%&gt;, &lt;%m4_patsubst(&lt;%$1%&gt;, &lt;%[`']%&gt;)%&gt;)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_dnl
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_dnl # now strip the quotes from the predefined macros.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_dnl
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_define(&lt;%_FVWM_VERSION_%&gt;, stripquotes(FVWM_VERSION))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_define(&lt;%_BITS_PER_RGB_%&gt;, stripquotes(BITS_PER_RGB))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_define(&lt;%_CLASS_%&gt;, stripquotes(CLASS))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_define(&lt;%_CLIENTHOST_%&gt;, stripquotes(CLIENTHOST))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_define(&lt;%_COLOR_%&gt;, stripquotes(COLOR))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_define(&lt;%_WMDIR_%&gt;, stripquotes(FVWMDIR))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_define(&lt;%_HEIGHT_%&gt;, stripquotes(HEIGHT))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_define(&lt;%_HOME_%&gt;, stripquotes(HOME))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_define(&lt;%_HOSTNAME_%&gt;, stripquotes(HOSTNAME))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_define(&lt;%_OPTIONS_%&gt;, stripquotes(OPTIONS))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_define(&lt;%_OSTYPE_%&gt;, stripquotes(OSTYPE))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_define(&lt;%_PLANES_%&gt;, stripquotes(PLANES))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_define(&lt;%_RELEASE_%&gt;, stripquotes(RELEASE))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_define(&lt;%_REVISION_%&gt;, stripquotes(REVISION))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_define(&lt;%_SERVERHOST_%&gt;, stripquotes(SERVERHOST))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_define(&lt;%_TWM_TYPE_%&gt;, stripquotes(TWM_TYPE))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_define(&lt;%_USER_%&gt;, stripquotes(USER))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_define(&lt;%_VENDOR_%&gt;, stripquotes(VENDOR))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_define(&lt;%_VERSION_%&gt;, stripquotes(VERSION))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_define(&lt;%_WIDTH_%&gt;, stripquotes(WIDTH))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_define(&lt;%_X_RESOLUTION_%&gt;, stripquotes(X_RESOLUTION))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_define(&lt;%_Y_RESOLUTION_%&gt;, stripquotes(Y_RESOLUTION))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_dnl
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_dnl # finally, get rid of stripquotes(), since we don't
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_dnl # need it anymore.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_dnl
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;m4_undefine(&lt;%stripquotes%&gt;)
+<br />
+<br />The quoteless macros are surrounded by underscores; e.g. the stripped
+<br />
+version of `WIDTH' becomes `_WIDTH_'.
+<br />
+<br />Hope that helps.  Freundliche Grüße aus North Carolina.
+<br />
+<br />--jim
+<br />
+<br />%%%%%%%%%%%%%%% jim knoble %%%%%%%% jmknoble_at_pobox.com %%%%%%%%%%%%%%%%%
+<br />
+<br />On 7 Oct 1997, Manfred Bartz wrote:
+<br />
+<br />: I have started to use FvwmM4 for some adaptive startup behaviour.
+<br />
+: E.g. starting xterms with different fontsizes and geometries.
+<br />
+: However, I found that all predefined macros include an extra set of
+<br />
+: quotes.  E.g. the predefined &quot;WIDTH&quot; expands to &quot;`1600'&quot;.  I find this
+<br />
+: very undesirable since it is not possible to do arithmetic with quoted
+<br />
+: numbers, e.g with ``m4_eval()''.  I have patched FvwmM4 for my
+<br />
+: purposes to omit those extra quotes.
+<br />
+: 
+<br />
+: Question:  Has anybody got a big investment in FvwmM4's current
+<br />
+: quoting behaviour or should it be changed to allow arithmetic in m4?
+<br />
+: 
+<br />
+: Or possibly: Am I missing something?
+<br />
+: 
+<br />
+: -- 
+<br />
+: Manfred Bartz &lt;mbartz_at_werple.net.au&gt;
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon Oct 06 1997 - 20:39:39 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start21084">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="21085.html" title="Next message in the list">Dan Espen: "FVWM: Fvwm IconBoxes patch (1/2)"</a></li>
+<li><dfn>Previous message</dfn>: <a href="21083.html" title="Previous message in the list">Manfred Bartz: "FVWM: FvwmM4 behaviour, anybody got a major investment in m4 code?"</a></li>
+<li><dfn>In reply to</dfn>: <a href="21083.html" title="Message to which this message replies">Manfred Bartz: "FVWM: FvwmM4 behaviour, anybody got a major investment in m4 code?"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21084" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21084" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21084" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21084" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

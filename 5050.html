@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: 2.5.1 man page bug: missing text in rendered man page (patch included) from Francis Litterio on 2002-05-06 (fvwm-users)</title>
+<meta name="Author" content="Francis Litterio (franl_at_world.std.com)" />
+<meta name="Subject" content="FVWM: 2.5.1 man page bug: missing text in rendered man page (patch included)" />
+<meta name="Date" content="2002-05-06" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: 2.5.1 man page bug: missing text in rendered man page (patch included)</h1>
+<!-- received="Mon May  6 10:22:04 2002" -->
+<!-- isoreceived="20020506092204" -->
+<!-- sent="Mon, 06 May 2002 11:07:21 -0400" -->
+<!-- isosent="20020506150721" -->
+<!-- name="Francis Litterio" -->
+<!-- email="franl_at_world.std.com" -->
+<!-- subject="FVWM: 2.5.1 man page bug: missing text in rendered man page (patch included)" -->
+<!-- id="uu1plfgl2.fsf_at_world.std.com" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start5050" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="5051.html" accesskey="d" title="Mikhael Goikhman: &quot;Re: FVWM: ToggleActiveUp/down/inactive&quot;">Next message</a> ]
+[ <a href="5049.html" title="Uwe Pross: &quot;Re: FVWM: ToggleActiveUp/down/inactive&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg5050" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg5050" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg5050" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg5050" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Francis Litterio &lt;<a href="mailto:franl_at_world.std.com?Subject=Re%3A%20FVWM%3A%202.5.1%20man%20page%20bug%3A%20missing%20text%20in%20rendered%20man%20page%20(patch%20included)">franl_at_world.std.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 06 May 2002 11:07:21 -0400</span><br />
+</address>
+<br />
+The 2.5.1 fvwm.1 man page source file contains this text:
+<br />
+<br />&nbsp;&nbsp;Lines beginning with '#' are ignored by fvwm.  Lines starting with
+<br />
+&nbsp;&nbsp;'*' are expected to contain module configuration commands (rather
+<br />
+&nbsp;&nbsp;than configuration commands for fvwm itself). Like in shell
+<br />
+&nbsp;&nbsp;scripts embedded newlines in a configuration file line can be
+<br />
+&nbsp;&nbsp;quoted by preceding them with a backslash.  All lines linked in
+<br />
+&nbsp;&nbsp;this fashion are treated as a single line.  The newline itself is
+<br />
+&nbsp;&nbsp;ignored.
+<br />
+<br />But GNU nroff and groff both seem to ignore lines starting with the
+<br />
+single quote character, so in the rendered man page the above text
+<br />
+appears like this (notice the 2nd line above is missing from the below
+<br />
+text):
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lines beginning with  '#'  are  ignored  by  fvwm.   Lines
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;starting   with   than  configuration  commands  for  fvwm
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itself). Like in shell scripts embedded newlines in a con-
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;figuration  file line can be quoted by preceding them with
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a backslash.  All lines linked in this fashion are treated
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;as a single line.  The newline itself is ignored.
+<br />
+<br />I'm seeing this using Cygwin's man command, but I suspect this happens
+<br />
+on any system that uses GNU nroff (e.g., Linux).
+<br />
+<br />The below patch fixes the problem on my Cygwin system, but I don't know
+<br />
+nroff well enough to say if this is the best way to fix it.
+<br />
+<pre>
+--
+Francis Litterio
+franl_at_world.std.com
+<a href="http://world.std.com/~franl/">http://world.std.com/~franl/</a>
+PGP public keys available on keyservers.
+--- fvwm.1.orig	Mon May  6 11:10:40 2002
++++ fvwm.1	Mon May  6 11:11:36 2002
+_at_&#64; -891,7 +891,7 &#64;&#64;
+ built-in, it is easy to read in new configuration files as you go.
+ 
+ Lines beginning with '#' are ignored by fvwm.  Lines starting with
+-'*' are expected to contain module configuration commands (rather
++\'*' are expected to contain module configuration commands (rather
+ than configuration commands for fvwm itself). Like in shell
+ scripts embedded newlines in a configuration file line can be
+ quoted by preceding them with a backslash.  All lines linked in
+_at_&#64; -1753,7 +1753,7 &#64;&#64;
+ If the menu-label contains a sub-string which is set off by stars,
+ then the text between the stars is expected to be the name of an
+ image file to insert in the menu.  To get a literal
+-'*', insert &quot;**&quot;.  For example
++\'*', insert &quot;**&quot;.  For example
+ .EX
+  + Calculator*xcalc.xpm* Exec exec xcalc
+ .EE
+_at_&#64; -4852,7 +4852,7 &#64;&#64;
+ the root window, 'W' for an application window, 'D' for a desktop
+ application (as kdesktop or Nautilus desktop), 'T' for a window
+ title-bar, 'S' for a window side, top, or bottom bar, '[', ']',
+-'-' and '_' for the left, rigth, top or bottom side only, 'F' for
++\'-' and '_' for the left, rigth, top or bottom side only, 'F' for
+ a window frame (the corners), '&lt;', '^', '&gt;' and 'v' for the top
+ left, top right, bottom right or bottom left corner, 'I' for an
+ Icon window, or '0' through '9' for title-bar buttons, or any
+_at_&#64; -5576,7 +5576,7 &#64;&#64;
+ .I scr-spec
+ argument specifies the Xinerama screen on which the IconBox is
+ defined.  It can be the usual screen Xinerama specification, 'p',
+-'c', 'g', a screen number or the additional 'w' for the screen
++\'c', 'g', a screen number or the additional 'w' for the screen
+ where the window center is located.  This is only useful with
+ multiple Xinerama screens.
+ The &quot;l t r b&quot; specification is more flexible than an X11 geometry.
+_at_&#64; -6123,7 +6123,7 &#64;&#64;
+ understand this usage, the starting desk/page can also be
+ specified via a resource (e.g., &quot;-xrm '*fvwmscreen: c'&quot;).
+ ('fvwmscreen' was chosen because some applications already use
+-'.screen' for other purposes.)
++\'.screen' for other purposes.)
+ 
+ .I StartsOnPageIncludesTransients
+ causes the
+_at_&#64; -6229,7 +6229,7 &#64;&#64;
+ (the default) causes transient windows not to be given the
+ standard decorations. You can only bind keys or mouse buttons to
+ the sides and the client window of an undecorated window ('S' and
+-'W' contexts in bindings, see
++\'W' contexts in bindings, see
+ .BR Mouse &quot; and &quot; Key
+ commands).
+ 
+_at_&#64; -7723,7 +7723,7 &#64;&#64;
+ use the curent screen (containing the pointer) whenever the
+ primary screen is used.  This may be very confusing under some
+ circumstances.  With
+-'g', the global screen is used as the primary screen, effectively
++\'g', the global screen is used as the primary screen, effectively
+ disabling the primary screen.  Calling this function with any
+ other argument (including none) resets the primary screen to 0.
+ 
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon May 06 2002 - 10:22:04 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start5050">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="5051.html" title="Next message in the list">Mikhael Goikhman: "Re: FVWM: ToggleActiveUp/down/inactive"</a></li>
+<li><dfn>Previous message</dfn>: <a href="5049.html" title="Previous message in the list">Uwe Pross: "Re: FVWM: ToggleActiveUp/down/inactive"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg5050" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg5050" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg5050" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg5050" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:53 BST
+</em></small></p>
+</body>
+</html>

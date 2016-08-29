@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: Mozilla titlebar problem from Adam Woodworth on 2003-08-06 (fvwm-users)</title>
+<meta name="Author" content="Adam Woodworth (adam_at_mirkwood.com)" />
+<meta name="Subject" content="Re: FVWM: Mozilla titlebar problem" />
+<meta name="Date" content="2003-08-06" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: Mozilla titlebar problem</h1>
+<!-- received="Wed Aug  6 16:30:57 2003" -->
+<!-- isoreceived="20030806153057" -->
+<!-- sent="Wed, 6 Aug 2003 17:29:12 -0400 (EDT)" -->
+<!-- isosent="20030806212912" -->
+<!-- name="Adam Woodworth" -->
+<!-- email="adam_at_mirkwood.com" -->
+<!-- subject="Re: FVWM: Mozilla titlebar problem" -->
+<!-- id="Pine.LNX.4.10.10308061721150.742-100000_at_frodo.mirkwood.com" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="20030806203015.GA14020_at_jadis.narnian.org" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start9642" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="9643.html" accesskey="d" title="Michael A. Plikk: &quot;FVWM: Problems with Alt/Ctrl/Shift in 2.5.7&quot;">Next message</a> ]
+[ <a href="9641.html" title="Mikhael Goikhman: &quot;Re: FVWM: Mozilla titlebar problem&quot;">Previous message</a> ]
+[ <a href="9639.html" title="Scott McWhirter: &quot;Re: FVWM: Mozilla titlebar problem&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="9641.html" accesskey="t" title="Mikhael Goikhman: &quot;Re: FVWM: Mozilla titlebar problem&quot;">Next in thread</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg9642" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg9642" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg9642" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg9642" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Adam Woodworth &lt;<a href="mailto:adam_at_mirkwood.com?Subject=Re%3A%20FVWM%3A%20Mozilla%20titlebar%20problem">adam_at_mirkwood.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 6 Aug 2003 17:29:12 -0400 (EDT)</span><br />
+</address>
+<br />
+Thanks Scott.
+<br />
+<br />I'm going to try to use Mozilla Firebird instead, which doesn't have this
+<br />
+problem, and is faster at browsing anyways.  Although instead of just
+<br />
+exec'ing the MozillaFirebird program again you have to do a remote
+<br />
+command, like you mentioned for normal Mozilla.  This is because running
+<br />
+the MozillaFirebird program again will say you can't run it because the
+<br />
+default profile is in use, and makes you pick a different one.  How
+<br />
+annoying.
+<br />
+<br />I use this remote command, which opens up a new blank window:
+<br />
+<br />MozillaFirebird -remote &quot;xfeDoCommand(openBrowser)&quot;
+<br />
+<br />And I use this script to launch Mozilla from an Fvwm menu:  (Credits to
+<br />
+Scott for providing the original script that I modified to suit my needs.
+<br />
+I'd forgotten all about the usefulness of the Shell Perl module!)
+<br />
+<br />#!/usr/bin/perl
+<br />
+use Shell;
+<br />
+my $run = qq{/path/to/MozillaFirebird/MozillaFirebird};
+<br />
+# Is mozilla running?
+<br />
+my $is_running = pidof(&quot;MozillaFirebird-bin&quot;);
+<br />
+chomp($is_running);
+<br />
+if($is_running){
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Mozilla is running....
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$run .= qq{ -remote &quot;xfeDoCommand(openBrowser)&quot;};
+<br />
+}
+<br />
+exec(&quot;$run&amp;&quot;);
+<br />
+<br /><br />On Wed, 6 Aug 2003, Scott McWhirter wrote:
+<br />
+<br /><em class="quotelev1">&gt; On Wed, Aug 06, 2003 at 04:18:08PM -0400, Adam Woodworth wrote:
+</em><br />
+<em class="quotelev2">&gt; &gt; Using DecorateTransient doesn't fix this, and I can't figure out how to do
+</em><br />
+<em class="quotelev2">&gt; &gt; fix it any other way.
+</em><br />
+<em class="quotelev1">&gt; That's because when mozilla launches a new window it's using the same
+</em><br />
+<em class="quotelev1">&gt; engine in memory, so all windows running from within your 'profile' will
+</em><br />
+<em class="quotelev1">&gt; be linked together.
+</em><br />
+<em class="quotelev1">&gt; It's got to do with the way that mozilla tells the WM about it's
+</em><br />
+<em class="quotelev1">&gt; transient windows... there is no real solution to this...
+</em><br />
+<em class="quotelev1">&gt; however,
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; when opening a new window (well sorta) try this:
+</em><br />
+<em class="quotelev1">&gt; mozilla -remote 'openWindow($url,new-tab)'
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; It'll open $url in a new tab within the current mozilla window, and the
+</em><br />
+<em class="quotelev1">&gt; tabs have their own close buttons.
+</em><br />
+<em class="quotelev1">&gt; I have a script to specifically do this:
+</em><br />
+<em class="quotelev1">&gt;   <a href="http://kungfuftr.com/code/mozilla-decide">http://kungfuftr.com/code/mozilla-decide</a>
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; have fun!
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; -- 
+</em><br />
+<em class="quotelev1">&gt; -Scott McWhirter- | -kungfuftr-
+</em><br />
+<em class="quotelev1">&gt; --
+</em><br />
+<em class="quotelev1">&gt; Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+</em><br />
+<em class="quotelev1">&gt; To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+</em><br />
+<em class="quotelev1">&gt; message to majordomo_at_fvwm.org.
+</em><br />
+<em class="quotelev1">&gt; To report problems, send mail to fvwm-owner_at_fvwm.org.
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<br />_______________________________________________________________________
+<br />
+&nbsp;&nbsp;Adam Woodworth
+<br />
+&nbsp;&nbsp;SMTP : adam_at_mirkwood.com
+<br />
+&nbsp;&nbsp;HTTP : <a href="http://www.mirkwood.com">http://www.mirkwood.com</a>
+<br />
+&nbsp;&nbsp;HAM  : N1ZNN
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Aug 06 2003 - 16:30:57 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start9642">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="9643.html" title="Next message in the list">Michael A. Plikk: "FVWM: Problems with Alt/Ctrl/Shift in 2.5.7"</a></li>
+<li><dfn>Previous message</dfn>: <a href="9641.html" title="Previous message in the list">Mikhael Goikhman: "Re: FVWM: Mozilla titlebar problem"</a></li>
+<li><dfn>In reply to</dfn>: <a href="9639.html" title="Message to which this message replies">Scott McWhirter: "Re: FVWM: Mozilla titlebar problem"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="9641.html" title="Next message in this discussion thread">Mikhael Goikhman: "Re: FVWM: Mozilla titlebar problem"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg9642" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg9642" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg9642" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg9642" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:55 BST
+</em></small></p>
+</body>
+</html>

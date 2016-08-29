@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Another Bug in fvwm 2.0.41 from Graham Barr on 1996-03-15 (fvwm-users)</title>
+<meta name="Author" content="Graham Barr (bodg_at_tiuk.ti.com)" />
+<meta name="Subject" content="FVWM: Another Bug in fvwm 2.0.41" />
+<meta name="Date" content="1996-03-15" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Another Bug in fvwm 2.0.41</h1>
+<!-- received="Fri Mar 15 14:07:19 1996" -->
+<!-- isoreceived="19960315140719" -->
+<!-- sent="Fri, 15 Mar 1996 14:44:19 +0000 (GMT)" -->
+<!-- isosent="19960315144419" -->
+<!-- name="Graham Barr" -->
+<!-- email="bodg_at_tiuk.ti.com" -->
+<!-- subject="FVWM: Another Bug in fvwm 2.0.41" -->
+<!-- id="9603151444.AA28015_at_tiuk.ti.com" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start15925" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="15926.html" accesskey="d" title="Pekka Marjola: &quot;FVWM: XEmacs/HP-UX, ssh (+ FvwmPager/Buttons)&quot;">Next message</a> ]
+[ <a href="15924.html" title="Martin Kraemer: &quot;Re: FVWM: Reducing color use for pixmaps (home made solution)&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15925" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15925" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15925" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15925" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Graham Barr &lt;<a href="mailto:bodg_at_tiuk.ti.com?Subject=Re%3A%20FVWM%3A%20Another%20Bug%20in%20fvwm%202.0.41">bodg_at_tiuk.ti.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 15 Mar 1996 14:44:19 +0000 (GMT)</span><br />
+</address>
+<br />
+I have found another bug/problem with fvwm 2.0.41. The problem lies in
+<br />
+fvwm.c when it opens,closes and then opens the deispaly again. Below
+<br />
+is a patch which fixes the problem
+<br />
+<br /><br />--- fvwm.c.orig	Mon Feb 19 14:57:42 1996
+<br />
++++ fvwm.c	Fri Mar 15 14:41:55 1996
+<br />
+_at_&#64; -220,31 +220,31 &#64;&#64;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strcpy(message, XDisplayString(dpy));
+<br />
+&nbsp;
+<br />
+-    XCloseDisplay(dpy);
+<br />
+-
+<br />
+-    for(i=1;i&lt;Scr.NumberOfScreens;i++)
+<br />
++    for(i=0;i&lt;Scr.NumberOfScreens;i++)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+-      if (fork() == 0)
+<br />
++      if (i != Scr.screen &amp;&amp; fork() == 0)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;myscreen = i;
+<br />
++
+<br />
++        /*
+<br />
++         * Truncate the string 'whatever:n.n' to 'whatever:n',
+<br />
++         * and then append the screen number.
+<br />
++         */
+<br />
++        cp = strchr(message, ':');
+<br />
++        if (cp != NULL)
+<br />
++        {
+<br />
++          cp = strchr(cp, '.');
+<br />
++          if (cp != NULL)
+<br />
++            *cp = '\0';		/* truncate at display part */
+<br />
++        }
+<br />
++        sprintf(message + strlen(message), &quot;.%d&quot;, myscreen);
+<br />
++        dpy = XOpenDisplay(message);
+<br />
++        Scr.screen = myscreen;
+<br />
++        Scr.NumberOfScreens = ScreenCount(dpy);
+<br />
++
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+-    /*
+<br />
+-     * Truncate the string 'whatever:n.n' to 'whatever:n',
+<br />
+-     * and then append the screen number.
+<br />
+-     */
+<br />
+-    cp = strchr(message, ':');
+<br />
+-    if (cp != NULL)
+<br />
+-    {
+<br />
+-      cp = strchr(cp, '.');
+<br />
+-      if (cp != NULL)
+<br />
+-        *cp = '\0';		/* truncate at display part */
+<br />
+-    }
+<br />
+-    sprintf(message + strlen(message), &quot;.%d&quot;, myscreen);
+<br />
+-    dpy = XOpenDisplay(message);
+<br />
+-    Scr.screen = myscreen;
+<br />
+-    Scr.NumberOfScreens = ScreenCount(dpy);
+<br />
+&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;x_fd = XConnectionNumber(dpy);
+<br />
+<br /><pre>
+--
+Graham Barr &lt;bodg_at_tiuk.ti.com&gt;
+Texas Instruments Ltd.
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Mar 15 1996 - 14:07:19 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start15925">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="15926.html" title="Next message in the list">Pekka Marjola: "FVWM: XEmacs/HP-UX, ssh (+ FvwmPager/Buttons)"</a></li>
+<li><dfn>Previous message</dfn>: <a href="15924.html" title="Previous message in the list">Martin Kraemer: "Re: FVWM: Reducing color use for pixmaps (home made solution)"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15925" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15925" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15925" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15925" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

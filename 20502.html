@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Patches so next/prev understand '!' for not from Douglas K. Rand on 1997-07-23 (fvwm-users)</title>
+<meta name="Author" content="Douglas K. Rand (rand_at_dev-null.aero.und.edu)" />
+<meta name="Subject" content="FVWM: Patches so next/prev understand '!' for not" />
+<meta name="Date" content="1997-07-23" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Patches so next/prev understand '!' for not</h1>
+<!-- received="Wed Jul 23 11:42:01 1997" -->
+<!-- isoreceived="19970723104201" -->
+<!-- sent="Wed, 23 Jul 1997 11:41:41 -0500 (CDT)" -->
+<!-- isosent="19970723164141" -->
+<!-- name="Douglas K. Rand" -->
+<!-- email="rand_at_dev-null.aero.und.edu" -->
+<!-- subject="FVWM: Patches so next/prev understand '!' for not" -->
+<!-- id="199707231641.LAA00392_at_dev-null.aero.und.edu" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start20502" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="20503.html" accesskey="d" title="Kyle Baker: &quot;FVWM: can&#0039;t open display&quot;">Next message</a> ]
+[ <a href="20501.html" title="Kai Grossjohann: &quot;Re: FVWM: FVWM2: Avoiding part of a display&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg20502" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg20502" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg20502" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg20502" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Douglas K. Rand &lt;<a href="mailto:rand_at_dev-null.aero.und.edu?Subject=Re%3A%20FVWM%3A%20Patches%20so%20next%2Fprev%20understand%20'!'%20for%20not">rand_at_dev-null.aero.und.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 23 Jul 1997 11:41:41 -0500 (CDT)</span><br />
+</address>
+<br />
+About a year ago I posted these patches so that the Next and Prev
+<br />
+commands would understand ! in front of screen names. For example I
+<br />
+use the following in my .fvwmrc to skip all the windows with names
+<br />
+that begin with &quot;Fvwm&quot; so I don't have to bother with my FvwmButtons
+<br />
+windows. 
+<br />
+<br />Key Prior A M  Next [!Iconic CurrentDesk CurrentScreen !Fvwm*] FocusAndWarpToWindow
+<br />
+Key Next  A M  Prev [!Iconic CurrentDesk CurrentScreen !Fvwm*] FocusAndWarpToWindow
+<br />
+Key Prior A MC Next [!Iconic CurrentDesk !Fvwm*] FocusAndWarpToWindow
+<br />
+Key Next  A MC Prev [!Iconic CurrentDesk !Fvwm*] FocusAndWarpToWindow
+<br />
+<br />The patch is fairly simple, the only bad part about it is the using
+<br />
+the strings &quot;NoClass&quot; and &quot;NoResource&quot;. The variables NoClass and
+<br />
+NoResource aren't available to libs/wild.c. I just recompiled FVWM on
+<br />
+another system and had to apply this again so I thought I'd send it
+<br />
+out again on the off chance it'd make the FVWM distribution.
+<br />
+<br />*** wild.c-orig	Tue Sep 13 14:11:47 1994
+<br />
+--- wild.c-dkr	Wed Jul 23 11:31:13 1997
+<br />
+***************
+<br />
+*** 13,32 ****
+<br />
+&nbsp;&nbsp;&nbsp;*      This code donated by  Paul Hudson &lt;paulh_at_harlequin.co.uk&gt;    
+<br />
+&nbsp;&nbsp;&nbsp;*      It is public domain, no strings attached. No guarantees either.
+<br />
+&nbsp;&nbsp;&nbsp;*
+<br />
+&nbsp;&nbsp;&nbsp;*****************************************************************************/
+<br />
+&nbsp;&nbsp;int matchWildcards(char *pattern, char *string)
+<br />
+&nbsp;&nbsp;{
+<br />
+!   if(string == NULL)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!       if(pattern == NULL)
+<br />
+! 	return TRUE;
+<br />
+!       else if(strcmp(pattern,&quot;*&quot;)==0)
+<br />
+! 	return TRUE;
+<br />
+!       else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return FALSE;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+!   if(pattern == NULL)
+<br />
+!     return TRUE;
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;while (*string &amp;&amp; *pattern)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+--- 13,40 ----
+<br />
+&nbsp;&nbsp;&nbsp;*      This code donated by  Paul Hudson &lt;paulh_at_harlequin.co.uk&gt;    
+<br />
+&nbsp;&nbsp;&nbsp;*      It is public domain, no strings attached. No guarantees either.
+<br />
+&nbsp;&nbsp;&nbsp;*
+<br />
++  *	Simple code to understand patterns that begin with '!' to ignore
+<br />
++  *	specific strings.  Douglas K. Rand &lt;rand_at_aero.und.edu&gt;
+<br />
++  *
+<br />
+&nbsp;&nbsp;&nbsp;*****************************************************************************/
+<br />
+&nbsp;&nbsp;int matchWildcards(char *pattern, char *string)
+<br />
+&nbsp;&nbsp;{
+<br />
+!   if (pattern == NULL)
+<br />
+!     return TRUE;
+<br />
+!   else if (*pattern == '!')
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!       /* Don't have the !pattern match the NoClass or NoResource windows */
+<br />
+!       /* The NoClass and NoResource aren't available in libs, maybe should
+<br />
+! 	 be #defines? */
+<br />
+!       if(strcmp(string, &quot;NoClass&quot;)==0 || strcmp(string, &quot;NoResource&quot;)==0)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return FALSE;
+<br />
++       return !matchWildcards(pattern + 1, string);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+!   else if(string == NULL)
+<br />
+!     if(strcmp(pattern,&quot;*&quot;)==0)
+<br />
+!       return TRUE;
+<br />
+!     else
+<br />
+!       return FALSE;
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;while (*string &amp;&amp; *pattern)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+<br /><br /><pre>
+-- 
+Douglas K. Rand                                              rand_at_aero.und.edu
+System/Network Administrator      Scientific Computing Center -- UND Aerospace
+Office: +1 701 777 2801                             University of North Dakota
+FAX:    +1 701 777 2940                   Box 9022, Grand Forks ND  58202-9022
+ echo '[q]sa[ln0=aln256%Pln256/snlbx]sb3135071790101768542287578439snlbxq'|dc
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Jul 23 1997 - 11:42:01 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start20502">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="20503.html" title="Next message in the list">Kyle Baker: "FVWM: can&#0039;t open display"</a></li>
+<li><dfn>Previous message</dfn>: <a href="20501.html" title="Previous message in the list">Kai Grossjohann: "Re: FVWM: FVWM2: Avoiding part of a display"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg20502" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg20502" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg20502" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg20502" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,609 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Animated WindowShade patch, v1.2 from Cristian Tibirna on 1997-08-30 (fvwm-users)</title>
+<meta name="Author" content="Cristian Tibirna (ctibirna_at_degas.gch.ulaval.ca)" />
+<meta name="Subject" content="FVWM: Animated WindowShade patch, v1.2" />
+<meta name="Date" content="1997-08-30" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Animated WindowShade patch, v1.2</h1>
+<!-- received="Sat Aug 30 17:14:33 1997" -->
+<!-- isoreceived="19970830161433" -->
+<!-- sent="Sat, 30 Aug 1997 18:16:06 -0400" -->
+<!-- isosent="19970830221606" -->
+<!-- name="Cristian Tibirna" -->
+<!-- email="ctibirna_at_degas.gch.ulaval.ca" -->
+<!-- subject="FVWM: Animated WindowShade patch, v1.2" -->
+<!-- id="199708302216.SAA17801_at_degas.gch.ulaval.ca" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start20845" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="20846.html" accesskey="d" title="Joe: &quot;FVWM: Hilight/Shadow&quot;">Next message</a> ]
+[ <a href="20844.html" title="Cristian Tibirna: &quot;FVWM: animated windowshade patch&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg20845" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg20845" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg20845" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg20845" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Cristian Tibirna &lt;<a href="mailto:ctibirna_at_degas.gch.ulaval.ca?Subject=Re%3A%20FVWM%3A%20Animated%20WindowShade%20patch%2C%20v1.2">ctibirna_at_degas.gch.ulaval.ca</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sat, 30 Aug 1997 18:16:06 -0400</span><br />
+</address>
+<br />
+Nice to &quot;meet&quot; you again
+<br />
+<br />I finally covered by debts to Morpheus last night and today, when I
+<br />
+came back to my indecentely easy to use computer, I found the problem
+<br />
+with the config of the WindowShadeAnimate. In fact, I finally read
+<br />
+with more attention the man page for bsearch(3).
+<br />
+<br />So, here is the second patch for the WindowShade animation. Now the
+<br />
+WindowShadeAnimate parameter can be tuned from the FvwmTalk for
+<br />
+example. Of course, the normal use would be to put it in your
+<br />
+.fvwm2rc.
+<br />
+<br />I also added the WINDOWSHADE preprocessor flags there where
+<br />
+necessary. This hopefully eliminates possible compile time errors in
+<br />
+case of choosing not to use WINDOWSHADE at all.
+<br />
+<br />The hardcoded default WindowShadeAnimate is off. So you _have_ to add
+<br />
+the command to your .fvwm2rc with a parameter in order to see it at
+<br />
+work.
+<br />
+<br />As a known bug, if you move the title bar of a shaded window, the
+<br />
+window deshades by itself (not wanted) but remains flagged as shaded,
+<br />
+so next time one tries to shade it, it will not do it.
+<br />
+<br />The TODO list contains now: patching the manual and trying to get lower
+<br />
+border stay visible after a shade (you know, having the border all
+<br />
+around the title), as a run-time option.
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cristian
+<br />
+<br />----------shade_anim-1.2.patch-------cut here---
+<br />
+diff -u fvwm_orig/builtins.c fvwm/builtins.c
+<br />
+--- fvwm_orig/builtins.c	Tue Aug 19 19:41:27 1997
+<br />
++++ fvwm/builtins.c	Sat Aug 30 17:37:52 1997
+<br />
+_at_&#64; -22,6 +22,12 &#64;&#64;
+<br />
+&nbsp;#include &quot;screen.h&quot;
+<br />
+&nbsp;#include &quot;module.h&quot;
+<br />
+&nbsp;
+<br />
++#ifdef WINDOWSHADE
+<br />
++/*-&gt;CT set shade_anim and shade_anim_steps defaults */
+<br />
++static int shade_anim_steps=10;
+<br />
++/*&lt;-CT*/
+<br />
++#endif
+<br />
++
+<br />
+&nbsp;static char *exec_shell_name=&quot;/bin/sh&quot;;
+<br />
+&nbsp;/* button state strings must match the enumerated states */
+<br />
+&nbsp;static char  *button_states[MaxButtonState]={
+<br />
+_at_&#64; -34,6 +40,7 &#64;&#64;
+<br />
+&nbsp;#endif
+<br />
+&nbsp;};
+<br />
+&nbsp;
+<br />
++
+<br />
+&nbsp;/***********************************************************************
+<br />
+&nbsp;&nbsp;*
+<br />
+&nbsp;&nbsp;*  Procedure:
+<br />
+_at_&#64; -383,48 +390,91 &#64;&#64;
+<br />
+&nbsp;&nbsp;*
+<br />
+&nbsp;&nbsp;*  Args: 1 -- force shade, 2 -- force unshade  No Arg: toggle
+<br />
+&nbsp;&nbsp;* 
+<br />
++ ***********************************************************************
+<br />
++ *
+<br />
++ *  Animation added. 
+<br />
++ *     Based on code from AfterStep-1.0 (CT: ctibirna_at_gch.ulaval.ca)
+<br />
++ *
+<br />
++ *  Builtin function: WindowShadeAnimate &lt;steps&gt;
+<br />
++ *      &lt;steps&gt; is number of steps in animation. If 0, the
+<br />
++ *              windowshade animation goes off. Default = 10.
+<br />
++ *
+<br />
+&nbsp;&nbsp;***********************************************************************/
+<br />
+&nbsp;void WindowShade(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long context, char *action, int *Module)
+<br />
+-{
+<br />
++{       
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int n = 0;
+<br />
++    int f_h, f_w, t_h, tb_h;
+<br />
++    int h, y, s;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (DeferExecution(eventp,&amp;w,&amp;tmp_win,&amp;context, SELECT,ButtonRelease))
+<br />
+-	return;
+<br />
+-
+<br />
++      return;
+<br />
++    if ( tmp_win == NULL )
+<br />
++      return;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (!(tmp_win-&gt;flags &amp; TITLE) || (tmp_win-&gt;flags &amp; MAXIMIZED)) {
+<br />
+-	XBell(dpy, Scr.screen);
+<br />
+-	return;
+<br />
++      XBell(dpy, Scr.screen);
+<br />
++      return;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
++
+<br />
++    f_h   = tmp_win-&gt;frame_height;
+<br />
++    f_w   = tmp_win-&gt;frame_width;
+<br />
++    t_h   = tmp_win-&gt;title_height; 
+<br />
++    tb_h  = tmp_win-&gt;title_height+tmp_win-&gt;boundary_width;
+<br />
++
+<br />
++    if(shade_anim_steps) s = f_h/shade_anim_steps;
+<br />
++    
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (isspace(*action))++action;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (isdigit(*action))
+<br />
+-	sscanf(action,&quot;%d&quot;,&amp;n);
+<br />
+-
+<br />
++      sscanf(action,&quot;%d&quot;,&amp;n);
+<br />
++    
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (((tmp_win-&gt;buttons &amp; WSHADE)||(n==2))&amp;&amp;(n!=1))
+<br />
+-    {
+<br />
++      {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tmp_win-&gt;buttons &amp;= ~WSHADE;
+<br />
+-	SetupFrame(tmp_win,
+<br />
+-		   tmp_win-&gt;frame_x, 
+<br />
+-		   tmp_win-&gt;frame_y, 
+<br />
+-		   tmp_win-&gt;orig_wd,
+<br />
+-		   tmp_win-&gt;orig_ht,
+<br />
+-		   True);
+<br />
+-        Broadcast(M_DEWINDOWSHADE, 3, tmp_win-&gt;w, tmp_win-&gt;frame,
+<br />
+-                  (unsigned long)tmp_win, 0, 0, 0, 0);
+<br />
+-    }
+<br />
++
+<br />
++	if(shade_anim_steps) {
+<br />
++	  XMoveWindow(dpy, tmp_win-&gt;w, 0, - (f_h - tb_h));
+<br />
++	  h = tb_h;
+<br />
++	  y = -(f_h - tb_h);
+<br />
++	  while (h&lt;f_h - tb_h) {
+<br />
++	    XResizeWindow(dpy, tmp_win-&gt;frame, f_w, h);
+<br />
++	    XMoveWindow(dpy, tmp_win-&gt;w, 0, y);
+<br />
++	    XSync(dpy, 0);
+<br />
++	    h+=s;
+<br />
++	    y+=s;
+<br />
++	  }
+<br />
++	  XMoveWindow(dpy, tmp_win-&gt;w, 0, 0);	
+<br />
++	}
+<br />
++
+<br />
++        XResizeWindow(dpy, tmp_win-&gt;frame, f_w, f_h);
+<br />
++	Broadcast(M_DEWINDOWSHADE,3,tmp_win-&gt;w,tmp_win-&gt;frame,
+<br />
++		  (unsigned long)tmp_win,0,0,0,0);
+<br />
++      } 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+-    {
+<br />
++      {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tmp_win-&gt;buttons |= WSHADE;
+<br />
+-	SetupFrame(tmp_win,
+<br />
+-		   tmp_win-&gt;frame_x,
+<br />
+-		   tmp_win-&gt;frame_y,
+<br />
+-		   tmp_win-&gt;frame_width,
+<br />
+-		   tmp_win-&gt;title_height + tmp_win-&gt;boundary_width,
+<br />
+-		   False);
+<br />
+-        Broadcast(M_WINDOWSHADE, 3, tmp_win-&gt;w, tmp_win-&gt;frame,
+<br />
+-                  (unsigned long)tmp_win, 0, 0, 0, 0);
+<br />
+-    }
+<br />
++	
+<br />
++	if (shade_anim_steps) {
+<br />
++	  XLowerWindow(dpy, tmp_win-&gt;w);
+<br />
++	  h = f_h;
+<br />
++	  y = tb_h;
+<br />
++	  while (h&gt;tb_h) {
+<br />
++	    XMoveWindow(dpy, tmp_win-&gt;w, 0, y);
+<br />
++	    XResizeWindow(dpy, tmp_win-&gt;frame, f_w, h);
+<br />
++	    XSync(dpy, 0);
+<br />
++	    h-=s;
+<br />
++	    y-=s;
+<br />
++	  }
+<br />
++	  XMoveWindow(dpy, tmp_win-&gt;w, 0, 0);
+<br />
++	}
+<br />
++	
+<br />
++	XResizeWindow(dpy, tmp_win-&gt;frame, f_w, tb_h);
+<br />
++	Broadcast(M_WINDOWSHADE,3,tmp_win-&gt;w,tmp_win-&gt;frame,
+<br />
++		  (unsigned long)tmp_win,0,0,0,0);	
+<br />
++      }
+<br />
++    
+<br />
+&nbsp;}
+<br />
++
+<br />
++
+<br />
+&nbsp;#endif /* WINDOWSHADE */
+<br />
+&nbsp;
+<br />
+&nbsp;/* For Ultrix 4.2 */
+<br />
+_at_&#64; -3329,3 +3379,22 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;if (opts) /* should be empty at this point... */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;free(opts);
+<br />
+&nbsp;}
+<br />
++
+<br />
++#ifdef WINDOWSHADE
+<br />
++/*-&gt;CT set shade_anim_steps */
+<br />
++void setShadeAnim (XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
++            unsigned long context, char *action,int* Module) 
+<br />
++{
+<br />
++  int val,val_unit,n;
+<br />
++ 
+<br />
++  n=GetOneArgument(action, &amp;val, &amp;val_unit);
+<br />
++  if(n != 1) {
+<br />
++    fvwm_msg(ERR,&quot;setShadeAnim&quot;,&quot;WindowShadeAnimate requires 1 argument&quot;);
+<br />
++    return;
+<br />
++  }
+<br />
++ 
+<br />
++  shade_anim_steps = val;
+<br />
++}
+<br />
++/*&lt;-CT*/
+<br />
++#endif
+<br />
++   
+<br />
+diff -u fvwm_orig/functions.c fvwm/functions.c
+<br />
+--- fvwm_orig/functions.c	Mon Aug 11 16:09:29 1997
+<br />
++++ fvwm/functions.c	Sat Aug 30 17:30:43 1997
+<br />
+_at_&#64; -139,6 +139,9 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;{&quot;WindowsDesk&quot;,  changeWindowsDesk,F_CHANGE_WINDOWS_DESK, FUNC_NEEDS_WINDOW},
+<br />
+&nbsp;#ifdef WINDOWSHADE
+<br />
+&nbsp;&nbsp;&nbsp;{&quot;WindowShade&quot;,  WindowShade,      F_WINDOW_SHADE,        FUNC_NEEDS_WINDOW},
+<br />
++  /*-&gt;CT for SHADE_ANIMATE*/
+<br />
++  {&quot;WindowShadeAnimate&quot;,setShadeAnim,F_SHADE_ANIMATE,      FUNC_NO_WINDOW},
+<br />
++  /*&lt;-CT*/
+<br />
+&nbsp;#endif /* WINDOWSHADE */
+<br />
+&nbsp;&nbsp;&nbsp;{&quot;XORValue&quot;,     SetXOR,           F_XOR,                 FUNC_NO_WINDOW},
+<br />
+&nbsp;&nbsp;&nbsp;{&quot;&quot;,0,0,0}
+<br />
+diff -u fvwm_orig/fvwm.c fvwm/fvwm.c
+<br />
+--- fvwm_orig/fvwm.c	Mon Aug  4 16:53:32 1997
+<br />
++++ fvwm/fvwm.c	Sat Aug 30 01:11:40 1997
+<br />
+_at_&#64; -630,6 +630,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;char *defaults[] = {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;HilightColor black grey&quot;,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;XORValue 0&quot;,
+<br />
++    &quot;WindowShadeAnimate 0&quot;,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;MenuStyle black grey slategrey fixed fvwm&quot;,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;TitleStyle Centered -- Raised&quot;,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;IconFont fixed&quot;,
+<br />
+diff -u fvwm_orig/misc.h fvwm/misc.h
+<br />
+--- fvwm_orig/misc.h	Mon Aug 11 16:10:19 1997
+<br />
++++ fvwm/misc.h	Sat Aug 30 17:37:53 1997
+<br />
+_at_&#64; -217,7 +217,13 &#64;&#64;
+<br />
+&nbsp;#ifdef  WINDOWSHADE
+<br />
+&nbsp;void WindowShade(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long context, char *action, int *Module);
+<br />
++
+<br />
++/*-&gt;CT for window shade animation */
+<br />
++void setShadeAnim(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
++		 unsigned long context, char *action, int *Module);
+<br />
++/*&lt;-CT*/
+<br />
+&nbsp;#endif
+<br />
++
+<br />
+&nbsp;extern void       RaiseWindow(FvwmWindow *t);
+<br />
+&nbsp;extern void       LowerWindow(FvwmWindow *t);
+<br />
+&nbsp;extern Bool       GrabEm(int);
+<br />
+diff -u fvwm_orig/parse.h fvwm/parse.h
+<br />
+--- fvwm_orig/parse.h	Mon Aug 11 16:10:39 1997
+<br />
++++ fvwm/parse.h	Sat Aug 30 00:46:25 1997
+<br />
+_at_&#64; -75,6 +75,9 &#64;&#64;
+<br />
+&nbsp;#define F_EXEC_SETUP            57
+<br />
+&nbsp;#define F_CURSOR_STYLE          58
+<br />
+&nbsp;#define F_CURRENT               59
+<br />
++/*-&gt;CT*/
+<br />
++#define F_SHADE_ANIMATE         60
+<br />
++/*&lt;-CT*/
+<br />
+&nbsp;
+<br />
+&nbsp;/* Functions which require a target window */
+<br />
+&nbsp;#define F_RESIZE		100
+<br />
+_at_&#64; -104,6 +107,7 &#64;&#64;
+<br />
+&nbsp;#define F_DESTROY_DECOR         124
+<br />
+&nbsp;#define F_UPDATE_DECOR          125
+<br />
+&nbsp;#define F_WINDOW_SHADE          126
+<br />
++
+<br />
+&nbsp;
+<br />
+&nbsp;/* Functions for use by modules only! */
+<br />
+&nbsp;#define F_SEND_WINDOW_LIST     1000
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sat Aug 30 1997 - 17:14:33 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start20845">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="20846.html" title="Next message in the list">Joe: "FVWM: Hilight/Shadow"</a></li>
+<li><dfn>Previous message</dfn>: <a href="20844.html" title="Previous message in the list">Cristian Tibirna: "FVWM: animated windowshade patch"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg20845" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg20845" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg20845" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg20845" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

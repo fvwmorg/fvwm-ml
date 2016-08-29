@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: another way to shutdown/reboot with xdm from f.kater_at_gmx.net on 2003-01-02 (fvwm-users)</title>
+<meta name="Author" content="f.kater_at_gmx.net (f.kater_at_gmx.net)" />
+<meta name="Subject" content="FVWM: another way to shutdown/reboot with xdm" />
+<meta name="Date" content="2003-01-02" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: another way to shutdown/reboot with xdm</h1>
+<!-- received="Thu Jan  2 07:27:50 2003" -->
+<!-- isoreceived="20030102072750" -->
+<!-- sent="Thu, 2 Jan 2003 14:35:04 +0100" -->
+<!-- isosent="20030102133504" -->
+<!-- name="f.kater_at_gmx.net" -->
+<!-- email="f.kater_at_gmx.net" -->
+<!-- subject="FVWM: another way to shutdown/reboot with xdm" -->
+<!-- id="20030102143504.0bbbbb5e.f.kater_at_gmx.net" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start7413" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="7414.html" accesskey="d" title="Bob Crochelt: &quot;Re: FVWM: FVWM 2.5.5 and GNOME/Nautilus 2 (RedHat 8.0)&quot;">Next message</a> ]
+[ <a href="7412.html" title="Olivier Chapuis: &quot;Re: FVWM: FVWM 2.5.5 and GNOME/Nautilus 2 (RedHat 8.0)&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg7413" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg7413" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg7413" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg7413" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: &lt;<a href="mailto:f.kater_at_gmx.net?Subject=Re%3A%20FVWM%3A%20another%20way%20to%20shutdown%2Freboot%20with%20xdm">f.kater_at_gmx.net</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 2 Jan 2003 14:35:04 +0100</span><br />
+</address>
+<br />
+Hi,
+<br />
+<br />who every may be interested in that...: Here is (another) way to
+<br />
+shutdown/reboot from a fvwm2 session created by xdm:
+<br />
+<br />Add the following lines to one of your menu config files
+<br />
+<br />[...]
+<br />
++ &quot;log off&quot;		Quit
+<br />
++ &quot;restart computer&quot;	func_restart
+<br />
++ &quot;shutdown&quot;		func_shutdown
+<br />
+<br />Add the following functions:
+<br />
+<br />DestroyFunc func_restart
+<br />
+AddtoFunc func_restart
+<br />
++	I	Exec exec echo '1' &gt; /tmp/fvwm_exit_reboot
+<br />
++	I	Quit
+<br />
+<br />DestroyFunc func_shutdown
+<br />
+AddToFunc func_shutdown
+<br />
++	I	Exec exec echo '1' &gt; /tmp/fvwm_exit_shutdown
+<br />
++	I	Quit
+<br />
+<br /><br />Change the file which starts your window manager (in my case using
+<br />
+a gentoo distribution it's: /etc/X11/Session/fvwm2):
+<br />
+<br />#!/bin/bash
+<br />
+/usr/local/bin/fvwm2
+<br />
+#add the following lines:
+<br />
+<br />#sleep may help if this script is two quick
+<br />
+sleep 2
+<br />
+<br />if [ -e /tmp/fvwm_exit_reboot ]
+<br />
+then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rm /tmp/fvwm_exit_reboot
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/sbin/shutdown -r 0
+<br />
+fi
+<br />
+<br />if [ -e /tmp/fvwm_exit_shutdown ]
+<br />
+then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rm /tmp/fvwm_exit_shutdown
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/sbin/shutdown -h 0
+<br />
+fi
+<br />
+<br /><br />There are probably other solutions for this issue but this one works for
+<br />
+me.
+<br />
+Bye
+<br />
+&nbsp;Felix
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Jan 02 2003 - 07:27:50 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start7413">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="7414.html" title="Next message in the list">Bob Crochelt: "Re: FVWM: FVWM 2.5.5 and GNOME/Nautilus 2 (RedHat 8.0)"</a></li>
+<li><dfn>Previous message</dfn>: <a href="7412.html" title="Previous message in the list">Olivier Chapuis: "Re: FVWM: FVWM 2.5.5 and GNOME/Nautilus 2 (RedHat 8.0)"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg7413" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg7413" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg7413" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg7413" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:54 BST
+</em></small></p>
+</body>
+</html>

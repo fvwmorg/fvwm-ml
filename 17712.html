@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: FvwmBanner from Marco Mariani on 1996-08-24 (fvwm-users)</title>
+<meta name="Author" content="Marco Mariani (m.mariani_at_imola.nettuno.it)" />
+<meta name="Subject" content="FVWM: FvwmBanner" />
+<meta name="Date" content="1996-08-24" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: FvwmBanner</h1>
+<!-- received="Sat Aug 24 14:27:59 1996" -->
+<!-- isoreceived="19960824132759" -->
+<!-- sent="Sat, 24 Aug 1996 19:26:12 -0100 (GMT-0100)" -->
+<!-- isosent="19960824202612" -->
+<!-- name="Marco Mariani" -->
+<!-- email="m.mariani_at_imola.nettuno.it" -->
+<!-- subject="FVWM: FvwmBanner" -->
+<!-- id="Pine.LNX.3.93.960824192210.680G-300000_at_shalott.imola.nettuno.it" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start17712" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="17713.html" accesskey="d" title="H}vard Fosseng: &quot;Re: FVWM: FvwmM4 (was FvwmCpp)&quot;">Next message</a> ]
+[ <a href="17711.html" title="Marco Mariani: &quot;FVWM: hangup with miscalled Exec&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17712" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17712" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17712" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17712" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Marco Mariani &lt;<a href="mailto:m.mariani_at_imola.nettuno.it?Subject=Re%3A%20FVWM%3A%20FvwmBanner">m.mariani_at_imola.nettuno.it</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sat, 24 Aug 1996 19:26:12 -0100 (GMT-0100)</span><br />
+</address>
+<br />
+The attached files are a patch to FvwmBanner and, just in case of an
+<br />
+inclusion in the fvwm package, to the manpage.
+<br />
+<br />When I start up X, I like having a picture on the center of the background
+<br />
+(the silly linux penguin) for ten seconds. Unfortunately, I thought, if I
+<br />
+happen to click on the image, it disappears. My patch prevents it, by
+<br />
+introducing the option &quot;*FvwmBannerMouse Ignore&quot;.
+<br />
+<br />While I was at it, I also added FvwmBannerX and FvwmBannerY.
+<br />
+<br />Now my question is: is there a way to pass the ButtonRelease to fvwm so that
+<br />
+it will display the root menu over the image?
+<br />
+<br /><br />All The Best,
+<br />
+&nbsp;Marco
+<br />
+<br />Excuse the waste of bandwidth, please send flames to my alternate address
+<br />
+(bill_at_microsoft.com).
+<br />
+<br /><br />
+--- FvwmBanner.c.orig	Sat Aug 24 16:19:32 1996
+<br />
++++ FvwmBanner.c	Sat Aug 24 18:36:43 1996
+<br />
+_at_&#64; -71,8 +71,14 &#64;&#64;
+<br />
+&nbsp;char *pixmapPath = NULL;
+<br />
+&nbsp;char *pixmapName = NULL;
+<br />
+&nbsp;char *myName = NULL;
+<br />
++char *mouseoption = NULL;
+<br />
+&nbsp;
+<br />
+&nbsp;int timeout = 3000000; /* default time of 3 seconds */
+<br />
++int ignoremouse = 0;
+<br />
++int image_x = 0;
+<br />
++int image_y = 0;
+<br />
++int image_x_defined = 0;
+<br />
++int image_y_defined = 0;
+<br />
+&nbsp;
+<br />
+&nbsp;Display *dpy;			/* which display are we talking to */
+<br />
+&nbsp;Window Root;
+<br />
+_at_&#64; -187,8 +193,28 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;mysizehints.max_width = mysizehints.width;
+<br />
+&nbsp;&nbsp;&nbsp;mysizehints.win_gravity = NorthWestGravity;
+<br />
+&nbsp;
+<br />
+-  mysizehints.x = (ScreenWidth - view.attributes.width)/2;
+<br />
+-  mysizehints.y = (ScreenHeight - view.attributes.height)/2;
+<br />
++#ifndef MAX
+<br />
++#define MAX(x,y) ((x)&gt;(y)?(x):(y))
+<br />
++#define MIN(x,y) ((x)&lt;(y)?(x):(y))
+<br />
++#endif
+<br />
++
+<br />
++  if (image_x_defined) {
+<br />
++    if (image_x&gt;=0)
+<br />
++      mysizehints.x = MIN(image_x,ScreenWidth-view.attributes.width);
+<br />
++    else
+<br />
++      mysizehints.x = MAX(ScreenWidth-view.attributes.width+image_x,0);
+<br />
++  }
+<br />
++  else mysizehints.x = (ScreenWidth - view.attributes.width)/2;
+<br />
++
+<br />
++
+<br />
++  if (image_y_defined) {
+<br />
++    if (image_y&gt;=0)
+<br />
++      mysizehints.y = MIN(image_y,ScreenHeight-view.attributes.height);
+<br />
++    else
+<br />
++      mysizehints.y = MAX(ScreenHeight-view.attributes.height+image_y,0);
+<br />
++  }
+<br />
++  else mysizehints.y = (ScreenHeight - view.attributes.height)/2;
+<br />
++
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;win = XCreateSimpleWindow(dpy,Root,mysizehints.x,mysizehints.y,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mysizehints.width,mysizehints.height,
+<br />
+_at_&#64; -242,9 +268,12 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;switch(Event.type)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case ButtonRelease:
+<br />
+-          XDestroyWindow(dpy,win);
+<br />
+-          XSync(dpy,0);
+<br />
+-          exit(0);
+<br />
++          if (!ignoremouse)
+<br />
++          {
+<br />
++            XDestroyWindow(dpy,win);
+<br />
++            XSync(dpy,0);
+<br />
++            exit(0);
+<br />
++          }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case ClientMessage:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (Event.xclient.format==32 &amp;&amp; Event.xclient.data.l[0]==wm_del_win)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+_at_&#64; -339,6 +368,32 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;continue;
+<br />
++      }
+<br />
++      if (mystrncasecmp (tline,
+<br />
++			 CatString3 (&quot;*&quot;, myName, &quot;X&quot;),
+<br />
++			 clength + 2) ==0)
+<br />
++      {
+<br />
++	image_x = atoi(&amp;tline[clength+2]);
+<br />
++	image_x_defined = 1;
+<br />
++	continue;
+<br />
++      }
+<br />
++      if (mystrncasecmp (tline,
+<br />
++			 CatString3 (&quot;*&quot;, myName, &quot;Y&quot;),
+<br />
++			 clength + 2) ==0)
+<br />
++      {
+<br />
++	image_y = atoi(&amp;tline[clength+2]);
+<br />
++	image_y_defined = 1;
+<br />
++	continue;
+<br />
++      }
+<br />
++      if (mystrncasecmp (tline,
+<br />
++	      		 CatString3 (&quot;*&quot;, myName, &quot;Mouse&quot;),
+<br />
++			 clength + 6) ==0)
+<br />
++      {
+<br />
++	 CopyString (&amp;mouseoption, &amp;tline[clength+6]);
+<br />
++	 if (mystrncasecmp (mouseoption, &quot;Ignore&quot;, 7) ==0) {
+<br />
++	   ignoremouse = 1;
+<br />
++         }
+<br />
++	 free (mouseoption);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (mystrncasecmp (tline,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CatString3 (&quot;*&quot;, myName, &quot;Timeout&quot;),
+<br />
+<br />
+--- FvwmBanner.man.orig	Sat Aug 24 17:16:58 1996
+<br />
++++ FvwmBanner.man	Sat Aug 24 18:52:27 1996
+<br />
+_at_&#64; -1,6 +1,6 &#64;&#64;
+<br />
+&nbsp;.\&quot; t
+<br />
+&nbsp;.\&quot; _at_(#)FvwmBanner.1	1/12/94
+<br />
+-.TH FvwmBanner 1.20 &quot;Jan 28, 1994&quot;
+<br />
++.TH FvwmBanner 1.21 &quot;Aug 24, 1996&quot;
+<br />
+&nbsp;.UC
+<br />
+&nbsp;.SH NAME
+<br />
+&nbsp;FvwmBanner \- the FVWM Banner
+<br />
+_at_&#64; -8,7 +8,7 &#64;&#64;
+<br />
+&nbsp;FvwmBanner is intended to be spawned by fvwm.
+<br />
+&nbsp;
+<br />
+&nbsp;.SH DESCRIPTION
+<br />
+-The FvwmInitBanner displays an Fvwm Logo in the center of the screen
+<br />
++FvwmBanner displays an Fvwm Logo in the center of the screen
+<br />
+&nbsp;for 3 seconds.
+<br />
+&nbsp;
+<br />
+&nbsp;.SH COPYRIGHTS
+<br />
+_at_&#64; -34,7 +34,22 &#64;&#64;
+<br />
+&nbsp;.IP &quot;*FvwmBannerTimeout \fIsec\fP&quot;
+<br />
+&nbsp;Tells the module to display for \fIsec\fP seconds instead of default of 3.
+<br />
+&nbsp;
+<br />
++.IP &quot;*FvwmBannerMouse \fIIgnore\fP&quot;
+<br />
++Tells the module to ignore mouse button presses over the image.
+<br />
++The default is to exit.
+<br />
++
+<br />
++.IP &quot;*FvwmBannerX \fIx\fP&quot;
+<br />
++Tells the module to put the image \fIx\fP pixels from the left border of the
+<br />
++screen.  A negative number refers to the right border.  The default is to
+<br />
++put the image in the center.
+<br />
++
+<br />
++.IP &quot;*FvwmBannerY \fIy\fP&quot;
+<br />
++Tells the module to put the image \fIy\fP pixels from the top border of the
+<br />
++screen.  A negative number refers to the bottom border.  The default is to
+<br />
++put the image in the center.
+<br />
++
+<br />
+&nbsp;
+<br />
+&nbsp;.SH AUTHOR
+<br />
+-Robert Nation 
+<br />
++Robert Nation.
+<br />
++Mouse ignore and image position added by m.mariani_at_nettuno&#46;<!--nospam-->it.
+<br />
+&nbsp;
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sat Aug 24 1996 - 14:27:59 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start17712">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="17713.html" title="Next message in the list">H}vard Fosseng: "Re: FVWM: FvwmM4 (was FvwmCpp)"</a></li>
+<li><dfn>Previous message</dfn>: <a href="17711.html" title="Previous message in the list">Marco Mariani: "FVWM: hangup with miscalled Exec"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17712" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17712" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17712" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17712" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

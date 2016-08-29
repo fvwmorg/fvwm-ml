@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Bugs in pl38 from spiegl_at_appl-math.tu-muenchen.de on 1995-11-03 (fvwm-users)</title>
+<meta name="Author" content="spiegl_at_appl-math.tu-muenchen.de (spiegl_at_appl-math.tu-muenchen.de)" />
+<meta name="Subject" content="FVWM: Bugs in pl38" />
+<meta name="Date" content="1995-11-03" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Bugs in pl38</h1>
+<!-- received="Fri Nov  3 11:34:44 1995" -->
+<!-- isoreceived="19951103113444" -->
+<!-- sent="Fri, 3 Nov 1995 18:28:57 +0100 (MET)" -->
+<!-- isosent="19951103172857" -->
+<!-- name="spiegl_at_appl-math.tu-muenchen.de" -->
+<!-- email="spiegl_at_appl-math.tu-muenchen.de" -->
+<!-- subject="FVWM: Bugs in pl38" -->
+<!-- id="199511031729.SAA01285_at_hamster.appl-math.tu-muenchen.de" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start14737" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="14738.html" accesskey="d" title="Todd Fries: &quot;FVWM: &#0039;makefile anomolies&#0039;&quot;">Next message</a> ]
+[ <a href="14736.html" title="Kai Grossjohann: &quot;Re: FVWM: autoraise with new windows&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg14737" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg14737" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg14737" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg14737" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: &lt;<a href="mailto:spiegl_at_appl-math.tu-muenchen.de?Subject=Re%3A%20FVWM%3A%20Bugs%20in%20pl38">spiegl_at_appl-math.tu-muenchen.de</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 3 Nov 1995 18:28:57 +0100 (MET)</span><br />
+</address>
+<br />
+Hi!
+<br />
+<br />After a lot of trouble getting fvwm2 to run on my SGI at all, it
+<br />
+is finally up and running beautifully.
+<br />
+<br />While playing around with it, I found a few bugs, that you guys
+<br />
+might be interested in:
+<br />
+<br />1.) .fvwm2rc:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;I get a coredump right after fvwm2 starts, when I ask for this:
+<br />
+AddToFunc XSETROOT_s &quot;I&quot; exec xsetroot -bitmap $0
+<br />
+AddToFunc XSETROOT_b &quot;I&quot; exec xsetroot -bitmap $0 $1 $2 $3 $4 $5 $6 $7 $8 $9
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;But it works fine when I ask for this:
+<br />
+AddToFunc XSETROOT_s &quot;I&quot; exec xsetroot -bitmap $0
+<br />
+AddToFunc XSETROOT_b &quot;I&quot; exec xsetroot -bitmap $0 $1 $2 $3 $4 $5 $6 $7 $8
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;I checked the man page for fvwm2 and it says $0 - $9 is fine, though.
+<br />
+<br />2.) FvwmWinList: 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;*truncateleft doesn't work.  It still truncates right.
+<br />
+<br />3.) FvwmTalk:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;It doesn't accept module specifications like &quot;*FvwmWinListUseIconNames&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;The error message is:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;No such module /usr/local/lib/X11/fvwm2 *FvwmWinListUseIconNames&quot;
+<br />
+<br />4.) Okay, here is a tricky one:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;In my .fvwm2rc I got:
+<br />
+Key Up          A       SC      CursorMove  0 -1
+<br />
+Key Down        A       SC      CursorMove  0 +1
+<br />
+Key Up          A       SM      CursorMove  0  -10
+<br />
+Key Down        A       SM      CursorMove  0  +10
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;This works beautifully, unless a (popup) menu is open.  In that
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;case Shift-Control-&lt;cursor&gt; acts just like Shift-Meta-&lt;cursor&gt;.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Apparently the Meta-Flag is set while a menu is open.  Strange.
+<br />
+<br />5.) This is not a bug, but two questions:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;a) Did fvwm1's 'Cursor' command disappear completely, or is it
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;just hidden somewhere?  If it's gone, why?
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;b) What about fvwm1's commands &quot;AppsBackingStore&quot; and &quot;BackingStore&quot;?
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Are the gone, too?  Why?
+<br />
+<br />6.) Another question, but more tricky I am afraid:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;How can I specify that an iconified FvwmPager always opens up
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;at -1+1 ?  In order to simulate the old builtin pager, I got this:
+<br />
+AddToFunc InitFunction    &quot;I&quot; Module FvwmPager 0 1
+<br />
+*FvwmPagerHilight lightsteelblue
+<br />
+*FvwmPagerGeometry -1+1
+<br />
+*FvwmPagerLabel 0 Standard
+<br />
+*FvwmPagerLabel 1 Extended
+<br />
+*FvwmPagerSmallFont 5x8
+<br />
+*FvwmPagerDeskTopScale 35
+<br />
+*FvwmPagerStartIconic
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;It starts up iconic, just like I want to have it, but of course
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;it always shows up where all the other icons are, too.  But I
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;want to have it at the upper right corner.  Is that possible?
+<br />
+<br />7.) Finally I would like to second the wish for &quot;OpaqueResize&quot;, and
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;my personal wish would be a window-specific AutoRaise command/module,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;like a style-command or so.
+<br />
+<br />Besides that, you guys really did a wonderful job!!!
+<br />
+Keep up the good work, and thanks a lot!
+<br />
+<br />Ciao,
+<br />
+&nbsp;Andy.
+<br />
+___________________________________________________________________________
+<br />
+&nbsp;&nbsp;Andy Spiegl, Institute for Applied Mathematics
+<br />
+&nbsp;&nbsp;University of Technology, Muenchen, Germany
+<br />
+&nbsp;&nbsp;E-Mail: Spiegl_at_Appl-Math.TU-Muenchen.de
+<br />
+&nbsp;&nbsp;<a href="http://www.appl-math.tu-muenchen.de/~spiegl/">http://www.appl-math.tu-muenchen.de/~spiegl/</a>
+<br />
+<br />Above all else - sky.
+<br />
+<br /><pre>
+--
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Nov 03 1995 - 11:34:44 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start14737">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="14738.html" title="Next message in the list">Todd Fries: "FVWM: &#0039;makefile anomolies&#0039;"</a></li>
+<li><dfn>Previous message</dfn>: <a href="14736.html" title="Previous message in the list">Kai Grossjohann: "Re: FVWM: autoraise with new windows"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg14737" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg14737" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg14737" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg14737" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:57 BST
+</em></small></p>
+</body>
+</html>

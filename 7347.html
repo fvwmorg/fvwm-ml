@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: Helper Function to chnages Layers. from Thomas Glanzmann on 2002-12-27 (fvwm-users)</title>
+<meta name="Author" content="Thomas Glanzmann (sithglan_at_stud.uni-erlangen.de)" />
+<meta name="Subject" content="Re: FVWM: Helper Function to chnages Layers." />
+<meta name="Date" content="2002-12-27" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: Helper Function to chnages Layers.</h1>
+<!-- received="Thu Dec 26 19:45:00 2002" -->
+<!-- isoreceived="20021226194500" -->
+<!-- sent="Fri, 27 Dec 2002 02:43:23 +0100" -->
+<!-- isosent="20021227014323" -->
+<!-- name="Thomas Glanzmann" -->
+<!-- email="sithglan_at_stud.uni-erlangen.de" -->
+<!-- subject="Re: FVWM: Helper Function to chnages Layers." -->
+<!-- id="20021227014323.GA18102_at_stud.uni-erlangen.de" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="20021227005608.GC16182_at_unixcab.org" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start7347" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="7348.html" accesskey="d" title="Dan Espen: &quot;Re: FVWM: question of clock&quot;">Next message</a> ]
+[ <a href="7346.html" title="dion king: &quot;Re: FVWM: question of clock&quot;">Previous message</a> ]
+[ <a href="7345.html" title="Mikhael Goikhman: &quot;Re: FVWM: Helper Function to chnages Layers.&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="7352.html" accesskey="t" title="Mikhael Goikhman: &quot;Re: FVWM: Helper Function to chnages Layers.&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg7347" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg7347" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg7347" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg7347" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Thomas Glanzmann &lt;<a href="mailto:sithglan_at_stud.uni-erlangen.de?Subject=Re%3A%20FVWM%3A%20Helper%20Function%20to%20chnages%20Layers.">sithglan_at_stud.uni-erlangen.de</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 27 Dec 2002 02:43:23 +0100</span><br />
+</address>
+<br />
+<em class="quotelev1">&gt; There is a Layer condition to do what you want:
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt;   ThisWindow (Layer 4) Layer 10
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; Just keep in mind that if you want if-else construct you should use either
+</em><br />
+<em class="quotelev1">&gt; new 2.5.x Cond command or first conditionally construct a function and
+</em><br />
+<em class="quotelev1">&gt; only then execute it, like:
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt;   # cyclicly change a window layer 4 -&gt; 10 -&gt; 5 -&gt; 9 -&gt; 4
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt;   DestroyFunc ActuallyDoLayer
+</em><br />
+<em class="quotelev1">&gt;   AddToFunc   ActuallyDoLayer
+</em><br />
+<em class="quotelev1">&gt;   ThisWindow (Layer  4) + Layer 10
+</em><br />
+<em class="quotelev1">&gt;   ThisWindow (Layer  5) + Layer  9
+</em><br />
+<em class="quotelev1">&gt;   ThisWindow (Layer  9) + Layer  4
+</em><br />
+<em class="quotelev1">&gt;   ThisWindow (Layer 10) + Layer  5
+</em><br />
+<em class="quotelev1">&gt;   ActuallyDoLayer
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; P.S. Layer command does not work in 2.5.5 and in cvs for now.
+</em><br />
+<br />Thanks for the fast answer. It's the right direction but does not solve my
+<br />
+specific problem.
+<br />
+<br />I need the following:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If (Layer == 4) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;put on Layer 10;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;put on Layer 4;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+<br />I tried the following, but it is crap anyway:
+<br />
+<br />DestroyFunc RaiseOnTop
+<br />
+AddToFunc RaiseOnTop
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ I Raise 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ ThisWindow (Layer 4)  Layer 10
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ ThisWindow (!Layer 4) Layer 4
+<br />
+<br />Because if it done I am back in Layer 4. So I see at the moment no way to solve
+<br />
+this problem. Do you habe any idea?
+<br />
+<br />Greetings and thank you again for your fast response, 
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Thomas (who is still _not_ on the list ... so please reply by email,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;too)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;~~~
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Dec 26 2002 - 19:45:00 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start7347">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="7348.html" title="Next message in the list">Dan Espen: "Re: FVWM: question of clock"</a></li>
+<li><dfn>Previous message</dfn>: <a href="7346.html" title="Previous message in the list">dion king: "Re: FVWM: question of clock"</a></li>
+<li><dfn>In reply to</dfn>: <a href="7345.html" title="Message to which this message replies">Mikhael Goikhman: "Re: FVWM: Helper Function to chnages Layers."</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="7352.html" title="Next message in this discussion thread">Mikhael Goikhman: "Re: FVWM: Helper Function to chnages Layers."</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="7352.html" title="Message sent in reply to this message">Mikhael Goikhman: "Re: FVWM: Helper Function to chnages Layers."</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg7347" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg7347" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg7347" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg7347" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:54 BST
+</em></small></p>
+</body>
+</html>

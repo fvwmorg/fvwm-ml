@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: tbsp8 Borderstyle/Multistyle/Uselook patch from Andrew Veliath on 1996-12-08 (fvwm-users)</title>
+<meta name="Author" content="Andrew Veliath (veliaa_at_rpi.edu)" />
+<meta name="Subject" content="FVWM: tbsp8 Borderstyle/Multistyle/Uselook patch" />
+<meta name="Date" content="1996-12-08" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: tbsp8 Borderstyle/Multistyle/Uselook patch</h1>
+<!-- received="Sun Dec  8 16:42:38 1996" -->
+<!-- isoreceived="19961208164238" -->
+<!-- sent="Sun, 8 Dec 1996 17:41:21 -0500" -->
+<!-- isosent="19961208224121" -->
+<!-- name="Andrew Veliath" -->
+<!-- email="veliaa_at_rpi.edu" -->
+<!-- subject="FVWM: tbsp8 Borderstyle/Multistyle/Uselook patch" -->
+<!-- id="199612082241.RAA00442_at_pluto.solarsystem.org" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start18651" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="18652.html" accesskey="d" title="Mike A. Harris: &quot;FVWM: FVWM-digest???&quot;">Next message</a> ]
+[ <a href="18650.html" title="Allen Brady Montz: &quot;FVWM: New FvwmIconMan release&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="18654.html" accesskey="t" title="Allen Brady Montz: &quot;Re: FVWM: tbsp8 Borderstyle/Multistyle/Uselook patch&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18651" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18651" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18651" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18651" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Andrew Veliath &lt;<a href="mailto:veliaa_at_rpi.edu?Subject=Re%3A%20FVWM%3A%20tbsp8%20Borderstyle%2FMultistyle%2FUselook%20patch">veliaa_at_rpi.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sun, 8 Dec 1996 17:41:21 -0500</span><br />
+</address>
+<br />
+I have a new patch, tbsp8 available.  First, it adds a new borderstyle
+<br />
+flag which supplements the HiddenHandles, NoInset (with this, you can
+<br />
+nearly duplicate fvwm95 look).  Also, *much* more code can now be
+<br />
+compiled out.  
+<br />
+<br />Then, there is a new thing.  In response to people wanting different
+<br />
+&quot;looks,&quot; there is a compile-time option to add code for general style
+<br />
+tagging which can be applied with the Style command to particular
+<br />
+windows.  Although it uses the Style command, it doesn't use a style
+<br />
+flag (but because of this even the *new* MiniIcons patch won't
+<br />
+patch... Brady? :) As a compile time option you can also disable the
+<br />
+use of multistyles (add/button/title styles).
+<br />
+<br />After a lot of sweat here, with this, you have this new ability for
+<br />
+fvwm-2.0.43:
+<br />
+<br />AddToLook CustomLook1
+<br />
++ &lt;button/border/titlestyle/hilight color command&gt;
+<br />
++ &lt;etc.&gt;
+<br />
+Style &quot;-CustomLook1-&quot; UseLook CustomLook1,HandleWidth 1,NoButton 2
+<br />
+<br />AddToLook CustomLook2
+<br />
++ &lt;button/border/titlestyle/hilight color command&gt;
+<br />
++ &lt;etc.&gt;
+<br />
+Style &quot;-CustomLook2-&quot; UseLook CustomLook2,HandleWidth 4
+<br />
+<br />Then you can do:
+<br />
+<br />Style &quot;*rxvt*&quot; UseStyle -CustomLook1-
+<br />
+Style &quot;*xterm*&quot; UseStyle -CustomLook2-
+<br />
+<br />I played around briefly and in about 10 minutes had an xterm which
+<br />
+look similar to NeXT and an rxvt which looked like W95 and a Netscape
+<br />
+which looked mwm, but the idea is that you can compile in USELOOK
+<br />
+support even without pixmap buttons/titlebars/borders/gradients and
+<br />
+at least use it to define window classes.
+<br />
+<br />Here is an excerpt from the patched Fvwm.tmpl:
+<br />
+<br />&nbsp;* -DPIXMAP_TITLEBARS		!!!PATCH ADDITION!!!!
+<br />
+&nbsp;* 
+<br />
+&nbsp;* Allows use of the styled title-bars using the TitleStyle 
+<br />
+&nbsp;* command in a similar fashion to the ButtonStyle command.
+<br />
+&nbsp;* If Xpm support and PIXMAP_BUTTONS is compiled in,
+<br />
+&nbsp;* then you can also use pixmaps on title-bars.
+<br />
+&nbsp;*
+<br />
+&nbsp;*
+<br />
+&nbsp;* -DBORDERSTYLE		!!!PATCH ADDITION!!!!
+<br />
+&nbsp;*
+<br />
+&nbsp;* This compiles in support for different border styles using 
+<br />
+&nbsp;* the BorderStyle command. See the man page entries for BorderStyle 
+<br />
+&nbsp;* for detailed usage information.
+<br />
+&nbsp;*
+<br />
+&nbsp;*
+<br />
+&nbsp;* -DGRADIENTS			!!!PATCH ADDITION!!!!
+<br />
+&nbsp;*
+<br />
+&nbsp;* Compiles in support for the use of both horizontal and 
+<br />
+&nbsp;* vertical, linear and nonlinear gradients for buttons and 
+<br />
+&nbsp;* title-bars. See the man page button style entries for
+<br />
+&nbsp;* HGradient and VGradient for more information.
+<br />
+&nbsp;*
+<br />
+&nbsp;*
+<br />
+&nbsp;* -DMULTISTYLE			!!!PATCH ADDITION!!!!
+<br />
+&nbsp;*
+<br />
+&nbsp;* Allows the use of stacked styles for buttons and title-bars.
+<br />
+&nbsp;* There is a slight memory penalty for each stacked style
+<br />
+&nbsp;* over the default ones. See AddButtonStyle and AddTitleStyle 
+<br />
+&nbsp;* for more information.
+<br />
+&nbsp;*
+<br />
+&nbsp;* 
+<br />
+&nbsp;* -DUSELOOK			!!!PATCH ADDITION!!!!
+<br />
+&nbsp;* 
+<br />
+&nbsp;* Allows the creation of tagged looks, any of which can be
+<br />
+&nbsp;* assigned to a window using the UseLook Style command.  To create
+<br />
+&nbsp;* &quot;look&quot; definitions, see the man page entries for AddToLook 
+<br />
+&nbsp;* and DestroyLook.  There is a slight memory penalty for each added
+<br />
+&nbsp;* look, probably at least 10k (more or less depending on previous
+<br />
+&nbsp;* compile setings and individual styles).
+<br />
+&nbsp;* 
+<br />
+&nbsp;***************************************************************************/
+<br />
+<br />OPTION_DEFINES  = -DSHAPE
+<br />
+OPTION_DEFINES += -DPIXMAP_BUTTONS -DPIXMAP_TITLEBARS -DGRADIENTS
+<br />
+OPTION_DEFINES += -DMULTISTYLE -DUSELOOK
+<br />
+<br /><pre>
+--
+Andrew Veliath &lt;veliaa_at_rpi.edu&gt;        <a href="http://www.rpi.edu/~veliaa">http://www.rpi.edu/~veliaa</a>
+One day, all forms of communication will be superseded by a FAQ.
+Finger for PGP Public Key
+Key fingerprint =  51 56 5D 3E 51 43 8B 74  7C B2 E4 B6 84 8E 8B 08
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sun Dec 08 1996 - 16:42:38 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start18651">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="18652.html" title="Next message in the list">Mike A. Harris: "FVWM: FVWM-digest???"</a></li>
+<li><dfn>Previous message</dfn>: <a href="18650.html" title="Previous message in the list">Allen Brady Montz: "FVWM: New FvwmIconMan release"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="18654.html" title="Next message in this discussion thread">Allen Brady Montz: "Re: FVWM: tbsp8 Borderstyle/Multistyle/Uselook patch"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="18654.html" title="Message sent in reply to this message">Allen Brady Montz: "Re: FVWM: tbsp8 Borderstyle/Multistyle/Uselook patch"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18651" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18651" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18651" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18651" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: Variable assignment and use from Dominik Vogt on 2004-06-29 (fvwm-users)</title>
+<meta name="Author" content="Dominik Vogt (dominik.vogt_at_gmx.de)" />
+<meta name="Subject" content="Re: FVWM: Variable assignment and use" />
+<meta name="Date" content="2004-06-29" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: Variable assignment and use</h1>
+<!-- received="Tue Jun 29 06:47:16 2004" -->
+<!-- isoreceived="20040629054716" -->
+<!-- sent="Tue, 29 Jun 2004 13:43:54 +0200" -->
+<!-- isosent="20040629114354" -->
+<!-- name="Dominik Vogt" -->
+<!-- email="dominik.vogt_at_gmx.de" -->
+<!-- subject="Re: FVWM: Variable assignment and use" -->
+<!-- id="20040629114354.GA12132_at_gmx.de" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="1088494504.10889.38.camel_at_rustyp.hn.org" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start12612" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="12613.html" accesskey="d" title="Alexander V. Butenko: &quot;FVWM: IndexedWindowName option trouble&quot;">Next message</a> ]
+[ <a href="12611.html" title="Tavis Ormandy: &quot;Re: FVWM: Variable assignment and use&quot;">Previous message</a> ]
+[ <a href="12610.html" title="Rusty Phillips: &quot;FVWM: Variable assignment and use&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="12616.html" accesskey="t" title="Rusty Phillips: &quot;Re: FVWM: Variable assignment and use&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg12612" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg12612" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg12612" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg12612" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Dominik Vogt &lt;<a href="mailto:dominik.vogt_at_gmx.de?Subject=Re%3A%20FVWM%3A%20Variable%20assignment%20and%20use">dominik.vogt_at_gmx.de</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 29 Jun 2004 13:43:54 +0200</span><br />
+</address>
+<br />
+On Tue, Jun 29, 2004 at 02:35:05AM -0500, Rusty Phillips wrote:
+<br />
+<em class="quotelev1">&gt; Creating constant valued scalar variables is obviously possible with
+</em><br />
+<em class="quotelev1">&gt; SetEnv, but is there an accepted way to do anything beyond this?
+</em><br />
+<em class="quotelev1">&gt; I have two questions about this:
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; I  Lets say, for example, that I wanted to create a command that keeps
+</em><br />
+<em class="quotelev1">&gt; track of the location of every window on the screen and restores them to
+</em><br />
+<em class="quotelev1">&gt; that condition if I press that command again, while ignoring windows
+</em><br />
+<em class="quotelev1">&gt; that are new or closed.  Is this possible in fvwm?
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; These are the big problems I can't solve:
+</em><br />
+<em class="quotelev1">&gt; 1)  I can't find a non-scalar assignment mechanism.
+</em><br />
+<br />Fvwm does not support array variables directly.  However, you can
+<br />
+put the array index in the variable name.  For example:
+<br />
+<br />&nbsp;&nbsp;setenv xpos_$[w.id] $[w.x]
+<br />
+&nbsp;&nbsp;setenv ypos_$[w.id] $[w.y]
+<br />
+<br />(replace $[w.id] with $w for older fvwm versions).  If you have
+<br />
+the window selected, you can access the stored property like this
+<br />
+by using the functions below:
+<br />
+<br />&nbsp;&nbsp;array_get xpos $[w.id]
+<br />
+&nbsp;&nbsp;array_get ypos $[w.id]
+<br />
+&nbsp;&nbsp;# return values are now stored in xpos_val and ypos_val
+<br />
+<br />With the functions array_init, array_append and array_delete you
+<br />
+can even manage indexed arrays.  E.g.:
+<br />
+<br />&nbsp;&nbsp;# create new array
+<br />
+&nbsp;&nbsp;array_init foo
+<br />
+&nbsp;&nbsp;# append a couple of entries
+<br />
+&nbsp;&nbsp;array_append foo entry1
+<br />
+&nbsp;&nbsp;array_append foo entry2
+<br />
+&nbsp;&nbsp;array_append foo entry3
+<br />
+&nbsp;&nbsp;# print some entries
+<br />
+&nbsp;&nbsp;array_get foo 1
+<br />
+&nbsp;&nbsp;echo $[foo_0] $[foo_val]
+<br />
+&nbsp;&nbsp;# delete entry2
+<br />
+&nbsp;&nbsp;array_delete foo 1
+<br />
+&nbsp;&nbsp;# clean out whole array
+<br />
+&nbsp;&nbsp;array_init foo
+<br />
+<br />Looping over all aray indices can be done with a shell script via
+<br />
+piperead.
+<br />
+<br />------------------------- snip -------------------------------------
+<br />
+#
+<br />
+# Fvwm based array implementation
+<br />
+#
+<br />
+<br /><br /># Warning: These function can *not* handle quoting characters or
+<br />
+# shell meta characters in variable names or contents.
+<br />
+<br /># $0 = array name
+<br />
+# $1 = array index
+<br />
+# result is stored in $0_val
+<br />
+AddToFunc array_get
+<br />
++ i piperead 'echo setenv \\&quot;$0_val\\&quot; \\&quot;\\$\[$0_$1\]\\&quot;'
+<br />
+<br /># $0 = array name
+<br />
+AddToFunc array_init
+<br />
++ I setenv &quot;$0_num&quot; 0
+<br />
+<br /># $0 = array name
+<br />
+# $1 = data to store
+<br />
+AddToFunc array_append
+<br />
++ i piperead 'echo setenv \\&quot;$0_&quot;\\$\[$0_num\]&quot;\\&quot;  \\&quot;\\$1\\&quot;'
+<br />
++ i piperead 'echo setenv \\&quot;$0_num\\&quot; \$\[$0_num + 1\]'
+<br />
+<br /># $0 = array name
+<br />
+# $1 = array index to delete
+<br />
+# Note: If the array is already empty, this function may corrupt
+<br />
+# the array.  The last entry in the array is moved to the vacant
+<br />
+# slot.
+<br />
+AddToFunc array_delete
+<br />
++ i piperead 'echo setenv \\&quot;$0_num\\&quot; \$\[$0_num - 1\]'
+<br />
++ i piperead 'echo setenv \\&quot;$0_$1\\&quot; \\&quot;\\$\[$0_\${$0_num}\]\\&quot;'
+<br />
+--------------------------------------------------------------------
+<br />
+<br />Ciao
+<br />
+<br />Dominik ^_^  ^_^
+<br />
+<br />&nbsp;--
+<br />
+Dominik Vogt, dominik.vogt_at_gmx.de
+<br />
+Reply-To: dominik.vogt_at_gmx.de
+<br />
+<br /><br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<div>
+<ul>
+<li>application/pgp-signature attachment: <a href="att-12612/01-part">stored</a></li>
+</ul>
+<!-- attachment="01-part" -->
+</div>
+<span id="received"><dfn>Received on</dfn> Tue Jun 29 2004 - 06:47:16 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start12612">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="12613.html" title="Next message in the list">Alexander V. Butenko: "FVWM: IndexedWindowName option trouble"</a></li>
+<li><dfn>Previous message</dfn>: <a href="12611.html" title="Previous message in the list">Tavis Ormandy: "Re: FVWM: Variable assignment and use"</a></li>
+<li><dfn>In reply to</dfn>: <a href="12610.html" title="Message to which this message replies">Rusty Phillips: "FVWM: Variable assignment and use"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="12616.html" title="Next message in this discussion thread">Rusty Phillips: "Re: FVWM: Variable assignment and use"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="12616.html" title="Message sent in reply to this message">Rusty Phillips: "Re: FVWM: Variable assignment and use"</a></li>
+<li><dfn>Reply</dfn>: <a href="12619.html" title="Message sent in reply to this message">Mikhael Goikhman: "Re: FVWM: Variable assignment and use"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg12612" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg12612" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg12612" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg12612" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:56 BST
+</em></small></p>
+</body>
+</html>

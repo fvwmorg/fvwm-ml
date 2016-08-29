@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Menus - missing separator from Neil Bird on 1999-05-20 (fvwm-users)</title>
+<meta name="Author" content="Neil Bird (neil.bird_at_rrds.co.uk)" />
+<meta name="Subject" content="FVWM: Menus - missing separator" />
+<meta name="Date" content="1999-05-20" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Menus - missing separator</h1>
+<!-- received="Thu May 20 03:17:08 1999" -->
+<!-- isoreceived="19990520021708" -->
+<!-- sent="Thu, 20 May 1999 09:19:02 +0100" -->
+<!-- isosent="19990520081902" -->
+<!-- name="Neil Bird" -->
+<!-- email="neil.bird_at_rrds.co.uk" -->
+<!-- subject="FVWM: Menus - missing separator" -->
+<!-- id="3743C576.71E10945_at_rrds.co.uk" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start24212" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="24213.html" accesskey="d" title="Philippe BOURDEU d&#0039;AGUERRE: &quot;FVWM: A smart console with fvwm ?&quot;">Next message</a> ]
+[ <a href="24211.html" title="Dominic Mitchell: &quot;FVWM: Configuration sample site&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="24214.html" accesskey="t" title="Dominik Vogt: &quot;Re: FVWM: Menus - missing separator&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg24212" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg24212" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg24212" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg24212" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Neil Bird &lt;<a href="mailto:neil.bird_at_rrds.co.uk?Subject=Re%3A%20FVWM%3A%20Menus%20-%20missing%20separator">neil.bird_at_rrds.co.uk</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 20 May 1999 09:19:02 +0100</span><br />
+</address>
+<br />
+&nbsp;&nbsp;fvwm2.2/sparc/solaris2.5.1: if I create a menu 'by hand' (fvwm2rc):
+<br />
+<br />AddTomenu uaa2src____ &quot;uaa2-src ...&quot; Title
+<br />
++ &quot;localhost&quot;  exec xterm -T uaa2-src -n uaa2src -e rlogin -l uaa2src
+<br />
+localhost
+<br />
++ &quot;&quot;           Nop
+<br />
++ &quot;wsc097&quot;     exec xterm -n uaa2src -e rlogin -l uaa2src wsc097
+<br />
++ &quot;wsc098&quot;     exec xterm -n uaa2src -e rlogin -l uaa2src wsc098
+<br />
++ &quot;wsc099&quot;     exec xterm -n uaa2src -e rlogin -l uaa2src wsc099
+<br />
+<br />&nbsp;... etc. for lots of machines ... I get a separator for the &quot;&quot; Nop bit.
+<br />
+Fine. However, I have several accounts now that I need to bring up xterms
+<br />
+for in the same way, and it's an arse maintaining several lists of valid
+<br />
+machines. So, I did this in my fvwm2rc (XTerm iss a small wrpper for xterm
+<br />
+- ignore):
+<br />
+<br />Function NewPeep  uaa2src
+<br />
+Function NewPeep  twkadm
+<br />
+Function NewPeep  hjmoore
+<br />
+<br /><br />AddToFunc NewPeep  \
+<br />
+&nbsp;&nbsp;&nbsp;&quot;I&quot; AddToMenu Peeps &quot;$0&quot; Popup $0____ Item 80 -100-4p
+<br />
++  &quot;I&quot; DestroyMenu $0____
+<br />
++  &quot;I&quot; AddTomenu $0____ &quot;localhost&quot;  \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exec XTerm -r `uname -n` $0 &quot;$0 login `uname -n`&quot; &quot;$0&quot;
+<br />
++  &quot;I&quot; AddTomenu $0____ &quot;&quot;           \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nop
+<br />
++  &quot;I&quot; AddTomenu $0____ &quot;wsc097&quot;     \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exec XTerm -r wsc097 $0 &quot;$0 login wsc097&quot; &quot;$0&quot;
+<br />
++  &quot;I&quot; AddTomenu $0____ &quot;wsc098&quot;     \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exec XTerm -r wsc098 $0 &quot;$0 login wsc098&quot; &quot;$0&quot;
+<br />
+<br /><br />&nbsp;&nbsp;.. etc. (I've split the lines to fit them into the e-mail).
+<br />
+<br />&nbsp;&nbsp;This does work, but I don't get any separator! Now, I *can* make the &quot;&quot;
+<br />
+into &quot;-&quot;, and the entry duly appears, but of course then I just see '-' as
+<br />
+its label!
+<br />
+<br />&nbsp;&nbsp;Why does the 'AddTomenu blah &quot;&quot; Nop' not work in this instance?
+<br />
+<br /><pre>
+-- 
+========================- <a href="http://www.rrds.co.uk/">http://www.rrds.co.uk/</a> -======================
+ Neil Bird                   |   This is who we are     The time is near
+                             |        There are 226 days remaining
+ mailto:neil.bird_at_rrds.co.uk |                           [ T-19 days! ]
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu May 20 1999 - 03:17:08 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start24212">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="24213.html" title="Next message in the list">Philippe BOURDEU d&#0039;AGUERRE: "FVWM: A smart console with fvwm ?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="24211.html" title="Previous message in the list">Dominic Mitchell: "FVWM: Configuration sample site"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="24214.html" title="Next message in this discussion thread">Dominik Vogt: "Re: FVWM: Menus - missing separator"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="24214.html" title="Message sent in reply to this message">Dominik Vogt: "Re: FVWM: Menus - missing separator"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="24215.html" title="Message sent in reply to this message">Neil Bird: "Re: FVWM: Menus - missing separator"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg24212" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg24212" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg24212" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg24212" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:02 BST
+</em></small></p>
+</body>
+</html>

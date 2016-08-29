@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Compiling under Linux from Greg Krasnow on 1996-01-31 (fvwm-users)</title>
+<meta name="Author" content="Greg Krasnow (greg_at_coredump.extern.ucsd.edu)" />
+<meta name="Subject" content="FVWM: Compiling under Linux" />
+<meta name="Date" content="1996-01-31" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Compiling under Linux</h1>
+<!-- received="Wed Jan 31 15:20:45 1996" -->
+<!-- isoreceived="19960131152045" -->
+<!-- sent="Wed, 31 Jan 1996 13:19:22 -0800 (PST)" -->
+<!-- isosent="19960131211922" -->
+<!-- name="Greg Krasnow" -->
+<!-- email="greg_at_coredump.extern.ucsd.edu" -->
+<!-- subject="FVWM: Compiling under Linux" -->
+<!-- id="Pine.LNX.3.91.960131131657.11088A-100000_at_coredump.extern.ucsd.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start15347" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="15348.html" accesskey="d" title="Paul D. Smith: &quot;Re: FVWM: Undefined: XLoadQueryFont on SGI Irix 4.0.5&quot;">Next message</a> ]
+[ <a href="15346.html" title="Robert Tarrall: &quot;Re: FVWM: Undefined: XLoadQueryFont on SGI Irix 4.0.5&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15347" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15347" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15347" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15347" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Greg Krasnow &lt;<a href="mailto:greg_at_coredump.extern.ucsd.edu?Subject=Re%3A%20FVWM%3A%20Compiling%20under%20Linux">greg_at_coredump.extern.ucsd.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 31 Jan 1996 13:19:22 -0800 (PST)</span><br />
+</address>
+<br />
+Ok.. here is  a patch to makefile.h which will correct the problem when
+<br />
+compiling fvwm2 under Linux.
+<br />
+<br />I will put the patch onto a ftp site since this seems to be requested often.
+<br />
+<br />--- makefile.h	Wed Oct 18 12:10:19 1995
+<br />
++++ makefile.h.lnx	Sun Jan 28 10:58:14 1996
+<br />
+_at_&#64; -65,7 +65,7 &#64;&#64;
+<br />
+&nbsp;#ifdef i386SVR4Architecture
+<br />
+&nbsp;LOCAL_LIBRARIES = XPM_LIBRARIES $(ADD_LIB) $(XLIB) -lnsl -lsocket -L$(FVWM_SRCDIR)/libs -l$(LIB)
+<br />
+&nbsp;#else
+<br />
+-LOCAL_LIBRARIES = XPM_LIBRARIES $(ADD_LIB) $(XLIB) $(FVWM_SRCDIR)/libs/lib$(LIB).a
+<br />
++LOCAL_LIBRARIES = XPM_LIBRARIES $(FVWM_SRCDIR)/libs/lib$(LIB).a $(ADD_LIB) $(XLIB) 
+<br />
+&nbsp;#endif /* i386SVR4Architecture */
+<br />
+&nbsp;#endif /* HPArchitecture */
+<br />
+&nbsp;#endif /* AlphaArchitecture */
+<br />
+<br />Gregory Krasnow			A university is what a college becomes when	
+<br />
+gkrasnow_at_ucsd.edu		the faculty loses interest in students.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-- John Ciardi
+<br />
+<br /><pre>
+--
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Jan 31 1996 - 15:20:45 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start15347">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="15348.html" title="Next message in the list">Paul D. Smith: "Re: FVWM: Undefined: XLoadQueryFont on SGI Irix 4.0.5"</a></li>
+<li><dfn>Previous message</dfn>: <a href="15346.html" title="Previous message in the list">Robert Tarrall: "Re: FVWM: Undefined: XLoadQueryFont on SGI Irix 4.0.5"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15347" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15347" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15347" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15347" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

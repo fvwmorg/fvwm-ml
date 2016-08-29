@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Some questions about 2.0.41 from H}vard Fosseng on 1996-04-06 (fvwm-users)</title>
+<meta name="Author" content="H}vard Fosseng (havard.fosseng_at_usit.uio.no)" />
+<meta name="Subject" content="FVWM: Some questions about 2.0.41" />
+<meta name="Date" content="1996-04-06" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Some questions about 2.0.41</h1>
+<!-- received="Fri Apr  5 17:07:21 1996" -->
+<!-- isoreceived="19960405160721" -->
+<!-- sent="Sat, 6 Apr 1996 01:09:56 +0200" -->
+<!-- isosent="19960405230956" -->
+<!-- name="H}vard Fosseng" -->
+<!-- email="havard.fosseng_at_usit.uio.no" -->
+<!-- subject="FVWM: Some questions about 2.0.41" -->
+<!-- id="199604052309.BAA01052_at_agnar.uio.no" -->
+<!-- charset="iso-8859-1" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start16084" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="16085.html" accesskey="d" title="Berni Elbourn: &quot;(no subject)&quot;">Next message</a> ]
+[ <a href="16083.html" title="David Barth: &quot;Re: FVWM: fvwm version 2.x install errors&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16084" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16084" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16084" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16084" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: H}vard Fosseng &lt;<a href="mailto:havard.fosseng_at_usit.uio.no?Subject=Re%3A%20FVWM%3A%20Some%20questions%20about%202.0.41">havard.fosseng_at_usit.uio.no</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sat, 6 Apr 1996 01:09:56 +0200</span><br />
+</address>
+<br />
+Having recently converted from 1.24r and gotten things to work nearly
+<br />
+the way I want them, I have some questions:
+<br />
+<br />1. How does the execution of the lines of an AddToFunc depend on the
+<br />
+&nbsp;&nbsp;&nbsp;success/failure of the preceding lines? The function below seems to
+<br />
+&nbsp;&nbsp;&nbsp;do what I want, i. e.:
+<br />
+<br />&nbsp;&nbsp;&nbsp;-- If a window by that name exists, make sure it's not iconified
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and give it focus.
+<br />
+<br />&nbsp;&nbsp;&nbsp;-- If no such window exists, create one ($1 since the command to
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;create a window may differ from its name once created), wait for
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it to appear and then give it the focus.
+<br />
+<br />&nbsp;&nbsp;&nbsp;AddToFunc Warp	I Next [$0] Iconify -1
+<br />
+&nbsp;&nbsp;&nbsp;+			I Next [$0] Focus
+<br />
+&nbsp;&nbsp;&nbsp;+			I None [$0] Exec detach $1
+<br />
+&nbsp;&nbsp;&nbsp;+			I Wait $0
+<br />
+&nbsp;&nbsp;&nbsp;+			I Next [$0] Focus
+<br />
+<br />&nbsp;&nbsp;&nbsp;No window gets created if one already exists, which is what I want,
+<br />
+&nbsp;&nbsp;&nbsp;but I would like to know how this comes about. The man page doesn't
+<br />
+&nbsp;&nbsp;&nbsp;seem to say anything about this.
+<br />
+<br />2. The man page states that you can use $0-9. Is there any parallel
+<br />
+&nbsp;&nbsp;&nbsp;to shell $* or $_at_, i. e. *all* the positional parameters?
+<br />
+<br />3. When I invoke WindowList from the keyboard, as in
+<br />
+<br />&nbsp;&nbsp;&nbsp;Key o  A  3  WindowList 0 0
+<br />
+<br />&nbsp;&nbsp;&nbsp;it takes *two* keystrokes to jump to some window. It doesn't seem
+<br />
+&nbsp;&nbsp;&nbsp;to matter whether the window's number is the first, last or both of
+<br />
+&nbsp;&nbsp;&nbsp;these. If I key in two different numbers, the last one takes
+<br />
+&nbsp;&nbsp;&nbsp;precedence.
+<br />
+<br />&nbsp;&nbsp;&nbsp;When I invoke WindowList with the mouse, one keystroke is enough.
+<br />
+<br />&nbsp;&nbsp;&nbsp;If this isn't the way things are supposed to work, tell me and I'll
+<br />
+&nbsp;&nbsp;&nbsp;send a proper bug report. If it is, please tell me some way to work
+<br />
+&nbsp;&nbsp;&nbsp;around it; it's annoying!
+<br />
+<br />Last, but definitely not least, thank you to those who've made Fvwm available!
+<br />
+<br /><br />-- Håvard Fosseng
+<br />
+<br />Håvard Fosseng       S'il fallait tolérer aux autres tout ce qu'on se permet á
+<br />
+Informatics          soi-même, la vie ne serait plus tenable.
+<br />
+University of Oslo                      -- Georges Courteline
+<br />
+haavardf_at_ifi.uio.no
+<br />
+<br /><br /><br /><br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Apr 05 1996 - 17:07:21 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start16084">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="16085.html" title="Next message in the list">Berni Elbourn: "(no subject)"</a></li>
+<li><dfn>Previous message</dfn>: <a href="16083.html" title="Previous message in the list">David Barth: "Re: FVWM: fvwm version 2.x install errors"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16084" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16084" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16084" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16084" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

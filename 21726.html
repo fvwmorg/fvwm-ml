@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>RE: FVWM: help swallowing prg in buttonbar... from Bob Woodside on 1998-02-03 (fvwm-users)</title>
+<meta name="Author" content="Bob Woodside (proteus_at_pcnet.com)" />
+<meta name="Subject" content="RE: FVWM: help swallowing prg in buttonbar..." />
+<meta name="Date" content="1998-02-03" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>RE: FVWM: help swallowing prg in buttonbar...</h1>
+<!-- received="Mon Feb  2 23:36:48 1998" -->
+<!-- isoreceived="19980202233648" -->
+<!-- sent="Tue, 03 Feb 1998 00:29:33 -0500 (EST)" -->
+<!-- isosent="19980203052933" -->
+<!-- name="Bob Woodside" -->
+<!-- email="proteus_at_pcnet.com" -->
+<!-- subject="RE: FVWM: help swallowing prg in buttonbar..." -->
+<!-- id="XFMail.980203002933.proteus_at_pcnet.com" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="19980203013046.29032.qmail_at_hotmail.com" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start21726" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="21727.html" accesskey="d" title="Patrick K.: &quot;Re: FVWM: fvwm-2.0.46 bug&quot;">Next message</a> ]
+[ <a href="21725.html" title="Ben Jackson: &quot;FVWM: BorderStyle solid colors&quot;">Previous message</a> ]
+[ <a href="21723.html" title="James Miller: &quot;FVWM: help swallowing prg in buttonbar...&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21726" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21726" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21726" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21726" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Bob Woodside &lt;<a href="mailto:proteus_at_pcnet.com?Subject=RE%3A%20FVWM%3A%20help%20swallowing%20prg%20in%20buttonbar...">proteus_at_pcnet.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 03 Feb 1998 00:29:33 -0500 (EST)</span><br />
+</address>
+<br />
+On 03-Feb-98 James Miller wrote:
+<br />
+<em class="quotelev1">&gt; My second problem involves the number of desks I have.  I want to have 
+</em><br />
+<em class="quotelev1">&gt; only one Desk and then DeskTopSize 3 3 or something else reasonable.  I 
+</em><br />
+<em class="quotelev1">&gt; don't like not being able to drag windows around.  I can't find where 
+</em><br />
+<em class="quotelev1">&gt; the desks are getting made to 4 in the .fvwm2rc.
+</em><br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Quick Answer:  Look for lines in menu definitions that look 
+<br />
+something like
+<br />
+<br />+          &quot;Pager (2 desks)&quot; Module  FvwmPager 0 1
+<br />
+<br />and change them all to specify &quot;FvwmPager 0 0&quot;, so the pager only shows
+<br />
+1 desktop. Then find all the &quot;*FvwmPagerblahblahblah&quot; statements. You should
+<br />
+see &quot;*FvwmPagerLabel 0 Some Title&quot;, &quot;*FvwmPagerLabel 1 Another Title&quot;, etc.
+<br />
+Lose all but the first one (this step isn't really necessary, but it'll look
+<br />
+cleaner). Lastly, excise any functions that invoke a desktop switch, and any
+<br />
+StartsOnDesk Style definitions.
+<br />
+<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The Truth:  What I said above is really a lie. There is no
+<br />
+such thing as a fixed number of desktops - the desk is an arbitrary X
+<br />
+property that can be assigned to a window, and a window manager may be
+<br />
+gracious enough to do something useful with it. What we're doing above is
+<br />
+creating the appearance of having only one desktop, by removing any 
+<br />
+references to multiple desktops from your .fvwm2rc.
+<br />
+<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Bob
+<br />
+<br />&nbsp;
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon Feb 02 1998 - 23:36:48 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start21726">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="21727.html" title="Next message in the list">Patrick K.: "Re: FVWM: fvwm-2.0.46 bug"</a></li>
+<li><dfn>Previous message</dfn>: <a href="21725.html" title="Previous message in the list">Ben Jackson: "FVWM: BorderStyle solid colors"</a></li>
+<li><dfn>In reply to</dfn>: <a href="21723.html" title="Message to which this message replies">James Miller: "FVWM: help swallowing prg in buttonbar..."</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21726" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21726" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21726" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21726" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

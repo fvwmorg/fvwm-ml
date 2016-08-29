@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: TaskBar swallowing or ... from Dominik Vogt on 2001-09-09 (fvwm-users)</title>
+<meta name="Author" content="Dominik Vogt (dominik.vogt_at_gmx.de)" />
+<meta name="Subject" content="Re: FVWM: TaskBar swallowing or ..." />
+<meta name="Date" content="2001-09-09" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: TaskBar swallowing or ...</h1>
+<!-- received="Sat Sep  8 20:39:56 2001" -->
+<!-- isoreceived="20010908193956" -->
+<!-- sent="Sun, 9 Sep 2001 03:36:17 +0200" -->
+<!-- isosent="20010909013617" -->
+<!-- name="Dominik Vogt" -->
+<!-- email="dominik.vogt_at_gmx.de" -->
+<!-- subject="Re: FVWM: TaskBar swallowing or ..." -->
+<!-- id="20010909033617.E672_at_gmx.de" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="87elpjgg81.fsf_at_nwalsh.com" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start3129" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="3130.html" accesskey="d" title="Dominik Vogt: &quot;Re: FVWM: How do I Move a specific FvwmButtonBar using a keystroke&quot;">Next message</a> ]
+[ <a href="3128.html" title="Thomas Adam: &quot;FVWM: Fvwm (2.4.0): FvwmButtons, FvwmPager and &#0034;Desker&#0034;&quot;">Previous message</a> ]
+[ <a href="3124.html" title="Norman Walsh: &quot;FVWM: TaskBar swallowing or ...&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg3129" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg3129" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg3129" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg3129" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Dominik Vogt &lt;<a href="mailto:dominik.vogt_at_gmx.de?Subject=Re%3A%20FVWM%3A%20TaskBar%20swallowing%20or%20...">dominik.vogt_at_gmx.de</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sun, 9 Sep 2001 03:36:17 +0200</span><br />
+</address>
+<br />
+On Fri, Sep 07, 2001 at 03:26:19PM -0400, Norman Walsh wrote:
+<br />
+<em class="quotelev1">&gt; Is it possible to emulate the following Gnome control panel (I think
+</em><br />
+<em class="quotelev1">&gt; that's what they call it) functionality in fvwm:
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; I'd like to have an autohidden task bar that has swallowed the pager
+</em><br />
+<em class="quotelev1">&gt; and possibly a few buttons.
+</em><br />
+<br />Yes, but you probably won't like the auto hiding part.
+<br />
+<br />What you want is a combination of FvwmButtons, FvwmPager and
+<br />
+FvwmIconMan.  First, create an FvwmButtons bar that is located at
+<br />
+the bottom of the screen (or wherever else you want it) and size
+<br />
+it appropriately, then swallow both, the pager and the icon
+<br />
+manager:
+<br />
+<br />&nbsp;&nbsp;Style TBButtons MouseFocus, Sticky, WindowListSkip, CirculateSkip
+<br />
+&nbsp;&nbsp;Style TBButtons HandleWidth 1, TitleAtBottom, NoTitle
+<br />
+&nbsp;&nbsp;*TBButtonsGeometry 1024x24+0-0
+<br />
+&nbsp;&nbsp;*TBButtonsRows     1
+<br />
+&nbsp;&nbsp;*TBButtonsColumns  128
+<br />
+&nbsp;&nbsp;*TBButtonsBoxSize  fixed
+<br />
+&nbsp;&nbsp;*TBButtons(10x1+0+0, Swallow FvwmPager 'FvwmPager TBPager * * -geometry -2000-2000')
+<br />
+&nbsp;&nbsp;*TBButtons(118x1, Swallow FvwmIconMan 'FvwmIconMan TBIconMan')
+<br />
+<br />&nbsp;&nbsp;# FvwmPager settings for 'taskbar' emulation
+<br />
+&nbsp;&nbsp;*TBPagerFont         none
+<br />
+<br />&nbsp;&nbsp;# FvwmIconMan settings for 'taskbar' emulation
+<br />
+&nbsp;&nbsp;Style FvwmIconMan WindowListSkip, CirculateSkip
+<br />
+&nbsp;&nbsp;*TBIconMan*FollowFocus true
+<br />
+&nbsp;&nbsp;*TBIconMan*Format &quot;%t&quot;
+<br />
+&nbsp;&nbsp;*TBIconMan*ManagerGeometry 5x1
+<br />
+&nbsp;&nbsp;*TBIconMan*Resolution page
+<br />
+&nbsp;&nbsp;*TBIconMan*UseWinList true
+<br />
+<br />Then start it with
+<br />
+<br />&nbsp;&nbsp;FvwmButtons TBButtons
+<br />
+<br />(put that in your StartFunction).
+<br />
+You may have to fine tune the geometries, though.  The only funny
+<br />
+thing is that the buttons in the icon manager happily fill the
+<br />
+whole 'task bar', even if there is only one window.
+<br />
+<br />Now for the autohiding part.  You need to use FvwmAuto:
+<br />
+<br />&nbsp;&nbsp;AddToFunc TBEnter
+<br />
+&nbsp;&nbsp;+ I Current (TBButtons) All (TBButtons) WindowShade off
+<br />
+&nbsp;&nbsp;+ I Current (!TBButtons) All (TBButtons) WindowShade on
+<br />
+&nbsp;&nbsp;AddToFunc TBLeave
+<br />
+&nbsp;&nbsp;+ I All (TBButtons) WindowShade on
+<br />
+&nbsp;&nbsp;Module FvwmAuto 50 TBEnter TBLeave
+<br />
+<br />Note that this only works properly if the button bar uses
+<br />
+MouseFocus or SloppyFocus. You may want
+<br />
+<br />&nbsp;&nbsp;Style TBButtons StaysOnTop
+<br />
+<br />also.
+<br />
+<br />Personally, I don't like this kind of auto hiding at all.  I find
+<br />
+it much more convenient to bind a double click on the decoration
+<br />
+hide/show the module:
+<br />
+<br />&nbsp;&nbsp;Mouse 1 FS    N   Function ResizeOrRaise
+<br />
+&nbsp;&nbsp;AddToFunc ResizeOrRaise
+<br />
+&nbsp;&nbsp;+ C Raise
+<br />
+&nbsp;&nbsp;+ M Raise
+<br />
+&nbsp;&nbsp;+ M Resize
+<br />
+&nbsp;&nbsp;+ D Current (Shaded) Raise
+<br />
+&nbsp;&nbsp;+ D WindowShade toggle
+<br />
+<br />Bye
+<br />
+<br />Dominik ^_^  ^_^
+<br />
+<br />&nbsp;--
+<br />
+Dominik Vogt, dominik.vogt_at_gmx.de
+<br />
+Reply-To: dominik.vogt_at_gmx.de
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sat Sep 08 2001 - 20:39:56 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start3129">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="3130.html" title="Next message in the list">Dominik Vogt: "Re: FVWM: How do I Move a specific FvwmButtonBar using a keystroke"</a></li>
+<li><dfn>Previous message</dfn>: <a href="3128.html" title="Previous message in the list">Thomas Adam: "FVWM: Fvwm (2.4.0): FvwmButtons, FvwmPager and &#0034;Desker&#0034;"</a></li>
+<li><dfn>In reply to</dfn>: <a href="3124.html" title="Message to which this message replies">Norman Walsh: "FVWM: TaskBar swallowing or ..."</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg3129" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg3129" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg3129" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg3129" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:52 BST
+</em></small></p>
+</body>
+</html>

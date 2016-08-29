@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: ClickToFocus oddity from Michael Tiefenback on 1996-10-25 (fvwm-users)</title>
+<meta name="Author" content="Michael Tiefenback (tiefen_at_mgt.cebaf.gov)" />
+<meta name="Subject" content="FVWM: ClickToFocus oddity" />
+<meta name="Date" content="1996-10-25" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: ClickToFocus oddity</h1>
+<!-- received="Fri Oct 25 11:27:28 1996" -->
+<!-- isoreceived="19961025102728" -->
+<!-- sent="Fri, 25 Oct 1996 12:32:01 -0400 (EDT)" -->
+<!-- isosent="19961025163201" -->
+<!-- name="Michael Tiefenback" -->
+<!-- email="tiefen_at_mgt.cebaf.gov" -->
+<!-- subject="FVWM: ClickToFocus oddity" -->
+<!-- id="Pine.LNX.3.91.961025120138.8201B-100000_at_mgt.cebaf.gov" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start18244" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="18245.html" accesskey="d" title="Eli Burke: &quot;FVWM: enough clicktofocus; how about an edgescroll buglet&quot;">Next message</a> ]
+[ <a href="18243.html" title="Charles Hines: &quot;Re: FVWM: ANNOUNCE: CleverPlacement&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18244" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18244" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18244" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18244" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Michael Tiefenback &lt;<a href="mailto:tiefen_at_mgt.cebaf.gov?Subject=Re%3A%20FVWM%3A%20ClickToFocus%20oddity">tiefen_at_mgt.cebaf.gov</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 25 Oct 1996 12:32:01 -0400 (EDT)</span><br />
+</address>
+<br />
+I have the mouse binding
+<br />
+<br />Mouse 3 TSIF    A       RaiseLower
+<br />
+<br />in my .fvwm2rc file (2.0.43 in use).  This toggles well for windows in 
+<br />
+MouseFocus, but when I have ClickToFocus set for a window, I get the 
+<br />
+following behavior
+<br />
+<br />Window has focus	click 3 in Title	RaiseLower toggle
+<br />
+<br />Window has no focus	click 3 in Title	Window Raises briefly
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;above any windows it
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;had been below, then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;drops to bottom.
+<br />
+<br />This seems not to be consistent behavior.  This is my only non-root mouse
+<br />
+3 binding.  This seems to be due to the ClickToFocus generating a Raise
+<br />
+event before evoking the RaiseLower which then drops the window to the
+<br />
+bottom.  I *really* like fvwm, and I don't consider this a real problem,
+<br />
+but neither do I consider it to be proper behavior, as the Raise is not
+<br />
+called out in the manpage as a result of a window-click, at least as far
+<br />
+as I have found.  Is this related to the relatively nasty behavior I see
+<br />
+with some Motif processes (getting a Raise command [dutifully executed]
+<br />
+resulting from a button-click which was issued to call forth a menu in the
+<br />
+window _body_ [note: menus from menubar work properly], thus covering up
+<br />
+the newly created menu)?  And maybe with some configureNotify observations
+<br />
+recently raised along with accompanying clouds of smoke and dust
+<br />
+concerning active focus apps?  Or maybe I didn't RTFM? 
+<br />
+<br />Michael Tiefenback
+<br />
+<br /><br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Oct 25 1996 - 11:27:28 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start18244">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="18245.html" title="Next message in the list">Eli Burke: "FVWM: enough clicktofocus; how about an edgescroll buglet"</a></li>
+<li><dfn>Previous message</dfn>: <a href="18243.html" title="Previous message in the list">Charles Hines: "Re: FVWM: ANNOUNCE: CleverPlacement"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18244" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18244" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18244" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18244" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

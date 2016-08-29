@@ -1,0 +1,63 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+
+Quoth Jan Vicherek:
+>    Is there a way to dynamicaly (w/out reloading the config file) assign a
+> key shortcut to a window ? (e.g. upon pressing a the shortcut, fvwm jumps
+> to the section of vitual desktop where the window is)
+
+Not sure quite how you want it to work, but here's one approach...
+
+This will set things up so that clicking on the third button on the left
+in the titlebar of a window will make <Alt><Shift>F1 a shortcut for that
+window; generalizing it is left as an exercise :-)
+
+1) Put the following perl script into your ModulePath under the name
+FvwmWarpTo:
+
+    #!/usr/bin/perl
+    open(WINID,"/tmp/shortcut");
+    $winid = hex(<WINID>);
+    close(WINID);
+    $fd = $ARGV[0];
+    close(STDOUT);
+    open(STDOUT, ">&$fd");
+    print STDOUT pack("lla6l", $winid, 6, "Focus", 0);
+
+2) Add the following lines to your .fvwm2rc file:
+    Mouse	0	5	N	Exec	echo $w > /tmp/shortcut
+    Key		F1	A	SM	Module	FvwmWarpTo
+
+The way it works is:
+    - the titlebar button is bound to the action of writing the window
+	id ($w) to a temporary file;
+    - the shortcut key calls the perl script, which reads the window ID
+	from the temporary file and spits a Focus command for the window
+	back to fvwm2.
+
+Note: this is only intended as a rough example.  With a little work,
+this could probably be turned into a much smoother mechanism; if anyone
+thinks it would be a worthwhile addition to the distribution, say so and
+I'll whip it into shape....
+
+HTH,
+
+- --                          People shouldn't think that it's better to have
+Dan Astoorian               loved and lost than never loved at all.  It's
+http://www.utopia.csas.com  not, it's better to have loved and won.  All
+djast@utopia.csas.com       the other options really suck.    --Dan Redican
+
+-----BEGIN PGP SIGNATURE-----
+Version: 2.6.i
+
+iQCVAgUBMdneaZztKqi7J1ZpAQGUHAP7BaOtCSQWT7GaXVHDtLMfUf8C3vtUrFJ3
+GrlMYZ8DGk+fpYnx4D0QaH1YOA0d4eU161IK/3sY9XO6jhsHb82w/CbUbXhjntZr
+qUXi632k2dUZnacs7ukTdcpwLYN9DvcP5UDxs3QFIDy2FsMZkX2F+SD8+KhCKj0T
+T5HyrwnCPT0=
+=wVDf
+-----END PGP SIGNATURE-----
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-owner@hpc.uh.edu.
+

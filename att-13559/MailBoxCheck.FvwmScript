@@ -1,0 +1,114 @@
+#-*-shell-script-*-
+#---------------------------------------------------------------------
+#-  File          : MailBoxCheck.FvwmScript                           
+#-  Author        : Uwe Pross                                         
+#---------------------------------------------------------------------
+WindowTitle {MailBoxCheck}
+WindowSize 60 42
+WindowPosition -2000 -2000
+# ForeColor {color}
+# BackColor {color}
+# HilightColor {color}
+# ShadowColor {color}
+Colorset 10
+Font -*-fixed-medium-*-*-*-10-*-*-*-*-*-*-*
+
+Init
+  Begin
+    Set $fvwm_mail=0
+    Set $spam_mail=0
+    Set $inbox_mail=0
+    Set $mail_num=0
+    Set  $inbox_mail={ MBox: } (GetOutput {lsmbox -t -o -n /var/spool/mail/uwp | grep Summary} 1 2)
+    ChangeTitle 1 $inbox_mail
+    Set $fvwm_mail={ Fvwm: } (GetOutput {lsmbox -t -o -n /home/uwp/Mail/Received/Fvwm | grep Summary} 1 2)
+    ChangeTitle 2 $fvwm_mail
+    Set $fvwm_workers_mail={ F-Wo: } (GetOutput {lsmbox -t -o -n /home/uwp/Mail/Received/FvwmWorkers | grep Summary} 1 2)
+    ChangeTitle 3 $fvwm_workers_mail
+  End
+
+PeriodicTasks
+ Begin
+  If (RemainderOfDiv (GetTime) 10)==0 Then
+   Begin
+    Set $inbox_mail=(GetOutput {lsmbox -t -o -n /var/spool/mail/uwp | grep Summary} 1 2)
+    Set $inbox_title={ MBox: } $inbox_mail
+    ChangeTitle 1 $inbox_title
+    If $inbox_mail>0 Then
+      ChangeForeColor 1 {red}
+    Else
+      ChangeForeColor 1 {black}
+    
+    Set $fvwm_mail=(GetOutput {lsmbox -t -o -n /home/uwp/Mail/Received/Fvwm | grep Summary} 1 2)
+    Set $fvwm_title={ Fvwm: } $fvwm_mail
+    ChangeTitle 2 $fvwm_title
+    If $fvwm_mail>0 Then
+      ChangeForeColor 2 {blue}
+    Else
+      ChangeForeColor 2 {black}
+
+    Set $fvwm_workers_mail=(GetOutput {lsmbox -t -o -n /home/uwp/Mail/Received/FvwmWorkers | grep Summary} 1 2)
+    Set $fvwm_title={ F-Wo: } $fvwm_workers_mail
+    ChangeTitle 3 $fvwm_title
+    If $fvwm_workers_mail>0 Then
+      ChangeForeColor 3 {blue}
+    Else
+      ChangeForeColor 3 {black}
+
+    If $inbox_mail>$mail_num Then
+     Begin
+      # Here one can place a beep
+      Do { Nop }
+     End
+
+#    Set $mail_num=(Add (Add $fvwm_mail $inbox_mail) (Add $fvwm_logo_mail $fvwm_workers_mail))
+    Set $mail_num=$inbox_mail
+
+   End
+ End
+
+Widget 1
+Property
+ Size 60 12
+ Position 0 0
+ Flags NoReliefString Left
+ Type ItemDraw
+ Title { init .. }
+Main
+ Case message of
+  SingleClic :
+  Begin
+    Do {Exec xterm -name muttTerm -e mutt &}
+  End
+End
+
+Widget 2
+Property
+ Size 60 12
+ Position 0 15
+ Flags NoReliefString Left
+ Type ItemDraw
+ Title { init .. }
+Main
+ Case message of
+  SingleClic :
+  Begin
+    Do {Exec xterm -name muttTerm -e mutt -f '/home/uwp/Mail/Received/Fvwm' &}
+  End
+End
+
+Widget 3
+Property
+ Size 60 12
+ Position 0 30
+ Flags NoReliefString Left
+ Type ItemDraw
+ Title { init .. }
+Main
+ Case message of
+  SingleClic :
+  Begin
+    Do {Exec xterm -name muttTerm -e mutt -f '/home/uwp/Mail/Received/FvwmWorkers' &}
+  End
+End
+

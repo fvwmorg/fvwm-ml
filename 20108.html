@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: swallowing iconified apps from Gary Sargent on 1997-05-30 (fvwm-users)</title>
+<meta name="Author" content="Gary Sargent (gary.sargent_at_gecm.com)" />
+<meta name="Subject" content="Re: FVWM: swallowing iconified apps" />
+<meta name="Date" content="1997-05-30" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: swallowing iconified apps</h1>
+<!-- received="Fri May 30 02:47:36 1997" -->
+<!-- isoreceived="19970530014736" -->
+<!-- sent="Fri, 30 May 1997 08:43:55 +0100" -->
+<!-- isosent="19970530074355" -->
+<!-- name="Gary Sargent" -->
+<!-- email="gary.sargent_at_gecm.com" -->
+<!-- subject="Re: FVWM: swallowing iconified apps" -->
+<!-- id="970530084355.5861_at_oas01.gmcl.co.uk" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="199705291628.JAA06722_at_mailsun2.us.oracle.com" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start20108" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="20109.html" accesskey="d" title="Kai Grossjohann: &quot;Re: FVWM: I&#0039;m interested&quot;">Next message</a> ]
+[ <a href="20107.html" title="Morsy Cheikhrouhou: &quot;Re: FVWM: swallowing iconified apps&quot;">Previous message</a> ]
+[ <a href="20103.html" title="Mike Campbell: &quot;FVWM: swallowing iconified apps&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg20108" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg20108" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg20108" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg20108" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Gary Sargent &lt;<a href="mailto:gary.sargent_at_gecm.com?Subject=Re%3A%20FVWM%3A%20swallowing%20iconified%20apps">gary.sargent_at_gecm.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 30 May 1997 08:43:55 +0100</span><br />
+</address>
+<br />
+<em class="quotelev1">&gt; Did anyone get an answer to how to make FvwmButtons swallow an iconified 
+</em><br />
+<em class="quotelev1">&gt; application??? 
+</em><br />
+<em class="quotelev1">&gt;  
+</em><br />
+<em class="quotelev1">&gt; I'd like to swallow rclock iconified so that it will display the clock as well 
+</em><br />
+<em class="quotelev1">&gt; as the date. 
+</em><br />
+<em class="quotelev1">&gt;  
+</em><br />
+<br />I needed to do this because we use a mail program called 'Mailworks', which when
+<br />
+iconified shows you a dog with mail in its mouth if you get new mail (!!??!!).
+<br />
+The only way I could think to do it is to use an FvwmIconBox. I swallow this in
+<br />
+my FvwmButtons and ensure that only the one icon I want is present in the
+<br />
+icon box. Here's what I used (fvwm 2.0.45):
+<br />
+<br />&nbsp;&nbsp;For my button bar:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*IconBar(Frame 0, Swallow(Respawn) &quot;IMailBox&quot; &quot;IMailBox&quot;)
+<br />
+<br />&nbsp;&nbsp;For my FvwmIconBox (called IMailBox ie I have a soft link from IMailBox to
+<br />
+&nbsp;&nbsp;FvwmIconBox):
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*IMailBox &quot;nedit*&quot; -
+<br />
+<br />and styles:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Style &quot;*&quot;                       Icon xterm.xpm
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Style &quot;MailWorks*Browser*&quot;      NoIcon
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Style &quot;nedit&quot;                   NoIcon
+<br />
+<br />nedit and mailworks are the only two apps I have in iconbox's. I disclude the nedit
+<br />
+ones from my IMailBox and the mailworks ones from the other to ensure I don't
+<br />
+have duplicates.
+<br />
+<br />Now when I double click on the icon (in the button bar) the icon remains iconified
+<br />
+but the window expands - so I have the icon and the window. I only ever start the
+<br />
+program once (done in a seperate script - but this could be done within a function
+<br />
+or something).
+<br />
+<br />I suppose you could use &quot;*&quot; to disclude all icons and then add a specific one
+<br />
+(rclock).
+<br />
+<br />Hope this helps,
+<br />
+<br />Gary Sargent.
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri May 30 1997 - 02:47:36 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start20108">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="20109.html" title="Next message in the list">Kai Grossjohann: "Re: FVWM: I&#0039;m interested"</a></li>
+<li><dfn>Previous message</dfn>: <a href="20107.html" title="Previous message in the list">Morsy Cheikhrouhou: "Re: FVWM: swallowing iconified apps"</a></li>
+<li><dfn>In reply to</dfn>: <a href="20103.html" title="Message to which this message replies">Mike Campbell: "FVWM: swallowing iconified apps"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg20108" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg20108" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg20108" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg20108" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

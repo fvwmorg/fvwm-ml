@@ -1,0 +1,681 @@
+<?xml version="1.0" encoding="ISO-8859-2"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-2" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: [patch] feature request - remember the page position on all desks from Jindrich Makovicka on 2004-10-06 (fvwm-users)</title>
+<meta name="Author" content="Jindrich Makovicka (makovick_at_kmlinux.fjfi.cvut.cz)" />
+<meta name="Subject" content="FVWM: [patch] feature request - remember the page position on all desks" />
+<meta name="Date" content="2004-10-06" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: [patch] feature request - remember the page position on all desks</h1>
+<!-- received="Wed Oct  6 11:39:45 2004" -->
+<!-- isoreceived="20041006103945" -->
+<!-- sent="Wed, 06 Oct 2004 18:39:02 +0200" -->
+<!-- isosent="20041006163902" -->
+<!-- name="Jindrich Makovicka" -->
+<!-- email="makovick_at_kmlinux.fjfi.cvut.cz" -->
+<!-- subject="FVWM: [patch] feature request - remember the page position on all desks" -->
+<!-- id="41641FA6.4050301_at_kmlinux.fjfi.cvut.cz" -->
+<!-- charset="ISO-8859-2" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start13338" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="13339.html" accesskey="d" title="Jindrich Makovicka: &quot;FVWM: GKrellM problem - window disappearing&quot;">Next message</a> ]
+[ <a href="13337.html" title="Michelle Konzack: &quot;FVWM: Re: Keystrokes to Mozilla&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg13338" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg13338" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg13338" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg13338" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Jindrich Makovicka &lt;<a href="mailto:makovick_at_kmlinux.fjfi.cvut.cz?Subject=Re%3A%20FVWM%3A%20%5Bpatch%5D%20feature%20request%20-%20remember%20the%20page%20position%20on%20all%20desks">makovick_at_kmlinux.fjfi.cvut.cz</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 06 Oct 2004 18:39:02 +0200</span><br />
+</address>
+<br />
+Hello,
+<br />
+<br />would it be possible to make fvwm remember the page positions on all 
+<br />
+desktops, somehow like in the attached patch? After applying it, it is 
+<br />
+possible to use a new command called GotoDeskPrevPage, which works like 
+<br />
+ordinary GotoDesk, only it jumps to the position where user previously 
+<br />
+left the target desk. I found it quite useful, when I switch between two 
+<br />
+desktops back and forth using keyboard and have two windows on different 
+<br />
+places on each desk.
+<br />
+<br />I don't know the fvwm internals very well, so the patch can be buggy, 
+<br />
+but I am sending it for illustration anyway :)
+<br />
+<br />Regards,
+<br />
+<pre>
+--
+Jindrich Makovicka
+
+</pre>
+<br />
+Index: fvwm/commands.h
+<br />
+===================================================================
+<br />
+RCS file: /home/cvs/fvwm/fvwm/fvwm/commands.h,v
+<br />
+retrieving revision 1.43
+<br />
+diff -u -r1.43 commands.h
+<br />
+--- fvwm/commands.h	30 Sep 2004 17:45:52 -0000	1.43
+<br />
++++ fvwm/commands.h	6 Oct 2004 16:27:46 -0000
+<br />
+_at_&#64; -280,6 +280,7 &#64;&#64;
+<br />
+&nbsp;P(GnomeShowDesks);
+<br />
+&nbsp;P(GotoDesk);
+<br />
+&nbsp;P(GotoDeskAndPage);
+<br />
++P(GotoDeskPrevPage);
+<br />
+&nbsp;P(GotoPage);
+<br />
+&nbsp;P(HideGeometryWindow);
+<br />
+&nbsp;P(HilightColor);
+<br />
+Index: fvwm/ewmh_events.c
+<br />
+===================================================================
+<br />
+RCS file: /home/cvs/fvwm/fvwm/fvwm/ewmh_events.c,v
+<br />
+retrieving revision 1.45
+<br />
+diff -u -r1.45 ewmh_events.c
+<br />
+--- fvwm/ewmh_events.c	6 Aug 2004 19:42:54 -0000	1.45
+<br />
++++ fvwm/ewmh_events.c	6 Oct 2004 16:27:47 -0000
+<br />
+_at_&#64; -50,7 +50,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;*/
+<br />
+&nbsp;int ewmh_CurrentDesktop(EWMH_CMD_ARGS)
+<br />
+&nbsp;{
+<br />
+-	goto_desk(ev-&gt;xclient.data.l[0]);
+<br />
++	goto_desk(ev-&gt;xclient.data.l[0], 0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return -1;
+<br />
+&nbsp;}
+<br />
+&nbsp;
+<br />
+Index: fvwm/focus.c
+<br />
+===================================================================
+<br />
+RCS file: /home/cvs/fvwm/fvwm/fvwm/focus.c,v
+<br />
+retrieving revision 1.152
+<br />
+diff -u -r1.152 focus.c
+<br />
+--- fvwm/focus.c	1 Sep 2004 14:55:18 -0000	1.152
+<br />
++++ fvwm/focus.c	6 Oct 2004 16:27:47 -0000
+<br />
+_at_&#64; -427,7 +427,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (t-&gt;Desk != Scr.CurrentDesk)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+-		goto_desk(t-&gt;Desk);
+<br />
++		goto_desk(t-&gt;Desk, 0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (IS_ICONIFIED(t))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+_at_&#64; -639,7 +639,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (fw-&gt;Desk != Scr.CurrentDesk)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+-			goto_desk(fw-&gt;Desk);
+<br />
++			goto_desk(fw-&gt;Desk, 0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (IS_ICONIFIED(fw))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+Index: fvwm/functable.c
+<br />
+===================================================================
+<br />
+RCS file: /home/cvs/fvwm/fvwm/fvwm/functable.c,v
+<br />
+retrieving revision 1.31
+<br />
+diff -u -r1.31 functable.c
+<br />
+--- fvwm/functable.c	30 Sep 2004 17:45:52 -0000	1.31
+<br />
++++ fvwm/functable.c	6 Oct 2004 16:27:47 -0000
+<br />
+_at_&#64; -295,6 +295,9 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CMD_ENT(&quot;gotodeskandpage&quot;, CMD_GotoDeskAndPage, F_GOTO_DESK, 0, 0),
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* - Switch viewport to another desk and page */
+<br />
+&nbsp;
+<br />
++	CMD_ENT(&quot;gotodeskprevpage&quot;, CMD_GotoDeskPrevPage, F_GOTO_DESK, 0, 0),
+<br />
++	/* - Switch viewport to another desk previous page */
+<br />
++
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CMD_ENT(&quot;gotopage&quot;, CMD_GotoPage, F_GOTO_PAGE, 0, 0),
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* - Switch viewport to another page same desk */
+<br />
+&nbsp;
+<br />
+Index: fvwm/gnome.c
+<br />
+===================================================================
+<br />
+RCS file: /home/cvs/fvwm/fvwm/fvwm/gnome.c,v
+<br />
+retrieving revision 1.64
+<br />
+diff -u -r1.64 gnome.c
+<br />
+--- fvwm/gnome.c	29 Jun 2003 19:53:23 -0000	1.64
+<br />
++++ fvwm/gnome.c	6 Oct 2004 16:27:47 -0000
+<br />
+_at_&#64; -969,7 +969,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a = XInternAtom(dpy, XA_WIN_WORKSPACE, False);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (ev-&gt;xclient.message_type == a)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+-		goto_desk(ev-&gt;xclient.data.l[0]);
+<br />
++		goto_desk(ev-&gt;xclient.data.l[0], 0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a = XInternAtom(dpy, XA_WIN_LAYER, False);
+<br />
+Index: fvwm/placement.c
+<br />
+===================================================================
+<br />
+RCS file: /home/cvs/fvwm/fvwm/fvwm/placement.c,v
+<br />
+retrieving revision 1.138
+<br />
+diff -u -r1.138 placement.c
+<br />
+--- fvwm/placement.c	3 Sep 2004 08:22:22 -0000	1.138
+<br />
++++ fvwm/placement.c	6 Oct 2004 16:27:47 -0000
+<br />
+_at_&#64; -1456,7 +1456,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reason-&gt;desk.do_switch_desk = 1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+-		goto_desk(fw-&gt;Desk);
+<br />
++		goto_desk(fw-&gt;Desk, 0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* Don't move viewport if SkipMapping, or if recapturing the window,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* adjust the coordinates later. Otherwise, just switch to the target
+<br />
+Index: fvwm/session.c
+<br />
+===================================================================
+<br />
+RCS file: /home/cvs/fvwm/fvwm/fvwm/session.c,v
+<br />
+retrieving revision 1.126
+<br />
+diff -u -r1.126 session.c
+<br />
+--- fvwm/session.c	8 Jul 2004 14:54:16 -0000	1.126
+<br />
++++ fvwm/session.c	6 Oct 2004 16:27:47 -0000
+<br />
+_at_&#64; -1125,7 +1125,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if (!strcmp(s1, &quot;[DESKTOP]&quot;))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sscanf(s, &quot;%*s %i&quot;, &amp;i1);
+<br />
+-			goto_desk(i1);
+<br />
++			goto_desk(i1, 0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if (!strcmp(s1, &quot;[VIEWPORT]&quot;))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+Index: fvwm/virtual.c
+<br />
+===================================================================
+<br />
+RCS file: /home/cvs/fvwm/fvwm/fvwm/virtual.c,v
+<br />
+retrieving revision 1.172
+<br />
+diff -u -r1.172 virtual.c
+<br />
+--- fvwm/virtual.c	30 Sep 2004 17:45:52 -0000	1.172
+<br />
++++ fvwm/virtual.c	6 Oct 2004 16:27:47 -0000
+<br />
+_at_&#64; -85,12 +85,63 &#64;&#64;
+<br />
+&nbsp;static unsigned int prev_desk_and_page_page_x = 0;
+<br />
+&nbsp;static unsigned int prev_desk_and_page_page_y = 0;
+<br />
+&nbsp;
+<br />
++typedef struct
+<br />
++{
+<br />
++    int desk;
+<br />
++    unsigned int page_x, page_y;
+<br />
++} desk_pos;
+<br />
++
+<br />
++static desk_pos* desk_positions;
+<br />
++static int desk_position_count = 0;
+<br />
++
+<br />
+&nbsp;/* ---------------------------- exported variables (globals) --------------- */
+<br />
+&nbsp;
+<br />
+&nbsp;/* ---------------------------- local functions ---------------------------- */
+<br />
+&nbsp;
+<br />
+&nbsp;/*
+<br />
+&nbsp;&nbsp;*
+<br />
++ * Gets the viewport coordinates within a desktop
+<br />
++ * returns 1 if found, 0 if not found
+<br />
++ *
+<br />
++ */
+<br />
++static int get_desk_position(int desk, unsigned int *x, unsigned int *y)
+<br />
++{
+<br />
++    int i;
+<br />
++    for (i = 0; i &lt; desk_position_count; i++) {
+<br />
++	if (desk_positions[i].desk == desk) {
+<br />
++	    *x = desk_positions[i].page_x;
+<br />
++	    *y = desk_positions[i].page_y;
+<br />
++	    return 1;
+<br />
++	}
+<br />
++    }
+<br />
++    return 0;
+<br />
++}
+<br />
++
+<br />
++/*
+<br />
++ *
+<br />
++ * Stores the viewport coordinates within a desktop
+<br />
++ *
+<br />
++ */
+<br />
++static void set_desk_position(int desk, unsigned int x, unsigned int y)
+<br />
++{
+<br />
++    int i;
+<br />
++    for (i = 0; i &lt; desk_position_count; i++) {
+<br />
++	if (desk_positions[i].desk == desk) {
+<br />
++	    desk_positions[i].page_x = x;
+<br />
++	    desk_positions[i].page_y = y;
+<br />
++	    return;
+<br />
++	}
+<br />
++    }
+<br />
++    desk_positions = (desk_pos*)realloc(desk_positions, (desk_position_count + 1)*sizeof(desk_pos));
+<br />
++    desk_positions[desk_position_count].desk = desk;
+<br />
++    desk_positions[desk_position_count].page_x = x;
+<br />
++    desk_positions[desk_position_count].page_y = y;
+<br />
++    desk_position_count++;
+<br />
++    return;
+<br />
++}
+<br />
++
+<br />
++/*
+<br />
++ *
+<br />
+&nbsp;&nbsp;* Parse arguments for &quot;Desk&quot; and &quot;MoveToDesk&quot; (formerly &quot;WindowsDesk&quot;):
+<br />
+&nbsp;&nbsp;*
+<br />
+&nbsp;&nbsp;* (nil)       : desk number = current desk
+<br />
+_at_&#64; -1072,6 +1123,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prev_desk_and_page_page_x = Scr.Vx;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prev_desk_and_page_page_y = Scr.Vy;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prev_desk_and_page_desk = Scr.CurrentDesk;
+<br />
++		set_desk_position(Scr.CurrentDesk, Scr.Vx, Scr.Vy);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Scr.Vx = newx;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Scr.Vy = newy;
+<br />
+_at_&#64; -1234,19 +1286,24 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+&nbsp;}
+<br />
+&nbsp;
+<br />
+-void goto_desk(int desk)
+<br />
++void goto_desk(int desk, int prevpage)
+<br />
+&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* RBW - the unmapping operations are now removed to their own
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* functions so they can also be used by the new GoToDeskAndPage
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* command. */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (Scr.CurrentDesk != desk)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
++  	        int px, py;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prev_desk = Scr.CurrentDesk;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prev_desk_and_page_desk = Scr.CurrentDesk;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prev_desk_and_page_page_x = Scr.Vx;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prev_desk_and_page_page_y = Scr.Vy;
+<br />
++		set_desk_position(Scr.CurrentDesk, Scr.Vx, Scr.Vy);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UnmapDesk(Scr.CurrentDesk, True);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Scr.CurrentDesk = desk;
+<br />
++		if (prevpage &amp;&amp; get_desk_position(Scr.CurrentDesk, &amp;px, &amp;py)) {
+<br />
++		        MoveViewport(px, py, True);
+<br />
++		}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MapDesk(desk, True);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;focus_grab_buttons_all();
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BroadcastPacket(M_NEW_DESK, 1, Scr.CurrentDesk);
+<br />
+_at_&#64; -1929,7 +1986,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;*/
+<br />
+&nbsp;void CMD_GotoDesk(F_CMD_ARGS)
+<br />
+&nbsp;{
+<br />
+-	goto_desk(GetDeskNumber(action, Scr.CurrentDesk));
+<br />
++	goto_desk(GetDeskNumber(action, Scr.CurrentDesk), 0);
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+&nbsp;}
+<br />
+_at_&#64; -1941,6 +1998,13 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+&nbsp;}
+<br />
+&nbsp;
+<br />
++void CMD_GotoDeskPrevPage(F_CMD_ARGS)
+<br />
++{
+<br />
++	goto_desk(GetDeskNumber(action, Scr.CurrentDesk), 1);
+<br />
++
+<br />
++	return;
+<br />
++}
+<br />
++
+<br />
+&nbsp;/*
+<br />
+&nbsp;&nbsp;*
+<br />
+&nbsp;&nbsp;* Move to a new desktop and page at the same time.
+<br />
+_at_&#64; -1978,6 +2042,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prev_desk_and_page_page_x = Scr.Vx;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prev_desk_and_page_page_y = Scr.Vy;
+<br />
++	set_desk_position(Scr.CurrentDesk, Scr.Vx, Scr.Vy);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MoveViewport(val[1], val[2], True);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (is_new_desk)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+Index: fvwm/virtual.h
+<br />
+===================================================================
+<br />
+RCS file: /home/cvs/fvwm/fvwm/fvwm/virtual.h,v
+<br />
+retrieving revision 1.15
+<br />
+diff -u -r1.15 virtual.h
+<br />
+--- fvwm/virtual.h	29 Jun 2003 19:53:23 -0000	1.15
+<br />
++++ fvwm/virtual.h	6 Oct 2004 16:27:47 -0000
+<br />
+_at_&#64; -12,7 +12,7 &#64;&#64;
+<br />
+&nbsp;void initPanFrames(void);
+<br />
+&nbsp;Bool is_pan_frame(Window w);
+<br />
+&nbsp;void MoveViewport(int newx, int newy,Bool);
+<br />
+-void goto_desk(int desk);
+<br />
++void goto_desk(int desk, int prevpage);
+<br />
+&nbsp;void do_move_window_to_desk(FvwmWindow *fw, int desk);
+<br />
+&nbsp;Bool get_page_arguments(char *action, int *page_x, int *page_y);
+<br />
+&nbsp;char *GetDesktopName(int desk);
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Oct 06 2004 - 11:39:45 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start13338">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="13339.html" title="Next message in the list">Jindrich Makovicka: "FVWM: GKrellM problem - window disappearing"</a></li>
+<li><dfn>Previous message</dfn>: <a href="13337.html" title="Previous message in the list">Michelle Konzack: "FVWM: Re: Keystrokes to Mozilla"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg13338" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg13338" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg13338" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg13338" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:57 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: A script for gnome-2 menu support from Bob Hepple on 2004-07-12 (fvwm-users)</title>
+<meta name="Author" content="Bob Hepple (bhepple_at_freeshell.org)" />
+<meta name="Subject" content="FVWM: A script for gnome-2 menu support" />
+<meta name="Date" content="2004-07-12" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: A script for gnome-2 menu support</h1>
+<!-- received="Mon Jul 12 08:18:53 2004" -->
+<!-- isoreceived="20040712071853" -->
+<!-- sent="Mon, 12 Jul 2004 18:54:45 +1000" -->
+<!-- isosent="20040712085445" -->
+<!-- name="Bob Hepple" -->
+<!-- email="bhepple_at_freeshell.org" -->
+<!-- subject="FVWM: A script for gnome-2 menu support" -->
+<!-- id="20040712185445.26ed1dda.bhepple_at_freeshell.org" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start12771" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="12772.html" accesskey="d" title="Sarah Burgo: &quot;Re: FVWM: translation of the manpage&quot;">Next message</a> ]
+[ <a href="12770.html" title="Reuben D. Budiardja: &quot;Re: FVWM: Funny font&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg12771" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg12771" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg12771" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg12771" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Bob Hepple &lt;<a href="mailto:bhepple_at_freeshell.org?Subject=Re%3A%20FVWM%3A%20A%20script%20for%20gnome-2%20menu%20support">bhepple_at_freeshell.org</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 12 Jul 2004 18:54:45 +1000</span><br />
+</address>
+<br />
+I was playing around with fvwm-menu-desktop and realised that it doesn't
+<br />
+support gnome2. So I wrote a hasty script with awk to do something about
+<br />
+it. Here it is ... I put it into my latest mondo configuration scripts at
+<br />
+&nbsp;
+<br />
+<a href="http://bhepple.freeshell.org/fvwm2">http://bhepple.freeshell.org/fvwm2</a>
+<br />
+<br />(these scripts auto-gen a whole bunch of menus and buttons based on what
+<br />
+is installed on the machine - no more dead links in my fvwm!)
+<br />
+<br />Pop this into your .fvwmrc and adjust the path to the script:
+<br />
+<br />AddToMenu RootMenu &quot;Gnome-2 Menu%mini/x.xpm%&quot; Popup Gnome2Menu
+<br />
+PipeRead ~/.fvwm/fvwm-gnome2
+<br />
+<br />By the way - I found that to get the old gnome-1 menus come up correctly I
+<br />
+needed to set &quot;--lang C&quot; on the fvwm-menu-desktop command line.
+<br />
+<br />PipeRead 'fvwm-menu-desktop --enable-mini-icons --lang C'
+<br />
+PipeRead 'fvwm-menu-desktop --desktop gnome-user --enable-mini-icons --lang C'
+<br />
+PipeRead 'fvwm-menu-desktop --desktop gnome-redhat --enable-mini-icons --lang C'
+<br />
+<br />Here's the gnome-2 script:
+<br />
+<br />#! /bin/sh
+<br />
+<br /># Very hasty and simple script to generate some menus for fvwm from the gnome directory /usr/share/applications
+<br />
+# Needs bells, whistles, options, flannel, improvements, documentation, kde. Nah.
+<br />
+<br />cd /usr/share/applications
+<br />
+for FILE in *.desktop; do
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NAME=`basename $FILE .desktop` awk -F= '
+<br />
+<br />/^Name=/ { name=$2 }
+<br />
+/^Name/ { if (!altname) { altname=$2 } }
+<br />
+/^Categories=/ { categories=$2 }
+<br />
+/^Icon=/ { icon=$2 }
+<br />
+/^Exec=/ { run=$2 }
+<br />
+<br />END {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filename = ENVIRON[&quot;NAME&quot;]
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (!name) { name = altname}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (!name) { name = filename}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (!run) { run = filename }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (!icon) { icon = &quot;gnome-unknown.png&quot; }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;%s:%s:%s:%s:%s\n&quot;,  categories, name, filename, icon, run)
+<br />
+}' $FILE
+<br />
+done | sed -e &quot;s/^GNOME;//&quot;|sed -e &quot;s/^Application;//&quot;| sort | awk -F: '
+<br />
+BEGIN {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;menu=&quot;&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print &quot;DestroyMenu Gnome2Menu&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print &quot;AddToMenu Gnome2Menu \&quot;Gnome-2 Menu%%gnome-unknown.png%%\&quot; Title&quot;
+<br />
+}
+<br />
+<br />function build_menu(cat,name,filename,icon,run) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;num=split(cat,list,&quot;;&quot;)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;menu_name=&quot;&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parent_menu=&quot;Gnome2Menu&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (i=1; i&lt;num; i++) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (menu_name) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;menu_name=menu_name &quot;-&quot; list[i]
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;menu_name = list[i]
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (!exists[menu_name]) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exists[menu_name]=&quot;y&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;AddToMenu %s \&quot;%s%%gnome-unknown.png%%\&quot; Popup %s\n&quot;, parent_menu, list[i], menu_name)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;DestroyMenu %s\n&quot;, menu_name)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;AddToMenu %s \&quot;%s\&quot; Title\n&quot;, menu_name, menu_name)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parent_menu = menu_name
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;AddToMenu %s \&quot;%s (%s)%%%s%%\&quot; Exec exec %s\n&quot;, menu_name, name, filename, icon, run)
+<br />
+}
+<br />
+<br />{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;categories=$1
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name=$2
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filename=$3
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;icon=$4
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;run=$5
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;build_menu(categories,name,filename,icon,run)
+<br />
+<br />}'
+<br />
+<br /><br /><pre>
+-- 
+Bob Hepple
+mailto:bhepple_at_freeshell.org <a href="http://bhepple.freeshell.org">http://bhepple.freeshell.org</a>
+Public Key: <a href="http://bhepple.freeshell.org/public_keys.txt">http://bhepple.freeshell.org/public_keys.txt</a>
+
+</pre>
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<div>
+<ul>
+<li>application/pgp-signature attachment: <a href="att-12771/01-part">stored</a></li>
+</ul>
+<!-- attachment="01-part" -->
+</div>
+<span id="received"><dfn>Received on</dfn> Mon Jul 12 2004 - 08:18:53 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start12771">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="12772.html" title="Next message in the list">Sarah Burgo: "Re: FVWM: translation of the manpage"</a></li>
+<li><dfn>Previous message</dfn>: <a href="12770.html" title="Previous message in the list">Reuben D. Budiardja: "Re: FVWM: Funny font"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg12771" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg12771" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg12771" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg12771" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:56 BST
+</em></small></p>
+</body>
+</html>

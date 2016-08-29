@@ -1,0 +1,859 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Help with Xinerama support from knighten_at_athena.knighten.org on 2002-04-26 (fvwm-users)</title>
+<meta name="Author" content="knighten_at_athena.knighten.org (knighten_at_athena.knighten.org)" />
+<meta name="Subject" content="FVWM: Help with Xinerama support" />
+<meta name="Date" content="2002-04-26" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Help with Xinerama support</h1>
+<!-- received="Fri Apr 26 00:22:49 2002" -->
+<!-- isoreceived="20020425232249" -->
+<!-- sent="Thu, 25 Apr 2002 21:56:39 -0700 (PDT)" -->
+<!-- isosent="20020426045639" -->
+<!-- name="knighten_at_athena.knighten.org" -->
+<!-- email="knighten_at_athena.knighten.org" -->
+<!-- subject="FVWM: Help with Xinerama support" -->
+<!-- id="20020426045639.27ED527BB6_at_athena.knighten.org" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start4974" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="4975.html" accesskey="d" title="Mikhael Goikhman: &quot;Re: FVWM: Alt-tab&quot;">Next message</a> ]
+[ <a href="4973.html" title="Stian Sletner: &quot;Re: FVWM: Alt-tab&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg4974" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg4974" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg4974" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg4974" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: &lt;<a href="mailto:knighten_at_athena.knighten.org?Subject=Re%3A%20FVWM%3A%20Help%20with%20Xinerama%20support">knighten_at_athena.knighten.org</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 25 Apr 2002 21:56:39 -0700 (PDT)</span><br />
+</address>
+<br />
+I have just started using a dual head setup, and I clearly don't grok how to
+<br />
+take advantage of xinerama support in fvwm2.  I'm hoping for some help from
+<br />
+you kind folk.
+<br />
+<br />Attached below are my .xinitrc, .Xresources, .fvwm2rc and some other fvwm2
+<br />
+config files.  My setup is a striped down and lightly modified version of the
+<br />
+sample provided in the fvwm2 setup.  I am using fvwm2 version 2.4.6.
+<br />
+<br />So far the only effect of using Xinerama on vs. Xinerama off that I can see is
+<br />
+the Buttons and Mini-buttons are on screen 2 with Xinerama on and on screen 1
+<br />
+with Xinerama off.  I have not been able to avoid the problem of windows
+<br />
+poping up split between the two screens, nor have I been able to affect the
+<br />
+placement of windows using the geometry_at_screen construct mentioned in the man
+<br />
+page.  In particular I have not been able to use this successfully to specify
+<br />
+where either the Buttons or MiniButtons should be placed.  Another example -
+<br />
+on the root window menu I have the entry
+<br />
+<br />+ &quot;Emacs %mini-edit.xpm%&quot;               Exec exec emacs  -geometry 85x60_at_p
+<br />
+<br />but that _at_p or any variation I try has no apparent effect.
+<br />
+<br />Another Xinerama issue that may have nothing to do with fvwm: right now I
+<br />
+display a picture of the earth from space as the backdrop on my root window
+<br />
+using xloadimage, and at the moment it is just split across the two screens.
+<br />
+I would really like to have two different images on the two screens, but don't
+<br />
+see any easy way to do that.
+<br />
+<br />Thank you for any help.
+<br />
+<br />-- Bob
+<br />
+<br />## .xinitrc
+<br />
+#!/bin/sh
+<br />
+<br />if [ -f $HOME/.Xresources ]
+<br />
+then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/usr/bin/X11/xrdb $HOME/.Xresources
+<br />
+fi
+<br />
+<br />xset bc
+<br />
+xset fp rehash
+<br />
+xloadimage -center -onroot /usr/local/X11/images/earth2.gif &amp;
+<br />
+emacs -geometry 80x60+15+15 &amp;
+<br />
+xterm -geometry 85x32+15+1030 &amp;
+<br />
+exec fvwm2
+<br />
+<br />===============================================================================
+<br />
+<br /><br />! emacs, xemacs
+<br />
+<br />Emacs*background:                       Gray80
+<br />
+Emacs*borderColor:                      SteelBlue
+<br />
+Emacs*cursorColor:                      DarkRed
+<br />
+Emacs*font: -b&amp;h-lucidatypewriter-bold-r-normal-sans-*-140-75-75-m-90-iso8859-15
+<br />
+Emacs*foreground:                       DarkRed
+<br />
+Emacs*height:                           60
+<br />
+Emacs*menu-bar-lines:                   0
+<br />
+Emacs*mouseColor:                       Blue
+<br />
+Emacs*pointerColor:                     Red
+<br />
+Emacs*region.attributeBackground:       Blue
+<br />
+Emacs*region.attributeForeground:       Yellow
+<br />
+Emacs*width:                            85
+<br />
+<br /><br />!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+<br />
+! xterm (and friends)
+<br />
+<br />XTerm*highlightSelection:  true
+<br />
+! Uncomment this to use color for the bold attribute
+<br />
+XTerm*VT100*colorBDMode:  on
+<br />
+XTerm*VT100*colorBD:  blue
+<br />
+! Uncomment this to use color for underline attribute
+<br />
+XTerm.VT100*colorULMode:  on
+<br />
+XTerm.VT100*underLine:  off
+<br />
+XTerm*VT100*colorUL:  magenta
+<br />
+! Uncomment this to display the scrollbar 
+<br />
+XTerm*scrollBar:  true
+<br />
+<br />! This resource specifies whether or not to ignore the 'alternate screen'
+<br />
+! of applications such as vi.  When it is on, these applications will restore
+<br />
+! the contents of the screen when they are exited to what they were before
+<br />
+! they were started.  When it is off, the contents of vi will remain on the
+<br />
+! screen after the program is quit.
+<br />
+XTerm.VT100.titeInhibit:  true
+<br />
+<br />! Uncomment this to turn off color mode in your xterms
+<br />
+!XTerm.VT100*colorMode:  off
+<br />
+XTerm.VT100*dynamicColors:  on
+<br />
+<br />! Number of lines of scrollback to save
+<br />
+XTerm*saveLines:	1500
+<br />
+<br />xterm*reverseWrap:	true
+<br />
+<br />*visualBell:		true
+<br />
+*scrollTtyOutput:	False
+<br />
+*scrollKey:		True
+<br />
+Scrollbar.JumpCursor:	True
+<br />
+<br />! Suppr support.
+<br />
+*VT100.Translations: #override \
+<br />
+&lt;Key&gt;BackSpace: string(0x7F)\n\
+<br />
+&lt;Key&gt;Delete: string(&quot;\033[3~&quot;)\n\
+<br />
+&lt;Key&gt;Home: string(&quot;\033[1~&quot;)\n\
+<br />
+&lt;Key&gt;End: string(&quot;\033[4~&quot;)
+<br />
+<br /><br />==============================================================================
+<br />
+<br /># .fvwm2rc
+<br />
+# Robert L. Knighten
+<br />
+# 4 April 2002
+<br />
+#
+<br />
+######################  SET UP THE MAJOR OPERATING MODES  #####################
+<br />
+Style &quot;*&quot; NoIcon
+<br />
+Style &quot;*&quot; MWMFunctions
+<br />
+Style &quot;*&quot; HintOverride
+<br />
+Style &quot;*&quot; MWMDecor
+<br />
+<br /># XineramaPrimaryScreen 1
+<br />
+# Xinerama off
+<br />
+<br />#########################  BEHAVIOR AT EDGE OF PANES  #########################
+<br />
+OpaqueMoveSize 100
+<br />
+EdgeResistance 250 10
+<br />
+EdgeScroll 0 0
+<br />
+ClickTime 750
+<br />
+<br /><br />#############################  VIRTUAL DESK TOP  ##############################
+<br />
+DeskTopSize 2x2
+<br />
+<br />ColorMapFocus FollowsMouse
+<br />
+<br />Xinerama
+<br />
+<br />#######  IMAGE PATH - A COLON-SEPARATED LIST FOR ICONS, PIXMAPS, ETC.  #######
+<br />
+ImagePath /usr/local/X11/pixmaps:/usr/X11R6/include/X11/pixmaps/:\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:/usr/share/pixmaps/:
+<br />
+<br />###############################  DEFAULT STYLES  ##############################
+<br />
+Style &quot;*&quot; Font -adobe-helvetica-bold-r-*-*-12-*-*-*-*-*-*-*
+<br />
+Style &quot;*&quot; IconFont fixed
+<br />
+Style &quot;*&quot; HilightFore white, HilightBack lightgrey
+<br />
+Style &quot;*&quot; BorderWidth 5, HandleWidth 5
+<br />
+Style &quot;*&quot; MWMFunctions, MWMDecor, HintOverride
+<br />
+Style &quot;*&quot; DecorateTransient, NoPPosition
+<br />
+Style &quot;*&quot; IconBox 0 -10 -280 -1
+<br />
+Style &quot;*&quot; FocusFollowsMouse
+<br />
+Style &quot;*&quot; TileCascadePlacement
+<br />
+<br /># Styles for various Fvwm modules:
+<br />
+Style &quot;Fvwm*&quot;       NoTitle, Sticky, WindowListSkip
+<br />
+Style &quot;Fvwm*&quot;       BorderWidth 2, CirculateSkipIcon, CirculateSkip
+<br />
+Style &quot;FvwmPager&quot;   StaysOnTop, NoHandles
+<br />
+Style &quot;FvwmBanner&quot;  StaysOnTop
+<br />
+Style &quot;FvwmButtons&quot; NoTitle, NoHandles, Sticky, WindowListSkip, BorderWidth 5
+<br />
+<br /><br />#
+<br />
+# Some simple default key bindings
+<br />
+#
+<br />
+Key Next         A       SCM     Next [*] Focus
+<br />
+Key Prior        A       SCM     Prev [*] Focus
+<br />
+<br /># Some simple default mouse bindings
+<br />
+#
+<br />
+#   For the root window
+<br />
+Mouse 1 R       A       Menu MenuFvwmRoot Nop
+<br />
+Mouse 2 R       A       Menu MenuFvwmWindowOps Nop
+<br />
+Mouse 3 R       A       WindowList
+<br />
+#
+<br />
+#   For the title bar buttons
+<br />
+Mouse 0 1       A       Menu MenuFvwmWindowOps2 Close
+<br />
+Mouse 0 2       A       FuncFvwmMaximize
+<br />
+Mouse 0 4       A       Iconify
+<br />
+#
+<br />
+#   For other parts of the window/borders/icons
+<br />
+Mouse 1 F       A       FuncFvwmResizeOrRaise
+<br />
+Mouse 1 TS      A       FuncFvwmMoveOrRaise
+<br />
+Mouse 1 I       A       FuncFvwmMoveOrIconify
+<br />
+Mouse 2 I       A       Iconify
+<br />
+Mouse 2 FST     A       Menu MenuFvwmWindowOps2 Nop
+<br />
+Mouse 3 TSIF    A       RaiseLower
+<br />
+<br />######################## Initialization Functions ############################
+<br />
+AddToFunc StartFunction
+<br />
++ I Module FvwmAnimate
+<br />
++ I Module FvwmButtons
+<br />
+<br />AddToFunc InitFunction
+<br />
++ &quot;I&quot; Module FvwmButtons MiniButtons
+<br />
+<br />AddToFunc &quot;RestartFunction&quot;
+<br />
++ &quot;I&quot; Module FvwmButtons MiniButtons
+<br />
+<br /># For some SM-s (like gnome-session) there is an internal background setter.
+<br />
+AddToFunc SessionInitFunction
+<br />
++ I Nop
+<br />
+<br />###################################  Menus  ##################################
+<br />
+<br />#&gt;&gt;&gt; ROOT MENU &lt;&lt;&lt;&lt;#
+<br />
+DestroyMenu MenuFvwmRoot
+<br />
+AddToMenu MenuFvwmRoot  &quot;Root Menu&quot;             Title
+<br />
++ &quot;Emacs %mini-edit.xpm%&quot;               Exec exec emacs  -geometry 85x60_at_p
+<br />
++ &quot;Xterm %mini-term.xpm%&quot; 	        Exec exec xterm -sb  -sl 500 -rw 
+<br />
++ &quot;Large Font Xterm %mini-term.xpm%&quot; 	Exec exec xterm -sb -sl 500 -j -ls
+<br />
++ &quot;&quot;					    	Nop
+<br />
++ &quot;Applications&quot;      Popup Applications
+<br />
++ &quot;Accessories&quot;       Popup Accessories
+<br />
++ &quot;Other Login&quot;       Popup MenuFvwmLogins
+<br />
++ &quot;Fvwm Window Ops&quot;   Popup MenuFvwmWindowOps
+<br />
++ &quot;Fvwm Utilities&quot;    Popup FvwmUtilities
+<br />
++ &quot;&quot;                        Nop
+<br />
++ &quot;Refresh Screen %mini-ray.xpm%&quot;       Refresh
+<br />
++ &quot;Restart Fvwm %mini-turn.xpm%&quot;	Restart
+<br />
++ &quot;Quit  fvwm? %mini-stop.xpm%&quot; Popup   Quit-Verify
+<br />
+<br />#&gt;&gt;&gt;&gt; APPLICATIONS &lt;&lt;&lt;&lt;#
+<br />
+DestroyMenu MenuFvwmApplications
+<br />
+AddToMenu Applications     &quot;Applications&quot; Title
+<br />
++ &quot;Acrobat&quot;                       Exec exec acroread
+<br />
++ &quot;GhostView %mini-gv.xpm%&quot;       Exec exec gv
+<br />
++ &quot;NcFTP %mini-ftp.xpm%&quot;          Exec xterm -name NcFtp -T FTP -ls -fn 7x14 -e ncftp
+<br />
++ &quot;Netscape %mini-nscape.xpm%&quot;    Exec exec netscape
+<br />
++ &quot;Opera %opera.xpm%&quot;             Exec exec opera
+<br />
++ &quot;XTerm&quot;                         Exec exec xterm
+<br />
++ &quot;Xfractint %mini-fractal.xpm%&quot;  Exec exec xterm -font 7x14 -e xfractint map=chroma
+<br />
++ &quot;Xpdf %mini-pdf.xpm%&quot;           Exec exec xpdf
+<br />
++ &quot;Xv %mini-xv.xpm%&quot;              Exec exec xv
+<br />
+<br />#&gt;&gt;&gt;&gt; ACCESSORIES &lt;&lt;&lt;&lt;#
+<br />
+DestroyMenu &quot;Accessories&quot;
+<br />
+AddToMenu &quot;Accessories&quot;
+<br />
++ &quot;Font viewer (xfontsel) %mini-font.xpm%&quot;  Exec exec xfontsel
+<br />
++ &quot;Color viewer (gcolorsel)&quot;                Exec exec gcolorsel
+<br />
+<br /><br />#&gt;&gt;&gt;&gt; WINDOW OPERATIONS &lt;&lt;&lt;&lt;#
+<br />
+<br /># There are 2 versions of the WindowOps Menu, meant to be bound to different
+<br />
+# things.  The common part, used in the two menus below, is:
+<br />
+DestroyFunc FuncFvwmWindowCommon
+<br />
+AddToFunc FuncFvwmWindowCommon
+<br />
++ I AddToMenu $0 &quot;&amp;Move %mini-move.xpm%&quot;     Move
+<br />
++ I AddToMenu $0 &quot;&amp;Resize %mini-resize.xpm%&quot;  Resize
+<br />
++ I AddToMenu $0 &quot;R&amp;aise %mini-raise.xpm%&quot;    Raise
+<br />
++ I AddToMenu $0 &quot;&amp;Lower %mini-lower.xpm%&quot;    Lower
+<br />
++ I AddToMenu $0 &quot;(De)&amp;Iconify&quot;               Iconify
+<br />
++ I AddToMenu $0 &quot;(Un)&amp;Stick&quot;                 Stick
+<br />
++ I AddToMenu $0 &quot;(Un)Ma&amp;ximize %mini-max1.xpm%&quot; Maximize
+<br />
++ I AddToMenu $0 &quot;&quot;                 Nop
+<br />
++ I AddToMenu $0 &quot;&amp;Delete %mini-cross.xpm%&quot;   Delete
+<br />
++ I AddToMenu $0 &quot;&amp;Close&quot;                     Close
+<br />
++ I AddToMenu $0 &quot;Destroy %mini-bomb.xpm%&quot;    Destroy
+<br />
++ I AddToMenu $0 &quot;&quot;                 Nop
+<br />
+<br /># First windowops menu, bound to mouse 2 on root
+<br />
+<br />DestroyMenu MenuFvwmWindowOps
+<br />
+AddToMenu MenuFvwmWindowOps     &quot;Window Operations&quot;    Title
+<br />
++ &quot;Switch to...&quot;                WindowList
+<br />
+FuncFvwmWindowCommon MenuFvwmWindowOps
+<br />
++ &quot;Refresh Screen %mini-ray.xpm%&quot; Refresh
+<br />
++ &quot;Re&amp;fresh Window&quot; RefreshWindow
+<br />
+<br /># Second windowops menu, bound to:
+<br />
+# any mouse on titlebar button 1
+<br />
+# mouse 2 on frame, side or titlebar
+<br />
+DestroyMenu MenuFvwmWindowOps2
+<br />
+AddToMenu MenuFvwmWindowOps2
+<br />
+FuncFvwmWindowCommon MenuFvwmWindowOps2
+<br />
++ Scroll&amp;Bar       Module FvwmScroll 2 2
+<br />
+<br />#
+<br />
+# A trimmed down version of &quot;Window Ops&quot;, good for binding to decorations
+<br />
+#
+<br />
+AddToMenu &quot;Window-Ops2&quot; &quot;&amp;Restore&quot;        Iconify -1
+<br />
++                       &quot;&amp;Move&quot;           Move-or-Raise
+<br />
++                       &quot;&amp;Size&quot;           Resize-or-Raise
+<br />
++                       &quot;Mi&amp;nimize&quot;       Iconify 1
+<br />
++                       &quot;Ma&amp;ximize&quot;       Maximize 100 100
+<br />
++                       &quot;&quot;                Nop
+<br />
++                       &quot;&amp;Kill&quot;           Destroy
+<br />
++                       &quot;&amp;Close	Alt+F4&quot;   Delete
+<br />
+<br />#                         &gt;&gt;&gt;&gt;&gt; FVWM UTILITIES &lt;&lt;&lt;&lt;&lt;
+<br />
+DestroyMenu FvwmUtilies
+<br />
+AddToMenu FvwmUtilities &quot;FVWM Utilities&quot; Title
+<br />
++ &quot;Load my  Xresources&quot;  Exec exec xrdb -load $HOME/.Xresources
+<br />
+<br />##################################################################
+<br />
+<br />#
+<br />
+# This menu is invoked as a sub-menu - it allows you to quit,
+<br />
+# restart, or switch to another WM.
+<br />
+#
+<br />
+DestroyMenu &quot;Quit-Verify&quot;
+<br />
+AddToMenu &quot;Quit-Verify&quot; &quot;Really Quit Fvwm?&quot; Title
+<br />
++ &quot;Yes, really quit!&quot; Quit
+<br />
++ &quot;No, just restart an Xterm&quot;    Restart xterm -n '&quot;X Console&quot;' -T '&quot;X Console&quot;'
+<br />
++ &quot;No, don't quit&quot;   Nop
+<br />
+<br /><br />###########################  FUNCTION DEFINITIONS  ###########################
+<br />
+DestroyFunc FuncFvwmMoveOrRaise
+<br />
+AddToFunc FuncFvwmMoveOrRaise
+<br />
++ I Raise
+<br />
++ M Move
+<br />
++ D Lower
+<br />
+<br />DestroyFunc FuncFvwmMaximize
+<br />
+AddToFunc FuncFvwmMaximize
+<br />
++ M Maximize   0 100
+<br />
++ H Maximize   0 100
+<br />
++ C Maximize   0  80
+<br />
++ D Maximize 100 100
+<br />
+<br />DestroyFunc FuncFvwmMoveOrIconify
+<br />
+AddToFunc FuncFvwmMoveOrIconify
+<br />
++ I Raise
+<br />
++ M Move
+<br />
++ D Iconify
+<br />
+<br />DestroyFunc FuncFvwmResizeOrRaise
+<br />
+AddToFunc FuncFvwmResizeOrRaise
+<br />
++ I Raise
+<br />
++ M Resize
+<br />
++ D Lower
+<br />
+<br />DestroyFunc FuncFvwmFocusPolicyChange
+<br />
+AddToFunc FuncFvwmFocusPolicyChange
+<br />
++ I Style * $0
+<br />
++ I Recapture
+<br />
+<br />######################  READ CONFIG FILES FOR MODULES  ######################
+<br />
+read ConfigFvwmIconMan
+<br />
+read ConfigFvwmButtons
+<br />
+read ConfigFvwmMiniButtons
+<br />
+read ConfigFvwmPager
+<br />
+read ConfigFvwmWinList
+<br />
+<br />##############################  End of .fvwm2rc  ##############################
+<br />
+<br />==============================================================================
+<br />
+<br />########################## Icon Manager ####################################
+<br />
+# this FvwmIconMan setup is for swallowing in button bar example
+<br />
+DestroyModuleConfig FvwmIconMan: *
+<br />
+*FvwmIconMan: *numManagers 1
+<br />
+*FvwmIconMan: *Resolution  page
+<br />
+*FvwmIconMan: *background  bisque3
+<br />
+*FvwmIconMan: *foreground  black
+<br />
+*FvwmIconMan: *font        7x13bold
+<br />
+*FvwmIconMan: *format      &quot;%t&quot;
+<br />
+*FvwmIconMan: *action      Mouse   1 N sendcommand Focus, sendcommand &quot;Iconify&quot;
+<br />
+*FvwmIconMan: *action      Mouse   2 N sendcommand &quot;Iconify 1&quot;
+<br />
+*FvwmIconMan: *action      Mouse   3 N sendcommand &quot;FvwmIdent&quot;
+<br />
+*FvwmIconMan: *followfocus true
+<br />
+*FvwmIconMan: *sort        none
+<br />
+*FvwmIconMan: *iconbutton          up black white
+<br />
+*FvwmIconMan: *plainbutton          up black bisque3
+<br />
+*FvwmIconMan: *selectbutton         down black bisque3
+<br />
+*FvwmIconMan: *focusbutton          up yellow firebrick
+<br />
+*FvwmIconMan: *focusandselectButton down yellow firebrick
+<br />
+*FvwmIconMan: *dontshow icon=Untitled resource=Untitled
+<br />
+#*FvwmIconMan: *drawicons true
+<br />
+*FvwmIconMan: *buttongeometry  300x0
+<br />
+*FvwmIconMan: *managergeometry 1x5
+<br />
+<br />==============================================================================
+<br />
+<br />################## FvwmButtons button-bar ##############################
+<br />
+*----------------*---------*-----------*
+<br />
+*                *         *           *
+<br />
+*  FvwmIconMan   *  xload  *   Pager   *
+<br />
+*                *         *           *
+<br />
+*----------------*---------*-----------*
+<br />
+<br />KillModule FvwmButtons
+<br />
+DestroyModuleConfig FvwmButtons: *
+<br />
+*FvwmButtons: Geometry 470x100-1-1_at_2
+<br />
+*FvwmButtons: Back bisque3
+<br />
+*FvwmButtons: (Frame 2, Padding 2 2, Container(Rows 2 Columns 9 Frame 1 Padding 10 0))
+<br />
+*FvwmButtons: (4x2, Frame 2, Swallow &quot;FvwmIconMan&quot; &quot;Module FvwmIconMan&quot;)
+<br />
+*FvwmButtons: (3x2, Frame 0, Container(Rows 2 Columns 2 Frame 0))
+<br />
+*FvwmButtons: (3x2, Frame 2, Swallow(UseOld,NoHints,Respawn) &quot;xload&quot; `Exec exec xload -bg bisque3 -fg black -update 5 -nolabel`)
+<br />
+*FvwmButtons: (End)
+<br />
+*FvwmButtons: (2x2, Frame 2, Swallow(UseOld) &quot;Inline&quot; &quot;Module FvwmPager Inline 0 0&quot;)
+<br />
+*FvwmButtons: (End)
+<br />
+<br />DestroyModuleConfig Inline: *
+<br />
+*Inline: Rows 1
+<br />
+*Inline: Columns 1
+<br />
+DestroyModuleConfig FvwmPagerSubPanel: *
+<br />
+*FvwmPagerSubPanel: Rows 5
+<br />
+*FvwmPagerSubPanel: Columns 1
+<br />
+<br />==============================================================================
+<br />
+<br />###############################  MiniButtons  ###############################
+<br />
+Style &quot;MiniButtons&quot;  NoTitle,NoHandles,Sticky,WindowListSkip,BorderWidth 0
+<br />
+<br />*MiniButtonsFore Black
+<br />
+*MiniButtonsBack #c0c0c0
+<br />
+*MiniButtonsFont -adobe-helvetica-bold-r-*-*-10-*-*-*-*-*-*-*
+<br />
+*MiniButtonsGeometry -5-115_at_p
+<br />
+*MiniButtonsRows 1
+<br />
+*MiniButtonsPadding 1 1
+<br />
+<br />*MiniButtons -   opera.xpm            Exec exec opera
+<br />
+*MiniButtons -   mini-nscape.xpm      Exec exec netscape -geometry 790x543+0+0
+<br />
+*MiniButtons -   mini-term.xpm        Exec exec xterm -ls -sb -fn lucidasanstypewriter-bold-14 -bg peachpuff -title &quot;XTerm&quot;
+<br />
+*MiniButtons -   mini-edit.xpm        Exec exec emacs
+<br />
+*MiniButtons -   mini-gv.xpm          Exec exec gv
+<br />
+*MiniButtons -   mini-xv.xpm          Exec exec xv
+<br />
+*MiniButtons -   mini-bomb.xpm        Destroy
+<br />
+<br />==============================================================================
+<br />
+<br />########################### Pager #########################################
+<br />
+DestroyModuleConfig FvwmPager: *
+<br />
+*FvwmPager: Back #908090
+<br />
+*FvwmPager: Fore #484048
+<br />
+#*FvwmPager: Font -adobe-helvetica-bold-r-*-*-10-*-*-*-*-*-*-*
+<br />
+# turn off desktop names for swallowing in above button bar example:
+<br />
+*FvwmPager: Font none
+<br />
+*FvwmPager: Hilight #cab3ca
+<br />
+*FvwmPager: Geometry -1-1
+<br />
+*FvwmPager: Label 0 Misc
+<br />
+*FvwmPager: SmallFont 5x8
+<br />
+*FvwmPager: Balloons            All
+<br />
+*FvwmPager: BalloonBack         Yellow
+<br />
+*FvwmPager: BalloonFore         Black
+<br />
+*FvwmPager: BalloonFont         lucidasanstypewriter-12
+<br />
+*FvwmPager: BalloonYOffset      +2
+<br />
+*FvwmPager: BalloonBorderWidth  1
+<br />
+*FvwmPager: BalloonBorderColor  Black
+<br />
+<br />==============================================================================
+<br />
+<br />##########################FvwmWinList##################################
+<br />
+DestroyModuleConfig FvwmWinList: *
+<br />
+*FvwmWinList: Back #908090
+<br />
+*FvwmWinList: Fore Black
+<br />
+*FvwmWinList: Font -adobe-helvetica-bold-r-*-*-10-*-*-*-*-*-*-*
+<br />
+*FvwmWinList: Action Click1 Iconify false, Focus
+<br />
+*FvwmWinList: Action Click2 Iconify toggle
+<br />
+*FvwmWinList: Action Click3 Module FvwmIdent
+<br />
+*FvwmWinList: UseSkipList
+<br />
+*FvwmWinList: Geometry +0-1
+<br />
+<br />==============================================================================
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Apr 26 2002 - 00:22:49 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start4974">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="4975.html" title="Next message in the list">Mikhael Goikhman: "Re: FVWM: Alt-tab"</a></li>
+<li><dfn>Previous message</dfn>: <a href="4973.html" title="Previous message in the list">Stian Sletner: "Re: FVWM: Alt-tab"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg4974" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg4974" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg4974" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg4974" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:53 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: parsing in restart_function() in fvwm/builtins.c? from Dan Astoorian on 1997-08-21 (fvwm-users)</title>
+<meta name="Author" content="Dan Astoorian (djast_at_ppp12.utopia.csas.com)" />
+<meta name="Subject" content="FVWM: parsing in restart_function() in fvwm/builtins.c?" />
+<meta name="Date" content="1997-08-21" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: parsing in restart_function() in fvwm/builtins.c?</h1>
+<!-- received="Wed Aug 20 20:45:52 1997" -->
+<!-- isoreceived="19970820194552" -->
+<!-- sent="Wed, 20 Aug 1997 21:39:38 -0400" -->
+<!-- isosent="19970821013938" -->
+<!-- name="Dan Astoorian" -->
+<!-- email="djast_at_ppp12.utopia.csas.com" -->
+<!-- subject="FVWM: parsing in restart_function() in fvwm/builtins.c?" -->
+<!-- id="m0x1MDq-0002a9C_at_utopia.csas.com" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start20702" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="20703.html" accesskey="d" title="Kelly Stephens: &quot;FVWM: Please add this patch to the distribution&quot;">Next message</a> ]
+[ <a href="20701.html" title="bratsche_at_dfw.net: &quot;FVWM: Icon Editors&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg20702" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg20702" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg20702" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg20702" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Dan Astoorian &lt;<a href="mailto:djast_at_ppp12.utopia.csas.com?Subject=Re%3A%20FVWM%3A%20parsing%20in%20restart_function()%20in%20fvwm%2Fbuiltins.c%3F">djast_at_ppp12.utopia.csas.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 20 Aug 1997 21:39:38 -0400</span><br />
+</address>
+<br />
+Here's a bug that's been a mild annoyance to me for a while; I
+<br />
+mentioned it when 2.0.44 came out, but it still seems to be there in
+<br />
+2.0.46....
+<br />
+<br />I use FvwmButtons, with this line included in the configuration:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;*FvwmButtons Restart icon.xpm     Restart fvwm2
+<br />
+<br />...but whenever I use the button, a warning message is produced:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;[FVWM][Done]: &lt;&lt;ERROR&gt;&gt; Call of 'fvwm2
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;' failed!!!!
+<br />
+<br />When FvwmButtons sends commands to fvwm2, it includes the trailing
+<br />
+newline, and fvwm2 isn't parsing it out, so it tries to start a command
+<br />
+named &quot;fvwm2\n&quot;.
+<br />
+<br />This would particularly be a problem if one wanted to start a different
+<br />
+window manager from FvwmButtons, since there's no way to get FvwmButtons
+<br />
+to suppress the newline, and as it stands, no way to get fvwm2 to ignore
+<br />
+it.
+<br />
+<br />Would it break anything if restart_function() were changed to parse out
+<br />
+the first word after the command?  I.e., change:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;void restart_function(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long context, char *action, int *Module)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Done(1, action);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+<br />to something along the lines of:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;void restart_function(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long context, char *action, int *Module)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;char *arg=NULL;
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;action = GetNextToken(action,&amp;arg);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (!(arg &amp;&amp; *arg)) arg=&quot;fvwm2&quot;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Done(1, arg);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+<br />Comments?  (Chuck, could this be fixed in 2.0.47?)
+<br />
+<br />Thanks,
+<br />
+<br />--                          People shouldn't think that it's better to have
+<br />
+Dan Astoorian               loved and lost than never loved at all.  It's
+<br />
+<a href="http://www.utopia.csas.com">http://www.utopia.csas.com</a>  not, it's better to have loved and won.  All
+<br />
+djast_at_utopia.csas.com       the other options really suck.    --Dan Redican
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Aug 20 1997 - 20:45:52 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start20702">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="20703.html" title="Next message in the list">Kelly Stephens: "FVWM: Please add this patch to the distribution"</a></li>
+<li><dfn>Previous message</dfn>: <a href="20701.html" title="Previous message in the list">bratsche_at_dfw.net: "FVWM: Icon Editors"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg20702" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg20702" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg20702" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg20702" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

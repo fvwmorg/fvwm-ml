@@ -1,0 +1,801 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Here's a patch for WarpTowindow and FocusOnly functions from Brady Montz on 1996-04-19 (fvwm-users)</title>
+<meta name="Author" content="Brady Montz (bradym_at_cs.arizona.edu)" />
+<meta name="Subject" content="FVWM: Here's a patch for WarpTowindow and FocusOnly functions" />
+<meta name="Date" content="1996-04-19" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Here's a patch for WarpTowindow and FocusOnly functions</h1>
+<!-- received="Fri Apr 19 13:54:08 1996" -->
+<!-- isoreceived="19960419125408" -->
+<!-- sent="Fri, 19 Apr 1996 11:56:34 -0700 (MST)" -->
+<!-- isosent="19960419185634" -->
+<!-- name="Brady Montz" -->
+<!-- email="bradym_at_cs.arizona.edu" -->
+<!-- subject="FVWM: Here's a patch for WarpTowindow and FocusOnly functions" -->
+<!-- id="199604191856.LAA07533_at_mahler.cs.arizona.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start16314" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="16315.html" accesskey="d" title="Greg Veres: &quot;re:&#0034;Re: FVWM: Memory usage&#0034;&quot;">Next message</a> ]
+[ <a href="16313.html" title="Andrew Veliath: &quot;FVWM: Re: titlebutton pixmaps&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="16321.html" accesskey="t" title="Nobutaka Suzuki: &quot;Re: FVWM: Here&#0039;s a patch for WarpTowindow and FocusOnly functions&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16314" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16314" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16314" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16314" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Brady Montz &lt;<a href="mailto:bradym_at_cs.arizona.edu?Subject=Re%3A%20FVWM%3A%20Here's%20a%20patch%20for%20WarpTowindow%20and%20FocusOnly%20functions">bradym_at_cs.arizona.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 19 Apr 1996 11:56:34 -0700 (MST)</span><br />
+</address>
+<br />
+This adds two functions: WarpToWindow and FocusOnly.
+<br />
+<br />WarpToWindow takes two arguments. It moves the viewport to the page containing
+<br />
+the window, then it raises the window, then it warps the cursor to the
+<br />
+specified location in the window. 
+<br />
+<br />WarpToWindow 20 30 moves the cursor the the sport in the window which is 20% 
+<br />
+of the width and 30% of the height. 
+<br />
+<br />WarpToWindow 20p 30p moves the cursor to the pixel (20, 30) in the window.
+<br />
+<br />I used the GetTwoARguments function to parse the arguments, and it doesn't
+<br />
+allow you to mix bwetween pixel and percent types, so you can do something
+<br />
+like: WarpToWindow 20p 90.
+<br />
+<br />If you give it no arguments, it warps to the upper left hand corner, and
+<br />
+giving it a negative argument results in no warping of the cursor at all, so
+<br />
+it just moves the the right page and raises the window.
+<br />
+<br />FocusOnly is pretty simple, and it just changes the focus.
+<br />
+<br />The current Focus function is still there, but this function works fine for me
+<br />
+to get the current Focus behavior:
+<br />
+<br />AddToFunc &quot;MyFocus&quot;
+<br />
++		&quot;I&quot; WarpToWindow
+<br />
++		&quot;I&quot; FocusOnly
+<br />
+<br />The only problem I forsee is that the current focus function checks whether
+<br />
+the window is a ClickToFocus window before deciding whether to warp the
+<br />
+cursor, and you obviously lose this now. I think that most people either only
+<br />
+use ClickToFocus all the time, or never, or only for windows that don't ever
+<br />
+need the focus (that's what I do) so this might not be a big problem.
+<br />
+<br />Let me know what you think. I wrote this just this morning, so I expect
+<br />
+problems. Seems to work for me though. Apply the patch in the fvwm-2.0.42
+<br />
+directory.
+<br />
+<br /><br />diff -cr fvwm/builtins.c fvwm-patched/builtins.c
+<br />
+*** fvwm/builtins.c	Wed Apr 10 10:38:25 1996
+<br />
+--- fvwm-patched/builtins.c	Fri Apr 19 11:28:56 1996
+<br />
+***************
+<br />
+*** 145,172 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;return FALSE;
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+- 
+<br />
+- 
+<br />
+- 
+<br />
+&nbsp;&nbsp;/**************************************************************************
+<br />
+&nbsp;&nbsp;&nbsp;*
+<br />
+!  * Moves focus to specified window 
+<br />
+&nbsp;&nbsp;&nbsp;*
+<br />
+!  *************************************************************************/
+<br />
+! void FocusOn(FvwmWindow *t,int DeIconifyOnly)
+<br />
+&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;#ifndef NON_VIRTUAL
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int dx,dy;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int cx,cy;
+<br />
+&nbsp;&nbsp;#endif
+<br />
+!   int x,y;
+<br />
+! 
+<br />
+!   if(t == (FvwmWindow *)0)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+&nbsp;&nbsp;
+<br />
+!   if(t-&gt;Desk != Scr.CurrentDesk)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!     changeDesks(0,t-&gt;Desk);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;#ifndef NON_VIRTUAL
+<br />
+--- 145,171 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;return FALSE;
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;/**************************************************************************
+<br />
+&nbsp;&nbsp;&nbsp;*
+<br />
+!  * Warps pointer to a specified window
+<br />
+&nbsp;&nbsp;&nbsp;*
+<br />
+!  **************************************************************************/
+<br />
+! 
+<br />
+! void WarpOn(FvwmWindow *t, int warp_x, int x_unit, int warp_y, 
+<br />
+! 	    int y_unit)
+<br />
+&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;#ifndef NON_VIRTUAL
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int dx,dy;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int cx,cy;
+<br />
+&nbsp;&nbsp;#endif
+<br />
+!   int x, y;
+<br />
+!   
+<br />
+!   if (t == (FvwmWindow *)0 || (t-&gt;flags &amp; ICONIFIED &amp;&amp; t-&gt;icon_w == None))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+&nbsp;&nbsp;
+<br />
+!   if (t-&gt;Desk != Scr.CurrentDesk)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!     changeDesks (0, t-&gt;Desk);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;#ifndef NON_VIRTUAL
+<br />
+***************
+<br />
+*** 187,204 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MoveViewport(dx,dy,True);
+<br />
+&nbsp;&nbsp;#endif
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(t-&gt;flags &amp; ICONIFIED)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!     x = t-&gt;icon_xl_loc + t-&gt;icon_w_width/2;
+<br />
+!     y = t-&gt;icon_y_loc + t-&gt;icon_p_height + ICON_HEIGHT/2;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!     x = t-&gt;frame_x;
+<br />
+!     y = t-&gt;frame_y;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+-   if(!(t-&gt;flags &amp; ClickToFocus))
+<br />
+-     XWarpPointer(dpy, None, Scr.Root, 0, 0, 0, 0, x+2,y+2);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;RaiseWindow(t);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;KeepOnTop();
+<br />
+&nbsp;&nbsp;
+<br />
+--- 186,211 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MoveViewport(dx,dy,True);
+<br />
+&nbsp;&nbsp;#endif
+<br />
+&nbsp;&nbsp;
+<br />
++ 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(t-&gt;flags &amp; ICONIFIED)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!     x = t-&gt;icon_xl_loc + t-&gt;icon_w_width/2 + 2;
+<br />
+!     y = t-&gt;icon_y_loc + t-&gt;icon_p_height + ICON_HEIGHT/2 + 2;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!     if (x_unit != Scr.MyDisplayWidth)
+<br />
+!       x = t-&gt;frame_x + 2 + warp_x;
+<br />
+!     else
+<br />
+!       x = t-&gt;frame_x + 2 + (t-&gt;frame_width - 4) * warp_x / 100;
+<br />
+!     if (y_unit != Scr.MyDisplayHeight) 
+<br />
+!       y = t-&gt;frame_y + 2 + warp_y;
+<br />
+!     else
+<br />
+!       y = t-&gt;frame_y + 2 + (t-&gt;frame_height - 4) * warp_y / 100;
+<br />
+!   }
+<br />
+!   if (warp_x &gt;= 0 &amp;&amp; warp_y &gt;= 0) {
+<br />
+!     XWarpPointer(dpy, None, Scr.Root, 0, 0, 0, 0, x, y);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;RaiseWindow(t);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;KeepOnTop();
+<br />
+&nbsp;&nbsp;
+<br />
+***************
+<br />
+*** 207,216 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(t-&gt;frame_x &gt;Scr.MyDisplayWidth)||(t-&gt;frame_y&gt;Scr.MyDisplayHeight))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SetupFrame(t,0,0,t-&gt;frame_width, t-&gt;frame_height,False);
+<br />
+!     if(!(t-&gt;flags &amp; ClickToFocus))
+<br />
+!       XWarpPointer(dpy, None, Scr.Root, 0, 0, 0, 0, 2,2);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;UngrabEm();
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SetFocus(t-&gt;w,t,0);
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+--- 214,243 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(t-&gt;frame_x &gt;Scr.MyDisplayWidth)||(t-&gt;frame_y&gt;Scr.MyDisplayHeight))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SetupFrame(t,0,0,t-&gt;frame_width, t-&gt;frame_height,False);
+<br />
+!     XWarpPointer(dpy, None, Scr.Root, 0, 0, 0, 0, 2,2);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;UngrabEm();
+<br />
++ }
+<br />
++ 
+<br />
++ /**************************************************************************
+<br />
++  *
+<br />
++  * Moves focus to specified window 
+<br />
++  *
+<br />
++  *************************************************************************/
+<br />
++ void FocusOn(FvwmWindow *t,int DeIconifyOnly, int FocusOnly)
+<br />
++ {
+<br />
++ #ifndef NON_VIRTUAL
+<br />
++   int dx,dy;
+<br />
++   int cx,cy;
+<br />
++ #endif
+<br />
++   int x,y;
+<br />
++ 
+<br />
++   if(t == (FvwmWindow *)0)
+<br />
++     return;
+<br />
++   
+<br />
++   if (!FocusOnly) {
+<br />
++     WarpOn (t, 0, 0, 0, 0);
+<br />
++   }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SetFocus(t-&gt;w,t,0);
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+***************
+<br />
+*** 747,761 ****
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(val1 != 0)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!     FocusOn((FvwmWindow *)val1,0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (((FvwmWindow *)(val1))-&gt;flags &amp; ICONIFIED)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DeIconify((FvwmWindow *)val1);
+<br />
+!       FocusOn((FvwmWindow *)val1,0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;void focus_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long context, char *action, int *Module)
+<br />
+--- 774,801 ----
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(val1 != 0)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!     FocusOn((FvwmWindow *)val1,0,0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (((FvwmWindow *)(val1))-&gt;flags &amp; ICONIFIED)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DeIconify((FvwmWindow *)val1);
+<br />
+!       FocusOn((FvwmWindow *)val1,0,0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
++ void warpwindow_func(XEvent *eventp, Window w, FvwmWindow *tmp_win,
+<br />
++ 		     unsigned long context, char *action, int *Module)
+<br />
++ {
+<br />
++   int val1_unit, val2_unit, n;
+<br />
++   int val1, val2;
+<br />
++ 
+<br />
++   n = GetTwoArguments (action, &amp;val1, &amp;val2, &amp;val1_unit, &amp;val2_unit);
+<br />
++   
+<br />
++   if (n == 2)
+<br />
++     WarpOn (tmp_win, val1, val1_unit, val2, val2_unit);
+<br />
++   else
+<br />
++     WarpOn (tmp_win, 0, 0, 0, 0);
+<br />
++ }
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;void focus_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long context, char *action, int *Module)
+<br />
+***************
+<br />
+*** 763,771 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if (DeferExecution(eventp,&amp;w,&amp;tmp_win,&amp;context,SELECT,ButtonRelease))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+&nbsp;&nbsp;
+<br />
+!   FocusOn(tmp_win,0);
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;void popup_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long context, char *action,int *Module)
+<br />
+--- 803,819 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if (DeferExecution(eventp,&amp;w,&amp;tmp_win,&amp;context,SELECT,ButtonRelease))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+&nbsp;&nbsp;
+<br />
+!   FocusOn(tmp_win,0,0);
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
++ void focusonly_func (XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
++ 		     unsigned long context, char *action, int *Module)
+<br />
++ {
+<br />
++   if (DeferExecution(eventp,&amp;w,&amp;tmp_win,&amp;context,SELECT,ButtonRelease))
+<br />
++     return;
+<br />
++   
+<br />
++   FocusOn(tmp_win,0,1);
+<br />
++ }
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;void popup_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long context, char *action,int *Module)
+<br />
+diff -cr fvwm/functions.c fvwm-patched/functions.c
+<br />
+*** fvwm/functions.c	Thu Mar 28 08:24:23 1996
+<br />
+--- fvwm-patched/functions.c	Fri Apr 19 11:26:01 1996
+<br />
+***************
+<br />
+*** 54,59 ****
+<br />
+--- 54,60 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{&quot;Exec&quot;,         exec_function,    F_EXEC,                FUNC_NO_WINDOW},
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{&quot;ExecUseSHELL&quot;, exec_setup,       F_EXEC_SETUP,          FUNC_NO_WINDOW},
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{&quot;Focus&quot;,        focus_func,       F_FOCUS,               FUNC_NEEDS_WINDOW},
+<br />
++   {&quot;FocusOnly&quot;,    focusonly_func,   F_FOCUSONLY,           FUNC_NEEDS_WINDOW},
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{&quot;Function&quot;,     ComplexFunction,  F_FUNCTION,            FUNC_NO_WINDOW},
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{&quot;GotoPage&quot;,     goto_page_func,   F_GOTO_PAGE,           FUNC_NO_WINDOW},
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{&quot;HilightColor&quot;, SetHiColor,       F_HICOLOR,             FUNC_NO_WINDOW},
+<br />
+***************
+<br />
+*** 98,103 ****
+<br />
+--- 99,105 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{&quot;Title&quot;,        Nop_func,         F_TITLE,               FUNC_TITLE},
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{&quot;Titlestyle&quot;,   SetTitleStyle,    F_TITLESTYLE,          FUNC_NO_WINDOW},
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{&quot;Wait&quot;,         wait_func,        F_WAIT,                FUNC_NO_WINDOW},
+<br />
++   {&quot;WarpToWindow&quot;, warpwindow_func,  F_WARPTOWINDOW,        FUNC_NEEDS_WINDOW},
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{&quot;WindowFont&quot;,   LoadWindowFont,   F_WINDOWFONT,          FUNC_NO_WINDOW},
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{&quot;WindowList&quot;,   do_windowList,    F_WINDOWLIST,          FUNC_NO_WINDOW},
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{&quot;WindowsDesk&quot;,  changeWindowsDesk,F_CHANGE_WINDOWS_DESK, FUNC_NEEDS_WINDOW},
+<br />
+diff -cr fvwm/icons.c fvwm-patched/icons.c
+<br />
+*** fvwm/icons.c	Thu Apr 11 08:37:37 1996
+<br />
+--- fvwm-patched/icons.c	Fri Apr 19 11:21:40 1996
+<br />
+***************
+<br />
+*** 736,742 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(tmp_win-&gt;flags &amp; ClickToFocus)
+<br />
+!     FocusOn(tmp_win,1);
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;KeepOnTop();
+<br />
+&nbsp;&nbsp;
+<br />
+--- 736,742 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(tmp_win-&gt;flags &amp; ClickToFocus)
+<br />
+!     FocusOn(tmp_win,1,0);
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;KeepOnTop();
+<br />
+&nbsp;&nbsp;
+<br />
+diff -cr fvwm/misc.h fvwm-patched/misc.h
+<br />
+*** fvwm/misc.h	Thu Apr  4 16:47:30 1996
+<br />
+--- fvwm-patched/misc.h	Fri Apr 19 11:25:31 1996
+<br />
+***************
+<br />
+*** 274,280 ****
+<br />
+&nbsp;&nbsp;void KeepOnTop(void);
+<br />
+&nbsp;&nbsp;void show_panner(void);
+<br />
+&nbsp;&nbsp;void WaitForButtonsUp(void);
+<br />
+! void FocusOn(FvwmWindow *t,int DeIconifyOnly);
+<br />
+&nbsp;&nbsp;Bool PlaceWindow(FvwmWindow *tmp_win, unsigned long flags,int Desk);
+<br />
+&nbsp;&nbsp;void free_window_names (FvwmWindow *tmp, Bool nukename, Bool nukeicon);
+<br />
+&nbsp;&nbsp;
+<br />
+--- 274,280 ----
+<br />
+&nbsp;&nbsp;void KeepOnTop(void);
+<br />
+&nbsp;&nbsp;void show_panner(void);
+<br />
+&nbsp;&nbsp;void WaitForButtonsUp(void);
+<br />
+! void FocusOn(FvwmWindow *t,int DeIconifyOnly, int FocusOnly);
+<br />
+&nbsp;&nbsp;Bool PlaceWindow(FvwmWindow *tmp_win, unsigned long flags,int Desk);
+<br />
+&nbsp;&nbsp;void free_window_names (FvwmWindow *tmp, Bool nukename, Bool nukeicon);
+<br />
+&nbsp;&nbsp;
+<br />
+***************
+<br />
+*** 381,387 ****
+<br />
+--- 381,391 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long context,char *action, int *Module);
+<br />
+&nbsp;&nbsp;void raise_it_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long context, char *action, int *Module);
+<br />
++ void warpwindow_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
++ 		unsigned long context, char *action, int *Module);
+<br />
+&nbsp;&nbsp;void focus_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
++ 		unsigned long context, char *action, int *Module);
+<br />
++ void focusonly_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long context, char *action, int *Module);
+<br />
+&nbsp;&nbsp;void SendDataToModule(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long context, char *action,int *Module);
+<br />
+diff -cr fvwm/parse.h fvwm-patched/parse.h
+<br />
+*** fvwm/parse.h	Thu Mar 28 08:24:48 1996
+<br />
+--- fvwm-patched/parse.h	Fri Apr 19 11:26:29 1996
+<br />
+***************
+<br />
+*** 85,90 ****
+<br />
+--- 85,92 ----
+<br />
+&nbsp;&nbsp;#define F_RAISELOWER            108
+<br />
+&nbsp;&nbsp;#define F_MAXIMIZE              109
+<br />
+&nbsp;&nbsp;#define F_FOCUS                 110
+<br />
++ #define F_WARPTOWINDOW          111
+<br />
++ #define F_FOCUSONLY             112
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;/* Functions for use by modules only! */
+<br />
+&nbsp;&nbsp;#define F_SEND_WINDOW_LIST     1000
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Apr 19 1996 - 13:54:08 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start16314">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="16315.html" title="Next message in the list">Greg Veres: "re:&#0034;Re: FVWM: Memory usage&#0034;"</a></li>
+<li><dfn>Previous message</dfn>: <a href="16313.html" title="Previous message in the list">Andrew Veliath: "FVWM: Re: titlebutton pixmaps"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="16321.html" title="Next message in this discussion thread">Nobutaka Suzuki: "Re: FVWM: Here&#0039;s a patch for WarpTowindow and FocusOnly functions"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Maybe reply</dfn>: <a href="16321.html" title="Message sent in reply to this message">Nobutaka Suzuki: "Re: FVWM: Here&#0039;s a patch for WarpTowindow and FocusOnly functions"</a></li>
+<li><dfn>Reply</dfn>: <a href="16347.html" title="Message sent in reply to this message">Kai Grossjohann: "Re: FVWM: Here&#0039;s a patch for WarpTowindow and FocusOnly functions"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16314" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16314" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16314" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16314" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

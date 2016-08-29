@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: automation of deiconifying xconsole from Thomas A. Gardiner on 2001-02-08 (fvwm-users)</title>
+<meta name="Author" content="Thomas A. Gardiner (gardiner_at_pas.rochester.edu)" />
+<meta name="Subject" content="Re: FVWM: automation of deiconifying xconsole" />
+<meta name="Date" content="2001-02-08" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: automation of deiconifying xconsole</h1>
+<!-- received="Thu Feb  8 07:46:52 2001" -->
+<!-- isoreceived="20010208074652" -->
+<!-- sent="Thu, 8 Feb 2001 08:38:50 -0500 (EST)" -->
+<!-- isosent="20010208133850" -->
+<!-- name="Thomas A. Gardiner" -->
+<!-- email="gardiner_at_pas.rochester.edu" -->
+<!-- subject="Re: FVWM: automation of deiconifying xconsole" -->
+<!-- id="Pine.LNX.3.96URPAS-R.1010208082744.16789A-100000_at_alfalfa.pas.rochester.edu" -->
+<!-- charset="iso-8859-1" -->
+<!-- inreplyto="20010208115737.15456.qmail_at_web3004.mail.yahoo.com" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start2111" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="2112.html" accesskey="d" title="Dan Espen: &quot;Re: FVWM: automation of deiconifying xconsole&quot;">Next message</a> ]
+[ <a href="2110.html" title="S. Anderson: &quot;Re: FVWM: Default window placementent&quot;">Previous message</a> ]
+[ <a href="2109.html" title="Thomas Adam: &quot;Re: FVWM: automation of deiconifying xconsole&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="2112.html" accesskey="t" title="Dan Espen: &quot;Re: FVWM: automation of deiconifying xconsole&quot;">Next in thread</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg2111" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg2111" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg2111" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg2111" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Thomas A. Gardiner &lt;<a href="mailto:gardiner_at_pas.rochester.edu?Subject=Re%3A%20FVWM%3A%20automation%20of%20deiconifying%20xconsole">gardiner_at_pas.rochester.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 8 Feb 2001 08:38:50 -0500 (EST)</span><br />
+</address>
+<br />
+Well, first you have to make sure that you start FvwmEvent, as the
+<br />
+AnotherLevel package is soo old that it still has configuration stuff for
+<br />
+FvwmAudio...  In fvwm2rc.init.m4 you will find the following function:
+<br />
+<br /># SetupFunction gets run at Init and Restart
+<br />
+AddToFunc &quot;SetupFunction&quot;
+<br />
++ &quot;I&quot; Exec xsetroot -solid BG_COLOR
+<br />
+ifdef(`WANT_SOUND_EVENTS',`+ &quot;I&quot; Module FvwmAudio
+<br />
+')dnl
+<br />
+ifdef(`USE_AUTO_RAISE',`+ &quot;I&quot; Module FvwmAuto AUTO_RAISE_SPEED
+<br />
+')dnl
+<br />
++ &quot;I&quot; Module FvwmEvent
+<br />
+<br />Add the bottom line to it like I've done to start FvwmEvent.
+<br />
+<br />(By the way if you are wondering what SetupFunction does, look in
+<br />
+fvwm2rc.m4 and you will find that it simply added to the InitFunction and
+<br />
+RestartFunction used by Fvwm2.)
+<br />
+<br />To make a long story short, the configuration stuff for modules, those
+<br />
+lines which start with *FvwmEvent go in fvwm2rc.modules.m4 and the
+<br />
+functions go in fvwm2rc.functions.m4 according to the AnotherLevel layout.
+<br />
+<br />In the end, however, it really doesn't matter where you put it...
+<br />
+<br />HTH,
+<br />
+<br />Tom
+<br />
+<br />On Thu, 8 Feb 2001, Thomas Adam wrote:
+<br />
+<br /><em class="quotelev1">&gt;Hi,
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt;As I am a complete newbie to all of this, could you
+</em><br />
+<em class="quotelev1">&gt;provide detailed instructions as to which file I put
+</em><br />
+<em class="quotelev1">&gt;the functions that you mentioned. I use the
+</em><br />
+<em class="quotelev1">&gt;AnotherLevel m4 preprocessor if that helps!!
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt;Much obliged for your help,
+</em><br />
+<em class="quotelev1">&gt;Regards,
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt;Thomas Adam
+</em><br />
+<br /><em class="quotelev1">&gt;--- Dominik Vogt &lt;dominik.vogt_at_fvwm.org&gt; wrote:
+</em><br />
+<em class="quotelev2">&gt;&gt; 
+</em><br />
+<em class="quotelev2">&gt;&gt; If xconsole is started with the &quot;-notify&quot; option, an
+</em><br />
+<em class="quotelev2">&gt;&gt; asterisk is
+</em><br />
+<em class="quotelev2">&gt;&gt; appended to the icon title whenever new data
+</em><br />
+<em class="quotelev2">&gt;&gt; arrives.  Then you
+</em><br />
+<em class="quotelev2">&gt;&gt; can set up FvwmEvent to notice this change in the
+</em><br />
+<em class="quotelev2">&gt;&gt; icon title and
+</em><br />
+<em class="quotelev2">&gt;&gt; deiconify the window via an fvwm function, perhaps
+</em><br />
+<em class="quotelev2">&gt;&gt; something like
+</em><br />
+<em class="quotelev2">&gt;&gt; 
+</em><br />
+<em class="quotelev2">&gt;&gt;   *FvwmEvent icon_name Function DeiconifyXconsole
+</em><br />
+<em class="quotelev2">&gt;&gt;   *FvwmEventPassID
+</em><br />
+<em class="quotelev2">&gt;&gt;   AddToFunc DeiconifyXconsole
+</em><br />
+<em class="quotelev2">&gt;&gt;   + I WindowId $0 (xconsole\*) iconify off
+</em><br />
+<em class="quotelev2">&gt;&gt; 
+</em><br />
+<em class="quotelev2">&gt;&gt; Bye
+</em><br />
+<em class="quotelev2">&gt;&gt; 
+</em><br />
+<em class="quotelev2">&gt;&gt; Dominik ^_^  ^_^
+</em><br />
+<em class="quotelev2">&gt;&gt; 
+</em><br />
+<em class="quotelev2">&gt;&gt; --
+</em><br />
+<em class="quotelev2">&gt;&gt; Dominik Vogt, email: d.vogt_at_lifebits.de
+</em><br />
+<em class="quotelev2">&gt;&gt; LifeBits Aktiengesellschaft, Albrechtstr. 9, D-72072
+</em><br />
+<em class="quotelev2">&gt;&gt; Tuebingen
+</em><br />
+<em class="quotelev2">&gt;&gt; fon: ++49 (0) 7071/7965-0, fax: ++49 (0) 7071/7965-2
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt;=====
+</em><br />
+<em class="quotelev1">&gt;Thomas Adam
+</em><br />
+<em class="quotelev1">&gt;Linux Co-ordinator for The Purbeck School
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt;e-mail (school): n6tadam_at_users.purbeck.dorset.sch.uk
+</em><br />
+<em class="quotelev1">&gt;e-mail (yahoo) : thomas_adam16_at_yahoo.com
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt;__________________________________________________
+</em><br />
+<em class="quotelev1">&gt;Do You Yahoo!?
+</em><br />
+<em class="quotelev1">&gt;Get personalized email addresses from Yahoo! Mail - only $35 
+</em><br />
+<em class="quotelev1">&gt;a year!  <a href="http://personal.mail.yahoo.com/">http://personal.mail.yahoo.com/</a>
+</em><br />
+<em class="quotelev1">&gt;--
+</em><br />
+<em class="quotelev1">&gt;Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+</em><br />
+<em class="quotelev1">&gt;To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+</em><br />
+<em class="quotelev1">&gt;message to majordomo_at_fvwm.org.
+</em><br />
+<em class="quotelev1">&gt;To report problems, send mail to fvwm-owner_at_fvwm.org.
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Feb 08 2001 - 07:46:52 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start2111">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="2112.html" title="Next message in the list">Dan Espen: "Re: FVWM: automation of deiconifying xconsole"</a></li>
+<li><dfn>Previous message</dfn>: <a href="2110.html" title="Previous message in the list">S. Anderson: "Re: FVWM: Default window placementent"</a></li>
+<li><dfn>In reply to</dfn>: <a href="2109.html" title="Message to which this message replies">Thomas Adam: "Re: FVWM: automation of deiconifying xconsole"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="2112.html" title="Next message in this discussion thread">Dan Espen: "Re: FVWM: automation of deiconifying xconsole"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg2111" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg2111" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg2111" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg2111" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:51 BST
+</em></small></p>
+</body>
+</html>

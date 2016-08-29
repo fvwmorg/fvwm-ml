@@ -1,0 +1,399 @@
+##########################################################################
+# FVWM - F? Virtual Window Manager, Version 2.x (fvwm2) Configuration File
+# Created April 1996
+#
+
+##########################################################################
+# PATH Setup 
+#
+# Not normally needed; use configure to set defaults at compile time.  
+#
+# IMPORTANT: if you decide to set a ModulePath, please note that modules
+#            are normally installed into a version-dependent
+#	     directory.  Be sure to update this file after installing
+#	     a new version.
+#
+# Colon seperated unix directory paths for Modules, xpm files, and bitmaps
+PixmapPath /usr/X11R6/lib/X11/fvwm2/pixmaps
+PixmapPath $HOME/.fvwm2themes/Simple/Pixmaps/
+
+
+############################################################################
+# COLORS and FONTS
+#
+# Set the fore and back border colors for the window that has focus
+HilightColor		black #89818b
+
+# Set fore/back border colors for all other windows 
+Style "*" Color black/white
+
+# Set colors/font for pop-up menus
+# Syntax: MenuStyle forecolor backcolor shadecolor font style(fvwm/mwm)
+MenuStyle black #706468 #302a2a -bitstream-charter-medium-r-normal-*-*-100-*-*-p-*-iso8859-1 fvwm
+
+MenuStyle * MenuFace TiledPixmap menu3.xpm
+
+# Set fonts to use on title bar and icon label
+WindowFont 	-bitstream-charter-medium-r-normal-*-*-90-*-*-p-*-iso8859-1
+IconFont	 -bitstream-charter-medium-r-normal-*-*-100-*-*-p-*-iso8859-1
+
+############################################################################
+# ICON Setup
+#
+# Auto Place Icons is a nice feature (Left Top Right Bottom)
+Style "*" IconBox -215 200 -1 -100 
+
+CursorStyle ROOT arrow1.xpm
+CursorStyle DEFAULT arrow1.xpm
+CursorStyle SYS arrow1.xpm
+CursorStyle MENU arrow1.xpm
+CursorStyle TITLE arrow1.xpm
+CursorStyle WAIT arrow1.xpm
+
+
+SnapAttraction 10
+
+
+############################################################################
+# FOCUS Setup
+#
+# If you knock your mouse out of the xterm, it keeps focus while in root window
+Style "*term"		SloppyFocus
+
+############################################################################
+# MISC Setup
+#
+# click/release must occur in <n milliseconds to be a "click"
+ClickTime 250
+
+# if the window occupies less than n% of the screen, draw it opaque
+OpaqueMoveSize 100
+
+# flip by whole pages on the edge of the screen, but delay for a half second
+EdgeScroll 100 100
+EdgeResistance 50000000 20
+
+# MWM Emulation: Don't ignore hints for functions and transient decoration
+Style "*" MWMFunctions, MWMDecor
+
+###########################################################################
+# PAGER Setup
+#
+# set the desk top size in units of physical screen size (width x height)
+DeskTopSize 3 3
+
+############################################################################
+# WINDOW Placement
+#
+# SmartPlacement makes new windows pop-up in blank regions of screen 
+Style "*" SmartPlacement
+
+# If SmartPlacement fails, this places it randomly instead of making you do it
+Style "*" RandomPlacement
+
+############################################################################
+# STYLE Flag Setup
+#
+# (decorations and window options) 
+# Note: Order is important!! If compatible styles are set, styles are ORed
+# together. If conflicting styles are set, the last one specified is used.
+
+# change the default width, set a global icon, and give borders to popups
+Style "*" BorderWidth 7, HandleWidth 7, Icon x.xpm, DecorateTransient
+
+Style "Fvwm*"		NoTitle, Sticky, WindowListSkip, StaysOnTop
+Style "xbiff"		NoTitle, Sticky, WindowListSkip
+Style "FvwmButtons"	ClickToFocus
+Style "*term"		Icon xterm.xpm
+Style "xcalc"		Icon xcalc.xpm
+Style "xbiff"		Icon mail1.xpm
+Style "xmh"		Icon mail2.xpm
+Style "XFMail"		NoPPosition, StartsOnPage 0 1 0
+
+#############################################################################
+# START-UP Functions
+#
+AddToFunc "InitFunction" "I" Module FvwmButtons
++		"I" Module FvwmAnimate
++		"I" Module FvwmBanner
+#+		"I" Next [!iconic CurrentScreen xterm] Focus
+#+		"I" CursorMove 30 40
+
+AddToFunc "RestartFunction" "I" Module FvwmButtons
++		"I" Module FvwmBanner
++		"I" Module FvwmAnimate
+#+		"I" Next [!iconic CurrentScreen xterm] Focus
+#+		"I" CursorMove 30 40
+
+
+*FvwmAnimate	Efect Zoom3D
+
+############################################################################
+# BUTTON Setup
+#
+
+PixmapPath $HOME/.fvwm2themes/Simple/Pixmaps/
+TitleStyle ActiveUp (TiledPixmap "title2.xpm" -- flat)
+TitleStyle ActiveDown (TiledPixmap "title2.xpm" -- flat)
+TitleStyle InActive (TiledPixmap "title.xpm" -- flat)
+ButtonStyle 1 (TiledPixmap "button1.xpm" -- flat)
+ButtonStyle 2 (TiledPixmap "button2.xpm" -- flat)
+ButtonStyle 3 (TiledPixmap "button3.xpm" -- flat)
+ButtonStyle 4 (TiledPixmap "button4.xpm" -- flat)
+ButtonStyle 6 (TiledPixmap "button6.xpm" -- flat)
+Style "*" Color #666666/gray
+Style "*" MWMBorder
+Style "*" HintOverride
+Style "*" NoButton 5
+Style "*" BorderWidth 3, HandleWidth 3
+
+*FvwmBanner: Pixmap netbsd.xpm
+
+
+##############################################################################
+# MENU Setup
+#
+
+
+AddToMenu bgs		"Mellon Collie"	Exec exec Esetroot ~/pics/0.jpg
++		"Pisces Iscariot" Exec exec Esetroot ~/pics/1.jpg
++		"Choirgirl"	 Exec exec Esetroot ~/pics/2.jpg
++		"Little Earthquakes"	Exec exec Esetroot ~/pics/3.jpg
++		"Reckoning"	Exec exec Esetroot ~/pics/4.jpg
++		"Murmur"	 Exec exec Esetroot ~/pics/5.jpg
++		"Horsehead"	 Exec exec Esetroot ~/pics/6.jpg
++		"Adore"		 Exec exec Esetroot ~/pics/7.jpg
++		"Thank You"	 Exec exec Esetroot ~/pics/8.jpg
++		"Reveal"	 Exec exec Esetroot ~/pics/9.jpg
++		"Automatic"	 Exec exec Esetroot ~/pics/10.jpg
++		"Murder Ballads"	 Exec exec Esetroot ~/pics/11.jpg
++		"Seaview"	 Exec exec Esetroot ~/pics/12.jpg
++		"Dawn"		 Exec exec Esetroot ~/pics/13.jpg
++		"Lake"		 Exec exec Esetroot ~/pics/14.jpg
++		"Aftermath"	Exec exec Esetroot -scale ~/pics/aftermath.jpg
++		"Capricorn"	Exec exec Esetroot -scale ~/pics/capricorn.jpg	
++		"Earlyfrost"	Exec exec Esetroot -scale ~/pics/earlyfrost.jpg
++		"Maelstrom"	Exec exec Esetroot -scale ~/pics/maelstrom.jpg
++		"Skysong"	Exec exec Esetroot -scale ~/pics/skysong2.jpg
++		"Morninglight" Exec exec Esetroot -scale ~/pics/morninglight.jpg
++		"Neptune"	Exec exec Esetroot -scale ~/pics/neptune.jpg
++		"Disarm"	 Exec exec Esetroot -scale ~/pics/disarm.jpg
++		"Blow"		 Exec exec Esetroot -scale ~/pics/blow.jpg
++		"Queen"		 Exec exec Esetroot -scale ~/pics/queen.jpg
++		"Andromeda"	 Exec exec Esetroot -scale ~/pics/andromeda.jpg
+		
+
+# This defines the most common window operations
+AddToMenu Window-Ops    "Window Ops"    Title
++                       "(De)Iconify"   Iconify
++                       "(Un)Stick"     Stick
++                       "(Un)Maximize"  maximize_func
++                       "Delete"        Delete
++                       "Close"         Close
++                       "Destroy"       Destroy
++                       ""              Nop
++                       "Refresh Screen" Refresh
+
+# A trimmed down version of "Window Ops", good for binding to decorations
+AddToMenu Window-Ops2   "Move"          Move-or-Raise
++			"Maximize"	maximize_func
++                       "Iconify"       Iconify
++                       "(Un)Stick"     Stick
++                       "Delete"        Delete
++                       "Close"         Close
++                       "Destroy"       Destroy
+
+AddToMenu FvwmCommands	"Fvwm Commands" Title
++	                "Restart Fvwm2" Restart fvwm2
++ 			"Fvwm Modules"  Popup FvwmModules
++	                "" Nop
++ 			"Exit Fvwm"     Quit
+
+
+AddToMenu FvwmModules	"Fvwm Modules" Title
++                       "Pager"         Module  FvwmPager 0 0
++                       "Button-Bar"    Module  FvwmButtons
++                       "WinList"       Module  FvwmWinList
++                       "Identify"      Module  FvwmIdent
++			""		Nop
++                       "Clean-Up"      Module  FvwmClean
++                       "SaveDesktop"   Module  FvwmSave
++                       "Debug"         Module  FvwmDebug
++                       "Background"    Module  FvwmBacker
++                       "IconBox"       Module  FvwmIconBox
++                       "Banner"        Module  FvwmBanner
++                       "Talk"          Module  FvwmTalk
++			"Audio"		Module	FvwmAudio
++			"Config"	Module	FvwmConfig
++                       "Prompt"        Module  FvwmPrompt "hello" raise
++			"Gtk"		Module  FvwmGtk RootMenu
+
+# This is the root menu
+AddToMenu RootMenu "Root Menu" Title
++		"Xterm"		Exec exec Eterm &
++		"Root Xterm"	Exec exec xterm -fg grey -bg black -sl 256 -e sudo bash &
++		"mc"		Exec exec xterm -fg grey -bg black -e mc &
++		"Mozilla"	Exec exec mozilla &
++		"xfmail"	Exec exec xfmail &
++		"xmms"		Exec exec xmms &
++		"fxtv"		Exec exec fxtv -bnoswap2Bpp &
++		"alevt"		Exec exec alevt 100 &
++		"gimp"		Exec exec gimp &
++		"gqview"	Exec exec gqview &
++		"WordPerfect"	Exec exex /linux/usr/local/wp/wpbin/xwp &
++		"" 		Nop
++		"rarely"	Popup rare
++		"Utilities"	Popup Utilities
++		"Fvwm Commands"	Popup FvwmCommands
++		"Backgrounds"	Popup bgs
++		"Exit Fvwm"	Quit
++		"Shutdown"	Exec exec /home/philipp/.shutdown.sh &
+
+AddToMenu rare		"rarely used" Title
++		"nedit"		Exec exec nedit &
++		"netscape"	Exec exec netscape &
++               "micq"          Exec exec xterm -fg grey -bg black -e micq &
++               "BitchX"        Exec exec xterm -fg grey -bg black -e BitchX vienna.irc.at &
++		"tin"		Exec exec xterm -fg grey -bg black -e rtin -Q &
++		"xchat"		Exec exec xchat &
++		"xearth"	Exec exec xearth &
++		"timidity"	Exec exec timidity &
++		"freeciv"	Exec exec civclient-gtk &
++		"gtksql"	Exec exec gtksql &
++		"pgaccess"	Exec exec pgaccess &
++		"xbill"		Exec exec xbill &
+
+
+
+# This menu will fire up some often used programs
+AddToMenu Utilities 	"Choose one:" Title
++	                "xcalc" Exec exec xcalc &
++			"speyes"	Exec	exec speyes -s &
++			"xsnow"	Exec	exec xsnow
++			"xcruise"	Exec	exec xcruise &
+
+
+# A wide variety of screenlocking options...
+
+############################################################################
+# COMPLEX FUNCTIONS
+#
+AddToFunc warp-or-run		"I" Next [$0 CirculateHit] Iconify -1
++				"I" Next [$0 CirculateHit] Focus
++				"I" None [$0] $1
+
+AddToFunc MailFunction		"I" Next [$0] Iconify -1
++				"I" Next [$0] focus
++				"I" None [$0] Exec $0 $1
+
+AddToFunc Move-or-Raise		"I" Raise
++				"M" Move
++				"D" Lower
+
+AddToFunc Move-or-Raise2        "M" Raise
++				"M" Move
++				"D" Lower
+
+AddToFunc Maximize-Func         "C" Maximize     93 100
++                               "D" Maximize     93 100
+
+AddToFunc Move-or-Iconify       "I" Raise
++                               "M" Move
++                               "D" Iconify
+
+AddToFunc Resize-or-Raise       "I" Raise
++                               "M" Resize
++                               "D" Lower
+
+AddToFunc Resize-or-Raise2      "M" Raise
++                               "M" Resize
++                               "D" Lower
+
+AddToFunc PrintFunction         "I" Raise
++                               "I" Exec xdpr -id $w
+
+AddToFunc Iconify-and-Raise     "I" Iconify
++                               "I" Raise
+
+############################################################################
+# MOUSE Setup
+#
+# First, the root window. Button 1 brings up the Main Menu. B2 is the
+# window operations list, and B3 is the winlist module
+#     Button	Context Modifi 	Function
+Mouse 1		R   	A       Menu RootMenu Nop
+Mouse 2		R    	A       Menu Window-Ops Nop
+Mouse 3		R    	A      	WindowList
+
+# Now, title bar buttons
+# Left button is the Window-Ops2 menu, right is iconify, rightmost is maximize
+#     Button	Context Modifi 	Function
+Mouse 0		1       A       Close Menu Window-Ops2
+Mouse 0		2    	A     	Maximize-Func
+Mouse 0		4    	A     	Iconify
+Mouse 0		3       A       Stick
+
+# Button 1 in Frame or Sides is a resize-or-raise, in Icons is a move or 
+# de-iconify, and on Top does a move-or-raise
+#     Button	Context Modifi 	Function
+Mouse 1 	FS      A       Resize-or-Raise
+Mouse 1		I       A       Move-or-Iconify
+Mouse 1		T       A       Move-or-Raise
+
+# Button 2 in an Icon is de-iconify, in Corners/Sides/Titlebar gets Ops Menu
+#     Button	Context Modifi 	Function
+Mouse 1		I	A	Iconify
+Mouse 2 	I       A       Iconify
+Mouse 2 	FST     A       Menu Window-Ops2 Nop
+
+# Button 3 does a raise-lower on anything
+Mouse 3 	TSIF    A       RaiseLower
+
+############################################################################
+# KEYBOARD Setup
+#
+
+############################################################################
+# FvwmButtons
+#
+# Colors
+
+*FvwmButtonsFore black
+*FvwmButtonsPixmap menu3.xpm
+*FvwmButtonsFrame 1
+*FvwmButtonsFont -bitstream-charter-medium-r-normal-*-*-100-*-*-p-*-iso8859-1
+*FvwmButtonsGeometry 70x765+951+0
+*FvwmButtonsRows 9
+*FvwmButtons(Swallow "FvwmPager" "FvwmPager 0 0")
+*FvwmButtons xterm Monitor.xpm Exec Eterm &
+*FvwmButtons(Swallow oclock 'Exec oclock -transparent -geometry 70x70 &')
+*FvwmButtons(Swallow XEyes 'Exec xeyes -bg RoyalBlue3 &')
+*FvwmButtons Menu menu.xpm Menu RootMenu Nop
+*FvwmButtons(Swallow xbiff 'Exec xbiff -bg grey70 -fg black&')
+*FvwmButtons(Swallow xosview 'Exec xosview -labels +net -ints -page -xrm "xosview*background: grey70"&')
+*FvwmButtons xkill bomb.xpm Exec xkill &
+*FvwmButtons Shutdown exit.xpm Exec /home/philipp/.shutdown.sh &
+
+############################################################################
+# FvwmIdent
+#
+# Give us colors and a fonts
+*FvwmIdentBack MidnightBlue
+*FvwmIdentFore Yellow
+*FvwmIdentFont -adobe-helvetica-medium-r-*-*-12-*-*-*-*-*-*-*
+
+
+############################################################################
+# FvwmPager
+#
+*FvwmPagerBack grey70
+*FvwmPagerFore black
+*FvwmPagerFont -bitstream-charter-medium-r-normal-*-*-100-*-*-p-*-iso8859-1
+*FvwmPagerHilight grey80
+*FvwmPagerGeometry -0+0
+*FvwmPagerLabel 0 "here"
+*FvwmPagerDeskPixmap 0 menu3.xpm
+
+# Setting the font to 0x0 or nil2 results in no text
+*FvwmPagerSmallFont 5x8
+

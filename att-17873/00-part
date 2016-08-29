@@ -1,0 +1,47 @@
+Kevin Penrose wrote:
+> 
+> I am trying to have the root menu (pop-up) have as its title
+> the name of the machine it's running on.  I assume I might have
+> to do something with M4 or CPP but I can't figure out what.  I
+> don't see anything in the fvwm doc's about putting something in 
+> the title dynamically.  Anyone know if it can be done?
+
+Yes it can be done with m4 and probably with cpp.  I have a setup where
+I have defined in my .Xdefaults different xterm configurations for
+different machines.  I then have ported my fvwm setup between four
+different accounts with different architectures.  I have a single
+generic xterm button but if I am on the machine wakko this button brings
+up an xterm with the configuration named wakko, etc.
+
+All of this is accomplished by:
+
+	#1 Parsing the .fvwm2rc file with FvwmM4
+	#2 passing the CLIENTHOST M4 macro to the -name command for
+		xterm.
+
+Likewise, you can simply use CLIENTHOST for your menus.  To parse your
+files with m4, FvwmM4 must be compiled and installed on your system.
+Then for fvwm2.0.43 the command:
+
+	fvwm2 -cmd 'FvwmM4 ~/.fvwm2rc'
+
+Will parse your files with m4 and replace any references to CLIENTHOST
+with the machines name.  For more information please check out the man
+page on FvwmM4.
+
+Also note, for version previous to 2.0.43 the command was:
+
+	fvwm2 -f 'FvwmM4 ~/.fvwm2rc'
+
+-Alan
+
+-- 
+Alan Wild <arwild01@starbase.spd.louisville.edu>           /T\ f/s/c lou95
+IT-HSC Consultant       Speed School Student Council        Speed News Guy
+http://www.spd.louisville.edu/~arwild01 or ==> ~triangle/ ~spdnews/ ~sssc/
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-owner@hpc.uh.edu.
+

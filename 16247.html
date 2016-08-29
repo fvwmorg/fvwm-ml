@@ -1,0 +1,707 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: Re: Beta version 2.0.42 now ready from Martin Kraemer on 1996-04-18 (fvwm-users)</title>
+<meta name="Author" content="Martin Kraemer (Martin.Kraemer_at_mch.sni.de)" />
+<meta name="Subject" content="Re: FVWM: Re: Beta version 2.0.42 now ready" />
+<meta name="Date" content="1996-04-18" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: Re: Beta version 2.0.42 now ready</h1>
+<!-- received="Thu Apr 18 11:14:01 1996" -->
+<!-- isoreceived="19960418101401" -->
+<!-- sent="Thu, 18 Apr 1996 18:16:35 +0200 (MET DST)" -->
+<!-- isosent="19960418161635" -->
+<!-- name="Martin Kraemer" -->
+<!-- email="Martin.Kraemer_at_mch.sni.de" -->
+<!-- subject="Re: FVWM: Re: Beta version 2.0.42 now ready" -->
+<!-- id="199604181616.AA05455_at_deejai.mch.sni.de" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="FVWM: Re: Beta version 2.0.42 now ready" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start16247" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="16248.html" accesskey="d" title="John Williams: &quot;Re: FVWM: focus and pointer (maybe modifiers)&quot;">Next message</a> ]
+[ <a href="16246.html" title="Paul D. Smith: &quot;FVWM: FvwmForm enhancements request&quot;">Previous message</a> ]
+[ <a href="16238.html" title="Charles Hines: &quot;FVWM: Re: Beta version 2.0.42 now ready&quot;">Maybe in reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16247" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16247" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16247" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16247" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Martin Kraemer &lt;<a href="mailto:Martin.Kraemer_at_mch.sni.de?Subject=Re%3A%20FVWM%3A%20Re%3A%20Beta%20version%202.0.42%20now%20ready">Martin.Kraemer_at_mch.sni.de</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 18 Apr 1996 18:16:35 +0200 (MET DST)</span><br />
+</address>
+<br />
+Hello,
+<br />
+<br />Only today did I find the time to compile fvwm-2.0.42 on my SIEMENS NIXDORF
+<br />
+SINIX-D 5.41 SVR4+X11R4 system. My compiler is rather talkative, and when
+<br />
+given the ansi switch, it is also kind of strict when it comes to passing
+<br />
+pointers to anything. Here's a selected list of errors and a list of
+<br />
+patches to cure them for several fvwm modules; the patches don't break
+<br />
+anything but make fvwm compilable on all platforms (not just on those with
+<br />
+gcc ;-) :
+<br />
+<br />===&gt; fvwm/decorations.c:
+<br />
+cc -kansi -O   -I/usr/include   -I. -I../libs  -Datt=att -DSYSV -DSVR4 -DSVR4_0 -Dsiemens -DXMVERSION=1100 -DSTREAMWRITEMAX=4096 -DSTRNET -DFUNCPROTO -DSHAPE -DPIXMAP_BUTTONS -DXPM      -c decorations.c -o decorations.o
+<br />
+/usr/include/X11/Xlib.h   232: [warning]:   'class' is a C++ reserved word
+<br />
+/usr/include/X11/Xlib.h   918: [warning]:   'new' is a C++ reserved word
+<br />
+/usr/include/X11/Xproto.h  1385: [warning]:   'delete' is a C++ reserved word
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c0: errors: 0, warnings: 3
+<br />
+decorations.c   189: [error]:     Argument type 'ptr to unsigned long' does not match parameter type 'ptr to char'
+<br />
+decorations.c   206: [error]:     Argument type 'ptr to unsigned long' does not match parameter type 'ptr to char'
+<br />
+decorations.c   223: [error]:     Argument type 'ptr to unsigned long' does not match parameter type 'ptr to char'
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c1: errors: 3, warnings: 0
+<br />
+Make: *** [decorations.o] Error 1
+<br />
+<br />--- fvwm/decorations.c.bak	Thu Apr 11 17:27:42 1996
+<br />
++++ fvwm/decorations.c	Thu Apr 18 17:32:34 1996
+<br />
+_at_&#64; -186,7 +186,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t-&gt;ol_hints &amp;= ~OL_DECOR_ICON_NAME;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;
+<br />
+-      XFree (hints);
+<br />
++      XFree ((XtPointer)hints);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;if(XGetWindowProperty (dpy, t-&gt;w, _XA_OL_DECOR_ADD, 0L, 20L, False,
+<br />
+_at_&#64; -203,7 +203,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if (hints[i] == _XA_OL_DECOR_ICON_NAME)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t-&gt;ol_hints |= OL_DECOR_ICON_NAME;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+-      XFree (hints);
+<br />
++      XFree ((XtPointer)hints);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;if(XGetWindowProperty (dpy, t-&gt;w, _XA_OL_DECOR_DEL, 0L, 20L, False,
+<br />
+_at_&#64; -220,7 +220,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if (hints[i] == _XA_OL_DECOR_ICON_NAME)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t-&gt;ol_hints &amp;= ~OL_DECOR_ICON_NAME;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+-      XFree (hints);
+<br />
++      XFree ((XtPointer)hints);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;
+<br />
+&nbsp;}
+<br />
+<br /><br />===&gt; modules/FvwmButtons/FvwmButtons.c
+<br />
+cc -kansi -O   -I/usr/include   -I. -I../../libs  -Datt=att -DSYSV -DSVR4 -DSVR4_0 -Dsiemens -DXMVERSION=1100 -DSTREAMWRITEMAX=4096 -DSTRNET -DFUNCPROTO -DSHAPE -DPIXMAP_BUTTONS -DXPM      -c FvwmButtons.c -o FvwmButtons.o
+<br />
+/usr/include/X11/Xlib.h   232: [warning]:   'class' is a C++ reserved word
+<br />
+/usr/include/X11/Xlib.h   918: [warning]:   'new' is a C++ reserved word
+<br />
+/usr/include/X11/Xproto.h  1385: [warning]:   'delete' is a C++ reserved word
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c0: errors: 0, warnings: 3
+<br />
+FvwmButtons.c   159: [warning]:   d never used
+<br />
+FvwmButtons.c   242: [warning]:   whatever never used
+<br />
+FvwmButtons.c   385: [warning]:   '==' or '=' desired?
+<br />
+FvwmButtons.c   509: [warning]:   Condition is always true
+<br />
+FvwmButtons.c   589: [warning]:   Flow between cases
+<br />
+FvwmButtons.c   598: [warning]:   '==' or '=' desired?
+<br />
+FvwmButtons.c   605: [warning]:   Flow between cases
+<br />
+FvwmButtons.c   608: [warning]:   '==' or '=' desired?
+<br />
+FvwmButtons.c   841: [warning]:   '==' or '=' desired?
+<br />
+FvwmButtons.c   856: [warning]:   '==' or '=' desired?
+<br />
+FvwmButtons.c   862: [warning]:   '==' or '=' desired?
+<br />
+FvwmButtons.c   913: [warning]:   '==' or '=' desired?
+<br />
+FvwmButtons.c  1092: [warning]:   Argument type 'ptr to unsigned char' does not match parameter type 'ptr to char'
+<br />
+FvwmButtons.c  1349: [warning]:   count set but not used
+<br />
+FvwmButtons.c  1516: [warning]:   Argument type 'ptr to int' does not match parameter type 'ptr to unsigned int'
+<br />
+FvwmButtons.c  1517: [error]:     Argument type 'ptr to unsigned long' does not match parameter type 'ptr to char'
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c1: errors: 1, warnings: 15
+<br />
+make[1]: [FvwmButtons.o] Error 1 (ignored)
+<br />
+<br />--- modules/FvwmButtons/FvwmButtons.c.bak	Mon Apr 15 20:50:16 1996
+<br />
++++ modules/FvwmButtons/FvwmButtons.c	Thu Apr 18 17:47:19 1996
+<br />
+_at_&#64; -1514,7 +1514,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;XTranslateCoordinates(dpy,win,root,*x,*y,x,y,&amp;rp);
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;XQueryTree(dpy,win,&amp;root,&amp;rp,&amp;children,&amp;n); 
+<br />
+-  XFree(children);
+<br />
++  XFree((XtPointer)children);
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;return rp;
+<br />
+&nbsp;}
+<br />
+<br /><br />===&gt; modules/FvwmForm/FvwmForm.c:
+<br />
+cc -kansi -O   -I/usr/include   -I. -I../../libs  -Datt=att -DSYSV -DSVR4 -DSVR4_0 -Dsiemens -DXMVERSION=1100 -DSTREAMWRITEMAX=4096 -DSTRNET -DFUNCPROTO -DSHAPE -DPIXMAP_BUTTONS -DXPM      -c FvwmForm.c -o FvwmForm.o
+<br />
+/usr/include/X11/Xlib.h   232: [warning]:   'class' is a C++ reserved word
+<br />
+/usr/include/X11/Xlib.h   918: [warning]:   'new' is a C++ reserved word
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c0: errors: 0, warnings: 2
+<br />
+FvwmForm.c   202: [warning]:   Condition is always true
+<br />
+FvwmForm.c   212: [warning]:   No flow into statement
+<br />
+FvwmForm.c   225: [warning]:   Condition is always true
+<br />
+FvwmForm.c   280: [error]:     'ptr to struct  of size 80' = 'int'
+<br />
+FvwmForm.c   339: [error]:     'ptr to struct  of size 80' = 'int'
+<br />
+FvwmForm.c   347: [error]:     'ptr to struct  of size 80' = 'int'
+<br />
+FvwmForm.c   355: [error]:     'ptr to struct  of size 80' = 'int'
+<br />
+FvwmForm.c   597: [warning]:   fp never used
+<br />
+FvwmForm.c   611: [warning]:   Argument type 'ptr to long' does not match parameter type 'ptr to unsigned long'
+<br />
+FvwmForm.c   871: [warning]:   Condition is always true
+<br />
+FvwmForm.c   887: [warning]:   Condition is always true
+<br />
+FvwmForm.c   953: [warning]:   vp set but not used
+<br />
+FvwmForm.c   953: [warning]:   wp set but not used
+<br />
+FvwmForm.c  1191: [warning]:   No flow into statement
+<br />
+FvwmForm.c  1199: [warning]:   No flow into statement
+<br />
+FvwmForm.c  1211: [warning]:   No flow into statement
+<br />
+FvwmForm.c  1224: [warning]:   No flow into statement
+<br />
+FvwmForm.c  1244: [warning]:   No flow into statement
+<br />
+FvwmForm.c  1453: [warning]:   Condition is always true
+<br />
+FvwmForm.c  1517: [warning]:   '==' or '=' desired?
+<br />
+FvwmForm.c  1540: [warning]:   nonsense never used
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c1: errors: 4, warnings: 17
+<br />
+<br />--- modules/FvwmForm/FvwmForm.c.orig	Fri Feb 16 14:59:47 1996
+<br />
++++ modules/FvwmForm/FvwmForm.c	Thu Apr 18 18:05:26 1996
+<br />
+_at_&#64; -24,6 +24,7 &#64;&#64;
+<br />
+&nbsp;#if defined ___AIX || defined _AIX || defined ___AIXV3
+<br />
+&nbsp;#include &lt;sys/select.h&gt;
+<br />
+&nbsp;#endif
+<br />
++#include &quot;../../libs/fvwmlib.h&quot; /* get prototypes */
+<br />
+&nbsp;
+<br />
+&nbsp;void dummy () {
+<br />
+&nbsp;}
+<br />
+_at_&#64; -181,7 +182,7 &#64;&#64;
+<br />
+&nbsp;static int N = 8;
+<br />
+&nbsp;
+<br />
+&nbsp;/* copy a string until '\0', or up to n chars, and delete trailing spaces */
+<br />
+-char *CopyString (char *cp, int n)
+<br />
++char *DupString (char *cp, int n)
+<br />
+&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;char *dp, *bp;
+<br />
+&nbsp;&nbsp;&nbsp;if (n == 0)
+<br />
+_at_&#64; -310,31 +311,31 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if (strncmp(cp, &quot;Fore&quot;, 4) == 0) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cp += 4;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (isspace(*cp)) cp++;
+<br />
+-      color_names[c_fore] = CopyString(cp, 0);
+<br />
++      color_names[c_fore] = DupString(cp, 0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(fp_err, &quot;ColorFore: %s\n&quot;, color_names[c_fore]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;continue;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else if (strncmp(cp, &quot;Back&quot;, 4) == 0) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cp += 4;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (isspace(*cp)) cp++;
+<br />
+-      color_names[c_back] = CopyString(cp, 0);
+<br />
++      color_names[c_back] = DupString(cp, 0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(fp_err, &quot;ColorBack: %s\n&quot;, color_names[c_back]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;continue;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else if (strncmp(cp, &quot;ItemFore&quot;, 8) == 0) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cp += 8;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (isspace(*cp)) cp++;
+<br />
+-      color_names[c_itemfore] = CopyString(cp, 0);
+<br />
++      color_names[c_itemfore] = DupString(cp, 0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(fp_err, &quot;ColorItemFore: %s\n&quot;, color_names[c_itemfore]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;continue;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else if (strncmp(cp, &quot;ItemBack&quot;, 8) == 0) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cp += 8;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (isspace(*cp)) cp++;
+<br />
+-      color_names[c_itemback] = CopyString(cp, 0);
+<br />
++      color_names[c_itemback] = DupString(cp, 0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(fp_err, &quot;ColorItemBack: %s\n&quot;, color_names[c_itemback]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;continue;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else if (strncmp(cp, &quot;Font&quot;, 4) == 0) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cp += 4;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (isspace(*cp)) cp++;
+<br />
+-      font_names[f_text] = CopyString(cp, 0);
+<br />
++      font_names[f_text] = DupString(cp, 0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(fp_err, &quot;Font: %s\n&quot;, font_names[f_text]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xfs[f_text] = GetFontOrFixed(dpy, font_names[f_text]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fonts[f_text] = xfs[f_text]-&gt;fid;
+<br />
+_at_&#64; -342,7 +343,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else if (strncmp(cp, &quot;ButtonFont&quot;, 10) == 0) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cp += 10;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (isspace(*cp)) cp++;
+<br />
+-      font_names[f_button] = CopyString(cp, 0);
+<br />
++      font_names[f_button] = DupString(cp, 0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(fp_err, &quot;ButtonFont: %s\n&quot;, font_names[f_button]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xfs[f_button] = GetFontOrFixed(dpy, font_names[f_button]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fonts[f_button] = xfs[f_button]-&gt;fid;
+<br />
+_at_&#64; -350,7 +351,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else if (strncmp(cp, &quot;InputFont&quot;, 9) == 0) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cp += 9;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (isspace(*cp)) cp++;
+<br />
+-      font_names[f_input] = CopyString(cp, 0);
+<br />
++      font_names[f_input] = DupString(cp, 0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(fp_err, &quot;InputFont: %s\n&quot;, font_names[f_input]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xfs[f_input] = GetFontOrFixed(dpy, font_names[f_input]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fonts[f_input] = xfs[f_input]-&gt;fid;
+<br />
+_at_&#64; -510,7 +511,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cp += 7;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (isspace(*cp)) cp++;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cur_button-&gt;button.commands[cur_button-&gt;button.n++] =
+<br />
+-	CopyString(cp, 0);
+<br />
++	DupString(cp, 0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;}  /* end of switch() */
+<br />
+&nbsp;&nbsp;&nbsp;/* get the geometry right */
+<br />
+<br /><br /><br />==&gt; modules/FvwmIconBox/FvwmIconBox.c:
+<br />
+cc -kansi -O   -I/usr/include   -I. -I../../libs  -Datt=att -DSYSV -DSVR4 -DSVR4_0 -Dsiemens -DXMVERSION=1100 -DSTREAMWRITEMAX=4096 -DSTRNET -DFUNCPROTO -DSHAPE -DPIXMAP_BUTTONS -DXPM      -c FvwmIconBox.c -o FvwmIconBox.o
+<br />
+/usr/include/X11/Xlib.h   232: [warning]:   'class' is a C++ reserved word
+<br />
+/usr/include/X11/Xlib.h   918: [warning]:   'new' is a C++ reserved word
+<br />
+/usr/include/X11/Xproto.h  1385: [warning]:   'delete' is a C++ reserved word
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c0: errors: 0, warnings: 3
+<br />
+FvwmIconBox.c   194: [warning]:   '==' or '=' desired?
+<br />
+FvwmIconBox.c   224: [error]:     Argument type 'ptr to struct  of size 24' does not match parameter type 'ptr to char'
+<br />
+FvwmIconBox.c   250: [warning]:   Condition is always true
+<br />
+FvwmIconBox.c   455: [error]:     Argument type 'ptr to struct  of size 36' does not match parameter type 'ptr to char'
+<br />
+FvwmIconBox.c  1219: [warning]:   Condition is always true
+<br />
+FvwmIconBox.c  1412: [warning]:   nonsense never used
+<br />
+FvwmIconBox.c  1798: [warning]:   Argument type 'ptr to unsigned char' does not match parameter type 'ptr to char'
+<br />
+FvwmIconBox.c  1850: [warning]:   '==' or '=' desired?
+<br />
+FvwmIconBox.c  1857: [warning]:   cbody never used
+<br />
+FvwmIconBox.c  1857: [warning]:   total never used
+<br />
+FvwmIconBox.c  1857: [warning]:   count2 set but not used
+<br />
+FvwmIconBox.c  1857: [warning]:   count set but not used
+<br />
+FvwmIconBox.c  1857: [warning]:   body_length never used
+<br />
+FvwmIconBox.c  1926: [warning]:   Flow between cases
+<br />
+FvwmIconBox.c  2297: [warning]:   '==' or '=' desired?
+<br />
+FvwmIconBox.c  2311: [warning]:   '==' or '=' desired?
+<br />
+FvwmIconBox.c  2507: [error]:     Argument type 'ptr to struct  of size 36' does not match parameter type 'ptr to char'
+<br />
+FvwmIconBox.c  2592: [warning]:   ev set but not used
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c1: errors: 3, warnings: 15
+<br />
+--- modules/FvwmIconBox/FvwmIconBox.c.bak        Tue Apr  2 21:49:05 1996
+<br />
++++ modules/FvwmIconBox/FvwmIconBox.c    Thu Apr 18 17:57:21 1996
+<br />
+_at_&#64; -221,7 +221,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;size-&gt;max_height = size-&gt;min_height = max_icon_height + icon_relief;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;size-&gt;width_inc  = size-&gt;height_inc = 0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XSetIconSizes(dpy, Root, size, 1);
+<br />
+-    XFree(size);
+<br />
++    XFree((XtPointer)size);
+<br />
+&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;CreateWindow();
+<br />
+_at_&#64; -452,7 +452,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (tmp == NULL || tmp-&gt;wmhints == NULL || !(tmp-&gt;extra_flags &amp; DEFAULTICON)) 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (tmp-&gt;wmhints)
+<br />
+-		  XFree (tmp-&gt;wmhints);
+<br />
++		  XFree ((XtPointer)tmp-&gt;wmhints);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tmp-&gt;wmhints = XGetWMHints(dpy, tmp-&gt;id);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (tmp-&gt;wmhints &amp;&amp; (tmp-&gt;wmhints-&gt;flags &amp; IconPixmapHint)){
+<br />
+&nbsp;#ifdef SHAPE
+<br />
+_at_&#64; -2504,7 +2504,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;if (item-&gt;res_class != NULL)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;free(item-&gt;res_class);
+<br />
+&nbsp;&nbsp;&nbsp;if (item-&gt;wmhints != NULL)
+<br />
+-    XFree(item-&gt;wmhints);
+<br />
++    XFree((XtPointer)item-&gt;wmhints);
+<br />
+&nbsp;&nbsp;&nbsp;if (item-&gt;iconPixmap != None)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XFreePixmap(dpy, item-&gt;iconPixmap);
+<br />
+&nbsp;&nbsp;&nbsp;if (item-&gt;icon_maskPixmap != None &amp;&amp; 
+<br />
+<br /><br /><br />===&gt; modules/FvwmScroll/GrabWindow.c:
+<br />
+cc -kansi -O   -I/usr/include   -I. -I../../libs  -Datt=att -DSYSV -DSVR4 -DSVR4_0 -Dsiemens -DXMVERSION=1100 -DSTREAMWRITEMAX=4096 -DSTRNET -DFUNCPROTO -DSHAPE -DPIXMAP_BUTTONS -DXPM      -c GrabWindow.c -o GrabWindow.o
+<br />
+/usr/include/X11/Xlib.h   232: [warning]:   'class' is a C++ reserved word
+<br />
+/usr/include/X11/Xlib.h   918: [warning]:   'new' is a C++ reserved word
+<br />
+/usr/include/X11/Xproto.h  1385: [warning]:   'delete' is a C++ reserved word
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c0: errors: 0, warnings: 3
+<br />
+GrabWindow.c   318: [warning]:   Condition is always true
+<br />
+GrabWindow.c   594: [error]:     Argument type 'ptr to struct  of size 36' does not match parameter type 'ptr to char'
+<br />
+GrabWindow.c   763: [warning]:   Argument type 'ptr to unsigned char' does not match parameter type 'ptr to char'
+<br />
+GrabWindow.c   781: [warning]:   Argument type 'ptr to unsigned char' does not match parameter type 'ptr to char'
+<br />
+GrabWindow.c   859: [error]:     Argument type 'ptr to struct  of size 36' does not match parameter type 'ptr to char'
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c1: errors: 2, warnings: 3
+<br />
+<br />--- modules/FvwmScroll/GrabWindow.c.bak  Thu Jul 13 15:25:04 1995
+<br />
++++ modules/FvwmScroll/GrabWindow.c      Thu Apr 18 18:00:19 1996
+<br />
+_at_&#64; -591,7 +591,7 &#64;&#64;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wmhints = XGetWMHints(dpy,target);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XSetWMHints(dpy,main_win, wmhints);
+<br />
+-	      XFree(wmhints);
+<br />
++	      XFree((XtPointer)wmhints);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if(Event.xproperty.atom == XA_WM_NORMAL_HINTS)	  
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+_at_&#64; -856,7 +856,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(wmhints != NULL)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XSetWMHints(dpy,main_win, wmhints);
+<br />
+-	XFree(wmhints);
+<br />
++	XFree((XtPointer)wmhints);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;{
+<br />
+<br /><br />===&gt; modules/FvwmButtons/misc.c:
+<br />
+cc -kansi -O   -I/usr/include   -I. -I../../libs  -Datt=att -DSYSV -DSVR4 -DSVR4_0 -Dsiemens -DXMVERSION=1100 -DSTREAMWRITEMAX=4096 -DSTRNET -DFUNCPROTO -DSHAPE -DPIXMAP_BUTTONS -DXPM      -c misc.c -o misc.o
+<br />
+/usr/include/X11/Xlib.h   232: [warning]:   'class' is a C++ reserved word
+<br />
+/usr/include/X11/Xlib.h   918: [warning]:   'new' is a C++ reserved word
+<br />
+misc.c      156: [error]:     Illegal characters after # directive
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c0: errors: 1, warnings: 2
+<br />
+<br />--- modules/FvwmButtons/misc.c.bak       Fri Mar 29 13:25:42 1996
+<br />
++++ modules/FvwmButtons/misc.c   Thu Apr 18 18:12:16 1996
+<br />
+_at_&#64; -153,7 +153,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;*widthp = dwidth;
+<br />
+&nbsp;&nbsp;&nbsp;*heightp = dheight;
+<br />
+&nbsp;&nbsp;&nbsp;return;
+<br />
+-#undef makemult(a,b)
+<br />
++#undef makemult
+<br />
+&nbsp;#undef maxAspectX
+<br />
+&nbsp;#undef maxAspectY
+<br />
+&nbsp;#undef minAspectX
+<br />
+<br /><pre>
+-- 
+| S I E M E N S |   Martin.Kraemer_at_mch.sni.de   |      Siemens Nixdorf
+| ------------- |   Voice: +49-89-636-46021     |  Informationssysteme AG
+| N I X D O R F |   FAX:   +49-89-636-44994     |   81730 Munich, Germany
+~~~~~~~~~~~~~~~~My opinions only, of course; pgp key available on request
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Apr 18 1996 - 11:14:01 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start16247">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="16248.html" title="Next message in the list">John Williams: "Re: FVWM: focus and pointer (maybe modifiers)"</a></li>
+<li><dfn>Previous message</dfn>: <a href="16246.html" title="Previous message in the list">Paul D. Smith: "FVWM: FvwmForm enhancements request"</a></li>
+<li><dfn>Maybe in reply to</dfn>: <a href="16238.html" title="Message to which this message replies">Charles Hines: "FVWM: Re: Beta version 2.0.42 now ready"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16247" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16247" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16247" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16247" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

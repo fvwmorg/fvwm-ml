@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Multiple window names in condition lists from Norman Yarvin on 2001-08-20 (fvwm-users)</title>
+<meta name="Author" content="Norman Yarvin (norman.yarvin_at_snet.net)" />
+<meta name="Subject" content="FVWM: Multiple window names in condition lists" />
+<meta name="Date" content="2001-08-20" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Multiple window names in condition lists</h1>
+<!-- received="Sun Aug 19 22:43:45 2001" -->
+<!-- isoreceived="20010819214345" -->
+<!-- sent="Sun, 19 Aug 2001 23:45:59 -0400" -->
+<!-- isosent="20010820034559" -->
+<!-- name="Norman Yarvin" -->
+<!-- email="norman.yarvin_at_snet.net" -->
+<!-- subject="FVWM: Multiple window names in condition lists" -->
+<!-- id="20010819234559.A24848_at_athol.localdomain" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start2969" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="2970.html" accesskey="d" title="Ariel Cas: &quot;Re: FVWM: Re: cc problem.&quot;">Next message</a> ]
+[ <a href="2968.html" title="Dan Espen: &quot;Re: FVWM: Tabbed windows&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg2969" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg2969" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg2969" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg2969" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Norman Yarvin &lt;<a href="mailto:norman.yarvin_at_snet.net?Subject=Re%3A%20FVWM%3A%20Multiple%20window%20names%20in%20condition%20lists">norman.yarvin_at_snet.net</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sun, 19 Aug 2001 23:45:59 -0400</span><br />
+</address>
+<br />
+Looking at FVWM 2.4.0, I see that the user can specify only one window
+<br />
+name in each condition list.  In particular, you can't have:
+<br />
+<br />Key F1		A  N	Next (CurrentPage xterm1) goto-window
+<br />
+Key F2		A  N	Next (CurrentPage xterm2) goto-window
+<br />
+Key F3		A  N	Next (CurrentPage console) goto-window
+<br />
+Key F4		A  N	Next (CurrentPage emacs) goto-window
+<br />
+Key F5		A  N	Next (CurrentPage Netscape konqueror) goto-window
+<br />
+Key F6		A  N	Next (CurrentPage xdvi xpdf gv acroread) goto-window
+<br />
+Key F7		A  N	Next (CurrentPage xv ee gimp) goto-window
+<br />
+Key F8          A  N	Next (CurrentPage !XTerm !emacs !Netscape !konqueror \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;!xdvi !xpdf !gv !acroread !xv !ee \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;!gimp) goto-window
+<br />
+<br />which is what I have now in my .fvwm2rc, after making the changes in the
+<br />
+patch at the end of this message.  The patch is short and simple; it uses
+<br />
+a fixed-size array rather than a linked list, and demands that each list
+<br />
+of windows either be all of windows to use, or all of windows to not use;
+<br />
+there is no attempt to introduce any kind of boolean algebra.  (Boolean
+<br />
+algebra would not only be more complicated to program, but also more
+<br />
+complicated for the user, and, I think, usually needlessly so.)
+<br />
+<br />I wonder if this patch, or something to the same effect, could be added
+<br />
+to the mainstream version, so that I wouldn't have to keep it around and
+<br />
+keep adding it to new versions.  I'm willing to revise the man page to
+<br />
+describe the new behavior.
+<br />
+<br /><br /><br />--- fvwm.h.orig	Sun Aug 19 16:27:49 2001
+<br />
++++ fvwm.h	Sun Aug 19 17:51:11 2001
+<br />
+_at_&#64; -320,7 +320,9 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;} my_flags;
+<br />
+&nbsp;&nbsp;&nbsp;window_flags flags;
+<br />
+&nbsp;&nbsp;&nbsp;window_flags flag_mask;
+<br />
+-  char *name;
+<br />
++#define WCMASK_NNAME	40
+<br />
++  char *name[WCMASK_NNAME];
+<br />
++  int nname;
+<br />
+&nbsp;&nbsp;&nbsp;int layer;
+<br />
+&nbsp;} WindowConditionMask;
+<br />
+&nbsp;
+<br />
+--- conditional.c.orig	Sun Aug 19 16:27:32 2001
+<br />
++++ conditional.c	Sun Aug 19 17:51:11 2001
+<br />
+_at_&#64; -103,10 +103,13 &#64;&#64;
+<br />
+&nbsp;&nbsp;**********************************************************************/
+<br />
+&nbsp;void FreeConditionMask(WindowConditionMask *mask)
+<br />
+&nbsp;{
+<br />
+-  if (mask-&gt;my_flags.needs_name)
+<br />
+-    free(mask-&gt;name);
+<br />
+-  else if (mask-&gt;my_flags.needs_not_name)
+<br />
+-    free(mask-&gt;name - 1);
+<br />
++  int i;
+<br />
++
+<br />
++  for(i=0; i&lt;mask-&gt;nname; i++)
+<br />
++    if (mask-&gt;my_flags.needs_name)
+<br />
++      free(mask-&gt;name[i]);
+<br />
++    else if (mask-&gt;my_flags.needs_not_name)
+<br />
++      free(mask-&gt;name[i] - 1);
+<br />
+&nbsp;}
+<br />
+&nbsp;
+<br />
+&nbsp;/* Assign the default values for the window mask
+<br />
+_at_&#64; -128,6 +131,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;char *condition;
+<br />
+&nbsp;&nbsp;&nbsp;char *prev_condition = NULL;
+<br />
+&nbsp;&nbsp;&nbsp;char *tmp;
+<br />
++  int i;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;if (flags == NULL)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+_at_&#64; -245,20 +249,29 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mask-&gt;layer = -1; /* needs current layer */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+-    else if(!mask-&gt;my_flags.needs_name &amp;&amp; !mask-&gt;my_flags.needs_not_name)
+<br />
++    else if (mask-&gt;nname &lt; WCMASK_NNAME)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+-      /* only 1st name to avoid mem leak */
+<br />
+-      mask-&gt;name = condition;
+<br />
+-      condition = NULL;
+<br />
+-      if (mask-&gt;name[0] == '!')
+<br />
+-      {
+<br />
+-	mask-&gt;my_flags.needs_not_name = 1;
+<br />
+-	mask-&gt;name++;
+<br />
++      if (mask-&gt;nname==0) {
+<br />
++	if (condition[0] == '!')
+<br />
++	  mask-&gt;my_flags.needs_not_name = 1;
+<br />
++	else
+<br />
++	  mask-&gt;my_flags.needs_name = 1;
+<br />
++      }
+<br />
++      if (condition[0] == '!' &amp;&amp; mask-&gt;my_flags.needs_not_name != 1 ||
+<br />
++	  condition[0] != '!' &amp;&amp; mask-&gt;my_flags.needs_name != 1) {
+<br />
++	fvwm_msg(ERR,&quot;CreateConditionMask&quot;,&quot;\&quot;%s\&quot;: window names in condition&quot;
+<br />
++		&quot; lists must be either all asserted or all negated; no mixes&quot;,
+<br />
++		condition);
+<br />
++	goto error;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+-      else
+<br />
+-	mask-&gt;my_flags.needs_name = 1;
+<br />
++      i=mask-&gt;nname++;
+<br />
++      mask-&gt;name[i] = condition;
+<br />
++      condition = NULL;
+<br />
++      if (mask-&gt;name[i][0] == '!')
+<br />
++	mask-&gt;name[i]++;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;
+<br />
++error:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (prev_condition)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;free(prev_condition);
+<br />
+&nbsp;
+<br />
+_at_&#64; -283,6 +296,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;Bool fMatchesResource;
+<br />
+&nbsp;&nbsp;&nbsp;Bool fMatches;
+<br />
+&nbsp;&nbsp;&nbsp;FvwmWindow *sf = get_focus_window();
+<br />
++  int i;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;if (!blockcmpmask((char *)&amp;(fw-&gt;flags), (char *)&amp;(mask-&gt;flags),
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(char *)&amp;(mask-&gt;flag_mask), sizeof(fw-&gt;flags)))
+<br />
+_at_&#64; -320,14 +334,17 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 0;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;/* Yes, I know this could be shorter, but it's hard to understand then */
+<br />
+-  fMatchesName = matchWildcards(mask-&gt;name, fw-&gt;name);
+<br />
+-  fMatchesIconName = matchWildcards(mask-&gt;name, fw-&gt;icon_name);
+<br />
+-  fMatchesClass = (fw-&gt;class.res_class &amp;&amp;
+<br />
+-		   matchWildcards(mask-&gt;name,fw-&gt;class.res_class));
+<br />
+-  fMatchesResource = (fw-&gt;class.res_name &amp;&amp;
+<br />
+-		      matchWildcards(mask-&gt;name, fw-&gt;class.res_name));
+<br />
+-  fMatches = (fMatchesName || fMatchesIconName || fMatchesClass ||
+<br />
+-	      fMatchesResource);
+<br />
++  fMatches = 0;
+<br />
++  for(i=0; i&lt;mask-&gt;nname; i++) {
+<br />
++    fMatchesName = matchWildcards(mask-&gt;name[i], fw-&gt;name);
+<br />
++    fMatchesIconName = matchWildcards(mask-&gt;name[i], fw-&gt;icon_name);
+<br />
++    fMatchesClass = (fw-&gt;class.res_class &amp;&amp;
+<br />
++		     matchWildcards(mask-&gt;name[i],fw-&gt;class.res_class));
+<br />
++    fMatchesResource = (fw-&gt;class.res_name &amp;&amp;
+<br />
++		        matchWildcards(mask-&gt;name[i], fw-&gt;class.res_name));
+<br />
++    fMatches |= (fMatchesName || fMatchesIconName || fMatchesClass ||
+<br />
++	        fMatchesResource);
+<br />
++  }
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;if (mask-&gt;my_flags.needs_name &amp;&amp; !fMatches)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 0;
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sun Aug 19 2001 - 22:43:45 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start2969">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="2970.html" title="Next message in the list">Ariel Cas: "Re: FVWM: Re: cc problem."</a></li>
+<li><dfn>Previous message</dfn>: <a href="2968.html" title="Previous message in the list">Dan Espen: "Re: FVWM: Tabbed windows"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg2969" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg2969" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg2969" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg2969" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:52 BST
+</em></small></p>
+</body>
+</html>

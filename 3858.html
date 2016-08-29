@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: current desktop using FvwmCommand? from Mikhael Goikhman on 2001-12-15 (fvwm-users)</title>
+<meta name="Author" content="Mikhael Goikhman (migo_at_homemail.com)" />
+<meta name="Subject" content="Re: FVWM: current desktop using FvwmCommand?" />
+<meta name="Date" content="2001-12-15" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: current desktop using FvwmCommand?</h1>
+<!-- received="Sat Dec 15 17:59:17 2001" -->
+<!-- isoreceived="20011215175917" -->
+<!-- sent="Sat, 15 Dec 2001 23:58:52 +0000" -->
+<!-- isosent="20011215235852" -->
+<!-- name="Mikhael Goikhman" -->
+<!-- email="migo_at_homemail.com" -->
+<!-- subject="Re: FVWM: current desktop using FvwmCommand?" -->
+<!-- id="20011215235852.A1367_at_homemail.com" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="D779279DECFB9F4DBF7A8E8811C2AFE5079628_at_elex2" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start3858" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="3859.html" accesskey="d" title="Glen Lee Edwards: &quot;Re: FVWM: current desktop using FvwmCommand?&quot;">Next message</a> ]
+[ <a href="3857.html" title="Dan Espen: &quot;Re: FVWM: FvwmPager: MiniIcons&quot;">Previous message</a> ]
+[ <a href="3856.html" title="Riswick, J.G.A. van: &quot;FVWM: current desktop using FvwmCommand?&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="3859.html" accesskey="t" title="Glen Lee Edwards: &quot;Re: FVWM: current desktop using FvwmCommand?&quot;">Next in thread</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg3858" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg3858" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg3858" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg3858" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Mikhael Goikhman &lt;<a href="mailto:migo_at_homemail.com?Subject=Re%3A%20FVWM%3A%20current%20desktop%20using%20FvwmCommand%3F">migo_at_homemail.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sat, 15 Dec 2001 23:58:52 +0000</span><br />
+</address>
+<br />
+On 15 Dec 2001 23:28:32 +0100, Riswick, J.G.A. van wrote:
+<br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; I'd like to implement a 'goto desktop' menu which 
+</em><br />
+<em class="quotelev1">&gt; shows a few desktop numbers (as menu items), and a '*' in 
+</em><br />
+<em class="quotelev1">&gt; front of the current desktop number. Upon choosing a number,
+</em><br />
+<em class="quotelev1">&gt; the current desktop is changed to that number.
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; The question is, how to get the asterisk (*) in front
+</em><br />
+<em class="quotelev1">&gt; of the current desktop number. Is it possible to retreive 
+</em><br />
+<em class="quotelev1">&gt; this using FvwmCommand? 
+</em><br />
+<br />Use this piece of code (4 lines) that builds and shows requested menu.
+<br />
+<br />&nbsp;&nbsp;AddToFunc ShowMyDeskMenu
+<br />
+&nbsp;&nbsp;+ I DestroyMenu MyDeskMenu
+<br />
+&nbsp;&nbsp;+ I PipeRead `for i in 0 1 2 3; do echo -n 'AddToMenu MyDeskMenu &quot;';
+<br />
+[ $$d = ${i} ] &amp;&amp; echo -n &quot;**&quot;; echo \\ ${i}'&quot; GotoDesk '${i}; done
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|__ real TAB for better alignment
+<br />
+&nbsp;&nbsp;+ I Menu MyDeskMenu
+<br />
+<br />Double dollar is to expand desk at run time, not at func definition time.
+<br />
+Double star is to escape star in AddToMenu.
+<br />
+Double slash is to escape TAB (one for FVWM, another for /bin/sh), so TAB
+<br />
+is passed to echo.
+<br />
+${i} ensures FVWM does not expands var, but /bin/sh does.
+<br />
+<br />Regards,
+<br />
+Mikhael.
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sat Dec 15 2001 - 17:59:17 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start3858">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="3859.html" title="Next message in the list">Glen Lee Edwards: "Re: FVWM: current desktop using FvwmCommand?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="3857.html" title="Previous message in the list">Dan Espen: "Re: FVWM: FvwmPager: MiniIcons"</a></li>
+<li><dfn>In reply to</dfn>: <a href="3856.html" title="Message to which this message replies">Riswick, J.G.A. van: "FVWM: current desktop using FvwmCommand?"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="3859.html" title="Next message in this discussion thread">Glen Lee Edwards: "Re: FVWM: current desktop using FvwmCommand?"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg3858" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg3858" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg3858" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg3858" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:52 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: PATCH -- no icon focus under SloppyFocus from Paul Raines on 1996-09-21 (fvwm-users)</title>
+<meta name="Author" content="Paul Raines (raines_at_slac.stanford.edu)" />
+<meta name="Subject" content="FVWM: PATCH -- no icon focus under SloppyFocus" />
+<meta name="Date" content="1996-09-21" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: PATCH -- no icon focus under SloppyFocus</h1>
+<!-- received="Sat Sep 21 09:37:39 1996" -->
+<!-- isoreceived="19960921083739" -->
+<!-- sent="Sat, 21 Sep 1996 10:34:32 -0400" -->
+<!-- isosent="19960921143432" -->
+<!-- name="Paul Raines" -->
+<!-- email="raines_at_slac.stanford.edu" -->
+<!-- subject="FVWM: PATCH &ndash;&ndash; no icon focus under SloppyFocus" -->
+<!-- id="raines-960921103402.A0D14108_at_curie.physics.wm.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start17918" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="17919.html" accesskey="d" title="Graeme McCaffery: &quot;FVWM: Broadway&quot;">Next message</a> ]
+[ <a href="17917.html" title="Rogier van Wanroij: &quot;FVWM: Move to Current Desk.&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17918" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17918" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17918" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17918" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Paul Raines &lt;<a href="mailto:raines_at_slac.stanford.edu?Subject=Re%3A%20FVWM%3A%20PATCH%20--%20no%20icon%20focus%20under%20SloppyFocus">raines_at_slac.stanford.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sat, 21 Sep 1996 10:34:32 -0400</span><br />
+</address>
+<br />
+I used to be a ClickToFocus person until SloppyFocus came along. 
+<br />
+However, there is one annoying &quot;feature&quot; of it in that it still gives 
+<br />
+focus to icons.  My opinion is that the whole idea of SloppyFocus is 
+<br />
+to have the focus follow the mouse only when it enters something worth 
+<br />
+giving the keyboard focus to. Icons don't seem to want it. &quot;Fixing&quot; 
+<br />
+the behavior is a simple one item patch I have included below for 
+<br />
+those who don't want icons getting keyboard focus. 
+<br />
+<br />*** events.c.orig       Sat Sep 21 10:24:22 1996
+<br />
+--- events.c    Sat Sep 21 10:20:02 1996
+<br />
+***************
+<br />
+*** 1126,1132 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if (!Tmp_win) 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+!   if(!(Tmp_win-&gt;flags &amp; ClickToFocus))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(Scr.Focus != Tmp_win)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+--- 1126,1133 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if (!Tmp_win) 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+!   if(!(Tmp_win-&gt;flags &amp; ClickToFocus) &amp;&amp; !((Tmp_win-&gt;flags &amp; SloppyFocus)
+<br />
+!       &amp;&amp;(Tmp_win-&gt;flags &amp; ICONIFIED)))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(Scr.Focus != Tmp_win)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+<br /><br /><pre>
+--
+_________________________________________________________________________
+Paul Raines               raines_at_slac.stanford.edu           804-221-1876
+Stanford Linear Accelerator    End Station A           E143 Collaboration
+<a href="http://www.slac.stanford.edu/~raines/index.html">http://www.slac.stanford.edu/~raines/index.html</a>  &lt;======== PGP public key
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sat Sep 21 1996 - 09:37:39 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start17918">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="17919.html" title="Next message in the list">Graeme McCaffery: "FVWM: Broadway"</a></li>
+<li><dfn>Previous message</dfn>: <a href="17917.html" title="Previous message in the list">Rogier van Wanroij: "FVWM: Move to Current Desk."</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17918" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17918" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17918" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17918" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

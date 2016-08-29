@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Buglet: Off-By-One error in Menu position from Martin Kraemer on 1995-10-06 (fvwm-users)</title>
+<meta name="Author" content="Martin Kraemer (Martin.Kraemer_at_mch.sni.de)" />
+<meta name="Subject" content="FVWM: Buglet: Off-By-One error in Menu position" />
+<meta name="Date" content="1995-10-06" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Buglet: Off-By-One error in Menu position</h1>
+<!-- received="Fri Oct  6 09:41:05 1995" -->
+<!-- isoreceived="19951006084105" -->
+<!-- sent="Fri, 6 Oct 1995 15:44:11 +0100 (MET)" -->
+<!-- isosent="19951006144411" -->
+<!-- name="Martin Kraemer" -->
+<!-- email="Martin.Kraemer_at_mch.sni.de" -->
+<!-- subject="FVWM: Buglet: Off-By-One error in Menu position" -->
+<!-- id="199510061444.AA03381_at_deejai.mch.sni.de" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start14432" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="14433.html" accesskey="d" title="Kevin Scott: &quot;FVWM: fvwm 2.0 pl36 - bug and patch&quot;">Next message</a> ]
+[ <a href="14431.html" title="chitturi_at_dns1.state.mi.us: &quot;FVWM: Diff fvwm1.2 andd fvwm2.0&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg14432" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg14432" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg14432" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg14432" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Martin Kraemer &lt;<a href="mailto:Martin.Kraemer_at_mch.sni.de?Subject=Re%3A%20FVWM%3A%20Buglet%3A%20Off-By-One%20error%20in%20Menu%20position">Martin.Kraemer_at_mch.sni.de</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 6 Oct 1995 15:44:11 +0100 (MET)</span><br />
+</address>
+<br />
+Hello
+<br />
+<br />I use fvwm-pre-2.0-pl35. On a window's left button (button 0), I have bound
+<br />
+the usual menu (mwm-style). But the menu doesn't fit &quot;snug&quot; attached to the
+<br />
+title bar, but leaves a one-pixel row to the left and top free; the original
+<br />
+window contents are visible in this area. I think it would look &quot;more
+<br />
+professional&quot; (or rather &quot;more mwm-ish&quot;) if the menu would attach directly
+<br />
+to the title bar (and left resize bar, respectively).
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;Martin
+<br />
+__
+<br />
+Here's my config:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;Mouse 0 1       A       Menu    Window-Corner   Close
+<br />
+<br />with the menu
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;AddToMenu Window-Corner &quot;Restore        Alt+F5&quot;         Nop
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;+                       &quot;&amp;Move          Alt+F7&quot;         Move-or-Raise
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;+                       &quot;&amp;Size          Alt+F8&quot;         Resize-or-Raise
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;+                       &quot;&amp;Lower         Alt+F3&quot;         Lower
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;+                       &quot;Raise&quot;                         Raise
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;....
+<br />
+and
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;# Keyboard accelerators
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Key F3          A       M       Lower
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Key F4          A       M       Destroy
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;...
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Key F10         A       M       Maximize
+<br />
+<br />This menu pops up, but it is one pixel too far down, that is:
+<br />
+<br />&nbsp;&nbsp;&nbsp;++===++=======================++===++===++
+<br />
+&nbsp;&nbsp;&nbsp;|| = ||        Title          || * ||[ ]||
+<br />
+&nbsp;&nbsp;&nbsp;++===++=======================++===++===++
+<br />
+&nbsp;&nbsp;&nbsp;|+--------------+ &lt;---here's a 1 pixel space between title bar &amp; menu
+<br />
+&nbsp;&nbsp;&nbsp;||Restore Alt+F5|                       ||
+<br />
+&nbsp;&nbsp;&nbsp;||Move    Alt+F7|                       ||
+<br />
+&nbsp;&nbsp;&nbsp;||Size    Alt+F8|                       ||
+<br />
+&nbsp;&nbsp;&nbsp;||              |                       ||
+<br />
+&nbsp;&nbsp;&nbsp;||              |                       ||
+<br />
+&nbsp;&nbsp;&nbsp;||              |                       ||
+<br />
+&nbsp;&nbsp;&nbsp;||              |                       ||
+<br />
+&nbsp;&nbsp;&nbsp;|+--------------+                       ||
+<br />
+&nbsp;&nbsp;&nbsp;|&lt;-here, too                            ||
+<br />
+&nbsp;&nbsp;&nbsp;||                                      ||
+<br />
+&nbsp;&nbsp;&nbsp;||                                      ||
+<br />
+&nbsp;&nbsp;&nbsp;||                                      ||
+<br />
+&nbsp;&nbsp;&nbsp;++===++=======================++===++===++
+<br />
+<br /><pre>
+-- 
+| S I E M E N S |   Martin.Kraemer_at_mch.sni.de   |       Siemens Nixdorf
+| ------------- |   Voice: +49-89-636-46021     |   Informationssysteme AG
+| N I X D O R F |   FAX:   +49-89-636-44994     |    81730 Munich, Germany
+~~~~~~~~~~~~~~~~  (My opinions only, of course; pgp key available on request)
+--
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Oct 06 1995 - 09:41:05 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start14432">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="14433.html" title="Next message in the list">Kevin Scott: "FVWM: fvwm 2.0 pl36 - bug and patch"</a></li>
+<li><dfn>Previous message</dfn>: <a href="14431.html" title="Previous message in the list">chitturi_at_dns1.state.mi.us: "FVWM: Diff fvwm1.2 andd fvwm2.0"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg14432" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg14432" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg14432" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg14432" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:57 BST
+</em></small></p>
+</body>
+</html>

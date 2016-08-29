@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Re: Empty function arguments (was Re: Finally moved to 2.2 etc etc) from David S. Goldberg on 1999-05-21 (fvwm-users)</title>
+<meta name="Author" content="David S. Goldberg (dsg_at_mitre.org)" />
+<meta name="Subject" content="FVWM: Re: Empty function arguments (was Re: Finally moved to 2.2 etc etc)" />
+<meta name="Date" content="1999-05-21" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Re: Empty function arguments (was Re: Finally moved to 2.2 etc etc)</h1>
+<!-- received="Fri May 21 08:34:17 1999" -->
+<!-- isoreceived="19990521073417" -->
+<!-- sent="21 May 1999 09:33:09 -0400" -->
+<!-- isosent="19990521133309" -->
+<!-- name="David S. Goldberg" -->
+<!-- email="dsg_at_mitre.org" -->
+<!-- subject="FVWM: Re: Empty function arguments (was Re: Finally moved to 2.2 etc etc)" -->
+<!-- id="m1bu2t6k0oa.fsf_at_blackbird.mitre.org" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="Fri, 21 May 1999 07:49:27 -0400&quot;" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start24233" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="24234.html" accesskey="d" title="Dan Espen: &quot;Re: FVWM: Re: Empty function arguments (was Re: Finally moved to 2.2 etc etc)&quot;">Next message</a> ]
+[ <a href="24232.html" title="Dan Espen: &quot;Re: FVWM: Re: Empty function arguments (was Re: Finally moved to 2.2 etc etc)&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg24233" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg24233" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg24233" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg24233" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: David S. Goldberg &lt;<a href="mailto:dsg_at_mitre.org?Subject=Re%3A%20FVWM%3A%20Re%3A%20Empty%20function%20arguments%20(was%20Re%3A%20Finally%20moved%20to%202.2%20etc%20etc)">dsg_at_mitre.org</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: 21 May 1999 09:33:09 -0400</span><br />
+</address>
+<br />
+The problem is almost certainly the empty arguments being passed to
+<br />
+the exec of the FvwmForm module.  I trussed my fvwm2 with the follow
+<br />
+option and I see at the execve line:
+<br />
+<br />4754:   fork()          (returning as child ...)        = 2405
+<br />
+4754:   close(23)                                       = 0
+<br />
+4754:   close(24)                                       = 0
+<br />
+4754:   execve(&quot;/blackbird/local/openwin/libexec/fvwm/2.2/FvwmForm&quot;, 0xEFFF8AB8, 0xEFFFF398)  argc = 14
+<br />
+<br />argc should certainly not be 14.  I'm passing FvwmForm one argument,
+<br />
+the name of the form.  fvwm2 passes it an addition 6 if I remember
+<br />
+correctly.  If I call FvwmForm MyXcmd without the wrapper function
+<br />
+argc shows up as 7 as expected.  Since I don't want to waste bandwidth
+<br />
+on the list, if anyone wants the truss outputs, I'll be happy to email
+<br />
+them.  Hmm.  Better yet, I've put them on my web page:
+<br />
+<br />&lt;URL:<a href="http://world.std.com/~dsg/fvwmform-via-wrapper.txt">http://world.std.com/~dsg/fvwmform-via-wrapper.txt</a>&gt;
+<br />
+&lt;URL:<a href="http://world.std.com/~dsg/fvwmform-native.txt">http://world.std.com/~dsg/fvwmform-native.txt</a>&gt;
+<br />
+<pre>
+-- 
+Dave Goldberg
+Post: The Mitre Corporation\MS B325\202 Burlington Rd.\Bedford, MA 01730
+Phone: 781-271-3887
+Email: dsg_at_mitre.org
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri May 21 1999 - 08:34:17 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start24233">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="24234.html" title="Next message in the list">Dan Espen: "Re: FVWM: Re: Empty function arguments (was Re: Finally moved to 2.2 etc etc)"</a></li>
+<li><dfn>Previous message</dfn>: <a href="24232.html" title="Previous message in the list">Dan Espen: "Re: FVWM: Re: Empty function arguments (was Re: Finally moved to 2.2 etc etc)"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg24233" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg24233" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg24233" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg24233" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:02 BST
+</em></small></p>
+</body>
+</html>

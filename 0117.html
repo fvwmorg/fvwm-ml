@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Argument Passing? from Thomas A. Gardiner on 2000-01-15 (fvwm-users)</title>
+<meta name="Author" content="Thomas A. Gardiner (gardiner_at_pas.rochester.edu)" />
+<meta name="Subject" content="FVWM: Argument Passing?" />
+<meta name="Date" content="2000-01-15" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Argument Passing?</h1>
+<!-- received="Fri Jan 14 18:19:39 2000" -->
+<!-- isoreceived="20000114181939" -->
+<!-- sent="Fri, 14 Jan 2000 19:16:56 -0500 (EST)" -->
+<!-- isosent="20000115001656" -->
+<!-- name="Thomas A. Gardiner" -->
+<!-- email="gardiner_at_pas.rochester.edu" -->
+<!-- subject="FVWM: Argument Passing?" -->
+<!-- id="Pine.LNX.3.96URPAS-R.1000114183705.18670B-100000_at_alfalfa.pas.rochester.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="200001142114.QAA16923_at_castle.mk.telcordia.com" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start117" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="0118.html" accesskey="d" title="Dan Espen: &quot;Re: FVWM: Argument Passing?&quot;">Next message</a> ]
+[ <a href="0116.html" title="Dan Espen: &quot;Re: FVWM: can&#0039;t move windows under Solaris 2.6&quot;">Previous message</a> ]
+[ <a href="0115.html" title="Dan Espen: &quot;Re: FVWM: Argument Passing?&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="0118.html" accesskey="t" title="Dan Espen: &quot;Re: FVWM: Argument Passing?&quot;">Next in thread</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg117" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg117" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg117" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg117" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Thomas A. Gardiner &lt;<a href="mailto:gardiner_at_pas.rochester.edu?Subject=Re%3A%20FVWM%3A%20Argument%20Passing%3F">gardiner_at_pas.rochester.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 14 Jan 2000 19:16:56 -0500 (EST)</span><br />
+</address>
+<br />
+Hi,
+<br />
+<br />Sorry for not responding to this earlier.  John, I'm especially sorry for
+<br />
+not trying your suggestion yet.  So, I get varied results...
+<br />
+<br />The first suggestion.
+<br />
+<br />AddToFunc SwitchDecor
+<br />
++ &quot;I&quot; Exec echo $0 &gt; HOME/USER_WM_STYLE
+<br />
++ &quot;I&quot; Restart HOME/bin/RunWM
+<br />
+<br />I tried the first suggestion below, and it works for me, but I too was
+<br />
+afraid that it would be unreliable from the excerpt of the fvwm2 man page
+<br />
+which Dan mentioned.
+<br />
+<br /><em class="quotelev1">&gt;From the man page: 
+</em><br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Note that this function doesn't  wait  for  command  to
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;complete, so things like:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Exec &quot;echo AddToMenu ... &gt; /tmp/file&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Read /tmp/file
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;won't work reliably.
+<br />
+<br /><br /><br /><em class="quotelev2">&gt;&gt; In other places where I want to wait for an Exec to complete before moving on
+</em><br />
+<em class="quotelev2">&gt;&gt; I use PipeRead instead: so, one could try:
+</em><br />
+<em class="quotelev2">&gt;&gt; 
+</em><br />
+<em class="quotelev2">&gt;&gt;          AddToFunc SwitchDecor
+</em><br />
+<em class="quotelev2">&gt;&gt;          + &quot;I&quot; PipeRead &quot;echo $0 &gt; HOME/USER_WM_STYLE&quot;
+</em><br />
+<em class="quotelev2">&gt;&gt;          + &quot;I&quot; Restart HOME/bin/RunWM
+</em><br />
+<br />This suggestion works just fine for me.  There is one interesting
+<br />
+difference from the first suggestion above.  I pipe stdout and stderr to
+<br />
+~/.FVWM2-errors with
+<br />
+<br />fvwm2 -cmd 'FvwmM4 fvwm2rc.m4' &gt; ~/.FVWM2-errors 2&gt;&amp;1
+<br />
+<br />The first suggestion causes the output of subsequent restarts to be
+<br />
+appended to the file.  The second suggestion causes the file to be
+<br />
+overwritten.  There is definitely something going on here, but I'll be
+<br />
+damned if I know what...
+<br />
+<br />The third suggestion gives me an error for some unknown reason.
+<br />
+<br /><em class="quotelev2">&gt;&gt; Or even:
+</em><br />
+<em class="quotelev2">&gt;&gt; 
+</em><br />
+<em class="quotelev2">&gt;&gt;          AddToFunc SwitchDecor
+</em><br />
+<em class="quotelev2">&gt;&gt;          + &quot;I&quot; PipeRead &quot;echo $0 &gt; HOME/USER_WM_STYLE; echo Restart HOME/bin/
+</em><br />
+<em class="quotelev2">&gt;&gt; RunWM&quot;
+</em><br />
+<br />[FVWM][Done]: &lt;&lt;ERROR&gt;&gt; Call of '/home/tom/bin/RunWM' failed!!!! 
+<br />
+(restarting 'fvwm2' instead)
+<br />
+<br />Anyone have an idea why???  I guess it doesn't matter, the second
+<br />
+suggestion works.  I should just use it and move on...
+<br />
+<br /><em class="quotelev2">&gt;&gt; (which now suggests one doesn't even need the function SwitchDecor, although
+</em><br />
+<em class="quotelev2">&gt;&gt; perhaps it's nicer than having the PipeRead repeated for each menu item).
+</em><br />
+<br />Now one last demonstration of my ignorance.
+<br />
+<br />What does this mean?
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PipeRead cmd option
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Causes fvwm to read commands output from  the  pro-
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gram  named  cmd.   Useful  for building up dynamic
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;menu entries based on a directories  contents,  for
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;example.
+<br />
+<br />So this caused fvwm2 to read the result of the echo command and do nothing
+<br />
+with it?
+<br />
+<br />PipeRead &quot;echo $0 &gt; HOME/USER_WM_STYLE&quot;
+<br />
+<br />Tom
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Jan 14 2000 - 18:19:39 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start117">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="0118.html" title="Next message in the list">Dan Espen: "Re: FVWM: Argument Passing?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="0116.html" title="Previous message in the list">Dan Espen: "Re: FVWM: can&#0039;t move windows under Solaris 2.6"</a></li>
+<li><dfn>In reply to</dfn>: <a href="0115.html" title="Message to which this message replies">Dan Espen: "Re: FVWM: Argument Passing?"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="0118.html" title="Next message in this discussion thread">Dan Espen: "Re: FVWM: Argument Passing?"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg117" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg117" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg117" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg117" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:50 BST
+</em></small></p>
+</body>
+</html>

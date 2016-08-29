@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: PipeRead help from Cameron Simpson on 2002-09-08 (fvwm-users)</title>
+<meta name="Author" content="Cameron Simpson (cs_at_zip.com.au)" />
+<meta name="Subject" content="Re: FVWM: PipeRead help" />
+<meta name="Date" content="2002-09-08" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: PipeRead help</h1>
+<!-- received="Sat Sep  7 20:44:50 2002" -->
+<!-- isoreceived="20020907194450" -->
+<!-- sent="Sun, 8 Sep 2002 11:43:33 +1000" -->
+<!-- isosent="20020908014333" -->
+<!-- name="Cameron Simpson" -->
+<!-- email="cs_at_zip.com.au" -->
+<!-- subject="Re: FVWM: PipeRead help" -->
+<!-- id="20020908014333.GA11964_at_amadeus.home" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="20020907224927.GA23982_at_unixcab.org" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start6197" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="6198.html" accesskey="d" title="Mikhael Goikhman: &quot;Re: FVWM: FVWM crashes when typing &#0034;Q&#0034; on Pine&quot;">Next message</a> ]
+[ <a href="6196.html" title="Wolfgang Pfeiffer: &quot;FVWM: FVWM crashes when typing &#0034;Q&#0034; on Pine&quot;">Previous message</a> ]
+[ <a href="6195.html" title="Mikhael Goikhman: &quot;Re: FVWM: PipeRead help&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg6197" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg6197" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg6197" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg6197" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Cameron Simpson &lt;<a href="mailto:cs_at_zip.com.au?Subject=Re%3A%20FVWM%3A%20PipeRead%20help">cs_at_zip.com.au</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sun, 8 Sep 2002 11:43:33 +1000</span><br />
+</address>
+<br />
+On 22:49 07 Sep 2002, Mikhael Goikhman &lt;migo_at_homemail.com&gt; wrote:
+<br />
+| On 07 Sep 2002 23:28:29 +0200, Johan Svedberg wrote:
+<br />
+| &gt; I need some help. What I want to do is check if a program is on my
+<br />
+| &gt; system, and if it is I want to run it in my InitFunction. I'm guessing
+<br />
+| &gt; this could be done in a Function using PipeRead, but I have no idea how
+<br />
+| &gt; to do it... :-) Help would be greatly appriciated.
+<br />
+| 
+<br />
+| Do what you would do from a script or command line. Something like this:
+<br />
+| 
+<br />
+|   Exec which myprogram &gt;/dev/null 2&gt;&amp;1 &amp;&amp; myprogram params
+<br />
+| 
+<br />
+| Some propretary unices (Solaris) have pretty unusable &quot;which&quot; that always
+<br />
+| returns 0 and write errors on stdout. There are also &quot;whereis&quot; (external),
+<br />
+| &quot;where&quot;, &quot;filetest -X&quot; (tcsh/csh), &quot;hash&quot;, &quot;type&quot; (sh).
+<br />
+<br />Any reason not just to do this:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Exec myprogram params
+<br />
+<br />If it's there, it runs. If not, it doesn't.
+<br />
+<br />Of course, if you want to do a bit more than just invoke it
+<br />
+then Mikhael's approach is the go. If your &quot;which&quot; always returns 0 you
+<br />
+can try this:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Exec prog=`which myprogram 2&gt;/dev/null`; [ -f &quot;$$prog&quot; ] &amp;&amp; myprogram params
+<br />
+<br />i.e. doesn't trust which's exit status - test the string it returns. The
+<br />
+double $$ is to get the $ through to the shell from FVWM (which also
+<br />
+uses $).
+<br />
+<pre>
+-- 
+Cameron Simpson, DoD#743        cs_at_zip.com.au    <a href="http://www.zip.com.au/~cs/">http://www.zip.com.au/~cs/</a>
+As long as you're willing to distract people with odd host names, the British
+Indian Ocean Territory appears to be a safe bet; unlike .cv, .cm, and .vg,
+there is still no name service for .io, making it ripe for fictional hosts.
+According to my almanac, it contains the Chagos Archipelago, with a surface
+area of 23 square miles and no civilian population whatsoever, although both
+the UK and the US &quot;maintain a military presence&quot;. Presumably any computers it
+contains will be in .mil or .uk. - Elizabeth Zwicky &lt;zwicky_at_greatcircle.com&gt;
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sat Sep 07 2002 - 20:44:50 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start6197">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="6198.html" title="Next message in the list">Mikhael Goikhman: "Re: FVWM: FVWM crashes when typing &#0034;Q&#0034; on Pine"</a></li>
+<li><dfn>Previous message</dfn>: <a href="6196.html" title="Previous message in the list">Wolfgang Pfeiffer: "FVWM: FVWM crashes when typing &#0034;Q&#0034; on Pine"</a></li>
+<li><dfn>In reply to</dfn>: <a href="6195.html" title="Message to which this message replies">Mikhael Goikhman: "Re: FVWM: PipeRead help"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg6197" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg6197" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg6197" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg6197" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:53 BST
+</em></small></p>
+</body>
+</html>

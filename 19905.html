@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: Re: Query about .fvwm2-menu from H}vard Fosseng on 1997-05-02 (fvwm-users)</title>
+<meta name="Author" content="H}vard Fosseng (havard.fosseng_at_usit.uio.no)" />
+<meta name="Subject" content="Re: FVWM: Re: Query about .fvwm2-menu" />
+<meta name="Date" content="1997-05-02" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: Re: Query about .fvwm2-menu</h1>
+<!-- received="Fri May  2 10:04:27 1997" -->
+<!-- isoreceived="19970502090427" -->
+<!-- sent="Fri, 2 May 1997 17:04:01 +0200 (MET DST)" -->
+<!-- isosent="19970502150401" -->
+<!-- name="H}vard Fosseng" -->
+<!-- email="havard.fosseng_at_usit.uio.no" -->
+<!-- subject="Re: FVWM: Re: Query about .fvwm2-menu" -->
+<!-- id="199705021504.RAA06527_at_tag.uio.no" -->
+<!-- charset="iso-8859-1" -->
+<!-- inreplyto="m1bbu6unf16.fsf_at_blackbird.mitre.org" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start19905" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="19906.html" accesskey="d" title="Alfred von Campe: &quot;FVWM: Backspace key doesn&#0039;t work in Netscape&quot;">Next message</a> ]
+[ <a href="19904.html" title="Adrian Nagle: &quot;RE: FVWM: Query about .fvwm2-menu&quot;">Previous message</a> ]
+[ <a href="19901.html" title="David S. Goldberg: &quot;FVWM: Re: Query about .fvwm2-menu&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="19902.html" accesskey="t" title="Dan Espen: &quot;Re: FVWM: Query about .fvwm2-menu&quot;">Next in thread</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19905" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19905" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19905" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19905" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: H}vard Fosseng &lt;<a href="mailto:havard.fosseng_at_usit.uio.no?Subject=Re%3A%20FVWM%3A%20Re%3A%20Query%20about%20.fvwm2-menu">havard.fosseng_at_usit.uio.no</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 2 May 1997 17:04:01 +0200 (MET DST)</span><br />
+</address>
+<br />
+David S. Goldberg writes:
+<br />
+<br /><em class="quotelev1">&gt; That was my first reaction too, but running Exec in the ExitFunction
+</em><br />
+<em class="quotelev1">&gt; may not work as expected since the Exec'd programs are effectively run
+</em><br />
+<em class="quotelev1">&gt; in the background so fvwm may quit before he wants it to.  One
+</em><br />
+<em class="quotelev1">&gt; possibility would have the last script run a given X application and
+</em><br />
+<em class="quotelev1">&gt; then in the ExitFunction he could Wait for that application's window
+</em><br />
+<em class="quotelev1">&gt; before finishing.
+</em><br />
+<br />I've been using this technique for some time:
+<br />
+<br />_______________________________________________________________________________
+<br />
+<br />AddToFunc Terminer
+<br />
++ I Exec sh -c &quot;rsh tag gnudoit \'\(hf-save-all-and-terminate\)\'; exec xlogo&quot;
+<br />
++ I Wait xlogo
+<br />
++ I Quit
+<br />
+<br />AddToMenu Session	Session		Title
+<br />
++			&amp;Quit		Terminer
+<br />
+<br />_______________________________________________________________________________
+<br />
+<br />I.e. I exec &quot;sh&quot; with a single command line, the last command in which
+<br />
+is &quot;xlogo&quot;. Any other X application should work, but something
+<br />
+lightweight seems the best choice here. It's not necessary to have the
+<br />
+final script run the X application itself, you can do that from the
+<br />
+.fvwmrc.
+<br />
+<br /><br /><br />- Håvard Fosseng
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri May 02 1997 - 10:04:27 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start19905">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="19906.html" title="Next message in the list">Alfred von Campe: "FVWM: Backspace key doesn&#0039;t work in Netscape"</a></li>
+<li><dfn>Previous message</dfn>: <a href="19904.html" title="Previous message in the list">Adrian Nagle: "RE: FVWM: Query about .fvwm2-menu"</a></li>
+<li><dfn>In reply to</dfn>: <a href="19901.html" title="Message to which this message replies">David S. Goldberg: "FVWM: Re: Query about .fvwm2-menu"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="19902.html" title="Next message in this discussion thread">Dan Espen: "Re: FVWM: Query about .fvwm2-menu"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19905" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19905" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19905" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19905" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

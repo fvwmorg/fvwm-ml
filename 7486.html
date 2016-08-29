@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: RE: Notification: incoming/977 from EXT-Wilson, William A on 2003-01-09 (fvwm-users)</title>
+<meta name="Author" content="EXT-Wilson, William A (william.a.wilson_at_boeing.com)" />
+<meta name="Subject" content="FVWM: RE: Notification: incoming/977" />
+<meta name="Date" content="2003-01-09" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: RE: Notification: incoming/977</h1>
+<!-- received="Thu Jan  9 09:19:11 2003" -->
+<!-- isoreceived="20030109091911" -->
+<!-- sent="Thu, 9 Jan 2003 06:59:35 -0800 " -->
+<!-- isosent="20030109145935" -->
+<!-- name="EXT-Wilson, William A" -->
+<!-- email="william.a.wilson_at_boeing.com" -->
+<!-- subject="FVWM: RE: Notification: incoming/977" -->
+<!-- id="4A0BDD8C9380D14A8B382B3F33D13504302F4A_at_xch-sw-01.sw.nos.boeing.com" -->
+<!-- charset="iso-8859-1" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start7486" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="7487.html" accesskey="d" title="Remko Troncon: &quot;Re: FVWM: Acrobat Reader refuse to move in FVWM!&quot;">Next message</a> ]
+[ <a href="7485.html" title="DAT Email: &quot;FVWM: Thank you for your message&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="7494.html" accesskey="t" title="Dominik Vogt: &quot;Re: FVWM: RE: Notification: incoming/977&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg7486" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg7486" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg7486" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg7486" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: EXT-Wilson, William A &lt;<a href="mailto:william.a.wilson_at_boeing.com?Subject=Re%3A%20FVWM%3A%20RE%3A%20Notification%3A%20incoming%2F977">william.a.wilson_at_boeing.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 9 Jan 2003 06:59:35 -0800 </span><br />
+</address>
+<br />
+Dan,
+<br />
+<br />Attached is a tarball with a sample program.  I have included stripped down
+<br />
+versions of the two files which are required and a tc.m which will make it.
+<br />
+The g_plot file normally resides in 
+<br />
+~/app-defaults/g_plot.  The part of the code which I suspect is not working
+<br />
+correctly with fvwm is:
+<br />
+<br />&nbsp;&nbsp;/*
+<br />
+&nbsp;&nbsp;&nbsp;* Turn on backing Store &amp; Save Under
+<br />
+&nbsp;&nbsp;&nbsp;*/
+<br />
+&nbsp;&nbsp;if (strcmp(expose,&quot;SERVER&quot;) == 0) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;attrib.backing_store = Always;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;attrib.save_under   = True;
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;else {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;attrib.backing_store = NotUseful;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;attrib.save_under   = False;
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;XChangeWindowAttributes(screen[snum].G_plot_disp,screen[snum].G_plot_win, 
+<br />
+&nbsp;&nbsp;&nbsp;CWBackingStore | CWSaveUnder,&amp;attrib);
+<br />
+<br />which is in x11_gplot.c.  This code (which I don't understand was coded a
+<br />
+long time ago for a Sun based sonar system which used a Techsource display
+<br />
+VME card.  Things have changed over the years and we keep tinkering with the
+<br />
+plot package to make it work.  Using fvwm delivered with Red Hat 7.2 (maybe
+<br />
+7.3) everything was OK.  You could minimize a g_plot window and bring it
+<br />
+back and you could cover it up with another window and it would restore.
+<br />
+Now, when you bring it back, the covered area is black.  The only part that
+<br />
+comes back is the border and the window title &quot;Gplot Graphics ...&quot;.
+<br />
+<br />Any and all suggestions would be appreciated.
+<br />
+<br />Bill Wilson
+<br />
+714-762-4348
+<br />
+<br />-----Original Message-----
+<br />
+From: Dan Espen [mailto:dane_at_mk.telcordia.com]
+<br />
+Sent: Wednesday, January 08, 2003 1:24 PM
+<br />
+To: EXT-Wilson, William A
+<br />
+Cc: 'fvwm_at_fvwm.org'
+<br />
+Subject: Re: Notification: incoming/977 
+<br />
+<br /><br />&quot;EXT-Wilson, William A&quot; &lt;william.a.wilson_at_boeing.com&gt; writes:
+<br />
+<em class="quotelev1">&gt; Dan,
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; Thanks for the quick response.  I think I must have made an error in
+</em><br />
+reading
+<br />
+<em class="quotelev1">&gt; the version number; but I updated to 2.4.14 as you suggested.  I still
+</em><br />
+have
+<br />
+<em class="quotelev1">&gt; the same problem.  I think (wild guess by not a strong X programmer) that
+</em><br />
+<em class="quotelev1">&gt; there is a configuration file somewhere controlling fvwm and it got
+</em><br />
+updated
+<br />
+<em class="quotelev1">&gt; when I upgraded to Red Hat 8.0.  The key to this is, &quot;does fvwm repaint
+</em><br />
+<em class="quotelev1">&gt; uncovered portions of a display?&quot;.
+</em><br />
+<br />No.
+<br />
+The application will get expose events and then the application
+<br />
+has to repaint itself.
+<br />
+<br />Can you give us more information about the application or
+<br />
+perhaps a small piece of code.
+<br />
+<br />For 2.4.14, the configuration file for fvwm would be
+<br />
+$HOME/.fvwm/.fvwm2rc.
+<br />
+<br /><pre>
+-- 
+Dan Espen                           E-mail: dane_at_mk.telcordia.com
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Jan 09 2003 - 09:19:11 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start7486">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="7487.html" title="Next message in the list">Remko Troncon: "Re: FVWM: Acrobat Reader refuse to move in FVWM!"</a></li>
+<li><dfn>Previous message</dfn>: <a href="7485.html" title="Previous message in the list">DAT Email: "FVWM: Thank you for your message"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="7494.html" title="Next message in this discussion thread">Dominik Vogt: "Re: FVWM: RE: Notification: incoming/977"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="7494.html" title="Message sent in reply to this message">Dominik Vogt: "Re: FVWM: RE: Notification: incoming/977"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="7504.html" title="Message sent in reply to this message">Dan Espen: "Re: FVWM: RE: Notification: incoming/977"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg7486" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg7486" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg7486" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg7486" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:54 BST
+</em></small></p>
+</body>
+</html>

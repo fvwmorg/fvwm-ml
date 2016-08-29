@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: Window title for xterm from Todd Tyrone Fries on 1996-05-16 (fvwm-users)</title>
+<meta name="Author" content="Todd Tyrone Fries (todd_at_davidalan.com)" />
+<meta name="Subject" content="Re: FVWM: Window title for xterm" />
+<meta name="Date" content="1996-05-16" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: Window title for xterm</h1>
+<!-- received="Thu May 16 14:27:06 1996" -->
+<!-- isoreceived="19960516132706" -->
+<!-- sent="Thu, 16 May 1996 13:29:42 -0600 (MDT)" -->
+<!-- isosent="19960516192942" -->
+<!-- name="Todd Tyrone Fries" -->
+<!-- email="todd_at_davidalan.com" -->
+<!-- subject="Re: FVWM: Window title for xterm" -->
+<!-- id="199605161929.NAA13595_at_whiteout.davidalan.com" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="199605161740.NAA29045_at_starbase.spd.louisville.edu" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start16785" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="16786.html" accesskey="d" title="Alan Wild: &quot;Re: FVWM: Window title for xterm&quot;">Next message</a> ]
+[ <a href="16784.html" title="Richard Lister: &quot;FVWM: Repost: using none.xpm&quot;">Previous message</a> ]
+[ <a href="16782.html" title="Alan Wild: &quot;Re: FVWM: Window title for xterm&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="16786.html" accesskey="t" title="Alan Wild: &quot;Re: FVWM: Window title for xterm&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16785" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16785" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16785" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16785" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Todd Tyrone Fries &lt;<a href="mailto:todd_at_davidalan.com?Subject=Re%3A%20FVWM%3A%20Window%20title%20for%20xterm">todd_at_davidalan.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 16 May 1996 13:29:42 -0600 (MDT)</span><br />
+</address>
+<br />
+<em class="quotelev1">&gt; Rasmus Peter Tamstorf wrote:
+</em><br />
+<em class="quotelev1">&gt; This is what I use to change the xterm title to include my current host
+</em><br />
+<em class="quotelev1">&gt; and directory.  The iconname has also been changed to reflect the host.
+</em><br />
+<em class="quotelev1">&gt; BTW, this is all for bash.  You set your prompt to this string and then
+</em><br />
+<em class="quotelev1">&gt; each time your prompt changes, the title/iconname is updated:
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; 	PS1=&quot;\[\033]0;\h:\w\007\033]1;\h\007\]\h\$ &quot;
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; The \033 implies an ESC character. The \007 implies a ^G.
+</em><br />
+<br />This wouldn't be so bad, except it redraws the entire line everytime you type
+<br />
+a character.  Not too bad on localhost, but very slow over a modem ...
+<br />
+<br />Anyone ever figure out how to keep the redraw from occurring?
+<br />
+<br />My solution was to do this:
+<br />
+<br />PS1='\h\w:\$ '
+<br />
+if [ &quot;$TERM&quot; = &quot;xterm&quot; ]; then
+<br />
+&nbsp;&nbsp;function cd ()
+<br />
+&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;builtin cd $*
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;xtitle &quot;${HOSTNAME%%.*}:$PWD `cat /etc/ip` (`date`)&quot;
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;function cd ()
+<br />
+&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;builtin cd $*
+<br />
+&nbsp;&nbsp;}
+<br />
+fi
+<br />
+xtitle=()
+<br />
+{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;echo -e -n &quot;\033]2;$*\007&quot;
+<br />
+}
+<br />
+<br />(also for bash)
+<br />
+<pre>
+-- 
+Todd Fries
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu May 16 1996 - 14:27:06 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start16785">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="16786.html" title="Next message in the list">Alan Wild: "Re: FVWM: Window title for xterm"</a></li>
+<li><dfn>Previous message</dfn>: <a href="16784.html" title="Previous message in the list">Richard Lister: "FVWM: Repost: using none.xpm"</a></li>
+<li><dfn>In reply to</dfn>: <a href="16782.html" title="Message to which this message replies">Alan Wild: "Re: FVWM: Window title for xterm"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="16786.html" title="Next message in this discussion thread">Alan Wild: "Re: FVWM: Window title for xterm"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="16786.html" title="Message sent in reply to this message">Alan Wild: "Re: FVWM: Window title for xterm"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16785" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16785" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16785" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16785" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

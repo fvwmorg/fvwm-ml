@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: 1) specifying colors and 2) string literal sizes from Luis Fernandes on 1998-06-28 (fvwm-users)</title>
+<meta name="Author" content="Luis Fernandes (elf_at_ee.ryerson.ca)" />
+<meta name="Subject" content="FVWM: 1) specifying colors and 2) string literal sizes" />
+<meta name="Date" content="1998-06-28" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: 1) specifying colors and 2) string literal sizes</h1>
+<!-- received="Sun Jun 28 09:16:04 1998" -->
+<!-- isoreceived="19980628081604" -->
+<!-- sent="Sun, 28 Jun 1998 10:15:42 -0400 (EDT)" -->
+<!-- isosent="19980628141542" -->
+<!-- name="Luis Fernandes" -->
+<!-- email="elf_at_ee.ryerson.ca" -->
+<!-- subject="FVWM: 1) specifying colors and 2) string literal sizes" -->
+<!-- id="199806281415.KAA27153_at_gemini.ee.ryerson.ca" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start22509" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="22510.html" accesskey="d" title="William J. Salvino: &quot;FVWM: Red Hat 5.1 Config&quot;">Next message</a> ]
+[ <a href="22508.html" title="Brady Montz: &quot;Re: FVWM: FvwmIconMan: Can it just show iconified windows?&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg22509" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg22509" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg22509" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg22509" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Luis Fernandes &lt;<a href="mailto:elf_at_ee.ryerson.ca?Subject=Re%3A%20FVWM%3A%201)%20specifying%20colors%20and%202)%20string%20literal%20sizes">elf_at_ee.ryerson.ca</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sun, 28 Jun 1998 10:15:42 -0400 (EDT)</span><br />
+</address>
+<br />
+Using fvwm 2.0.46 beta, I cannot specify colors like this:
+<br />
+<br />*FvwmPagerHilight \#cecece
+<br />
+<br />This is OK, however:
+<br />
+<br />*FvwmPagerHilight grey80
+<br />
+<br />It just seems inconsistent since I can specify:
+<br />
+<br />HilightColor black \#bebebe 
+<br />
+<br />------------------------------------------------------------------------
+<br />
+<br />Also, it seems that Exec string literals are loaded into fixed size
+<br />
+arrays rather than being dynamically allocated. I had to rename the
+<br />
+pixmaps (make the names smaller) in the following Exec string to
+<br />
+accomodate the fixed size that fvwm expects.
+<br />
+<br />*FvwmButtons(Swallow(Respawn,NoHints) xbiff `Exec xbiff -rv -bg grey60 -shape -xrm &quot;*fullPixmap: /usr/common/pixmaps/Mail1.xbm&quot; -xrm &quot;*emptyPixmap: /usr/common/pixmaps/Mail2.xbm&quot; -xrm &quot;*fullPixmapMask: /usr/common/pixmaps/Mail1M.xbm&quot; -xrm &quot;*emptyPixmapMask: /usr/common/pixmaps/Mail2M.xbm&quot;`)
+<br />
+<br />Granted, this is an exceptional case since most exec strings would
+<br />
+resonably fit within the fixed storage size, but I think fvwm2 should
+<br />
+be more robust and handle any string size, within the limits of the
+<br />
+hardware, of course.
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sun Jun 28 1998 - 09:16:04 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start22509">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="22510.html" title="Next message in the list">William J. Salvino: "FVWM: Red Hat 5.1 Config"</a></li>
+<li><dfn>Previous message</dfn>: <a href="22508.html" title="Previous message in the list">Brady Montz: "Re: FVWM: FvwmIconMan: Can it just show iconified windows?"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg22509" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg22509" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg22509" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg22509" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

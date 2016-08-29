@@ -1,0 +1,67 @@
+diff -ru fvwm-2.1.6/fvwm/builtins.c fvwm-2.1.6.new/fvwm/builtins.c
+--- fvwm-2.1.6/fvwm/builtins.c	Sat Dec 26 16:02:45 1998
++++ fvwm-2.1.6.new/fvwm/builtins.c	Thu Dec 31 13:03:26 1998
+@@ -679,6 +679,30 @@
+   return;
+ }
+ 
++void replace_function(XEvent *eventp,Window w,FvwmWindow *tmp_win,
++              unsigned long context,char *action, int *Module)
++{
++  int x,y;
++  char *token;
++  
++  if (DeferExecution(eventp, &w, &tmp_win, &context, SELECT, ButtonRelease))
++    return;
++    
++  /* Find new position for window */
++  SmartPlacement(tmp_win,tmp_win->frame_width+2*tmp_win->bw,
++		 tmp_win->frame_height+2*tmp_win->bw, &x, &y,
++		 0,0);
++
++  /* Possibly animate the movement */
++  GetNextToken(action, &token);
++  if(token!=NULL && StrEquals("ANIM", token))
++    AnimatedMoveOfWindow(tmp_win->frame, -1, -1, x, y, FALSE, -1, NULL);
++
++  SetupFrame(tmp_win,x,y,tmp_win->frame_width, tmp_win->frame_height, FALSE);
++                 
++  return;
++}
++
+ 
+ void iconify_function(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+ 		      unsigned long context,char *action, int *Module)
+diff -ru fvwm-2.1.6/fvwm/functions.c fvwm-2.1.6.new/fvwm/functions.c
+--- fvwm-2.1.6/fvwm/functions.c	Tue Dec 22 15:38:12 1998
++++ fvwm-2.1.6.new/fvwm/functions.c	Thu Dec 31 13:03:26 1998
+@@ -143,6 +143,7 @@
+   {"Recapture",    Recapture,        F_RECAPTURE,           FUNC_NO_WINDOW},
+   {"Refresh",      refresh_function, F_REFRESH,             FUNC_NO_WINDOW},
+   {"RefreshWindow",refresh_win_function, F_REFRESH,         FUNC_NEEDS_WINDOW},
++  {"Replace",      replace_function, F_REPLACE,             FUNC_NEEDS_WINDOW},
+   {"Resize",       resize_window,    F_RESIZE,              FUNC_NEEDS_WINDOW},
+   {"Restart",      restart_function, F_RESTART,             FUNC_NO_WINDOW},
+   {"Scroll",       scroll,           F_SCROLL,              FUNC_NO_WINDOW},
+diff -ru fvwm-2.1.6/fvwm/misc.h fvwm-2.1.6.new/fvwm/misc.h
+--- fvwm-2.1.6/fvwm/misc.h	Tue Dec 22 15:41:25 1998
++++ fvwm-2.1.6.new/fvwm/misc.h	Thu Dec 31 13:05:55 1998
+@@ -374,6 +374,7 @@
+ void exec_setup(F_CMD_ARGS);
+ void refresh_function(F_CMD_ARGS);
+ void refresh_win_function(F_CMD_ARGS);
++void replace_function(F_CMD_ARGS);
+ void stick_function(F_CMD_ARGS);
+ 
+ void setEdgeThickness(F_CMD_ARGS);
+diff -ru fvwm-2.1.6/fvwm/parse.h fvwm-2.1.6.new/fvwm/parse.h
+--- fvwm-2.1.6/fvwm/parse.h	Mon Dec 21 17:23:59 1998
++++ fvwm-2.1.6.new/fvwm/parse.h	Thu Dec 31 13:07:38 1998
+@@ -119,6 +119,7 @@
+     F_WINDOW_SHADE,
+     F_COLOR_LIMIT,
+     F_ANIMATED_MOVE,
++    F_REPLACE,
+ 
+ /* Functions for use by modules only! */
+     F_SEND_WINDOW_LIST = 1000

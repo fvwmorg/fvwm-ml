@@ -1,0 +1,192 @@
+*** fvwm/commands.h.old	Thu Feb  5 19:53:58 2004
+--- fvwm/commands.h	Fri Feb  6 03:11:05 2004
+***************
+*** 180,185 ****
+--- 180,186 ----
+  	F_STICK,
+  	F_STICKACROSSDESKS,
+  	F_STICKACROSSPAGES,
++ 	F_TOWINDOWLISTFRONT,
+  	F_UPDATE_DECOR,
+  	F_WARP,
+  	F_WINDOWID,
+***************
+*** 364,369 ****
+--- 365,371 ----
+  P(TestRc);
+  P(ThisWindow);
+  P(TitleStyle);
++ P(ToWindowListFront);
+  P(Unalias);
+  P(UnsetEnv);
+  P(UpdateDecor);
+*** fvwm/functable.c.old	Thu Feb  5 19:53:36 2004
+--- fvwm/functable.c	Fri Feb  6 03:11:38 2004
+***************
+*** 591,596 ****
+--- 591,600 ----
+  	CMD_ENT("titlestyle", CMD_TitleStyle, F_TITLESTYLE, FUNC_DECOR, 0),
+  	/* - Control window title */
+  
++ 	CMD_ENT("towindowlistfront", CMD_ToWindowListFront,
++ 		F_TOWINDOWLISTFRONT, FUNC_NEEDS_WINDOW, 0),
++ 	/* - Move window to windowlist front */
++ 
+  	CMD_ENT("unsetenv", CMD_UnsetEnv, F_SETENV, 0, 0),
+  	/* - Remove an environment variable */
+  
+*** fvwm/focus.c.old	Sat Jan 31 01:28:43 2004
+--- fvwm/focus.c	Fri Feb  6 03:11:22 2004
+***************
+*** 167,172 ****
+--- 167,196 ----
+  	return False;
+  }
+  
++ static void __to_windowlist_front(FvwmWindow *fw)
++ {
++ 	/* pluck window from list and deposit at top */
++ 	/* Watch out: fw may not be on the windowlist and the windowlist may be
++ 	 * empty */
++ 	/* remove fw from list */
++ 	if (fw->prev)
++ 	{
++ 		fw->prev->next = fw->next;
++ 	}
++ 	if (fw->next)
++ 	{
++ 		fw->next->prev = fw->prev;
++ 	}
++ 	/* insert fw at start */
++ 	fw->next = Scr.FvwmRoot.next;
++ 	if (Scr.FvwmRoot.next)
++ 	{
++ 		Scr.FvwmRoot.next->prev = fw;
++ 	}
++ 	Scr.FvwmRoot.next = fw;
++ 	fw->prev = &Scr.FvwmRoot;
++ }
++ 
+  static void __update_windowlist(
+  	FvwmWindow *fw, fpol_set_focus_by_t set_by,
+  	int is_focus_by_flip_focus_cmd)
+***************
+*** 177,241 ****
+  	{
+  		return;
+  	}
+- 	/* Watch out: fw may not be on the windowlist and the windowlist may be
+- 	 * empty */
+  	if (!is_focus_by_flip_focus_cmd &&
+  	    (FP_DO_SORT_WINDOWLIST_BY(FW_FOCUS_POLICY(fw)) ==
+  	     FPOL_SORT_WL_BY_OPEN ||
+  	     set_by == FOCUS_SET_BY_FUNCTION))
+  	{
+- 		/* move the windowlist around so that fw is at the top */
+- 		FvwmWindow *fw2;
+- 
+- 		/* find the window on the windowlist */
+- 		fw2 = &Scr.FvwmRoot;
+- 		while (fw2 && fw2 != fw)
+- 		{
+- 			fw2 = fw2->next;
+- 		}
+- 
+- 		if (fw2)
+- 		{
+- 			/* the window is on the (non-zero length) windowlist */
+- 			/* make fw2 point to the last window on the list */
+- 			while (fw2->next)
+- 			{
+- 				fw2 = fw2->next;
+- 			}
+- 
+- 			/* close the ends of the windowlist */
+- 			fw2->next = Scr.FvwmRoot.next;
+- 			Scr.FvwmRoot.next->prev = fw2;
+- 
+- 			/* make fw the new start of the list */
+- 			Scr.FvwmRoot.next = fw;
+- 			/* open the closed loop windowlist */
+- 			fw->prev->next = NULL;
+- 			fw->prev = &Scr.FvwmRoot;
+- 		}
+  	}
+  	else
+  	{
+! 		/* pluck window from list and deposit at top */
+! 		/* remove fw from list */
+! 		if (fw->prev)
+! 		{
+! 			fw->prev->next = fw->next;
+! 		}
+! 		if (fw->next)
+! 		{
+! 			fw->next->prev = fw->prev;
+! 		}
+! 		/* insert fw at start */
+! 		fw->next = Scr.FvwmRoot.next;
+! 		if (Scr.FvwmRoot.next)
+! 		{
+! 			Scr.FvwmRoot.next->prev = fw;
+! 		}
+! 		Scr.FvwmRoot.next = fw;
+! 		fw->prev = &Scr.FvwmRoot;
+  	}
+- 
+  	return;
+  }
+  
+--- 201,216 ----
+  	{
+  		return;
+  	}
+  	if (!is_focus_by_flip_focus_cmd &&
+  	    (FP_DO_SORT_WINDOWLIST_BY(FW_FOCUS_POLICY(fw)) ==
+  	     FPOL_SORT_WL_BY_OPEN ||
+  	     set_by == FOCUS_SET_BY_FUNCTION))
+  	{
+  	}
+  	else
+  	{
+! 		__to_windowlist_front(fw);
+  	}
+  	return;
+  }
+  
+***************
+*** 1236,1240 ****
+--- 1211,1225 ----
+  		FWarpPointer(dpy, None, exc->w.w, 0, 0, 0, 0, x, y);
+  	}
+  
++ 	return;
++ }
++ 
++ void CMD_ToWindowListFront(F_CMD_ARGS)
++ {
++ 	FvwmWindow *fw = exc->w.fw;
++ 	if (fw != NULL && fw != &Scr.FvwmRoot)
++ 	{
++ 		__to_windowlist_front(fw);
++ 	}
+  	return;
+  }
+*** ChangeLog.old	Fri Feb  6 02:16:54 2004
+--- ChangeLog	Fri Feb  6 03:10:28 2004
+***************
+*** 1,3 ****
+--- 1,13 ----
++ 2004-02-06  Jochen Klenner  <jochen.klenner@gmx.net>
++ 	
++ 	* fvwm/functable.c:
++ 	* fvwm/commands.h:
++ 	* fvwm/focus.c (__to_windowlist_front) 
++ 	(__update_windowlist)
++ 	(CMD_ToWindowListFront):
++ 	don't rotate internal windowlist on focus change
++ 	added new Command 'ToWindowListFront'
++ 
+  2004-02-05  Dominik Vogt  <dominik.vogt@gmx.de>
+  
+  	* libs/defaults.h (DEF_FP_SORT_WINDOWLIST_BY):

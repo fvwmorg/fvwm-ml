@@ -1,0 +1,993 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: FVWM focus bug? from Danny Sung on 1996-05-01 (fvwm-users)</title>
+<meta name="Author" content="Danny Sung (dannys_at_ucla.edu)" />
+<meta name="Subject" content="FVWM: FVWM focus bug?" />
+<meta name="Date" content="1996-05-01" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: FVWM focus bug?</h1>
+<!-- received="Tue Apr 30 22:52:48 1996" -->
+<!-- isoreceived="19960430215248" -->
+<!-- sent="Tue, 30 Apr 1996 20:55:29 -0700" -->
+<!-- isosent="19960501035529" -->
+<!-- name="Danny Sung" -->
+<!-- email="dannys_at_ucla.edu" -->
+<!-- subject="FVWM: FVWM focus bug?" -->
+<!-- id="199605010355.UAA04968_at_gaia" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start16569" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="16570.html" accesskey="d" title="Arnon Kanfi: &quot;Re: FVWM: fvwm-2.0.42 installation bug.&quot;">Next message</a> ]
+[ <a href="16568.html" title="Tim Smithers: &quot;Re: FVWM: style: Start Maximized ?? Start AnyFunction?????&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="16581.html" accesskey="t" title="Dan Espen: &quot;Re: FVWM: FVWM focus bug?&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16569" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16569" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16569" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16569" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Danny Sung &lt;<a href="mailto:dannys_at_ucla.edu?Subject=Re%3A%20FVWM%3A%20FVWM%20focus%20bug%3F">dannys_at_ucla.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 30 Apr 1996 20:55:29 -0700</span><br />
+</address>
+<br />
+I'm having a rather peculiar problem with FVWM (at least I think
+<br />
+it's fvwm's fault, since other window managers don't seem to
+<br />
+have a problem).  For some reason, the focus will never go onto a
+<br />
+program that I write.  I've tried setting 'Style &quot;*&quot; ClickToFocus'
+<br />
+and SloppyFocus.  Neither have any affect.  Whether I move the mouse
+<br />
+onto the window, select the window title bar, resize, whatever.
+<br />
+<br />Here are the relevant files (a sample X program that has this problem,
+<br />
+and my ~/.fvwmrc file):
+<br />
+<br />------------------------------------------------------
+<br />
+# Imakefile
+<br />
+PROGRAMS = xtest
+<br />
+<br />SRCS1 = xtest.c 
+<br />
+OBJS1 = xtest.o
+<br />
+<br />CCOPTIONS = -pedantic -Wall
+<br />
+<br />LOCAL_LIBRARIES1 = $(XLIB) $(XTOOLLIB) $(XAWLIB) $(XMULIB) \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lm $(EXTRA_LDOPTIONS)
+<br />
+DEPLIBS1 = $(DEPXLIB) $(DEPXTOOLLIB) $(DEPXAWLIB) $(DEPXMULIB) 
+<br />
+<br />ComplexProgramTarget_1(xtest,$(LOCAL_LIBRARIES1),)
+<br />
+------------------------------------------------------
+<br />
+/* xtest.c */
+<br />
+#include &lt;X11/Intrinsic.h&gt;
+<br />
+#include &lt;X11/StringDefs.h&gt;
+<br />
+#include &lt;X11/Xaw/Command.h&gt;
+<br />
+<br />void cb_quit(Widget w, XtPointer client_data, XtPointer call_data);
+<br />
+<br />int main(int argc, char *argv[])
+<br />
+{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XtAppContext app_context;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Widget toplevel, quit;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;toplevel = XtVaAppInitialize(&amp;app_context,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;Xtest&quot;, NULL, 0, &amp;argc, argv, NULL, NULL);
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;quit = XtCreateManagedWidget(&quot;quit&quot;, commandWidgetClass, 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;toplevel, 0, 0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XtAddCallback(quit, XtNcallback, cb_quit, NULL);
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XtRealizeWidget(toplevel);
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XtAppMainLoop(app_context);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return(0);
+<br />
+}
+<br />
+<br />void cb_quit(Widget w, XtPointer client_data, XtPointer call_data)
+<br />
+{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit(0);
+<br />
+}
+<br />
+<br />------------------------------------------------------
+<br />
+<br /># Win95'ish FVWM rc for fvwm-2
+<br />
+<br /># Apparantly, you can retrieve sample .fvwmrc's from 
+<br />
+# 	<a href="ftp://ftp.best.com/pub/tdgilman/Fvwmrcs">ftp://ftp.best.com/pub/tdgilman/Fvwmrcs</a>
+<br />
+# you can also submit your favourite .fvwmrc to
+<br />
+#	tdgilman_at_best.com 
+<br />
+# if you want to.
+<br />
+<br /># Path definitions
+<br />
+ModulePath /usr/lib/X11/fvwm
+<br />
+PixmapPath /usr/include/X11/pixmaps/:/usr/local/include/X11/pixmaps/
+<br />
+IconPath   /usr/include/X11/bitmaps/
+<br />
+<br /><br />### Tool button definitions ###
+<br />
+# Main window options
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mouse 0	1    	A      	Menu Window-Ops2 Close
+<br />
+# Kill Window
+<br />
+ButtonStyle 2 13 20x25_at_0 30x25_at_0 50x45_at_0  70x25_at_0 80x25_at_0 55x50_at_0  80x75_at_0 70x75_at_0 50x55_at_0  30x75_at_0 20x75_at_0 45x50_at_0 20x25_at_0 # X
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mouse 1	2	A	Close
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mouse 2	2	A	Close
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mouse 3	2	A	Close
+<br />
+# Minimize
+<br />
+ButtonStyle 6 5 25x75_at_0 65x75_at_0   65x72_at_0 25x72_at_0 25x75_at_0 # minimize
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mouse 1	6	A	Iconify
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mouse 2	6	A	Iconify
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mouse 3	6	A	Iconify
+<br />
+# Maximize
+<br />
+# To fully simulate W95, we need a special
+<br />
+# case for the maximize button
+<br />
+ButtonStyle 4 10 25x25_at_0 75x25_at_0 75x75_at_0 25x75_at_0 25x25_at_0   25x30_at_-1 75x30_at_0 75x28_at_0 25x28_at_0 25x30_at_0  # maximize
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mouse 1 4	A	MaxFunc
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mouse 2 4	A	MaxFunc
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mouse 3 4	A	MaxFunc
+<br />
+#	The above commands are duplicated in the function RestoreFunc.  Remember
+<br />
+#	to change both if making changes.
+<br />
+<br /><br />#old style
+<br />
+#ButtonStyle 4 11 25x25_at_0 75x25_at_0 75x75_at_0 25x75_at_0 25x25_at_0   25x30_at_0 75x30_at_0 75x28_at_0 25x28_at_0 25x30_at_0 25x25_at_0
+<br />
+#ButtonStyle 2 13 20x25_at_0 30x25_at_0 50x45_at_0  70x25_at_0 80x25_at_0 55x50_at_0  80x75_at_0 70x75_at_0 50x55_at_0  30x75_at_0 20x75_at_0 45x50_at_0 20x25_at_0 # X
+<br />
+#ButtonStyle 6 5 25x75_at_0 65x75_at_0   65x72_at_0 25x72_at_0 25x75_at_0  # minimize
+<br />
+# Some new button styles:
+<br />
+# Cross
+<br />
+# ButtonStyle 2 13 20x25_at_0 30x25_at_0 50x45_at_0  70x25_at_0 80x25_at_0 55x50_at_0  80x75_at_0 70x75_at_0 50x55_at_0  30x75_at_0 20x75_at_0 45x50_at_0  20x25_at_0
+<br />
+# A forward Slash
+<br />
+# ButtonStyle  2  5  80x25_at_0 75x20_at_1 20x75_at_1 25x80_at_1 80x25_at_0
+<br />
+<br />###  These are some default button styles that come with FVWM
+<br />
+# small up triangle
+<br />
+#ButtonStyle 2 4 50x35_at_1 65x65_at_0 35x65_at_0 50x35_at_1
+<br />
+# small down triangle
+<br />
+#ButtonStyle 4 4 50x65_at_1 35x35_at_1 65x35_at_1 50x65_at_0
+<br />
+# large up triangle
+<br />
+#ButtonStyle 2 4 50x25_at_1 75x75_at_0 25x75_at_0 50x25_at_1
+<br />
+# large down triangle
+<br />
+#ButtonStyle 4 4 50x75_at_1 25x25_at_1 75x25_at_1 50x75_at_0
+<br />
+# big box
+<br />
+#ButtonStyle 2 5 25x25_at_1 25x75_at_1 75x75_at_0 75x25_at_0 25x25_at_1
+<br />
+# little box
+<br />
+#ButtonStyle 8 5 40x40_at_1 60x40_at_1 60x60_at_0 40x60_at_0 40x40_at_1
+<br />
+# tall box
+<br />
+#ButtonStyle 6 5 40x25_at_1 60x25_at_1 60x75_at_0 40x75_at_0 40x25_at_1
+<br />
+# dot
+<br />
+#ButtonStyle 4 5 45x45_at_1 55x45_at_1 55x55_at_0 45x55_at_0 45x45_at_1
+<br />
+# an up arrow:
+<br />
+#ButtonStyle 2 8 40x80_at_1 40x50_at_1 20x50_at_1 50x20_at_1 80x50_at_0 60x50_at_0 60x80_at_0 40x80_at_0
+<br />
+# an X
+<br />
+#ButtonStyle 2 13 26x29_at_1 34x21_at_1 50x35_at_1 70x21_at_1 79x29_at_1 63x48_at_0 79x65_at_1 70x75_at_0 50x61_at_0 34x75_at_0 26x65_at_0 44x48_at_1 26x29_at_0
+<br />
+<br /><br />EdgeResistance	250	128
+<br />
+WindowFont	-adobe-helvetica-*-r-*-*-13-20-*-*-*-*-*-*
+<br />
+IconFont	-adobe-helvetica-bold-r-*-*-10-*-*-*-*-*-*-*
+<br />
+MenuStyle	black	grey76	black	-adobe-times-bold-r-*-*-14-*-*-*-*-*-*-* fvwm
+<br />
+EdgeScroll	100	100
+<br />
+<br />HilightColor	black	grey76
+<br />
+TitleFocusColor	white	NavyBlue
+<br />
+TitleUnfocusColor	Grey76	Grey51
+<br />
+TitleJustify	left
+<br />
+<br />#DeskTopSize	2x2
+<br />
+DeskTopSize	1x1
+<br />
+ClickTime	750
+<br />
+<br />ColormapFocus	FollowsMouse
+<br />
+<br /># default parameters
+<br />
+Style &quot;*&quot;		BorderWidth 5, HandleWidth 5
+<br />
+Style &quot;*&quot;		Icon unknown1.xpm, Color Black/grey76
+<br />
+Style &quot;*&quot;		ActivePlacement, SmartPlacement
+<br />
+Style &quot;*&quot;		MWMFunctions,MWMDecor,HintOverride, MWMBorder
+<br />
+Style &quot;*&quot;		DecorateTransient,IconBox 0 -10 -280 -1
+<br />
+Style &quot;*&quot;		SmartPlacement, RandomPlacement
+<br />
+# default fvwm (modules, etc.) parameters
+<br />
+Style &quot;Fvwm*&quot;		NoTitle, NoHandles, Sticky, WindowListSkip,
+<br />
+Style &quot;Fvwm*&quot;		BorderWidth 0,CirculateSkipIcon
+<br />
+Style &quot;Fvwm Pager&quot;	StaysOnTop
+<br />
+Style &quot;FvwmPager&quot;	StaysOnTop
+<br />
+Style &quot;FvwmBanner&quot;	StaysOnTop
+<br />
+Style &quot;FvwmButtons&quot;	NoTitle, NoHandles, Sticky, WindowListSkip
+<br />
+Style &quot;FvwmButtons&quot;	BorderWidth 0, CirculateSkip
+<br />
+Style &quot;FvwmButtons&quot;	Icon toolbox.xpm,ClickToFocus
+<br />
+<br /># application parameters
+<br />
+Style &quot;*lock&quot;		NoTitle, NoHandles, Sticky, WindowListSkip
+<br />
+Style &quot;*lock&quot;		RandomPlacement
+<br />
+#Style &quot;*load&quot;		NoTitle
+<br />
+Style &quot;*load&quot;		NoTitle, Sticky, WindowListSkip,ClickToFocus
+<br />
+Style &quot;xbiff&quot;		NoTitle, Sticky, WindowListSkip,ClickToFocus
+<br />
+Style &quot;Maker&quot;		StartsOnDesk 1,RandomPlacement,ClickToFocus
+<br />
+Style &quot;matlab&quot;		StartsOnDesk 3
+<br />
+Style &quot;signal&quot;		StartsOnDesk 3 
+<br />
+Style &quot;rxvt&quot;		Icon  term.xpm,SloppyFocus,IconBox -70 1 -1 -140
+<br />
+#Style &quot;XTerm&quot;		Icon xterm.xpm,IconBox -70 1 -1 -140
+<br />
+#Style &quot;XTerm&quot;		Color black/#aa80aa,MWMBorder,MWMButtons
+<br />
+Style &quot;Appointment&quot;	Icon datebook.xpm, NoButton 2, NoButton 4,ClickToFocus
+<br />
+Style &quot;xcalc&quot;		Icon xcalc.xpm, NoButton 2,RandomPlacement,ClickToFocus
+<br />
+Style &quot;xmh&quot;		Icon mail1.xpm, NoIconTitle,StickyIcon
+<br />
+Style &quot;xmh&quot;		RandomPlacement, StartsOnDesk 2, NoButton 2
+<br />
+Style &quot;xman&quot;		Icon xman.xpm,RandomPlacement,ClickToFocus
+<br />
+Style &quot;xvgr&quot;		Icon graphs.xpm,RandomPlacement,ClickToFocus
+<br />
+Style &quot;matlab&quot;		Icon math4.xpm,ClickToFocus
+<br />
+Style &quot;xmag&quot;		Icon mag_glass.xpm,RandomPlacement, ClickToFocus
+<br />
+Style &quot;xgraph&quot;		Icon graphs.xpm,RandomPlacement,ClickToFocus
+<br />
+Style &quot;sppeed6&quot;		Icon math3.xpm,NoTitle,ClickToFocus
+<br />
+Style &quot;sppeed6_user&quot;	Icon math4.xpm,NoTitle
+<br />
+Style &quot;xmosaic&quot;		NoPPosition, color Green/Yellow,ClickToFocus
+<br />
+<br /># Windows Style keymaps
+<br />
+Key Escape	A	C	WindowList
+<br />
+Key Tab		A	M	Next [*] focus
+<br />
+Key Tab		A	SM	Prev [*] focus
+<br />
+<br />Key Left	A	C	Scroll -100 0
+<br />
+Key Right	A	C	Scroll +100 +0
+<br />
+Key Up		A	C	Scroll +0   -100
+<br />
+Key Down	A	C	Scroll +0   +100
+<br />
+Key Left	A	M	Scroll -10 +0
+<br />
+Key Right	A	M	Scroll +10 +0
+<br />
+Key Up		A	M	Scroll +0   -10
+<br />
+Key Down	A	M	Scroll +0   +10
+<br />
+Key Left	A	SC	CursorMove -1 0
+<br />
+Key Right	A	SC	CursorMove +1 +0
+<br />
+Key Up		A	SC	CursorMove +0   -1
+<br />
+Key Down	A	SC	CursorMove +0   +1
+<br />
+Key Left	A	SM	CursorMove -10 +0
+<br />
+Key Right	A	SM	CursorMove +10 +0
+<br />
+Key Up		A	SM	CursorMove +0   -10
+<br />
+Key Down	A	SM	CursorMove +0   +10
+<br />
+Key KP_F1	A	M	Popup &quot;Utilities&quot;
+<br />
+Key KP_F2	A	M	Popup &quot;Window-Ops&quot;
+<br />
+Key KP_F3	A	M	Module FvwmWinList 
+<br />
+Key KP_F4	A	M	Iconify
+<br />
+Key F5		A	M	Move        100p 100p
+<br />
+Key F6		A	M	Resize   10 10
+<br />
+Key F7		A	M	Next [*] focus
+<br />
+Key F8		A	M	Prev [*] focus
+<br />
+Key F10 	A	A	Next [CurrentDesk rxvt]Focus
+<br />
+Key F11 	A	A	Prev [CurrentDesk rxvt]Focus
+<br />
+Key F15		FTIWS	A	Raise
+<br />
+<br />Mouse 1	R	A	Menu Utilities Nop
+<br />
+Mouse 2	R	A	Menu Window-Ops Nop
+<br />
+Mouse 3	R	A	WindowList
+<br />
+Mouse 1	F	A	Resize-or-Raise
+<br />
+Mouse 1	TS	A	Move-or-Raise
+<br />
+Mouse 1	I	A	Move-or-Iconify
+<br />
+Mouse 2	I	A	Iconify
+<br />
+Mouse 2	FST	A	Menu Window-Ops2 Nop
+<br />
+Mouse 3	TSIF	A	RaiseLower
+<br />
+<br />#Mouse 0	1	A      	Menu Window-Ops2 Close
+<br />
+#Mouse 0	2	A     	Maximize-Func
+<br />
+#Mouse 0	4	A     	Iconify
+<br />
+<br />########################Initialization Functions ############################
+<br />
+AddToFunc InitFunction 	  &quot;I&quot; Module FvwmButtons
+<br />
++			  &quot;I&quot; exec xsetroot -mod 2 2 -fg turquoise4 -bg DarkCyan
+<br />
+<br />AddToFunc RestartFunction &quot;I&quot; Module FvwmButtons
+<br />
++			  &quot;I&quot; exec xsetroot -mod 2 2 -fg turquoise4 -bg DarkCyan
+<br />
+<br /><br />########################Menus ########################################
+<br />
+AddToMenu Utilities	&quot;Utilities&quot;	Title 	
+<br />
++			&quot;Shells&quot;		Popup Shells-Popup
+<br />
++			&quot;AnsiXterm (7x14)&quot; Exec exec /usr/local/X11/ansi_xterm -sb -sl 300 -j -ls -fn 7x14 -r &amp;
+<br />
++			&quot;Xterm&quot;		Exec  exec xterm -e tcsh &amp;
+<br />
++			&quot;Rxvt&quot;		Exec  exec rxvt &amp;
+<br />
++			&quot;Remote Logins&quot;	Popup Remote-Logins
+<br />
++			&quot;Top&quot;		Exec  exec rxvt -T Top -n Top -e top &amp;
+<br />
++			&quot;Calculator&quot;	Exec  exec xcalc &amp;
+<br />
++			&quot;Xman&quot;		Exec  exec xman &amp;
+<br />
++			&quot;Xmag&quot;		Exec  exec xmag &amp;
+<br />
++			&quot;emacs&quot;		Exec  exec xemacs &amp;
+<br />
++                       &quot;Mail&quot;          MailFunction xmh &quot;-font fixed&quot;
+<br />
++			&quot;&quot;		Nop
+<br />
++			&quot;Modules&quot;	Popup Module-Popup
+<br />
++			&quot;&quot;		Nop		
+<br />
++			&quot;Exit Fvwm&quot;	Popup Quit-Verify
+<br />
+AddToMenu Window-Ops	&quot;Window Ops&quot;	Title		
+<br />
++			&quot;Move&quot;		Move-or-Raise2
+<br />
++			&quot;Resize&quot;	Resize-or-Raise2
+<br />
++			&quot;Raise&quot;		Raise
+<br />
++			&quot;Lower&quot;		Lower 
+<br />
++		 	&quot;(De)Iconify&quot;	Iconify
+<br />
++			&quot;(Un)Stick&quot;	Stick		
+<br />
++			&quot;(Un)Maximize&quot;	maximize_func
+<br />
++			&quot;&quot;		Nop  
+<br />
++			&quot;Delete&quot;	Delete	 
+<br />
++			&quot;Close&quot;		Close	 
+<br />
++			&quot;Destroy&quot;	Destroy
+<br />
++			&quot;&quot;		Nop		
+<br />
++			&quot;Refresh Screen&quot; Refresh		
+<br />
+AddToMenu Window-Ops2	&quot;Move&quot;		Move-or-Raise
+<br />
++			&quot;Resize&quot;	Resize-or-Raise
+<br />
++			&quot;Raise&quot;		Raise   	
+<br />
++			&quot;Lower&quot;		Lower   	
+<br />
++			&quot;Iconify&quot;	Iconify 	
+<br />
++			&quot;(Un)Stick&quot;	Stick		
+<br />
++			&quot;&quot;		Nop     	
+<br />
++			&quot;Delete&quot;	Delete	
+<br />
++			&quot;Close&quot;		Close	  	
+<br />
++			&quot;Destroy&quot;	Destroy 	
+<br />
++			&quot;&quot;		Nop 		
+<br />
++			&quot;ScrollBar&quot; 	Module FvwmScroll 2 2	
+<br />
++			&quot;Print&quot;         PrintFunction
+<br />
+<br />AddToMenu Remote-Logins	&quot;dopey&quot;	 Exec rsh dopey rxvt -display $HOSTDISPLAY &amp;
+<br />
++			&quot;snoopy&quot; Exec rsh snoopy rxvt -display $HOSTDISPLAY &amp;
+<br />
++			&quot;grumpy&quot; Exec rsh grumpy rxvt -display $HOSTDISPLAY &amp;
+<br />
++			&quot;happy&quot;	 Exec rsh happy rxvt -display $HOSTDISPLAY &amp;
+<br />
++			&quot;bailey&quot; Exec rsh bailey rxvt -display $HOSTDISPLAY &amp;
+<br />
++			&quot;barnum&quot; Exec rsh barnum rxvt -display $HOSTDISPLAY &amp;
+<br />
++			&quot;joker&quot;	 Exec rsh joker rxvt -display $HOSTDISPLAY &amp;
+<br />
++			&quot;signal&quot; Exec rxterm signal
+<br />
+<br />AddToMenu Module-Popup	&quot;Modules&quot;	Title	
+<br />
++			&quot;Button-Bar&quot;	Module	FvwmButtons
+<br />
++			&quot;Clean-Up&quot;	Module	FvwmClean
+<br />
++			&quot;Identify&quot;	Module	FvwmIdent
+<br />
++			&quot;SaveDesktop&quot;	Module  FvwmSave
+<br />
++			&quot;Debug&quot;		Module	FvwmDebug
+<br />
++			&quot;Pager&quot;		Module  FvwmPager 0 1
+<br />
++			&quot;WinList&quot;	Module  FvwmWinList
+<br />
++			&quot;Background&quot;	Module  FvwmBacker
+<br />
++			&quot;IconBox&quot;	Module	FvwmIconBox
+<br />
++			&quot;Banner&quot;	Module	FvwmBanner
+<br />
++			&quot;Talk&quot;  	Module	FvwmTalk
+<br />
++			&quot;Prompt&quot;	Module	FvwmPrompt &quot;hello&quot; raise
+<br />
++			&quot;Audio&quot;		Module	FvwmAudio
+<br />
+<br />AddToMenu Quit-Verify 	&quot;Really Quit Fvwm?&quot; Title	
+<br />
++		      	&quot;Yes, Really Quit&quot;  Quit	
+<br />
++		      	&quot;Restart Fvwm&quot;	    Restart fvwm	
+<br />
++		      	&quot;Start twm&quot;         Restart twm
+<br />
++		      	&quot;Start mwm&quot;    	    Restart mwm
+<br />
++	      	      	&quot;Start olwm&quot;        Restart /usr/openwin/bin/olwm
+<br />
++		        &quot;Start tvtwm&quot;       Restart vtwm
+<br />
++		      	&quot;Start dummy&quot;       Restart xterm
+<br />
++		      	&quot;&quot;		    Nop	
+<br />
++		      	&quot;No, Don't Quit&quot;    Nop	
+<br />
+<br />########################Functions ########################################
+<br />
+<br />AddToFunc MailFunction	   &quot;I&quot; Next [$0] Iconify -1
+<br />
++		           &quot;I&quot; Next [$0] focus
+<br />
++			   &quot;I&quot; None [$0] Exec $0 $1
+<br />
+<br />AddToFunc Move-or-Raise		&quot;I&quot; Raise
+<br />
++				&quot;M&quot; Move
+<br />
++  				&quot;D&quot; Lower
+<br />
+<br />AddToFunc Move-or-Raise2	&quot;M&quot; Raise
+<br />
++				&quot;M&quot; Move
+<br />
++  				&quot;D&quot; Lower
+<br />
+<br />AddToFunc Maximize-Func		&quot;M&quot; Maximize	 0 100
+<br />
++				&quot;C&quot; Maximize	 0 80
+<br />
++				&quot;D&quot; Maximize	 100 100
+<br />
+<br />AddToFunc Move-or-Iconify	&quot;I&quot; Raise
+<br />
++				&quot;M&quot; Move
+<br />
++				&quot;D&quot; Iconify
+<br />
+<br />AddToFunc Resize-or-Raise	&quot;I&quot; Raise
+<br />
++				&quot;M&quot; Resize
+<br />
++				&quot;D&quot; Lower
+<br />
+<br />AddToFunc Resize-or-Raise2	&quot;M&quot; Raise
+<br />
++				&quot;M&quot; Resize
+<br />
++				&quot;D&quot; Lower
+<br />
+<br />AddToFunc PrintFunction		&quot;I&quot; Raise
+<br />
++				&quot;I&quot; Exec xdpr -id $w
+<br />
+<br />AddToFunc MaxFunc
+<br />
++		&quot;I&quot;	Maximize
+<br />
++		&quot;I&quot;	Mouse			1	4	A	RestoreFunc
+<br />
++		&quot;I&quot;	Mouse			2	4	A	RestoreFunc
+<br />
++		&quot;I&quot;	Mouse			3	4	A	RestoreFunc
+<br />
++		&quot;I&quot;	ButtonStyle 4 14 25x40_at_0 65x40_at_0 65x75_at_0 25x75_at_0 25x40_at_0   65x45_at_-1 25x45_at_0    40x40_at_-1 40x25_at_0  75x25_at_0 75x60_at_0 65x60_at_0   75x30_at_-1 40x30_at_0
+<br />
+<br /># old style
+<br />
+#+		&quot;I&quot;	ButtonStyle 4 20 25x40_at_0 65x40_at_0 65x75_at_0 25x75_at_0 25x40_at_0   25x45_at_0 65x45_at_0 65x43_at_0 25x43_at_0 25x45_at_0 25x40_at_0    40x40_at_0  40x25_at_0  75x25_at_0 75x27_at_0 40x27_at_0 40x30_at_0  75x30_at_0 75x60_at_0 65x60_at_0
+<br />
+<br />AddToFunc RestoreFunc
+<br />
++		&quot;I&quot;	Maximize
+<br />
++		&quot;I&quot;	Mouse			1	4	A	MaxFunc
+<br />
++		&quot;I&quot;	Mouse			2	4	A	MaxFunc
+<br />
++		&quot;I&quot;	Mouse			3	4	A	MaxFunc
+<br />
++		&quot;I&quot;	ButtonStyle 4 11 25x25_at_0 75x25_at_0 75x75_at_0 25x75_at_0 25x25_at_0   25x30_at_0 75x30_at_0 75x28_at_0 25x28_at_0 25x30_at_0 25x25_at_0
+<br />
+<br /># The above 3 calls are duplicated at init time.  Remember to change
+<br />
+# both if making changes.
+<br />
+<br /><br />################## FvwmButtons button-bar ################################
+<br />
+# Colors
+<br />
+*FvwmButtonsFore Black
+<br />
+*FvwmButtonsBack grey65
+<br />
+<br /># Font
+<br />
+*FvwmButtonsFont -adobe-helvetica-bold-r-*-*-10-*-*-*-*-*-*-*
+<br />
+# Geometry - really likes to pick its own size, but giving a position is OK
+<br />
+#*FvwmButtonsGeometry -1-1
+<br />
+*FvwmButtonsGeometry 100x50+0+0
+<br />
+<br /># Layout: specify rows or columns, not both
+<br />
+#*FvwmButtonsRows 2
+<br />
+*FvwmButtonsRows 1
+<br />
+<br /># xterm or rxvts on remote machines can be done like this
+<br />
+# Output re-direction is csh style, not sh style
+<br />
+# You will want to substitute your own hosts here!
+<br />
+<br /># *FvwmButtons	Dopey	rterm.xpm	Exec &quot;XTerm&quot; rsh dopey &quot;exec rxvt -T dopey -display $HOSTDISPLAY &lt;/dev/null &gt;&amp;/dev/null &amp; &quot;&amp;
+<br />
+# *FvwmButtons	Grumpy	rterm.xpm	Exec &quot;XTerm&quot; rsh grumpy &quot;exec rxvt -T grumpy -display $HOSTDISPLAY &lt;/dev/null &gt;&amp;/dev/null &amp; &quot;&amp;
+<br />
+# *FvwmButtons	Snoopy	rterm.xpm	Exec &quot;XTerm&quot; rsh snoopy &quot;exec rxvt -T snoopy -display $HOSTDISPLAY &lt;/dev/null &gt;&amp;/dev/null &amp; &quot;&amp;
+<br />
+# *FvwmButtons	signal	rterm.xpm	Exec &quot;XTerm&quot; rxterm signal &amp;
+<br />
+# *FvwmButtons	mail	mail2.xpm	Function MailFunction xmh &quot;-font fixed&quot;
+<br />
+<br /># *FvwmButtons whatever  clock.xpm   Swallow &quot;Clock&quot; Exec rclock -bg \#908090 -geometry -1500-1500 -font -*-times-*-r-*-*-17-*-*-*-*-*-*-* -mailupdate 10 &amp;
+<br />
+*FvwmButtons(2x1) -	whatever	Swallow	&quot;FvwmPager&quot; Module FvwmPager 0 1
+<br />
+<br />########################## Window-Identifier ###############################
+<br />
+# Just choose colors and a fonts
+<br />
+*FvwmIdentBack		MidnightBlue
+<br />
+*FvwmIdentFore		Yellow
+<br />
+*FvwmIdentFont		-adobe-helvetica-medium-r-*-*-12-*-*-*-*-*-*-*
+<br />
+<br />########################### Pager #########################################
+<br />
+*FvwmPagerBack		#908090
+<br />
+*FvwmPagerFore		#484048
+<br />
+*FvwmPagerFont		-adobe-helvetica-bold-r-*-*-10-*-*-*-*-*-*-*
+<br />
+*FvwmPagerHilight	#cab3ca
+<br />
+*FvwmPagerGeometry	-1-1
+<br />
+*FvwmPagerLabel		0	Misc
+<br />
+*FvwmPagerLabel		1	Maker
+<br />
+*FvwmPagerLabel		2	Mail
+<br />
+*FvwmPagerLabel		3	Matlab
+<br />
+*FvwmPagerSmallFont	5x8
+<br />
+<br />##########################FvwmWinList##################################
+<br />
+*FvwmWinListBack	#908090
+<br />
+*FvwmWinListFore	Black
+<br />
+*FvwmWinListFont	-adobe-helvetica-bold-r-*-*-10-*-*-*-*-*-*-*
+<br />
+*FvwmWinListAction	Click1 Iconify -1,Focus
+<br />
+*FvwmWinListAction	Click2 Iconify
+<br />
+*FvwmWinListAction	Click3 Module &quot;FvwmIdent&quot; FvwmIdent
+<br />
+*FvwmWinListUseSkipList	
+<br />
+*FvwmWinListGeometry	+0-1
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+*FvwmBackerDesk		0	-solid steelblue
+<br />
+*FvwmBackerDesk		1	-solid midnightblue
+<br />
+<br />*FvwmScrollBack		grey40
+<br />
+*FvwmScrollFore		green
+<br />
+<br />############################################################
+<br />
+############################################################
+<br />
+# Note that icons are shown in the module
+<br />
+#    only if NoIcon commnand is applied.
+<br />
+#Style     &quot;*&quot;  NoIcon
+<br />
+<br />############################################################
+<br />
+*FvwmIconBoxIconBack    #cfcfcf
+<br />
+*FvwmIconBoxIconHiFore  black
+<br />
+*FvwmIconBoxIconHiBack  LightSkyBlue
+<br />
+*FvwmIconBoxBack        #5f9ea0
+<br />
+#*FvwmIconBoxFore       blue
+<br />
+*FvwmIconBoxGeometry    5x1+0+0
+<br />
+*FvwmIconBoxMaxIconSize 64x38
+<br />
+*FvwmIconBoxFont        -adobe-helvetica-medium-r-*-*-12-*-*-*-*-*-*-*
+<br />
+*FvwmIconBoxSortIcons
+<br />
+*FvwmIconBoxPadding     4
+<br />
+*FvwmIconBoxLines       10
+<br />
+*FvwmIconBoxSBWidth     11
+<br />
+*FvwmIconBoxPlacement   Left Top
+<br />
+*FvwmIconBoxPixmap      fvwm.xpm
+<br />
+#*FvwmIconBoxHideSC Horizontal
+<br />
+*FvwmIconBoxSetWMIconSize
+<br />
+*FvwmIconBoxHilightFocusWin
+<br />
+*FvwmIconBoxMouse       1       Click           RaiseLower
+<br />
+*FvwmIconBoxMouse       1       DoubleClick     Iconify
+<br />
+*FvwmIconBoxMouse       2       Click           Iconify -1, Focus
+<br />
+*FvwmIconBoxMouse       3       Click           Module &quot;FvwmIdent&quot; Fvw
+<br />
+*FvwmIconBoxKey         r       RaiseLower
+<br />
+*FvwmIconBoxKey         space   Iconify
+<br />
+*FvwmIconBoxKey         d       Close
+<br />
+*FvwmIconBoxKey         n       Next
+<br />
+*FvwmIconBoxKey         p       Prev
+<br />
+*FvwmIconBoxKey         h       Left
+<br />
+*FvwmIconBoxKey         j       Down
+<br />
+*FvwmIconBoxKey         k       Up
+<br />
+*FvwmIconBoxKey         l       Right
+<br />
+#
+<br />
+# Icon file specifications
+<br />
+#
+<br />
+# Mostly, you don't have to specify icon files, as FvwmIconBox now
+<br />
+# reads icon files specified in Style commands.
+<br />
+#
+<br />
+*FvwmIconBox            &quot;Fvwm*&quot;         -
+<br />
+<br /><br /># Audio configuration
+<br />
+<br />*FvwmAudioPlayCmd	builtin-rplay
+<br />
+*FvwmAudioDir		/usr/lib/sounds
+<br />
+*FvwmAudioDelay		1
+<br />
+*FvwmAudioRplayHost	mom
+<br />
+*FvwmAudioRplayPriority	0
+<br />
+*FvwmAudioRplayVolume	127
+<br />
+<br /># Modules to start up
+<br />
+Module			FvwmAudio
+<br />
+<br />------------------------------------------------------
+<br />
+<br />Note that TitleFocusColor, TitleFocusColor, TitleUnfocusColor, and
+<br />
+TitleJustify are my hacks (does anyone want the diffs?  I haven't
+<br />
+had time to clean them up, but they're getting the job done at least).
+<br />
+I'm pretty sure that my changes aren't what's causing the problem.
+<br />
+I just tried it with a clean 2.0.42 and new-system.fvwmrc in the
+<br />
+sample.fvwmrc/ directory, and &quot;xtest&quot; had the same problem, so the
+<br />
+problem is most likely not my changes.
+<br />
+<br />In any case, it's only programs that I write that have this problem.
+<br />
+Any other program I compile or run doesn't seem to exhibit this
+<br />
+behavior.
+<br />
+<br />BTW, I'm using XFree86-3.0.2 and Linux v1.3.88.  Any insight into this
+<br />
+matter would be greatly appreciated.
+<br />
+<br />Thanks,
+<br />
+Danny Sung
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue Apr 30 1996 - 22:52:48 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start16569">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="16570.html" title="Next message in the list">Arnon Kanfi: "Re: FVWM: fvwm-2.0.42 installation bug."</a></li>
+<li><dfn>Previous message</dfn>: <a href="16568.html" title="Previous message in the list">Tim Smithers: "Re: FVWM: style: Start Maximized ?? Start AnyFunction?????"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="16581.html" title="Next message in this discussion thread">Dan Espen: "Re: FVWM: FVWM focus bug?"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Maybe reply</dfn>: <a href="16581.html" title="Message sent in reply to this message">Dan Espen: "Re: FVWM: FVWM focus bug?"</a></li>
+<li><dfn>Reply</dfn>: <a href="16586.html" title="Message sent in reply to this message">Charles Hines: "Re: FVWM: FVWM focus bug?"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16569" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16569" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16569" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16569" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Re: OUCH! 2.0.43 FvwmWinList no longer warps the pointer! FIX??? from Dave Goldberg on 1996-07-17 (fvwm-users)</title>
+<meta name="Author" content="Dave Goldberg (dsg_at_linus.mitre.org)" />
+<meta name="Subject" content="FVWM: Re: OUCH! 2.0.43 FvwmWinList no longer warps the pointer! FIX???" />
+<meta name="Date" content="1996-07-17" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Re: OUCH! 2.0.43 FvwmWinList no longer warps the pointer! FIX???</h1>
+<!-- received="Wed Jul 17 13:41:14 1996" -->
+<!-- isoreceived="19960717124114" -->
+<!-- sent="Wed, 17 Jul 1996 14:35:07 -0400" -->
+<!-- isosent="19960717183507" -->
+<!-- name="Dave Goldberg" -->
+<!-- email="dsg_at_linus.mitre.org" -->
+<!-- subject="FVWM: Re: OUCH! 2.0.43 FvwmWinList no longer warps the pointer! FIX???" -->
+<!-- id="23903.837628507_at_blackbird.mitre.org" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="9607171804.AA27047&#64;cold.fishkill.ibm.com" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start17417" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="17418.html" accesskey="d" title="Hector Peraza: &quot;Re: FVWM: 2.0.43 dies horribly&quot;">Next message</a> ]
+[ <a href="17416.html" title="Charles Hines: &quot;Re: FVWM: OUCH! 2.0.43 FvwmWinList no longer warps the pointer! FIX???&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17417" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17417" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17417" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17417" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Dave Goldberg &lt;<a href="mailto:dsg_at_linus.mitre.org?Subject=Re%3A%20FVWM%3A%20Re%3A%20OUCH!%202.0.43%20FvwmWinList%20no%20longer%20warps%20the%20pointer!%20FIX%3F%3F%3F">dsg_at_linus.mitre.org</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 17 Jul 1996 14:35:07 -0400</span><br />
+</address>
+<br />
+Brady&gt; If you use the FvwmWinListAction option to bind WarpToWindow to
+<br />
+Brady&gt; a click event, that'll probably work.
+<br />
+<br />Chuck&gt; Actually, better would be to use something like the following
+<br />
+Chuck&gt; function:
+<br />
+<br />Chuck&gt;   AddToFunc FocusAndWarp &quot;I&quot; Focus
+<br />
+Chuck&gt;   +                      &quot;I&quot; WarpToWindow 2p 2p
+<br />
+<br />Chuck&gt; and bind that to the click event (because WarpToWindow won't
+<br />
+Chuck&gt; actually change the focus on it's own in click to focus mode).
+<br />
+<br />I prefer the following:
+<br />
+<br />AddToFunc myfocus &quot;I&quot; $2
+<br />
++ &quot;I&quot; WarpToWindow $0 $1
+<br />
++ &quot;I&quot; Focus
+<br />
+<br />I'm not sure if it matters what order one calls Focus and
+<br />
+WarpToWindow.
+<br />
+<br />Typically I call it as
+<br />
+<br />myfocus 50 50 Nop
+<br />
+<br />which warps to the window and focuses.  However, I found that if the
+<br />
+window was iconified, WarpToWindow didn't automagically deiconfy it.
+<br />
+So I added the third argument so that from the FvwmIconMan actions, I
+<br />
+can specify
+<br />
+<br />myfocus 50 50 &quot;Iconify -1&quot;
+<br />
+<br />which does what I want.
+<br />
+<br /><pre>
+--
+Dave Goldberg
+Post: The Mitre Corporation\MS B305\202 Burlington Rd.\Bedford, MA 01730
+Phone: 617-271-3887
+Email: dsg_at_mitre.org
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Jul 17 1996 - 13:41:14 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start17417">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="17418.html" title="Next message in the list">Hector Peraza: "Re: FVWM: 2.0.43 dies horribly"</a></li>
+<li><dfn>Previous message</dfn>: <a href="17416.html" title="Previous message in the list">Charles Hines: "Re: FVWM: OUCH! 2.0.43 FvwmWinList no longer warps the pointer! FIX???"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17417" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17417" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17417" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17417" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

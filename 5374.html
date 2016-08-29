@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: TaskBar's mail indicator from Gregg Dameron on 2002-06-26 (fvwm-users)</title>
+<meta name="Author" content="Gregg Dameron (gregg.dameron_at_lmco.com)" />
+<meta name="Subject" content="FVWM: TaskBar's mail indicator" />
+<meta name="Date" content="2002-06-26" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: TaskBar's mail indicator</h1>
+<!-- received="Wed Jun 26 17:17:12 2002" -->
+<!-- isoreceived="20020626161712" -->
+<!-- sent="Wed, 26 Jun 2002 16:13:45 -0600" -->
+<!-- isosent="20020626221345" -->
+<!-- name="Gregg Dameron" -->
+<!-- email="gregg.dameron_at_lmco.com" -->
+<!-- subject="FVWM: TaskBar's mail indicator" -->
+<!-- id="3D1A3C99.F9E0925C_at_lmco.com" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start5374" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="5375.html" accesskey="d" title="Uwe Pross: &quot;FVWM: Apply an Style option to an existing window&quot;">Next message</a> ]
+[ <a href="5373.html" title="Mike Bourassa: &quot;FVWM: Newbie Question - No window functionality&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="5376.html" accesskey="t" title="Mikhael Goikhman: &quot;Re: FVWM: TaskBar&#0039;s mail indicator&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg5374" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg5374" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg5374" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg5374" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Gregg Dameron &lt;<a href="mailto:gregg.dameron_at_lmco.com?Subject=Re%3A%20FVWM%3A%20TaskBar's%20mail%20indicator">gregg.dameron_at_lmco.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 26 Jun 2002 16:13:45 -0600</span><br />
+</address>
+<br />
+Running 2.4.7 on Solaris 8.
+<br />
+<br />I am trying to acquaint myself with the TaskBar's mail indicator
+<br />
+behavior, using a &quot;surrogate&quot; mailbox (a dummy file I have
+<br />
+designated as the MailBox) and surrogate mail messages (adding
+<br />
+to/removing from the file by hand, then deleting it).
+<br />
+<br />Here's what I am seeing.
+<br />
+<br />1.  The mailbox is checked every MailCheck seconds _provided_ the
+<br />
+TaskBar has work to do (like updating buttons due to window focus
+<br />
+changes).  If the TaskBar is idle, the mailbox is not checked until
+<br />
+the UpdateInterval timer expires.  I've found that I need to set
+<br />
+both MailCheck and UpdateInterval to the same low value, say 5, to
+<br />
+get timely mail indicator updates when the TaskBar is otherwise
+<br />
+idle.  I'm not necessarily advocating a code change, but some hints
+<br />
+in the man page as to the interrelationship between these two
+<br />
+parameters might be worthwhile.
+<br />
+<br />[Side note:  The man page states that the default value for
+<br />
+UpdateInterval is 60.  It's actually 30, isn't it?]
+<br />
+<br />2.  Single-clicking the &quot;new&quot; mail indicator unconditionally returns
+<br />
+the indicator to its &quot;old mail&quot; state.  Until the mailbox is
+<br />
+actually re-read, the indicator and its tooltip are in conflict.  A
+<br />
+nit, to be sure.
+<br />
+<br />3.  In the &quot;no mail&quot; case, when no icon is rendered, the empty space
+<br />
+still sports a tooltip, and MailCommand can still be launched with a
+<br />
+double-click (both of which seem non-intuitive).  Perhaps TaskBar
+<br />
+could be enhanced to show three different icons for the no-mail,
+<br />
+old-mail and new-mail cases.  Perhaps all three icons could be
+<br />
+config options.
+<br />
+<br />Gregg Dameron
+<br />
+<br /><br /><br /><pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Jun 26 2002 - 17:17:12 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start5374">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="5375.html" title="Next message in the list">Uwe Pross: "FVWM: Apply an Style option to an existing window"</a></li>
+<li><dfn>Previous message</dfn>: <a href="5373.html" title="Previous message in the list">Mike Bourassa: "FVWM: Newbie Question - No window functionality"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="5376.html" title="Next message in this discussion thread">Mikhael Goikhman: "Re: FVWM: TaskBar&#0039;s mail indicator"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="5376.html" title="Message sent in reply to this message">Mikhael Goikhman: "Re: FVWM: TaskBar&#0039;s mail indicator"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg5374" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg5374" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg5374" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg5374" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:53 BST
+</em></small></p>
+</body>
+</html>

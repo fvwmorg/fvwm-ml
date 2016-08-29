@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: startup window placement from Josh M. Osborne on 1997-03-28 (fvwm-users)</title>
+<meta name="Author" content="Josh M. Osborne (stripes_at_va.pubnix.com)" />
+<meta name="Subject" content="Re: FVWM: startup window placement" />
+<meta name="Date" content="1997-03-28" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: startup window placement</h1>
+<!-- received="Fri Mar 28 09:05:45 1997" -->
+<!-- isoreceived="19970328090545" -->
+<!-- sent="Fri, 28 Mar 1997 10:05:32 -0500" -->
+<!-- isosent="19970328150532" -->
+<!-- name="Josh M. Osborne" -->
+<!-- email="stripes_at_va.pubnix.com" -->
+<!-- subject="Re: FVWM: startup window placement" -->
+<!-- id="KAA02347.199703281505_at_garotte.va.pubnix.com" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="199703272209.PAA27343&#64;horseman.uwyo.edu" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start19687" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="19688.html" accesskey="d" title="Randy J. Ray: &quot;FVWM: ButtonStyle ignored&quot;">Next message</a> ]
+[ <a href="19686.html" title="Josh M. Osborne: &quot;Re: FVWM: Exec wasteful&quot;">Previous message</a> ]
+[ <a href="19682.html" title="John Harres: &quot;FVWM: startup window placement&quot;">Maybe in reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19687" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19687" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19687" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19687" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Josh M. Osborne &lt;<a href="mailto:stripes_at_va.pubnix.com?Subject=Re%3A%20FVWM%3A%20startup%20window%20placement">stripes_at_va.pubnix.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 28 Mar 1997 10:05:32 -0500</span><br />
+</address>
+<br />
+In message &lt;199703272209.PAA27343_at_horseman.uwyo.edu&gt;, John Harres writes:
+<br />
+<em class="quotelev1">&gt;When I log in and fvwm starts, it starts all of my applications first, then
+</em><br />
+<em class="quotelev1">&gt;finally, fvwm.  Since fvwm isn't around to handle the placement of the windows,
+</em><br />
+<em class="quotelev1">&gt;I get a big pile of windows in the upper left of my screen.
+</em><br />
+<br />If you don't mind making your startup fvwm dependent you could
+<br />
+start just fvwm from your .xinitrc (or .xsession), and
+<br />
+use the InitFunction to start all your apps.
+<br />
+<br />If you want a non-fvwm specific solution, and you want exiting
+<br />
+fvwm to end you X session there is still a way.
+<br />
+<br />You can do something more like this in your .xinitrc/.xsessionrc
+<br />
+(NOTE: the delay factors were hand tuned for a Sun3/50 with 4M of
+<br />
+RAM, no disk, X11R3, and twm; they could probbabably be made
+<br />
+smaller!!!):
+<br />
+<br /># Stuff to start before the window manager
+<br />
+xrdb -load -retain $HOME/.Xresources
+<br />
+xconsole -geometry 450x120+0+0 -iconic &amp;
+<br />
+<br /># Set the window manager
+<br />
+TWM=fvwm
+<br />
+<br /># Wait for the console to start
+<br />
+sleep 3
+<br />
+<br />$TWM &amp;
+<br />
+TWMNO=$!
+<br />
+<br /># Wait for the window manager to start
+<br />
+sleep 6
+<br />
+<br /># Now start as much cruft as you like
+<br />
+xload &amp;
+<br />
+repeat 500 xterm &amp;
+<br />
+netscape &amp;
+<br />
+<br /># This waits untill the windows manager exits.  As long as you
+<br />
+# don't add more stuff after it when you exit the window manager
+<br />
+# your X session will end.
+<br />
+<br />wait $TWMNO
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Mar 28 1997 - 09:05:45 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start19687">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="19688.html" title="Next message in the list">Randy J. Ray: "FVWM: ButtonStyle ignored"</a></li>
+<li><dfn>Previous message</dfn>: <a href="19686.html" title="Previous message in the list">Josh M. Osborne: "Re: FVWM: Exec wasteful"</a></li>
+<li><dfn>Maybe in reply to</dfn>: <a href="19682.html" title="Message to which this message replies">John Harres: "FVWM: startup window placement"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19687" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19687" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19687" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19687" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

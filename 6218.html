@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Addendum to FAQ 4.3 from Eric Doenges on 2002-09-11 (fvwm-users)</title>
+<meta name="Author" content="Eric Doenges (doenges_at_lpr.e-technik.tu-muenchen.de)" />
+<meta name="Subject" content="FVWM: Addendum to FAQ 4.3" />
+<meta name="Date" content="2002-09-11" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Addendum to FAQ 4.3</h1>
+<!-- received="Wed Sep 11 02:45:26 2002" -->
+<!-- isoreceived="20020911014526" -->
+<!-- sent="Wed, 11 Sep 2002 09:44:26 +0200" -->
+<!-- isosent="20020911074426" -->
+<!-- name="Eric Doenges" -->
+<!-- email="doenges_at_lpr.e-technik.tu-muenchen.de" -->
+<!-- subject="FVWM: Addendum to FAQ 4.3" -->
+<!-- id="20020911094426.A7704_at_rcs.ei.tum.de" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start6218" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="6219.html" accesskey="d" title="Mikhael Goikhman: &quot;Re: FVWM: Addendum to FAQ 4.3&quot;">Next message</a> ]
+[ <a href="6217.html" title="Gregg Dameron: &quot;Re: FVWM: i can&#0039;t run fvwm 2.4&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="6219.html" accesskey="t" title="Mikhael Goikhman: &quot;Re: FVWM: Addendum to FAQ 4.3&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg6218" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg6218" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg6218" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg6218" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Eric Doenges &lt;<a href="mailto:doenges_at_lpr.e-technik.tu-muenchen.de?Subject=Re%3A%20FVWM%3A%20Addendum%20to%20FAQ%204.3">doenges_at_lpr.e-technik.tu-muenchen.de</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 11 Sep 2002 09:44:26 +0200</span><br />
+</address>
+<br />
+Hi,
+<br />
+<br /><br />first a short disclaimer -- I have no idea if this is the correct
+<br />
+mailing list, but there seems to be no other way of contacting the
+<br />
+fvwm maintainers. If this mail is inapropriate, I'm sorry.
+<br />
+<br />Anyway, I have an addendum to FAQ 4.3 &quot;I'm seeing odd things when
+<br />
+trying to preprocess files with the FvwmM4/Cpp module...&quot;.
+<br />
+<br />I was seeing strange things too. On our setup, the main .fvwm2rc file
+<br />
+reads a number of different subfiles, some of which were parsed with
+<br />
+FvwmM4. This periodically led to a race condition where FvwmM4 was not
+<br />
+finished processing before the M4 output was needed elsewhere in the
+<br />
+configuration (in our case, the problem was with FvwmButtons being
+<br />
+started before the apps to swallow had been started). The fix detailed
+<br />
+in FAQ 4.3 did not help (because we were starting other modules), but
+<br />
+the solution was surprisingly simple:
+<br />
+<br />I replaced all &quot;FvmM4 &lt;file&gt;&quot; commands with &quot;PipeRead 'm4 &lt;file&gt;'&quot; and
+<br />
+everything seems to work now.
+<br />
+<pre>
+-- 
+________________________________________________________________________
+Dipl.-Ing. Eric Doenges                         <a href="http://www.rcs.ei.tum.de">http://www.rcs.ei.tum.de</a>
+Institute for Real-Time Computer Systems (RCS)      fon +49-89-289-23590
+Technische Universitaet Muenchen, D-80290 Muenchen  fax +49-89-289-23555
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Sep 11 2002 - 02:45:26 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start6218">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="6219.html" title="Next message in the list">Mikhael Goikhman: "Re: FVWM: Addendum to FAQ 4.3"</a></li>
+<li><dfn>Previous message</dfn>: <a href="6217.html" title="Previous message in the list">Gregg Dameron: "Re: FVWM: i can&#0039;t run fvwm 2.4"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="6219.html" title="Next message in this discussion thread">Mikhael Goikhman: "Re: FVWM: Addendum to FAQ 4.3"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="6219.html" title="Message sent in reply to this message">Mikhael Goikhman: "Re: FVWM: Addendum to FAQ 4.3"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="6220.html" title="Message sent in reply to this message">Mikhael Goikhman: "Re: FVWM: Addendum to FAQ 4.3"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="6221.html" title="Message sent in reply to this message">Mikhael Goikhman: "Re: FVWM: Addendum to FAQ 4.3"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="6223.html" title="Message sent in reply to this message">Dan Espen: "Re: FVWM: Addendum to FAQ 4.3"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg6218" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg6218" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg6218" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg6218" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:53 BST
+</em></small></p>
+</body>
+</html>

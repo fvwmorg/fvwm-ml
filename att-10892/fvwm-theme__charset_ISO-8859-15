@@ -1,0 +1,344 @@
+#!/usr/bin/perl
+# Usage:
+#     fvwm-theme -bg    [background]
+#     fvwm-theme -decor [window decor]
+#     fvwm-theme -term  [terminal scheme]
+#     fvwm-theme -theme [meta-theme name]
+#
+#     Leave off the extension for [background].
+#
+#     At fvwm2 startup: fvwm-theme -init
+#
+#     This will add various bindable menus and functions (most importantly, the
+#     top-level ThemesMenu menu), and set the theme from ~/.fvwm-theme (or
+#     failing that, from the "default" meta-theme).
+
+use strict;
+
+sub my_die;
+
+########################## Configurable Constants #############################
+
+#my $SHARE_DIR = "/usr/share/fvwm/themes";
+my $SHARE_DIR = "$ENV{HOME}/.fvwm/themes";
+my $USER_FILE = "$ENV{HOME}/.fvwm/fvwm-theme";
+
+my $BACKGROUND_SETTER = 'fvwm-root --retain-pixmap';  # should set a tiled root background
+my $TERMINAL_PROGRAM  = 'xterm';   # must have full xresources support
+
+# This image will be used to mark the current theme option in menus
+my $CHECKMARK_IMAGE = '16x16/stock/generic/stock_calc-accept.png';
+
+
+################################# Constants ###################################
+
+my $PROG_NAME = 'fvwm-theme';
+
+my $BACKGROUNDS_DIR     = "$ENV{HOME}/Wallpapers";
+my $DECORS_DIR          = "$SHARE_DIR/decors";
+my $TERMS_DIR           = "$SHARE_DIR/terms";
+my $THEMES_DIR          = "$SHARE_DIR/themes";
+
+my @TERM_COLORS = ('red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white');
+
+my @TITLE_PIXMAPS = qw(title titlebt titleat titleunder titlelt titlert titleleft titleright buttonsbg lbuttonsbg rbuttonsbg);
+my @PM_NAMES      = qw(Main LeftMain RightMain UnderText LeftOfText RightOfText LeftEnd RightEnd Buttons LeftButtons RightButtons);
+my @BUTTON_SETUP = (
+    ['1 ActiveUp',    'options_activeup.xpm'],
+    ['6 ActiveUp',    'iconify_activeup.xpm'],
+    ['4 ActiveUp',    'maximize_activeup.xpm'],
+    ['2 ActiveUp',    'close_activeup.xpm'],
+    ['1 ActiveDown',  'options_activedown.xpm'],
+    ['6 ActiveDown',  'iconify_activedown.xpm'],
+    ['4 ActiveDown',  'maximize_activedown.xpm'],
+    ['2 ActiveDown',  'close_activedown.xpm'],
+    ['1 Inactive',    'options_inactive.xpm'],
+    ['6 Inactive',    'iconify_inactive.xpm'],
+    ['4 Inactive',    'maximize_inactive.xpm'],
+    ['2 Inactive',    'close_inactive.xpm'],
+);
+
+my %OPTIONS = (
+    'init'             => { func => \&init,             args => 0 },
+    'backgrounds-menu' => { func => \&backgrounds_menu, args => 0 },
+    'decors-menu'      => { func => \&decors_menu,      args => 0 },
+    'terms-menu'       => { func => \&terms_menu,       args => 0 },
+    'meta-themes-menu' => { func => \&meta_themes_menu, args => 0 },
+    'bg'               => { func => \&set_background,   args => 1 },
+    'decor'            => { func => \&set_decor,        args => 1 },
+    'term'             => { func => \&set_term,         args => 1 },
+    'theme'            => { func => \&set_theme,        args => 1 }
+);
+
+################################## Globals ####################################
+
+my %theme;
+
+################################# Begin Main ##################################
+
+my $option = shift or usage_abort();
+$option =~ s/^-+// or usage_abort();
+my $option_info = $OPTIONS{$option} or usage_abort();
+@ARGV == $option_info->{args} or usage_abort();
+read_hash_file($USER_FILE, \%theme) or
+    read_hash_file("$THEMES_DIR/default", \%theme) or
+    my_die "No $USER_FILE and no default theme found";
+$option_info->{func}(@ARGV);
+write_hash_file($USER_FILE, \%theme) or
+    my_die "Can't open $USER_FILE for writing ($!)";
+
+################################## End Main ###################################
+
+############################### Bound Functions ###############################
+
+sub init {
+    print <<"END";
+ImagePath +:$DECORS_DIR
+
+AddToFunc SetBackground I PipeRead 'fvwm-theme -bg    \$0'
+AddToFunc SetDecor      I PipeRead 'fvwm-theme -decor \$0'
+#AddToFunc SetTerm       I PipeRead 'fvwm-theme -term  \$0'
+AddToFunc SetTheme      I PipeRead 'fvwm-theme -theme \$0'
+
+AddToMenu ThemesMenu "Themes" Title
+  + "Backgrounds"         Popup BackgroundsMenu
+  + "Window Decorations"  Popup DecorsMenu
+#  + "Terminals"           Popup TermThemesMenu
+  + "Full Themes"         Popup MetaThemesMenu
+
+AddToMenu BackgroundsMenu DynamicPopupAction Function MakeBackgroundsMenu
+AddToFunc MakeBackgroundsMenu
+   + I DestroyMenu recreate BackgroundsMenu
+   + I PipeRead 'fvwm-theme -backgrounds-menu'
+
+AddToMenu DecorsMenu DynamicPopupAction Function MakeDecorsMenu
+AddToFunc MakeDecorsMenu
+   + I DestroyMenu recreate DecorsMenu
+   + I PipeRead 'fvwm-theme -decors-menu'
+
+AddToMenu TermThemesMenu DynamicPopupAction Function MakeTermThemesMenu
+AddToFunc MakeTermThemesMenu
+   + I DestroyMenu recreate TermThemesMenu
+   + I PipeRead 'fvwm-theme -terms-menu'
+
+AddToMenu MetaThemesMenu DynamicPopupAction Function MakeMetaThemesMenu
+AddToFunc MakeMetaThemesMenu
+   + I DestroyMenu recreate MetaThemesMenu
+   + I PipeRead 'fvwm-theme -meta-themes-menu'
+END
+
+    set_theme_from_hash();
+}
+
+sub backgrounds_menu {
+    generic_menu('Backgrounds', 'BackgroundsMenu', 'bgsub', 'SetBackground',
+                 $BACKGROUNDS_DIR, $theme{background}, 0);
+}
+
+sub decors_menu {
+    generic_menu('Window Decorations', 'DecorsMenu', 'dcsub', 'SetDecor',
+                 $DECORS_DIR, $theme{decor}, 1);
+}
+
+sub terms_menu {
+    generic_menu('Terminal Themes', 'TermThemesMenu', 'ttsub', 'SetTerm',
+                 $TERMS_DIR, $theme{term}, 0);
+}
+
+sub meta_themes_menu {
+    generic_menu('Full Themes', 'MetaThemesMenu', 'ftsub', 'SetTheme',
+                 $THEMES_DIR, '', 0);
+}
+
+sub set_background {
+    my $background = shift;
+    $theme{background} = $background;
+    system "$BACKGROUND_SETTER $BACKGROUNDS_DIR/$background";
+    print "Refresh\n";
+}
+
+sub set_decor {
+    my $decor = shift;
+    my $dir = "$DECORS_DIR/$decor";
+    return unless -d $dir;
+    for (@BUTTON_SETUP) {
+        my $target = $_->[0];
+        my $pixmap = $_->[1];
+        next unless -e "$dir/$pixmap";
+        print "ButtonStyle $target Pixmap $decor/$pixmap\n";
+    }
+    print "ButtonStyle 1 MiniIcon\n"
+        if -e "$DECORS_DIR/$decor/MINI_ICON";
+    print "ButtonStyle All -- Flat UseTitleStyle\n";
+    for my $state ('ActiveUp', 'ActiveDown', 'Inactive') {
+        print "TitleStyle $state MultiPixmap ";
+        for (my $i=0; $i < @TITLE_PIXMAPS; $i++) {
+            my $pixmap = $TITLE_PIXMAPS[$i];
+            my $append = ($state eq 'Inactive' ? 'inactive' : 'active');
+            my $pixmap_fn = "${pixmap}_$append.xpm";
+            next unless -e "$dir/$pixmap_fn";
+            my $pm_name = $PM_NAMES[$i];
+            print ", " if $i > 0;
+            print "$pm_name ";
+            print "(stretched) " if -e "$DECORS_DIR/$decor/STRETCH" &&
+                                    ($pixmap eq 'title' || $pixmap eq 'titleunder' ||
+                                     $pixmap eq 'titlebt' || $pixmap eq 'titleat');
+            print "$decor/$pixmap_fn";
+        }
+        print "\n";
+    }
+    print "TitleStyle -- Flat\n";
+    open F, "<$dir/decor";
+    print while <F>;
+    close F;
+
+    $theme{decor} = $decor;
+}
+
+sub set_term {
+    my $term = shift;
+    my %term_info;
+    read_hash_file("$TERMS_DIR/$term", \%term_info) or return;
+    $theme{term} = $term;
+    open XRDB, "|xrdb -merge -" or
+        my_die "Can't open a pipe to 'xrdb -merge -' ($!)";
+    my $transparent = (exists $term_info{transparent} ? 'true' : 'false');
+    my $shading = $term_info{shading} || '100%';
+    print XRDB <<"END";
+$TERMINAL_PROGRAM.transparent: $transparent
+$TERMINAL_PROGRAM.shading: $shading
+$TERMINAL_PROGRAM.backgroundPixmap: $term_info{backgroundPixmap}
+$TERMINAL_PROGRAM.background: $term_info{background}
+$TERMINAL_PROGRAM.foreground: $term_info{foreground}
+END
+    print XRDB "$TERMINAL_PROGRAM.colorBD: $term_info{bold}\n"
+        if $term_info{bold};
+    for (my $i=0; $i < @TERM_COLORS; $i++) {
+        my $index = $i+1;
+        my $value = $term_info{$TERM_COLORS[$i]} or next;
+        print XRDB "$TERMINAL_PROGRAM.color${index}: $value\n";
+    }
+    for (my $i=0; $i < @TERM_COLORS; $i++) {
+        my $index = $i+9;
+        my $value = $term_info{'bright_' . $TERM_COLORS[$i]} ||
+                    $term_info{$TERM_COLORS[$i]} or
+                    next;
+        print XRDB "$TERMINAL_PROGRAM.color${index}: $value\n";
+    }
+    close XRDB or
+        my_die "Close failed after writing to pipe 'xrdb -merge -' ($!)";
+}
+
+sub set_theme {
+    my $theme = shift;
+    read_hash_file("$THEMES_DIR/$theme", \%theme);
+    set_theme_from_hash();
+}
+
+############################## Helper Functions ###############################
+
+sub set_theme_from_hash {
+    set_background($theme{background});
+    set_decor($theme{decor});
+    set_term($theme{term});
+}
+
+sub generic_menu {
+    my ($menu_title, $menu_name, $subname_prefix, $menu_function, $directory, $selected, $directories_are_items) = @_;
+    chdir $directory or my_die "Can't chdir to $directory ($!)";
+    generic_submenu($menu_title, $menu_name, $subname_prefix, $menu_function,
+                    '.', $selected, $directories_are_items);
+}
+
+sub generic_submenu {
+    my ($menu_title, $menu_name, $subname_prefix, $menu_function, $directory, $selected, $directories_are_items) = @_;
+    opendir DIR, $directory or my_die "Can't opendir $directory ($!)";
+    my @contents = sort(grep(!/^\./, readdir(DIR)));
+    closedir DIR;
+    print "DestroyMenu recreate $menu_name\n";
+    print "AddToMenu $menu_name '$menu_title' Title\n";
+    my @subdirs;
+    for my $item (@contents) {
+        my $path = ($directory eq '.' ? $item : "$directory/$item");
+        my $display_name = make_display_name($item);
+        if (-d $path && !$directories_are_items) {
+            my $submenu_name = "${subname_prefix}_$path";
+            $submenu_name =~ tr|/|_|;
+            push @subdirs, [$display_name, $submenu_name, $subname_prefix,
+                            $menu_function, $path, $selected];
+            print "+ '$display_name' Popup $submenu_name\n";
+        }
+        else {
+            print "+ '$display_name";
+            print "%$CHECKMARK_IMAGE%" if $path eq $selected;
+            print "' $menu_function $path\n";
+        }
+
+
+    }
+    generic_submenu(@$_) for @subdirs;
+}    
+
+sub read_hash_file {
+    my ($file, $hash) = @_;
+    open F, "<$file" or return 0;
+    while (<F>) {
+        chomp;
+        my ($key, $val) = split(/=/, $_, 2);
+        $key = trim_whitespace($key);
+        $val = trim_whitespace($val);
+        $$hash{$key} = $val;
+    }
+    close F;
+    return 1;
+}
+
+sub write_hash_file {
+    my ($file, $hash) = @_;
+    open F, ">$file" or return 0;
+    while (my ($key, $val) = each %$hash) {
+        print F "$key=$val\n";
+    }
+    close F;
+    return 1;
+}
+
+sub trim_whitespace {
+    my $str = shift;
+    $str =~ s/^\s+//;
+    $str =~ s/\s+$//;
+    return $str;
+}
+
+sub make_display_name {
+    my $name = shift;
+    $name =~ s/\.[^.]+$//;        # strip extension
+    $name =~ tr/_-/ /;            # convert underscores to spaces
+    $name =~ s/\b([a-z])/\U$1/g;  # capitalize words
+    return $name;
+}
+
+sub usage_abort {
+    print STDERR <<"END";
+Usage:
+    fvwm-theme -bg    [background]
+    fvwm-theme -decor [window decor]
+    fvwm-theme -term  [terminal scheme]
+    fvwm-theme -theme [meta-theme name]
+
+    Leave off the extension for [background].
+
+    At fvwm2 startup: fvwm-theme -init
+
+    This will add various bindable menus and functions (most importantly, the
+    ThemesMenu menu), and set the theme from ~/.fvwm-theme (or failing that,
+    the "default" meta-theme).
+END
+    exit(1);
+}
+
+sub my_die {
+    my $msg = shift;
+    die "$PROG_NAME: $msg\n";
+}
+

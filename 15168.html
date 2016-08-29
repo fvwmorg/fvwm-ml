@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: M4 examples? from Nicholas Vargish on 1995-12-29 (fvwm-users)</title>
+<meta name="Author" content="Nicholas Vargish (vargish_at_mailbox.sura.net)" />
+<meta name="Subject" content="FVWM: M4 examples?" />
+<meta name="Date" content="1995-12-29" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: M4 examples?</h1>
+<!-- received="Fri Dec 29 09:31:35 1995" -->
+<!-- isoreceived="19951229093135" -->
+<!-- sent="Fri, 29 Dec 1995 10:31:37 -0500" -->
+<!-- isosent="19951229153137" -->
+<!-- name="Nicholas Vargish" -->
+<!-- email="vargish_at_mailbox.sura.net" -->
+<!-- subject="FVWM: M4 examples?" -->
+<!-- id="199512291531.KAA26672_at_mailbox.sura.net" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start15168" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="15169.html" accesskey="d" title="Bill Hails: &quot;Re: FVWM: M4 examples?&quot;">Next message</a> ]
+[ <a href="15167.html" title="Eric F. Kahler (ekahler_at_mars.superlink.net): &quot;Re: FVWM: TKGoodstuff and the pager&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="15169.html" accesskey="t" title="Bill Hails: &quot;Re: FVWM: M4 examples?&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15168" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15168" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15168" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15168" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Nicholas Vargish &lt;<a href="mailto:vargish_at_mailbox.sura.net?Subject=Re%3A%20FVWM%3A%20M4%20examples%3F">vargish_at_mailbox.sura.net</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 29 Dec 1995 10:31:37 -0500</span><br />
+</address>
+<br />
+Hi,
+<br />
+<br />Sorry to be an idiot, but I can't figure this m4 macro language out. I'm
+<br />
+trying to build an .fvwm2rc that will work both at home (on my Linux
+<br />
+box) and at work (Sparcstations). I'd like to use m4 to preprocess the
+<br />
+file, so I can set up paths and the like automatically, and not have
+<br />
+to hand-edit the file every time I copy it from work to home (and vice
+<br />
+versa).
+<br />
+<br />Someone else must be doing this, right? I can't find any actual examples
+<br />
+in the docs or in the archives of this list. Let me just include the
+<br />
+stuff that I've been trying, perhaps some more enlightened soul can
+<br />
+show me where I'm going wrong?
+<br />
+<br /><br />My first effort was to do this:
+<br />
+<br />This is the basic definition, establish the default:
+<br />
+<br />m4_define(`icopath',`/homes/critters/vargish/lib/icons:/var/local/X11R6/include/X11/bitmaps:/usr/local/X11R6/include/X11/bitmaps')
+<br />
+<br />Then check the HOSTNAME and change the definition if needed:
+<br />
+<br />m4_ifelse(`HOSTNAME',`imrryr',`m4_define(`icopath',`/homes/nick/lib/icons:/usr/X11R6/include/X11/bitmaps')')
+<br />
+<br />Which didn't really do the trick -- it didn't change the definition. I tried
+<br />
+removing the quotes around the `m4_define(...)' section, but that didn't
+<br />
+help -- it changed the definition every time, even when HOSTNAME was not
+<br />
+defined as imrryr.
+<br />
+<br />Okay, so the second attempt was to do this:
+<br />
+<br />m4_define(`modpath',m4_ifelse(`HOSTNAME',`imrryr',`/usr/X11R6/lib/X11/fvwm2:/usr/X11R6/bin',`/var/local/X11R6/lib/X11/fvwm2:/usr/local/X11R6/lib/X11/fvwm2:/var/local/X11R6/bin:/usr/local/X11R6/bin'))
+<br />
+<br />But this doesn't work either... When HOSTNAME is imrryr, it still uses the
+<br />
+second definition, the not-clause.
+<br />
+<br />I think I must be confused about m4 quoting rules, but I'm not sure
+<br />
+exactly where I'm going wrong. I'd appreciate any advice people might
+<br />
+have... Examples would be especially welcome -- I learn well from those.
+<br />
+<br />Nick
+<br />
+<br />p.s. Is there any way to make those m4 definitions &quot;prettier&quot;? I'm just not
+<br />
+a big fan of 220-character lines...
+<br />
+<br /><br />&nbsp;+------------------------------------+  Love's not Time's fool, though        
+<br />
+&nbsp;| Nick Vargish, BBN Planet (SURAnet) |      rosy lips and cheeks              
+<br />
+&nbsp;|   vargish_at_sura.net  301/489-8134   |  Within his bending sickle's           
+<br />
+&nbsp;|    <a href="http://www.sura.net/~vargish">http://www.sura.net/~vargish</a>    |      compass come     [Shakespeare]   
+<br />
+<br /><br /><pre>
+--
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Dec 29 1995 - 09:31:35 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start15168">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="15169.html" title="Next message in the list">Bill Hails: "Re: FVWM: M4 examples?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="15167.html" title="Previous message in the list">Eric F. Kahler (ekahler_at_mars.superlink.net): "Re: FVWM: TKGoodstuff and the pager"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="15169.html" title="Next message in this discussion thread">Bill Hails: "Re: FVWM: M4 examples?"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Maybe reply</dfn>: <a href="15169.html" title="Message sent in reply to this message">Bill Hails: "Re: FVWM: M4 examples?"</a></li>
+<li><dfn>Reply</dfn>: <a href="15171.html" title="Message sent in reply to this message">Chris Taylor: "Re: FVWM: M4 examples?"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15168" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15168" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15168" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15168" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: bug in CleverPlacement from Trent Piepho on 1998-12-30 (fvwm-users)</title>
+<meta name="Author" content="Trent Piepho (xyzzy_at_u.washington.edu)" />
+<meta name="Subject" content="FVWM: bug in CleverPlacement" />
+<meta name="Date" content="1998-12-30" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: bug in CleverPlacement</h1>
+<!-- received="Wed Dec 30 11:05:43 1998" -->
+<!-- isoreceived="19981230110543" -->
+<!-- sent="Wed, 30 Dec 1998 09:10:28 -0800 (PST)" -->
+<!-- isosent="19981230171028" -->
+<!-- name="Trent Piepho" -->
+<!-- email="xyzzy_at_u.washington.edu" -->
+<!-- subject="FVWM: bug in CleverPlacement" -->
+<!-- id="Pine.LNX.4.04.9812300808390.10281-100000_at_cs102-3.fsmodem.washington.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start23290" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="23291.html" accesskey="d" title="Neil Zanella: &quot;FVWM: hard question: fvwm2 and Red Hat (5.0 and above)&quot;">Next message</a> ]
+[ <a href="23289.html" title="Toshi Isogai: &quot;Re:FVWM: FvwmCommandS still won&#0039;t load&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="23292.html" accesskey="t" title="Dominik Vogt: &quot;Re: FVWM: bug in CleverPlacement&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg23290" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg23290" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg23290" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg23290" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Trent Piepho &lt;<a href="mailto:xyzzy_at_u.washington.edu?Subject=Re%3A%20FVWM%3A%20bug%20in%20CleverPlacement">xyzzy_at_u.washington.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 30 Dec 1998 09:10:28 -0800 (PST)</span><br />
+</address>
+<br />
+There seems to be some kind of bug in the Smart placement code.  The placement
+<br />
+of windows gets messed up if there is an iconized window with no icon.  To
+<br />
+demonstrate, try this.  Add this to the end of your .fvwm2rc or via FvwmTalk:
+<br />
+<br />Style &quot;*&quot; NoIcon 
+<br />
+GlobalOpts SmartPlacementIsReallySmart
+<br />
+<br />Now make your desktop mostly empty.  Start some program and iconize it, then
+<br />
+start a second copy.  It should appear right where the first one did, but
+<br />
+instead it will appear at some other odd place.
+<br />
+<br />The fvwm2 code is really a mess to me, but the problem looks like the function
+<br />
+test_fit in placement.c
+<br />
+<br />There is some code that does this:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;if((testw-&gt;flags &amp; ICONIFIED)&amp;&amp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(testw-&gt;icon_w)) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(testw-&gt;flags &amp; ICON_UNMAPPED)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;continue;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;... stuff with icon position ...
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;} else {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;... stuff with window position ...
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+<br />It looks like iconified windows with no icon will take the branch that uses
+<br />
+the window position for calculations.  Here is a patch that seems to have
+<br />
+fixed it for me.
+<br />
+<br /><br />diff fvwm-2.1.5/fvwm/placement.c fvwm-2.1.5.new/fvwm/placement.c
+<br />
+320,321c320
+<br />
+&lt;     if((testw-&gt;flags &amp; ICONIFIED)&amp;&amp;
+<br />
+&lt;        (testw-&gt;icon_w))
+<br />
+<pre>
+---
+&gt;     if(testw-&gt;flags &amp; ICONIFIED)
+323c322
+&lt;        if(testw-&gt;flags &amp; ICON_UNMAPPED)
+---
+&gt;        if((testw-&gt;flags &amp; ICON_UNMAPPED) || !(testw-&gt;icon_w))
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://fvwm.math.uh.edu/">http://fvwm.math.uh.edu/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Dec 30 1998 - 11:05:43 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start23290">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="23291.html" title="Next message in the list">Neil Zanella: "FVWM: hard question: fvwm2 and Red Hat (5.0 and above)"</a></li>
+<li><dfn>Previous message</dfn>: <a href="23289.html" title="Previous message in the list">Toshi Isogai: "Re:FVWM: FvwmCommandS still won&#0039;t load"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="23292.html" title="Next message in this discussion thread">Dominik Vogt: "Re: FVWM: bug in CleverPlacement"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="23292.html" title="Message sent in reply to this message">Dominik Vogt: "Re: FVWM: bug in CleverPlacement"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg23290" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg23290" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg23290" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg23290" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:02 BST
+</em></small></p>
+</body>
+</html>

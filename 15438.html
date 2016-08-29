@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Re: tricky problem with fvwm reparenting from Brady Montz on 1996-02-07 (fvwm-users)</title>
+<meta name="Author" content="Brady Montz (bradym_at_cs.arizona.edu)" />
+<meta name="Subject" content="FVWM: Re: tricky problem with fvwm reparenting" />
+<meta name="Date" content="1996-02-07" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Re: tricky problem with fvwm reparenting</h1>
+<!-- received="Wed Feb  7 17:22:40 1996" -->
+<!-- isoreceived="19960207172240" -->
+<!-- sent="Wed, 7 Feb 1996 16:22:32 -0700 (MST)" -->
+<!-- isosent="19960207232232" -->
+<!-- name="Brady Montz" -->
+<!-- email="bradym_at_cs.arizona.edu" -->
+<!-- subject="FVWM: Re: tricky problem with fvwm reparenting" -->
+<!-- id="199602072322.QAA01607_at_mahler.cs.arizona.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="no.id" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start15438" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="15439.html" accesskey="d" title="John Junior Dawkins: &quot;FVWM: menu backgrounds&quot;">Next message</a> ]
+[ <a href="15437.html" title="Lars Wirzenius: &quot;Re: FVWM: tabbing in fvwm?&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15438" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15438" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15438" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15438" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Brady Montz &lt;<a href="mailto:bradym_at_cs.arizona.edu?Subject=Re%3A%20FVWM%3A%20Re%3A%20tricky%20problem%20with%20fvwm%20reparenting">bradym_at_cs.arizona.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 7 Feb 1996 16:22:32 -0700 (MST)</span><br />
+</address>
+<br />
+I no longer need an answer to this question, as I've gone back to the
+<br />
+original method I used: just wait for fvwm to tell the program what its
+<br />
+location is. This seems to work, but I don't remember why I stopped doing
+<br />
+it that way. 
+<br />
+<br />For those who are curious about such things, I tried the obvious method
+<br />
+arising from what I described below, just call XGetGeometry on the frame
+<br />
+window and then compute the new location, and I believe I ended up with a race
+<br />
+condition if I was moving between pages while the manager was resizing itself
+<br />
+(which is often since it always resizes itself when you change pages), and it
+<br />
+didn't work.
+<br />
+<br />bradym_at_cs.arizona.edu
+<br />
+<br /><br /><em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; I'm just about to release FvwmIconMan 0.3, but I have one last bug that I just
+</em><br />
+<em class="quotelev1">&gt; can't squish. This problem has actually been around since forever, and I
+</em><br />
+<em class="quotelev1">&gt; want to get rid of it for once and all.
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; For those who have't used it, for this problem just think of it like WinList.
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; When the user specifies a geometry with a negative y coordinate, then the
+</em><br />
+<em class="quotelev1">&gt; manager window should grow upwards. To do this, I need to move the window,
+</em><br />
+<em class="quotelev1">&gt; then resize it (I actually use XMoveResizeWindow). To do this, I need to
+</em><br />
+<em class="quotelev1">&gt; know what the global location of my window is.
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; Looking at the fvwm source code, it appears that fvwm puts two layers of
+</em><br />
+<em class="quotelev1">&gt; parents on top of all managed windows, one immediately containing the window, 
+</em><br />
+<em class="quotelev1">&gt; and then the frame window. Is this correct, and if it's correct, is it
+</em><br />
+<em class="quotelev1">&gt; consistently correct? Cause then I'll just go back to the grandfather window
+</em><br />
+<em class="quotelev1">&gt; to figure out my global location. If not, then are there any suggestions?
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; bradym_at_cs.arizona.edu
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<br /><pre>
+--
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Feb 07 1996 - 17:22:40 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start15438">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="15439.html" title="Next message in the list">John Junior Dawkins: "FVWM: menu backgrounds"</a></li>
+<li><dfn>Previous message</dfn>: <a href="15437.html" title="Previous message in the list">Lars Wirzenius: "Re: FVWM: tabbing in fvwm?"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15438" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15438" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15438" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15438" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

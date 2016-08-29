@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Per-Window Styles from Craig Milo Rogers on 2003-03-17 (fvwm-users)</title>
+<meta name="Author" content="Craig Milo Rogers (Rogers_at_ISI.EDU)" />
+<meta name="Subject" content="FVWM: Per-Window Styles" />
+<meta name="Date" content="2003-03-17" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Per-Window Styles</h1>
+<!-- received="Sun Mar 16 19:04:13 2003" -->
+<!-- isoreceived="20030316190413" -->
+<!-- sent="Sun, 16 Mar 2003 17:02:54 -0800" -->
+<!-- isosent="20030317010254" -->
+<!-- name="Craig Milo Rogers" -->
+<!-- email="Rogers_at_ISI.EDU" -->
+<!-- subject="FVWM: Per-Window Styles" -->
+<!-- id="19059.1047862974_at_ISI.EDU" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start8267" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="8268.html" accesskey="d" title="David Hansen: &quot;Re: FVWM: Style NoButton requires special order, Bug?&quot;">Next message</a> ]
+[ <a href="8266.html" title="mail_at_ptporn.com: &quot;FVWM: Recebeu um convite&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="8310.html" accesskey="t" title="Mikhael Goikhman: &quot;Re: FVWM: Per-Window Styles&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg8267" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg8267" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg8267" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg8267" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Craig Milo Rogers &lt;<a href="mailto:Rogers_at_ISI.EDU?Subject=Re%3A%20FVWM%3A%20Per-Window%20Styles">Rogers_at_ISI.EDU</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sun, 16 Mar 2003 17:02:54 -0800</span><br />
+</address>
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Today, out of the blue, I decided that I wanted to apply
+<br />
+styles to specific windows (and not to window names, classes, or
+<br />
+resources, any of which may the same for multiple windows) on my FVWM
+<br />
+desktop.  I noticed that a request to do this was already pending in
+<br />
+the FVWM bug site(id #568), but seeing that it's been over 2 years
+<br />
+since the enhancement request was queued in the bug tracking system, I
+<br />
+decided to look into it for fun.
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I made the following changes to &quot;fvwm/style.c&quot; in fvwm-2.5.6:
+<br />
+<br />*** style.c.orig        2003-03-16 15:48:15.000000000 -0800
+<br />
+--- style.c     2003-03-16 15:51:17.000000000 -0800
+<br />
+***************
+<br />
+*** 4033,4038 ****
+<br />
+--- 4033,4042 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* clear callers return area */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;memset(styles, 0, sizeof(window_style));
+<br />
+&nbsp;&nbsp;
+<br />
++       /* Get the window ID: */
+<br />
++       char winId[20];
+<br />
++       sprintf(winId, &quot;0x%x&quot;, (unsigned int)FW_W(fw));
+<br />
++ 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* look thru all styles in order defined. */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (nptr = all_styles; nptr != NULL; nptr = SGET_NEXT_STYLE(*nptr))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+***************
+<br />
+*** 4051,4056 ****
+<br />
+--- 4055,4063 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;merge_styles(styles, nptr, False);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
++               else if (strcmp(SGET_NAME(*nptr), winId) == 0) {
+<br />
++                       merge_styles(styles, nptr, False);
+<br />
++               }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (!DO_IGNORE_GNOME_HINTS(fw))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+***************
+<br />
+*** 4800,4808 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (t = Scr.FvwmRoot.next; t != NULL &amp;&amp; t != &amp;Scr.FvwmRoot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t = t-&gt;next)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (matchWildcards(name, t-&gt;class.res_class) == TRUE ||
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matchWildcards(name, t-&gt;class.res_name) == TRUE ||
+<br />
+!                   matchWildcards(name, t-&gt;name.name) == TRUE)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SET_STYLE_DELETED(t, 1);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Scr.flags.do_need_window_update = 1;
+<br />
+--- 4807,4820 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (t = Scr.FvwmRoot.next; t != NULL &amp;&amp; t != &amp;Scr.FvwmRoot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t = t-&gt;next)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
++               /* Get the window ID: */
+<br />
++               char winId[20];
+<br />
++               sprintf(winId, &quot;0x%x&quot;, (unsigned int)FW_W(t));
+<br />
++ 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (matchWildcards(name, t-&gt;class.res_class) == TRUE ||
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matchWildcards(name, t-&gt;class.res_name) == TRUE ||
+<br />
+!                   matchWildcards(name, t-&gt;name.name) == TRUE ||
+<br />
+!                   strcmp(name, winId) == 0)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SET_STYLE_DELETED(t, 1);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Scr.flags.do_need_window_update = 1;
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This implements per-window styles, except for the the
+<br />
+possibility of the reuse of window IDs.  I apologize for the hokey
+<br />
+20-character fixed buffers; consider this a proof-of-concept
+<br />
+implementation, not rugged code.
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Here's a sample menu that applies per-window styles:
+<br />
+<br />AddToMenu &quot;WindowOps&quot; &quot;WindowOps&quot; Title
+<br />
++              &quot;Focus Policy&quot;        Popup FocusPolicyOps
+<br />
+<br />AddToMenu &quot;FocusPolicyOps&quot; &quot;Focus Policy&quot; Title
+<br />
++              &quot;Click to Focus&quot;      Current Style $[w.id] ClickToFocus
+<br />
++              &quot;Focus Follows Mouse&quot; Current Style $[w.id] FocusFollowsMouse
+<br />
++              &quot;Never Focus&quot;         Current Style $[w.id] NeverFocus
+<br />
++              &quot;Sloppy Focus&quot;        Current Style $[w.id] SloppyFocus
+<br />
+<br /><br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Craig Milo Rogers
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sun Mar 16 2003 - 19:04:13 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start8267">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="8268.html" title="Next message in the list">David Hansen: "Re: FVWM: Style NoButton requires special order, Bug?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="8266.html" title="Previous message in the list">mail_at_ptporn.com: "FVWM: Recebeu um convite"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="8310.html" title="Next message in this discussion thread">Mikhael Goikhman: "Re: FVWM: Per-Window Styles"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="8310.html" title="Message sent in reply to this message">Mikhael Goikhman: "Re: FVWM: Per-Window Styles"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg8267" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg8267" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg8267" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg8267" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:54 BST
+</em></small></p>
+</body>
+</html>

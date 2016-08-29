@@ -1,0 +1,124 @@
+#!/usr/bin/perl -w
+
+use strict;
+use FindBin qw($RealBin $RealScript);
+
+################################################################################
+
+my $choose_modifiers = 'SCM';
+my $select_modifiers = 'SC';
+my @keys             = ( 0 ... 9 );
+my @xwininfo         = ('/usr/X11R6/bin/xwininfo', '/usr/openwin/bin/xwininfo');
+
+################################################################################
+
+sub init
+{
+	foreach my $key (@keys) {
+		print "Key	${key}	A	${choose_modifiers}	Piperead \"${RealBin}/${RealScript} ${key}\"\n";
+	}
+
+	print <<'EOF';
+
+AddToFunc QuickSelectHelper
+	+ I WindowId $0 Iconify off
+	+ I WindowId $0 Raise
+	+ I WindowId $0 focus
+
+EOF
+}
+
+################################################################################
+
+sub probe
+{
+	while (my $xwininfo = shift) {
+		-x $xwininfo && return $xwininfo;
+	}
+
+	return undef;
+}
+
+sub retrieve_windowid
+{
+	my $xwininfo = probe(@xwininfo) || die ("can't find xwinfo");
+	my $out = `$xwininfo`;
+	 
+	$out =~ /^xwininfo: Window id: (0x[a-z0-9]{6})/m
+		|| die ("can't find windowid");
+
+	return $1;
+}
+
+################################################################################
+
+sub init_key
+{
+	my $key = shift;
+	grep($key eq $_, @keys) || die ("unknown keys: <$key>");
+	my $windowid = retrieve_windowid();
+
+	print "Key	${key}	A	${select_modifiers}	QuickSelectHelper ${windowid}\n";
+}
+
+# int main ...
+# {
+my $arg = shift;
+
+if (! defined($arg)) {
+	init();
+
+} else {
+	init_key($arg);
+}
+
+# }
+
+__END__
+
+=head1 NAME
+
+quickselect - set Application Windows on Hotkeys
+
+=head1 SYNOPSIS
+
+.fvwm2rc:
+
+AddToFunc StartFunction
+	+ I Piperead "/path/to/quickselect"
+
+=head1 DESCRIPTION
+
+B<quickselect> is used in conjuction with fvwm2. By default you select an
+application window by pressing CTRL ALT SHIFT 0 - 9 and klicking on an
+application window. After that you can focus ths window by pressing CTRL SHIFT
+0 - 9.
+
+=head1 CONFIGURATION
+
+=over 8
+
+=item B<@keys>
+
+This is an array containing all keys which you want to use to quickselect
+application windows in conjuction to B<$select_modifiers>.
+
+=item B<$choose_modifiers>
+
+This is an scalar holding the modifiers which have to be pressed together with
+one of B<@keys> to B<bind> an application window to an key.
+
+=item B<$select_modifiers>
+
+This is an scalar holding the modifiers which have to be pressed together with
+one of B<@keys> to B<focus> an application window to an key.
+
+=item B<@xwininfo>
+
+This is an array holding all possible locations of the binary xwininfo,
+which is typically installed in /usr/X11R6/bin or /usr/openwin/bin.
+
+=back
+
+=cut
+

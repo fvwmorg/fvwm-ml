@@ -1,0 +1,865 @@
+#Style "*" ForeColor orchid
+Style "*" ForeColor Tan
+#Style "*" BackColor DarkOliveGreen
+Style "*" BackColor SteelBlue
+
+# Set the foreground and background color for selected windows
+#HilightColor   black DarkSalmon
+HilightColor   black Tan
+
+
+########################      FOCUS STUFF     ##############################
+#ClickToFocus
+
+# Set windows to auto-raise after 750 milliseconds:
+#! AutoRaise 750 (use Module FvwmAuto)
+
+AddToFunc "InitFunction" "I" Module FvwmAuto 750
+
+############################################################################
+# Now the fonts - one for menus, another for window titles, another for icons
+WindowFont		-adobe-helvetica-bold-r-*-*-14-*-*-*-*-*-*-*
+#IconFont		fixed
+IconFont                -adobe-helvetica-medium-r-*-*-16-*-*-*-*-*-*-*
+
+########################      ICON STUFF     ##############################
+# Auto Place Icons is a nice feature....
+# This creates two icon boxes, one on the left side, then one on the
+# bottom. Leaves room in the upper left for my clock and xbiff,
+# room on the bottom for the Pager.
+Style "*" IconBox 5 -50 -140 -5
+
+# If you uncomment this, and make sure that the WindowList is bound to
+# something, it works pretty much like an icon manager.
+#SuppressIcons
+
+# StubbornIcons makes icons de-iconify into their original position on the
+# desktop, instead of on the current page.
+#StubbornIcons
+
+
+# With AutoPlacement, icons will normally place themselves underneath active
+# windows. This option changes that.
+#StubbornIconPlacement
+
+# If you want ALL you icons to follow you around the desktop (Sticky), try
+# this
+#Style "*" StickyIcon
+Style "*" NoIcon
+
+########################      MWM EMULATION     #######################
+#
+Style "*" MWMFunctions
+
+Style "*" ClickToFocus
+
+Style "*" HintOverride
+
+Style "*" MWMDecor
+
+#MenuStyle   Red Gray80 Blue -*-times-medium-i-*-*-*-120-*-*-*-*-*-* mwm
+#MenuStyle Black  DarkOliveGreen DarkGrey -adobe-helvetica-bold-r-*-*-14-*-*-*-*-*-*-* mwm
+MenuStyle Black #c0c0c0 darkgrey -adobe-helvetica-bold-r-*-*-14-*-*-*-*-*-*-* mwm
+
+Style "*" MWMButtons
+
+########################      MISCELLANEOUS STUFF     #######################
+# If you don't like the default 150 msec click delay for the complex functions
+# change this and uncomment it.
+#ClickTime 150
+
+OpaqueMoveSize 100
+
+EdgeScroll 0 0
+
+EdgeResistance 0 0
+
+########################      WINDOW PLACEMENT     #######################
+#RandomPlacement
+
+Style "*" SmartPlacement
+
+#StubbornPlacement
+
+#NoPPosition
+
+Style "*" DecorateTransient
+
+###########################################################################
+# Set up the virtual desktop and pager
+
+#set the desk top size in units of physical screen size (cols x rows)
+DeskTopSize 2x2
+
+# and the reduction scale used for the panner/pager
+#! DeskTopScale 42
+
+##########################################################################
+# Module path and paths to the icons
+#
+# ModulePath is a colon-separated list, just like regular unix PATH
+
+#ModulePath /opt/software/tools/lib/X11/fvwm2
+#ModulePath /sitstore/XPM/fvwm-2.2.4/libexec/fvwm/2.2.4
+
+ModulePath /sitstore/XPM/fvwm-2.3.22/libexec/fvwm/2.3.22
+
+#PixmapPath /opt/software/X11R6/lib/X11/twm/images:/opt/software/tools/lib/X11/pixmaps
+
+ImagePath /opt/software/X11R6/lib/X11/twm/images:/opt/software/tools/lib/X11/pixmaps:/home/nmalik/icons:/sitstore/XPM/fvwm-2.2.4/icons
+
+############################################################################
+# Set the decoration styles and window options
+# Order is important!!!!
+# If compatible styles are set for a single window in multiple Style
+# commands, then the styles are ORed together. If conflicting styles
+# are set, the last one specified is used.
+
+# These commands should command before any menus or functions are defined,
+# and before the internal pager is started.
+
+# change the default width.
+# everthing else purple color
+Style "*" BorderWidth 5, HandleWidth 5, Color black,Icon unknown1.xpm
+#Style * MouseFocusClickRaises
+#Style "Perfmeter*" Sticky, NoTitle, WindowListSkip
+Style "Fvwm*"      NoTitle, NoHandles, Sticky, WindowListSkip, BorderWidth 0
+Style "FvwmPager"  StaysOnTop, BorderWidth 0
+Style "FvwmBanner" StaysOnTop
+Style "FvwmButtons"  Handles, Sticky, WindowListSkip, BorderWidth 1
+Style "*elm*"      StartsOnDesk 0
+Style "*CascadeView*"    StartsOnDesk 2
+Style "*ovw*"    StartsOnDesk 2
+Style "*Netscape*" Icon nscape.xpm
+Style "xterm"      Icon xterm.xpm, Color black
+Style "xcalc"      Icon xcalc.xpm
+Style "xbiff"      Icon mail1.xpm
+Style "xbiff"      Sticky, NoTitle, NoHandles, WindowListSkip, BorderWidth 0
+Style "xman"	   Icon xman.xpm
+Style "xmag"	   Icon mag_glass.xpm
+Style "xgraph"	   Icon graphs.xpm
+Style "FvwmButtons"  Icon toolbox.xpm
+#Style "GoodStuff"  StaysOnTop
+Style "*lock"      NoTitle, NoHandles, Sticky
+Style "xclock"     Sticky, NoHandles, NoTitle, WindowListSkip, BorderWidth 0
+Style "xload"      StaysOnTop, Sticky, NoHandles, NoTitle, WindowListSkip
+Style "xcalendar"  Sticky, NoTitle, NoHandles, WindowListSkip
+Style "XCalendar v.4.0"  Sticky, NoTitle, NoHandles, WindowListSkip
+Style "Day Editor"  Sticky, NoTitle, NoHandles, WindowListSkip
+#Style "perfmeter"  Title,Handles,NoSticky,NoStaysOnTop
+
+#############################################################################
+
+# Stuff to do at start-up
+
+#AddToFunc "InitFunction" "I" Exec xv -root -rm 4 -quit /home/nmalik/images/rocks.gif
+AddToFunc "InitFunction" "I" Exec exec xsetroot -solid black
++              "I" Module FvwmButtons
+#+              "I" Module FvwmWinList
+#+              "I" Module FvwmBanner
++              "I" Desk 0 0
++              "I" Module FvwmForm Login
++   		"I" Module  FvwmCommandS
+
+#AddToFunc "RestartFunction" "I" Exec xv -root -rm 4 -quit /home/nmalik/images/rocks.gif
+AddToFunc "RestartFunction" "I" Exec exec xsetroot -solid black
++              "I" Module FvwmButtons
+#+              "I" Module FvwmWinList
++   		"I" Module  FvwmCommandS
+
+
+############################################################################
+# Now define some handy complex functions
+
+# This one moves and then raises the window if you drag the mouse,
+# only raises the window if you click,  or does a RaiseLower if you double 
+# click
+#
+AddToFunc "Move-or-Raise" "M" Move
++              "C" Raise
++              "M" Raise
+#+              "D" RaiseLower
++              "D" WindowShade
+
+# This one maximizes vertically if you click (leaving room for the GoodStuff 
+# bar at the bottom), or does a full maximization if you double click, or a 
+# true full vertical maximization if you just hold the mouse button down.
+#
+AddToFunc "maximize_func" "M" Maximize 0 100
++              "C" Maximize 0 80
++              "D" Maximize 100 100
+
+
+# This one moves and then lowers the window if you drag the mouse,
+# only lowers the window if you click,  or does a RaiseLower if you double 
+# click
+AddToFunc "Move-or-Lower" "M" Move
++              "C" Lower
++              "M" Lower
++              "D" RaiseLower
+
+# This one moves or (de)iconifies:
+AddToFunc "Move-or-Iconify" "M" Move
++              "D" Iconify
+
+# This one resizes and then raises the window if you drag the mouse,
+# only raises the window if you click,  or does a RaiseLower if you double 
+# click
+AddToFunc "Resize-or-Raise" "M" Resize
++              "C" Raise
++              "M" Raise
++              "D" RaiseLower
+
+##############################################################################
+#now define the menus - defer bindings until later
+
+# This menu is invoked as a sub-menu - it allows you to quit,
+# restart, or switch to another WM.
+AddToMenu "Quit-Verify" "Quit Fvwm %mini.question.xpm%" Title
++              "" Nop
++              "Yes, Really Quit" Quit
++              "Restart fvwm2" Restart fvwm2
++              "Start mwm" Restart mwm
++              "" Nop
++              "No, Don't Quit" Nop
+
+# Provides a list of modules to fire off
+AddToMenu "Module-Popup" "Modules" Title
++              "FvwmButtons" Module FvwmButtons
++              "Clean-Up" Module FvwmClean
++              "Identify" Module FvwmIdent
++              "SaveDesktop" Module FvwmSave
++              "Debug" Module FvwmDebug
++              "Pager %mini.pager.xpm%" Module FvwmPager 0 2
++              "FvwmWinList" Module FvwmWinList
++              "FvwmBanner" Module FvwmBanner
++	       "FvwmConfig" Module FvwmConfig
++		"FvwmTalk" Module FvwmTalk
+
+#
+# Host pop-up. All my favorite hosts
+#
+AddToMenu "Servers" "Servers" Title
++              "monica" Exec DSP=`hostname`;export $DSP;rsh monica xterm +si -sk -sl 2000 -d $DSP:0.0 -sb -ut -n monica &
++              "tree" Exec DSP=`hostname`;export $DSP;rsh tree xterm +si -sk -sl 2000 -d $DSP:0.0 -sb -ut -n tree &
++              "mudbug" Exec DSP=`hostname`;export $DSP;rsh mudbug xterm +si -sk -sl 2000 -d $DSP:0.0 -sb -ut -n mudbug &
++              "yoohoo" Exec DSP=`hostname`;export $DSP;rsh yoohoo xterm +si -sk -sl 2000 -d $DSP:0.0 -sb -ut -n yoohoo &
++              "struct" Exec DSP=`hostname`;export $DSP;rsh struct xterm +si -sk -sl 2000 -d $DSP:0.0 -sb -ut -n struct &
++              "rouge" Exec DSP=`hostname`;export $DSP;rsh rouge xterm +si -sk -sl 2000 -d $DSP:0.0 -sb -ut -n rouge &
++              "ftc" Exec DSP=`hostname`;export $DSP;rsh ftc xterm +si -sk -sl 2000 -d $DSP:0.0 -sb -ut -n ftc &
+
+AddToMenu "Screensaver" "Screensaver" Title
++              "Bat" Exec exec xlock -nolock -nice 0 -mode bat &
++              "Blank" Exec exec xlock -nolock -nice 0 -mode blank &
++              "Blot" Exec exec xlock -nolock -nice 0 -mode blot &
++              "Bob" Exec exec xlock -nolock -nice 0 -mode bob &
++              "Bounce" Exec exec xlock -nolock -nice 0 -mode bounce &
++              "Flame" Exec exec xlock -nolock -nice 0 -mode flame &
++              "Galaxy" Exec exec xlock -nolock -nice 0 -mode galaxy &
++              "Grav" Exec exec xlock -nolock -nice 0 -mode grav &
++              "Helix" Exec exec xlock -nolock -nice 0 -mode helix &
++              "Hop" Exec exec xlock -nolock -nice 0 -mode hop &
++              "Hyper" Exec exec xlock -nolock -nice 0 -mode hyper &
++              "Kaleid" Exec exec xlock -nolock -nice 0 -mode kaleid &
++              "Life" Exec exec xlock -nolock -nice 0 -mode life &
++              "Life3d" Exec exec xlock -nolock -nice 0 -mode life3d &
++              "Maze" Exec exec xlock -nolock -nice 0 -mode maze &
++              "Pyro" Exec exec xlock -nolock -nice 0 -mode pyro &
++              "Qix" Exec exec xlock -nolock -nice 0 -mode qix &
++              "Random" Exec exec xlock -nolock -nice 0 -mode random &
++              "Rect" Exec exec xlock -nolock -nice 0 -mode rect &
++              "Rock" Exec exec xlock -nolock -nice 0 -mode rock &
++              "Rotor" Exec exec xlock -nolock -nice 0 -mode rotor &
++              "Sphere" Exec exec xlock -nolock -nice 0 -mode sphere &
++              "Spline" Exec exec xlock -nolock -nice 0 -mode spline &
++              "Swarm" Exec exec xlock -nolock -nice 0 -mode swarm &
++              "Wator" Exec exec xlock -nolock -nice 0 -mode wator &
++              "Worm" Exec exec xlock -nolock -nice 0 -mode worm &
++              "World" Exec exec xlock -nolock -nice 0 -mode world &
+
+AddToMenu "Switches" "Switches" Title
++              "" NOP
++              "Bogie" Exec xterm +si -sk -sl 5000 -e tscons BOGIE &
++              "Harley" Exec xterm +si -sk -sl 5000 -e tscons HARLEY &
++              "Frick" Exec xterm +si -sk -sl 5000 -e tscons FRICK &
++              "Triad" Exec xterm +si -sk -sl 5000 -e tscons TRIAD &
++              "Moe" Exec xterm +si -sk -sl 5000 -e tscons MOE &
++              "Larry" Exec xterm +si -sk -sl 5000 -e tscons LARRY &
+
+AddToMenu "Colored_Terms_One" "24x80 white" Exec xterm -sb +si -sl 5000 -geometry 80x24 &
++              "24x80 black" Exec xterm -sb -bg black -fg white +si -sl 10000 -geometry 80x24 &
++              "48x90 white" Exec xterm -sb +si -sl 5000 -geometry 90x48 &
++              "48x90 black" Exec xterm -sb -bg black -fg white +si -sl 10000 -geometry 90x48 &
++              "cadet" Exec xterm -sb -bg cadetblue -fg black +si -sl 5000 -geometry 90x48 &
++              "blue" Exec xterm -sb -bg blue -fg white +si -sl 5000 -geometry 90x48 &
++              "orchid" Exec xterm -sb -bg orchid -fg black +si -sl 5000 -geometry 90x48 &
++              "slate" Exec xterm -sb -bg slateblue -fg white +si -sl 5000 -geometry 90x48 &
++              "grey" Exec xterm -sb -bg grey -fg black +si -sl 5000 -geometry 90x48 &
++              "gainsboro" Exec xterm -sb -bg gainsboro -fg black +si -sl 5000 -geometry 90x48 &
++              "FloralWhite" Exec xterm -sb -bg FloralWhite -fg black +si -sl 5000 -geometry 90x48 &
++              "PeachPuff" Exec xterm -sb -bg PeachPuff -fg black +si -sl 5000 -geometry 90x48 &
++              "cornsilk" Exec xterm -sb -bg cornsilk -fg black +si -sl 5000 -geometry 90x48 &
++              "honeydew" Exec xterm -sb -bg honeydew -fg black +si -sl 5000 -geometry 90x48 &
++              "lavender" Exec xterm -sb -bg lavender -fg black +si -sl 5000 -geometry 90x48 &
++              "DarkSlateGray" Exec xterm -sb -bg DarkSlateGray -fg white +si -sl 5000 -geometry 90x48 &
++              "DimGray" Exec xterm -sb -bg DimGray -fg black +si -sl 5000 -geometry 90x48 &
++              "SlateGray" Exec xterm -sb -bg SlateGray -fg black +si -sl 5000 -geometry 90x48 &
++              "LightSlateGray" Exec xterm -sb -bg LightSlateGray -fg black +si -sl 5000 -geometry 90x48 &
++              "LightGrey" Exec xterm -sb -bg LightGrey -fg black +si -sl 5000 -geometry 90x48 &
++              "MidnightBlue" Exec xterm -sb -bg MidnightBlue -fg white +si -sl 5000 -geometry 90x48 &
++              "NavyBlue" Exec xterm -sb -bg NavyBlue -fg white +si -sl 5000 -geometry 90x48 &
++              "DarkSlateBlue" Exec xterm -sb -bg DarkSlateBlue -fg white +si -sl 5000 -geometry 90x48 &
++              "SlateBlue" Exec xterm -sb -bg SlateBlue -fg white +si -sl 5000 -geometry 90x48 &
++              "MediumSlateBlue" Exec xterm -sb -bg MediumSlateBlue -fg white +si -sl 5000 -geometry 90x48 &
++              "LightSlateBlue" Exec xterm -sb -bg LightSlateBlue -fg white +si -sl 5000 -geometry 90x48 &
++              "MediumBlue" Exec xterm -sb -bg MediumBlue -fg white +si -sl 5000 -geometry 90x48 &
++              "RoyalBlue" Exec xterm -sb -bg RoyalBlue -fg white +si -sl 5000 -geometry 90x48 &
++              "DodgerBlue" Exec xterm -sb -bg DodgerBlue -fg white +si -sl 5000 -geometry 90x48 &
++              "DeepSkyBlue" Exec xterm -sb -bg DeepSkyBlue -fg white +si -sl 5000 -geometry 90x48 &
++              "SkyBlue" Exec xterm -sb -bg SkyBlue -fg white +si -sl 5000 -geometry 90x48 &
++              "LightSkyBlue" Exec xterm -sb -bg LightSkyBlue -fg white +si -sl 5000 -geometry 90x48 &
++              "SteelBlue" Exec xterm -sb -bg SteelBlue -fg white +si -sl 5000 -geometry 90x48 &
++              "LightSteelBlue" Exec xterm -sb -bg LightSteelBlue -fg white +si -sl 5000 -geometry 90x48 &
++              "LightBlue" Exec xterm -sb -bg LightBlue -fg white +si -sl 5000 -geometry 90x48 &
++              "PowderBlue" Exec xterm -sb -bg PowderBlue -fg white +si -sl 5000 -geometry 90x48 &
++              "PaleTurquoise" Exec xterm -sb -bg PaleTurquoise -fg black +si -sl 5000 -geometry 90x48 &
++              "DarkTurquoise" Exec xterm -sb -bg DarkTurquoise -fg black +si -sl 5000 -geometry 90x48 &
++              "MediumTurquoise" Exec xterm -sb -bg MediumTurquoise -fg black +si -sl 5000 -geometry 90x48 &
++              "cyan" Exec xterm -sb -bg cyan -fg black +si -sl 5000 -geometry 90x48 &
++              "LightCyan" Exec xterm -sb -bg LightCyan -fg black +si -sl 5000 -geometry 90x48 &
++              "MediumAqua" Exec xterm -sb -bg MediumAquamarine -fg black +si -sl 5000 -geometry 90x48&
++              "aquamarine" Exec xterm -sb -bg aquamarine -fg black +si -sl 5000 -geometry 90x48 &
++              "DarkGreen" Exec xterm -sb -bg DarkGreen -fg white +si -sl 5000 -geometry 90x48 &
++              "DarkOliveGreen" Exec xterm -sb -bg DarkOliveGreen -fg white +si -sl 5000 -geometry 90x48 &
++              "DarkSeaGreen" Exec xterm -sb -bg DarkSeaGreen -fg white +si -sl 5000 -geometry 90x48 &
++              "SeaGreen" Exec xterm -sb -bg SeaGreen -fg white +si -sl 5000 -geometry 90x48 &
++              "MediumSeaGreen" Exec xterm -sb -bg MediumSeaGreen -fg white +si -sl 5000 -geometry 90x48 &
+
+AddToMenu "Colored_Terms_Two" "LimeGreen" Exec xterm -sb -bg LimeGreen -fg black +si -sl 5000 -geometry 90x48 &
++              "YellowGreen" Exec xterm -sb -bg YellowGreen -fg black +si -sl 5000 -geometry 90x48 &
++              "ForestGreen" Exec xterm -sb -bg ForestGreen -fg black +si -sl 5000 -geometry 90x48 &
++              "OliveDrab" Exec xterm -sb -bg OliveDrab -fg black +si -sl 5000 -geometry 90x48 &
++              "DarkKhaki" Exec xterm -sb -bg DarkKhaki -fg black +si -sl 5000 -geometry 90x48 &
++              "PaleGoldenrod" Exec xterm -sb -bg PaleGoldenrod -fg black +si -sl 5000 -geometry 90x48 &
++              "LightYellow" Exec xterm -sb -bg LightYellow -fg black +si -sl 5000 -geometry 90x48 &
++              "yellow" Exec xterm -sb -bg yellow -fg black +si -sl 5000 -geometry 90x48 &
++              "LightGoldenrod" Exec xterm -sb -bg LightGoldenrod -fg black +si -sl 5000 -geometry 90x48 &
++              "goldenrod" Exec xterm -sb -bg goldenrod -fg black +si -sl 5000 -geometry 90x48 &
++              "DarkGoldenrod" Exec xterm -sb -bg DarkGoldenrod -fg black +si -sl 5000 -geometry 90x48 &
++              "RosyBrown" Exec xterm -sb -bg RosyBrown -fg black +si -sl 5000 -geometry 90x48 &
++              "IndianRed" Exec xterm -sb -bg IndianRed -fg black +si -sl 5000 -geometry 90x48 &
++              "SaddleBrown" Exec xterm -sb -bg SaddleBrown -fg black +si -sl 5000 -geometry 90x48 &
++              "sienna" Exec xterm -sb -bg sienna -fg black +si -sl 5000 -geometry 90x48 &
++              "peru" Exec xterm -sb -bg peru -fg black +si -sl 5000 -geometry 90x48 &
++              "burlywood" Exec xterm -sb -bg burlywood -fg black +si -sl 5000 -geometry 90x48 &
++              "beige" Exec xterm -sb -bg beige -fg black +si -sl 5000 -geometry 90x48 &
++              "wheat" Exec xterm -sb -bg wheat -fg black +si -sl 5000 -geometry 90x48 &
++              "SandyBrown" Exec xterm -sb -bg SandyBrown -fg black +si -sl 5000 -geometry 90x48 &
++              "tan" Exec xterm -sb -bg tan -fg black +si -sl 5000 -geometry 90x48 &
++              "chocolate" Exec xterm -sb -bg chocolate -fg black +si -sl 5000 -geometry 90x48 &
++              "brown" Exec xterm -sb -bg brown -fg black +si -sl 5000 -geometry 90x48 &
++              "DarkSalmon" Exec xterm -sb -bg DarkSalmon -fg black +si -sl 5000 -geometry 90x48 &
++              "LightSalmon" Exec xterm -sb -bg LightSalmon -fg black +si -sl 5000 -geometry 90x48 &
++              "orange" Exec xterm -sb -bg orange -fg black +si -sl 5000 -geometry 90x48 &
++              "DarkOrange" Exec xterm -sb -bg DarkOrange -fg black +si -sl 5000 -geometry 90x48 &
++              "coral" Exec xterm -sb -bg coral -fg black +si -sl 5000 -geometry 90x48 &
++              "LightCoral" Exec xterm -sb -bg LightCoral -fg black +si -sl 5000 -geometry 90x48 &
++              "OrangeRed" Exec xterm -sb -bg OrangeRed -fg black +si -sl 5000 -geometry 90x48 &
++              "red" Exec xterm -sb -bg red -fg black +si -sl 5000 -geometry 90x48 &
++              "PaleVioletRed" Exec xterm -sb -bg PaleVioletRed -fg black +si -sl 5000 -geometry 90x48 &
++              "maroon" Exec xterm -sb -bg maroon -fg white +si -sl 5000 -geometry 90x48 &
++              "MediumVioletRed" Exec xterm -sb -bg MediumVioletRed -fg black +si -sl 5000 -geometry 90x48 &
++              "violet" Exec xterm -sb -bg violet -fg black +si -sl 5000 -geometry 90x48 &
++              "VioletRed" Exec xterm -sb -bg VioletRed -fg black +si -sl 5000 -geometry 90x48 &
++              "magenta" Exec xterm -sb -bg magenta -fg black +si -sl 5000 -geometry 90x48 &
++              "violet" Exec xterm -sb -bg violet -fg black +si -sl 5000 -geometry 90x48 &
++              "plum" Exec xterm -sb -bg plum -fg black +si -sl 5000 -geometry 90x48 &
++              "orchid" Exec xterm -sb -bg orchid -fg black +si -sl 5000 -geometry 90x48 &
++              "MediumOrchid" Exec xterm -sb -bg MediumOrchid -fg black +si -sl 5000 -geometry 90x48 &
++              "DarkOrchid" Exec xterm -sb -bg DarkOrchid -fg black +si -sl 5000 -geometry 90x48 &
++              "DarkViolet" Exec xterm -sb -bg DarkViolet -fg black +si -sl 5000 -geometry 90x48 &
++              "BlueViolet" Exec xterm -sb -bg BlueViolet -fg black +si -sl 5000 -geometry 90x48 &
++              "purple" Exec xterm -sb -bg purple -fg black +si -sl 5000 -geometry 90x48 &
++              "MediumPurple" Exec xterm -sb -bg MediumPurple -fg black +si -sl 5000 -geometry 90x48 &
++              "thistle" Exec xterm -sb -bg thistle -fg black +si -sl 5000 -geometry 90x48 &
+
+#
+# Utilities
+#
+AddToMenu "Utilities" "Utilities" Title
++              "XCalc %mini.calc2.xpm%" Exec xcalc &
++              "" Nop
++              "Sybooks" Exec /documentation/sybooks/sun5m/bin/sybooks &
++              "Calender %mini.calendar.xpm%" Exec cm &
++              "Console" Exec xterm -iconic -C -n CONSOLE -geometry 40X5+10 &
+
+# This menu will fire up some very common utilities
+AddToMenu "Pop-O-Matic" "Menu %mini-x2.xpm%" Title
++              "" Nop
++              "Xterm %mini.xterm.xpm%" Exec xterm -sb +si -sl 5000 -geometry 80x24 &
++              "" Nop
++              "Servers %mini.telnet.xpm%" Popup Servers
++              "Switches" Popup Switches
++              "Screensaver" Popup Screensaver
++              "C-Term1 %mini.colors.xpm%" Popup Colored_Terms_One
++              "C-Term2 %mini.colors.xpm%" Popup Colored_Terms_Two
++              "" Nop
+#+              "Netscape %mini.netscape.xpm%" Exec /usr/local/bin/netscape -install&
++              "Netscape %mini.netscape.xpm%" Popup Netscape
++              "Clipboard %mini.clipboard.xpm%" Exec xclipboard -geometry 1000x250+125+700 &
++              "XMan %mini.xman.xpm%" Exec xman -notopbox &
++              "Pine %mini.mail2.xpm%" Exec xterm +sb -geometry 80x45+0 -n Pine -e /usr/local/bin/pine &
++              "" Nop
++              "Modules %mini.modules.xpm%" Popup Module-Popup
++              "Utilities" Popup Utilities
++              "" Nop
+
+AddToMenu "Netscape" "Netscape" Title
++		"" Nop
++		"Netscape %mini.netscape.xpm%" Exec /usr/local/bin/netscape &
++		"Netscape -install %mini.netscape.xpm%" Exec /usr/local/bin/netscape -install&
++              "" Nop
+
+# This defines the most common window operations
+AddToMenu "Window_Ops" "Window Ops" Title
++              "" Nop
++              "Refresh Screen %mini.refresh.xpm%" Refresh
++              "" Nop
++              "Move %mini.move.xpm%" Function Move-or-Raise
++              "Resize %mini.resize.xpm%" Function Resize-or-Raise
++              "Raise %mini.raise.xpm%" Raise
++              "Lower %mini.lower.xpm%" Lower
++              "(De)Iconify %mini.iconify.xpm%" Iconify
++              "(Un)Stick%mini.stick.xpm%" Stick
++              "(Un)Maximize %mini.maximize.xpm%" Function maximize_func
++              "" Nop
++              "Destroy %mini.destroy.xpm%" Destroy
++              "Delete %mini.delete.xpm%" Delete
++              "" Nop
+#+              "Exit %mini.exit.xpm%" Popup Quit-Verify
++              "Exit %mini.exit.xpm%" Module FvwmForm QuitVerify
+
+# A trimmed down version of Window_Ops", good for binding to decorations
+AddToMenu "Window_Ops2" "Window Ops" Title
++	       "Move" Function Move-or-Raise
++              "Resize" Function Resize-or-Raise
++              "Raise" Raise
++              "Lower" Lower
++              "Iconify" Iconify
++              "(Un)Stick" Stick
++              "" Nop
++              "Destroy" Destroy
++              "Delete" Delete
++              "" Nop
++              "ScrollBar" Module FvwmScroll 2 2
+
+*QuitVerifyGrabServer
+*QuitVerifyWarpPointer
+*QuitVerifyFont          *helvetica*m*r*n*14*
+*QuitVerifyButtonFont    *helvetica*m*r*n*14*
+*QuitVerifyFore         Bisque
+*QuitVerifyBack         Black
+*QuitVerifyItemFore      Bisque
+*QuitVerifyItemBack      Gray50
+
+# begin items
+*QuitVerifyLine          center
+*QuitVerifyText          "Do you really want to logout?"
+*QuitVerifyLine          expand
+*QuitVerifyButton   quit      "Logout"  ^M
+*QuitVerifyCommand  Quit
+*QuitVerifyButton   quit      "Restart"  ^R
+*QuitVerifyCommand  Restart fvwm2
+*QuitVerifyButton   quit      "Cancel"  ^[
+*QuitVerifyCommand  Nop
+
+Style "QuitVerify" NoTitle, NoHandles, BorderWidth 10
+
+#############################################################################
+# One more complex function - couldn't be defined earlier because it used 
+# pop-up menus
+#
+# This creates a motif-ish sticky menu for the title-bar window-ops
+# pop-up
+# Menu acts like normal twm menu if you just hold the button down,
+# but if you click instead, the menu stays up, motif style
+AddToFunc "window_ops_func" 
++		"C" PopUp Window_Ops2
++      		"M" PopUp Window_Ops2
++       	"D" Delete
+
+
+##############################################################################
+# This defines the mouse bindings
+
+# First, for the mouse in the root window
+# Button 1 gives the Utilities menu
+# Button 2 gives the Window Ops menu
+# Button 3 gives the WindowList (like TwmWindows)
+# I use the AnyModifier (A) option for the modifier field, so you can hold down
+# any shift-control-whatever combination you want!
+
+#     Button	Context Modifi 	Function
+Mouse 1		R   	A       Menu "Pop-O-Matic" Nop
+Mouse 2		R    	A      	WindowList 0 0
+Mouse 3		R    	A       Menu Window_Ops Nop
+#Mouse 3		R    	A      	Module "winlist" FvwmWinList transient
+
+
+# Configuring the titlebar is easy once you understand the ordering of the
+# buttons on the title bar:
+# The odd-numbered buttons are on the left side of the titlebar,
+# while even numbered ones are on the right side.
+#  A simple textual representation would be:
+#
+# [1][3][5][7][9]                 [0][8][6][4][2]
+#
+# Now the title bar buttons
+# Any button in the left title-bar button gives the window ops menu
+# Any button in the right title-bar button Iconifies the window
+# Any button in the rightmost title-bar button maximizes
+# Note the use of "Mouse 0" for AnyButton.
+# define the mouse bindings
+#     Button    Context Modifi  Function
+#Mouse 1         1       N       Function "Top-Left"
+#Mouse 2         1       N       PopUp Window_Ops"
+#Mouse 3         1       N       PopUp Window_Ops"
+#Mouse 1         2       N       Iconify
+#Mouse 2         2       N       Iconify
+#Mouse 3         2       N       Iconify
+#Mouse 1         3       N       Popup Window_Ops"
+#Mouse 0         4       N       Maximize
+#Mouse 6         1       N       Resize
+
+
+#     Button    Context Modifi  Function
+
+Mouse 0         1       A       Function "window_ops_func"
+Mouse 0         2       A       Delete
+Mouse 0         3       A       Menu Window_Ops" Nop
+Mouse 0         6       A       Iconify
+Mouse 0         5       A       WindowList
+Mouse 0         4       A       Maximize
+
+#     Button	Context Modifi 	Function
+#Mouse 0		1    	A      	Function "window_ops_func"
+#Mouse 0		2    	A     	Function "maximize_func"
+#Mouse 0		4    	A     	Iconify
+
+# Now the rest of the frame
+# Here I invoke my complex functions for Move-or-lower, Move-or-raise,
+# and Resize-or-Raise. 
+# Button 1 in the corner pieces, with any modifiers, gives resize or raise
+Mouse 1		F	A	Function "Resize-or-Raise"
+Mouse 2		F	A	Function "Resize-or-Raise"
+
+#ButtonStyle : 2 17 20x20@1 30x20@1 50x40@1 70x20@1 80x20@1 80x30@0 60x50@0 80x80@0 70x80@0 50x60@0 30x80@0 20x80@0 20x70@0 40x50@1 20x30@0 20x20@1
+#ButtonStyle : 4 11 10x10@1 40x10@1 25x20@0 80x70@1 90x60@1 90x85@0 60x85@0 70x75@1 20x30@0 10x40@0 10x10@1
+#ButtonStyle : 6 13 10x0@1 80x0@1 80x10@1 80x80@0 0x80@0 0x60@1 10x65@1 70x65@0 70x0@0 55x0@1 55x10@1 55x55@0 10x55@0
+
+######################### Button Styles ########################
+
+ButtonStyle 2 16 20x20@1 30x20@1 50x40@1 70x20@1 80x20@1 80x30@0 60x50@0 80x80@0 70x80@0 50x60@0 30x80@0 20x80@0 20x70@0 40x50@1 20x30@0 20x20@1
+#ButtonStyle 4 4 50x35@1 65x65@0 35x65@0 50x35@1
+ButtonStyle 4 10 25x40@1 20x40@1 20x80@1 60x80@1 60x65@1 35x65@0 85x65@0 85x10@0 30x10@1 30x65@1
+#ButtonStyle 6 4 50x65@1 35x35@1 65x35@1 50x65@0
+ButtonStyle 6 17 95x20@0 95x60@0 75x60@0 75x40@0 75x70@0 55x70@0 55x60@0 55x85@0 15x85@0 15x60@1 55x60@1 30x60@1 30x40@1 75x40@1 45x40@1 45x20@1 95x20@1
+
+#
+#
+# (FGS)
+#
+# This block specifies the behavior of mouse buttons and application windows.
+# In order, they permform the following:
+#
+#	(1) Resize window by grabbing side drag bars w/ left mouse button.
+#	(2) Resize window by holding down meta key and dragging in any
+#	    direction inside window with right mouse button.
+#	(3) Move window by grabbing window by its title bar with left mouse
+#	    button.
+#	(4) Move window my holding meta key and left mouse button inside
+#	    window.
+#
+#		
+#
+#
+#   Mouse x [where x is 0 (any button), 1 (left), 2 (middle), 3 (right)]
+# / 
+# |
+# |	Context: S (Sides of window)
+# |		 R (Root/background window)
+# |		 W (Application window)
+# |		 T (Title bar)
+# |		 I (Icon window)
+# |		 F (Frame/corner)
+# |		/
+# |		|	Modifiers: N (No modifiers)
+# |		|		   C (Control key)
+# |		|	   /	   S (Shift key)
+# |		|	  /	   M (Meta key)
+# |		|	 /	   A (Any modifier)
+# |		|	|
+# |		|	|
+# |		|	|	  Action/Function
+# |		|	|	  /
+# |		|	|	  |
+# =====	       ===     ===     ==============================
+
+Mouse 1		S	A	Function "Resize-or-Raise"
+Mouse 1		T	A	Function "Move-or-Raise"
+Mouse 1		W	M	Function "Move-or-Raise"
+Mouse 1		I	A	Function "Move-or-Iconify"
+Mouse 1		R	S	Desk -1 0
+Mouse 1		RW	SM	Scroll -100 0 
+Mouse 1		R	M	Scroll -10 0
+
+Mouse 2		S	A	Function "Resize-or-Raise"
+Mouse 2		T	A	Function "Move-or-Raise"
+Mouse 2		W	M	Function "Move-or-Raise"
+Mouse 2		I	A	Function "Move-or-Iconify"
+#Mouse 2		I	A	Iconify
+
+Mouse 3		S	A	Function "Resize-or-Raise"
+Mouse 3		T	A	Function "Move-or-Raise"
+Mouse 3		W	M	Function "Move-or-Raise"
+Mouse 3		I	A	Function "Move-or-Iconify"
+Mouse 3		R	S	Desk 1 0
+Mouse 3		RW	SM	Scroll +100 +0 
+Mouse 3		R	M	Scroll +10 +0
+
+#Key Left	A	S 	Desk -1 0
+#Key Right 	A	S	Desk 1 0
+
+############################################################################
+# Now some keyboard shortcuts.
+
+
+# Arrow Keys
+# press arrow + control anywhere, and scroll by 1 page
+Key Left	A	SM	Scroll -100 0
+Key Right	A	SM	Scroll +100 +0
+Key Up		A	SM	Scroll +0   -100
+Key Down	A	SM	Scroll +0   +100
+
+# press arrow + meta key, and scroll by 1/10 of a page
+Key Left	A	M	Scroll -10 +0
+Key Right	A	M	Scroll +10 +0
+Key Up		A	M	Scroll +0   -10
+Key Down	A	M	Scroll +0   +10
+
+# press shift arrow + control anywhere, and move the pointer by 1% of a page
+Key Left	A	SC	CursorMove -1 0
+Key Right	A	SC	CursorMove +1 +0
+Key Up		A	SC	CursorMove +0   -1
+Key Down	A	SC	CursorMove +0   +1
+
+# press shift arrow + meta key, and move the pointer by 1/10 of a page
+Key Left	A	C	CursorMove -10 +0
+Key Right	A	C	CursorMove +10 +0
+Key Up		A	C	CursorMove +0   -10
+Key Down	A	C	CursorMove +0   +10
+
+# Keyboard accelerators
+Key F1		A	N	Popup "Utilities"
+Key F2		A	N	Popup Window_Ops
+Key F3		A	N	Module FvwmWinList 
+Key F4		A	N	Iconify
+Key F5		A	N	Move
+Key F6		A	N	Resize
+#Key F7		A	N	CirculateUp
+#Key F8		A	N	CirculateDown
+Key F9		A	SCM	Quit
+
+#Page Up/Dapge Down keys are used to scroll by one desktop page
+# in any context, press page up/down + control
+# in root context, just pressing page up/down is OK
+# 
+# prefer the non-wrapping scroll. These are for example purposes only
+#Key Next	m      C       Scroll 100000 0
+#Key Next	R       N       Scroll 100000 0  
+#Key Prior	A       C       Scroll -100000 0
+#Key Prior	R       N       Scroll -100000 0
+
+Key Help	A	N	Exec xterm -sb +si -sl 5000 -geometry 80x24 &
+Key F10         W       N       Lower
+Key F11         W       N       RaiseLower
+Key F12		W	N	Iconify
+
+
+############################################################################
+############################################################################
+#Definitions used by the modules
+
+###################### GoodStuff button-bar ################################
+# Colors
+*FvwmButtonsFore Red
+#*FvwmButtonsBack #908090
+*FvwmButtonsBack DarkBlue
+#
+# Font
+*FvwmButtonsFont -adobe-helvetica-bold-r-*-*-10-*-*-*-*-*-*-*
+*FvwmButtonsGeometry  -1+1
+#
+# Layout: specify rows or columns, not both
+*FvwmButtonsColumns 2
+#
+# Define the buttons to use.....
+#
+# xterm or rxvts on remote machines can be done like this
+# Output re-direction is csh style, not sh style
+# You will want to substitute your own hosts here!
+#
+#*FvwmButtons(2x1, Icon fvwm2.xpm)
+*FvwmButtons(2x1, Swallow (NoKill, NoClose) "FvwmPager" 'Module FvwmPager 0 2')
+#*FvwmButtons (Swallow "FvwmXclock" 'Exec xclock -name FvwmXclock -bg rgb:90/80/90 -padding 5&')
+#*FvwmButtons(Swallow "xbiff" 'Exec xbiff -bg rgb:90/80/90 -geometry -1500-1500 &')
+*FvwmButtons - nscape.xpm Exec "" netscape -install
+*FvwmButtons - xv2.xpm Popup graphics
+*FvwmButtons - mail2.xpm  Exec "" xterm +sb -geometry 80x45+0 -n Pine -e /usr/local/bin/pine &
+*FvwmButtons - Jxlock.xpm  Popup ScreenSaver
+*FvwmButtons sol xterm.xpm  Exec "" exec  xterm -T 'SOL' -geometry +100+100 -bg white -fg black -e telnet sol.cs.binghamton.edu &
+*FvwmButtons Servers  xterm.xpm Popup Servers
+#*FvwmButtons (Swallow "xeyes" 'Exec xeyes -bg rgb:90/80/90 -geometry -1500-1500 &')
+*FvwmButtons Vantive toolbox.xpm  Exec "" exec  citrix-vantive-medium &
+*FvwmButtons - exit.xpm Popup Quit-Verify
+#
+#*FvwmButtons yoohoo  xterm.xpm Exec "" exec  xterm -d `hostname`:0.0 -T 'yoohoo' -geometry +100+100 -bg white -fg black -e rlogin yoohoo&
+#*FvwmButtons rouge  xterm.xpm Exec "" exec  xterm -d `hostname`:0.0 -T 'rouge' -geometry +100+100 -bg white -fg black -e rlogin rouge&
+#*FvwmButtons mudbug  xterm.xpm Exec "" exec  xterm -d `hostname`:0.0 -T 'mudbug' -geometry +100+100 -bg white -fg black -e rlogin mudbug&
+#*FvwmButtons struct  xterm.xpm Exec "" exec  xterm -d `hostname`:0.0 -T 'struct' -geometry +100+100 -bg white -fg black -e rlogin struct&
+#*FvwmButtons tree  xterm.xpm Exec "" exec  xterm -d `hostname`:0.0 -T 'tree' -geometry +100+100 -bg white -fg black -e rlogin tree&
+#*FvwmButtons ftc  xterm.xpm Exec "" exec  xterm -d `hostname`:0.0 -T 'felixthecat' -geometry +100+100 -bg white -fg black -e rlogin ftc&
+#
+#Style "FvwmButtons" NoTitle, NoHandles, BorderWidth 5 
+Style "FvwmButtons" NoTitle, NoHandles, BorderWidth 0 
+#
+########################## Setup the Cursor ################
+# 
+#Cursor 0 8
+######################### No Clutter ########################################
+# I only wrote NoClutter as a simple test case, but maybe some big sites like
+# universities really have usage problems (too many open windows)....
+# Time delays are in seconds.
+*FvwmNoClutter 3600 Iconify 1
+*FvwmNoClutter 86400 Delete
+*FvwmNoCLutter 172800 Destroy
+########################## Window-Identifier ###############################
+# Just choose colors and a fonts
+*FvwmIdentBack MidnightBlue
+*FvwmIdentFore Yellow
+*FvwmIdentFont -adobe-helvetica-medium-r-*-*-12-*-*-*-*-*-*-*
+########################### Pager #########################################
+*FvwmPagerBack darkseagreen4
+*FvwmPagerFore black
+*FvwmPagerFont -adobe-helvetica-bold-r-*-*-10-*-*-*-*-*-*-*
+*FvwmPagerHilight MistyRose3
+*FvwmPagerGeometry -1-1
+*FvwmPagerLabel 0 Sys
+*FvwmPagerLabel 1 Work
+*FvwmPagerLabel 2 Misc
+*FvwmPagerSmallFont 5x8
+##########################FvwmWinList##################################
+*FvwmWinListBack gray73
+*FvwmWinListFore Black
+*FvwmWinListFont -adobe-helvetica-bold-r-*-*-10-*-*-*-*-*-*-*
+*FvwmWinListAction Click1 Iconify -1,Focus
+*FvwmWinListAction Click2 Iconify
+*FvwmWinListAction Click3 Module "FvwmIdent" FvwmIdent
+*FvwmWinListUseSkipList
+*FvwmWinListGeometry +100 +100
+#
+*LoginGrabServer
+*LoginWarpPointer
+*LoginFont         *helvetica*m*r*n*14*
+*LoginButtonFont   *helvetica*m*o*n*14*
+*LoginInputFont    *cour*m*r*n*14*
+*LoginFore         Bisque
+*LoginBack         Black
+*LoginItemFore     Bisque
+*LoginItemBack     Gray50
+#
+# begin items
+*LoginLine         center
+*LoginText         "Start Options:"
+*LoginLine         center
+*LoginButton       quit " Quick  Start " ^[
+*LoginCommand      QuickStart
+*LoginLine         center
+*LoginButton       quit "All Programs" ^M
+*LoginCommand      RunProgs
+Style "Login" NoTitle, NoHandles, BorderWidth 10
+#  See : http://www.plig.org/xwinman/rc/fvwm2rc-mautv
+#
+DestroyMenu QuickStart
+AddToFunc "QuickStart"  "I"  Exec xterm -T "nmalik@`hostname`" +si -sk -sl 2000 -sb -ut 
++                       "I" Wait xterm
+#
+DestroyMenu RunProgs
+AddToFunc "RunProgs"  "I" Exec exec xrsh yoohoo xterm -title "nmalik@yoohoo" +si -sk -sl 2000 -sb -ut -n yoohoo
++       "I" Exec exec netscape -install -geometry +0+1020
++       "I" Wait netscape
+#
+#DestroyMenu RunProgs
+#AddToFunc "RunProgs"    "I" Exec exec xmailtool -iconic -geometry +425+83
+#+       "I" Exec exec xmb_new -geometry +906+117 -brief -usercode
+#+       "I" Exec exec xrsh yoohoo xterm -bg black -bd snow3 -fg bisque -iconic
+#+       "I" Exec exec xtt -geometry +581+118
+#+       "I" Exec exec xlab -geometry -1-1
+#+       "I" Exec exec netscape -install -geometry +0+1020
+#+       "I" Exec exec rsh yoohoo xemacs -iconic 
+#+       "I" Wait xemacs
+#
+DestroyMenu graphics
+AddToMenu "graphics" "Graphics" Title
++              "XV" Exec exec xv
++              "Taj Mahal" Exec exec xv -root -quit images/taj_mahal.jpg
++              "Niagara" Exec exec xv -root -rm 5 -maxpect -quit images/niagara1.jpg
++              "Rocks" Exec exec xv -root -quit images/rocks.gif
++              "Black" Exec exec xsetroot -solid black
++              "Rocks" Exec exec rocks -root &
++              "" Nop
+#
+# Start the taskbar on fvwm startup and restart
+#
+#
+AddToFunc "InitFunction" "I" Module FvwmTaskBar
+#
+#AddToFunc "RestartFunction" "I" Module FvwmTaskBar
+#
+#
+# Set the style for the taskbar window, keep always on top of another
+# windows
+#
+#
+Style "FvwmTaskBar" NoTitle,BorderWidth 4, HandleWidth 4,Sticky
+#Style "FvwmTaskBar" StaysOnTop, WindowSkipList, CirculateSkip
+
+*FvwmTaskBarBack #c3c3c3
+*FvwmTaskBarFore black
+*FvwmTaskBarTipsBack bisque
+*FvwmTaskBarTipsFore black
+*FvwmTaskBarGeometry +0-1
+*FvwmTaskBarFont -adobe-helvetica-medium-r-*-*-14-*-*-*-*-*-*-*
+*FvwmTaskBarSelFont -adobe-helvetica-bold-r-*-*-14-*-*-*-*-*-*-*
+*FvwmTaskBarStatusFont fixed
+#
+*FvwmTaskBarAction Click1 Iconify -1, Raise
+*FvwmTaskBarAction Click2 Iconify +1, Lower
+*FvwmTaskBarAction Click3 Iconify -1, Raise
+#
+*FvwmTaskBarUseSkipList
+*FvwmTaskBarUseIconNames
+*FvwmTaskBarAutoStick
+*FvwmTaskBarShowTips
+#
+*FvwmTaskBarButtonWidth 180
+*FvwmTaskBarBellVolume 20
+*FvwmTaskBarMailBox /var/spool/mail/nmalik
+*FvwmTaskBarMailCommand Exec xterm -e pine
+*FvwmTaskBarClockFormat %I:%M %p
+#
+*FvwmTaskBarStartName Modules
+*FvwmTaskBarStartMenu Module-Popup
+*FvwmTaskBarStartIcon mini.exp.xpm
+
+Mouse 1 T C WindowShade  # Ctrl + Mouse 1 on title shades the window

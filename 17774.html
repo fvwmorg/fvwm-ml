@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Compile Problems on Solaris 2.51 from Ali Erkan on 1996-09-09 (fvwm-users)</title>
+<meta name="Author" content="Ali Erkan (ase2_at_eecs.lehigh.edu)" />
+<meta name="Subject" content="FVWM: Compile Problems on Solaris 2.51" />
+<meta name="Date" content="1996-09-09" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Compile Problems on Solaris 2.51</h1>
+<!-- received="Mon Sep  9 00:23:24 1996" -->
+<!-- isoreceived="19960908232324" -->
+<!-- sent="Mon, 09 Sep 1996 01:14:32 -0400" -->
+<!-- isosent="19960909051432" -->
+<!-- name="Ali Erkan" -->
+<!-- email="ase2_at_eecs.lehigh.edu" -->
+<!-- subject="FVWM: Compile Problems on Solaris 2.51" -->
+<!-- id="3233A7B8.1137_at_eecs.lehigh.edu" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start17774" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="17775.html" accesskey="d" title="MuD: &quot;FVWM: Cursors&quot;">Next message</a> ]
+[ <a href="17773.html" title="Guenther Grau: &quot;Re: FVWM: FVWM-2 menu bar Pixmap problem&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="17779.html" accesskey="t" title="Guenther Grau: &quot;Re: FVWM: Compile Problems on Solaris 2.51&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17774" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17774" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17774" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17774" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Ali Erkan &lt;<a href="mailto:ase2_at_eecs.lehigh.edu?Subject=Re%3A%20FVWM%3A%20Compile%20Problems%20on%20Solaris%202.51">ase2_at_eecs.lehigh.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 09 Sep 1996 01:14:32 -0400</span><br />
+</address>
+<br />
+Hi,
+<br />
+<br />I cannot compile fvwm2.042 on a Solaris system. I have noticed that this
+<br />
+has been a problem for other people as well and yet the provided
+<br />
+solutions did not work in my case. First, some background:
+<br />
+<br />compiler:	gcc
+<br />
+assembler:	gnu as
+<br />
+linker:		gnu ld
+<br />
+xmp:		turned off (I do not have it yet)
+<br />
+system:		Ultra 1
+<br />
+OS:		Solaris 2.51
+<br />
+<br />I modified the Fvwm.tmpl so that *everything* that has to do with fvwm
+<br />
+will be installed under /apps/fvwm2.042.
+<br />
+<br />Problems:
+<br />
+<br />[1]	The -xF option upsets gcc; I've read somewhere that this is not 	
+<br />
+fatal; I can also undefine it from the command line
+<br />
+[2]	There is some assembler option that has the characters 92 in it. 	
+<br />
+The assembler called by gcc does not understand this. Again, I
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;had it undefined from the command line.
+<br />
+[3]	After the libfvwm.a file has been created, the very first time 			it
+<br />
+is being referenced in a link statement, the compiling fails
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;due to not finding symbols.
+<br />
+<br />Possible explanations:
+<br />
+<br />[1]	Did I mess up the system by forcing everything under /apps/...
+<br />
+[2]	Is imake not configured properly. I don't really know much about
+<br />
+&lt;	imake other than the fact that it creates makefiles for X
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;applications. No customization has been made on this machine
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;as far as imake is concerned.
+<br />
+[3]	???
+<br />
+<br />BTW, I tried many versions (1.x and 2.x) of this package and none of
+<br />
+them worked. 
+<br />
+<br />Thanks for any help.
+<br />
+<br />ase2_at_eecs.lehigh.edu
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon Sep 09 1996 - 00:23:24 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start17774">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="17775.html" title="Next message in the list">MuD: "FVWM: Cursors"</a></li>
+<li><dfn>Previous message</dfn>: <a href="17773.html" title="Previous message in the list">Guenther Grau: "Re: FVWM: FVWM-2 menu bar Pixmap problem"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="17779.html" title="Next message in this discussion thread">Guenther Grau: "Re: FVWM: Compile Problems on Solaris 2.51"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="17779.html" title="Message sent in reply to this message">Guenther Grau: "Re: FVWM: Compile Problems on Solaris 2.51"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17774" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17774" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17774" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17774" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

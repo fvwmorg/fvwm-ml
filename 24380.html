@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: FvwmEvent Core Dumps from Thomas A. Gardiner on 1999-06-12 (fvwm-users)</title>
+<meta name="Author" content="Thomas A. Gardiner (gardiner_at_pas.rochester.edu)" />
+<meta name="Subject" content="FVWM: FvwmEvent Core Dumps" />
+<meta name="Date" content="1999-06-12" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: FvwmEvent Core Dumps</h1>
+<!-- received="Sat Jun 12 14:13:09 1999" -->
+<!-- isoreceived="19990612131309" -->
+<!-- sent="Sat, 12 Jun 1999 15:09:51 -0400 (EDT)" -->
+<!-- isosent="19990612190951" -->
+<!-- name="Thomas A. Gardiner" -->
+<!-- email="gardiner_at_pas.rochester.edu" -->
+<!-- subject="FVWM: FvwmEvent Core Dumps" -->
+<!-- id="Pine.LNX.3.96URPAS-R.990612145944.4504B-100000_at_alfalfa.pas.rochester.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="Pine.LNX.3.96URPAS-R.990611185901.19610A-100000_at_alfalfa.pas.rochester.edu" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start24380" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="24381.html" accesskey="d" title="Dominik Vogt: &quot;Re: FVWM: Sizing individual FvwmButtons&quot;">Next message</a> ]
+[ <a href="24379.html" title="Jason Kibblewhite: &quot;Re: FVWM: xload problem&quot;">Previous message</a> ]
+[ <a href="24375.html" title="Thomas A. Gardiner: &quot;FVWM: FvwmEvent Core Dumps&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="24382.html" accesskey="t" title="Thomas A. Gardiner: &quot;Re: FVWM: FvwmEvent Core Dumps&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg24380" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg24380" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg24380" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg24380" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Thomas A. Gardiner &lt;<a href="mailto:gardiner_at_pas.rochester.edu?Subject=Re%3A%20FVWM%3A%20FvwmEvent%20Core%20Dumps">gardiner_at_pas.rochester.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sat, 12 Jun 1999 15:09:51 -0400 (EDT)</span><br />
+</address>
+<br />
+Hi All,
+<br />
+<br />I almost managed to get FvwmEvent to play sounds using rplay.  I noticed
+<br />
+the error was directly associated with the line 
+<br />
+<br />#0  __strcasecmp (s1=0x0, s2=0x8050ae0 &quot;focus_change_window&quot;)
+<br />
+<br />so I stripped down the number of FvwmEvent lines to just a few which looks
+<br />
+like this
+<br />
+<br />*FvwmEventCmd builtin-rplay
+<br />
+*FvwmEventRplayHost d185fcdc5.rochester.rr.com
+<br />
+*FvwmEventRplayVolume 127
+<br />
+*FvwmEventDelay 5
+<br />
+*FvwmEvent startup              matra.wav
+<br />
+*FvwmEvent shutdown             Shutdown.wav
+<br />
+*FvwmEvent iconify              shotgun.wav
+<br />
+*FvwmEvent deiconify            Wooeep.wav
+<br />
+*FvwmEvent new_page             Troll_Grumble.wav
+<br />
+*FvwmEvent new_desk             card_shuffle.wav
+<br />
+<br />Picking just a few that I can test.  Now I do not get a core dump, but
+<br />
+still get no sound.  Executing &quot;tail -f ~/.FVWM2-errors&quot; I get the
+<br />
+following output on a RedHat 5.2 system.
+<br />
+<br />[tom_at_d185fcdc5 tom]$ tail -f .FVWM2-errors 
+<br />
+Window-Ops menu...
+<br />
+Including_fvwm_hostmenus...
+<br />
+Including_defstyles...
+<br />
+Including_modules...
+<br />
+Including forms...
+<br />
+Including_init...
+<br />
+Done
+<br />
+[FVWM][AddToMenu]: &lt;&lt;WARNING&gt;&gt; Hotkey P is reused in menu StartMenu;
+<br />
+second binding ignored.
+<br />
+[FVWM][AddToMenu]: &lt;&lt;WARNING&gt;&gt; Hotkey W is reused in menu Window-Ops;
+<br />
+second binding ignored.
+<br />
+[FVWM][AddToMenu]: &lt;&lt;WARNING&gt;&gt; Hotkey L is reused in menu Window-Ops;
+<br />
+second binding ignored.
+<br />
+rplay: error writing to socket
+<br />
+rplay: error writing to socket
+<br />
+rplay: error writing to socket
+<br />
+rplay: error writing to socket
+<br />
+rplay: error writing to socket
+<br />
+rplay: error writing to socket
+<br />
+rplay: error writing to socket
+<br />
+<br /><br />The errors are occuring when I iconify windows and what-not.  I tried to
+<br />
+specify my hostname as the host to play to, to no avail.  Does anyone out
+<br />
+there have experience with rplay and how I might get around this error?
+<br />
+<br />Thanks,
+<br />
+<br />Tom
+<br />
+<br />Ps. Yes I know I have some hot-keys re-used, I just haven't had a chance
+<br />
+yet to learn how to correct this problem. :-)
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sat Jun 12 1999 - 14:13:09 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start24380">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="24381.html" title="Next message in the list">Dominik Vogt: "Re: FVWM: Sizing individual FvwmButtons"</a></li>
+<li><dfn>Previous message</dfn>: <a href="24379.html" title="Previous message in the list">Jason Kibblewhite: "Re: FVWM: xload problem"</a></li>
+<li><dfn>In reply to</dfn>: <a href="24375.html" title="Message to which this message replies">Thomas A. Gardiner: "FVWM: FvwmEvent Core Dumps"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="24382.html" title="Next message in this discussion thread">Thomas A. Gardiner: "Re: FVWM: FvwmEvent Core Dumps"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="24382.html" title="Message sent in reply to this message">Thomas A. Gardiner: "Re: FVWM: FvwmEvent Core Dumps"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg24380" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg24380" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg24380" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg24380" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:02 BST
+</em></small></p>
+</body>
+</html>

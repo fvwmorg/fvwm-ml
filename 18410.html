@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: FvwmConsole on solaris from Jens-U H Petersen on 1996-11-14 (fvwm-users)</title>
+<meta name="Author" content="Jens-U H Petersen (petersen_at_kurims.kyoto-u.ac.jp)" />
+<meta name="Subject" content="FVWM: FvwmConsole on solaris" />
+<meta name="Date" content="1996-11-14" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: FvwmConsole on solaris</h1>
+<!-- received="Thu Nov 14 01:37:09 1996" -->
+<!-- isoreceived="19961114013709" -->
+<!-- sent="Thu, 14 Nov 1996 16:36:12 +0900" -->
+<!-- isosent="19961114073612" -->
+<!-- name="Jens-U H Petersen" -->
+<!-- email="petersen_at_kurims.kyoto-u.ac.jp" -->
+<!-- subject="FVWM: FvwmConsole on solaris" -->
+<!-- id="199611140736.QAA19515_at_orion.kurims.kyoto-u.ac.jp" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start18410" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="18411.html" accesskey="d" title="Tobias Oetiker: &quot;FVWM: BUG: *FvwmIconBoxMaxIconSize 69x0 gives Errors&quot;">Next message</a> ]
+[ <a href="18409.html" title="hud: &quot;FVWM: GoodStuff buttons&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18410" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18410" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18410" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18410" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Jens-U H Petersen &lt;<a href="mailto:petersen_at_kurims.kyoto-u.ac.jp?Subject=Re%3A%20FVWM%3A%20FvwmConsole%20on%20solaris">petersen_at_kurims.kyoto-u.ac.jp</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 14 Nov 1996 16:36:12 +0900</span><br />
+</address>
+<br />
+Hello,
+<br />
+<br />I have been trying to build your FvwmConsole module (from
+<br />
+fvwm-2.0.43) under Solaris with X11R6.1.  Well, it seems to build
+<br />
+ok (all be it with a lot of warnings):
+<br />
+<br />---- Start of included text -----------------------8&lt;--- cut here -------------
+<br />
+% xmkmf;make
+<br />
+mv -f Makefile Makefile.bak
+<br />
+imake -DUseInstalled -I/usr/local/X11R6.1/lib/X11/config
+<br />
+gcc -fpcc-struct-return -O2 -Wall  -I/home/petersen/include  -I. -I../../libs  -I/usr/local/X11R6.1/include  -Dsun -DSVR4 -DHAVE_READLINE   -DSHAPE -DPIXMAP_BUTTONS -DXPM    -c FvwmConsole.c -o FvwmConsole.o
+<br />
+In file included from FvwmConsole.h:22,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from FvwmConsole.c:10:
+<br />
+../../configure.h:118: warning: `HAVE_READLINE' redefined
+<br />
+*Initialization*:1: warning: this is the location of the previous definition
+<br />
+FvwmConsole.c: In function `server':
+<br />
+FvwmConsole.c:142: warning: passing arg 2 of `bind' from incompatible pointer type
+<br />
+FvwmConsole.c:156: warning: passing arg 2 of `accept' from incompatible pointer type
+<br />
+rm -f FvwmConsole
+<br />
+LD_RUN_PATH=/usr/local/X11R6.1/lib gcc -fpcc-struct-return -o FvwmConsole -O2 -Wall     -L/usr/local/X11R6.1/lib FvwmConsole.o ../../libs/libfvwm2.a -L/home/petersen/lib/solaris -lXpm  -lXext -lX11    -lsocket -lnsl  
+<br />
+gcc -fpcc-struct-return -O2 -Wall  -I/home/petersen/include  -I. -I../../libs  -I/usr/local/X11R6.1/include  -Dsun -DSVR4 -DHAVE_READLINE   -DSHAPE -DPIXMAP_BUTTONS -DXPM    -c FvwmConsoleC.c -o FvwmConsoleC.o
+<br />
+In file included from FvwmConsole.h:22,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from FvwmConsoleC.c:1:
+<br />
+../../configure.h:118: warning: `HAVE_READLINE' redefined
+<br />
+*Initialization*:1: warning: this is the location of the previous definition
+<br />
+FvwmConsoleC.c: In function `main':
+<br />
+FvwmConsoleC.c:57: warning: passing arg 2 of `connect' from incompatible pointer type
+<br />
+gcc -fpcc-struct-return -O2 -Wall  -I/home/petersen/include  -I. -I../../libs  -I/usr/local/X11R6.1/include  -Dsun -DSVR4 -DHAVE_READLINE   -DSHAPE -DPIXMAP_BUTTONS -DXPM    -c getline.c -o getline.o
+<br />
+In file included from FvwmConsole.h:22,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from getline.c:1:
+<br />
+../../configure.h:118: warning: `HAVE_READLINE' redefined
+<br />
+*Initialization*:1: warning: this is the location of the previous definition
+<br />
+getline.c: In function `getline':
+<br />
+getline.c:38: warning: implicit declaration of function `add_history'
+<br />
+getline.c:21: warning: `line' might be used uninitialized in this function
+<br />
+rm -f FvwmConsoleC
+<br />
+LD_RUN_PATH=/usr/local/X11R6.1/lib gcc -fpcc-struct-return -o FvwmConsoleC -O2 -Wall     -L/usr/local/X11R6.1/lib FvwmConsoleC.o getline.o ../../libs/libfvwm2.a -L/home/petersen/lib/solaris -lXpm  -lXext -lX11 -lreadline -ltermcap    -lsocket -lnsl  
+<br />
+gcc -fpcc-struct-return -O2 -Wall  -I/home/petersen/include  -I. -I../../libs  -I/usr/local/X11R6.1/include  -Dsun -DSVR4 -DHAVE_READLINE   -DSHAPE -DPIXMAP_BUTTONS -DXPM    -c FCtest.c -o FCtest.o
+<br />
+In file included from FvwmConsole.h:22,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from FCtest.c:10:
+<br />
+../../configure.h:118: warning: `HAVE_READLINE' redefined
+<br />
+*Initialization*:1: warning: this is the location of the previous definition
+<br />
+FCtest.c: In function `server':
+<br />
+FCtest.c:145: warning: passing arg 2 of `bind' from incompatible pointer type
+<br />
+FCtest.c:161: warning: passing arg 2 of `accept' from incompatible pointer type
+<br />
+rm -f FCtest
+<br />
+LD_RUN_PATH=/usr/local/X11R6.1/lib gcc -fpcc-struct-return -o FCtest -O2 -Wall     -L/usr/local/X11R6.1/lib FCtest.o ../../libs/libfvwm2.a -L/home/petersen/lib/solaris -lXpm  -lXext -lX11    -lsocket -lnsl  
+<br />
+---- End of included text -------------------------8&lt;--- and here -------------
+<br />
+<br />but when I try to start it from fvwm2, it dies almost immediately,
+<br />
+with a message something like
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FvwmConsoleC error in connect
+<br />
+<br />(in fact I get exactly this message when I try to run
+<br />
+FvwmConsoleC from a shell by hand).
+<br />
+<br />I have readline, which I assume it is seeing, but anyway the
+<br />
+problem seems to be different: do you know how I can build under
+<br />
+solaris?
+<br />
+<br />Also I heard there is a new version of FvwmConsole, can you tell
+<br />
+me where I can get it from?
+<br />
+<br />Thanks, Jens
+<br />
+<br />ps I have it it working fine under Sunos4 and X11R6.
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Nov 14 1996 - 01:37:09 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start18410">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="18411.html" title="Next message in the list">Tobias Oetiker: "FVWM: BUG: *FvwmIconBoxMaxIconSize 69x0 gives Errors"</a></li>
+<li><dfn>Previous message</dfn>: <a href="18409.html" title="Previous message in the list">hud: "FVWM: GoodStuff buttons"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18410" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18410" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18410" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18410" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

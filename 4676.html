@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Double-dollars confusion from Gregg Dameron on 2002-03-23 (fvwm-users)</title>
+<meta name="Author" content="Gregg Dameron (gregg.dameron_at_lmco.com)" />
+<meta name="Subject" content="FVWM: Double-dollars confusion" />
+<meta name="Date" content="2002-03-23" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Double-dollars confusion</h1>
+<!-- received="Sat Mar 23 18:00:06 2002" -->
+<!-- isoreceived="20020323180006" -->
+<!-- sent="Fri, 22 Mar 2002 18:26:08 -0700" -->
+<!-- isosent="20020323012608" -->
+<!-- name="Gregg Dameron" -->
+<!-- email="gregg.dameron_at_lmco.com" -->
+<!-- subject="FVWM: Double-dollars confusion" -->
+<!-- id="3C9BD9AF.ED932E9F_at_lmco.com" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start4676" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="4677.html" accesskey="d" title="Mikhael Goikhman: &quot;Re: FVWM: Double-dollars confusion&quot;">Next message</a> ]
+[ <a href="4675.html" title="Tom Alsberg: &quot;Re: FVWM: Setting background images for page, speed...&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="4677.html" accesskey="t" title="Mikhael Goikhman: &quot;Re: FVWM: Double-dollars confusion&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg4676" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg4676" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg4676" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg4676" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Gregg Dameron &lt;<a href="mailto:gregg.dameron_at_lmco.com?Subject=Re%3A%20FVWM%3A%20Double-dollars%20confusion">gregg.dameron_at_lmco.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 22 Mar 2002 18:26:08 -0700</span><br />
+</address>
+<br />
+I'm unclear about the rules for double-dollars with bracketed
+<br />
+parameters.  From the man page:
+<br />
+<br />==================
+<br />
+Parameter expansion in the + command is  different  than  in
+<br />
+normal  commands.   If  the command is adding to a function,
+<br />
+single letter parameters  are  expanded  normally  which  is
+<br />
+often  not what was intended.  To suppress expansion the '$'
+<br />
+has to be doubled.  Parameters enclosed in brackets are pro-
+<br />
+tected from parameter expansion in these commands so the '$'
+<br />
+must not be doubled.
+<br />
+==================
+<br />
+<br />Suppose I have:
+<br />
+<br />DestroyMenu MyMenu
+<br />
+AddToMenu MyMenu
+<br />
++ &quot;My Item&quot; MyFunc $[param1]
+<br />
+<br />...
+<br />
+<br />DestroyFunc MyFunc
+<br />
+AddToFunc MyFunc
+<br />
++ I Exec exec my_script $0 $[param2] $[param3]
+<br />
+<br />where $[paramN] are being updated elsewhere via SetEnv.  Is it safe to
+<br />
+assume that what is true for functions is also true for menus:  the
+<br />
+parameter is expanded at runtime, not at read time, so a single dollar
+<br />
+is fine?
+<br />
+<br />If my &quot;+&quot; command has a PipeRead, do the rules change?  An earlier
+<br />
+posting stated:
+<br />
+<br />==================
+<br />
+<em class="quotelev4">&gt; &gt; &gt; &gt; You can't make calculations in fvwm commands.  Use the shell via
+</em><br />
+<br /><em class="quotelev4">&gt; &gt; &gt; &gt; PipeRead instead:
+</em><br />
+<em class="quotelev4">&gt; &gt; &gt; &gt;
+</em><br />
+<em class="quotelev4">&gt; &gt; &gt; &gt;   Key Left FSTW SCM PipeRead &quot;echo MoveToPage $[$[page.nx]-1]
+</em><br />
+$[page.ny]&quot;
+<br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt; Add another '$' here:
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt;   Key Left FSTW SCM PipeRead &quot;echo MoveToPage $$[$[page.nx]-1]
+</em><br />
+$[page.ny]&quot;
+<br />
+<em class="quotelev1">&gt;                                               ^^
+</em><br />
+<br />This would work if the command PipeRead was by itself. But the command
+<br />
+here is Key. If this line is placed in .fvwm2rc it's always equivalent
+<br />
+to:
+<br />
+<br />&nbsp;&nbsp;Key Left FSTW SCM PipeRead &quot;echo MoveToPage $$[0-1] 0&quot;
+<br />
+<br />We should escape all dollars for the Key command. The correct line is:
+<br />
+<br />&nbsp;&nbsp;Key Left FSTW SCM PipeRead &quot;echo MoveToPage $$$$[$$[page.nx]-1]
+<br />
+$$[page.ny]&quot;
+<br />
+==================
+<br />
+<br />When is it correct to double-dollar bracketed parameters?  Is the
+<br />
+quad-dollar guidance unique to Key-with-PipeRead?
+<br />
+<br />Gregg Dameron
+<br />
+<br /><br /><pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sat Mar 23 2002 - 18:00:06 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start4676">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="4677.html" title="Next message in the list">Mikhael Goikhman: "Re: FVWM: Double-dollars confusion"</a></li>
+<li><dfn>Previous message</dfn>: <a href="4675.html" title="Previous message in the list">Tom Alsberg: "Re: FVWM: Setting background images for page, speed..."</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="4677.html" title="Next message in this discussion thread">Mikhael Goikhman: "Re: FVWM: Double-dollars confusion"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="4677.html" title="Message sent in reply to this message">Mikhael Goikhman: "Re: FVWM: Double-dollars confusion"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg4676" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg4676" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg4676" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg4676" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:52 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: unable to compile without strerror from Cameron Simpson on 1996-11-14 (fvwm-users)</title>
+<meta name="Author" content="Cameron Simpson (cameron_at_research.canon.com.au)" />
+<meta name="Subject" content="Re: FVWM: unable to compile without strerror" />
+<meta name="Date" content="1996-11-14" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: unable to compile without strerror</h1>
+<!-- received="Thu Nov 14 16:35:05 1996" -->
+<!-- isoreceived="19961114163505" -->
+<!-- sent="Fri, 15 Nov 1996 09:33:58 +1100 (EST)" -->
+<!-- isosent="19961114223358" -->
+<!-- name="Cameron Simpson" -->
+<!-- email="cameron_at_research.canon.com.au" -->
+<!-- subject="Re: FVWM: unable to compile without strerror" -->
+<!-- id="19961115093356-cameron-1-09772_at_sid.research.canon.com.au" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="01BBD201.5A45E170_at_hr-mac.cisco.com" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start18415" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="18416.html" accesskey="d" title="4 U 2 N V: &quot;FVWM: INSTALL FVWM(%&quot;">Next message</a> ]
+[ <a href="18414.html" title="Madhukar Sinha: &quot;FVWM: Help&quot;">Previous message</a> ]
+[ <a href="18413.html" title="Jason Wong: &quot;FVWM: unable to compile without strerror&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18415" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18415" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18415" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18415" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Cameron Simpson &lt;<a href="mailto:cameron_at_research.canon.com.au?Subject=Re%3A%20FVWM%3A%20unable%20to%20compile%20without%20strerror">cameron_at_research.canon.com.au</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 15 Nov 1996 09:33:58 +1100 (EST)</span><br />
+</address>
+<br />
+Jason Wong &lt;jawong_at_cisco.com&gt; writes:
+<br />
+| This may be a dumb question, but I am having problems compiling FVWM95  all 
+<br />
+| the modules compile and even the fvwm95-2 however when I go to launch the 
+<br />
+| app it reports that ld: undefined error strerror
+<br />
+| Does anyone know where strerror can be found???
+<br />
+<br />If there's not one ifdeffed into the source, use the one below.
+<br />
+But _all_ ANSI C implementations are required to supply this - what
+<br />
+platform are you compiling this on?
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Cameron Simpson
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cameron_at_research.canon.com.au, DoD#743
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.zip.com.au/~cs/">http://www.zip.com.au/~cs/</a>
+<br />
+<pre>
+--
+I've seen things you people wouldn't believe.  Attack ships on fire off the
+shoulder of Orion. I've watched C-beams glitter in the dark near the
+Tannhauser Gate.  All these memories will be lost in time, like tears in rain.
+	- Roy Baty, _Blader Runner_
+#include	&lt;errno.h&gt;
+/* inline strerror() routine for UNIX beasts - needs POSIXising, etc */
+#define		Strerror(n)	(((n) &lt; 0 || (n) &gt;= sys_nerr) \
+					? &quot;error number out of range&quot; \
+					: sys_errlist[n])
+#ifdef		cs_STDC_strerror
+char *
+strerror(       size_t	n)
+{
+	return Strerror(n);
+}
+#endif
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Nov 14 1996 - 16:35:05 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start18415">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="18416.html" title="Next message in the list">4 U 2 N V: "FVWM: INSTALL FVWM(%"</a></li>
+<li><dfn>Previous message</dfn>: <a href="18414.html" title="Previous message in the list">Madhukar Sinha: "FVWM: Help"</a></li>
+<li><dfn>In reply to</dfn>: <a href="18413.html" title="Message to which this message replies">Jason Wong: "FVWM: unable to compile without strerror"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18415" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18415" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18415" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18415" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: Re: What's a good memory debugger? from Olivier Chapuis on 2002-07-11 (fvwm-users)</title>
+<meta name="Author" content="Olivier Chapuis (olivier.chapuis_at_free.fr)" />
+<meta name="Subject" content="Re: FVWM: Re: What's a good memory debugger?" />
+<meta name="Date" content="2002-07-11" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: Re: What's a good memory debugger?</h1>
+<!-- received="Thu Jul 11 02:09:00 2002" -->
+<!-- isoreceived="20020711010900" -->
+<!-- sent="Thu, 11 Jul 2002 08:47:37 +0200" -->
+<!-- isosent="20020711064737" -->
+<!-- name="Olivier Chapuis" -->
+<!-- email="olivier.chapuis_at_free.fr" -->
+<!-- subject="Re: FVWM: Re: What's a good memory debugger?" -->
+<!-- id="20020711064737.GC851_at_snoopy.parislyon" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="20020709055101.GA31216_at_spacedout.fries.net" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start5540" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="5541.html" accesskey="d" title="Thomas Glanzmann: &quot;FVWM: Disable global key bindings for a single application (please reply personally yo me)&quot;">Next message</a> ]
+[ <a href="5539.html" title="Dominik Vogt: &quot;Re: FVWM: Automatically raise certain windows on mouse enter, flickering of windows and widgets&quot;">Previous message</a> ]
+[ <a href="5520.html" title="David Fries: &quot;FVWM: Re: What&#0039;s a good memory debugger?&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="5562.html" accesskey="t" title="David Fries: &quot;FVWM: 300+MB for fwvm?&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg5540" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg5540" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg5540" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg5540" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Olivier Chapuis &lt;<a href="mailto:olivier.chapuis_at_free.fr?Subject=Re%3A%20FVWM%3A%20Re%3A%20What's%20a%20good%20memory%20debugger%3F">olivier.chapuis_at_free.fr</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 11 Jul 2002 08:47:37 +0200</span><br />
+</address>
+<br />
+On Tue, Jul 09, 2002 at 12:51:01AM -0500, David Fries wrote:
+<br />
+<em class="quotelev1">&gt; Speaking of memory usage, has anyone thought about looking for some
+</em><br />
+<em class="quotelev1">&gt; memory leaks?  Ok so I've been a lazy Debian user and I'm not up to
+</em><br />
+<em class="quotelev1">&gt; what's in CVS (2.4.7 right now), but here's what I'm seeing (from top).
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt;   PID USER     PRI  NI  SIZE SWAP  RSS SHARE STAT %CPU %MEM   TIME COMMAND
+</em><br />
+<em class="quotelev1">&gt;   668 david      8   0 15300 8948 6352  3440 S     0.0  1.9   3:35 fvwm2
+</em><br />
+<em class="quotelev1">&gt; after restarting fvwm, same windows etc
+</em><br />
+<em class="quotelev1">&gt;   668 david     10   0  2468    0 2468  1348 S     0.1  0.7   3:36 fvwm2
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<br />Maybe some part the leaks come from the Xlib. I think that the
+<br />
+debian package is compiled with --enable-multibyte. There is some memory
+<br />
+leaks in XCreateFontSet: each time a font is unloaded ~4kb is lost (this
+<br />
+depends on the font, with an utf8 locale and if you use an iso106464-1
+<br />
+font with a big coverage this may be a lot more).
+<br />
+<br />For example:
+<br />
+- if you delete a window ~4kb is lost (0kb with 2.5.2) 
+<br />
+- if you change your font and you have 20 windows, ~80kb is
+<br />
+lost (only 4kb with 2.5.2).
+<br />
+<br />I've recently sent a patch to the XFree developers but no feedback yet ...
+<br />
+<br />Note that I do not claim that all the leak come from the Xlib,
+<br />
+it is just a possibility. So one question and one query:
+<br />
+- Do you do something special regarding the fvwm config
+<br />
+(as regularly changing some config parameters)
+<br />
+- Can you send me your config file(s) if this is possible.
+<br />
+<br />Regards, Olivier 
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Jul 11 2002 - 02:09:00 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start5540">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="5541.html" title="Next message in the list">Thomas Glanzmann: "FVWM: Disable global key bindings for a single application (please reply personally yo me)"</a></li>
+<li><dfn>Previous message</dfn>: <a href="5539.html" title="Previous message in the list">Dominik Vogt: "Re: FVWM: Automatically raise certain windows on mouse enter, flickering of windows and widgets"</a></li>
+<li><dfn>In reply to</dfn>: <a href="5520.html" title="Message to which this message replies">David Fries: "FVWM: Re: What&#0039;s a good memory debugger?"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="5562.html" title="Next message in this discussion thread">David Fries: "FVWM: 300+MB for fwvm?"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="5562.html" title="Message sent in reply to this message">David Fries: "FVWM: 300+MB for fwvm?"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg5540" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg5540" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg5540" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg5540" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:53 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: BUG I found... from Mattias Brandstrom on 1997-02-15 (fvwm-users)</title>
+<meta name="Author" content="Mattias Brandstrom (d95-mbr_at_sm.luth.se)" />
+<meta name="Subject" content="FVWM: BUG I found..." />
+<meta name="Date" content="1997-02-15" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: BUG I found...</h1>
+<!-- received="Sat Feb 15 10:58:52 1997" -->
+<!-- isoreceived="19970215105852" -->
+<!-- sent="Sat, 15 Feb 1997 17:58:28 +0100 (MET)" -->
+<!-- isosent="19970215165828" -->
+<!-- name="Mattias Brandstrom" -->
+<!-- email="d95-mbr_at_sm.luth.se" -->
+<!-- subject="FVWM: BUG I found..." -->
+<!-- id="Pine.SUN.3.95.970215173541.3529A-100000_at_jota88.sm.luth.se" -->
+<!-- charset="ISO-8859-1" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start19262" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="19263.html" accesskey="d" title="Vin Shelton: &quot;FVWM: 2.0.45 should be linked with $(CCLINK)&quot;">Next message</a> ]
+[ <a href="19261.html" title="Romano Giannetti: &quot;FVWM: Re: fvwm / FvwmAuto problem&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19262" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19262" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19262" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19262" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Mattias Brandstrom &lt;<a href="mailto:d95-mbr_at_sm.luth.se?Subject=Re%3A%20FVWM%3A%20BUG%20I%20found...">d95-mbr_at_sm.luth.se</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sat, 15 Feb 1997 17:58:28 +0100 (MET)</span><br />
+</address>
+<br />
+Hello!
+<br />
+<br />I spent several hours last day trying to get fvwm2 to parse my
+<br />
+.fvwm2rc file with FvwmM4. It didn't work at first...
+<br />
+<br />In the man pages it says that if you want to use FvwmM4 you should
+<br />
+start fvwm with the following sequence:
+<br />
+<br />fvwm -f &quot;FvwmM4 .fvwm2rc&quot;
+<br />
+<br />This is not true!
+<br />
+<br />After trying out different theories for a long time I took a look
+<br />
+at the source for fvwm. In the part where the args passed to it is
+<br />
+checked one can see that:
+<br />
+<br />(Skip this if you are not interested in the details)
+<br />
+<br />If you pass -f as above:
+<br />
+<br />if (mystrncasecmp(argv[i],&quot;-f&quot;,2)==0)
+<br />
+{
+<br />
+&nbsp;&nbsp;if (++i &gt;= argc)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;usage();
+<br />
+&nbsp;&nbsp;config_command = (char *)malloc(6+strlen(argv[i]));
+<br />
+&nbsp;&nbsp;strcpy(config_command,&quot;Read &quot;);     &lt;---
+<br />
+&nbsp;&nbsp;strcat(config_command,argv[i]);     &lt;---
+<br />
+&nbsp;&nbsp;free_config_command = True;
+<br />
+}
+<br />
+<br />This will cause the config_command to be &quot;Read FvwmM4 .fvwm2rc&quot;.
+<br />
+Wich doesn't work.
+<br />
+<br />If you use:
+<br />
+<br />fvwm -cmd &quot;FvwmM4 .fvwm2rc&quot;
+<br />
+<br />to start fvwm this will happen:
+<br />
+<br />if (mystrncasecmp(argv[i],&quot;-cmd&quot;,4)==0)
+<br />
+{
+<br />
+&nbsp;&nbsp;if (++i &gt;= argc)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;usage();
+<br />
+&nbsp;&nbsp;config_command = argv[i];
+<br />
+}
+<br />
+<br />Now config_command will be &quot;FvwmM4 .fvwm2rc&quot;. And that, I think, is 
+<br />
+how it should be.
+<br />
+<br />I hope someone will find this information usefull. I would have fond
+<br />
+it so last night. :-)
+<br />
+<br />The man pages should atleast be changed to the correct information.
+<br />
+<br />Please feel free to make any comments about this. I would appreciate if
+<br />
+you could send any replys to this mail to my email aswell as to the
+<br />
+mailinglist. I don't know how often I am going to read this list.
+<br />
+<br />Regards
+<br />
+<br />/Mattias Brändström
+<br />
+<br />brasse_at_keso.campus.luth.se
+<br />
+<br /><br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sat Feb 15 1997 - 10:58:52 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start19262">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="19263.html" title="Next message in the list">Vin Shelton: "FVWM: 2.0.45 should be linked with $(CCLINK)"</a></li>
+<li><dfn>Previous message</dfn>: <a href="19261.html" title="Previous message in the list">Romano Giannetti: "FVWM: Re: fvwm / FvwmAuto problem"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19262" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19262" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19262" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19262" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

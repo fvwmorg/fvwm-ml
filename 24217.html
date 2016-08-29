@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Finally moved to 2.2, can't figure out some changes from David S. Goldberg on 1999-05-20 (fvwm-users)</title>
+<meta name="Author" content="David S. Goldberg (dsg_at_mitre.org)" />
+<meta name="Subject" content="FVWM: Finally moved to 2.2, can't figure out some changes" />
+<meta name="Date" content="1999-05-20" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Finally moved to 2.2, can't figure out some changes</h1>
+<!-- received="Thu May 20 12:17:24 1999" -->
+<!-- isoreceived="19990520111724" -->
+<!-- sent="20 May 1999 13:16:19 -0400" -->
+<!-- isosent="19990520171619" -->
+<!-- name="David S. Goldberg" -->
+<!-- email="dsg_at_mitre.org" -->
+<!-- subject="FVWM: Finally moved to 2.2, can't figure out some changes" -->
+<!-- id="m1baeuz7jbw.fsf_at_blackbird.mitre.org" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start24217" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="24218.html" accesskey="d" title="Brad Giaccio: &quot;Re: FVWM: Finally moved to 2.2, can&#0039;t figure out some changes&quot;">Next message</a> ]
+[ <a href="24216.html" title="Matthew Wade Roberts: &quot;Re: FVWM: Configuration sample site&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="24218.html" accesskey="t" title="Brad Giaccio: &quot;Re: FVWM: Finally moved to 2.2, can&#0039;t figure out some changes&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg24217" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg24217" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg24217" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg24217" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: David S. Goldberg &lt;<a href="mailto:dsg_at_mitre.org?Subject=Re%3A%20FVWM%3A%20Finally%20moved%20to%202.2%2C%20can't%20figure%20out%20some%20changes">dsg_at_mitre.org</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: 20 May 1999 13:16:19 -0400</span><br />
+</address>
+<br />
+I'm not prepared to call these bug reports just yet (well, the
+<br />
+FvwmConsole thing is a feature request); most likely I'm missing
+<br />
+something in the man page or the FAQ (both of which I've read).
+<br />
+Here's the issues I've run into that I can't find a fix for.  To head
+<br />
+off one expected answer, yes I did eliminate the old MODULEPATH and
+<br />
+have verified (via truss) that the 2.2 modules are the ones being
+<br />
+called for.  If it matters, I'm running on Solaris 2.5.1 and built
+<br />
+fvwm2 with the openwin libraries.  I also included xpm, readline and
+<br />
+rplay support.  No compilation errors occurred.
+<br />
+<br />1: I have a function that tries to warp to a given window if it
+<br />
+exists, if it doesn't it execs the desired program/runs the desired
+<br />
+module and warps to that.  Here's the definition:
+<br />
+<br />AddToFunc run-then-warp &quot;I&quot; $1 $2 $3 $4 $5 $6 $7 $8 $9
+<br />
++ &quot;I&quot; Wait $0
+<br />
++ &quot;I&quot; Next ($0 CirculateHit) myfocus 50 50 Iconify -1
+<br />
+<br />AddToFunc warp-or-run &quot;I&quot; Next ($0 CirculateHit) myfocus 50 50 Iconify -1
+<br />
++ &quot;I&quot; Next ($0) myfocus 50 50 Iconify -1
+<br />
++ &quot;I&quot; None ($0 CirculateHit) run-then-warp $0 $1 $2 $3 $4 $5 $6 $7 $8 $9
+<br />
+<br />Then I have in a menu definition:
+<br />
+<br />+ &quot;&amp;FvwmConsole&quot; warp-or-run FvwmConsole Module FvwmConsole
+<br />
+<br />But when I try to do this I get the following error:
+<br />
+<br />xterm:  bad command line option &quot;$3&quot;
+<br />
+[xterm usage message deleted]
+<br />
+<br />Unlike 2.0.46, which didn't pass additional function args if they
+<br />
+didn't exist, 2.2 seems to put in the $# stuff.  Is this a bug or am I 
+<br />
+just missing something?
+<br />
+<br />2: FlipFocus doesn't work the way I expect.  I have the following:
+<br />
+<br />AddToFunc myfocus &quot;I&quot; $2 $3 $4 $5 $6 $7 $8 $9
+<br />
++ &quot;I&quot; WarpToWindow $0 $1
+<br />
++ &quot;I&quot; Focus
+<br />
+<br />AddToFunc togglewindow &quot;I&quot; FlipFocus
+<br />
++ &quot;I&quot; Prev (!iconic CurrentPage) myfocus 0 0 Nop
+<br />
+<br />And bind togglewindow to Alt-TAB.  Under 2.0.46 that caused Alt-TAB to
+<br />
+switch between only the top two windows.  Under 2.2 it switches
+<br />
+amongst all the windows on the current page.  I'm clearly missing
+<br />
+something but I've tried replacing the Prev with Current and Next and
+<br />
+Adding a Current to the first line.  All to no avail.  How to get the
+<br />
+old behavior (other than downgrading :-)?
+<br />
+<br />3: My FvwmForms no longer work.  Near as I can tell my configs conform 
+<br />
+to the man pages, but when I try to start it I get the following:
+<br />
+<br />X Error of failed request:  BadValue (integer parameter out of range for operation)
+<br />
+&nbsp;&nbsp;Major opcode of failed request:  1 (X_CreateWindow)
+<br />
+&nbsp;&nbsp;Value in failed request:  0x0
+<br />
+&nbsp;&nbsp;Serial number of failed request:  31
+<br />
+&nbsp;&nbsp;Current serial number in output stream:  41
+<br />
+<br />4: (feature request, I'll try to come up with a patch later today) My
+<br />
+home directory is in AFS space which means that I can't have FIFOs etc
+<br />
+in there.  For FvwmCommand, I can specify the -f option to provide for
+<br />
+an alternate path for the FIFO.  I need to be able to do the same for
+<br />
+FvwmConsole, which is hardwired to $HOME.  I realize I can try
+<br />
+wrapping FvwmConsole with a shell script that sets HOME and execs
+<br />
+FvwmConsole, but that seems suboptimal.  Unless there's a way to set
+<br />
+an envar in .fvwm2rc that I've missed.
+<br />
+<br />Thanks for any help,
+<br />
+<pre>
+-- 
+Dave Goldberg
+Post: The Mitre Corporation\MS B325\202 Burlington Rd.\Bedford, MA 01730
+Phone: 781-271-3887
+Email: dsg_at_mitre.org
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu May 20 1999 - 12:17:24 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start24217">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="24218.html" title="Next message in the list">Brad Giaccio: "Re: FVWM: Finally moved to 2.2, can&#0039;t figure out some changes"</a></li>
+<li><dfn>Previous message</dfn>: <a href="24216.html" title="Previous message in the list">Matthew Wade Roberts: "Re: FVWM: Configuration sample site"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="24218.html" title="Next message in this discussion thread">Brad Giaccio: "Re: FVWM: Finally moved to 2.2, can&#0039;t figure out some changes"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="24218.html" title="Message sent in reply to this message">Brad Giaccio: "Re: FVWM: Finally moved to 2.2, can&#0039;t figure out some changes"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg24217" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg24217" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg24217" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg24217" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:02 BST
+</em></small></p>
+</body>
+</html>

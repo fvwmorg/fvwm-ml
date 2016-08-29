@@ -1,0 +1,44 @@
+# A dynamic popup menu for the window operations
+# Some entries depend on the window state
+
+AddToMenu WindowMenu "Window" Title
++ DynamicPopupAction Function WindowMenuF
+
+DestroyFunc WindowMenuF
+AddToFunc WindowMenuF
++ I DestroyMenu recreate WindowMenu
++ I AddToMenu WindowMenu "Window" Title
++ I + "&Move"			Move
++ I + "&Resize"			Resize
++ I + "R&aise"			Raise
++ I + "&Lower"			Lower
++ I Current (Iconic) + "De&iconify"	Iconify
++ I Current (!Iconic) + "&Iconify"	Iconify
++ I Current (Sticky) + "Un&stick"	Stick
++ I Current (!Sticky) + "&Stick"	Stick
++ I Current (Shaded) + "Un&shade"	WindowShade
++ I Current (!Shaded) + "&Shade"	WindowShade
++ I Current (Maximized) + "Unma&ximize"	Maximize layer grow grow
++ I Current (!Maximized) + "Ma&ximize"	Maximize layer grow grow
++ I Current (!Maximized) + "Maximize &Vertical"	Maximize layer 0 grow
++ I Current (!Maximized) + "Maximize &Horizontal"	Maximize layer grow 0
++ I + ""			Nop
++ I + "Move to &Desk"		Popup MoveToDeskMenu
++ I + "Title Position"		PopUp TitlePosMenu
++ I + ""			Nop
++ I + "Identify"		Module FvwmIdent
++ I + "ScrollBar"		Module FvwmScroll 2 2
++ I + "Print"			PrintFunction
++ I + "Print Reverse"		PrintReverseFunction
++ I + ""			Nop
++ I + "&Delete"			Delete
++ I + "&Close"			Close
++ I + "Destroy"			Destroy
+
+# This one works
+Mouse 1		1	A	Menu WindowMenu Nop
+
+# This one does not work for some entries
+*FvwmIconMan: Action Mouse 3 N \
+  sendcommand 'Menu WindowMenu Rectangle +$[left]+$[top] 0 -100m'
+

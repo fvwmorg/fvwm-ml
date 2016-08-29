@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Re: system wide system.fvwm2rc under Red Hat Linux from Neil Zanella on 1999-01-02 (fvwm-users)</title>
+<meta name="Author" content="Neil Zanella (nzanella_at_cs.mun.ca)" />
+<meta name="Subject" content="FVWM: Re: system wide system.fvwm2rc under Red Hat Linux" />
+<meta name="Date" content="1999-01-02" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Re: system wide system.fvwm2rc under Red Hat Linux</h1>
+<!-- received="Fri Jan  1 21:55:15 1999" -->
+<!-- isoreceived="19990101215515" -->
+<!-- sent="Sat, 2 Jan 1999 00:26:22 -0330 (NST)" -->
+<!-- isosent="19990102035622" -->
+<!-- name="Neil Zanella" -->
+<!-- email="nzanella_at_cs.mun.ca" -->
+<!-- subject="FVWM: Re: system wide system.fvwm2rc under Red Hat Linux" -->
+<!-- id="Pine.OSF.3.91.990102002503.29269A-100000_at_garfield.cs.mun.ca" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start23298" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="23299.html" accesskey="d" title="Paul D. Smith: &quot;Re: FVWM: New function, Replace&quot;">Next message</a> ]
+[ <a href="23297.html" title="Kendrick Vargas: &quot;Re: FVWM: hard question: fvwm2 and Red Hat (5.0 and above)&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="23301.html" accesskey="t" title="Dominik Vogt: &quot;Re: FVWM: Re: system wide system.fvwm2rc under Red Hat Linux&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg23298" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg23298" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg23298" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg23298" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Neil Zanella &lt;<a href="mailto:nzanella_at_cs.mun.ca?Subject=Re%3A%20FVWM%3A%20Re%3A%20system%20wide%20system.fvwm2rc%20under%20Red%20Hat%20Linux">nzanella_at_cs.mun.ca</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sat, 2 Jan 1999 00:26:22 -0330 (NST)</span><br />
+</address>
+<br />
+Hello,
+<br />
+<br />Here is how one can implement a custom wide system.fvwm2rc file without
+<br />
+having to put dotfiles in a user's home directory. The following only
+<br />
+applies to users starting fvwm2 under a Red Hat Linux 5.0 system (or above).
+<br />
+It will work for both users starting Fvwm2 with xinit (aka startx) in runlevel
+<br />
+3 as well as for users starting Fvwm2 with xdm in runlevel 5.
+<br />
+The runlevel is determined by the first uncommented line of the /etc/inittab
+<br />
+file:
+<br />
+<br />----- begin /etc/inittab snippet ---------------------------------------------
+<br />
+#
+<br />
+# inittab       This file describes how the INIT process should set up
+<br />
+#               the system in a certain run-level.
+<br />
+#
+<br />
+# Author:       Miquel van Smoorenburg, &lt;miquels_at_drinkel.nl.mugnet.org&gt;
+<br />
+#               Modified for RHS Linux by Marc Ewing and Donnie Barnes
+<br />
+#
+<br />
+<br /># Default runlevel. The runlevels used by RHS are:
+<br />
+#   0 - halt (Do NOT set initdefault to this)
+<br />
+#   1 - Single user mode
+<br />
+#   2 - Multiuser, without NFS (The same as 3, if you do not have networking)
+<br />
+#   3 - Full multiuser mode
+<br />
+#   4 - unused
+<br />
+#   5 - X11
+<br />
+#   6 - reboot (Do NOT set initdefault to this)
+<br />
+#
+<br />
+#id:3:initdefault:
+<br />
+id:5:initdefault:
+<br />
+----- end /etc/inittab snippet -----------------------------------------------
+<br />
+<br />So, here is how you do it:
+<br />
+<br />Step 1)
+<br />
+<br />Place your new configuration file under /etc/X11/fvwm2 as:
+<br />
+<br />/etc/X11/fvwm2/system.fvwm2rc
+<br />
+<br />Step 2)
+<br />
+<br />mv /etc/X11/xinit/Xclients /etc/X11/xinit/Xclients.old
+<br />
+<br />Step 3)
+<br />
+<br />Use the following file as the new /etc/X11/xinit/Xclients file snipping
+<br />
+the parts containing dashes (-).
+<br />
+<br />----- begin /etc/X11/xinit/Xclients ------------------------------------
+<br />
+#!/bin/bash
+<br />
+<br />########################################################################
+<br />
+# -*- sh -*-                                                           #
+<br />
+#                                                                      #
+<br />
+# ~/.Xclients: used by startx (xinit) to start up a window manager and #
+<br />
+# any other clients you always want to start an X session with.        #
+<br />
+#                                                                      #
+<br />
+# feel free to edit this file to suit your needs.                      #
+<br />
+########################################################################
+<br />
+<br />exec fvwm2 -f /etc/X11/fvwm2/system.fvwm2rc
+<br />
+<br />----- end /etc/X11/xinit/Xclients --------------------------------------
+<br />
+<br />Step 4)
+<br />
+<br />If this still doesn't work then it may be because you may have a
+<br />
+<br />&quot;.wm_config&quot; file in your home directory. Delete it and try again.
+<br />
+<br />Step 5)
+<br />
+<br />Reboot your system and good luck!!!
+<br />
+<br />Best Regards,
+<br />
+<br />Neil
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://fvwm.math.uh.edu/">http://fvwm.math.uh.edu/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Jan 01 1999 - 21:55:15 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start23298">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="23299.html" title="Next message in the list">Paul D. Smith: "Re: FVWM: New function, Replace"</a></li>
+<li><dfn>Previous message</dfn>: <a href="23297.html" title="Previous message in the list">Kendrick Vargas: "Re: FVWM: hard question: fvwm2 and Red Hat (5.0 and above)"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="23301.html" title="Next message in this discussion thread">Dominik Vogt: "Re: FVWM: Re: system wide system.fvwm2rc under Red Hat Linux"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="23301.html" title="Message sent in reply to this message">Dominik Vogt: "Re: FVWM: Re: system wide system.fvwm2rc under Red Hat Linux"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="23302.html" title="Message sent in reply to this message">Dan Espen: "Re: FVWM: Re: system wide system.fvwm2rc under Red Hat Linux"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="23326.html" title="Message sent in reply to this message">Jakob Ess: "Re: FVWM: Re: system wide system.fvwm2rc under Red Hat Linux"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg23298" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg23298" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg23298" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg23298" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:02 BST
+</em></small></p>
+</body>
+</html>

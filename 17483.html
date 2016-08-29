@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: 'module failed:' ?? from Chris Laas on 1996-07-26 (fvwm-users)</title>
+<meta name="Author" content="Chris Laas (chris_at_dreamcom.net)" />
+<meta name="Subject" content="Re: FVWM: 'module failed:' ??" />
+<meta name="Date" content="1996-07-26" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: 'module failed:' ??</h1>
+<!-- received="Fri Jul 26 00:18:00 1996" -->
+<!-- isoreceived="19960725231800" -->
+<!-- sent="Fri, 26 Jul 1996 01:03:20 -0400" -->
+<!-- isosent="19960726050320" -->
+<!-- name="Chris Laas" -->
+<!-- email="chris_at_dreamcom.net" -->
+<!-- subject="Re: FVWM: 'module failed:' ??" -->
+<!-- id="31F85198.544668AB_at_dreamcom.com" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="199607260148.BAA11928_at_lighthouse.umr.edu" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start17483" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="17484.html" accesskey="d" title="Larry Schwimmer: &quot;FVWM: PATCH: fvwm-2.0.43&quot;">Next message</a> ]
+[ <a href="17482.html" title="Chris Laas: &quot;Re: FVWM: ALT-TAB&quot;">Previous message</a> ]
+[ <a href="17480.html" title="Todd Fries: &quot;FVWM: &#0039;module failed:&#0039; ??&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17483" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17483" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17483" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17483" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Chris Laas &lt;<a href="mailto:chris_at_dreamcom.net?Subject=Re%3A%20FVWM%3A%20'module%20failed%3A'%20%3F%3F">chris_at_dreamcom.net</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 26 Jul 1996 01:03:20 -0400</span><br />
+</address>
+<br />
+Todd Fries wrote:
+<br />
+<em class="quotelev1">&gt;[snip]
+</em><br />
+<em class="quotelev1">&gt; AddToMenu &quot;DeskMenu&quot;
+</em><br />
+<em class="quotelev1">&gt; + &quot;Grab a Shell%mini-term.xpm%&quot; Exec rxvt
+</em><br />
+<em class="quotelev1">&gt; + &quot;&quot; Nop
+</em><br />
+<em class="quotelev1">&gt; [snip]
+</em><br />
+<em class="quotelev1">&gt; However, if I click quickly, which is the reason I have it as the first
+</em><br />
+<em class="quotelev1">&gt; item on the menu, then I get the following errors from fvwm:
+</em><br />
+<em class="quotelev1">&gt; [FVWM][executeModule]: &lt;&lt;ERROR&gt;&gt; Execution of module failed: /usr/local/lib/fvwm/
+</em><br />
+<em class="quotelev1">&gt; Permission denied
+</em><br />
+<br />Your problem is on the first line of your menu definition, AddToMenu &quot;DeskMenu&quot;.
+<br />
+Fvwm expects an item and command of some sort after each AddToMenu command, so the
+<br />
+way you have it now, Fvwm interprets there being some sort of null command there,
+<br />
+and tries to execute it, failing of course.  At least, that's the way I interpreted
+<br />
+it when I got the same errors.  The way to fix it is to move the first line of you
+<br />
+menu definition to the AddToMenu line, like this:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AddToMenu &quot;DeskMenu&quot; &quot;Grab a Shell%mini-term.xpm%&quot; Exec rxvt &amp;
+<br />
+It's ugly, yes, but it works.  The Fvwm developers should fix this for 2.1.0, if
+<br />
+they can.  It's not so bad if you do something like:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AddToMenu &quot;DeskMenu&quot; &quot;Desk Menu&quot; Title
+<br />
+Then you can pretend that the Title is meant to go in the AddToMenu line :)
+<br />
+<br />Hope this helps!
+<br />
+<br />--Xris
+<br />
+<br /><pre>
+-- 
+&quot;If A equals success, then the formula is A = X + Y + Z.  X is work.  Y is
+play.  Z is keep your mouth shut.&quot; -- Albert Einstein
+&quot;I'm not like John Lennon, who thought he was the Almighty.  I just think I'm
+John Lennon.&quot; -- Noel Gallagher, lead singer, guitarist, and songwriter of
+Oasis, on the importance of remaining humble despite great fame.
+Chris &quot;Xris&quot; Laas (that's me!) can be found lurking at chris_at_dreamcom.net or
+chrisl_at_cybercom.net.  If I say something wrong, don't hold Dream Communications
+responsible; however, if I have an idea inspired by genius, Dreamcom owns it.
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Jul 26 1996 - 00:18:00 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start17483">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="17484.html" title="Next message in the list">Larry Schwimmer: "FVWM: PATCH: fvwm-2.0.43"</a></li>
+<li><dfn>Previous message</dfn>: <a href="17482.html" title="Previous message in the list">Chris Laas: "Re: FVWM: ALT-TAB"</a></li>
+<li><dfn>In reply to</dfn>: <a href="17480.html" title="Message to which this message replies">Todd Fries: "FVWM: &#0039;module failed:&#0039; ??"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17483" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17483" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17483" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17483" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

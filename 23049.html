@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: FvwmTaskBarAutoHide has no clothes from Jui-Hsuan Feng on 1998-11-19 (fvwm-users)</title>
+<meta name="Author" content="Jui-Hsuan Feng (fengj_at_percy.engr.wisc.edu)" />
+<meta name="Subject" content="Re: FVWM: FvwmTaskBarAutoHide has no clothes" />
+<meta name="Date" content="1998-11-19" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: FvwmTaskBarAutoHide has no clothes</h1>
+<!-- received="Thu Nov 19 17:12:18 1998" -->
+<!-- isoreceived="19981119171218" -->
+<!-- sent="Thu, 19 Nov 1998 17:27:43 CST" -->
+<!-- isosent="19981119232743" -->
+<!-- name="Jui-Hsuan Feng" -->
+<!-- email="fengj_at_percy.engr.wisc.edu" -->
+<!-- subject="Re: FVWM: FvwmTaskBarAutoHide has no clothes" -->
+<!-- id="199811192327.RAA19116_at_circe.engr.wisc.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="199811191947.OAA20159_at_pm0.bu.edu" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start23049" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="23050.html" accesskey="d" title="Fabien Villard: &quot;FVWM: Re: Hello ?&quot;">Next message</a> ]
+[ <a href="23048.html" title="Tom Toffoli: &quot;FVWM: FvwmTaskBarAutoHide has no clothes&quot;">Previous message</a> ]
+[ <a href="23048.html" title="Tom Toffoli: &quot;FVWM: FvwmTaskBarAutoHide has no clothes&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg23049" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg23049" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg23049" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg23049" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Jui-Hsuan Feng &lt;<a href="mailto:fengj_at_percy.engr.wisc.edu?Subject=Re%3A%20FVWM%3A%20FvwmTaskBarAutoHide%20has%20no%20clothes">fengj_at_percy.engr.wisc.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 19 Nov 1998 17:27:43 CST</span><br />
+</address>
+<br />
+Hi,
+<br />
+<br /><em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; 11-19-98
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; The AutoHide feature of the fvmw2 TaskBar (used, e.g., in AnotherLevel) does
+</em><br />
+<em class="quotelev1">&gt; not work well; more bluntly, I'd say it's BROKEN. Can anyone at fvwm2 or
+</em><br />
+<em class="quotelev1">&gt; RedHat fix it or tell us how to patch it?
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<br />As far as I kown, it's fvwm2's issue. Some of them still remain in the
+<br />
+current fvwm CVS tree. If you have the source code, check the function
+<br />
+RaiseWindow(FvwmWindow *t) in the file fvwm/misc.c: the last line reads
+<br />
+<br />void RaiseWindow(FvwmWindow *t)
+<br />
+{
+<br />
+&nbsp;&nbsp;...
+<br />
+&nbsp;&nbsp;raisePanFrames();
+<br />
+}
+<br />
+<br />The PanFrames are used to eat out all the events when the pointer get to the
+<br />
+edge of the screen. If an application window is bigger than the screen, and
+<br />
+the pointer enters one of these unvisibel PanFrames windows, fvwm will scroll
+<br />
+the screen so other part of that application window can be shown on the screen.
+<br />
+In early days, people tend to use bigger virtual desk top, say 1024x768,
+<br />
+than the actual desk top resolution, say 800x640, this scrolling feature
+<br />
+was pretty good. Or similarly, it can be used to switch to another desk top
+<br />
+without click on the pager. This is the reason why the TaskBar always hides
+<br />
+in the pane 2, because it will never get a chance to be raised up after
+<br />
+those PanFrames.
+<br />
+<br />Another problem is cause by the function move_Loop() in the file fvwm/move.c
+<br />
+(maybe in another procedure). It will adjust those way-out-of-edge windows
+<br />
+back to screen. You can do a simple test by drag any application window
+<br />
+to the edge and hide it as much as you can in pane 3, it will behave the same,
+<br />
+and TaskBar is one of the application windows.
+<br />
+<br />Surely there are workarounds, like rasing those Always-on-top windows after
+<br />
+PanFrames windows. But those workarounds may cause some side effects to
+<br />
+other modules. The fvwm maintainer should be informed.
+<br />
+<br /><em class="quotelev1">&gt; I'm using fvwm2-2.0.46 as it comes with RedHatLinux 5.2.
+</em><br />
+<em class="quotelev1">&gt; As far as my experiments can tell, AutoHide behaves differently in the top,
+</em><br />
+<em class="quotelev1">&gt; middle, and bottom panes of a desktop (and because of this, it took me a
+</em><br />
+<em class="quotelev1">&gt; while to characterize its behavior). For simplicity, assume you have a 1x3
+</em><br />
+<em class="quotelev1">&gt; desktop
+</em><br />
+<em class="quotelev1">&gt;     -----
+</em><br />
+<em class="quotelev1">&gt;     | 1 |
+</em><br />
+<em class="quotelev1">&gt;     -----
+</em><br />
+<em class="quotelev1">&gt;     | 2 |
+</em><br />
+<em class="quotelev1">&gt;     -----
+</em><br />
+<em class="quotelev1">&gt;     | 3 |
+</em><br />
+<em class="quotelev1">&gt;     -----
+</em><br />
+<em class="quotelev1">&gt; (but my comments apply to any vertical number of panes, and in this case
+</em><br />
+<em class="quotelev1">&gt; 1 stands for the top pane, 3 for the bottom one, and 2 stands for all the panes
+</em><br />
+<em class="quotelev1">&gt; in between)
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; Well, AutoHide works well in pane one, UNTIL you manage to cross, with the
+</em><br />
+<em class="quotelev1">&gt; mouse, the boundary between panes 1 and 2; then, when you come back to 1, the
+</em><br />
+<em class="quotelev1">&gt; taskbar remains stuck in the hidden position.
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt; In pane 2, the taskbar always remains hidden.
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; In pane 3 (the bottom pane, or the only pane in a 1x1 desktop), the taskbar
+</em><br />
+<em class="quotelev1">&gt; pops up and down all right, but when it pops down it hides only 2/5 of the
+</em><br />
+<em class="quotelev1">&gt; way, so that most of it still sticks out.
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; So, in none of the three cases is the AutoHide feature worth its name.
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; A working AutoHide would be a very useful features especially with small
+</em><br />
+<em class="quotelev1">&gt; screens. The powers that be, please take a look at it and make it work.
+</em><br />
+<em class="quotelev1">&gt; If, on the other hand, I'm being extremely dense and the feature can
+</em><br />
+<em class="quotelev1">&gt; be made to work, please show me how.
+</em><br />
+<em class="quotelev1">&gt;                                                 Tom Toffoli          
+</em><br />
+<em class="quotelev1">&gt; ----------------------------------------------------------------     
+</em><br />
+<em class="quotelev1">&gt;         Prof. Tommaso Toffoli         tt_at_bu.edu |                    
+</em><br />
+<em class="quotelev1">&gt;         ECE Dept.                               | home:              
+</em><br />
+<em class="quotelev1">&gt;         Boston University          617/353-9846 | 617/864-8545       
+</em><br />
+<em class="quotelev1">&gt;         8 Saint Mary's St.           fax  -6440 | 26 Athens St.      
+</em><br />
+<em class="quotelev1">&gt;         Boston, MA 02215                        | Cambridge, MA 02138
+</em><br />
+<em class="quotelev1">&gt; --
+</em><br />
+<em class="quotelev1">&gt; Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+</em><br />
+<em class="quotelev1">&gt; To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+</em><br />
+<em class="quotelev1">&gt; message to majordomo_at_hpc.uh.edu.
+</em><br />
+<em class="quotelev1">&gt; To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<br /><br /><pre>
+--
+J. Joshua Feng                            (O)608/262-3640
+Electrical &amp; Computer Engr., Univ. of Wisconsin - Madison
+<a href="http://www.cae.wisc.edu/~fengj">http://www.cae.wisc.edu/~fengj</a>  fengj_at_percy.engr.wisc.edu
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Nov 19 1998 - 17:12:18 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start23049">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="23050.html" title="Next message in the list">Fabien Villard: "FVWM: Re: Hello ?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="23048.html" title="Previous message in the list">Tom Toffoli: "FVWM: FvwmTaskBarAutoHide has no clothes"</a></li>
+<li><dfn>In reply to</dfn>: <a href="23048.html" title="Message to which this message replies">Tom Toffoli: "FVWM: FvwmTaskBarAutoHide has no clothes"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg23049" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg23049" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg23049" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg23049" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: FVWM Form for restarting? from John Palmieri on 1996-10-16 (fvwm-users)</title>
+<meta name="Author" content="John Palmieri (palmieri_at_math.mit.edu)" />
+<meta name="Subject" content="FVWM: FVWM Form for restarting?" />
+<meta name="Date" content="1996-10-16" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: FVWM Form for restarting?</h1>
+<!-- received="Wed Oct 16 10:45:55 1996" -->
+<!-- isoreceived="19961016094555" -->
+<!-- sent="16 Oct 1996 11:45:44 -0400" -->
+<!-- isosent="19961016154544" -->
+<!-- name="John Palmieri" -->
+<!-- email="palmieri_at_math.mit.edu" -->
+<!-- subject="FVWM: FVWM Form for restarting?" -->
+<!-- id="oceiv8ahpzr.fsf_at_severi.mit.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="Wed, 9 Oct 1996 14:25:19 -0500" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start18152" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="18153.html" accesskey="d" title="Keith Nichol: &quot;FVWM: Invoking fvwm (Solaris)&quot;">Next message</a> ]
+[ <a href="18151.html" title="John Palmieri: &quot;Re: FVWM: function definition?&quot;">Previous message</a> ]
+[ <a href="18099.html" title="Dave Bodenstab: &quot;FVWM: Bug: 1.24 and 2.0.43&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="18158.html" accesskey="t" title="Richard Lister: &quot;Re: FVWM: FVWM Form for restarting?&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18152" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18152" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18152" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18152" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: John Palmieri &lt;<a href="mailto:palmieri_at_math.mit.edu?Subject=Re%3A%20FVWM%3A%20FVWM%20Form%20for%20restarting%3F">palmieri_at_math.mit.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: 16 Oct 1996 11:45:44 -0400</span><br />
+</address>
+<br />
+I have a question about FvwmForm.  I want to write a form for
+<br />
+restarting using another window manager--I want a window to pop up,
+<br />
+with little boxes I can check labeled &quot;fvwm2&quot;, &quot;twm&quot;, &quot;olwm&quot;,
+<br />
+whatever, and then when I check one off, I want to restart using the
+<br />
+appropriate window manager.  
+<br />
+<br />I tried writing such a form, which I called RestartWM.  It has lines
+<br />
+like
+<br />
+<br />&nbsp;&nbsp;*RestartWMSelection	WM	single
+<br />
+&nbsp;&nbsp;*RestartWMChoice	WM	fvwm2	on &quot;fvwm2&quot;
+<br />
+&nbsp;&nbsp;*RestartWMChoice	WM	twm	off &quot;twm&quot;
+<br />
+&nbsp;&nbsp;*RestartWMChoice	WM	uwm	off &quot;uwm&quot;
+<br />
+<br />and
+<br />
+<br />&nbsp;&nbsp;*RestartWMButton       quit &quot;Restart&quot;  ^M
+<br />
+&nbsp;&nbsp;*RestartWMCommand 	Restart $(WM) $(Custom?$(WMOther))
+<br />
+<br />But this last line doesn't work; no matter what I do, I always end up
+<br />
+with fvwm2 running.  I suspect the problem is explained by the second
+<br />
+paragraph in the following passage from the Fwvm man page:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Restart  WindowManagerName
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Causes fvwm to restart itself if  WindowManagerName  is
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;fvwm2&quot;, or to switch to an alternate window manager if
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WindowManagerName is other than &quot;fvwm2&quot;.  If the window
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;manager  is  not  in your default search path, then you
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;should use the full path name for WindowManagerName.
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This command should not have a  trailing  ampersand  or
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;any  command  line arguments and should not make use of
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;any environmental variables.  Of  the  following  exam-
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ples,  the  first two are sure losers, but the third is
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OK:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Key F1 R N Restart fvwm &amp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Key F1 R N Restart $(HOME)/bin/fvwm
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Key F1 R N Restart /home/nation/bin/fvwm
+<br />
+<br />So, is there a way to write this FvwmForm thing to get around this
+<br />
+difficulty?
+<br />
+<br />-------------------------------------------------------------
+<br />
+John H. Palmieri
+<br />
+Department of Mathematics, M.I.T.
+<br />
+palmieri_at_math.mit.edu
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Oct 16 1996 - 10:45:55 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start18152">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="18153.html" title="Next message in the list">Keith Nichol: "FVWM: Invoking fvwm (Solaris)"</a></li>
+<li><dfn>Previous message</dfn>: <a href="18151.html" title="Previous message in the list">John Palmieri: "Re: FVWM: function definition?"</a></li>
+<li><dfn>In reply to</dfn>: <a href="18099.html" title="Message to which this message replies">Dave Bodenstab: "FVWM: Bug: 1.24 and 2.0.43"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="18158.html" title="Next message in this discussion thread">Richard Lister: "Re: FVWM: FVWM Form for restarting?"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Maybe reply</dfn>: <a href="18158.html" title="Message sent in reply to this message">Richard Lister: "Re: FVWM: FVWM Form for restarting?"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18152" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18152" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18152" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18152" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

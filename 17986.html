@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: *Major* dual-headed Fvwm nit killed! from Barry A. Warsaw on 1996-09-27 (fvwm-users)</title>
+<meta name="Author" content="Barry A. Warsaw (bwarsaw_at_anthem.cnri.reston.va.us)" />
+<meta name="Subject" content="FVWM: *Major* dual-headed Fvwm nit killed!" />
+<meta name="Date" content="1996-09-27" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: *Major* dual-headed Fvwm nit killed!</h1>
+<!-- received="Thu Sep 26 19:04:38 1996" -->
+<!-- isoreceived="19960926180438" -->
+<!-- sent="Thu, 26 Sep 1996 20:03:32 -0400" -->
+<!-- isosent="19960927000332" -->
+<!-- name="Barry A. Warsaw" -->
+<!-- email="bwarsaw_at_anthem.cnri.reston.va.us" -->
+<!-- subject="FVWM: *Major* dual-headed Fvwm nit killed!" -->
+<!-- id="199609270003.UAA02521_at_anthem.CNRI.Reston.Va.US" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start17986" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="17987.html" accesskey="d" title="Mark Boyns: &quot;Re: FVWM: *Major* dual-headed Fvwm nit killed!&quot;">Next message</a> ]
+[ <a href="17985.html" title="Guenther Grau: &quot;Re: FVWM: fvwm&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="17987.html" accesskey="t" title="Mark Boyns: &quot;Re: FVWM: *Major* dual-headed Fvwm nit killed!&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17986" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17986" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17986" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17986" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Barry A. Warsaw &lt;<a href="mailto:bwarsaw_at_anthem.cnri.reston.va.us?Subject=Re%3A%20FVWM%3A%20*Major*%20dual-headed%20Fvwm%20nit%20killed!">bwarsaw_at_anthem.cnri.reston.va.us</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 26 Sep 1996 20:03:32 -0400</span><br />
+</address>
+<br />
+Well, I survived my first foray into the guts of Fvwm 2.0.43. :-) I
+<br />
+think I killed a major nit with using Fvwm on a dual-headed display
+<br />
+(FTR: Sparc 5, Solaris 2.5, OpenWindows 3.5).  The patch seems really
+<br />
+simple and so far I haven't noticed any evil side effects, so I'm
+<br />
+hoping it'll make it into the next major release.  I'll first explain
+<br />
+the problem, give the fix, then give a few other comments on Fvwm's
+<br />
+dual-headed support.
+<br />
+<br />The Problem:
+<br />
+<br />On screen 0, bring up an xterm and place it on the root window such
+<br />
+that there are no other windows between it and the edge of screen 1.
+<br />
+You will want focus-follows-mouse mode (note I explicitly do not use
+<br />
+sloppy focus).  Put the cursor in the xterm and observe how key press
+<br />
+events properly go to the xterm.
+<br />
+<br />Now start to slide the cursor over to screen 1.  It doesn't matter
+<br />
+whether the cursor crosses screen 0's root window or not, but the
+<br />
+cursor should enter screen 1's root window without ever crossing any
+<br />
+other windows on either screen.  Start hitting keypresses and watch as
+<br />
+they are bogusly directed to screen 0!  Note that if the xterm is
+<br />
+jammed against the side of screen 0, such that moving the cursor to
+<br />
+screen 1 does *not* cross screen 0's root, keypresses in screen 1's
+<br />
+root will get directed to the xterm.  If the crossing did cross screen
+<br />
+0's root, the keypresses will be directed to screen 0's root window.
+<br />
+<br />The Fix:
+<br />
+<br />Add another test to the SetFocus() conditional inside the test of
+<br />
+Event.xany.window == SrcRoot in events.c:HandleEnterNotify() [SEE
+<br />
+PATCH BELOW].  The only attribute I could find to test on is
+<br />
+Scr.Focus.  During debugging, I noticed that in all bogus cases, the
+<br />
+SetFocus() clause was not being entered because the test failed.  It
+<br />
+failed because Scr.Focus == 0, which makes some sense.  I think the
+<br />
+only time this happens is when the cursor moves across screen
+<br />
+boundaries, so I think the change is safe.  It does at least seem to
+<br />
+fix the problem in all situations described above.
+<br />
+<br />I'd love for others with dual-heads to check this out, and if it looks
+<br />
+okay, *please* for Chuck to add this patch to the final release!
+<br />
+<br />The Patch:
+<br />
+<br />Of course feel free to wax the commentary in this patch. :-) Without
+<br />
+that, its a one line change!
+<br />
+<br />-------------------- snip snip --------------------
+<br />
+*** events.c	1996/09/26 20:40:05	1.1
+<br />
+--- events.c	1996/09/26 23:35:58
+<br />
+***************
+<br />
+*** 1111,1116 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(Event.xany.window == Scr.Root)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!       if((Scr.Focus)&amp;&amp;(!(Scr.Focus-&gt;flags&amp;ClickToFocus))&amp;&amp;
+<br />
+! 	 (!(Scr.Focus-&gt;flags&amp;SloppyFocus)))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SetFocus(Scr.NoFocusWin,NULL,1);
+<br />
+--- 1111,1125 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(Event.xany.window == Scr.Root)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!       /* modification: 26-Sep-1996 bwarsaw_at_python.org
+<br />
+!        *
+<br />
+!        * This change kills one major nit with FVWM on dual-headed systems.
+<br />
+!        * The broken behavior was: when a window on screen 0 had the focus,
+<br />
+!        * and the cursor was moved to the root window of screen 1, all
+<br />
+!        * keypress events would still get delivered to screen 0.
+<br />
+!        */
+<br />
+!       if(!Scr.Focus ||
+<br />
+!          ((Scr.Focus)&amp;&amp;
+<br />
+!           (!(Scr.Focus-&gt;flags&amp;ClickToFocus))&amp;&amp;
+<br />
+!           (!(Scr.Focus-&gt;flags&amp;SloppyFocus))))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SetFocus(Scr.NoFocusWin,NULL,1);
+<br />
+-------------------- snip snip --------------------
+<br />
+<br />More on Dual-Headedness:
+<br />
+<br />I still think ctwm 3.3 handles dual-headedness better than Fvwm.
+<br />
+During debugging of this problem I noticed that the way Fvwm handles
+<br />
+the presence of multiple screens is to fork off a clone of itself for
+<br />
+each screen.  I surmise this is primarily because there is only one
+<br />
+global ScreenInfo structure, and so much of the code refers to it
+<br />
+through Scr.&lt;whatever&gt;.
+<br />
+<br />I quickly peeked at ctwm's startup and noticed it doesn't do things
+<br />
+this way.  It actually has an array of ScreenInfo's, one for each
+<br />
+screen, and the global Scr is a pointer into this array.  So it
+<br />
+accesses the current screen with Scr-&gt;&lt;whatever&gt;.  So there is only
+<br />
+one ctwm process (no forking), and I think that makes more sense.
+<br />
+<br />I'm sure the differences are somewhat more substantial, but I didn't
+<br />
+look into it in great detail.  As it stands (with this patch), Fvwm is
+<br />
+much more usable now.  Certainly such restructuring needn't happen
+<br />
+until after the next major release, but I wanted to bring your
+<br />
+attention to the difference.  Hopefully this can be improved in the
+<br />
+future.  I'd say, rip off as much from ctwm as possible.  In all other
+<br />
+respects, Fvwm is a better window manager.
+<br />
+<br />Thanks, and keep up the great work!
+<br />
+<br />-Barry
+<br />
+<br />[P.S. Some time, I'll post my thoughts on integrating a Python
+<br />
+interpreter into Fvwm, a la PyApache, the HTTP server with an
+<br />
+integrated Python interpreter]
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Sep 26 1996 - 19:04:38 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start17986">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="17987.html" title="Next message in the list">Mark Boyns: "Re: FVWM: *Major* dual-headed Fvwm nit killed!"</a></li>
+<li><dfn>Previous message</dfn>: <a href="17985.html" title="Previous message in the list">Guenther Grau: "Re: FVWM: fvwm"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="17987.html" title="Next message in this discussion thread">Mark Boyns: "Re: FVWM: *Major* dual-headed Fvwm nit killed!"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="17987.html" title="Message sent in reply to this message">Mark Boyns: "Re: FVWM: *Major* dual-headed Fvwm nit killed!"</a></li>
+<li><dfn>Reply</dfn>: <a href="18021.html" title="Message sent in reply to this message">Mark Boyns: "Re: FVWM: *Major* dual-headed Fvwm nit killed!"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="18068.html" title="Message sent in reply to this message">Barry A. Warsaw: "Re: FVWM: *Major* dual-headed Fvwm nit killed!"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17986" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17986" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17986" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17986" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

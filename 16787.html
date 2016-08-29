@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: Window title for xterm from Ron Kellam on 1996-05-16 (fvwm-users)</title>
+<meta name="Author" content="Ron Kellam (ronk_at_hpato.aus.hp.com)" />
+<meta name="Subject" content="Re: FVWM: Window title for xterm" />
+<meta name="Date" content="1996-05-16" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: Window title for xterm</h1>
+<!-- received="Thu May 16 17:17:02 1996" -->
+<!-- isoreceived="19960516161702" -->
+<!-- sent="Fri, 17 May 1996 08:16:42 +1000 (EST)" -->
+<!-- isosent="19960516221642" -->
+<!-- name="Ron Kellam" -->
+<!-- email="ronk_at_hpato.aus.hp.com" -->
+<!-- subject="Re: FVWM: Window title for xterm" -->
+<!-- id="199605162216.AA179145014_at_paloalto.access.hp.com" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="Pine.HPP.3.91.960516165338.19887B-100000_at_lorenz.gbar.dtu.dk" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start16787" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="16788.html" accesskey="d" title="Danny Sung: &quot;Re: FVWM: Window title for xterm&quot;">Next message</a> ]
+[ <a href="16786.html" title="Alan Wild: &quot;Re: FVWM: Window title for xterm&quot;">Previous message</a> ]
+[ <a href="16781.html" title="Rasmus Peter Tamstorf: &quot;FVWM: Window title for xterm&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="16788.html" accesskey="t" title="Danny Sung: &quot;Re: FVWM: Window title for xterm&quot;">Next in thread</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16787" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16787" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16787" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16787" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Ron Kellam &lt;<a href="mailto:ronk_at_hpato.aus.hp.com?Subject=Re%3A%20FVWM%3A%20Window%20title%20for%20xterm">ronk_at_hpato.aus.hp.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 17 May 1996 08:16:42 +1000 (EST)</span><br />
+</address>
+<br />
+Thus spake Rasmus Peter Tamstorf &lt;c918885_at_student.dtu.dk&gt;
+<br />
+<em class="quotelev1">&gt; This question may not belong to this list, but anyway ...
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; Is it possible to change the title/iconname of a xterm-window dynamically 
+</em><br />
+<em class="quotelev1">&gt; to show the name of the process running in the foreground if such one exists 
+</em><br />
+<em class="quotelev1">&gt; or if such one does not exist the current directory ?
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; I am using the taskbar in fvwm2, but it looses some of its value when you 
+</em><br />
+<em class="quotelev1">&gt; have 5 icons all named 'xterm'. It would be really nice if you could see 
+</em><br />
+<em class="quotelev1">&gt; what was running in those xterms.
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt;   Rasmus
+</em><br />
+<br />Below is a snippet from a TCL script I use to set the title of each new xterm I
+<br />
+create.  The key is the ESC sequences...
+<br />
+<br />------------
+<br />
+<br />proc setXTermTitle {title} {
+<br />
+&nbsp;&nbsp;# Set title of the XTERM
+<br />
+&nbsp;&nbsp;puts -nonewline &quot;\033]2;$title\007&quot;;
+<br />
+&nbsp;&nbsp;# Set ICON label of XTERM
+<br />
+&nbsp;&nbsp;puts -nonewline &quot;\033]1;$title\007&quot;;
+<br />
+}
+<br />
+<br />------------
+<br />
+<br />Cheers,
+<br />
+<br />Ron
+<br />
+<br /><br />------------------------------------------------------------------------
+<br />
+Ron Kellam                        | Phone: +613 9210 5553
+<br />
+Hewlett Packard Australia         | Fax:   +613 9210 5550         .-_!\
+<br />
+Australian Telecom Operation      | Email: ron_kellam_at_aus.hp.com / ATO \
+<br />
+347 Burwood Highway, Burwood East |                              \_.-._/
+<br />
+Victoria, Australia, 3151         | &quot;I speak for myself...&quot;           v
+<br />
+------------------------------------------------------------------------
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;Even if you're on the right track, you still get
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;run over if you don't keep moving&quot;
+<br />
+------------------------------------------------------------------------
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu May 16 1996 - 17:17:02 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start16787">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="16788.html" title="Next message in the list">Danny Sung: "Re: FVWM: Window title for xterm"</a></li>
+<li><dfn>Previous message</dfn>: <a href="16786.html" title="Previous message in the list">Alan Wild: "Re: FVWM: Window title for xterm"</a></li>
+<li><dfn>In reply to</dfn>: <a href="16781.html" title="Message to which this message replies">Rasmus Peter Tamstorf: "FVWM: Window title for xterm"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="16788.html" title="Next message in this discussion thread">Danny Sung: "Re: FVWM: Window title for xterm"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16787" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16787" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16787" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16787" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

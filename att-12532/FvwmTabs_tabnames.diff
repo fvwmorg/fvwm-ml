@@ -1,0 +1,63 @@
+--- FvwmTabs	2004-06-06 15:03:59.000000000 +0300
++++ /usr/lib/fvwm/2.5.10/FvwmTabs	2004-06-20 22:06:03.000000000 +0300
+@@ -303,7 +303,7 @@
+ 	my ($type) = @_;
+ 	foreach (split(/,/, $pConfig->{'autoSwallow' . $type}))
+ 	{
+-		if (!/^\s*(.+?)(\s+(\d+|any|lastFocus))?\s*$/i)
++		if (!/^\s*(.+?)(\s+(\S+|any|lastFocus))?\s*$/i)
+ 		{
+ 			print(STDERR $fvwm->name() . ": unparseable autoSwallow$type.\n");
+ 			next;
+@@ -415,10 +415,29 @@
+ 
+ sub createNewTabber ()
+ {
+-	my $tId;
+-	for ($tId = 0; ; $tId++)
++	my $tId = shift;
++
++	if (defined($tId))
+ 	{
+-		last if (!defined($tabWin{$tId}));
++		my $errmsg;
++
++		$errmsg = "Only tabber name allowed as parameter" if (defined($_[0]));
++		$errmsg = "any,lastFocus,-1 names are reserved" if ($tId =~ /any|lastfocus|-1/i);
++		$errmsg = "Tabber by that name already exists!" if (defined($tabWin{$tId}));
++		
++		if (defined($errmsg))
++		{
++			$fvwm->send("Beep");
++			$fvwm->showError($errmsg);
++			return;
++		}
++	}
++	else
++	{
++		for ($tId = 0; ; $tId++)
++		{
++			last if (!defined($tabWin{$tId}));
++		}
+ 	}
+ 
+ 	my $title = $fvwm->name() . " [$tId]";
+@@ -892,7 +911,7 @@
+ 			$tId = $_, last if ($tabWin{$_}{parent} == $event{window});
+ 		}
+ 
+-		return if ($tId < 0);
++		return if ($tId == -1);
+ 
+ 		my $h = $tabWin{$tId}{winFrame}->height();
+ 		# resize the $winFrame widget. Can't use $w->configure(-height ...)
+@@ -927,7 +946,7 @@
+ 			$tId = $_, last if (getWrapperWinId($_) == $event{event});
+ 		}
+ 
+-		print(STDERR "BUG: EnterNotify\n"), return if ($tId < 0);
++		print(STDERR "BUG: EnterNotify\n"), return if ($tId == -1);
+ 		$tabWin{$tId}{focusTimestamp} = $event{time};
+ 		$fvwm->debug("focusTimestamp set to $tabWin{$tId}{focusTimestamp}");
+ 		takeFocus($tId);
+

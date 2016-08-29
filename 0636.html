@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: FvwmIconMan and temporary transients from larry.gensch_at_compaq.com on 2000-04-13 (fvwm-users)</title>
+<meta name="Author" content="larry.gensch_at_compaq.com (larry.gensch_at_compaq.com)" />
+<meta name="Subject" content="FVWM: FvwmIconMan and temporary transients" />
+<meta name="Date" content="2000-04-13" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: FvwmIconMan and temporary transients</h1>
+<!-- received="Thu Apr 13 08:54:06 2000" -->
+<!-- isoreceived="20000413075406" -->
+<!-- sent="Thu, 13 Apr 2000 09:53:35 -0400 (EDT)" -->
+<!-- isosent="20000413135335" -->
+<!-- name="larry.gensch_at_compaq.com" -->
+<!-- email="larry.gensch_at_compaq.com" -->
+<!-- subject="FVWM: FvwmIconMan and temporary transients" -->
+<!-- id="200004131353.JAA0000106476_at_hunch.zk3.dec.com" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start636" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="0637.html" accesskey="d" title="Gregory A. Shimansky: &quot;FVWM: Fvwm newbie&#0039;s questions (problems with FvwmTaskBar)&quot;">Next message</a> ]
+[ <a href="0635.html" title="Gregory A. Shimansky: &quot;Re: FVWM: Fvwm newbie&#0039;s questions (focusing sticky windows)&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="0638.html" accesskey="t" title="Dominik Vogt: &quot;Re: FVWM: FvwmIconMan and temporary transients&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg636" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg636" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg636" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg636" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: &lt;<a href="mailto:larry.gensch_at_compaq.com?Subject=Re%3A%20FVWM%3A%20FvwmIconMan%20and%20temporary%20transients">larry.gensch_at_compaq.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 13 Apr 2000 09:53:35 -0400 (EDT)</span><br />
+</address>
+<br />
+After seeing the message in fvwm-workers about an &quot;icon launcher&quot; using
+<br />
+FvwmButtons, I got the idea of using FvwmIconMan to put up a transient window
+<br />
+containing certain windows that I am interested in.
+<br />
+<br />Since I don't normally use the numeric keypad on the right of my keyboard, I
+<br />
+have assigned certain keys to cycle between open windows of a certain type.
+<br />
+For instance, Keypad Enter (KP_Enter) will cycle through all my Netscape
+<br />
+windows.
+<br />
+<br />I decided to create a similar function that is called when the Shift key is
+<br />
+pressed to just display a list of the windows, and allow the user to select
+<br />
+the desired window.  This is most useful with XTerms (as my icon title tells
+<br />
+me which system I'm connected to and as what user).
+<br />
+<br />The problem is that it seems that there doesn't seem to be a way to clear
+<br />
+FvwmIconMan's concept of show/dontshow windows.  If I send FvwmIconMan a new
+<br />
+&quot;show&quot; line, it appends to its current list instead of replacing it.
+<br />
+<br />Thus, I need to add a DestroyModuleConfig and reset ALL the FvwmIconMan
+<br />
+control lines in my function.
+<br />
+<br />Is there a better way to get the functionality I need?
+<br />
+<br />I've attached a minimal configuration to show what I am doing.
+<br />
+<br />Second question:  is there any way to tell FvwmIconMan to pop up in the CENTER
+<br />
+of the screen instead of where the mouse is located?  Since I am launching
+<br />
+FvwmIconMan via keystroke, popping up at the mouse location isn't very useful.
+<br />
+Since the fvwm2 CursorMove function only moves the cursor relatively (I cannot
+<br />
+say &quot;CursorMove 50 50&quot; to place the cursor at the precise center of the
+<br />
+screen), it looks like absolute positioning is not available in fvwm2.  Is
+<br />
+this correct or is there a workaround for this?
+<br />
+<br />My config file is below: 
+<br />
+<br /># Styles
+<br />
+<br /># All windows:
+<br />
+<br />Style _at__at_All&#64;&#64;		DecorateTransient, \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MWMDecor, \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RandomPlacement, \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SmartPlacement, \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NoIcon
+<br />
+<br /># No decorations
+<br />
+<br />Style _at__at_Empty&#64;&#64;		UseStyle &#64;&#64;All&#64;&#64;, \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BorderWidth 0, \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CirculateSkip, \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CirculateSkipIcon, \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HandleWidth 0, \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NoHandles, \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NoTitle, \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WindowListSkip
+<br />
+<br /># System Windows (Sticky)
+<br />
+<br />Style _at__at_SysStick&#64;&#64;	UseStyle &#64;&#64;Empty&#64;&#64;, \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sticky
+<br />
+<br /># FvwmIconMan -- System (Sticky) + Title
+<br />
+<br />Style &quot;FvwmIconMan&quot;	UseStyle _at__at_SysStick&#64;&#64;, Title
+<br />
+<br /><br /># TransientMan function:
+<br />
+<br />DestroyFunc	&quot;TransientMan&quot;
+<br />
+AddToFunc	&quot;TransientMan&quot; \
+<br />
+&nbsp;&nbsp;&quot;I&quot;	DestroyModuleConfig FvwmIconMan*
+<br />
++ &quot;I&quot;	*FvwmIconMan*transient*title $0
+<br />
++ &quot;I&quot;	*FvwmIconMan*transient*show
+<br />
++ &quot;I&quot;	*FvwmIconMan*transient*show $1 $2 $3 $4 $5 $6 $7 $8 $9
+<br />
++ &quot;I&quot;	*FvwmIconMan*transient*resolution	global
+<br />
++ &quot;I&quot;	*FvwmIconMan*transient*font		7x13bold
+<br />
++ &quot;I&quot;	*FvwmIconMan*transient*drawicons	always
+<br />
++ &quot;I&quot;	*FvwmIconMan*transient*followfocus	true
+<br />
++ &quot;I&quot;	*FvwmIconMan*transient*usewinlist	true
+<br />
++ &quot;I&quot;	*FvwmIconMan*transient*format		%t
+<br />
++ &quot;I&quot;	*FvwmIconMan*transient*focusbutton	down black grey
+<br />
++ &quot;I&quot;	*FvwmIconMan*transient*focusandselectbutton flat black grey
+<br />
++ &quot;I&quot;	*FvwmIconMan*transient*iconbutton	up grey40 grey
+<br />
++ &quot;I&quot;	*FvwmIconMan*transient*buttongeometry	200x0
+<br />
++ &quot;I&quot;	*FvwmIconMan*transient*managergeometry	1x0
+<br />
++ &quot;I&quot;	*FvwmIconMan*transient*action	Key Up     N gotobutton Up, select
+<br />
++ &quot;I&quot;	*FvwmIconMAn*transient*action	Key Down   N \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bif Next 3, gotobutton 0, select, ret, gotobutton Next, select
+<br />
++ &quot;I&quot;	*FvwmIconMan*transient*action	Key Escape N quit
+<br />
++ &quot;I&quot;	*FvwmIconMan*transient*action	Key q      N quit
+<br />
++ &quot;I&quot;	*FvwmIconMan*transient*action   Mouse 0    N sendcommand Focus-and-Warp
+<br />
++ &quot;I&quot;	Module FvwmIconMan Transient
+<br />
+<br /># Other useful functions called in this file:
+<br />
+<br />DestroyFunc	&quot;warp-to&quot;
+<br />
+AddToFunc	&quot;warp-to&quot; \
+<br />
+&nbsp;&nbsp;&quot;I&quot;	Next [$0] Focus-and-Warp
+<br />
+<br />DestroyFunc	&quot;Focus-and-Warp&quot;
+<br />
+AddToFunc	&quot;Focus-and-Warp&quot; \
+<br />
+&nbsp;&nbsp;&quot;I&quot;	Iconify -1
+<br />
++ &quot;I&quot;	Raise
+<br />
++ &quot;I&quot;	Focus
+<br />
++ &quot;I&quot;	WarpToWindow	50 50
+<br />
+<br /># Keypad keys to launch TransientMan:
+<br />
+<br />Key KP_Enter	A	N	warp-to &quot;Netscape&quot;
+<br />
+Key KP_Add	A	N	warp-to &quot;TkRat&quot;
+<br />
+Key KP_Subtract	A	N	warp-to &quot;XVile&quot;
+<br />
+Key KP_Multiply	A	N	warp-to &quot;*Term&quot;
+<br />
+Key Num_Lock	A	N	warp-to &quot;Knews&quot;
+<br />
+<br />Key KP_Enter	A	S	TransientMan Browsers  class=Netscape
+<br />
+Key KP_Add	A	S	TransientMan Mailers   class=TkRat
+<br />
+Key KP_Subtract	A	S	TransientMan Editors   class=XVile
+<br />
+Key KP_Multiply	A	S	TransientMan Terminals class=*Term
+<br />
+Key Num_Lock	A	S	TransientMan News      class=Knews
+<br />
+<br /># end of configuration
+<br />
+<br /><pre>
+-- 
+Larry Gensch                                          larry.gensch_at_compaq.com
+                  &quot;May I have ten thousand marbles, please?&quot;
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Apr 13 2000 - 08:54:06 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start636">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="0637.html" title="Next message in the list">Gregory A. Shimansky: "FVWM: Fvwm newbie&#0039;s questions (problems with FvwmTaskBar)"</a></li>
+<li><dfn>Previous message</dfn>: <a href="0635.html" title="Previous message in the list">Gregory A. Shimansky: "Re: FVWM: Fvwm newbie&#0039;s questions (focusing sticky windows)"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="0638.html" title="Next message in this discussion thread">Dominik Vogt: "Re: FVWM: FvwmIconMan and temporary transients"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="0638.html" title="Message sent in reply to this message">Dominik Vogt: "Re: FVWM: FvwmIconMan and temporary transients"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg636" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg636" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg636" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg636" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:50 BST
+</em></small></p>
+</body>
+</html>

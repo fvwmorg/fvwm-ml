@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: fvwm misses mouse-release sometimes from Robert Nation 885-9815 on 1996-01-03 (fvwm-users)</title>
+<meta name="Author" content="Robert Nation 885-9815 (rnation_at_mansvr.sanders.lockheed.com)" />
+<meta name="Subject" content="Re: FVWM: fvwm misses mouse-release sometimes" />
+<meta name="Date" content="1996-01-03" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: fvwm misses mouse-release sometimes</h1>
+<!-- received="Wed Jan  3 09:08:18 1996" -->
+<!-- isoreceived="19960103090818" -->
+<!-- sent="Wed, 3 Jan 96 10:07:37 EST" -->
+<!-- isosent="19960103150737" -->
+<!-- name="Robert Nation 885-9815" -->
+<!-- email="rnation_at_mansvr.sanders.lockheed.com" -->
+<!-- subject="Re: FVWM: fvwm misses mouse-release sometimes" -->
+<!-- id="9601031507.AA02792_at_porgy" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="Pine.LNX.3.91.960103024155.29685D-100000_at_wingnut.foxnet.net" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start15181" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="15182.html" accesskey="d" title="Bill Hails: &quot;FVWM: fvwm2 and tk window withdrawal&quot;">Next message</a> ]
+[ <a href="15180.html" title="Avery Pennarun: &quot;FVWM: fvwm misses mouse-release sometimes&quot;">Previous message</a> ]
+[ <a href="15180.html" title="Avery Pennarun: &quot;FVWM: fvwm misses mouse-release sometimes&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15181" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15181" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15181" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15181" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Robert Nation 885-9815 &lt;<a href="mailto:rnation_at_mansvr.sanders.lockheed.com?Subject=Re%3A%20FVWM%3A%20fvwm%20misses%20mouse-release%20sometimes">rnation_at_mansvr.sanders.lockheed.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 3 Jan 96 10:07:37 EST</span><br />
+</address>
+<br />
+<em class="quotelev1">&gt;Has anyone else noticed that if you hold down the mouse button for exactly
+</em><br />
+<em class="quotelev1">&gt;the right amount of time on say a title bar, and then release the button,
+</em><br />
+<em class="quotelev1">&gt;and then move the mouse, fvwm will drag the window anyway and not release
+</em><br />
+<em class="quotelev1">&gt;the drag until you click again?
+</em><br />
+<br />I've noticed this before, but never debugged it. It is annoying. I believe 
+<br />
+that I have finally located the problem. Its in complex.c. Routine IsClick()
+<br />
+checks to see if we have a mouse move or a click:
+<br />
+<br />Bool IsClick(int x,int y,unsigned EndMask, XEvent *d)
+<br />
+{
+<br />
+&nbsp;&nbsp;int xcurrent,ycurrent,total = 0;
+<br />
+&nbsp;&nbsp;Time t0;
+<br />
+&nbsp;&nbsp;extern Time lastTimestamp;
+<br />
+<br />&nbsp;&nbsp;xcurrent = x;
+<br />
+&nbsp;&nbsp;ycurrent = y;
+<br />
+&nbsp;&nbsp;t0 = lastTimestamp;
+<br />
+<br />&nbsp;&nbsp;while((total &lt; Scr.ClickTime)&amp;&amp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(x - xcurrent &lt; 3)&amp;&amp;(x - xcurrent &gt; -3)&amp;&amp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(y - ycurrent &lt; 3)&amp;&amp;(y - ycurrent &gt; -3))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sleep_a_little(10000);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;total+=10;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(XCheckMaskEvent (dpy,EndMask, d))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;StashEventTime(d);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if((lastTimestamp - t0) &lt; Scr.ClickTime)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return True;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return False;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(XCheckMaskEvent (dpy,ButtonMotionMask|PointerMotionMask, d))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xcurrent = d-&gt;xmotion.x_root;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ycurrent = d-&gt;xmotion.y_root;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;StashEventTime(d);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;return False;
+<br />
+}
+<br />
+<br />When we get a Button Release, we pass the test:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(XCheckMaskEvent (dpy,EndMask, d))
+<br />
+and then check:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if((lastTimestamp - t0) &lt; Scr.ClickTime)
+<br />
+If we fail the second test, then we discard the button release! (Oops)
+<br />
+<br />This error can be triggered by releasing the mouse just before ClickTime 
+<br />
+expires.
+<br />
+<br />Solutions? One would be to make the click-move decision based on pointer motion
+<br />
+only. Perhaps better would be a re-write from
+<br />
+&nbsp;&nbsp;while((total &lt; Scr.ClickTime)&amp;&amp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(x - xcurrent &lt; 3)&amp;&amp;(x - xcurrent &gt; -3)&amp;&amp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(y - ycurrent &lt; 3)&amp;&amp;(y - ycurrent &gt; -3))
+<br />
+<br />to something like:
+<br />
+&nbsp;&nbsp;while((total &lt; Scr.ClickTime)&amp;&amp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(x - xcurrent &lt; 3)&amp;&amp;(x - xcurrent &gt; -3)&amp;&amp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(y - ycurrent &lt; 3)&amp;&amp;(y - ycurrent &gt; -3)&amp;&amp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(lastTimestamp - t0) &lt; Scr.ClickTime))
+<br />
+and remove the test for expiration time which occurs later:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if((lastTimestamp - t0) &lt; Scr.ClickTime)
+<br />
+<br />This second solution would probably allow infinite click-times if the
+<br />
+mouse is never moved.
+<br />
+<br />Perhaps the best solution is to try to peek in the event queue without
+<br />
+removing the button release. I think the function XPeekIfEvent might
+<br />
+allow this.
+<br />
+<br />Rob
+<br />
+<br /><pre>
+--
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Jan 03 1996 - 09:08:18 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start15181">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="15182.html" title="Next message in the list">Bill Hails: "FVWM: fvwm2 and tk window withdrawal"</a></li>
+<li><dfn>Previous message</dfn>: <a href="15180.html" title="Previous message in the list">Avery Pennarun: "FVWM: fvwm misses mouse-release sometimes"</a></li>
+<li><dfn>In reply to</dfn>: <a href="15180.html" title="Message to which this message replies">Avery Pennarun: "FVWM: fvwm misses mouse-release sometimes"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15181" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15181" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15181" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15181" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

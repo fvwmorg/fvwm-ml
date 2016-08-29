@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Creeping FvwmWinList from Neale Pickett on 1996-06-21 (fvwm-users)</title>
+<meta name="Author" content="Neale Pickett (zephyr_at_janus.frop.net)" />
+<meta name="Subject" content="FVWM: Creeping FvwmWinList" />
+<meta name="Date" content="1996-06-21" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Creeping FvwmWinList</h1>
+<!-- received="Fri Jun 21 02:57:41 1996" -->
+<!-- isoreceived="19960621015741" -->
+<!-- sent="Fri, 21 Jun 96 01:52 MDT" -->
+<!-- isosent="19960621075200" -->
+<!-- name="Neale Pickett" -->
+<!-- email="zephyr_at_janus.frop.net" -->
+<!-- subject="FVWM: Creeping FvwmWinList" -->
+<!-- id="m0uX10d-00039TC_at_janus.frop.net" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start17225" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="17226.html" accesskey="d" title="Albrecht Kadlec: &quot;Re: FVWM: Bindings to keycodes.&quot;">Next message</a> ]
+[ <a href="17224.html" title="Markus Gutschke: &quot;FVWM: Fatal bugs in FvwmConsole -- FIXES&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17225" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17225" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17225" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17225" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Neale Pickett &lt;<a href="mailto:zephyr_at_janus.frop.net?Subject=Re%3A%20FVWM%3A%20Creeping%20FvwmWinList">zephyr_at_janus.frop.net</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 21 Jun 96 01:52 MDT</span><br />
+</address>
+<br />
+I found this, I think, right after Rob decided to stop maintaining
+<br />
+FVWM.  The FvwmWinList creeps across the screen as you add and
+<br />
+remove entries to it.  (Try opening 15 copies of &quot;xlogo&quot; with it
+<br />
+if you don't understand what I mean).
+<br />
+<br />The fix is simple.  Here's the diff against a 1.24r version of FVWM.
+<br />
+Since the problem is still in FVWM2, I assume the code for this
+<br />
+module hasn't changed much.
+<br />
+<br /><br />janus:1 zephyr ~/fvwm-1.24r/modules/FvwmWinList% diff FvwmWinList.c.old FvwmWinList.c
+<br />
+543c543
+<br />
+&lt;       XMoveResizeWindow(dpy,win,win_x+win_border,win_y+win_title+win_border,
+<br />
+<pre>
+---
+&gt;       XMoveResizeWindow(dpy,win,win_x+win_border-1,win_y+win_title+win_border-1,
+And that's all there is to it.  You could probably even pipe this in to
+patch on whatever modified version of FvwmWinList you have and it would
+figure out how to fix it.
+I like to turn off icons altogether and keep the WinList open all the
+time, so you can see how this creeping might get a tad annoying :-)
+While I've got everyone's attention, I wonder if the hard-coded feature
+of typing &quot;q&quot; in the window to make it exit could be turned into a
+configurable option.
+In any case, thanks for continuing to update the package.  FVWM is a
+Very Good Thing.
+-- 
+Neale Pickett &lt;zephyr_at_nmt.edu&gt;
+I'm at home now; sorry, no witty signature ;-)
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Jun 21 1996 - 02:57:41 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start17225">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="17226.html" title="Next message in the list">Albrecht Kadlec: "Re: FVWM: Bindings to keycodes."</a></li>
+<li><dfn>Previous message</dfn>: <a href="17224.html" title="Previous message in the list">Markus Gutschke: "FVWM: Fatal bugs in FvwmConsole -- FIXES"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17225" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17225" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17225" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17225" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: StartsOnPage patch - update from Bob Woodside on 1997-09-20 (fvwm-users)</title>
+<meta name="Author" content="Bob Woodside (proteus_at_pcnet.com)" />
+<meta name="Subject" content="FVWM: StartsOnPage patch - update" />
+<meta name="Date" content="1997-09-20" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: StartsOnPage patch - update</h1>
+<!-- received="Sat Sep 20 00:16:32 1997" -->
+<!-- isoreceived="19970919231632" -->
+<!-- sent="Sat, 20 Sep 1997 01:09:48 -0400 (EDT)" -->
+<!-- isosent="19970920050948" -->
+<!-- name="Bob Woodside" -->
+<!-- email="proteus_at_pcnet.com" -->
+<!-- subject="FVWM: StartsOnPage patch - update" -->
+<!-- id="XFMail.970920010948.proteus_at_pcnet.com" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start20990" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="20991.html" accesskey="d" title="aesop: &quot;FVWM: FvwmScroll and Swallow&quot;">Next message</a> ]
+[ <a href="20989.html" title="gottlieb_at_research.nj.nec.com: &quot;[gottlieb_at_allan.nj.nec.com: Re: FVWM: how to hide &#0034;icon bar&#0034; underneath application window]&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg20990" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg20990" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg20990" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg20990" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Bob Woodside &lt;<a href="mailto:proteus_at_pcnet.com?Subject=Re%3A%20FVWM%3A%20StartsOnPage%20patch%20-%20update">proteus_at_pcnet.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sat, 20 Sep 1997 01:09:48 -0400 (EDT)</span><br />
+</address>
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;My StartsOnPage patch now looks pretty solid - I've been running
+<br />
+the latest version for about a week with no, er, surprises. I'd welcome 
+<br />
+any comments from testers, both as to its stability, and more importantly,
+<br />
+as to how people think it *ought* to behave.
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;It's rather large (36K), so I'd rather not spam the mailing
+<br />
+lists with repeated versions. It can be fetched from
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.pcnet.com/~proteus/Fvwm/FvwmPatches.html">http://www.pcnet.com/~proteus/Fvwm/FvwmPatches.html</a>
+<br />
+<br /><br />Usage:
+<br />
+------
+<br />
+<br />1) New Style:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Style StartsOnPage d x y
+<br />
+&nbsp;&nbsp;&nbsp;where d = the target desktop, and x and y = the x and y page
+<br />
+&nbsp;&nbsp;&nbsp;numbers.
+<br />
+&nbsp;&nbsp;&nbsp;If only one arg is used, it works like StartsOnDesk.
+<br />
+&nbsp;&nbsp;&nbsp;If 2 args, they specify the page with no desk preference.
+<br />
+&nbsp;&nbsp;&nbsp;It shares the StartsOnDesk Style flag, so you don't have
+<br />
+&nbsp;&nbsp;&nbsp;to give up some other style. Existing StartsOnDesk code is
+<br />
+&nbsp;&nbsp;&nbsp;used, where possible, without functional modification: 2 small
+<br />
+&nbsp;&nbsp;&nbsp;exceptions are noted below.
+<br />
+2) 3 temporary GlobalOpts pairs for customizing its behavior
+<br />
+&nbsp;&nbsp;&nbsp;(defaults appear first):
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CaptureHonorsStartsOnPage/CaptureIgnoresStartsOnPage
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RecaptureIgnoresStartsOnPage/RecaptureHonorsStartsOnPage
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;StartsOnPageHonorsUSPosition/StartsOnPageModifiesUSPosition
+<br />
+&nbsp;&nbsp;&nbsp;I personally think that 2 of the 3 options are a bit of overkill,
+<br />
+&nbsp;&nbsp;&nbsp;but I put them in to allow testers (including myself) to try out 
+<br />
+&nbsp;&nbsp;&nbsp;different behaviors to see what they really find useful.
+<br />
+<br /><br />How It Behaves:  (rather well, actually)
+<br />
+---------------
+<br />
+<br />1) StartsOnPage is honored for initial placement of new
+<br />
+&nbsp;&nbsp;&nbsp;windows, and for initial capture of windows existing
+<br />
+&nbsp;&nbsp;&nbsp;prior to startup.
+<br />
+2) By default, StartsOnPage (or StartsOnDesk) placement *is not* 
+<br />
+&nbsp;&nbsp;&nbsp;honored during a Restart or Recapture, but this can be 
+<br />
+&nbsp;&nbsp;&nbsp;overridden by GlobalOpts RecaptureHonorsStartsOnPage.
+<br />
+3) If SkipMapping is not also specified, fvwm will switch to
+<br />
+&nbsp;&nbsp;&nbsp;the target desktop (if specified) and page (if specified),
+<br />
+&nbsp;&nbsp;&nbsp;except during initial startup, or during a Restart or
+<br />
+&nbsp;&nbsp;&nbsp;Recapture.
+<br />
+4) By default, StartsOnPage placement *does not* modify
+<br />
+&nbsp;&nbsp;&nbsp;USPosition, which means that apps started with a geometry
+<br />
+&nbsp;&nbsp;&nbsp;spec (and SkipMapping) will probably appear somewhere other
+<br />
+&nbsp;&nbsp;&nbsp;than the page you intended. This can be overridden by 
+<br />
+&nbsp;&nbsp;&nbsp;specifying GlobalOpts StartsOnPageModifiesUSPosition.
+<br />
+5) ActivePlacement does not honor StartsOnPage (perhaps it should).
+<br />
+<br /><br />To Do:
+<br />
+------
+<br />
+<br />1) SmartPlacementIsFiendishlyClever (see caveat below)
+<br />
+2) Decide whether this should be merged with StartsOnDesk or kept as
+<br />
+&nbsp;&nbsp;&nbsp;a separate Style. (Chuck - got any strong opinions on this?)
+<br />
+3) Decide which options to keep or remove. (Ibid.)
+<br />
+<br /><br />Caveats:
+<br />
+--------
+<br />
+<br />1) There is one change in the behavior of StartsOnDesk: by
+<br />
+&nbsp;&nbsp;&nbsp;default, StartsOnDesk *no longer* moves a window back to its starting
+<br />
+&nbsp;&nbsp;&nbsp;desktop on a Restart/Recapture. (Initial capture on startup does
+<br />
+&nbsp;&nbsp;&nbsp;as it has always done.) If you dragged it to another desk, there it'll
+<br />
+&nbsp;&nbsp;&nbsp;stay, unless you override the default. (I think someone recently
+<br />
+&nbsp;&nbsp;&nbsp;expressed a wish for such a change.)
+<br />
+2) StartsOnPage in conjunction with SkipMapping introduces a
+<br />
+&nbsp;&nbsp;&nbsp;new, undocumented setting, SmartPlacementMaySeemCapricious. Until I
+<br />
+&nbsp;&nbsp;&nbsp;(or anyone who cares to volunteer) have some time to tinker with the
+<br />
+&nbsp;&nbsp;&nbsp;Smart/Clever placement code, a StartsOnPage window is positioned
+<br />
+&nbsp;&nbsp;&nbsp;within the target page at a spot appropriate for the page you're
+<br />
+&nbsp;&nbsp;&nbsp;currently on, not necessarily the one where it's about to be placed.
+<br />
+3) The name_list struct now carries the desk no. as 1-relative, not
+<br />
+&nbsp;&nbsp;&nbsp;0-relative, so 0 means &quot;don't care&quot;, not &quot;the first desk&quot;. It is
+<br />
+&nbsp;&nbsp;&nbsp;still stored 0-relative in the FvwmWindow struct, so most of Fvwm
+<br />
+&nbsp;&nbsp;&nbsp;is unaffected. If anyone knows of any module code that cares about
+<br />
+&nbsp;&nbsp;&nbsp;the internal Style representation of the desk no., please let me
+<br />
+&nbsp;&nbsp;&nbsp;know.
+<br />
+<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Bob
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;Never grep a yacc by the i-node.&quot;
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sat Sep 20 1997 - 00:16:32 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start20990">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="20991.html" title="Next message in the list">aesop: "FVWM: FvwmScroll and Swallow"</a></li>
+<li><dfn>Previous message</dfn>: <a href="20989.html" title="Previous message in the list">gottlieb_at_research.nj.nec.com: "[gottlieb_at_allan.nj.nec.com: Re: FVWM: how to hide &#0034;icon bar&#0034; underneath application window]"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg20990" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg20990" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg20990" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg20990" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

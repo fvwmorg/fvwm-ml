@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: PeriodicTasks bug? from fvwm.org_at_rainstick.net on 2005-02-04 (fvwm-users)</title>
+<meta name="Author" content="fvwm.org_at_rainstick.net (fvwm.org_at_rainstick.net)" />
+<meta name="Subject" content="FVWM: PeriodicTasks bug?" />
+<meta name="Date" content="2005-02-04" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: PeriodicTasks bug?</h1>
+<!-- received="Fri Feb  4 16:40:05 2005" -->
+<!-- isoreceived="20050204164005" -->
+<!-- sent="Fri, 04 Feb 2005 14:38:59 -0800" -->
+<!-- isosent="20050204223859" -->
+<!-- name="fvwm.org_at_rainstick.net" -->
+<!-- email="fvwm.org_at_rainstick.net" -->
+<!-- subject="FVWM: PeriodicTasks bug?" -->
+<!-- id="4203F983.2040106_at_rainstick.net" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start13770" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="13771.html" accesskey="d" title="Bjoern Steinbrink: &quot;Re: FVWM: PeriodicTasks bug?&quot;">Next message</a> ]
+[ <a href="13769.html" title="Kobus Retief: &quot;FVWM: SloppyFocus is obsolete...&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="13771.html" accesskey="t" title="Bjoern Steinbrink: &quot;Re: FVWM: PeriodicTasks bug?&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg13770" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg13770" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg13770" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg13770" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: &lt;<a href="mailto:fvwm.org_at_rainstick.net?Subject=Re%3A%20FVWM%3A%20PeriodicTasks%20bug%3F">fvwm.org_at_rainstick.net</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 04 Feb 2005 14:38:59 -0800</span><br />
+</address>
+<br />
+While I was playing around with some ideas for FvwmScript, I noticed an
+<br />
+odd behavior that I was unable to explain by reading the man pages. I
+<br />
+suspect its a bug tickled by improper usage, but I'll leave that up to
+<br />
+you folks to decide. I've written and attached a small test script that
+<br />
+shows the problem.
+<br />
+<br />Basically by my understanding, the attached script should advance the
+<br />
+red background one button every 5 seconds. However what actually happens
+<br />
+is that for one second out of 5 the red background cycles as fast as my
+<br />
+machine can make it go.
+<br />
+<br />If I add a &quot;Title&quot; line to each widget, the script works predictably and
+<br />
+only advances once every 5 seconds. Seems like the interpreter doesn't
+<br />
+like empty buttons too well.
+<br />
+<br />I have tested this with the most current build:
+<br />
+<br />fvwm 2.5.13 (snap-20050204) compiled on Feb  4 2005 at 13:33:45
+<br />
+with support for: ReadLine, XPM, PNG, Shape, XShm, SM, Xinerama,
+<br />
+XRender, XFT, NLS
+<br />
+<br />Regards,
+<br />
+Fred.
+<br />
+<br />P.S.: There is a typo in the man page for FvwmScript where
+<br />
+&quot;PeriodicTasks&quot; is spelled &quot;Periodic Task&quot; in the example.
+<br />
+<br />--- Begin script ---
+<br />
+<br />WindowTitle {ScriptSilon}
+<br />
+WindowSize 150 50
+<br />
+WindowPosition 300 300
+<br />
+Font &quot;Shadow=1:xft:Verdana:style=Regular:pixelsize=12:minspace=true&quot;
+<br />
+BackColor {rgb:77/77/77}
+<br />
+<br />Init
+<br />
+&nbsp;Begin
+<br />
+&nbsp;&nbsp;Set $NewLight=1
+<br />
+&nbsp;End
+<br />
+<br />PeriodicTasks
+<br />
+&nbsp;Begin
+<br />
+&nbsp;&nbsp;&nbsp;If (RemainderOfDiv (GetTime) 5)==0 Then
+<br />
+&nbsp;&nbsp;&nbsp;Begin
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Set $OldLight=$NewLight
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Set $NewLight=(Add $NewLight 1)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If $NewLight==4 Then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Set $NewLight=1
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ChangeTitle 4 $NewLight
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ChangeBackColor $OldLight {white}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ChangeBackColor $NewLight {red}
+<br />
+&nbsp;&nbsp;&nbsp;End
+<br />
+&nbsp;End
+<br />
+<br />Widget 1
+<br />
+Property
+<br />
+&nbsp;Size 10 18
+<br />
+&nbsp;Position 0 0
+<br />
+&nbsp;Type PushButton
+<br />
+&nbsp;BackColor {White}
+<br />
+Main
+<br />
+&nbsp;Case message of
+<br />
+&nbsp;&nbsp;SingleClic :
+<br />
+&nbsp;&nbsp;Begin
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ChangeBackColor 1 {rgb:00/00/ff}
+<br />
+&nbsp;&nbsp;End
+<br />
+End
+<br />
+<br />Widget 2
+<br />
+Property
+<br />
+&nbsp;Size 10 18
+<br />
+&nbsp;Position 30 0
+<br />
+&nbsp;Type PushButton
+<br />
+&nbsp;BackColor {white}
+<br />
+Main
+<br />
+&nbsp;Case message of
+<br />
+&nbsp;&nbsp;SingleClic :
+<br />
+&nbsp;&nbsp;Begin
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ChangeBackColor 2 {rgb:00/00/ff}
+<br />
+&nbsp;&nbsp;End
+<br />
+End
+<br />
+<br />Widget 3
+<br />
+Property
+<br />
+&nbsp;Size 10 18
+<br />
+&nbsp;Position 60 0
+<br />
+&nbsp;Type PushButton
+<br />
+&nbsp;BackColor {white}
+<br />
+Main
+<br />
+&nbsp;Case message of
+<br />
+&nbsp;&nbsp;SingleClic :
+<br />
+&nbsp;&nbsp;Begin
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ChangeBackColor 3 {rgb:00/00/ff}
+<br />
+&nbsp;&nbsp;End
+<br />
+End
+<br />
+<br />Widget 4
+<br />
+Property
+<br />
+&nbsp;Size 10 18
+<br />
+&nbsp;Position 90 0
+<br />
+&nbsp;Type PushButton
+<br />
+&nbsp;Title {1}
+<br />
+&nbsp;BackColor {white}
+<br />
+Main
+<br />
+End
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Feb 04 2005 - 16:40:05 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start13770">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="13771.html" title="Next message in the list">Bjoern Steinbrink: "Re: FVWM: PeriodicTasks bug?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="13769.html" title="Previous message in the list">Kobus Retief: "FVWM: SloppyFocus is obsolete..."</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="13771.html" title="Next message in this discussion thread">Bjoern Steinbrink: "Re: FVWM: PeriodicTasks bug?"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="13771.html" title="Message sent in reply to this message">Bjoern Steinbrink: "Re: FVWM: PeriodicTasks bug?"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="13773.html" title="Message sent in reply to this message">Dan Espen: "Re: FVWM: PeriodicTasks bug?"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg13770" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg13770" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg13770" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg13770" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:57 BST
+</em></small></p>
+</body>
+</html>

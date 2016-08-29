@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Re: FvwmButtons from David S. Goldberg on 1998-06-30 (fvwm-users)</title>
+<meta name="Author" content="David S. Goldberg (dsg_at_mitre.org)" />
+<meta name="Subject" content="FVWM: Re: FvwmButtons" />
+<meta name="Date" content="1998-06-30" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Re: FvwmButtons</h1>
+<!-- received="Tue Jun 30 09:36:42 1998" -->
+<!-- isoreceived="19980630083642" -->
+<!-- sent="30 Jun 1998 10:34:51 -0400" -->
+<!-- isosent="19980630143451" -->
+<!-- name="David S. Goldberg" -->
+<!-- email="dsg_at_mitre.org" -->
+<!-- subject="FVWM: Re: FvwmButtons" -->
+<!-- id="m1byaufc60k.fsf_at_blackbird.mitre.org" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="30 Jun 1998 03:28:01 GMT&quot;" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start22516" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="22517.html" accesskey="d" title="A. van Werven: &quot;Re: FVWM: trouble with pager&quot;">Next message</a> ]
+[ <a href="22515.html" title="Albrecht Kadlec: &quot;Re: FVWM: Problem&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg22516" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg22516" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg22516" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg22516" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: David S. Goldberg &lt;<a href="mailto:dsg_at_mitre.org?Subject=Re%3A%20FVWM%3A%20Re%3A%20FvwmButtons">dsg_at_mitre.org</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: 30 Jun 1998 10:34:51 -0400</span><br />
+</address>
+<br />
+I assume you're using fvwm2.  Currently, if you swallow an app, all
+<br />
+mouse clicks get passed to the app on the assumption that's what you
+<br />
+want.  This sucks for apps that don't do anything with mouse clicks
+<br />
+but that's the way it is.  A while back I tried to come up with an
+<br />
+option that would override this.  It seemed simple enough at first,
+<br />
+but I'm not an X programmer and I ran into a couple brick walls and
+<br />
+punted with a workaround because I didn't have enough time to put into
+<br />
+it.
+<br />
+<br />My workaround is to provide the swallowed app with a miniscule blank
+<br />
+title area (I think that frame padding works too, but I don't remember
+<br />
+for sure).  If you click in the title/frame, the mouse is intercepted
+<br />
+by FvwmButtons and the Action configuration is honored.  If you click
+<br />
+in the app, the app gets the click.
+<br />
+<br />Here's an example of how I use this.  I swallow xmeter (an xload like
+<br />
+program that monitors various stuff in addition to load).  I define
+<br />
+the title to be whitespace with nil2 as the font so I get a title area
+<br />
+that's about 2 or 3 pixels high.  If I click on that, I get the action
+<br />
+depending on which button is clicked (an xterm running top, or
+<br />
+raising/lowering the buttonbar.)  If I click in the xmeter, I get it's
+<br />
+usual mouse response.
+<br />
+<br />*FvwmButtons(10x8, Frame 1, Action `Exec &quot;top&quot; TOP`, \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Action (Mouse 2) &quot;Next [FvwmButtons CirculateHit] Raise&quot;, \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Action (Mouse 3) &quot;Next [FvwmButtons CirculateHit] Lower&quot;, \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Swallow(NoClose,UseOld) XMeter &quot;Exec XMETER&quot;, \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Font nil2, Title &quot; &quot;)
+<br />
+<br />For xmeter, this is pretty good, if not ideal; I get a fully
+<br />
+functional xmeter plus the extras I want for that button.  I also do
+<br />
+this for xclock, which is not so great since xclock doesn't do
+<br />
+anything with the mouse clicks.
+<br />
+<br /><pre>
+--
+Dave Goldberg
+Post: The Mitre Corporation\MS B305\202 Burlington Rd.\Bedford, MA 01730
+Phone: 781-271-3887
+Email: dsg_at_mitre.org
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue Jun 30 1998 - 09:36:42 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start22516">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="22517.html" title="Next message in the list">A. van Werven: "Re: FVWM: trouble with pager"</a></li>
+<li><dfn>Previous message</dfn>: <a href="22515.html" title="Previous message in the list">Albrecht Kadlec: "Re: FVWM: Problem"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg22516" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg22516" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg22516" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg22516" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

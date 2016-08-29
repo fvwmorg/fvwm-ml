@@ -1,0 +1,538 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: fvwm2 sorted WindowList from Robert Tsai on 1997-05-14 (fvwm-users)</title>
+<meta name="Author" content="Robert Tsai (rtsai_at_us.oracle.com)" />
+<meta name="Subject" content="FVWM: fvwm2 sorted WindowList" />
+<meta name="Date" content="1997-05-14" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: fvwm2 sorted WindowList</h1>
+<!-- received="Tue May 13 20:18:55 1997" -->
+<!-- isoreceived="19970513191855" -->
+<!-- sent="Tue, 13 May 1997 18:19:25 -0700 (PDT)" -->
+<!-- isosent="19970514011925" -->
+<!-- name="Robert Tsai" -->
+<!-- email="rtsai_at_us.oracle.com" -->
+<!-- subject="FVWM: fvwm2 sorted WindowList" -->
+<!-- id="Pine.GSO.3.96.970513180243.20227E-200000_at_jewel.us.oracle.com" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start19964" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="19965.html" accesskey="d" title="Andrew J Cosgriff: &quot;Re: FVWM: Emacs does not print when started from FVWM-Buttons&quot;">Next message</a> ]
+[ <a href="19963.html" title="Andreas Schumann: &quot;FVWM: Emacs does not print when started from FVWM-Buttons&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19964" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19964" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19964" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19964" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Robert Tsai &lt;<a href="mailto:rtsai_at_us.oracle.com?Subject=Re%3A%20FVWM%3A%20fvwm2%20sorted%20WindowList">rtsai_at_us.oracle.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 13 May 1997 18:19:25 -0700 (PDT)</span><br />
+</address>
+<br />
+&lt;/lurk&gt;
+<br />
+<br />My first contribution to the internet. This patch displays the WindowList
+<br />
+function (not the FvwmWinList module) alphabetized by window/icon name
+<br />
+rather than by hotkey. It makes it easier to find the window you are
+<br />
+looking for. 
+<br />
+<br />The patch is a context diff to be applied to fvwm-2.0.45, included to this
+<br />
+e-mail as a MIME attachment.
+<br />
+<br />There is a function AddToMenu0, which is identical to the original
+<br />
+AddToMenu, with the addition of a boolean 'sort' argument. The original
+<br />
+AddToMenu gets #define'd to AddToMenu0(false), and a new macro
+<br />
+SortedAddToMenu gets #define'd to AddToMenu0(true). The new code is in
+<br />
+menus.c. The menus.h diff reflects the new #define's and AddToMenu0
+<br />
+header, and the windows.c diff reflects the use of SortedAddToMenu. 
+<br />
+<br />&lt;lurk&gt;
+<br />
+<br />--Rob
+<br />
+=================================== Speaking only for myself, of course ==
+<br />
+Robert Tsai                                          IBM Products Division
+<br />
+rtsai_at_us.oracle.com                           500 Oracle Parkway, M/S 2op4
+<br />
+tel. 415-506-9319, fax 415-506-7409               Redwood Shores, CA 94065
+<br />
+<br /><br />
+*** fvwm.orig/menus.c	Mon Jan 20 08:56:11 1997
+<br />
+--- fvwm/menus.c	Mon May 12 00:20:02 1997
+<br />
+***************
+<br />
+*** 1180,1191 ****
+<br />
+&nbsp;&nbsp;&nbsp;*	item	- the text to appear in the menu
+<br />
+&nbsp;&nbsp;&nbsp;*	action	- the string to possibly execute
+<br />
+&nbsp;&nbsp;&nbsp;*	func	- the numeric function
+<br />
+&nbsp;&nbsp;&nbsp;*
+<br />
+&nbsp;&nbsp;&nbsp;* ckh - need to add boolean to say whether or not to expand for pixmaps,
+<br />
+&nbsp;&nbsp;&nbsp;*       so built in window list can handle windows w/ * and % in title.
+<br />
+&nbsp;&nbsp;&nbsp;*
+<br />
+&nbsp;&nbsp;&nbsp;***********************************************************************/
+<br />
+! void AddToMenu(MenuRoot *menu, char *item, char *action)
+<br />
+&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MenuItem *tmp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;char *start,*end;
+<br />
+--- 1180,1192 ----
+<br />
+&nbsp;&nbsp;&nbsp;*	item	- the text to appear in the menu
+<br />
+&nbsp;&nbsp;&nbsp;*	action	- the string to possibly execute
+<br />
+&nbsp;&nbsp;&nbsp;*	func	- the numeric function
+<br />
++  *	sort    - whether or not to sort by item title (not hotkey)
+<br />
+&nbsp;&nbsp;&nbsp;*
+<br />
+&nbsp;&nbsp;&nbsp;* ckh - need to add boolean to say whether or not to expand for pixmaps,
+<br />
+&nbsp;&nbsp;&nbsp;*       so built in window list can handle windows w/ * and % in title.
+<br />
+&nbsp;&nbsp;&nbsp;*
+<br />
+&nbsp;&nbsp;&nbsp;***********************************************************************/
+<br />
+! void AddToMenu0(MenuRoot *menu, char *item, char *action, int sort)
+<br />
+&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MenuItem *tmp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;char *start,*end;
+<br />
+***************
+<br />
+*** 1195,1210 ****
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;tmp = (MenuItem *)safemalloc(sizeof(MenuItem));
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if (menu-&gt;first == NULL)
+<br />
+!     {
+<br />
+!       menu-&gt;first = tmp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tmp-&gt;prev = NULL;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+!     {
+<br />
+!       menu-&gt;last-&gt;next = tmp;
+<br />
+!       tmp-&gt;prev = menu-&gt;last;
+<br />
+!     }
+<br />
+!   menu-&gt;last = tmp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;tmp-&gt;picture=NULL;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;tmp-&gt;lpicture=NULL;
+<br />
+&nbsp;&nbsp;
+<br />
+--- 1196,1292 ----
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;tmp = (MenuItem *)safemalloc(sizeof(MenuItem));
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if (menu-&gt;first == NULL)
+<br />
+!     {				/* first menu item */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tmp-&gt;prev = NULL;
+<br />
++       tmp-&gt;next = NULL;
+<br />
++       menu-&gt;first = tmp;
+<br />
++       menu-&gt;last = tmp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+!     {				/* add new menu item */
+<br />
+!       if (sort)
+<br />
+! 	{			/* sorted insert */
+<br />
+! 	  MenuItem *p = menu-&gt;first-&gt;next; /* skip the title */
+<br />
+! 
+<br />
+! 	  /* rtsai_at_us.oracle.com: For some reason, fvwm2 occasionally
+<br />
+!              coredumps when I use a dynamically-allocated
+<br />
+!              item_string. I can get the coredump by repeatedly
+<br />
+!              invoking WindowList while running Netscape 3.01 Gold or
+<br />
+!              editres, but I can't figure out why. (This is for
+<br />
+!              Slackware 3.2 (Linux 2.0.29)). Thus, I #undef
+<br />
+!              _MALLOC_ITEM_STRING to use a static array. The code is
+<br />
+!              cleaner anyway, since it then requires no cleanup. 128
+<br />
+!              chars should be enough for any window titles. I haven't
+<br />
+!              tried reproducing the coredump on Solaris 2.4, because
+<br />
+!              losing my WM and having to re-login is somewhat
+<br />
+!              disruptive ;) */
+<br />
+! #undef _MALLOC_ITEM_STRING
+<br />
+! #ifdef _MALLOC_ITEM_STRING
+<br />
+! 	  char *ch, *item_string; /* to determine sort order */
+<br />
+! #else
+<br />
+! 	  char *ch, item_string[128]; /* to determine sort order */
+<br />
+! #endif
+<br />
+! 	  int index;
+<br />
+! 	  
+<br />
+! #ifdef _MALLOC_ITEM_STRING
+<br />
+! 	  item_string = (char *) safemalloc (sizeof (char) * strlen (item));
+<br />
+! 	  strcpy (item_string, item);
+<br />
+! #else
+<br />
+! 	  strncpy (item_string, item, sizeof (item_string));
+<br />
+! 	  item_string [sizeof (item_string) - 1] = 0;
+<br />
+! #endif
+<br />
+! 
+<br />
+! 	  /* remove the '&amp;' hotkey markers */
+<br />
+! 	  while ((ch = strchr (item_string, '&amp;')))
+<br />
+! 	    {
+<br />
+! 	      while (*ch)
+<br />
+! 		{
+<br />
+! 		  *ch = *(ch + 1);
+<br />
+! 		  ch++;
+<br />
+! 		}
+<br />
+! 	    }
+<br />
+! 
+<br />
+! 	  /* rtsai_at_us&#46;<!--nospam-->oracle.com: This is an ugly hack to determine
+<br />
+! 	     whether or not this is a WindowList menu. For WindowList
+<br />
+! 	     menus, we want to sort by window/icon title rather than
+<br />
+! 	     first character, so we skip over the hotkey
+<br />
+! 	     characters. */
+<br />
+! 	  index = item_string[1] == '.' ? 4 : 0;
+<br />
+! 
+<br />
+! 	  /* find point before which to insert new item */
+<br />
+! 	  while (p &amp;&amp; strcmp (&amp;item_string[index], &amp;p-&gt;item[index]) &gt;= 0)
+<br />
+! 	    p = p-&gt;next;
+<br />
+! 
+<br />
+! #ifdef _MALLOC_ITEM_STRING
+<br />
+! 	  if (item_string)
+<br />
+! 	    free (item_string);	/* cleanup */
+<br />
+! #endif
+<br />
+! 
+<br />
+! 	  if (p)
+<br />
+! 	    {			/* insert new item before p */
+<br />
+! 	      tmp-&gt;prev = p-&gt;prev;
+<br />
+! 	      tmp-&gt;next = p;
+<br />
+! 	      tmp-&gt;prev-&gt;next = tmp;
+<br />
+! 	      tmp-&gt;next-&gt;prev = tmp;
+<br />
+! 	    }
+<br />
+! 	  else
+<br />
+! 	    {			/* add to end, just like unsorted insert */
+<br />
+! 	      tmp-&gt;prev = menu-&gt;last;
+<br />
+! 	      tmp-&gt;next = NULL;
+<br />
+! 	      tmp-&gt;prev-&gt;next = tmp;
+<br />
+! 
+<br />
+! 	      menu-&gt;last = tmp;	/* last menu pointer */
+<br />
+! 	    }
+<br />
+! 	} /* sorted insert */
+<br />
+!       else
+<br />
+! 	{			/* unsorted insert */
+<br />
+! 	  tmp-&gt;prev = menu-&gt;last;
+<br />
+! 	  tmp-&gt;next = NULL;
+<br />
+! 	  tmp-&gt;prev-&gt;next = tmp;
+<br />
+! 
+<br />
+! 	  menu-&gt;last = tmp;	/* last menu pointer */
+<br />
+! 	} /* unsorted insert */
+<br />
+!     } /* add new menu item */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;tmp-&gt;picture=NULL;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;tmp-&gt;lpicture=NULL;
+<br />
+&nbsp;&nbsp;
+<br />
+***************
+<br />
+*** 1257,1263 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tmp-&gt;strlen2 = 0;
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;tmp-&gt;action = stripcpy(action);
+<br />
+-   tmp-&gt;next = NULL;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;tmp-&gt;state = 0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;tmp-&gt;func_type = find_func_type(tmp-&gt;action);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;tmp-&gt;item_num = menu-&gt;items++;
+<br />
+--- 1339,1344 ----
+<br />
+*** fvwm.orig/misc.h	Mon Dec 23 14:07:47 1996
+<br />
+--- fvwm/misc.h	Sun May 11 23:24:11 1997
+<br />
+***************
+<br />
+*** 223,229 ****
+<br />
+&nbsp;&nbsp;extern Bool       GrabEm(int);
+<br />
+&nbsp;&nbsp;extern void       UngrabEm(void);
+<br />
+&nbsp;&nbsp;extern MenuRoot   *NewMenuRoot(char *name, int function_or_popup);
+<br />
+! extern void       AddToMenu(MenuRoot *, char *, char *);
+<br />
+&nbsp;&nbsp;extern void       MakeMenu(MenuRoot *);
+<br />
+&nbsp;&nbsp;extern void       CaptureAllWindows(void);
+<br />
+&nbsp;&nbsp;extern void       SetTimer(int);
+<br />
+--- 223,231 ----
+<br />
+&nbsp;&nbsp;extern Bool       GrabEm(int);
+<br />
+&nbsp;&nbsp;extern void       UngrabEm(void);
+<br />
+&nbsp;&nbsp;extern MenuRoot   *NewMenuRoot(char *name, int function_or_popup);
+<br />
+! extern void       AddToMenu0(MenuRoot *, char *, char *, int);
+<br />
+! #define AddToMenu(menu, item, action) AddToMenu0 (menu, item, action, 0)
+<br />
+! #define SortedAddToMenu(menu, item, action) AddToMenu0 (menu, item, action, 1)
+<br />
+&nbsp;&nbsp;extern void       MakeMenu(MenuRoot *);
+<br />
+&nbsp;&nbsp;extern void       CaptureAllWindows(void);
+<br />
+&nbsp;&nbsp;extern void       SetTimer(int);
+<br />
+*** fvwm.orig/windows.c	Tue Jan 14 14:09:00 1997
+<br />
+--- fvwm/windows.c	Mon May 12 00:09:02 1997
+<br />
+***************
+<br />
+*** 226,232 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sprintf(tlabel,&quot;%s %ld&quot;,func,t-&gt;w);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sprintf(tlabel,&quot;WindowListFunc %ld&quot;,t-&gt;w);
+<br />
+!         AddToMenu(mr, t_hot, tlabel);
+<br />
+&nbsp;&nbsp;#ifdef MINI_ICONS
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* Add the title pixmap */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (t-&gt;mini_icon) {
+<br />
+--- 226,232 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sprintf(tlabel,&quot;%s %ld&quot;,func,t-&gt;w);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sprintf(tlabel,&quot;WindowListFunc %ld&quot;,t-&gt;w);
+<br />
+!         SortedAddToMenu(mr, t_hot, tlabel); /* rtsai_at_us&#46;<!--nospam-->oracle.com */
+<br />
+&nbsp;&nbsp;#ifdef MINI_ICONS
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* Add the title pixmap */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (t-&gt;mini_icon) {
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue May 13 1997 - 20:18:55 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start19964">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="19965.html" title="Next message in the list">Andrew J Cosgriff: "Re: FVWM: Emacs does not print when started from FVWM-Buttons"</a></li>
+<li><dfn>Previous message</dfn>: <a href="19963.html" title="Previous message in the list">Andreas Schumann: "FVWM: Emacs does not print when started from FVWM-Buttons"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19964" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19964" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19964" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19964" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

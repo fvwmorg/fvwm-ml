@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Rotate window list without changing focus? from Jan T. Kim on 2000-03-10 (fvwm-users)</title>
+<meta name="Author" content="Jan T. Kim (kim_at_mpiz-koeln.mpg.de)" />
+<meta name="Subject" content="FVWM: Rotate window list without changing focus?" />
+<meta name="Date" content="2000-03-10" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Rotate window list without changing focus?</h1>
+<!-- received="Fri Mar 10 14:22:37 2000" -->
+<!-- isoreceived="20000310142237" -->
+<!-- sent="Fri, 10 Mar 2000 21:21:57 +0100" -->
+<!-- isosent="20000310202157" -->
+<!-- name="Jan T. Kim" -->
+<!-- email="kim_at_mpiz-koeln.mpg.de" -->
+<!-- subject="FVWM: Rotate window list without changing focus?" -->
+<!-- id="20000310212157.B31912_at_jupiter.mpiz-koeln.mpg.de" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start484" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="0485.html" accesskey="d" title="Tim Phipps: &quot;Re: FVWM: Rotate window list without changing focus?&quot;">Next message</a> ]
+[ <a href="0483.html" title="Erik Steffl: &quot;Re: FVWM: Keybindings dissapearing in fvwm2 I&#0039;m having a problem with keybindings dissapearing in fvwm2: when&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="0485.html" accesskey="t" title="Tim Phipps: &quot;Re: FVWM: Rotate window list without changing focus?&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg484" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg484" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg484" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg484" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Jan T. Kim &lt;<a href="mailto:kim_at_mpiz-koeln.mpg.de?Subject=Re%3A%20FVWM%3A%20Rotate%20window%20list%20without%20changing%20focus%3F">kim_at_mpiz-koeln.mpg.de</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 10 Mar 2000 21:21:57 +0100</span><br />
+</address>
+<br />
+Hi all,
+<br />
+<br />here's a quick question: Is it possible to raise a window and rotate it
+<br />
+to the top of the windowlist without having to give that window the
+<br />
+keyboard focus?
+<br />
+<br />Below follows a description of what I want, and what I've tried so
+<br />
+far. Please tell me what I overlooked...
+<br />
+<br />I would like to set up fvwm2 such that I can cyclically raise all
+<br />
+windows with the PageUp / PageDown keys, i.e. repeated PageDown
+<br />
+keystrokes should raise one window after the other, allowing me to find
+<br />
+a window which I've buried too deep. I use MouseFocus, and I'd like to
+<br />
+be able to move the mouse pointer over the root window, and then start
+<br />
+cycling, so no application will receive these keystrokes, and I won't
+<br />
+have to snatch the PageDown keystrokes away from an application which
+<br />
+may have a use for it.
+<br />
+<br />The most simple approach
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;Key Next         R         N     Next [*] Raise
+<br />
+<br />does not work, because the raised window does not become current, so
+<br />
+repeated PageDown keystrokes will just raise the same window again,
+<br />
+i.e. effectively do nothing.
+<br />
+<br />It seems that the only command for rotating the windowlist is Focus,
+<br />
+so I tried:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;Key Next         R         N     Function Next-Focus-and-Raise
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;AddToFunc Next-Focus-and-Raise  &quot;I&quot; Next [*] Raise
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;+                               &quot;I&quot; Next [*] Focus
+<br />
+<br />This works once, but not repeatedly. Somewhat weirdly, the the Focus
+<br />
+command gives the keyboard focus to the target window, even though
+<br />
+this is inconsistent with MouseFocus if the mouse pointer is over the
+<br />
+root window. As a result, all but the first PageDown keypresses are
+<br />
+sent to the application owning the target window instead of being
+<br />
+processed by fvwm2.
+<br />
+<br />A while ago, I have settled for
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;Key Next         A        CM     Function Next-Focus-and-Raise
+<br />
+<br />However, I am not satisfied with this solution, because (1) I don't
+<br />
+like having the window manager taking away keypresses from applications
+<br />
+which do have the keyboard focus and (2) I find pressing
+<br />
+Ctrl-Alt-PageDown quite inconvenient, so I don't use this as often as I
+<br />
+might do otherwise.
+<br />
+<br />Thanx in advance for any hints.
+<br />
+<br />Greetinx, Jan
+<br />
+<pre>
+-- 
+ +- Jan T. Kim -------------------------------------------------------+
+ |             email: kim_at_mpiz-koeln.mpg.de                           |
+ |             WWW:   <a href="http://www.mpiz-koeln.mpg.de/~kim/">http://www.mpiz-koeln.mpg.de/~kim/</a>              |
+ *-----=&lt;  hierarchical systems are for files, not for humans  &gt;=-----*
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Mar 10 2000 - 14:22:37 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start484">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="0485.html" title="Next message in the list">Tim Phipps: "Re: FVWM: Rotate window list without changing focus?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="0483.html" title="Previous message in the list">Erik Steffl: "Re: FVWM: Keybindings dissapearing in fvwm2 I&#0039;m having a problem with keybindings dissapearing in fvwm2: when"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="0485.html" title="Next message in this discussion thread">Tim Phipps: "Re: FVWM: Rotate window list without changing focus?"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="0485.html" title="Message sent in reply to this message">Tim Phipps: "Re: FVWM: Rotate window list without changing focus?"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="0490.html" title="Message sent in reply to this message">Tim Phipps: "Re: FVWM: Rotate window list without changing focus?"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg484" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg484" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg484" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg484" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:50 BST
+</em></small></p>
+</body>
+</html>

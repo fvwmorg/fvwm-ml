@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: can't figure out how to refocus from Adam Tla/lka on 1999-03-19 (fvwm-users)</title>
+<meta name="Author" content="Adam Tla/lka (atlka_at_pg.gda.pl)" />
+<meta name="Subject" content="Re: FVWM: can't figure out how to refocus" />
+<meta name="Date" content="1999-03-19" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: can't figure out how to refocus</h1>
+<!-- received="Fri Mar 19 03:10:24 1999" -->
+<!-- isoreceived="19990319031024" -->
+<!-- sent="Fri, 19 Mar 1999 09:59:46 +0100 (MET)" -->
+<!-- isosent="19990319085946" -->
+<!-- name="Adam Tla/lka" -->
+<!-- email="atlka_at_pg.gda.pl" -->
+<!-- subject="Re: FVWM: can't figure out how to refocus" -->
+<!-- id="Pine.GSO.3.96L01AT.990319091717.21358B-100000_at_sunrise" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="199903161508.JAA05725_at_sandman.sctc.com" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start23872" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="23873.html" accesskey="d" title="Richard Smith: &quot;FVWM: BorderStyle Colour Question&quot;">Next message</a> ]
+[ <a href="23871.html" title="Ram Bhamidipaty: &quot;FVWM: getting window and icon geometry info&quot;">Previous message</a> ]
+[ <a href="23850.html" title="Stephen C. Koehler: &quot;FVWM: can&#0039;t figure out how to refocus&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="23875.html" accesskey="t" title="Tim Phipps: &quot;Re: FVWM: can&#0039;t figure out how to refocus&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg23872" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg23872" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg23872" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg23872" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Adam Tla/lka &lt;<a href="mailto:atlka_at_pg.gda.pl?Subject=Re%3A%20FVWM%3A%20can't%20figure%20out%20how%20to%20refocus">atlka_at_pg.gda.pl</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 19 Mar 1999 09:59:46 +0100 (MET)</span><br />
+</address>
+<br />
+On Tue, 16 Mar 1999, Stephen C. Koehler wrote:
+<br />
+<br /><em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; I'm having trouble figuring out how to use the Current/None/Next commands 
+</em><br />
+<em class="quotelev1">&gt; to implement a smart refocus to a window on the current page.  
+</em><br />
+<br />I have some propositions but working only with ClickToFocus and
+<br />
+FvwmButtons as Sticky window.
+<br />
+Try this:
+<br />
+<br />Style &quot;FvwmButtons&quot; CirculateSkip
+<br />
+<br />AddToFunc RaiseFocus            &quot;I&quot; Raise
+<br />
++                               &quot;I&quot; Focus
+<br />
+<br />AddToFunc RaiseFlip             &quot;I&quot; Raise
+<br />
++                               &quot;I&quot; FlipFocus
+<br />
+<br />AddToFunc TopToEnd &quot;I&quot; Prev (CurrentDesk CurrentPage !Iconic) FlipFocus
+<br />
++                  &quot;I&quot; Prev (CurrentDesk CurrentPage !Iconic) FlipFocus
+<br />
++                  &quot;I&quot; Prev (CurrentDesk CurrentPage !Iconic) Focus
+<br />
++                  &quot;I&quot; Prev (CurrentDesk CurrentPage !Iconic) FlipFocus
+<br />
+<br />AddToFunc NextFlip &quot;I&quot; Next (CurrentDesk CurrentPage !Iconic) RaiseFlip
+<br />
+<br />AddToFunc PrevFlip &quot;I&quot; Current (CurrentDesk CurrentPage !Iconic !FvwmButtons)\
+<br />
+TopToEnd
+<br />
++                  &quot;I&quot; Prev (CurrentDesk CurrentPage !Iconic) RaiseFlip
+<br />
+<br />AddToFunc last_active &quot;I&quot; \
+<br />
+Prev (CurrentDesk CurrentPage CirculateHit FvwmButtons) FlipFocus
+<br />
++ &quot;I&quot; Prev (CurrentDesk CurrentPage !Iconic) FlipFocus
+<br />
+<br />AddToFunc scroll_rt     &quot;I&quot;     Scroll  100     0
+<br />
++                       &quot;I&quot;     Function        last_active
+<br />
+<br /><br />AddToFunc scroll_lt     &quot;I&quot;     Scroll  -100    0
+<br />
++                       &quot;I&quot;     Function        last_active
+<br />
+<br />AddToFunc scroll_dn     &quot;I&quot;     Scroll  0       100
+<br />
++                       &quot;I&quot;     Function        last_active
+<br />
+<br />AddToFunc scroll_up     &quot;I&quot;     Scroll  0       -100
+<br />
++                       &quot;I&quot;     Function        last_active
+<br />
+<br />Key Left        A       1       scroll_lt
+<br />
+Key Right       A       1       scroll_rt
+<br />
+Key Up          A       1       scroll_up
+<br />
+Key Down        A       1       scroll_dn
+<br />
+<br />Key Escape      A       1       WindowList Root c c \
+<br />
+&quot;Prev (CurrentDesk CurrentPage !iconic) RaiseFlip&quot;
+<br />
+<br />Maybe this is a bit complicated but works quite good.
+<br />
+Order of windows on pages is saved and while iconifying active window
+<br />
+previous on the list is activated.
+<br />
+Switching pages by Alt-Cursors activates last active on that page and
+<br />
+while switching by mouse Alt-Tab does the same.
+<br />
+<br />But generally speaking it will be nice to have additional function
+<br />
+in fvwm which places window on the top of window list like Focus but does
+<br />
+it by not changing order of other windows :
+<br />
+<br />[a] &lt;- top
+<br />
+<br />[b]
+<br />
+<br />[c]
+<br />
+<br />[d]  - this I want to be active and on top
+<br />
+<br />[e]
+<br />
+<br /><br />then
+<br />
+<br />[d]  &lt;- top
+<br />
+<br />[b]
+<br />
+<br />[c]
+<br />
+<br />[e]
+<br />
+<br />[a] - previous active goes to end of the list
+<br />
+<br />It is not hard to do that. Just extract desired window from the list and
+<br />
+glue it after top and then switch top to this position and activate it.
+<br />
+<br />I have &quot;Style * NoIcons&quot; and problem is that in my opinion Iconify
+<br />
+shouldn't switch focus to previous window on the list automatically.
+<br />
+I just want focus to stay on the same position and define:
+<br />
+<br />AddToFunc Iconify-and-Prev &quot;I&quot; Iconify 1
+<br />
++ &quot;I&quot; PrevFlip
+<br />
+<br /><br />Regards
+<br />
+<br />&nbsp;. .  Adam Tla/lka      mailto:atlka_at_pg.gda.pl    ^v^ ^v^ ^v^
+<br />
+&nbsp;&nbsp;)   System  &amp; Network Administration Group           ~~~~~~
+<br />
+&nbsp;&nbsp;-  Computer Center,  Technical University of Gdansk, Poland
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PGP public key:   finger atlka_at_sunrise.pg.gda.pl
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Mar 19 1999 - 03:10:24 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start23872">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="23873.html" title="Next message in the list">Richard Smith: "FVWM: BorderStyle Colour Question"</a></li>
+<li><dfn>Previous message</dfn>: <a href="23871.html" title="Previous message in the list">Ram Bhamidipaty: "FVWM: getting window and icon geometry info"</a></li>
+<li><dfn>In reply to</dfn>: <a href="23850.html" title="Message to which this message replies">Stephen C. Koehler: "FVWM: can&#0039;t figure out how to refocus"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="23875.html" title="Next message in this discussion thread">Tim Phipps: "Re: FVWM: can&#0039;t figure out how to refocus"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="23875.html" title="Message sent in reply to this message">Tim Phipps: "Re: FVWM: can&#0039;t figure out how to refocus"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg23872" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg23872" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg23872" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg23872" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:02 BST
+</em></small></p>
+</body>
+</html>

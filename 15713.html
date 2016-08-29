@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: FvwmButtons problems from jarl_at_cptsu5.univ-mrs.fr on 1996-03-06 (fvwm-users)</title>
+<meta name="Author" content="jarl_at_cptsu5.univ-mrs.fr (jarl_at_cptsu5.univ-mrs.fr)" />
+<meta name="Subject" content="FVWM: FvwmButtons problems" />
+<meta name="Date" content="1996-03-06" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: FvwmButtons problems</h1>
+<!-- received="Wed Mar  6 00:22:15 1996" -->
+<!-- isoreceived="19960306002215" -->
+<!-- sent="Wed, 6 Mar 1996 07:23:41 +0100 (MET)" -->
+<!-- isosent="19960306062341" -->
+<!-- name="jarl_at_cptsu5.univ-mrs.fr" -->
+<!-- email="jarl_at_cptsu5.univ-mrs.fr" -->
+<!-- subject="FVWM: FvwmButtons problems" -->
+<!-- id="199603060623.HAA22063_at_cptsu1.univ-mrs.fr" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start15713" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="15714.html" accesskey="d" title="Jan-Erik Borg: &quot;Re: FVWM: continued line patch (Finding central/user system.fvwmrc)&quot;">Next message</a> ]
+[ <a href="15712.html" title="N. Dan Zou: &quot;Re: FVWM: Move windows in place between desktops/screens&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="15715.html" accesskey="t" title="jarl_at_cptsu5.univ-mrs.fr: &quot;Re: FVWM: FvwmButtons problems&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15713" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15713" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15713" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15713" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: &lt;<a href="mailto:jarl_at_cptsu5.univ-mrs.fr?Subject=Re%3A%20FVWM%3A%20FvwmButtons%20problems">jarl_at_cptsu5.univ-mrs.fr</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 6 Mar 1996 07:23:41 +0100 (MET)</span><br />
+</address>
+<br />
+Thank you all for the reports on the latest FvwmButtons. There seems to be
+<br />
+two major inconveniences right now, that should be fixed:
+<br />
+<br />&nbsp;* If bitmaps and pixmaps are kept together in the same directory, FvwmButtons
+<br />
+&nbsp;&nbsp;&nbsp;fails to load the pixmaps. This is a bug which was easily fixed.
+<br />
+<br />&nbsp;* As Olly and several others point out, the routine for allocating colors
+<br />
+&nbsp;&nbsp;&nbsp;via xpm only works for xpm-3.4g and higher. (I didn't know that, sorry.)
+<br />
+&nbsp;&nbsp;&nbsp;Now, I will try to fix that, but I meet the following problem: xpm.h defines
+<br />
+&nbsp;&nbsp;&nbsp;it's version etc as:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#define XpmFormat 3
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#define XpmVersion 4
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#define XpmRevision 7
+<br />
+&nbsp;&nbsp;&nbsp;Forgive me for asking, but how can I use these defines to decide whether 
+<br />
+&nbsp;&nbsp;&nbsp;to compile a part of the code or not? Most preprocessors will only handle
+<br />
+&nbsp;&nbsp;&nbsp;constant expressions. 
+<br />
+&nbsp;&nbsp;&nbsp;So, for now I have put a #define NEWXPM in the beginning of FvwmButtons.c.
+<br />
+&nbsp;&nbsp;&nbsp;There is another way of doing what I do in the new code, but that is
+<br />
+&nbsp;&nbsp;&nbsp;defined as obsolete by the latest xpm docs... Help? Anyone?
+<br />
+<br />A new snapshot of FvwmButtons with these fixed will appear on the web page 
+<br />
+later today.
+<br />
+<br />Other comments:
+<br />
+<br />&nbsp;* Olly:
+<br />
+<em class="quotelev1">   &gt;      B. the &quot;whatever&quot; mode for selecting no icon now gives an error
+</em><br />
+<em class="quotelev1">   &gt;         message (before it was just silently ignored).  I just changed
+</em><br />
+<em class="quotelev1">   &gt;         my entries to use &quot;-&quot; when I don't want a pixmap which is what
+</em><br />
+<em class="quotelev1">   &gt;         the new manual tells you to do.
+</em><br />
+&nbsp;&nbsp;&nbsp;I really considered this a feature, besides, with the new syntax it 
+<br />
+&nbsp;&nbsp;&nbsp;should not be a problem, as all you do is leave out the &quot;Icon xxx&quot; part.
+<br />
+&nbsp;&nbsp;&nbsp;The new syntax is where everything is done inside the ()'s, and nothing
+<br />
+&nbsp;&nbsp;&nbsp;outside.
+<br />
+<br />&nbsp;* Olly:
+<br />
+<em class="quotelev1">   &gt; Now, there's one more feature that I would really like to see;  I'd like
+</em><br />
+<em class="quotelev1">   &gt; to be able to set up a button that would, given a window name,
+</em><br />
+<em class="quotelev1">   &gt; start the program and wait for the window to come up (like the default)
+</em><br />
+<em class="quotelev1">   &gt; unless a window with that name already existed in which case it would
+</em><br />
+<em class="quotelev1">   &gt; warp the desktop to that window.
+</em><br />
+&nbsp;&nbsp;&nbsp;Ok, I've put it on the TODO list, but it'll take a while, sorry...
+<br />
+<br />&nbsp;* Robert Tarrall discovered a serious typo which would mess things up if
+<br />
+&nbsp;&nbsp;&nbsp;you have buttons with actions &quot;Desk ....&quot;. (Does anyone use that anymore?
+<br />
+&nbsp;&nbsp;&nbsp;Guess the pager has taken over, but you know - never, _ever_ remove a
+<br />
+&nbsp;&nbsp;&nbsp;feature!) Should have shown up in my compiler warnings, however this lousy
+<br />
+&nbsp;&nbsp;&nbsp;system doesn't have matching includes and libs, I have to use things like 
+<br />
+&nbsp;&nbsp;&nbsp;sscanf and fprintf on faith. Looking forward to return to my Linux PC :-).
+<br />
+<br />More stuff:
+<br />
+<br />Even though I really, _really_ should be doing something completely different,
+<br />
+it seems I can't get my mind of this :-)
+<br />
+I have everything laid out, on paper, to redo the parser, make the button box
+<br />
+interactively configurable (you'll love that), and some more options.
+<br />
+I will do some brushing up, there will be some changes to the extended syntax
+<br />
+to make it all set, and then I will freeze it for some months.
+<br />
+(Until then, daily snapshots will appear on the web page. If you make a nice
+<br />
+config, please send it to me if you want it included there :-) Instant fame!)
+<br />
+<br />Problem is I've got 3 weeks now to finish my diploma, one week holiday with my
+<br />
+family, and then 2 months intensive army training probably without much spare
+<br />
+time.
+<br />
+<br />But I promise to finish this some time, I mean, there is a limit to how many
+<br />
+features you can add. Isn't it..?
+<br />
+<br />Vyrdsamt,
+<br />
+-Jarl
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Mar 06 1996 - 00:22:15 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start15713">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="15714.html" title="Next message in the list">Jan-Erik Borg: "Re: FVWM: continued line patch (Finding central/user system.fvwmrc)"</a></li>
+<li><dfn>Previous message</dfn>: <a href="15712.html" title="Previous message in the list">N. Dan Zou: "Re: FVWM: Move windows in place between desktops/screens"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="15715.html" title="Next message in this discussion thread">jarl_at_cptsu5.univ-mrs.fr: "Re: FVWM: FvwmButtons problems"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Maybe reply</dfn>: <a href="15715.html" title="Message sent in reply to this message">jarl_at_cptsu5.univ-mrs.fr: "Re: FVWM: FvwmButtons problems"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15713" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15713" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15713" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15713" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

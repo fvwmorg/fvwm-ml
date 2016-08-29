@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Suggestion for LastPlacement style option from Brady Montz on 1996-03-30 (fvwm-users)</title>
+<meta name="Author" content="Brady Montz (bradym_at_cs.arizona.edu)" />
+<meta name="Subject" content="FVWM: Suggestion for LastPlacement style option" />
+<meta name="Date" content="1996-03-30" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Suggestion for LastPlacement style option</h1>
+<!-- received="Sat Mar 30 10:09:06 1996" -->
+<!-- isoreceived="19960330100906" -->
+<!-- sent="Sat, 30 Mar 1996 09:08:57 -0700 (MST)" -->
+<!-- isosent="19960330160857" -->
+<!-- name="Brady Montz" -->
+<!-- email="bradym_at_cs.arizona.edu" -->
+<!-- subject="FVWM: Suggestion for LastPlacement style option" -->
+<!-- id="199603301608.JAA00845_at_mahler.cs.arizona.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start16057" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="16058.html" accesskey="d" title="Vladimir Vukicevic: &quot;FVWM: patch for using 24-bit ppms as icons&quot;">Next message</a> ]
+[ <a href="16056.html" title="Charles Hines: &quot;FVWM: delay of 2.0.42&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16057" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16057" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16057" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16057" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Brady Montz &lt;<a href="mailto:bradym_at_cs.arizona.edu?Subject=Re%3A%20FVWM%3A%20Suggestion%20for%20LastPlacement%20style%20option">bradym_at_cs.arizona.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sat, 30 Mar 1996 09:08:57 -0700 (MST)</span><br />
+</address>
+<br />
+I tend to be somewhat anal about where my windows go, but it is tiresome
+<br />
+placing the windows manually (I'm not so anal that I have aliases and scripts
+<br />
+to place them for me, although I suppose it could be done). So how does this
+<br />
+sound: A LastPlacement option, like SmartPlacement and RandomPlacement, which
+<br />
+places a window in the same location as the last instance of it, or has you
+<br />
+manually place it if this is the first invocation of it. Obviously, not too
+<br />
+useful for things like xterm, but I would like it for things that I only ever
+<br />
+have one of, such as workman, xcalc, xman, xv, editres, xpaint, nethack, etc.
+<br />
+<br />I see two potential problems. First, can we add another style without
+<br />
+problems? I remember reading that fwvm has run out of bits. Second, what
+<br />
+information do we store. The class and resource names don't change, but the
+<br />
+icon and title names sure do, and the styles match against all of them.
+<br />
+Probably just remember the values the window had when it was destroyed. Also,
+<br />
+it would probably be wise to cap the number of window types which get
+<br />
+remembered, in case someone for some reason is doing something weird like
+<br />
+running programs with classnames &quot;xterm.1&quot;, &quot;xterm.2&quot;, &quot;xterm.3&quot; etc. 
+<br />
+<br />As for how the style command does its matching, I do have a problem with that. 
+<br />
+I would much prefer the ability to specify which one of {class, resource,
+<br />
+title, icon} the regular expressions are matched against. I used to have a
+<br />
+like &quot;Style &quot;Fvwm*&quot; ...&quot; to match all fvwm modules in one shot, but that was
+<br />
+bad if I had an emacs window editing FvwmIconMan.c while I restarted fvwm. The
+<br />
+syntax FvwmIconMan uses is: type=regexp where type is one of {class, resource,
+<br />
+title, icon} and regexp is the regular expression, or just the regular
+<br />
+expression, in which case it matches everything.
+<br />
+<br />Does anybody see a reason why I should not go ahead and implement these?
+<br />
+<br />bradym_at_cs.arizona.edu
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sat Mar 30 1996 - 10:09:06 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start16057">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="16058.html" title="Next message in the list">Vladimir Vukicevic: "FVWM: patch for using 24-bit ppms as icons"</a></li>
+<li><dfn>Previous message</dfn>: <a href="16056.html" title="Previous message in the list">Charles Hines: "FVWM: delay of 2.0.42"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16057" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16057" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16057" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16057" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

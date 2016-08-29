@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="ISO-2022-JP"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-2022-JP" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: fvwm-2.0.42: FvwmDebug: portability fix from まつしたまこと  on 1996-04-29 (fvwm-users)</title>
+<meta name="Author" content="まつしたまこと  (matusita_at_ics.es.osaka-u.ac.jp)" />
+<meta name="Subject" content="Re: FVWM: fvwm-2.0.42: FvwmDebug: portability fix" />
+<meta name="Date" content="1996-04-29" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: fvwm-2.0.42: FvwmDebug: portability fix</h1>
+<!-- received="Sun Apr 28 22:20:02 1996" -->
+<!-- isoreceived="19960428212002" -->
+<!-- sent="Mon, 29 Apr 1996 12:22:45 +0900" -->
+<!-- isosent="19960429032245" -->
+<!-- name="まつしたまこと " -->
+<!-- email="matusita_at_ics.es.osaka-u.ac.jp" -->
+<!-- subject="Re: FVWM: fvwm-2.0.42: FvwmDebug: portability fix" -->
+<!-- id="199604290322.MAA17183_at_skylark.ics.es.osaka-u.ac.jp" -->
+<!-- charset="ISO-2022-JP" -->
+<!-- inreplyto="Mon, 29 Apr 1996 12:03:35 +0900&quot;" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start16514" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="16515.html" accesskey="d" title="Harper Theo: &quot;Re: FVWM: Screen Saver&quot;">Next message</a> ]
+[ <a href="16513.html" title="&#12414;&#12388;&#12375;&#12383;&#12414;&#12371;&#12392; : &quot;FVWM: fvwm-2.0.42: FvwmDebug: portability fix&quot;">Previous message</a> ]
+[ <a href="16513.html" title="&#12414;&#12388;&#12375;&#12383;&#12414;&#12371;&#12392; : &quot;FVWM: fvwm-2.0.42: FvwmDebug: portability fix&quot;">Maybe in reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16514" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16514" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16514" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16514" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: まつしたまこと  &lt;<a href="mailto:matusita_at_ics.es.osaka-u.ac.jp?Subject=Re%3A%20FVWM%3A%20fvwm-2.0.42%3A%20FvwmDebug%3A%20portability%20fix%1B(B">matusita_at_ics.es.osaka-u.ac.jp</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 29 Apr 1996 12:22:45 +0900</span><br />
+</address>
+<br />
+Oops, there are more points to fix.
+<br />
+<br />matusita&gt; In NEWS-OS 4.x, there are no define/typedef for 'pid_
+<br />
+matusita&gt; t'. Here is a patch to fix this, for FvwmDebug (too small:).
+<br />
+<br />Also, setvbuf() and waitpid() is also NOT exists. Followings is the
+<br />
+RIGHT patch to fix portability probrem in FvwmDebug.
+<br />
+<br />Sorry for confusing.
+<br />
+<br />- -
+<br />
+Makoto `MAR_kun' MATSUSHITA
+<br />
+<br />--- modules/FvwmDebug/FvwmDebug.c.orig	Sat Mar  2 05:17:22 1996
+<br />
++++ modules/FvwmDebug/FvwmDebug.c	Mon Apr 29 12:18:28 1996
+<br />
+_at_&#64; -62,7 +62,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;else /* parent */
+<br />
+&nbsp;&nbsp;&nbsp;{
+<br />
+-    if (waitpid(pid, NULL, WNOHANG) != pid)
+<br />
++    if (ReapChildrenPid(pid) != pid)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dup2(PIPE[1], STDOUT_FILENO);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dup2(PIPE[1], STDERR_FILENO);
+<br />
+--- modules/FvwmDebug/FvwmDebug.h.orig	Wed Sep 14 03:24:41 1994
+<br />
++++ modules/FvwmDebug/FvwmDebug.h	Mon Apr 29 12:18:12 1996
+<br />
+_at_&#64; -36,3 +36,13 &#64;&#64;
+<br />
+&nbsp;#include &quot;../../fvwm/sun_headers.h&quot;
+<br />
+&nbsp;#endif
+<br />
+&nbsp;
+<br />
++#ifdef HAVE_WAITPID
+<br />
++#define ReapChildrenPid(pid) waitpid(pid, NULL, WNOHANG)
+<br />
++#else
+<br />
++#define ReapChildrenPid(pid) wait4(pid, NULL, WNOHANG, NULL)
+<br />
++#endif
+<br />
++
+<br />
++#ifdef sony_news
+<br />
++typedef int pid_t;
+<br />
++#define setvbuf(a,b,c,d) setlinebuf(a)
+<br />
++#endif
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sun Apr 28 1996 - 22:20:02 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start16514">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="16515.html" title="Next message in the list">Harper Theo: "Re: FVWM: Screen Saver"</a></li>
+<li><dfn>Previous message</dfn>: <a href="16513.html" title="Previous message in the list">&#12414;&#12388;&#12375;&#12383;&#12414;&#12371;&#12392; : "FVWM: fvwm-2.0.42: FvwmDebug: portability fix"</a></li>
+<li><dfn>Maybe in reply to</dfn>: <a href="16513.html" title="Message to which this message replies">&#12414;&#12388;&#12375;&#12383;&#12414;&#12371;&#12392; : "FVWM: fvwm-2.0.42: FvwmDebug: portability fix"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16514" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16514" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16514" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16514" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

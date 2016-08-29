@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: [2.0.41] still coring using tgif from Paul D. Smith on 1996-03-13 (fvwm-users)</title>
+<meta name="Author" content="Paul D. Smith (psmith_at_BayNetworks.com)" />
+<meta name="Subject" content="FVWM: [2.0.41] still coring using tgif" />
+<meta name="Date" content="1996-03-13" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: [2.0.41] still coring using tgif</h1>
+<!-- received="Wed Mar 13 10:59:30 1996" -->
+<!-- isoreceived="19960313105930" -->
+<!-- sent="Wed, 13 Mar 96 11:58:49 EST" -->
+<!-- isosent="19960313165849" -->
+<!-- name="Paul D. Smith" -->
+<!-- email="psmith_at_BayNetworks.com" -->
+<!-- subject="FVWM: [2.0.41] still coring using tgif" -->
+<!-- id="9603131658.AA13227_at_lemming.engeast" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start15874" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="15875.html" accesskey="d" title="Jarl Totland: &quot;FVWM: rgb:r/g/b vs #rgb&quot;">Next message</a> ]
+[ <a href="15873.html" title="E. Bryan George: &quot;FVWM: Re: FVWM Mailing List Archives now available&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15874" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15874" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15874" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15874" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Paul D. Smith &lt;<a href="mailto:psmith_at_BayNetworks.com?Subject=Re%3A%20FVWM%3A%20%5B2.0.41%5D%20still%20coring%20using%20tgif">psmith_at_BayNetworks.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 13 Mar 96 11:58:49 EST</span><br />
+</address>
+<br />
+OK, I pulled the very latest tgif 2.16-p12 and it still causes FVWM to
+<br />
+core in exactly the same way.
+<br />
+<br />It turns out that the only time tgif causes a core is _after_ I've
+<br />
+resized the tgif window.  I played with tgif for about 10 mins without a
+<br />
+problem, then I resized the window (by dragging the right FVWM border)
+<br />
+and very quickly after that FVWM cored.  I then started tgif and
+<br />
+immediately resized the border, and again FVWM cored very shortly
+<br />
+afterward.  Note you must actually be fooling around in tgif, if you
+<br />
+don't do anything it won't core.
+<br />
+<br />I'm not 100% sure but it might have happened the first time I moved the
+<br />
+mouse outside of the tgif window after resizing.
+<br />
+<br />I have no tgif resources set personally, and tgif doesn't install any
+<br />
+system ones either.
+<br />
+<br />I'm using X11R6 fix 12 from MIT on SunOS 4.1.3_U1.  I've recompiled FVWM
+<br />
+and tgif to use the X11R6 libs and headers; ldd shows:
+<br />
+<br />&nbsp;&nbsp;$ ldd tgif 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lXext.4 =&gt; /usr/X11R6/lib/libXext.so.4.20
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lX11.4 =&gt; /usr/X11R6/lib/libX11.so.4.20
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lc.1 =&gt; /usr/lib/libc.so.1.9
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-ldl.1 =&gt; /usr/lib/libdl.so.1.0
+<br />
+&nbsp;&nbsp;$ ldd fvwm2
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lXpm.4 =&gt; /usr/X11R6/lib/libXpm.so.4.8
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lXext.4 =&gt; /usr/X11R6/lib/libXext.so.4.20
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lX11.4 =&gt; /usr/X11R6/lib/libX11.so.4.20
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lc.1 =&gt; /usr/lib/libc.so.1.9
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-ldl.1 =&gt; /usr/lib/libdl.so.1.0
+<br />
+<br />I'm not sure where to go from here: could this be a bug in FVWM?  Could
+<br />
+that event number get trashed somehow by FVWM before it's used?  Or is
+<br />
+that value take directly from the X API, and this is a bug in X?
+<br />
+<br />-------------------------------------------------------------------------------
+<br />
+&nbsp;Paul D. Smith &lt;psmith_at_baynetworks.com&gt;         Network Management Development
+<br />
+&nbsp;Senior Software Engineer                                   Bay Networks, Inc.
+<br />
+-----------------------------------------------==&lt;<a href="http://www.baynetworks.com/">http://www.baynetworks.com/</a>&gt;-
+<br />
+&nbsp;&quot;Please remain calm...I may be mad, but I am a professional.&quot; --Mad Scientist
+<br />
+-------------------------------------------------------------------------------
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;These are my opinions--Bay Networks takes no responsibility for them.
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Mar 13 1996 - 10:59:30 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start15874">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="15875.html" title="Next message in the list">Jarl Totland: "FVWM: rgb:r/g/b vs #rgb"</a></li>
+<li><dfn>Previous message</dfn>: <a href="15873.html" title="Previous message in the list">E. Bryan George: "FVWM: Re: FVWM Mailing List Archives now available"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15874" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15874" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15874" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15874" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

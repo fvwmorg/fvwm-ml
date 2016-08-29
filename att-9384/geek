@@ -1,0 +1,384 @@
+#!/usr/bin/perl
+
+# use strict;
+use Getopt::Long;
+
+my ($host, $home, $ircclient,
+    $cmd, $pid1, $pid2, $pid3, $pid4, $pid5, $g, $n, $s, $d, $v, $wide, $debug, $test, $server, $geometry,
+    $shell, $whoson, $icbclient, $ircclient, $nowork, $ii, $iii, @jobs, $force, $help, $who, $nowho, $std, $all,
+    $bitmines, $beadwrld, $wicb, $callahans, $caerllewys, $wardroom,
+    $withmines, $withbeadwrld, $withwicb, $withcall, $withcaer,
+    $undernet, $latt, 
+    $withunder, $withlatt, $icbm);
+
+$home = $ENV{'HOME'};
+$host = $ENV{'HOSTNAME'};
+
+$ircclient = '/usr/local/bin/sirc -8';
+
+$g = $n = $s = '';
+($bitmines, $beadwrld, $wicb, $callahans, $d, $latt, $caerllewys, $all, $v, $ii, $iii, $wide, $nowork, $debug) = (0,0,0,0,0,0,0,0,0,0,0,0);
+$icbm = 1;
+
+GetOptions('bitmines'		=> \$bitmines,
+           'beadwrld'		=> \$beadwrld,
+           'wicb'		=> \$wicb,
+           'callahans'		=> \$callahans,
+           'caerllewys|caer'	=> \$caerllewys,
+           'wardroom|ward'	=> \$wardroom,
+           'undernet'		=> \$undernet,
+           'latt'		=> \$latt,
+           'icbm'		=> \$icbm,
+           'cicb'		=> sub {$icbm = 0},
+           'with-wicb'		=> \$withwicb,
+           'with-bitmines'	=> \$withmines,
+           'with-beadwrld'	=> \$withbeadwrld,
+           'with-callahans'	=> \$withcall,
+           'with-caer'		=> \$withcaer,
+           'with-undernet'	=> \$withunder,
+           'with-latt'		=> \$withlatt,
+           'all'		=> \$all,
+           'who'		=> \$who,
+           'nowho'		=> \$nowho,
+           'group=s'		=> \$g,
+           'nick=s'		=> \$n,
+           'server=s'		=> \$s,
+           'std'		=> \$std,
+           'wide'		=> \$wide,
+           'nowork'		=> \$nowork,
+           'force'		=> \$force,
+           'verbose'		=> \$v,
+           '2'			=> \$ii,
+           '3'			=> \$iii,
+           'h'			=> \$help,
+           'help|usage'		=> \$help,
+           'debug'		=> \$debug,
+           'test'		=> \$test);
+
+if ($help)
+{
+    &usage;
+}
+else
+{
+    &start_sessions;
+}
+
+exit 0;
+
+
+sub usage
+{
+    print '
+Usage:
+	geek [options]
+
+Default options:
+	-wicb -calahans -wardroom -icbm -std
+
+Session options:
+	-beadwrld	ICB session to beadwrld
+	-bitmines	ICB session to bitmines
+	-wicb		ICB session to wicb
+	-caerllewys	IRC session to #caerllewys
+	-callahans	IRC session to #callahans
+	-wardroom	IRC session to #wardroom
+	-undernet	IRC session to #callahans on undernet
+	-latt		IRC session to #wardroom on latt.net
+	-with-beadwrld	add -beadwrld to defaults
+	-with-bitmines	add -bitmines to defaults
+	-with-caer	add -caerllewys to defaults
+	-with-call	add -callahans to defaults
+	-all		add -bitmines -2 to defaults
+	-nowork		not currently used
+	-who		poll the ICB server to see who\'s on
+	-nowho		do not poll the ICB server
+
+Server options:
+	-g <group>	change default ICB group
+	-n <nick>	change default nick
+	-s <server>	change default server
+	-test		test ICB session as TestRic
+
+Client options
+	-icbm		use icbm for ICB sessions
+	-cicb		use cicb for ICB sessions
+
+Window options:
+	-std		use standard windows (90 columns)
+	-wide    	use wide windows (120 columns)
+	-2		assume two icb sessions stacked vertically
+	-3		assume three icb sessions stacked vertically
+
+Operation options:
+	-force, -f	force session even if already running
+	-debug		debug only, do not actually start sessions
+	-verbose, -v	verbose operation
+
+';
+}
+
+
+sub start_sessions
+{
+    my $session;
+
+    ($wicb, $wardroom, $callahans, $std) = (1,1,1,1) unless ($bitmines || $beadwrld || $callahans || $caerllewys || $latt || $wicb || $wardroom);
+    ($wicb, $callahans, $wardroom, $bitmines, $ii, $std) = (1,1,1,1,1,1) if ($all);
+
+    $wicb = 1 if ($withwicb);
+    $bitmines = 1 if ($withmines);
+    $beadwrld = 1 if ($withbeadwrld);
+    $caerllewys = 1 if ($withcaer);
+    $callahans = 1 if ($withcall);
+    $undernet = 1 if ($withunder);
+    $latt = 1 if ($withlatt);
+#    $wide = $std ? 0 : (($withmines || $withbeadwrld || $withcaer || $withcall) ? 0 : 1);
+
+    @jobs = grep (/icb|ssfe/, `ps xww`);
+    if ($debug)
+    {
+        print "JOBS:\n";
+        print @jobs;
+        print "\n";
+    }
+
+    unless ($force)
+    {
+        $bitmines = 0 if (grep(/-g bitmines/i, @jobs));
+        $wicb = 0 if (grep(/-g wicb/i, @jobs));
+        $beadwrld = 0 if (grep(/-g beadwrld/i, @jobs));
+        $callahans = 0 if (grep(/freenode.net.*(Alaric|Alrekr)\s/i, @jobs));
+        $wardroom = 0 if (grep(/irc.freenode.net.*AlariCat/i, @jobs));
+        $undernet = 0 if (grep(/undernet.org/i, @jobs));
+        $latt = 0 if (grep(/latt.net/i, @jobs));
+        unless (grep(/caerllewys/, `screen -ls`))
+        {
+            $caerllewys = 0 if (grep(/AlaricToo .*undernet.org/i, @jobs));
+        }
+    }
+
+    printf ("Bitmines: '%d', beadwrld: '%d', wicb: '%d', callahans: '%d', caerllewys: '%d', latt: '%d', whoson: '%d'\n",
+            $bitmines, $beadwrld, $wicb, $callahans, $caerllewys, $latt, $whoson) if ($debug);
+
+    $geometry = ($wide ? '-geometry 120x89' : '-geometry 90x89');
+    $shell = 'xterm -tn xterm-color -sb -sl 2000 -j -ls -bg black -fg yellow -fn 6x13 +dc';
+
+    foreach my $session ('caerllewys', 'bitmines', 'beadwrld', 'callahans', 'wardroom', 'wicb', 'latt', 'undernet', 'whoson')
+    {
+        my $cmd = sprintf('&dofork($session) if ($%s)', $session);
+        print "$cmd\n" if ($debug);
+        eval $cmd;
+    }
+}
+
+
+sub dofork
+{
+    my ($proc) = @_;
+    my $pid;
+
+    print "Forking proc for $proc\n" if ($debug);
+
+FORK: {
+          if ($pid = fork)
+          {
+              # parent
+              return;
+          }
+          elsif (defined $pid)
+          {
+              &$proc;
+              return;
+          }
+          elsif ($! =~ /No more process/)
+          {
+              # EAGAIN
+              sleep 5;
+              redo FORK;
+          }
+          else
+          {
+              die "Unable to fork $proc subprocess: $!\n";
+          }
+      } # FORK
+}
+
+
+sub bitmines
+{
+    print "Bitmines\n" if ($v);
+    $g = 'BitMines' unless ($g);
+    $n = 'VirtuAl' unless ($n);
+    $geometry .= '+148+0';
+    if (($beadwrld && $wicb) || $iii)
+    {
+        $geometry =~ s/80/28/;
+    }
+    elsif (($beadwrld || $wicb) || $ii)
+    {
+        $geometry =~ s/80/43/;
+    }
+    &icb($g, $n, $geometry);
+}
+
+
+sub beadwrld
+{
+    print "Beadwrld\n" if ($v);
+    $g = 'BeadWrld' unless ($g);
+    $n = 'VirtuAl' unless ($n);
+    if (($bitmines && $wicb) || $iii)
+    {
+        $geometry =~ s/80/28/;
+        $geometry .= '+148+399';
+    }
+    elsif (($bitmines) || $ii)
+    {
+        $geometry =~ s/80/43/;
+        $geometry .= '+148+593';
+    }
+    elsif (($wicb) || $ii)
+    {
+        $geometry =~ s/80/43/;
+        $geometry .= '+148+0';
+    }
+    &icb($g, $n, $geometry);
+}
+
+
+sub wicb
+{
+    print "WICB\n" if ($v);
+    $g = 'WICB' unless ($g);
+    $n = 'Alaric' unless ($n);
+    if (($bitmines && $beadwrld) || $iii)
+    {
+        $geometry =~ s/80/28/;
+        $geometry .= '+148+798';
+    }
+    elsif (($bitmines || $beadwrld) || $ii)
+    {
+        $geometry =~ s/80/43/;
+        $geometry .= '+148+595';
+    }
+    else
+    {
+        $geometry .= '+148+0';
+    }
+    &icb($g, $n, $geometry);
+}
+
+
+sub icb
+{
+    my ($g, $n, $geometry) = @_;
+    my $icbclient;
+    my @nicks;
+
+    if ($icbm)
+    {
+        push (@nicks, sprintf('TestRic%d', $$)) if ($test);
+        push (@nicks, $n);
+        push (@nicks, 'VirtuAl');
+        $icbclient = sprintf ('/usr/local/bin/icbm -co -n %s',
+                              join(' -n ', @nicks));
+    }
+    else
+    {
+        $n = "VirtuAl" unless ($n);
+        $n = "TestRic$$" if ($test);
+        $icbclient = sprintf ('/usr/local/bin/icb -co -n %s',
+                              $n);
+    }
+
+    $server = sprintf("-s %s", ($s ? $s : 'chime')) unless ($server);
+    $cmd = "$shell -title ICB:$g $geometry -e $icbclient -g $g $server";
+    &execute($cmd);
+}
+
+
+sub undernet
+{
+    print "Callahans\n" if ($v);
+    my $n = 'Alaric' unless ($n);
+    my $server = 'amsterdam.nl.eu.undernet.org';
+
+    $geometry .= '+717+0';
+    $cmd = "$shell -title Undernet:Callahans $geometry -e $ircclient -s $server -n $n";
+    &execute($cmd);
+}
+
+
+sub callahans
+{
+    print "Callahans\n" if ($v);
+    my $n = 'Alaric' unless ($n);
+    my $server = 'irc.freenode.net';
+
+    $geometry .= ($wide ? '+781+0' : '+717+0');
+    $cmd = "$shell -title Freenode:Callahans $geometry -e $ircclient -s $server -n $n";
+    &execute($cmd);
+}
+
+
+sub wardroom
+{
+    print "Wardroom\n" if ($v);
+    my $n = 'AlariCat' unless ($n);
+    my $server = 'irc.freenode.net';
+
+    $geometry .= '+1286+0';
+    $cmd = "$shell -title Freenode:Wardroom $geometry -e $ircclient -s $server -n $n";
+    &execute($cmd);
+}
+
+
+sub caerllewys
+{
+    print "CaerLlewys\n" if ($v);
+    my $n = 'AlaricToo' unless ($n);
+    my $server = 'irc.freenode.net';
+
+    $geometry .= '+1286+0';
+    $cmd = "$shell -title Freenode:CaerLlewys $geometry -e $ircclient -s $server -n $n";
+    &execute($cmd);
+}
+
+
+sub latt
+{
+    print "latt.net\n" if ($v);
+    my $n = 'Alaric' unless ($n);
+    my $server = 'irc.latt.net';
+
+#    $geometry =~ s/80/43/ if ($freenode);
+    $geometry .= ($wide ? '+781+0' : '+717+0');
+    $cmd = "$shell -title Latt:Wardroom $geometry -e $ircclient -s $server -n $n";
+    &execute($cmd);
+}
+
+
+sub whoson
+{
+    print "Whoson\n" if ($v);
+    $server = ($s ? $s : 'chime');
+    $cmd = "/usr/local/bin/whoson2 -s $server";
+    &execute($cmd);
+}
+
+
+sub execute
+{
+    my ($cmd) = @_;
+
+    if ($debug)
+    {
+        print "$cmd\n";
+        exit (0);
+    }
+    else
+    {
+        exec (split(' ', $cmd));
+    }
+}

@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Solution to Start menu problem from Raph Levien on 1997-04-21 (fvwm-users)</title>
+<meta name="Author" content="Raph Levien (raph_at_acm.org)" />
+<meta name="Subject" content="FVWM: Solution to Start menu problem" />
+<meta name="Date" content="1997-04-21" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Solution to Start menu problem</h1>
+<!-- received="Mon Apr 21 17:42:53 1997" -->
+<!-- isoreceived="19970421164253" -->
+<!-- sent="Mon, 21 Apr 1997 15:43:22 -0700" -->
+<!-- isosent="19970421224322" -->
+<!-- name="Raph Levien" -->
+<!-- email="raph_at_acm.org" -->
+<!-- subject="FVWM: Solution to Start menu problem" -->
+<!-- id="335BED8A.1C2A87E2_at_acm.org" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start19858" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="19859.html" accesskey="d" title="Eric Ding [ext 284]: &quot;FVWM: for WM_TAKE_FOCUS windows, ClickToFocus misbehaves (??)&quot;">Next message</a> ]
+[ <a href="19857.html" title="David Koski: &quot;FVWM: Solaris 2.5.1 and 1.24/2.0.45&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19858" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19858" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19858" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19858" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Raph Levien &lt;<a href="mailto:raph_at_acm.org?Subject=Re%3A%20FVWM%3A%20Solution%20to%20Start%20menu%20problem">raph_at_acm.org</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 21 Apr 1997 15:43:22 -0700</span><br />
+</address>
+<br />
+Hi Hector,
+<br />
+<br />&nbsp;&nbsp;&nbsp;I've come up with the answer to making the Start menu pop up when the
+<br />
+start button is pressed, not waiting for it to be released.
+<br />
+<br />&nbsp;&nbsp;&nbsp;First, change modules/FvwmTaskBar.c:LoopOnEvents as follows (near
+<br />
+line 861):
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case ButtonPress:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RadioButton(&amp;buttons, -1, BUTTON_UP); /* no windows focused
+<br />
+anymore */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (MouseInStartButton(Event.xbutton.x, Event.xbutton.y)) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;StartButtonUpdate(NULL, BUTTON_DOWN);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x = win_x;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (win_y &lt; Midline) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* bar in top half of the screen */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y = win_y + RowHeight;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* bar in bottom of the screen */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y = win_y - ScreenHeight;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sprintf(tmp,&quot;Menu \&quot;%s %d %d\&quot;&quot;, StartPopup, x, y);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SendFvwmPipe(tmp, ItemID(&amp;windows, 0));
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XUngrabPointer(Event.xbutton.display, Event.xbutton.time);
+<br />
+<br />&nbsp;&nbsp;&nbsp;The two relevant changes are changing from Popup to Menu, so the
+<br />
+Start menu is properly sticky, and adding the XUngrabPointer call, so
+<br />
+the menu comes up instantly on button press.
+<br />
+<br />&nbsp;&nbsp;&nbsp;Second, change fvwm/builtins.c:staysup_func as follows:
+<br />
+<br />&nbsp;&nbsp;...
+<br />
+&nbsp;&nbsp;ActiveItem = NULL;
+<br />
+&nbsp;&nbsp;ActiveMenu = NULL;
+<br />
+&nbsp;&nbsp;menuFromFrameOrWindowOrTitlebar = FALSE;
+<br />
+<br />&nbsp;&nbsp;do_menu(menu,1);
+<br />
+<br />&nbsp;&nbsp;if(menu_name != NULL)
+<br />
+&nbsp;&nbsp;...
+<br />
+<br />&nbsp;&nbsp;&nbsp;In other words, get rid of the case analysis which makes the popup
+<br />
+sticky only if the event was a button press. Incidentally, you can do
+<br />
+the same thing at the end of window.c too.
+<br />
+<br />&nbsp;&nbsp;&nbsp;Third, change fvwm/menus.c:UpdateMenu as follows:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case ButtonPress:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sticks = 0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case KeyPress:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case VisibilityNotify:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;done=1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
+<br />&nbsp;&nbsp;&nbsp;In other words, catching a button press makes the window non-sticky.
+<br />
+This handles both the case that the menu was popped up by a key and the
+<br />
+case where it is popped up by a button in a different process (such as a
+<br />
+module).
+<br />
+<br />&nbsp;&nbsp;&nbsp;It should be clear that this is the right way to fix the problem (if
+<br />
+for no other reason than the too-sticky problem is solved once, in
+<br />
+UpdateMenu, rather than in two different places). What makes the problem
+<br />
+tricky is that the button release event from clicking the start button
+<br />
+may go to either FvwmTaskBar or fvwm, depending on the timing.
+<br />
+<br />&nbsp;&nbsp;&nbsp;Since much of the affected code is in fvwm proper, not just fvwm95,
+<br />
+I've cc'ed the fvwm mailing list. I'm not sure if this is the right
+<br />
+process, but it should at the very least get the patches to the people
+<br />
+that need them.
+<br />
+<br />Raph
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon Apr 21 1997 - 17:42:53 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start19858">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="19859.html" title="Next message in the list">Eric Ding [ext 284]: "FVWM: for WM_TAKE_FOCUS windows, ClickToFocus misbehaves (??)"</a></li>
+<li><dfn>Previous message</dfn>: <a href="19857.html" title="Previous message in the list">David Koski: "FVWM: Solaris 2.5.1 and 1.24/2.0.45"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19858" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19858" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19858" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19858" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

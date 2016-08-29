@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Re: shell vars in .fvwm2rc ? from David S. Goldberg on 1999-08-13 (fvwm-users)</title>
+<meta name="Author" content="David S. Goldberg (dsg_at_mitre.org)" />
+<meta name="Subject" content="FVWM: Re: shell vars in .fvwm2rc ?" />
+<meta name="Date" content="1999-08-13" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Re: shell vars in .fvwm2rc ?</h1>
+<!-- received="Fri Aug 13 08:39:46 1999" -->
+<!-- isoreceived="19990813073946" -->
+<!-- sent="13 Aug 1999 09:38:36 -0400" -->
+<!-- isosent="19990813133836" -->
+<!-- name="David S. Goldberg" -->
+<!-- email="dsg_at_mitre.org" -->
+<!-- subject="FVWM: Re: shell vars in .fvwm2rc ?" -->
+<!-- id="m1blnbfdcmb.fsf_at_blackbird.mitre.org" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="Thu, 12 Aug 1999 18:48:01 -0400&quot;" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start24671" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="24672.html" accesskey="d" title="Tim Phipps: &quot;Re: FVWM: fvwm2 on NT with Exceed?&quot;">Next message</a> ]
+[ <a href="24670.html" title="John_W_Quillen_at_sbphrd.com: &quot;FVWM: fvwm2 on NT with Exceed?&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg24671" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg24671" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg24671" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg24671" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: David S. Goldberg &lt;<a href="mailto:dsg_at_mitre.org?Subject=Re%3A%20FVWM%3A%20Re%3A%20shell%20vars%20in%20.fvwm2rc%20%3F">dsg_at_mitre.org</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: 13 Aug 1999 09:38:36 -0400</span><br />
+</address>
+<br />
+<em class="quotelev1">&gt; Is there a way to use shell variables in .fvwm2rc ? I'd rather not
+</em><br />
+<em class="quotelev1">&gt; preprocess the file using FvwmM4, since the same user may log in to
+</em><br />
+<em class="quotelev1">&gt; multiple machines, and thus multiple architectures, at
+</em><br />
+<em class="quotelev1">&gt; once. (However, I haven't even figured out how to do *that* yet
+</em><br />
+<em class="quotelev1">&gt; either, so pointers in that direction would also be appreciated.)
+</em><br />
+<br />Actually, processing with FvwmM4 is ideal for this situation.  FvwmM4
+<br />
+predefines an OSTYPE variable so you can choose your paths based on
+<br />
+that.  If you want more granularity than that, and have an environment
+<br />
+variable set up for it (call it $ARCH for example), you can do
+<br />
+something like this:
+<br />
+<br />fvwm2 -cmd &quot;FvwmM4 -m4-squote { -m4-equote } -m4-opt -DARCH=$ARCH .fvwm2rc&quot;
+<br />
+<br /><em class="quotelev1">&gt; P.S. I'm currently using 2.0.46. Will the same .fvwm2rc files work
+</em><br />
+<em class="quotelev1">&gt; with 2.2, 2.2.2, etc., aside from changing the module paths and
+</em><br />
+<em class="quotelev1">&gt; such?
+</em><br />
+<br />Mine required only a few minor tweaks when I moved to 2.2 and none for
+<br />
+the move from 2.2 to 2.2.2 except for removing a workaround for a bug
+<br />
+in 2.2 that's fixed in 2.2.2.  I haven't tried the 2.3.* yet, but I've 
+<br />
+read the manual.  I suspect that some tweaking would be necessary
+<br />
+there too, but it doesn't look like anything major.  In fact things
+<br />
+appear simple enough that with FvwmM4 you could easily have a .fvwm2rc 
+<br />
+that supported both versions.
+<br />
+<pre>
+-- 
+Dave Goldberg
+Post: The Mitre Corporation\MS B325\202 Burlington Rd.\Bedford, MA 01730
+Phone: 781-271-3887
+Email: dsg_at_mitre.org
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Aug 13 1999 - 08:39:46 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start24671">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="24672.html" title="Next message in the list">Tim Phipps: "Re: FVWM: fvwm2 on NT with Exceed?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="24670.html" title="Previous message in the list">John_W_Quillen_at_sbphrd.com: "FVWM: fvwm2 on NT with Exceed?"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg24671" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg24671" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg24671" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg24671" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:02 BST
+</em></small></p>
+</body>
+</html>

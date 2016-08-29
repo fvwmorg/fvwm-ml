@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: changing functions dynamically from Jakob Schiotz on 1997-02-14 (fvwm-users)</title>
+<meta name="Author" content="Jakob Schiotz (schiotz_at_fysik.dtu.dk)" />
+<meta name="Subject" content="Re: FVWM: changing functions dynamically" />
+<meta name="Date" content="1997-02-14" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: changing functions dynamically</h1>
+<!-- received="Fri Feb 14 03:16:23 1997" -->
+<!-- isoreceived="19970214031623" -->
+<!-- sent="Fri, 14 Feb 97 10:15:41 +0100" -->
+<!-- isosent="19970214091541" -->
+<!-- name="Jakob Schiotz" -->
+<!-- email="schiotz_at_fysik.dtu.dk" -->
+<!-- subject="Re: FVWM: changing functions dynamically" -->
+<!-- id="9702140915.AA11123_at_fysik.dtu.dk" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="33037512.7CB8_at_bbn.com" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start19246" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="19247.html" accesskey="d" title="Kai Grossjohann: &quot;FVWM: Re: none&quot;">Next message</a> ]
+[ <a href="19245.html" title="Sharad Gaur: &quot;(no subject)&quot;">Previous message</a> ]
+[ <a href="19232.html" title="Mark Krischer: &quot;FVWM: changing functions dynamically&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19246" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19246" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19246" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19246" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Jakob Schiotz &lt;<a href="mailto:schiotz_at_fysik.dtu.dk?Subject=Re%3A%20FVWM%3A%20changing%20functions%20dynamically">schiotz_at_fysik.dtu.dk</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 14 Feb 97 10:15:41 +0100</span><br />
+</address>
+<br />
+Mark Krischer &lt;mkrisch_at_bbn.com&gt; wrote:
+<br />
+<em class="quotelev1"> &gt; i'm trying to do this:
+</em><br />
+<em class="quotelev1"> &gt; 
+</em><br />
+<em class="quotelev1"> &gt; # Screen Saver and Lock functions
+</em><br />
+<em class="quotelev1"> &gt; DestroyFunc     ScreenSaver
+</em><br />
+<em class="quotelev1"> &gt; 
+</em><br />
+<em class="quotelev1"> &gt; AddToFunc       ScreenSaver  &quot;I&quot;     Function ScreenSaver1
+</em><br />
+<em class="quotelev1"> &gt; 
+</em><br />
+<em class="quotelev1"> &gt; AddToFunc       ScreenSaver1 &quot;I&quot;     Exec xlock -mode flame -delay 5000
+</em><br />
+<em class="quotelev1"> &gt; -nolock
+</em><br />
+<em class="quotelev1"> &gt; +       &quot;I&quot;     DestroyFunc     ScreenSaver
+</em><br />
+<em class="quotelev1"> &gt; +       &quot;I&quot;     AddToFunc       ScreenSaver &quot;I&quot; Function ScreenSaver2
+</em><br />
+<em class="quotelev1"> &gt; 
+</em><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ ... ]
+<br />
+<em class="quotelev1"> &gt; i can get the screen saver to start, but doing so kills fvwm2.  what am
+</em><br />
+<em class="quotelev1"> &gt; i doing wrong?
+</em><br />
+<em class="quotelev1"> &gt; 
+</em><br />
+<br />You are destroying a running function.  When ScreenSaver1 returns it
+<br />
+returns to ScreenSaver, but that function no longer exist (a new
+<br />
+function exists, but it may be somewhere else in memory).  Maybe the
+<br />
+memory once used by the first instance of ScreenSaver has been
+<br />
+reclaimed and used for something else.
+<br />
+<br />Jakob
+<br />
+<br /><pre>
+--
+Jakob Schiotz                    !  Email: schiotz_at_fysik.dtu.dk
+CAMP, Department of Physics      !  WWW: <a href="http://www.fysik.dtu.dk/~schiotz/">http://www.fysik.dtu.dk/~schiotz/</a>
+Technical University of Denmark  !  
+DK-2800 Lyngby, Denmark          !  
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Feb 14 1997 - 03:16:23 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start19246">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="19247.html" title="Next message in the list">Kai Grossjohann: "FVWM: Re: none"</a></li>
+<li><dfn>Previous message</dfn>: <a href="19245.html" title="Previous message in the list">Sharad Gaur: "(no subject)"</a></li>
+<li><dfn>In reply to</dfn>: <a href="19232.html" title="Message to which this message replies">Mark Krischer: "FVWM: changing functions dynamically"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19246" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19246" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19246" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19246" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

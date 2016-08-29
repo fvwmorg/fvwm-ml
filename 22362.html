@@ -1,0 +1,695 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: [PATCH]Buttons on FvwmTaskBar have positions corresponding to window locations from Cheuk-san Edward Wang on 1998-06-05 (fvwm-users)</title>
+<meta name="Author" content="Cheuk-san Edward Wang (wang_at_ai.mit.edu)" />
+<meta name="Subject" content="FVWM: [PATCH]Buttons on FvwmTaskBar have positions corresponding to window locations" />
+<meta name="Date" content="1998-06-05" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: [PATCH]Buttons on FvwmTaskBar have positions corresponding to window locations</h1>
+<!-- received="Fri Jun  5 15:16:32 1998" -->
+<!-- isoreceived="19980605141632" -->
+<!-- sent="Fri, 5 Jun 1998 20:16:49 GMT" -->
+<!-- isosent="19980605201649" -->
+<!-- name="Cheuk-san Edward Wang" -->
+<!-- email="wang_at_ai.mit.edu" -->
+<!-- subject="FVWM: [PATCH]Buttons on FvwmTaskBar have positions corresponding to window locations" -->
+<!-- id="199806052016.UAA17591_at_wang.ai.mit.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start22362" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="22363.html" accesskey="d" title="Kin Cho: &quot;FVWM: Turn off Beep?&quot;">Next message</a> ]
+[ <a href="22361.html" title="Neil Zanella: &quot;Re: FVWM: another feature request&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg22362" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg22362" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg22362" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg22362" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Cheuk-san Edward Wang &lt;<a href="mailto:wang_at_ai.mit.edu?Subject=Re%3A%20FVWM%3A%20%5BPATCH%5DButtons%20on%20FvwmTaskBar%20have%20positions%20corresponding%20to%20window%20locations">wang_at_ai.mit.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 5 Jun 1998 20:16:49 GMT</span><br />
+</address>
+<br />
+I usually have many windows opened at once, like mutiple rxvt's,
+<br />
+netscape's, etc. They have the same names and it was a pain to find
+<br />
+the one that I wanted. This patch will sort the buttons according to
+<br />
+the X coordinates of the centers of the windows. Now a window on
+<br />
+the left of the screen will have its button on the left, and a window
+<br />
+on the right will have its button on the right. This patch makes my
+<br />
+life much easier. I've been using it for a month and haven't found any 
+<br />
+problems yet.
+<br />
+<br />Enjoy 
+<br />
+<br />Ed Wang
+<br />
+<br /><br />--- ButtonArray.c.orig	Fri Jun  5 15:35:50 1998
+<br />
++++ ButtonArray.c	Fri Jun  5 15:22:08 1998
+<br />
+_at_&#64; -77,7 +77,7 &#64;&#64;
+<br />
+&nbsp;/* -------------------------------------------------------------------------
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ButtonNew - Allocates and fills a new button structure
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;------------------------------------------------------------------------- */
+<br />
+-Button *ButtonNew(char *title, Picture *p, int state, int count)
+<br />
++Button *ButtonNew(char *title, Picture *p, long frame_center, int state, int count)
+<br />
+&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;Button *new;
+<br />
+&nbsp;
+<br />
+_at_&#64; -94,9 +94,9 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new-&gt;p.picture = 0;
+<br />
+&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;
+<br />
++   new-&gt;frame_center = frame_center;
+<br />
+&nbsp;&nbsp;&nbsp;new-&gt;state = state;
+<br />
+&nbsp;&nbsp;&nbsp;new-&gt;count = count;
+<br />
+-  new-&gt;next  = NULL;
+<br />
+&nbsp;&nbsp;&nbsp;new-&gt;needsupdate = 1;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;return new;
+<br />
+_at_&#64; -255,19 +255,77 &#64;&#64;
+<br />
+&nbsp;/* -------------------------------------------------------------------------
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AddButton - Allocate space for and add the button to the list
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;------------------------------------------------------------------------- */
+<br />
+-void AddButton(ButtonArray *array, char *title, Picture *p, int state, int count)
+<br />
++void AddButton(ButtonArray *array, char *title, Picture *p, long frame_center, int state, int count)
+<br />
+&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;Button *new, *temp;
+<br />
+&nbsp;
+<br />
+-  new = ButtonNew(title, p, state, count);
+<br />
+-  if (array-&gt;head == NULL) array-&gt;head = new;
+<br />
+-  else {
+<br />
+-    for (temp=array-&gt;head; temp-&gt;next; temp=temp-&gt;next);
+<br />
++  new = ButtonNew(title, p, frame_center, state, count);
+<br />
++  if (array-&gt;head == NULL || array-&gt;head-&gt;frame_center &gt; frame_center) {
+<br />
++     new-&gt;next = array-&gt;head;
+<br />
++     array-&gt;head = new;
+<br />
++  } else {
+<br />
++    for (temp=array-&gt;head; temp-&gt;next &amp;&amp; temp-&gt;next-&gt;frame_center&lt;frame_center; 
+<br />
++	 temp=temp-&gt;next);
+<br />
++     new-&gt;next = temp-&gt;next;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;temp-&gt;next = new;
+<br />
+&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;array-&gt;count++;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;ArrangeButtonArray (array);
+<br />
++}
+<br />
++
+<br />
++/* -------------------------------------------------------------------------
+<br />
++   InsertButton - Insert a button at it's new position
+<br />
++   ------------------------------------------------------------------------- */
+<br />
++void InsertButton(ButtonArray *array, Button *but)
+<br />
++{
+<br />
++   Button *temp;
+<br />
++   
+<br />
++   if (but-&gt;frame_center &lt; array-&gt;head-&gt;frame_center) {
+<br />
++      but-&gt;next = array-&gt;head;
+<br />
++      array-&gt;head = but;
+<br />
++   } else {
+<br />
++      for(temp=array-&gt;head; temp-&gt;next &amp;&amp; temp-&gt;next-&gt;frame_center &lt; but-&gt;frame_center;
+<br />
++	  temp=temp-&gt;next);
+<br />
++      but-&gt;next = temp-&gt;next;
+<br />
++      temp-&gt;next = but;
+<br />
++   }
+<br />
++}
+<br />
++   
+<br />
++/* -------------------------------------------------------------------------
+<br />
++   MoveButton - Move a button to it's new position
+<br />
++   ------------------------------------------------------------------------- */
+<br />
++int MoveButton(ButtonArray *array, int butnum, long frame_center)
+<br />
++{
+<br />
++   Button *temp, *temp2;
+<br />
++   
+<br />
++   temp = array-&gt;head;
+<br />
++   if (temp == NULL) return 0;
+<br />
++   if (temp-&gt;count == butnum) {
+<br />
++      temp-&gt;frame_center = frame_center;
+<br />
++      if ((temp-&gt;next == NULL) || (temp-&gt;next-&gt;frame_center &gt;= frame_center))
+<br />
++	/* don't need to redraw */
+<br />
++	return 0;
+<br />
++      else {
+<br />
++	 array-&gt;head = temp-&gt;next;
+<br />
++	 InsertButton(array, temp);
+<br />
++	 return 1;
+<br />
++      }
+<br />
++   } else {
+<br />
++      for (; temp-&gt;next &amp;&amp; temp-&gt;next-&gt;count != butnum; temp=temp-&gt;next);
+<br />
++      temp2 = temp-&gt;next;
+<br />
++      if (temp2 == NULL) return 0;
+<br />
++      temp2-&gt;frame_center = frame_center;
+<br />
++      if ((temp-&gt;frame_center &lt;= frame_center) &amp;&amp; 
+<br />
++	  ((temp2-&gt;next == NULL) || (temp2-&gt;next-&gt;frame_center &gt;= frame_center)))
+<br />
++	return 0;
+<br />
++      else {
+<br />
++	 /* remove button */
+<br />
++	 temp-&gt;next=temp2-&gt;next;
+<br />
++	 InsertButton(array, temp2);
+<br />
++	 return 1;
+<br />
++      }
+<br />
++   }
+<br />
+&nbsp;}
+<br />
+&nbsp;
+<br />
+&nbsp;/* -------------------------------------------------------------------------
+<br />
+--- ButtonArray.h.orig	Fri Jun  5 15:35:53 1998
+<br />
++++ ButtonArray.h	Thu May 14 14:56:24 1998
+<br />
+_at_&#64; -29,6 +29,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;int    state, needsupdate, truncate, count;
+<br />
+&nbsp;&nbsp;&nbsp;struct button *next;
+<br />
+&nbsp;&nbsp;&nbsp;Picture p;
+<br />
++   long frame_center;
+<br />
+&nbsp;} Button;
+<br />
+&nbsp;
+<br />
+&nbsp;typedef struct {
+<br />
+_at_&#64; -40,12 +41,12 &#64;&#64;
+<br />
+&nbsp;/* Function Prototypes */
+<br />
+&nbsp;
+<br />
+&nbsp;void Draw3dRect(Window wn, int x, int y, int w, int h, int state);
+<br />
+-Button *ButtonNew(char *title, Picture *p, int state, int count); 
+<br />
++Button *ButtonNew(char *title, Picture *p, long frame_center, int state, int count); 
+<br />
+&nbsp;int ButtonUpdate(Button *button, char *title, int state);
+<br />
+&nbsp;char *ButtonName(Button *button);
+<br />
+&nbsp;void InitArray(ButtonArray *array, int x, int y, int w, int h, int tw);
+<br />
+&nbsp;void UpdateArray(ButtonArray *array, int x, int y, int w, int h, int tw);
+<br />
+-void AddButton(ButtonArray *array, char *title, Picture *p, int state, int count);
+<br />
++void AddButton(ButtonArray *array, char *title, Picture *p, long frame_center, int state, int count);
+<br />
+&nbsp;int UpdateButton(ButtonArray *array, int butnum, char *title, int state);
+<br />
+&nbsp;int UpdateButtonPicture(ButtonArray *array, int butnum, Picture *p);
+<br />
+&nbsp;void RemoveButton(ButtonArray *array, int butnum);
+<br />
+_at_&#64; -58,6 +59,7 &#64;&#64;
+<br />
+&nbsp;int WhichButton(ButtonArray *array, int x, int y);
+<br />
+&nbsp;int LocateButton(ButtonArray *array, int xp,  int yp,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int *xb, int *yb,
+<br />
+-                                     char **name, int *trunc); 
+<br />
++                                     char **name, int *trunc);
+<br />
++int MoveButton(ButtonArray *array, int butnum, long frame_center);
+<br />
+&nbsp;void ArrangeButtonArray(ButtonArray *array);
+<br />
+&nbsp;void ButtonDraw(Button *button, int x, int y, int w, int h);
+<br />
+--- FvwmTaskBar.c.orig	Fri Jun  5 15:36:00 1998
+<br />
++++ FvwmTaskBar.c	Fri Jun  5 15:24:54 1998
+<br />
+_at_&#64; -325,7 +325,8 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (GetDeskNumber(&amp;windows,i,&amp;Desk) &amp;&amp; DeskOnly) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (DeskNumber != Desk &amp;&amp; DeskNumber == body[7]) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* window moving to current desktop */
+<br />
+-          AddButton(&amp;buttons, ItemName(&amp;windows,i), GetItemPicture(&amp;windows,i), BUTTON_UP, i);
+<br />
++          AddButton(&amp;buttons, ItemName(&amp;windows,i), GetItemPicture(&amp;windows,i),
+<br />
++		    ItemFrameCenter(&amp;windows, i), BUTTON_UP, i);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;redraw = 1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (DeskNumber != body[7] &amp;&amp; DeskNumber == Desk) {
+<br />
+_at_&#64; -333,13 +334,15 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RemoveButton(&amp;buttons, i);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;redraw = 1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+-      }
+<br />
+-      UpdateItemFlagsDesk(&amp;windows, body[0], body[8], body[7]);
+<br />
++      } else if (MoveButton(&amp;buttons, i, body[3]+body[5]/2))
+<br />
++	   redraw = 1;
+<br />
++      UpdateItemFlagsDesk(&amp;windows, body[0], body[8], body[7],
+<br />
++			  body[3]+body[5]/2);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (!(body[8] &amp; WINDOWLISTSKIP) || !UseSkipList) {
+<br />
+-      AddItem(&amp;windows, body[0], body[8], body[7], Count++);
+<br />
++      AddItem(&amp;windows, body[0], body[8], body[7], body[3]+body[5]/2, Count++);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (Count &gt; COUNT_LIMIT) Count = 0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
+_at_&#64; -389,7 +392,8 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (GetDeskNumber(&amp;windows, i, &amp;Desk) == 0) return; /* ?? */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (!DeskOnly || Desk == DeskNumber)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+-        AddButton(&amp;buttons, string, NULL, BUTTON_UP, i);
+<br />
++        AddButton(&amp;buttons, string, NULL, ItemFrameCenter(&amp;windows, i), BUTTON_UP,
+<br />
++		  i);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;redraw = 1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+_at_&#64; -455,7 +459,8 &#64;&#64;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (item=windows.head; item; item=item-&gt;next)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (DeskNumber == item-&gt;Desk || (item-&gt;flags &amp; STICKY))
+<br />
+-	    AddButton(&amp;buttons, item-&gt;name, &amp;(item-&gt;p), BUTTON_UP, item-&gt;count);
+<br />
++	    AddButton(&amp;buttons, item-&gt;name, &amp;(item-&gt;p), item-&gt;frame_center, 
+<br />
++		      BUTTON_UP, item-&gt;count);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RedrawWindow(1);
+<br />
+&nbsp;}
+<br />
+--- List.c.orig	Fri Jun  5 15:36:03 1998
+<br />
++++ List.c	Fri Jun  5 15:29:00 1998
+<br />
+_at_&#64; -42,14 +42,16 &#64;&#64;
+<br />
+&nbsp;/******************************************************************************
+<br />
+&nbsp;&nbsp;&nbsp;AddItem - Allocates spaces for and appends an item to the list
+<br />
+&nbsp;******************************************************************************/
+<br />
+-void AddItem(List *list, long id, long flags, long Desk, int count)
+<br />
++void AddItem(List *list, long id, long flags, long Desk, long frame_center, int count)
+<br />
+&nbsp;{
+<br />
+&nbsp;Item *new;
+<br />
++
+<br />
+&nbsp;&nbsp;&nbsp;new=(Item *)safemalloc(sizeof(Item));
+<br />
+&nbsp;&nbsp;&nbsp;new-&gt;id=id;
+<br />
+&nbsp;&nbsp;&nbsp;new-&gt;name=NULL;
+<br />
+&nbsp;&nbsp;&nbsp;new-&gt;flags=flags;
+<br />
+&nbsp;&nbsp;&nbsp;new-&gt;Desk=Desk;
+<br />
++   new-&gt;frame_center=frame_center;
+<br />
+&nbsp;&nbsp;&nbsp;new-&gt;count=count;
+<br />
+&nbsp;&nbsp;&nbsp;new-&gt;next=NULL;
+<br />
+&nbsp;
+<br />
+_at_&#64; -129,13 +131,14 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;return temp-&gt;count;
+<br />
+&nbsp;}
+<br />
+&nbsp;
+<br />
+-int UpdateItemFlagsDesk(List *list, long id, long flags, long desk)
+<br />
++int UpdateItemFlagsDesk(List *list, long id, long flags, long desk, long frame_center)
+<br />
+&nbsp;{
+<br />
+&nbsp;Item *temp;
+<br />
+&nbsp;&nbsp;&nbsp;for(temp=list-&gt;head;temp!=NULL &amp;&amp; id!=temp-&gt;id;temp=temp-&gt;next);
+<br />
+&nbsp;&nbsp;&nbsp;if (temp==NULL) return -1;
+<br />
+&nbsp;&nbsp;&nbsp;if (flags!=-1) temp-&gt;flags=flags;
+<br />
+&nbsp;&nbsp;&nbsp;temp-&gt;Desk=desk;
+<br />
++   temp-&gt;frame_center=frame_center;
+<br />
+&nbsp;&nbsp;&nbsp;return temp-&gt;count;
+<br />
+&nbsp;}
+<br />
+&nbsp;
+<br />
+_at_&#64; -297,7 +300,7 &#64;&#64;
+<br />
+&nbsp;Item *temp;
+<br />
+&nbsp;&nbsp;&nbsp;for(temp=source-&gt;head; temp!=NULL &amp;&amp; temp-&gt;count!=n; temp=temp-&gt;next);
+<br />
+&nbsp;&nbsp;&nbsp;if (temp==NULL) return;
+<br />
+-  AddItem(dest,temp-&gt;id,temp-&gt;flags,temp-&gt;Desk,temp-&gt;count);
+<br />
++  AddItem(dest,temp-&gt;id,temp-&gt;flags,temp-&gt;Desk,temp-&gt;frame_center,temp-&gt;count);
+<br />
+&nbsp;&nbsp;&nbsp;UpdateItemName(dest,temp-&gt;id,temp-&gt;name);
+<br />
+&nbsp;&nbsp;&nbsp;DeleteItem(source,temp-&gt;id);
+<br />
+&nbsp;}
+<br />
+_at_&#64; -344,4 +347,16 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;for (temp=list-&gt;head;temp &amp;&amp; temp-&gt;count!=n;temp=temp-&gt;next);
+<br />
+&nbsp;&nbsp;&nbsp;if (temp==NULL) return 0;
+<br />
+&nbsp;&nbsp;&nbsp;return &amp;(temp-&gt;p);
+<br />
++}
+<br />
++
+<br />
++/******************************************************************************
+<br />
++  ItemFrameCenter - Returns the x-coordinate of the center
+<br />
++******************************************************************************/
+<br />
++long ItemFrameCenter(List *list, int n)
+<br />
++{
+<br />
++Item *temp;
+<br />
++
+<br />
++  for (temp=list-&gt;head;temp &amp;&amp; temp-&gt;count!=n;temp=temp-&gt;next);
+<br />
++  if (temp==NULL) return 0;
+<br />
++  return temp-&gt;frame_center;
+<br />
+&nbsp;}
+<br />
+--- List.h.orig	Fri Jun  5 15:36:08 1998
+<br />
++++ List.h	Thu May 14 15:02:41 1998
+<br />
+_at_&#64; -20,6 +20,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;char *name;
+<br />
+&nbsp;&nbsp;&nbsp;long flags;
+<br />
+&nbsp;&nbsp;&nbsp;long Desk;
+<br />
++  long frame_center;
+<br />
+&nbsp;&nbsp;&nbsp;int  count;
+<br />
+&nbsp;&nbsp;&nbsp;Picture p;
+<br />
+&nbsp;&nbsp;&nbsp;struct item *next;
+<br />
+_at_&#64; -32,13 +33,13 &#64;&#64;
+<br />
+&nbsp;
+<br />
+&nbsp;/* Function Prototypes */
+<br />
+&nbsp;void InitList(List *list);
+<br />
+-void AddItem(List *list, long id, long flags, long Desk, int count);
+<br />
++void AddItem(List *list, long id, long flags, long Desk, long frame_center, int count);
+<br />
+&nbsp;void AddItemName(List *list, char *string, long flags);
+<br />
+&nbsp;int FindItem(List *list, long id);
+<br />
+&nbsp;int FindNameItem(List *list, char *string);
+<br />
+&nbsp;int UpdateItemName(List *list, long id, char *string);
+<br />
+&nbsp;int UpdateItemFlags(List *list, long id, long flags);
+<br />
+-int UpdateItemFlagsDesk(List *list, long id, long flags, long desk);
+<br />
++int UpdateItemFlagsDesk(List *list, long id, long flags, long desk, long frame_center);
+<br />
+&nbsp;int UpdateNameItem(List *list, char *string, long id, long flags);
+<br />
+&nbsp;void FreeItem(Item *ptr);
+<br />
+&nbsp;int DeleteItem(List *list,long id);
+<br />
+_at_&#64; -54,4 +55,4 &#64;&#64;
+<br />
+&nbsp;void UpdateItemPicture(List *list, int n, Picture *p);
+<br />
+&nbsp;int GetDeskNumber(List *list, int n, long *Desk);
+<br />
+&nbsp;Picture *GetItemPicture(List *list, int n);
+<br />
+-
+<br />
++long ItemFrameCenter(List *list, int n);
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Jun 05 1998 - 15:16:32 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start22362">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="22363.html" title="Next message in the list">Kin Cho: "FVWM: Turn off Beep?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="22361.html" title="Previous message in the list">Neil Zanella: "Re: FVWM: another feature request"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg22362" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg22362" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg22362" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg22362" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

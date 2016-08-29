@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: RaiseWindow bug fix from Richard Lister on 1996-06-13 (fvwm-users)</title>
+<meta name="Author" content="Richard Lister (listerrj_at_helios.aston.ac.uk)" />
+<meta name="Subject" content="Re: FVWM: RaiseWindow bug fix" />
+<meta name="Date" content="1996-06-13" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: RaiseWindow bug fix</h1>
+<!-- received="Thu Jun 13 06:17:03 1996" -->
+<!-- isoreceived="19960613051703" -->
+<!-- sent="Thu, 13 Jun 1996 12:05:22 +0100" -->
+<!-- isosent="19960613110522" -->
+<!-- name="Richard Lister" -->
+<!-- email="listerrj_at_helios.aston.ac.uk" -->
+<!-- subject="Re: FVWM: RaiseWindow bug fix" -->
+<!-- id="6675.199606131105_at_sun.aston.ac.uk" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="Wed, 12 Jun 96 22:35 BST&quot;" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start17112" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="17113.html" accesskey="d" title="David Kennedy: &quot;FVWM: Broken.&quot;">Next message</a> ]
+[ <a href="17111.html" title="Albrecht Kadlec: &quot;Re: FVWM: Swallow and Exec from one FvwmButton&quot;">Previous message</a> ]
+[ <a href="17106.html" title="Richard Lister: &quot;FVWM: RaiseWindow bug fix&quot;">Maybe in reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="17115.html" accesskey="t" title="Austin Donnelly: &quot;Re: FVWM: RaiseWindow bug fix&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17112" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17112" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17112" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17112" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Richard Lister &lt;<a href="mailto:listerrj_at_helios.aston.ac.uk?Subject=Re%3A%20FVWM%3A%20RaiseWindow%20bug%20fix">listerrj_at_helios.aston.ac.uk</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 13 Jun 1996 12:05:22 +0100</span><br />
+</address>
+<br />
+On Wed, 12 Jun 96 22:35 BST
+<br />
+Austin Donnelly &lt;and1000_at_cam.ac.uk&gt; 
+<br />
+wrote concerning 'Re: FVWM: RaiseWindow bug fix':
+<br />
+<em class="quotelev1">&gt; On Wed, 12 Jun 1996, Richard Lister wrote:
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev2">&gt; &gt; Chuck, here's another bug fix for icons without a pixmap.
+</em><br />
+<em class="quotelev2">&gt; &gt; 
+</em><br />
+<em class="quotelev2">&gt; &gt; PROBLEM:
+</em><br />
+<em class="quotelev2">&gt; &gt; If an icon without a pixmap is deiconified it comes up underneath
+</em><br />
+<em class="quotelev2">&gt; &gt; all other windows on the screen.
+</em><br />
+<em class="quotelev2">&gt; &gt; 
+</em><br />
+<em class="quotelev2">&gt; &gt; CAUSE:
+</em><br />
+<em class="quotelev2">&gt; &gt; In RaiseWindow(), if there's no icon_pixmap_w then NULL gets pushed
+</em><br />
+<em class="quotelev2">&gt; &gt; onto the wins[] array, screwing up the call to XRestackWindows().
+</em><br />
+<em class="quotelev2">&gt; &gt; 
+</em><br />
+<em class="quotelev2">&gt; &gt; TO FIX:
+</em><br />
+<em class="quotelev2">&gt; &gt; Test for icon_pixmap_w != NULL first. Here's the patch.
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; Yup, I fixed this one about 1-2 months ago.  Strangely enough, my
+</em><br />
+<em class="quotelev1">&gt; patch was almost exactly yours :)
+</em><br />
+<br />Aha! I should have checked the archive first :-). Strange that I missed
+<br />
+your fix when it was first posted ... I must have read that message
+<br />
+before my first coffee of the day!
+<br />
+<br />Incidentally, I note Chuck said this doesn't happen under AIX. Is it
+<br />
+a bug in some implementations of XRestackWindows(), not treating the
+<br />
+array index i as authoritative and stopping at NULL array members?
+<br />
+Or a feature :-)   I'm on Irix 6.2 (X11R6).
+<br />
+<br />Ric
+<br />
+<br />&nbsp;~~~~~~~~~~~~~~ Richard J. Lister    r.j.lister_at_aston.ac.uk ~~~~~~~~~~~~~~~~
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Research Assistant, Neural Computing Research Group
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Aston University, Birmingham B4 7ET, UK
+<br />
+&nbsp;~~~~~~~~~~~~~~~~~ <a href="http://www.ncrg.aston.ac.uk/~listerrj/">http://www.ncrg.aston.ac.uk/~listerrj/</a> ~~~~~~~~~~~~~~~~~~
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Jun 13 1996 - 06:17:03 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start17112">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="17113.html" title="Next message in the list">David Kennedy: "FVWM: Broken."</a></li>
+<li><dfn>Previous message</dfn>: <a href="17111.html" title="Previous message in the list">Albrecht Kadlec: "Re: FVWM: Swallow and Exec from one FvwmButton"</a></li>
+<li><dfn>Maybe in reply to</dfn>: <a href="17106.html" title="Message to which this message replies">Richard Lister: "FVWM: RaiseWindow bug fix"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="17115.html" title="Next message in this discussion thread">Austin Donnelly: "Re: FVWM: RaiseWindow bug fix"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="17115.html" title="Message sent in reply to this message">Austin Donnelly: "Re: FVWM: RaiseWindow bug fix"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17112" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17112" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17112" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17112" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

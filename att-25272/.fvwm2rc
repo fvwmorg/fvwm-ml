@@ -1,0 +1,267 @@
+ModulePath      /usr/local/X11R6/libexec/fvwm/2.2.4
+PixmapPath      /usr/X11R6/include/X11/pixmaps:/usr/local/X11R6/include/X11/pixmaps
+IconPath        /usr/X11R6/include/X11/bitmaps:/usr/local/X11R6/include/X11/bitmaps
+
+HilightColor    Black #c06077
+
+WindowFont      -adobe-helvetica-bold-r-*-*-*-120-*-*-*-*-*-*
+IconFont        -adobe-helvetica-medium-r-*-*-*-120-*-*-*-*-*-*
+
+EdgeScroll      100 100
+EdgeResistance  10000 0
+
+OpaqueMoveSize  100
+
+DeskTopSize     2x2
+
+SnapAttraction 20 SameType
+
+
+Style "*"   ForeColor Black
+Style "*"   BackColor #60a0c0
+
+Style "*"   IconBox -100 120 -25 -50
+Style "*"   IconBox 25 -70 -25 -25
+
+Style "*"   MWMFunctions
+Style "*"   HintOverride
+Style "*"   MWMDecor
+Style "*"   MWMButtons
+Style "*"   MWMBorder
+
+Style "*"   ClickToFocus
+
+Style "*"   SmartPlacement
+Style "*"   NoPPosition
+
+Style "*"   BorderWidth 5, HandleWidth 5, Color Black/#60a0c0
+Style "*"   Icon unknown1.xpm
+
+Style "Fvwm*"       NoTitle, NoHandles, Sticky
+Style "FvwmBanner"  StaysOnTop
+Style "FvwmButtons" NoTitle, NoHandles, Sticky, WindowListSkip, BorderWidth 0
+Style "*lock"       NoTitle, NoHandles, Sticky
+Style "xterm*"      Icon xterm.xpm
+Style "Appointment" Icon datebook.xpm
+Style "xcalc"       Icon xcalc.xpm
+Style "xman"        Icon xman.xpm
+Style "xmag"        Icon mag_glass.xpm
+Style "xgraph"      Icon graphs.xpm
+Style "FvwmButtons" Icon toolbox.xpm
+Style "emacs"       Icon emacs1.xpm
+
+
+MenuStyle * MWM
+MenuStyle * Foreground Black, Background grey, Greyed SlateGrey
+MenuStyle * Animation
+MenuStyle * Font -adobe-helvetica-medium-r-*-*-*-120-*-*-*-*-*-*
+
+
+AddToFunc InitFunction
++   "I"     Exec xsetroot -solid SteelBlue
++   "I"     Module FvwmPager 0 0
++   "I"     Exec xclock -geometry 100x100-1+1
++   "I"     Exec xterm -bg black -fg white -sb -sl 1000 \
+                 -j -ls -fn 7x14 -geometry 100x8
++   "I"     Wait xterm
++   "I"     Exec xterm -bg black -fg white -sb -sl 1000 \
+                 -j -ls -fn 10x20 -geometry 80x25
+
+AddToFunc RestartFunction
++   "I"     Exec xsetroot -solid SteelBlue
++   "I"     Module FvwmPager 0 0
+
+AddToFunc Move-or-Raise
++   "M"     Move
++   "M"     Raise
++   "C"     Raise
++   "D"     RaiseLower
+
+AddToFunc maximize_func
++   "M"     Maximize 0 100
++   "C"     Maximize 0 80
++   "D"     Maximize 100 100
+
+AddToFunc Move-or-Lower
++   "M"     Move
++   "M"     Lower
++   "C"     Lower
++   "D"     RaiseLower
+
+AddToFunc Move-or-Iconify
++   "M"     Move
++   "D"     Iconify
+
+AddToFunc Resize-or-Raise
++   "M"     Resize
++   "M"     Raise
++   "C"     Raise
++   "D"     RaiseLower
+
+AddToMenu Quit-Verify
++   "Really Quit Fvwm?"  Title
++   "&Yes, Really Quit"  Quit
++   "&Restart fvwm2"     Restart fvwm2
++   "&Start twm"         Restart twm
++   ""                   Nop
++   "&No, Don't Quit"    Nop
+
+AddToMenu Module-Popup
++   "Modules"        Title
++   "Fvwm&Buttons"   Module FvwmButtons
++   "&Clean-Up"      Module FvwmClean
++   "&Identify"      Module FvwmIdent
++   "&SaveDesktop"   Module FvwmSave
++   "&Debug"         Module FvwmDebug
++   "&Pager"         Module FvwmPager 0 0
++   "Fvwm&WinList"   Module FvwmWinList
+
+AddToMenu Shells
++   "Shells"             Title
++   "Xterm (10x20 font)" Exec /usr/bin/X11/xterm -bg black -fg white \
+                              -sb -sl 1000 -j -ls -fn 10x20 -geometry 80x25
++   "Xterm (7x10 font)"  Exec /usr/bin/X11/xterm -bg black -fg white \
+                              -sb -sl 1000 -j -ls -fn 7x14 -geometry 100x8
+
+AddToMenu Utilities
++   "Utilities"      Title
++   "X&tetris"       Exec xtetris -boxsize 22
++   "&Calculator"    Exec xcalc
++   "&Netscape"      Exec netscape -geometry 1010x740+1+1
++   "X&man"          Exec xman
++   "O&clock"        Exec oclock
++   "X&eyes"         Exec xeyes
++   "X&logo"         Exec xlogo
++   ""               Nop
++   "&Shells"        Popup Shells
++   ""               Nop
++   "&Modules"       Popup Module-Popup
++   ""               Nop
++   "E&xit Fvwm"     Popup Quit-Verify
+
+AddToMenu Window_Ops
++   "Window Ops"                 Title
++   "&Move"                      Function Move-or-Raise
++   "Re&size"                    Function Resize-or-Raise
++   "&Raise"                     Raise
++   "&Lower"                     Lower
++   "(De)&Iconify"               Iconify
++   "(Un)&Stick"                 Stick
++   "(Un)Ma&ximize"              Maximize
++   "(Un)Maximize &Vertical"     Maximize 0 100
++   "(Un)Maximize &Horizontal"   Maximize 100 0
++   ""                           Nop
++   "&Destroy"                   Destroy
++   "De&lete"                    Delete
++   ""                           Nop
++   "Re&fresh Screen"            Refresh
+
+AddToMenu Window_Ops2
++   "&Move"      Function Move-or-Raise
++   "Re&size"    Function Resize-or-Raise
++   "&Raise"     Raise
++   "&Lower"     Lower
++   "&Iconify"   Iconify
++   "(Un)&Stick" Stick
++   ""           Nop
++   "&Destroy"   Destroy
++   "De&lete"    Delete
++   ""           Nop
++   "Scroll&Bar" Module FvwmScroll 2 2
+
+AddToFunc window_ops_func
++   "C"     PopUp Window_Ops2
++   "M"     PopUp Window_Ops2
++   "D"     Delete
+
+
+Mouse 1     R       A   Menu Utilities
+Mouse 2     R       A   Menu Window_Ops
+Mouse 3     R       A   WindowList
+
+Mouse 0     1       A   Function window_ops_func
+Mouse 0     2       A   Function maximize_func
+Mouse 0     4       A   Iconify
+
+Mouse 1     F       A   Function Resize-or-Raise
+Mouse 1     TS      A   Function Move-or-Raise
+
+Mouse 1     I       A   Function Move-or-Iconify
+Mouse 2     I       A   Iconify
+
+Mouse 2     FST     A   Function window_ops_func
+Mouse 3     TSIF    A   RaiseLower
+
+Mouse 3     W       M   RaiseLower
+
+
+Key Left        A       C   Scroll -100 +0
+Key Right       A       C   Scroll +100 +0
+Key Up          A       C   Scroll +0 -100
+Key Down        A       C   Scroll +0 +100
+
+Key Left        A       M   Scroll -10 +0
+Key Right       A       M   Scroll +10 +0
+Key Up          A       M   Scroll +0 -10
+Key Down        A       M   Scroll +0 +10
+
+Key Left        A       SC  CursorMove -1 +0
+Key Right       A       SC  CursorMove +1 +0
+Key Up          A       SC  CursorMove +0 -1
+Key Down        A       SC  CursorMove +0 +1
+
+Key Left        A       SM  CursorMove -10 +0
+Key Right       A       SM  CursorMove +10 +0
+Key Up          A       SM  CursorMove +0 -10
+Key Down        A       SM  CursorMove +0 +10
+
+Key Left        A       4   Direction West  Focus
+Key Right       A       4   Direction East  Focus
+Key Up          A       4   Direction North Focus
+Key Down        A       4   Direction South Focus
+
+Key F1          A       M   Popup Utilities
+Key F2          A       M   Popup Window_Ops
+Key F3          A       M   Module FvwmWinList 
+Key F4          A       M   Iconify
+Key F5          A       M   Move
+Key F6          A       M   Resize
+Key F7          A       M   Next Focus
+Key F8          A       M   Prev Focus
+
+
+*FvwmButtonsFore        Black
+*FvwmButtonsBack        #908090
+*FvwmButtonsFont        -adobe-helvetica-bold-r-*-*-10-*-*-*-*-*-*-*
+*FvwmButtonsGeometry    -1-90
+*FvwmButtonsColumns     1
+*FvwmButtons            Kill    rbomb.xpm \
+                          Destroy
+*FvwmButtons            Xcalc   rcalc.xpm \
+                          Exec "Calculator" xcalc
+*FvwmButtons            xclock  clock.xpm \
+                          Swallow "xclock" Exec xclock -bg \#908090 \
+                                  -geometry -1500-1500 -padding 0
+
+*FvwmNoClutter  3600    Iconify 1
+*FvwmNoClutter  86400   Delete
+*FvwmNoCLutter  172800  Destroy
+
+*FvwmIdentBack  MidnightBlue
+*FvwmIdentFore  Yellow
+*FvwmIdentFont  -adobe-helvetica-medium-r-*-*-12-*-*-*-*-*-*-*
+
+*FvwmPagerBack      #5c54c0
+*FvwmPagerFore      orchid
+*FvwmPagerFont      none
+*FvwmPagerHilight   #cab3ca
+
+*FvwmWinListBack        #908090
+*FvwmWinListFore        Black
+*FvwmWinListFont        -adobe-helvetica-bold-r-*-*-10-*-*-*-*-*-*-*
+*FvwmWinListAction      Click1  Iconify -1, Focus
+*FvwmWinListAction      Click2  Iconify
+*FvwmWinListAction      Click3  Module FvwmIdent
+*FvwmWinListUseSkipList
+*FvwmWinListGeometry    +0-1
+

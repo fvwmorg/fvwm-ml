@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Xinerama support for FvwmButtons from Yves Salathe on 2003-04-23 (fvwm-users)</title>
+<meta name="Author" content="Yves Salathe (ysa_at_chatnet.ch)" />
+<meta name="Subject" content="FVWM: Xinerama support for FvwmButtons" />
+<meta name="Date" content="2003-04-23" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Xinerama support for FvwmButtons</h1>
+<!-- received="Wed Apr 23 14:26:20 2003" -->
+<!-- isoreceived="20030423132620" -->
+<!-- sent="Wed, 23 Apr 2003 21:24:21 +0200" -->
+<!-- isosent="20030423192421" -->
+<!-- name="Yves Salathe" -->
+<!-- email="ysa_at_chatnet.ch" -->
+<!-- subject="FVWM: Xinerama support for FvwmButtons" -->
+<!-- id="20030423192421.GA9379_at_chatnet.ch" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start8689" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="8690.html" accesskey="d" title="dominik.vogt_at_gmx.de: &quot;Re: FVWM: Xinerama support for FvwmButtons&quot;">Next message</a> ]
+[ <a href="8688.html" title="Mikhael Goikhman: &quot;FVWM: The new web design on fvwm.org&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="8690.html" accesskey="t" title="dominik.vogt_at_gmx.de: &quot;Re: FVWM: Xinerama support for FvwmButtons&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg8689" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg8689" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg8689" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg8689" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Yves Salathe &lt;<a href="mailto:ysa_at_chatnet.ch?Subject=Re%3A%20FVWM%3A%20Xinerama%20support%20for%20FvwmButtons">ysa_at_chatnet.ch</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 23 Apr 2003 21:24:21 +0200</span><br />
+</address>
+<br />
+Hi
+<br />
+<br />Recently I wrote this little patch for FvwmButtons so that it now 
+<br />
+understands the [_at_screen] geometry option. There may be better solutions
+<br />
+but it seems to work. I hope that helps.
+<br />
+<br />Yves
+<br />
+<br />diff -r fvwm-2.4.15/modules/FvwmButtons/FvwmButtons.c fvwm-2.4.15.orig/modules/FvwmButtons/FvwmButtons.c
+<br />
+1970c1970
+<br />
+&lt;       mysizehints.x = x - mysizehints.width;
+<br />
+<pre>
+---
+&gt;       mysizehints.x = DisplayWidth(Dpy,screen) + x - mysizehints.width;
+1977c1977
+&lt;       mysizehints.y = y - mysizehints.height;
+---
+&gt;       mysizehints.y = DisplayHeight(Dpy,screen) + y - mysizehints.height;
+diff -r fvwm-2.4.15/modules/FvwmButtons/parse.c fvwm-2.4.15.orig/modules/FvwmButtons/parse.c
+1318d1317
+&lt;       int screen;
+1321,1322d1319
+&lt;       int s_x;
+&lt;       int s_y;
+1325,1326d1321
+&lt;       unsigned int s_width;
+&lt;       unsigned int s_height;
+1328,1330c1323
+&lt;       flags = FScreenParseGeometryWithScreen(
+&lt; 	      geom,&amp;g_x,&amp;g_y,&amp;width,&amp;height,&amp;screen);
+&lt;       FScreenGetScrRect(NULL, screen, &amp;s_x, &amp;s_y, &amp;s_width, &amp;s_height);
+---
+&gt;       flags = XParseGeometry(geom,&amp;g_x,&amp;g_y,&amp;width,&amp;height);
+1339,1340c1332,1336
+&lt;       if (flags&amp;XValue &amp;&amp; flags&amp;XNegative) {
+&lt; 	UberButton-&gt;x = s_x + s_width + g_x;
+---
+&gt;       if (flags&amp;XValue)
+&gt; 	UberButton-&gt;x = g_x;
+&gt;       if (flags&amp;YValue)
+&gt; 	UberButton-&gt;y = g_y;
+&gt;       if (flags&amp;XNegative)
+1342,1346c1338
+&lt;       } else if (flags&amp;XValue) {
+&lt; 	UberButton-&gt;x = g_x + s_x;
+&lt;       }
+&lt;       if (flags&amp;YValue &amp;&amp; flags&amp;YNegative) {
+&lt; 	UberButton-&gt;y = s_y + s_height + g_y;
+---
+&gt;       if (flags&amp;YNegative)
+1348,1350d1339
+&lt;       } else if (flags&amp;YValue) {
+&lt; 	UberButton-&gt;y = g_y + s_y;
+&lt;       }
+1642d1630
+&lt;   int screen;
+1645,1646d1632
+&lt;   int s_x;
+&lt;   int s_y;
+1649,1650d1634
+&lt;   unsigned int s_width;
+&lt;   unsigned int s_height;
+1652,1654c1636
+&lt;   flags = FScreenParseGeometryWithScreen(
+&lt; 	  geom,&amp;g_x,&amp;g_y,&amp;width,&amp;height,&amp;screen);
+&lt;   FScreenGetScrRect(NULL, screen, &amp;s_x, &amp;s_y, &amp;s_width, &amp;s_height);
+---
+&gt;   flags = FScreenParseGeometry(geom,&amp;g_x,&amp;g_y,&amp;width,&amp;height);
+1661,1662c1643,1647
+&lt;   if (flags&amp;XValue &amp;&amp; flags&amp;XNegative) {
+&lt;     UberButton-&gt;x = s_x + s_width + g_x;
+---
+&gt;   if (flags&amp;XValue)
+&gt;     UberButton-&gt;x = g_x;
+&gt;   if (flags&amp;YValue)
+&gt;     UberButton-&gt;y = g_y;
+&gt;   if (flags&amp;XNegative)
+1664,1668c1649
+&lt;   } else if (flags&amp;XValue) {
+&lt;     UberButton-&gt;x = g_x + s_x;
+&lt;   }
+&lt;   if (flags&amp;YValue &amp;&amp; flags&amp;YNegative) {
+&lt;     UberButton-&gt;y = s_y + s_height + g_y;
+---
+&gt;   if (flags&amp;YNegative)
+1670,1672d1650
+&lt;   } else if (flags&amp;YValue) {
+&lt;     UberButton-&gt;y = g_y + s_y;
+&lt;   }
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Apr 23 2003 - 14:26:20 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start8689">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="8690.html" title="Next message in the list">dominik.vogt_at_gmx.de: "Re: FVWM: Xinerama support for FvwmButtons"</a></li>
+<li><dfn>Previous message</dfn>: <a href="8688.html" title="Previous message in the list">Mikhael Goikhman: "FVWM: The new web design on fvwm.org"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="8690.html" title="Next message in this discussion thread">dominik.vogt_at_gmx.de: "Re: FVWM: Xinerama support for FvwmButtons"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="8690.html" title="Message sent in reply to this message">dominik.vogt_at_gmx.de: "Re: FVWM: Xinerama support for FvwmButtons"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg8689" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg8689" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg8689" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg8689" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:54 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="ISO-2022-JP"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-2022-JP" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: PATCH: to fix fvwm-2.0.42 package: summarize patches from まつしたまこと  on 1996-04-18 (fvwm-users)</title>
+<meta name="Author" content="まつしたまこと  (matusita_at_ics.es.osaka-u.ac.jp)" />
+<meta name="Subject" content="FVWM: PATCH: to fix fvwm-2.0.42 package: summarize patches" />
+<meta name="Date" content="1996-04-18" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: PATCH: to fix fvwm-2.0.42 package: summarize patches</h1>
+<!-- received="Thu Apr 18 12:07:24 1996" -->
+<!-- isoreceived="19960418110724" -->
+<!-- sent="Fri, 19 Apr 1996 02:09:56 +0900" -->
+<!-- isosent="19960418170956" -->
+<!-- name="まつしたまこと " -->
+<!-- email="matusita_at_ics.es.osaka-u.ac.jp" -->
+<!-- subject="FVWM: PATCH: to fix fvwm-2.0.42 package: summarize patches" -->
+<!-- id="199604181709.CAA08513_at_skylark.ics.es.osaka-u.ac.jp" -->
+<!-- charset="ISO-2022-JP" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start16252" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="16253.html" accesskey="d" title="&#12414;&#12388;&#12375;&#12383;&#12414;&#12371;&#12392; : &quot;Re: FVWM: FVWM Modules?&quot;">Next message</a> ]
+[ <a href="16251.html" title="Anthony Stevens: &quot;FVWM: FVWM Modules?&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16252" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16252" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16252" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16252" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: まつしたまこと  &lt;<a href="mailto:matusita_at_ics.es.osaka-u.ac.jp?Subject=Re%3A%20FVWM%3A%20PATCH%3A%20to%20fix%20fvwm-2.0.42%20package%3A%20summarize%20patches%1B(B">matusita_at_ics.es.osaka-u.ac.jp</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 19 Apr 1996 02:09:56 +0900</span><br />
+</address>
+<br />
+Here is a fix collection for fvwm-2.0.42 to compile more plathomes or
+<br />
+to fix typos, already posted to the list (and my original fix). This
+<br />
+patch includes:
+<br />
+<br />* Typo in a manual of fvwm/FvwmForm
+<br />
+* `make' command of BSD/OS 2.x considers 'C++FLAGS' as a flags of C++.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;It causes problem while compiling FvwmConfig.
+<br />
+* At least SunOS 4.x does not have strerror(). Use sys_errlist[].
+<br />
+* FvwmConfig misses LOCAL_LIBRARIES, to specify libraries.
+<br />
+* ugly modules/FvwmForm/FvwmForm.c fix
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Should include libs/fvwmlib.h.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Avoid to include &lt;malloc.h&gt; under BSD/OS environment.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Conflicts `CopyString()' function. Rename to `CopyNString()'.
+<br />
+<br />Of course there are more and more patches for 2.0.42 posted to the list.
+<br />
+Let me summarize...
+<br />
+<br />* Real-time window-moving handling for FvwmPager, etc
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;by Henrique Martins &lt;martins_at_martins.hpl.hp.com&gt;
+<br />
+* Check $PATH while processing `Exec' built-in function (use execlp())
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;by John Williams &lt;williams_at_sharkey.us.dynix.com&gt;
+<br />
+* New built-in function `DestroyModuleConfig'
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;by Toshi Isogai &lt;toshi_isogai_at_maxtor.com&gt;
+<br />
+* XSetInputFocus() problem in FvwmPager (is this fix ok?)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;by Nobutaka Suzuki &lt;nobuta-s_at_is.aist-nara.ac.jp&gt;
+<br />
+<br />- -
+<br />
+Makoto `MAR_kun' MATSUSHITA
+<br />
+Special Thanks to Masayuki Koba of Hitachi Software.
+<br />
+<br />--- Fvwm.tmpl.dist	Mon Apr  8 23:59:50 1996
+<br />
++++ Fvwm.tmpl	Thu Apr 18 17:23:48 1996
+<br />
+_at_&#64; -390,6 +390,9 &#64;&#64;
+<br />
+&nbsp;
+<br />
+&nbsp;#ifndef FvwmCplusplusProgramTargetHelper
+<br />
+&nbsp;#define	FvwmCplusplusProgramTargetHelper(program,srcs,objs,deplib,locallib,syslib) _at_&#64;\
+<br />
++#if defined(i386BsdArchitecture) &amp;&amp; defined(i386Bsdi)
+<br />
++        C++FLAGS = $(CXXFLAGS)
+<br />
++#endif
+<br />
+&nbsp;ProgramTargetName(program): $(objs) $(deplib)				_at_&#64;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RemoveTargetProgram($_at_)						&#64;&#64;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CplusplusLinkRule($_at_,$(CXXLDOPTIONS),$(objs),locallib $(LDLIBS) syslib) &#64;&#64;\
+<br />
+--- fvwm/builtins.c.dist	Thu Apr 11 02:38:25 1996
+<br />
++++ fvwm/builtins.c	Thu Apr 18 16:11:55 1996
+<br />
+_at_&#64; -663,7 +663,15 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (execl(exec_shell_name, exec_shell_name, &quot;-c&quot;, cmd, NULL)==-1)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
++#if defined(sun) &amp;&amp; !defined(SVR4)
+<br />
++      /* XXX: dirty hack for SunOS 4.x */
+<br />
++      extern char *sys_errlist[];
+<br />
++
+<br />
++      /* no strerror() function, see sys_errlist[] instead */
+<br />
++      fvwm_msg(ERR,&quot;exec_function&quot;,&quot;execl failed (%s)&quot;,sys_errlist[errno]);
+<br />
++#else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fvwm_msg(ERR,&quot;exec_function&quot;,&quot;execl failed (%s)&quot;,strerror(errno));
+<br />
++#endif
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit(100);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;}
+<br />
+--- fvwm/fvwm2.man.dist	Sat Apr 13 03:05:15 1996
+<br />
++++ fvwm/fvwm2.man	Thu Apr 18 16:15:31 1996
+<br />
+_at_&#64; -621,7 +621,7 &#64;&#64;
+<br />
+&nbsp;
+<br />
+&nbsp;.IP &quot;Exec \fIcommand\fP&quot;
+<br />
+&nbsp;Executes \fIcommand\fP.  Exec doesn't require an additional 'exec' or
+<br />
+-'&amp;' in the command.
+<br />
++\'&amp;' in the command.
+<br />
+&nbsp;
+<br />
+&nbsp;The following example binds function key F1 in the root window, with
+<br />
+&nbsp;no modifiers, to the exec function.  The program rxvt will be started
+<br />
+--- modules/FvwmConfig/Imakefile.dist	Sat Feb 17 13:47:42 1996
+<br />
++++ modules/FvwmConfig/Imakefile	Thu Apr 18 17:04:23 1996
+<br />
+_at_&#64; -14,6 +14,8 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WinText.o WinRadioButton.o WinInput.o WinSlider.o \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WinColorSelector.o
+<br />
+&nbsp;
+<br />
++LOCAL_LIBRARIES = $(FVWM_LIBS) $(XLIB)
+<br />
++
+<br />
+&nbsp;#if ProjectX &gt; 5
+<br />
+&nbsp;FvwmComplexCplusplusProgramTarget(FvwmConfig)
+<br />
+&nbsp;#else
+<br />
+--- modules/FvwmForm/FvwmForm.c.dist	Fri Feb 16 22:59:47 1996
+<br />
++++ modules/FvwmForm/FvwmForm.c	Thu Apr 18 17:20:34 1996
+<br />
+_at_&#64; -6,6 +6,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;* given, provided that this copyright is kept intact.
+<br />
+&nbsp;&nbsp;*/
+<br />
+&nbsp;#include &quot;../../configure.h&quot;
+<br />
++#include &quot;../../libs/fvwmlib.h&quot;
+<br />
+&nbsp;
+<br />
+&nbsp;#include &lt;stdio.h&gt;
+<br />
+&nbsp;#include &lt;stdlib.h&gt;
+<br />
+_at_&#64; -16,7 +17,9 &#64;&#64;
+<br />
+&nbsp;#include &lt;X11/cursorfont.h&gt;
+<br />
+&nbsp;#define XK_MISCELLANY
+<br />
+&nbsp;#include &lt;X11/keysymdef.h&gt;
+<br />
++#ifndef	__bsdi__
+<br />
+&nbsp;#include &lt;malloc.h&gt;
+<br />
++#endif
+<br />
+&nbsp;#include &lt;string.h&gt;
+<br />
+&nbsp;#include &lt;sys/types.h&gt;
+<br />
+&nbsp;#include &lt;sys/time.h&gt;
+<br />
+_at_&#64; -181,7 +184,7 &#64;&#64;
+<br />
+&nbsp;static int N = 8;
+<br />
+&nbsp;
+<br />
+&nbsp;/* copy a string until '\0', or up to n chars, and delete trailing spaces */
+<br />
+-char *CopyString (char *cp, int n)
+<br />
++char *CopyNString (char *cp, int n)
+<br />
+&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;char *dp, *bp;
+<br />
+&nbsp;&nbsp;&nbsp;if (n == 0)
+<br />
+_at_&#64; -310,31 +313,31 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if (strncmp(cp, &quot;Fore&quot;, 4) == 0) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cp += 4;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (isspace(*cp)) cp++;
+<br />
+-      color_names[c_fore] = CopyString(cp, 0);
+<br />
++      color_names[c_fore] = CopyNString(cp, 0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(fp_err, &quot;ColorFore: %s\n&quot;, color_names[c_fore]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;continue;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else if (strncmp(cp, &quot;Back&quot;, 4) == 0) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cp += 4;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (isspace(*cp)) cp++;
+<br />
+-      color_names[c_back] = CopyString(cp, 0);
+<br />
++      color_names[c_back] = CopyNString(cp, 0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(fp_err, &quot;ColorBack: %s\n&quot;, color_names[c_back]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;continue;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else if (strncmp(cp, &quot;ItemFore&quot;, 8) == 0) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cp += 8;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (isspace(*cp)) cp++;
+<br />
+-      color_names[c_itemfore] = CopyString(cp, 0);
+<br />
++      color_names[c_itemfore] = CopyNString(cp, 0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(fp_err, &quot;ColorItemFore: %s\n&quot;, color_names[c_itemfore]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;continue;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else if (strncmp(cp, &quot;ItemBack&quot;, 8) == 0) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cp += 8;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (isspace(*cp)) cp++;
+<br />
+-      color_names[c_itemback] = CopyString(cp, 0);
+<br />
++      color_names[c_itemback] = CopyNString(cp, 0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(fp_err, &quot;ColorItemBack: %s\n&quot;, color_names[c_itemback]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;continue;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else if (strncmp(cp, &quot;Font&quot;, 4) == 0) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cp += 4;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (isspace(*cp)) cp++;
+<br />
+-      font_names[f_text] = CopyString(cp, 0);
+<br />
++      font_names[f_text] = CopyNString(cp, 0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(fp_err, &quot;Font: %s\n&quot;, font_names[f_text]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xfs[f_text] = GetFontOrFixed(dpy, font_names[f_text]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fonts[f_text] = xfs[f_text]-&gt;fid;
+<br />
+_at_&#64; -342,7 +345,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else if (strncmp(cp, &quot;ButtonFont&quot;, 10) == 0) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cp += 10;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (isspace(*cp)) cp++;
+<br />
+-      font_names[f_button] = CopyString(cp, 0);
+<br />
++      font_names[f_button] = CopyNString(cp, 0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(fp_err, &quot;ButtonFont: %s\n&quot;, font_names[f_button]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xfs[f_button] = GetFontOrFixed(dpy, font_names[f_button]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fonts[f_button] = xfs[f_button]-&gt;fid;
+<br />
+_at_&#64; -350,7 +353,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else if (strncmp(cp, &quot;InputFont&quot;, 9) == 0) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cp += 9;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (isspace(*cp)) cp++;
+<br />
+-      font_names[f_input] = CopyString(cp, 0);
+<br />
++      font_names[f_input] = CopyNString(cp, 0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(fp_err, &quot;InputFont: %s\n&quot;, font_names[f_input]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xfs[f_input] = GetFontOrFixed(dpy, font_names[f_input]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fonts[f_input] = xfs[f_input]-&gt;fid;
+<br />
+_at_&#64; -510,7 +513,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cp += 7;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (isspace(*cp)) cp++;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cur_button-&gt;button.commands[cur_button-&gt;button.n++] =
+<br />
+-	CopyString(cp, 0);
+<br />
++	CopyNString(cp, 0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;}  /* end of switch() */
+<br />
+&nbsp;&nbsp;&nbsp;/* get the geometry right */
+<br />
+--- modules/FvwmForm/FvwmForm.man.dist	Wed Sep 27 03:14:57 1995
+<br />
++++ modules/FvwmForm/FvwmForm.man	Thu Apr 18 16:06:08 1996
+<br />
+_at_&#64; -145,7 +145,7 &#64;&#64;
+<br />
+&nbsp;.B \fImultiple\fP
+<br />
+&nbsp;This is a multiple-choice selection.
+<br />
+&nbsp;.TP 4
+<br />
+-.B *FvwmFormChoice \fIname\fP \fIvalue\fP on | off &quot;\fIstring\fP&quot;
+<br />
++.B *FvwmFormChoice \fIname\fP \fIvalue\fP &quot;on | off&quot; &quot;\fIstring\fP&quot;
+<br />
+&nbsp;Specifies a choice for a selection.
+<br />
+&nbsp;The choice item has a \fIname\fP and a \fIvalue\fP.
+<br />
+&nbsp;The \fIstring\fP will be displayed to the right of the choice button
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Apr 18 1996 - 12:07:24 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start16252">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="16253.html" title="Next message in the list">&#12414;&#12388;&#12375;&#12383;&#12414;&#12371;&#12392; : "Re: FVWM: FVWM Modules?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="16251.html" title="Previous message in the list">Anthony Stevens: "FVWM: FVWM Modules?"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16252" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16252" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16252" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16252" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

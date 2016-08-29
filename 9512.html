@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: re: locating XFT during config from Mike McNally on 2003-07-22 (fvwm-users)</title>
+<meta name="Author" content="Mike McNally (m5_at_works.com)" />
+<meta name="Subject" content="FVWM: re: locating XFT during config" />
+<meta name="Date" content="2003-07-22" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: re: locating XFT during config</h1>
+<!-- received="Tue Jul 22 16:30:23 2003" -->
+<!-- isoreceived="20030722153023" -->
+<!-- sent="Tue, 22 Jul 2003 16:28:42 -0500" -->
+<!-- isosent="20030722212842" -->
+<!-- name="Mike McNally" -->
+<!-- email="m5_at_works.com" -->
+<!-- subject="FVWM: re: locating XFT during config" -->
+<!-- id="20030722212842.GJ2337_at_yumyum.works.com" -->
+<!-- charset="iso-8859-1" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start9512" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="9513.html" accesskey="d" title="Jules Alberts: &quot;FVWM: window resize in 2.5.7&quot;">Next message</a> ]
+[ <a href="9511.html" title="Mikhael Goikhman: &quot;Re: FVWM: Help&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="9525.html" accesskey="t" title="f.kater_at_gmx.net: &quot;Re: FVWM: re: locating XFT during config&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg9512" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg9512" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg9512" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg9512" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Mike McNally &lt;<a href="mailto:m5_at_works.com?Subject=Re%3A%20FVWM%3A%20re%3A%20locating%20XFT%20during%20config">m5_at_works.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 22 Jul 2003 16:28:42 -0500</span><br />
+</address>
+<br />
+I couldn't remember what the deal was this morning, but I just
+<br />
+did now.  Somebody had a problem wherein FVWM wasn't finding 
+<br />
+xft during configuration.  One thing to check is to see whether
+<br />
+there's an &quot;xft.pc&quot; in /usr/X11R6/lib/pkgconfig, and then make
+<br />
+sure that PKG_CONFIG_PATH includes that directory when you 
+<br />
+run FVWM's configure script. In other words,
+<br />
+<br />PKG_CONFIG_PATH=/usr/X11R6/lib/pkgconfig
+<br />
+export PKG_CONFIG_PATH
+<br />
+./configure --whatever
+<br />
+<br />If there's no xft.pc, it should look something like this:
+<br />
+<br />prefix=/usr/X11R6
+<br />
+exec_prefix=/usr/X11R6/bin
+<br />
+libdir=/usr/X11R6/lib
+<br />
+includedir=/usr/X11R6/include
+<br />
+freetypelibs=-L/usr/X11R6/lib -lfreetype
+<br />
+freetypecflags=-I/usr/X11R6/include/freetype2
+<br />
+xrenderlibs=-L/usr/X11R6/lib -lXrender
+<br />
+xrendercflags=-I/usr/X11R6/include
+<br />
+<br />Name: Xft
+<br />
+Description: X FreeType library
+<br />
+Version: 2.1.0
+<br />
+Requires: fontconfig
+<br />
+Libs: -L${libdir} -lXft ${freetypelibs} ${xrenderlibs}
+<br />
+Cflags: -I${includedir} ${freetypecflags} ${xrendercflags}
+<br />
+<br /><br /><br />That may or may not work; it was necessary when I was getting Mozilla
+<br />
+to build.
+<br />
+<br /><pre>
+--
+[ you are my main foo ] Mike McNally -- m5_at_works.com
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue Jul 22 2003 - 16:30:23 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start9512">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="9513.html" title="Next message in the list">Jules Alberts: "FVWM: window resize in 2.5.7"</a></li>
+<li><dfn>Previous message</dfn>: <a href="9511.html" title="Previous message in the list">Mikhael Goikhman: "Re: FVWM: Help"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="9525.html" title="Next message in this discussion thread">f.kater_at_gmx.net: "Re: FVWM: re: locating XFT during config"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="9525.html" title="Message sent in reply to this message">f.kater_at_gmx.net: "Re: FVWM: re: locating XFT during config"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg9512" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg9512" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg9512" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg9512" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:55 BST
+</em></small></p>
+</body>
+</html>

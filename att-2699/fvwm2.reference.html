@@ -1,0 +1,1012 @@
+<html>
+<head>
+<title>Fvwm2 REFERENCE</title>
+</head>
+<body>
+<h1>Fvwm2 (Version 2.3.x) REFERENCE </h1>
+<h2>SYNOPSIS</h2>
+</a>
+<pre>
+<big><b>fvwm2 [[-blackout] \
+       [-clientId <i>id</i>] \
+       [-cmd <i>config_command</i>] \
+       [-d <i>displayname</i>] \
+       [-debug] \
+       [-debug_stack_ring] \
+       [-f <i>config_file</i>] \
+       [-h] \
+       [-replace] \
+       [-restore <i>state_file</i>] \
+       [-s] \
+       [-version] \
+       [-visual <i>visual_class</i>] \
+       [-visualId <i>id</i>]]</b></big>
+</pre>
+<h2>Command List</h2>
+Fvwm2 reads commands from the file <b>.fvwm2rc</b> which is searched in
+the following directories in the order shown:
+<pre>
+    $HOME/.fvwm
+    $FVWM_USERDIR
+    $HOME
+</pre>
+If this fails the file <b>system.fvwm2rc</b> is searched in the directory
+where fvwm2 was installed (/usr/X11R6/lib/X11/fvwm2).
+<p>
+Lines starting with a '<b>#</b>' character are comments. Lines starting with a '<b>*</b>'
+character are module configuration lines. Lines ending with an escaped newline
+character ('<b>\</b>') have a continuation line.
+<pre>
+The order for inserting configurations lines is:
+    1. Colors
+    2. Path setup (ModulePath, ImagePath)
+    3. Style settings, including the default style.
+    4. InitFunction, RestartFunction and ExitFunction definitions
+    5. Other Functions. Functions cannot be forward referenced from
+       other functions, but they can be backward referenced
+    6. Menus definitions. Same caveats about forward referencing
+    7. Key and Mouse Bindings
+    8. Module options
+</pre>
+<h2>AddButtonStyle button [state] [style] [-- [!]flag ...]</h2>
+Adds a button style to button
+<pre>
+  button: number (0 - 9), All, Left, Right
+  state:  ActiveUp, ActiveDown, Inactive,
+          ToggledActiveUp, ToggledActiveDown, ToggledInactive,
+          empty string means all states
+  style:  Simple, Default, Solid color
+          [Vector] count X0xY0@0 X1xY1@1
+          X,Y: pixel coordinates
+            @0: shadow color, @1: highlight color, @2: background color
+            e.g. X0xY0@0 X1xY1@1 draws a line from X0,Y0 to X1,Y1 in the highlight color
+            coordinate origin at left top corner, size in percent of height of TitleStyle
+          BGradient, CGradient, DGradient, HGradient
+          RGradient, SGradient, VGradient, YGradient
+            arguments: colorcount startcolor endcolor, or
+                       colorcount segmentcount color incr% [color incr% ...] endcolor
+          Pixmap file
+          MiniIcon file
+          TiledPixmap file
+  flag:   Raised, Sunk, Flat, UseTitleStyle, UseBorderStyle
+          MWMDecorMenue, MWMDecorMIn, MWMDecorMax
+          Left, Right, Bottom, Top for pixmaps
+</pre>
+<h2>AddTitleStyle [state] [style] [-- [!]flag ...]</h2>
+Adds a title style to a title bar
+<pre>
+  state: ActiveUp, ActiveDown, Inactive,
+         ToggledActiveUp, ToggledActiveDown, ToggledInactive,
+         empty string means all states
+  style: see TitleStyle and ButtonStyle
+  flag:  <b>Raised</b>, Sunk, Flat
+</pre>
+<h2>AddToDecor name</h2>
+Add or divert commands to a decor
+<pre>
+  [+ AddButtonStyle ...]
+  [+ AddTitleStyle ...]
+  [+ BorderStyle ...]
+  [+ ButtonStyle ...]
+  [+ TitleStyle ...]
+</pre>
+<h2>AddToFunc name</h2>
+Begins or adds to a function definition
+<pre>
+<b><big>+ trigger action</big></b>
+  trigger: Click       or C
+           DoubleClick or D
+           Hold        or H
+           Immediate   or I
+           Move        or M
+  action:  command parameters
+    parameters: $c:               class
+                $r:               resource name
+                $n:               current window name
+                $w:               window id
+                $d:               current desk number
+                $v:               fvwm version
+                $x:               x-coordinate of current viewport
+                $y:               y-coordinate of current viewport
+                $0...$9:          arguments
+                $.:               abs dir of current read file
+                $*:               all positional parameters
+                $[desk.width]     width og whole desktop
+                $[desk.height]    height of whole desktop
+                $[vp.x]:          x-coordinate of current viewport
+                $[vp.y]:          y-coordinate of current viewport
+                $[vp.width]:      width of current viewport
+                $[vp.height]:     height of current viewport
+                $[w.x]:           x-coordinate of current window
+                $[w.y]:           x-coordinate of current window
+                $[w.width]:       width of current window
+                $[w.height]:      width of current window
+                $[screen]:        screen number
+                $[env-var]:       environment variable
+                $[page.nx]:       current page number X
+                $[page.ny]:       current page number Y
+                $[fg.cs&lt;n&gt;]:      forground colorset
+                $[bg.cs&lt;n&gt;]:      background colorset
+                $[hilight.cs&lt;n&gt;]: hilight colorset
+                $[shadow.cs&lt;n&gt;]:  shadow clorset
+</pre>
+<h2>AddToMenu menu-name menu-title [Title [top]]</h2>
+Begins or adds to a menu definition
+<pre>
+<b><big> + [menu-&label][*xpm-file*][%xpm-file%] command</big></b>
+<b><big>[+ MissingSubmenuFunc command]</big></b>
+<b><big>[+ DynamicPopupAction command]</big></b>
+<b><big>[+ DynamicPopdownAction command]</big></b>
+  menu-name:  @xpm-file@: picture left to text
+              ^color^:    color of picture
+
+  menu-label: &:          underline  and hotkey
+              "" Nop:     separator
+              *xpm-file*: picture above text
+              %xpm-file%: picture left to text
+</pre>
+<h2>All [(condition[, condition...])] command</h2>
+Execute command on all windows meeting the conditions
+<pre>
+  conditions: CurrentDesk
+              CurrentPage
+              CurrentPageAnyDesk
+              Iconic, !Iconic
+              Layer [n]
+              Maximized, !Maximized
+              PlacedByButton3, !PlacedByButton3
+              Raised, !Raised
+              Shaded, !Shaded
+              Sticky, !Sticky
+              Transient, !Transient
+              Visible, !Visible
+              WindowName, wildcards allowed
+</pre>
+<h2>AnimatedMove [w | m]x[p] [w | m]y[p] [Warp]</h2>
+Move a window in an animated fashion. Similar to Move command
+<pre>
+  x, y: percent of screen width (height) or pixel if p
+  w:    relative to current window
+  m:    relative to current pointer (mouse)
+  Warp: warps cursor
+</pre>
+<h2>Beep</h2>
+As you might expect
+<h2>BorderStyle [state] [style] [-- [!]flag ...]</h2>
+Defines a border style for windows
+<pre>
+  state: Active, Inactive,
+         empty string means all states
+  style: TiledPixmap, Simple
+  flag:  HiddenHandles, NoInset, Flat, Sunk, Raised
+         default: HiddenHandles disabled
+</pre>
+<h2>BugOpts [option [bool], ...]</h2>
+This command controls several workarounds for bugs in third party programs
+<pre>
+  option: FlickeringMoveWorkaround
+          MixedVisualWorkaround
+          ModalityIsEvil
+          QtDialogsWorkaround
+          RaiseOverNativeWindows
+          RaiseOverUnmanaged
+  bool:   true = activate option, false = deactivate option,
+          not given or toggle = toggle option
+</pre>
+<h2>BusyCursor [option bool, ...]</h2>
+Controls the cursor during the execution of certain commands
+<pre>
+  option: DynamicMenu
+          ModulSynchronous
+          Read
+          Wait
+          *
+  bool:   true = use cursor, false = don't use cursor
+</pre>
+<h2>ButtonState [ActiveDown bool] [Inactive bool]</h2>
+Controls which states of the window titles and title buttons are used
+<pre>
+  bool: true = use state, false = don't use state
+</pre>
+<h2>ButtonStyle button [state] [style] [-- [!]flag ...]</h2>
+Sets the button style for a title-bar button
+<pre>
+  button: number (0 - 9), all, Left, Right, Reset
+  state:  ActiveUp, ActiveDown, Inactive,
+          ToggledActiveUp, ToggledActiveDown, ToggledInactive,
+          empty string means all states
+  style:  Simple, Default, Solid color
+          [Vector] count X0xY0@0 X1xY1@1
+          X,Y: pixel coordinates
+            @0: shadow color, @1: highlight color, @2: background color
+            e.g. X0xY0@0 X1xY1@1 draws a line from X0,Y0 to X1,Y1 in the highlight color
+            coordinate origin at left top corner, size percent of height of TitleStyle
+          BGradient, CGradient, DGradient, HGradient
+          RGradient, SGradient, VGradient, YGradient
+            arguments: colorcount startcolor endcolor, or
+                       colorcount segmentcount color incr% [color incr% ...] endcolor
+          Pixmap file
+          MiniIcon file
+          TiledPixmap file
+          Default [n]
+  flag:   Raised, Sunk, Flat, UseTitleStyle, UseBorderStyle
+          Left, Right, Top, Bottom, (default = centered) for pixmaps
+          MWMDecorStick, MWMDecorShade
+</pre>
+<h2>ButtonStyle button - [!]flag</h2>
+Sets state-independent flags for the specified button
+<pre>
+  button: number (0 - 9), all, Left, Right
+  flag:   <b>Raised</b>, Sunk, Flat, UseTitleStyle, UseBorderStyle
+          MWMDecorMenue, MWMDecorMIn, MWMDecorMax, MWMDecorStick, MWMDecorShade
+          Clear to clear flags
+</pre>
+<h2>ChangeDecor name</h2>
+Changes the decor of a window to decor name
+<pre>
+  name: name of decor, or Default
+</pre>
+<h2>ChangeMenuStyle menustyle menu-name [menuename ...]</h2>
+Changes the menu style of menu-name to menustyle
+<h2>ClickTime [milliseconds-delay]</h2>
+Specifies the maximum delay in milliseconds between a button press and a button
+release for the Function built-in to consider the action a mouse click
+<pre>
+  default: 150 ms
+</pre>
+<h2>Close</h2>
+If the window accepts the delete window protocol a message is sent to the window
+asking it to gracefully remove itself. If the window does not understand the delete
+window protocol then the window is destroyed as with the Destroy command.
+Note: if the window accepts the delete window protocol but does not close itself
+in response, the window is not deleted.
+
+<h2>ColorLimit limit</h2>
+Specifies a limit on the colors used in pixmaps used by fvwm on screens with a
+limited number of colors
+<pre>
+  limit: 0..60, 0 = no limit, default
+</pre>
+<h2>ColormapFocus FollowsMouse | FollowsFocus</h2>
+Installs the colormap of the window
+<h2>CopyMenuStyle orig-menustyle dest-menustyle</h2>
+Copy orig-menustyle to dest-menustyle, where orig-menustyle is an existing menu style
+<h2>Current (condition[, condition...]) command</h2>
+Performs command on the currently focused window if it satisfies all conditions
+<pre>
+  conditions: see All
+</pre>
+<h2>CursorMove horizontal[p] vertical[p]</h2>
+Moves the mouse pointer by horizontal pages in the X direction and vertical pages
+in the Y direction. Either or both entries may be negative
+<pre>
+  horizontal, vertical: in percent of page, or p for pixel
+</pre>
+<h2>CursorStyle context [number | name | xpm-file | None | Tiny [fore back]]</h2>
+Defines a new cursor for the specified context
+<pre>
+  context: BOTTOM       (bottom_side)
+           BOTTOM_EDGE  (bottom_side)
+           BOTTOM_LEFT  (bottom_left_corner)
+           BOTTOM_RIGHT (bottom_right_corner)
+           DEFAULT      (top_left_arrow)
+           DESTROY      (pirate)
+           LEFT         (left_side)
+           LEFT_EDGE    (left_side)
+           MENU         (top_left_arrow)
+           MOVE         (fleur)
+           POSITION     (top_left_corner)
+           RESIZE       (sizing)
+           RIGHT        (right_side)
+           RIGHT_EDGE   (right_side)
+           ROOT         (left_ptr)
+           SELECT       (crosshair)
+           STROKE       (plus)
+           SYS          (hand2)
+           TITLE        (top_left_arrow)
+           TOP          (top_side)
+           TOP_EDGE     (top_side)
+           TOP_LEFT     (top_left_corner)
+           TOP_RIGHT    (top_right_corner)
+           WAIT         (watch)
+ number:   as defined in cursorfont.h
+ name  :   as defined in cursorfont.h
+ xpm-file: name of a cursor file in xpm format
+ None:     no cursor
+ Tiny:     single pixel cursor
+</pre>
+<h2>DefaultColors [foreground background]</h2>
+Sets the default foreground and background colors used in miscellaneous windows
+<h2>DefaultColorset [n]</h2>
+Sets the colorset used by the windows controlled by the DefaultColors command
+<h2>DefaultFont [fontname]</h2>
+Sets the default font to font
+<h2>DefaultIcon file</h2>
+Sets the default icon which is used if a window has neither an client-supplied
+icon nor an icon supplied via the Icon option of the Style command.
+<h2>DefaultLayers bottom put top</h2>
+Changes the layers that are used for the StaysOnBottom, StaysPut, StaysOnTop
+Style options. Initially, the layers 2, 4 and 6 are used.
+<h2>Delete</h2>
+Sends a message to a window asking that it remove itself,
+frequently causing the application to exit
+<h2>DeskTopSize horizontal x vertical</h2>
+Defines the virtual desktop size
+<pre>
+  horizontal, vertical: units of physical sreens
+</pre>
+<h2>Destroy</h2>
+Destroys an application window, which usually causes the application to crash and burn
+<h2>DestroyDecor [recreate] decor-name</h2>
+Deletes the decor defined with AddToDecor
+<h2>DestroyFunc function-name</h2>
+Deletes a function, so that subsequent references to it are no longer valid
+<h2>DestroyMenu [recreate] menu-name</h2>
+Deletes a menu, so that subsequent references to it are no longer valid
+<h2>DestroyMenuStyle menustyle</h2>
+Deletes the menu style named menustyle and changes all menus using this style
+to the default style
+<h2>DestroyModuleConfig module-config-string</h2>
+Deletes module configuration entries
+<h2>Direction direction (condition[, condition...]) command</h2>
+Performs command (typically Focus) on a window in the given direction which satisfies
+all conditions
+<pre>
+  conditions: see All
+  direction:  North, Northeast, East, Southeast, South, Southwest, West, Northwest
+</pre>
+<h2>Echo string</h2>
+Prints a message to stderr
+<h2>EdgeResistance scrolling moving</h2>
+Tells how hard it should be to change the desktop viewport by moving the mouse over
+the edge of the screen and how hard it should be to move a window over the edge of the screen.
+<pre>
+  scrolling: milliseconds before viewport move
+  moving:    pixels before moving window
+</pre>
+<h2>EdgeScroll horizontal[p] vertical[p]</h2>
+Specifies the percentage of a page to scroll when the cursor hits the edge of a page
+<pre>
+  horizontal, vertical: percent of page, or pixel if p
+                        multiplied by 1000: wrap arround
+</pre>
+<h2>EdgeThickness 0 | 1 | 2</h2>
+This is the width or height of the invisible window that fvwm creates on the edges of
+the screen that are used for the edge scrolling feature.
+<pre>
+  0: no edge scrolling
+  1: smallest pan frame
+  2: default
+  the values are pixel
+</pre>
+<h2>Emulate fvwm | mwm | win</h2>
+This command affects how miscellaneous things are done by fvwm
+<h2>EscapeFunc</h2>
+By default the key sequence Ctrl-Alt-Escape allows to escape from a Wait pause and
+from a locked ModuleSynchronous command. The EscapeFunc command used with the Key
+command allows to configure this key sequence
+<h2>Exec command</h2>
+Executes command
+<pre>
+  use Exec exec command to avoid subshells (no ampersand in command)
+</pre>
+<h2>ExecUseShell [shell]</h2>
+Makes the Exec command use the specified shell
+<pre>
+  shell: bash, tcsh, ..., sh is default
+</pre>
+<h2>ExitFunction command [command ...]</h2>
+Executed when exiting or restarting before actually quitting
+<h2>FakeClick [command value ...]</h2>
+This command is mainly intended for debugging fvwm
+<h2>Flip Focus [NoWarp]</h2>
+Executes a Focus command as if the user had used the pointer to select the window
+<h2>Focus [NoWarp]</h2>
+Sets the keyboard focus to the selected window
+<h2>Function function-name</h2>
+Used to bind a previously defined function to a key or mouse button
+<h2>GnomeButton</h2>
+Used in conjunction with Mouse to pass mouse button presses on the root window
+to a GNOME program
+<h2>GotoDesk prev | arg1 [arg2] [min max]</h2>
+Switches the current viewport to another desktop
+<h2>GotoDeskAndPage prev | desk xpage ypage</h2>
+Switches the current viewport to another desktop and page
+<h2>GotoPage prev | x[p] y[p]</h2>
+Moves the desktop viewport to page (x,y)
+<h2>HideGeometryWindow [Never | Move | Resize]</h2>
+Hides the position or size window that is usually shown when a window is moved or
+resized interactively
+<h2>Iconify [bool]</h2>
+Iconifies a window if it is not already iconified or de-iconifies it if it is already iconified
+<pre>
+  bool: true = iconify only, false = deiconify only
+        not given or toggle = toggle state
+</pre>
+<h2>IgnoreModifiers [modifiers]</h2>
+Tells fvwm which modifiers to ignore when matching Mouse or Key bindings
+<pre>
+  modifiers: see Mouse or Key
+</pre>
+<h2>ImagePath path[:path ...]</h2>
+Specifies a colon separated list of directories in which to search for images
+(both monochrome and pixmap)
+<pre>
+  path: full path name of directory
+</pre>
+<h2>InitFunction command [command ...]</h2>
+Executed during initialization of fvwm2
+<h2>Key keyname context modifiers function</h2>
+Binds a keyboard key to a specified fvwm built-in function
+<pre>
+  keyname:   see keysymdef.h
+  context:   see Mouse
+  modifiers: see Mouse
+  function:  function name or - to remove binding
+</pre>
+<h2>KillModule name [alias]</h2>
+Causes the module which was invoked with name modulename to be killed.
+The name may include wildcards. If modulealias is given, only modules
+started with the given alias are killed
+<h2>Layer [arg1 arg2] | [default]</h2>
+Puts the current window in a new layer
+<h2>Lower</h2>
+Allows the user to lower a window
+<h2>Maximize [bool] [horizontal[p] vertical[p]]</h2>
+Maximize causes the window to alternately switch from a full-screen size to its normal size
+<pre>
+  bool:       true = maximize, false = minimize,
+              not given or toggle = toggle state
+  horizontal: percent of screen, or pixel if p, or Grow, GrowLeft, or GrowRight
+  vertical:   percent of screen, or pixel if p, or Grow, GrowUp, or GrowDown
+</pre>
+<h2>Menu menu-name [position] [double-click-action]</h2>
+Causes a previously defined menu to be popped up in a sticky manner
+<pre>
+  position: [[context-rectangle] [o&lt;n&gt; | c]x[m | p] [o&lt;n&gt; | c]y[m | p]] [special-options]
+            context-rectangle:
+               Button n:  button #n of the focused window
+               Context:   the current window, menu or icon
+               Icon:      the focused icon
+               Interior:  the inside of the focused window
+               Item:      current menu item
+               Menu:      the current menu
+               Mouse:     a 1x1 rectangle at the mouse position.(default)
+               Rectangle: X-geometry-format
+               Root:      the root window
+               This:      whatever widget the pointer is on
+               Title:     the title of the focused window or icon
+               Window:    the window with the focus
+             special-options: Animated, Mwm, Win, Fixed, WarpTitle, NoWarp, SelectInPlace
+             x,y percent of context-rectangle
+             o: overlap percentage (o0 = default)
+             c: = o50
+             m: menu width (height)
+             p: pixel
+</pre>
+<h2>MenuStyle stylename options</h2>
+Sets a new menu style or changes a previously defined style
+<pre>
+  stylename: * for the default menu
+  options:   ActiveColorset [n]
+             ActiveFore color/<b>ActiveForeOff</b>
+             Animation/<b>AnimationOff</b>
+             AutomaticHotkeys/<b>automaticHotkeysOff</b>
+             Background color
+             BorderWidth width
+             DeletSubmenus/<b>HoldSubmenus</b>
+             DoubleClickTime milliseconds (default 450 ms)
+             Font name
+             Foreground color
+             FVWM/MWM/WIN
+             Greyed color
+             GreyedColorset [n]
+             Hilight3DThick/Hilight3DThin/<b>Hilight3DOff</b>
+             Hilight3DThickness -50 ... 50 pixels
+             HilightBack color/<b>HilightBackOff</b>
+             ItemFormat format
+               format: %l = left justified
+                       %c = cetered
+                       %r = right justified
+                       %i = mini-icon
+                       %&gt; = submenu triangle right
+                       %&lt; = submenu triangle left
+                       %| = start or end of hilighted area
+                       %s = side picture,
+                       &lt;Space&gt;, &lt;Tab&gt; = a space
+                       %&lt;Space%gt;, &lt;%Tab&gt; = eight spaces
+                       %p = empty area
+             MenuColorset [n]
+             MenuFace style, see ButtonStyle
+             PopdownDelay milliseconds
+             PopdownImmediately/<b>PopdownDelayed</b>
+             PopupAsRootMenu/<b>PopupAsSubmenu</b>
+             PopupDelay milliseconds
+             PopupImmediately/<b>PopupDelayed</b>
+             PopupOffset x y percent of parent menu
+             RemoveSubmenus/<b>HoldSubmenus</b>
+             SelectOnRelease [key]
+             SeparatorsLong/<b>SeparatorsShort</b>
+             SideColor color
+             SidePic file
+             SubmenusRight/<b>SubmenusLeft</b>
+             TitleUnderlines0/TitleUnderlines1/TitleUnderlines2
+             TitleWarp/<b>TitleWarpOff</b>
+             TrianglesSolid/<b>TrianglesRelief</b>
+             VerticalItemSpacing y x
+             VerticalTitleSpacing y x
+</pre>
+<h2>Module module-name</h2>
+Specifies a module with its optional parameters which should be spawned
+<pre>
+  modul-name: FvwmAnimate  (fancy animation of (de)iconification)
+              FvwmAudio    (makes sounds to go with window manager actions)
+              FvwmAuto     (an auto raise module)
+              FvwmBacker   (to change the background when you change desktops)
+              FvwmBanner   (to display a spiffy XPM)
+              FvwmButtons  (brings up a customizable tool bar)
+              FvwmCommandS (a command server to use with shell's FvwmCommand client)
+              FvwmCpp      (to preprocess your .fvwm2rc with cpp)
+              FvwmDebug    (to debug your configuration)
+              FvwmDragWell (the place to drag&drop to)
+              FvwmEvent    (trigger various actions by events)
+              FvwmForm     (to bring up dialogs)
+              FvwmGtk      (to bring up GTK menus and dialogs)
+              FvwmIconBox  (like the mwm Icon-Box)
+              FvwmIconMan  (like the twm icon manager)
+              FvwmIdent    (to get window info)
+              FvwmM4       (to preprocess your .fvwm2rc with m4)
+              FvwmPager    (a mini version of the desktop)
+              FvwmRearange (to rearange windows)
+              FvwmSave     (saves the desktop state in .xinitrc  style)
+              FvwmSaveDesk (saves the desktop state in fvwm commands)
+              FvwmScript   (another powerful dialog toolkit)
+              FvwmScroll   (puts scrollbars  on  any window)
+              FvwmTalk     (to interactively run fvwm commands)
+              FvwmTaskBar  (a Windows like taskbar)
+              FvwmTheme    (manages colorsets)
+              FvwmWarf     (AfterStep like button bar)
+              FvwmWinList  (a window list)
+  Note: there may be other modules around
+</pre>
+<h2>ModulPath path[:path ...]</h2>
+Specifies a colon separated list of directories in which to search for modules
+<pre>
+  path: full path name to directory
+</pre>
+<h2>ModuleSynchronous  [expect-string] [timeout-secs] modulename</h2>
+The ModuleSynchronous command is very similar to Module. Fvwm stops processing any
+commands and user input until the module sends a string beginning with
+"NOP FINISHED STARTUP" back to fvwm
+<h2>ModuleTimeout timeout</h2>
+Specifies how many seconds fvwm waits for a module to respond
+<h2>Mouse Button context codifiers function</h2>
+Defines a mouse binding
+<pre>
+  button: 1, 2, 3, or 0 for any
+  context:   any combination of
+             A:   any, except title bar buttons
+             F:   window frame (the corner)
+             I:   Icon
+             R:   root window
+             S:   window sides
+             T:   title bar
+             W:   application window
+             0-9: title bar button number
+                  title bar buttons: 1 3 5 7 9   0 8 6 4 2
+  modifiers: any combination of
+             A:    any
+             C:    Control
+             H:    Hold
+             L:    Caps-Lock
+             M:    Meta (Alt)
+             N:    none
+             S:    Shift
+             0..5: X11 MOD1..MOD5
+  function:  command or - to remove binding
+</pre>
+<h2>Move [[w | m]x[p] | keep [w | m]y[p] | keep [Warp]] | [pointer]</h2>
+Allows the user to move a window
+<pre>
+  see AnimatedMove
+</pre>
+<h2>MoveThreshold [pixels]</h2>
+When the user presses a mouse button upon an object fvwm waits to see if the
+action is a click or a drag. If the mouse moves by more than pixels pixels
+it is assumed to be a drag. Default is 3 pixels.
+<h2>MoveToDesk prev | arg1 [arg2] [min max]</h2>
+Moves the selected window to another desktop
+<pre>
+  see GotoDesk
+</pre>
+<h2>MoveToPage [x[p] y[p]] | [prev]</h2>
+Moves the selected window to another page (x,y)
+<pre>
+  x,y: page
+  p:   move relative to current page
+</pre>
+<h2>Next [(condition[, condition...])] command</h2>
+Performs command (typically Focus) on the next window which satisfies all conditions
+<pre>
+  conditions: see All plus
+              CirculateHit
+              CirculateHitIcon
+</pre>
+<h2>None [(condition[, condition...])] command</h2>
+Performs command if no window which satisfies all conditions exists
+<pre>
+  conditions: see All
+</pre>
+<h2>Nop</h2>
+Does nothing. This is used to insert a blank line or separator in a menu
+<h2>OpaqueMoveSize [percentage]</h2>
+Tells fvwm the maximum size window with which opaque window movement should be used
+<pre>
+  default 5
+</pre>
+<h2>Pick [(condition[, condition...])] command</h2>
+Works like Function if invoked in the context of a window
+<pre>
+  conditions: see All
+</pre>
+<h2>PipeRead command [quiet]</h2>
+Causes fvwm to read commands from the output of the command
+<h2>PlaceAgain [Anim]</h2>
+Causes the current window's position to be re-computed using the initial window placement logic
+<h2>PointerKey keyname context modifiers function</h2>
+This command works exactly like the Key command. The only difference is that the binding
+operates on the window under the pointer
+<h2>Popup PopupName [position] [default-action]</h2>
+This built-in has two purposes: to bind a menu to a key or mouse button,
+and to bind a sub-menu into a menu
+<pre>
+  position: see Menu
+</pre>
+<h2>Prev [(condition[, condition...])] command</h2>
+Performs command (typically Focus) on the previous window which satisfies all conditions
+<pre>
+  conditions: see All
+</pre>
+<h2>Quit</h2>
+Exits fvwm, generally causing X to exit too
+<h2>QuitScreen</h2>
+Causes fvwm to stop managing the screen on which the command was issued
+<h2>QuitSession</h2>
+Causes a session manager (if any) to shutdown the session
+<h2>Raise</h2>
+Allows the user to raise a window. Note that this raises a window only in its layer.
+To bring a window to the absolute top, use
+<pre>
+  AddToFunc raise-to-top
+  + I Layer 0 ontop
+  + I Raise
+</pre>
+<h2>RaiseLower</h2>
+Alternately raises and lowers a window
+<h2>Read file [Quiet]</h2>
+Causes fvwm to read commands from the file named filename
+<h2>Recapture</h2>
+Causes fvwm to recapture all of its windows
+<h2>RecaptureWindow</h2>
+Causes fvwm to recapture the chosen window
+<h2>Refresh</h2>
+Causes all windows on the screen to redraw themselves
+<h2>RefreshWindow</h2>
+Causes the chosen window to redraw itself
+<h2>Resize [width[p | c] | keep height[p | c]] | keep | [bottomright | br x y]</h2>
+Allows to resize a window
+<pre>
+  width, height: in percent of page, or p for pixel, or c for client supplied unit
+  x, y:          coordinates of bottoright corner
+</pre>
+<h2>ResizeMove resize-arguments move-arguments</h2>
+This command does the same as the Resize and Move commands
+<h2>Restart [window_manager [params]]</h2>
+Causes FVWM to restart itself
+<h2>Restart --pass-args window_manager</h2>
+The same as Restart without parameters but the name for the current window manager
+is replaced with the specified window_manager and original arguments are preserved.
+<h2>Restart --dont-preserve-state [other-params]</h2>
+The same as Restart [other-params] but it does not save any window states over the restart
+<h2>RestartFunction command [command ...]</h2>
+Executed during a restart
+<h2>SaveSession</h2>
+Causes a session manager (if any) to save the session
+<h2>SaveQuitSession</h2>
+Causes a session manager (if any) to save and then shutdown the session
+<h2>Scroll horizonal[p] vertical[p]</h2>
+Scrolls the virtual desktop's viewport by horizontal pages in the x-direction
+and vertical pages in the y-direction
+<pre>
+  horizontal, vertical: percent of page, or pixel if p
+                        multiplied by 1000: wrap arround
+</pre>
+<h2>SendToModule modulename string</h2>
+Sends an arbitrary string (no quotes required) to all modules, whose alias
+or name matching modulename, which may contain wildcards
+<h2>SessionExit</h2>
+Like ExitFunction
+<h2>SessionInit</h2>
+  like InitFunction
+<h2>SessionRestart</h2>
+  like RestartFunction
+<h2>SetAnimation milliseconds-delay [fractions-to-move-list]</h2>
+Sets the time between frames and the list of fractional offsets to customize
+the animated moves of the AnimatedMove command and the animation of menus
+(if the menu style is set to animated; see MenuStyle command)
+<pre>
+  fractions-to-move-list: list of numbers between 0 and 1
+   default: 10 -.01 0 .01 .03 .08 .18 .3 .45 .6 .75 .85 .90 .94 .97 .99 1.0
+</pre>
+<h2>SetEnv varname stringvalue</h2>
+Set an environment variable to a new value, similar to shell's export or setenv command.
+The variable and its value are inherited by processes started directly by fvwm
+<h2>Silent command</h2>
+A number of built in functions require a window to operate on. If no window was selected
+when such a function is invoked the user is asked to select a window. Sometimes this
+behavior is unwanted, for example if the function was called by a module and the window
+that was selected at first does not exist anymore. You can prevent this by putting Silent
+in front of the fvwm command.
+<h2>SnapAttraction [[proximity [behavior] [Screen]]</h2>
+If during an interactive move the window or icon comes within proximity pixels of another
+the window or icon, it is moved to make the borders adjoin.
+The default of 0 means that no snapping happens
+<pre>
+  proximity: -1(default): no snapping, else number of pixels
+  behavior:  All, SameType, Windows, Icons, All is default
+</pre>
+<h2>SnapGrid [x-grid-size y-grid-size]</h2>
+During an interactive move a window or icon is positioned such that its location
+(top left corner) is coincident with the nearest grid point
+<pre>
+  x-grid-size, y-grid-size: in pixel, 1(default) = no grid
+</pre>
+<h2>StartFunction command [command ...]</h2>
+Executed during initial start of fvwm2
+<h2>Stick [bool]</h2>
+Makes a window sticky if it is not already sticky, or non-sticky if it is already sticky
+<pre>
+  bool: true = stick, false = unstick,
+        not given or toggle = toggle state
+</pre>
+<h2>Stroke sequence button context modifiers function</h2>
+Binds a mouse stroke sequence to a specified fvwm built-in function
+<h2>StrokeFunc [Options]</h2>
+Causes fvwm to record a mouse stroke sequence and to execute the corresponding
+action as defined in a Stroke command
+<pre>
+  options: NotStayPressed
+           EchoSequence
+           DrawMotion
+           Feedback
+           StrokeWidth width
+</pre>
+<h2>Style windowname options</h2>
+Used to set attributes of a window to values other than the default or to set
+the window manager default styles
+<pre>
+windowname: name, class, or resource string of an window, (wildcards are allowed)
+  options: BackColor color
+           BackingStore/<b>BackingStoreOff</b>
+           BorderColorset [n]
+           BorderWidth pixel
+           CaptureHonorsStartsOnPage/<b>CaptureIgnorsStartsOnPage</b>
+           CascadePlacement/<b>TileCascadePlacement</b>/TileManualPlacement/
+             MinOverlapPlacement/MinOverlapPlacementPercent/ManualPlacement
+           CirculateSkip/<b>CirculateHit</b>
+           CirculateSkipShade/<b>CirculateSkipShadeOff</b>
+           <b>ClickToFocus</b>/MouseFocus | FocusFollowsMouse/SloppyFocus/NeverFocus
+           ClickToFocusPassesClickOff/<b>ClickToFocusPassesClick</b>
+           ClickToFocusRaisesOff/<b>ClickToFocusRaises</b>
+           Color textcolor/bordercolor
+           Colorset [n]
+           DecorateTransient/<b>NakedTransient</b>
+           DepressableBorder/<b>FirmBorder</b>
+           FixedPosition/<b>VariablePosition</b>
+           Font font
+           ForeColor color
+           GNOMEIgnoreHints/<b>GNOMEUseHints</b>
+           GrabFocusOff/<b>GrabFocusOff</b>
+           GrabFocusTransientOff/<b>GrabFocusTransient</b>
+           HandleWidth pixel
+           HilightBack color
+           HilightBorderColorset [n]
+           HilightColorset [n]
+           HilightFore color
+           HintOverride/<b>NoOverride</b>
+           IconBox left, top, right, bottom, None, or geometry
+           IconFill dir1 dir2
+             dir1, dir2: t(op), b(ottom), l(eft), r(ight)
+             default: left to right then top to bottom (e.g. l b)
+           IconFont font
+           IconGrid x y pixel (3x3 = default)
+           IconifyWindowGroups/<b>IconifyWindowGroupsOff</b>
+           IconOverride/NoIconOverride/<b>NoActiveIconOverride</b>
+           IconTitle/<b>NoIconTitle</b>
+           IgnoreRestack/<b>AllowRestack</b>
+           KeepWindowGroupsOnDesk/<b>ScatterWindowGroups</b>
+           Layer n
+           Lenience/<b>NoLenience</b>
+           LowerTransient/<b>DontLowerTransient</b>
+           ManualPlacementHonorsStartsOnPage/<b>ManualPlacementIgnoresStartsOnPage</b>
+           MiniIcon file
+           MouseFocusClickRaises/<b>MouseFocusClickRaisesOff</b>
+           MWMBorder/<b>FvwmBorder</b>
+           MWMButtons/<b>FvwmButtons</b>
+           MWMDecor/<b>NoDecorHint</b>
+           MWMFunctions/<b>NoFuncHint</b>
+           NoButton n/<b>Button</b> n
+           NoHandles/<b>Handles</b>
+           NoIcon/<b>Icon</b> [file]
+           NoIconPosition/<b>UseIconPosition</b>
+           NoPPosition/<b>UsePPosition</b>
+           NoTitle/<b>Title</b>
+           OLDecor/<b>NoOLDecor</b>
+           ParentalRelativity/<b>Opacity</b>
+           RaiseTransient/<b>DontRaiseTransient</b>
+           RecaptureHonorsStartsOnPage/<b>RecaptureIgnoresStartsOnPage</b>
+           ResizeHintOverride<b>MaxWindowSize</b> [width[p] height[p]]
+           ResizeOpaque/<b>ResizeOutline</b>
+           SaveUnder/<b>SaveUnderOff</b>
+           SkipMapping/<b>ShowMapping</b>
+           StackTransientParent/<b>DontStackTransientParent</b>
+           StartIconic/<b>StartNormal</b>
+           StartsLowered/<b>StartsRaised</b>
+           StartsOnDesk n/StartsOnPage [desk] [x y]/<b>StartsAnywhere</b>
+           StartsOnPageIncludesTransients/<b>StartsOnPageIgnoresTransients</b>
+           StaysOnTop/<b>StaysPut</b>/StaysOnBottom
+           Sticky/<b>Slippery</b>
+           StickyIcon/<b>SlipperyIcon</b>
+           StippledTitle/<b>StippledTitleOff</b>
+           TitleAtBottom/<b>TitleAtTop</b>
+           UseDecor name (default not specified)
+           UseStyle name
+           WindowListSkip/<b>WindowListHit</b>
+           WindowShadeShrinks/<b>WinowShadeScrolls</b>
+           WindowshadeSteps n
+</pre>
+<h2>Title</h2>
+  Title for menu, no action
+<h2>TitleStyle [justification] [Height num]</h2>
+Sets attributes for the title-bar
+<pre>
+  justification: Centered, RightJustified, LeftJustified, Default: Centered
+  Height: pixels, must be set after the font
+</pre>
+<h2>TitleStyle [state] [style] [-- [!]flag ...]</h2>
+Sets attributes for the title-bar
+<pre>
+  state:  ActiveUp, ActiveDown, Inactive,
+          ToggledActiveUp, ToggledActiveDown, ToggledInactive,
+          empty string means all states
+  style:  Simple, Default, Solid color
+          BGradient, CGradient, DGradient, HGradient
+          RGradient, SGradient, VGradient, YGradient
+            arguments: colorcount startcolor endcolor, or
+                       colorcount segmentcount color incr% [color incr% ...] endcolor
+          Pixmap file
+          MiniIcon file
+          TiledPixmap file
+  flag:   <b>Raised</b>, Sunk, Flat
+</pre>
+<h2>UnsetEnv variable</h2>
+Unset an environment variable, similar to shell's export or unsetenv command
+<h2>UpdateDecor [decor]</h2>
+This command is kept mainly for backwards compatibility.
+Since all elements of a decor are updated immediately when they are changed,
+this command is mostly useless
+<h2>UpdateStyles</h2>
+All pending updates of all windows styles and looks are applied immediately
+<h2>Wait windowname</h2>
+This built-in is intended to be used in fvwm functions only. It causes execution
+of a function to pause until a new window with the title windowname appears.
+Fvwm remains fully functional during a wait
+<h2>WarpToWindow x[p] y[p]</h2>
+Warps the cursor to the associated window
+ <pre>
+ x, y: percent of page, or pixel if p
+</pre>
+<h2>WindowId [id] [(condition[, condition...])] | [root [screen]] function</h2>
+The WindowId function is similar to the Next and Prev functions, except that it looks
+for a specific window id and runs the specified function on it
+<h2>WindowList [(condition[, condition...])] [position] [options] [double-click-action]</h2>
+Generates a pop-up menu (and pops it up) in which the title and geometry of
+each of the windows currently on the desktop are shown
+<pre>
+  conditions: see All
+  position:   see Menu
+  options:    Alphabetic/NotAlphbetic
+              CurrentDesk
+              Desk desknum
+              Function funcname args
+              Layer m [n]
+              NoDeskSort
+              NoGeometry/Geometry
+              NoGeometryWithInfo
+              NoHotkeys
+              NoIcons/Icons/OnlyIcons
+              NoNormal/Normal/OnlyNormal
+              NoOnBottom/OnBottom/OnlyOnBottom
+              NoOnTop/OnTop/OnlyOnTop
+              NoSticky/Sticky/OnlySticky
+              SelectOnRelease
+              UseIconName
+              UseListSkip/OnlyListSkip
+  action:     see Menu
+  default:    AddToFunc WindowListFunc
+              + I WindowId $0 Iconify -1
+              + I WindowId $0 FlipFocus
+              + I WindowId $0 Raise
+              + I WindowId $0 WarpToWindow 5p 5p
+</pre>
+<h2>WindowShade [bool]</h2>
+Toggles the window shade feature for titled windows. Windows in the shaded state only
+display a title-bar
+<pre>
+  bool: true = force shade, false = force normal,
+        not given or toggle: toggle state
+</pre>
+<h2>XorPixmap [pixmap]</h2>
+Selects the pixmap with which bits are xor'ed when doing rubber-band window moving or resizing
+<h2>XORValue number</h2>
+Changes the value with which bits are xor'ed when doing rubber-band window moving or resizing
+<h2>Environment variables</h2>
+<pre>
+  DISPLAY,
+  FVWM_MODULEDIR,
+  FVWM_USERDIR,
+  SESSION_MANAGER,
+  SESSION_MANAGER_NAME
+  SM_SAVE_DIR
+</pre>
+<h2>Built in Key and Mouse Bindings</h2>
+<pre>
+  Key Help R A Popup MenuFvwmRoot
+  Key F1 R A Popup MenuFvwmRoot
+  Key Tab A M WindowList Root c c NoDeskSort
+  Key Escape A MC EscapeFunc
+
+  Mouse 1 TS A FuncFvwmRaiseLowerX Move
+  Mouse 1 F  A FuncFvwmRaiseLowerX Resize
+
+  AddToFunc FuncFvwmRaiseLowerX I Raise
+  + M $0
+  + D Lower
+</pre>
+<h2>Note on colors</h2>
+<pre>
+  Please use X11 colornames or the rgb:rrrr/gggg/bbbb (hex) notation
+</pre>
+<h2>Note on boolean arguments</h2>
+<pre>
+  yes, on,  true,  t, y means true
+  no,  off, false, f, n means false
+  toggle means toggle state
+</pre></pre>
+<h2>Note on gradients</h2>
+<pre>
+  HGradient is horizontal,
+  VGradient is vertical,
+  DGradient is diagonal from top left to bottom right,
+  BGradient is backwards diagonal from bottom left to top right,
+  SGradient is concentric squares,
+  CGradient is concentric circles,
+  RGradient is a radar like pattern and
+  YGradient is a Yin Yang style (but without the dots).
+
+  The gradient styles H, V, B and D are optimized for high
+  speed and low memory consumption in menus.
+</pre>
+<h2>Note on Quoting</h2>
+Quotes are required only when needed to make fvwm consider two or more words to be a single
+argument. Unnecessary quoting is allowed. If you want a quote character in your text, you
+must escape it by using the backslash character. For example, if you have a pop-up menu
+called "Window-Ops", then you don't need quotes: <pre>    Popup Window-Ops</pre> but if you replace the
+dash with a space, then you need quotes: <pre>    Popup "Window Ops"</pre>
+<p>
+The supported quoting characters are double quotes, single quotes and reverse single quotes.
+All three kinds of quotes are treated in the same way. Single characters can be quoted with
+a preceding backslash. Quoting single characters works even inside other kinds of quotes.
+</body>
+</html>
+

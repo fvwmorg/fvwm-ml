@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>RE: FVWM: FVWM 2.0.43 on Digital Unix still eats CPU time after from Charles Hines on 1996-09-10 (fvwm-users)</title>
+<meta name="Author" content="Charles Hines (chuck_hines_at_VNET.IBM.COM)" />
+<meta name="Subject" content="RE: FVWM: FVWM 2.0.43 on Digital Unix still eats CPU time after" />
+<meta name="Date" content="1996-09-10" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>RE: FVWM: FVWM 2.0.43 on Digital Unix still eats CPU time after</h1>
+<!-- received="Tue Sep 10 10:02:50 1996" -->
+<!-- isoreceived="19960910090250" -->
+<!-- sent="Tue, 10 Sep 1996 10:54:40 -0400" -->
+<!-- isosent="19960910145440" -->
+<!-- name="Charles Hines" -->
+<!-- email="chuck_hines_at_VNET.IBM.COM" -->
+<!-- subject="RE: FVWM: FVWM 2.0.43 on Digital Unix still eats CPU time after" -->
+<!-- id="9609101454.AA43073_at_cold.fishkill.ibm.com" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="XFMail.960910101042.grant_at_isgtec.com" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start17801" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="17802.html" accesskey="d" title="Mark Lehrer: &quot;FVWM: hook into fvwm restart?&quot;">Next message</a> ]
+[ <a href="17800.html" title="Grant McDorman: &quot;RE: FVWM: FVWM 2.0.43 on Digital Unix still eats CPU time after&quot;">Previous message</a> ]
+[ <a href="17800.html" title="Grant McDorman: &quot;RE: FVWM: FVWM 2.0.43 on Digital Unix still eats CPU time after&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="17809.html" accesskey="t" title="Thomas Leitner: &quot;RE: FVWM: FVWM 2.0.43 on Digital Unix still eats CPU time after&quot;">Next in thread</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17801" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17801" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17801" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17801" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Charles Hines &lt;<a href="mailto:chuck_hines_at_VNET.IBM.COM?Subject=RE%3A%20FVWM%3A%20FVWM%202.0.43%20on%20Digital%20Unix%20still%20eats%20CPU%20time%20after">chuck_hines_at_VNET.IBM.COM</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 10 Sep 1996 10:54:40 -0400</span><br />
+</address>
+<br />
+<em class="quotelev1">&gt;&gt;&gt;&gt;&gt; &quot;GM&quot; == Grant McDorman &lt;grant_at_isgtec.com&gt; writes:
+</em><br />
+<br />GM&gt; I hadn't followed up on my earlier postings on this since I was
+<br />
+GM&gt; doing some testing (and have also been busy on the things I'm
+<br />
+GM&gt; paid for &lt;grin&gt;). It turns out that the problem with FvwmButtons
+<br />
+GM&gt; looping is more likely the fact that it was doing Xlib calls in
+<br />
+GM&gt; the signal handler, which is supposed to be illegal.
+<br />
+<br />Yeah, that's definitely bad, but I hadn't noticed it before...
+<br />
+<br />GM&gt; I've changed it to just set a flag, which would force exit from
+<br />
+GM&gt; the main loop and then do the cleaup, but it doesn't seem to work
+<br />
+GM&gt; properly yet (swallowed programs get left running on a restart).
+<br />
+<br />Sounds like the right idea though.  I'll have to browse through that
+<br />
+code.
+<br />
+<br />GM&gt; Based on this, I suspect your problem may not be the signal handler.
+<br />
+GM&gt; What I suggest you do is break into the looping process(es) with your
+<br />
+GM&gt; debugger, get the call stack, and post it to the list. We can proceed
+<br />
+GM&gt; from there.
+<br />
+<br />Good idea, although where it's actually looping may not have anything
+<br />
+to do with how it got there.
+<br />
+<br />GM&gt; I'll post the change to FvwmButtons when I'm sure it works okay.
+<br />
+<br />Ok.
+<br />
+<br />Chuck
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue Sep 10 1996 - 10:02:50 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start17801">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="17802.html" title="Next message in the list">Mark Lehrer: "FVWM: hook into fvwm restart?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="17800.html" title="Previous message in the list">Grant McDorman: "RE: FVWM: FVWM 2.0.43 on Digital Unix still eats CPU time after"</a></li>
+<li><dfn>In reply to</dfn>: <a href="17800.html" title="Message to which this message replies">Grant McDorman: "RE: FVWM: FVWM 2.0.43 on Digital Unix still eats CPU time after"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="17809.html" title="Next message in this discussion thread">Thomas Leitner: "RE: FVWM: FVWM 2.0.43 on Digital Unix still eats CPU time after"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17801" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17801" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17801" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17801" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

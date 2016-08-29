@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: &quot;FvwmTaskbar MailBox&quot; with IMAP from uday bhaskar on 2004-12-20 (fvwm-users)</title>
+<meta name="Author" content="uday bhaskar (uday_p_at_yahoo.co.uk)" />
+<meta name="Subject" content="Re: FVWM: &quot;FvwmTaskbar MailBox&quot; with IMAP" />
+<meta name="Date" content="2004-12-20" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: &quot;FvwmTaskbar MailBox&quot; with IMAP</h1>
+<!-- received="Mon Dec 20 07:00:45 2004" -->
+<!-- isoreceived="20041220070045" -->
+<!-- sent="Mon, 20 Dec 2004 04:59:36 -0800 (PST)" -->
+<!-- isosent="20041220125936" -->
+<!-- name="uday bhaskar" -->
+<!-- email="uday_p_at_yahoo.co.uk" -->
+<!-- subject="Re: FVWM: &quot;FvwmTaskbar MailBox&quot; with IMAP" -->
+<!-- id="20041220125936.24998.qmail_at_web25004.mail.ukl.yahoo.com" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="FVWM: &quot;FvwmTaskbar MailBox&quot; with IMAP" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start13599" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="13600.html" accesskey="d" title="Felix E. Klee: &quot;Re: FVWM: Fishy Software-Patents: Please Participate in Web-Demo&quot;">Next message</a> ]
+[ <a href="13598.html" title="Felix E. Klee: &quot;FVWM: Fishy Software-Patents: Please Participate in Web-Demo&quot;">Previous message</a> ]
+[ <a href="12014.html" title="uday bhaskar: &quot;FVWM: &#0034;FvwmTaskbar MailBox&#0034; with IMAP&quot;">Maybe in reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg13599" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg13599" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg13599" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg13599" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: uday bhaskar &lt;<a href="mailto:uday_p_at_yahoo.co.uk?Subject=Re%3A%20FVWM%3A%20%22FvwmTaskbar%20MailBox%22%20with%20IMAP">uday_p_at_yahoo.co.uk</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 20 Dec 2004 04:59:36 -0800 (PST)</span><br />
+</address>
+<br />
+Hi,
+<br />
+<br />Felt like sharing this. This was what I did.
+<br />
+<br />#!/bin/perl
+<br />
+use Mail::IMAPClient;
+<br />
+$host = &quot;my-mail-server&quot;;
+<br />
+$id = &quot;uday&quot;;
+<br />
+$pass=xxxxxxxx;
+<br />
+$folder = &quot;INBOX&quot;;
+<br />
+$imap = Mail::IMAPClient-&gt;new(
+<br />
+Server =&gt; $host,
+<br />
+User =&gt; $id,
+<br />
+Password=&gt; $pass,
+<br />
+Fast_io=&gt;1,
+<br />
+) or die &quot;Cannot connect to $host as $id: $_at_&quot;;
+<br />
+while (1) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$imap-&gt;connect;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$count = 0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;defined($count = $imap-&gt;recent_count($folder))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;or die &quot;Could not recent_count: $_at_\\n&quot;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print STDERR &quot;the count is &quot;, $count, &quot; new
+<br />
+messages\n&quot;;
+<br />
+<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ($count){
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;open MAILFILE, &quot;&gt;mail&quot; or die &quot;unable to open mail
+<br />
+file\n&quot;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print MAILFILE &quot;new mail&quot;;
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$imap-&gt;logout;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;close MAILFILE;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sleep 300;
+<br />
+};
+<br />
+<br />and set fvwmtaskbar to watch on mail file.
+<br />
+<br />Thanks
+<br />
+Uday
+<br />
+<br />On Tue, Apr 20, 2004 at 05:54:06AM -0700, uday bhaskar
+<br />
+wrote:
+<br />
+<br />Sorry for the late reply.
+<br />
+<br /><em class="quotelev1">&gt; Not sure if this is the appropriate place to ask
+</em><br />
+this question, please 
+<br />
+<em class="quotelev1">&gt; redirect me to the appropriate palce.
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; My question is how do I use the &quot;FvwmTaskbar
+</em><br />
+MailBox&quot;
+<br />
+<em class="quotelev1">&gt; setting when I use IMAP for my mail access. All fvwm
+</em><br />
+says is add the 
+<br />
+<em class="quotelev1">&gt; path. Can someone help me out with how the path has
+</em><br />
+to be specified. 
+<br />
+<em class="quotelev1">&gt; {imap.domain.com}INBOX does not work.
+</em><br />
+<br />FvwmTaskBar just watches a file for new mails.  You
+<br />
+could use some other program such as fetchmail to
+<br />
+download the mails to a local file.  If this is
+<br />
+inacceptable, you can make some external script that
+<br />
+checks for new mail and writes something to a fake
+<br />
+mailbox,
+<br />
+e.g.:
+<br />
+<br />&nbsp;&nbsp;#!/bin/sh
+<br />
+&nbsp;&nbsp;echo &gt; /tmp/have_new_mail
+<br />
+&nbsp;&nbsp;while true; do
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if new_mail_in_imap_box; then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;new mail&quot; &gt;&gt; /tmp/have_new_mail
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;fi
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;sleep 300
+<br />
+&nbsp;&nbsp;done
+<br />
+<br />And tell FvwmTaskBar to watch the /tmp/have_new_mail
+<br />
+file instead of a real mailbox:
+<br />
+<br />&nbsp;&nbsp;*FvwmTaskBar: MailBox /tmp/have_new_mail
+<br />
+<br />The difficult part is to write the
+<br />
+&quot;new_mail_in_imap_box&quot; command or function.  Since I
+<br />
+never used IMAP, I don't know what tools there are to
+<br />
+do it.
+<br />
+<br />Ciao
+<br />
+<br />Dominik ^_^  ^_^
+<br />
+<br />&nbsp;--
+<br />
+Dominik Vogt, dominik.vogt_at_gmx.de
+<br />
+Reply-To: dominik.vogt_at_gmx.de
+<br />
+<br /><br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+__________________________________ 
+<br />
+Do you Yahoo!? 
+<br />
+Yahoo! Mail - You care about security. So do we. 
+<br />
+<a href="http://promotions.yahoo.com/new_mail">http://promotions.yahoo.com/new_mail</a>
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon Dec 20 2004 - 07:00:45 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start13599">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="13600.html" title="Next message in the list">Felix E. Klee: "Re: FVWM: Fishy Software-Patents: Please Participate in Web-Demo"</a></li>
+<li><dfn>Previous message</dfn>: <a href="13598.html" title="Previous message in the list">Felix E. Klee: "FVWM: Fishy Software-Patents: Please Participate in Web-Demo"</a></li>
+<li><dfn>Maybe in reply to</dfn>: <a href="12014.html" title="Message to which this message replies">uday bhaskar: "FVWM: &#0034;FvwmTaskbar MailBox&#0034; with IMAP"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg13599" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg13599" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg13599" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg13599" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:57 BST
+</em></small></p>
+</body>
+</html>

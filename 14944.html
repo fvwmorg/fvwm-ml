@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Re: B/W and COLOR determined at run time? from Mark Borges on 1995-11-30 (fvwm-users)</title>
+<meta name="Author" content="Mark Borges (mdb_at_cdc.noaa.gov)" />
+<meta name="Subject" content="FVWM: Re: B/W and COLOR determined at run time?" />
+<meta name="Date" content="1995-11-30" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Re: B/W and COLOR determined at run time?</h1>
+<!-- received="Thu Nov 30 17:02:40 1995" -->
+<!-- isoreceived="19951130170240" -->
+<!-- sent="Thu, 30 Nov 1995 16:02:31 -0700" -->
+<!-- isosent="19951130230231" -->
+<!-- name="Mark Borges" -->
+<!-- email="mdb_at_cdc.noaa.gov" -->
+<!-- subject="FVWM: Re: B/W and COLOR determined at run time?" -->
+<!-- id="9511302302.AA11665_at_suomi.cdc.noaa.gov" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="Thu, 30 Nov 1995 16:59:14 -0500" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start14944" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="14945.html" accesskey="d" title="Shishir Mehrotra: &quot;FVWM: Re: FvwmBacker&quot;">Next message</a> ]
+[ <a href="14943.html" title="Alan Wild: &quot;FVWM: FvwmBacker&quot;">Previous message</a> ]
+[ <a href="14942.html" title="Charles Chan: &quot;FVWM: B/W and COLOR determined at run time?&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg14944" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg14944" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg14944" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg14944" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Mark Borges &lt;<a href="mailto:mdb_at_cdc.noaa.gov?Subject=Re%3A%20FVWM%3A%20Re%3A%20B%2FW%20and%20COLOR%20determined%20at%20run%20time%3F">mdb_at_cdc.noaa.gov</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 30 Nov 1995 16:02:31 -0700</span><br />
+</address>
+<br />
+<em class="quotelev2">&gt;&gt; On Thu, 30 Nov 1995 16:59:14 -0500,
+</em><br />
+<em class="quotelev2">&gt;&gt; Charles Chan(C) wrote:
+</em><br />
+C&gt; Hi. I am constantly using fvwm on both b/w monitors and color monitors.
+<br />
+C&gt; Is there anyway to write my .fvwm2rc file such that it sets colors only 
+<br />
+C&gt; when I am using a color monitor? (maybe I need to write some M4 macros 
+<br />
+C&gt; somewhere?)
+<br />
+<br />cpp might be easier -- conditionalize your preferences in a file,
+<br />
+and read them in via FvwmCpp, e.g., I use it for font selection:
+<br />
+<br />FvwmCpp &quot;.fvwmrc-fonts&quot;
+<br />
+<br />where .fvwmrc-fonts contains:
+<br />
+---------------------------------------------------------------------------
+<br />
+/*
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Window and icon fonts
+<br />
+*/
+<br />
+<br />#if Y_RESOLUTION &gt;= 3700
+<br />
+#define WINDOWFONT	-adobe-times-bold-r-*-*-18-*-*-*-*-*-*-*
+<br />
+#define ICONFONT	-adobe-helvetica-bold-r-*-*-10-*-*-*-*-*-*-*
+<br />
+#else
+<br />
+#define WINDOWFONT	-adobe-times-bold-r-*-*-16-*-*-*-*-*-*-*
+<br />
+#define ICONFONT	-adobe-helvetica-bold-r-*-*-10-*-*-*-*-*-*-*
+<br />
+#endif
+<br />
+<br />WindowFont	WINDOWFONT
+<br />
+IconFont	ICONFONT
+<br />
+---------------------------------------------------------------------------
+<br />
+<br />so you could do something like:
+<br />
+<br />FvwmCpp &quot;.fvwmrc-colors&quot;
+<br />
+<br />where .fvwmrc-colors contains:
+<br />
+<br />---------------------------------------------------------------------------
+<br />
+#ifdef COLOR
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color stuff
+<br />
+<br />#else
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b/w stuff
+<br />
+<br />#endif
+<br />
+---------------------------------------------------------------------------
+<br />
+<br />for a list of symbols you can conditionalize on, run `xrdb -symbols'.
+<br />
+<br />&nbsp;&nbsp;-mb-
+<br />
+<pre>
+--
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Nov 30 1995 - 17:02:40 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start14944">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="14945.html" title="Next message in the list">Shishir Mehrotra: "FVWM: Re: FvwmBacker"</a></li>
+<li><dfn>Previous message</dfn>: <a href="14943.html" title="Previous message in the list">Alan Wild: "FVWM: FvwmBacker"</a></li>
+<li><dfn>In reply to</dfn>: <a href="14942.html" title="Message to which this message replies">Charles Chan: "FVWM: B/W and COLOR determined at run time?"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg14944" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg14944" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg14944" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg14944" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:57 BST
+</em></small></p>
+</body>
+</html>

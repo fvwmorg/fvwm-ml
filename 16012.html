@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: Command to send arbitrary stuff to modules from Charles Hines on 1996-03-25 (fvwm-users)</title>
+<meta name="Author" content="Charles Hines (<chuck_hines_at_VNET.IBM.COM>)" />
+<meta name="Subject" content="Re: FVWM: Command to send arbitrary stuff to modules" />
+<meta name="Date" content="1996-03-25" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: Command to send arbitrary stuff to modules</h1>
+<!-- received="Mon Mar 25 13:50:26 1996" -->
+<!-- isoreceived="19960325135026" -->
+<!-- sent="Mon, 25 Mar 1996 14:50:04 -0500" -->
+<!-- isosent="19960325195004" -->
+<!-- name="Charles Hines" -->
+<!-- email="<chuck_hines_at_VNET.IBM.COM>" -->
+<!-- subject="Re: FVWM: Command to send arbitrary stuff to modules" -->
+<!-- id="9603251950.AA31842_at_cold.fishkill.ibm.com" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="Pine.LNX.3.92.960324142334.28056D-100000_at_mortimer.powertie.org" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start16012" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="16013.html" accesskey="d" title="Charles Hines: &quot;Re: FVWM: Command to send arbitrary stuff to modules&quot;">Next message</a> ]
+[ <a href="16011.html" title="Grant McDorman: &quot;RE: FVWM: desktop&quot;">Previous message</a> ]
+[ <a href="15992.html" title="Brandon M. Browning: &quot;Re: FVWM: Command to send arbitrary stuff to modules&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="16001.html" accesskey="t" title="Graeme McCaffery: &quot;Re: FVWM: Command to send arbitrary stuff to modules&quot;">Next in thread</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16012" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16012" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16012" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16012" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Charles Hines &lt;<a href="mailto:%3Cchuck_hines_at_VNET.IBM.COM%3E?Subject=Re%3A%20FVWM%3A%20Command%20to%20send%20arbitrary%20stuff%20to%20modules"><chuck_hines_at_VNET.IBM.COM></a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 25 Mar 1996 14:50:04 -0500</span><br />
+</address>
+<br />
+<em class="quotelev1">&gt;&gt;&gt;&gt;&gt; &quot;Brandon&quot; == Brandon M Browning &lt;brandon_at_powertie.org&gt; writes:
+</em><br />
+<br />Brandon&gt; Not to compare apples to oranges, but OLWM lets me change
+<br />
+Brandon&gt; menu items w/o restarting.
+<br />
+<br />Actually, you can pretty much do this right now (although it may not
+<br />
+be an entirely elegant solution).
+<br />
+<br />To add to an existing menu on the fly, you can just call AddToMenu.
+<br />
+To recreate it you can call DestroyMenu, and then AddToMenu.
+<br />
+<br />So, if you rewrote your .fvwm2rc file correctly (or safer, had a
+<br />
+separate file just for menu definitions), you could just reread it.
+<br />
+<br />In fact, check out this.  In your ~/.fvwm2rc file you could have:
+<br />
+<br />----------------------------------------------------------------------
+<br />
+Mouse 2 R MC DynamicMenu
+<br />
+<br />AddToMenu DMenu &quot;Dynamic Menu&quot; Title
+<br />
+<br />AddToFunc DynamicMenu &quot;I&quot; DestroyMenu &quot;DMenu&quot;
+<br />
++ &quot;I&quot; Read .fvwm2rc-dynmenu
+<br />
++ &quot;I&quot; Popup DMenu
+<br />
+----------------------------------------------------------------------
+<br />
+<br />And ~/.fvwm2rc-dynmenu could look like this:
+<br />
+<br />----------------------------------------------------------------------
+<br />
+AddToMenu DMenu &quot;Dynamic Menu&quot; Title
+<br />
++ &quot;Rlogin&quot; Module FvwmForm Rlogin
+<br />
++ &quot;QuitVerify&quot; Module FvwmForm QuitVerify
+<br />
+----------------------------------------------------------------------
+<br />
+<br />This binds Alt-Ctrl-MiddleMouse to this dynamic menu function.
+<br />
+Editing the file .fvwm2rc-dynmenu would result in an immediate change
+<br />
+when you pop up the menu next time with no fvwm commands needed on
+<br />
+your part.
+<br />
+<br />Granted, if you haven't changed that file, it still does waste the
+<br />
+time of reading the file before popping up the menu, but with a not so
+<br />
+large menu this won't be too bad.  But if you used it to get the menu
+<br />
+to where you liked it and then just bound the resulting menu directly
+<br />
+instead of through this function, it wouldn't matter anyways.
+<br />
+<br />Chuck
+<br />
+<br />*******************************************************************************
+<br />
+Charles K. Hines &lt;chuck_hines_at_vnet.ibm.com&gt;
+<br />
+IBM Logic Synthesis developer [BooleDozer (TM)]
+<br />
+Martial Arts Instructor [Modern Arnis, Presas Style Filipino Martial Arts]
+<br />
+<br />IBM Internal email:                        &quot;Go back to sleep, Chuck.  You're
+<br />
+&nbsp;&nbsp;hines_at_cold.fishkill.ibm.com,              just havin' a nightmare--of course,
+<br />
+&nbsp;&nbsp;HINESC at FISHKILL, HINESC at FSHVMFK1    we are still in Hell.&quot; Gary Larson
+<br />
+*******************************************************************************
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon Mar 25 1996 - 13:50:26 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start16012">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="16013.html" title="Next message in the list">Charles Hines: "Re: FVWM: Command to send arbitrary stuff to modules"</a></li>
+<li><dfn>Previous message</dfn>: <a href="16011.html" title="Previous message in the list">Grant McDorman: "RE: FVWM: desktop"</a></li>
+<li><dfn>In reply to</dfn>: <a href="15992.html" title="Message to which this message replies">Brandon M. Browning: "Re: FVWM: Command to send arbitrary stuff to modules"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="16001.html" title="Next message in this discussion thread">Graeme McCaffery: "Re: FVWM: Command to send arbitrary stuff to modules"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16012" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16012" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16012" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16012" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

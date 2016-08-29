@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: feature patch: fixed icons from Brian Gregory on 1997-05-13 (fvwm-users)</title>
+<meta name="Author" content="Brian Gregory (bgregory_at_pacific.cisco.com)" />
+<meta name="Subject" content="FVWM: feature patch: fixed icons" />
+<meta name="Date" content="1997-05-13" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: feature patch: fixed icons</h1>
+<!-- received="Tue May 13 17:42:51 1997" -->
+<!-- isoreceived="19970513164251" -->
+<!-- sent="Tue, 13 May 1997 15:41:22 -0700" -->
+<!-- isosent="19970513224122" -->
+<!-- name="Brian Gregory" -->
+<!-- email="bgregory_at_pacific.cisco.com" -->
+<!-- subject="FVWM: feature patch: fixed icons" -->
+<!-- id="199705132241.PAA18262_at_veex.cisco.com" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start19959" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="19960.html" accesskey="d" title="Brian Gregory: &quot;Re: FVWM: feature patch: fixed icons&quot;">Next message</a> ]
+[ <a href="19958.html" title="Richard A. Guay: &quot;FVWM: FvwmXse Module&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="19960.html" accesskey="t" title="Brian Gregory: &quot;Re: FVWM: feature patch: fixed icons&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19959" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19959" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19959" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19959" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Brian Gregory &lt;<a href="mailto:bgregory_at_pacific.cisco.com?Subject=Re%3A%20FVWM%3A%20feature%20patch%3A%20fixed%20icons">bgregory_at_pacific.cisco.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 13 May 1997 15:41:22 -0700</span><br />
+</address>
+<br />
+Hi,
+<br />
+<br />Summary: patches enclosed (one regular, one unified format) implement
+<br />
+the IconFix function, which makes an icon stick to its position as if
+<br />
+it was moved zero distance.  Man page updated, too.  Trivial changes
+<br />
+were required for the implementation.
+<br />
+<br /><pre>
+----
+I switched to fvwm about 6 months ago, and it's great.  The extensive
+customization features sets it apart from most other window managers...
+By way of background, once on the screen, I prefer things to stay put.
+In fact, the main reason I went to fvwm is so that I can make moving and
+resizing windows &quot;much harder&quot; from an interface standpoint (I have
+move/raise and resize/raise do the move or resize function only when
+control is pressed).  Similarly, I prefer the icon for a given program
+to always appear in the same place.
+Though the IconBox style is very useful, the box implements a
+last-in, first-position placement scheme (yes, I could use an IconBox
+per program, but I want groups of programs in the same box).  I
+noticed that if an icon was moved, it stuck to the new position (in
+the code, ICON_MOVED can be set but never unset, in fact).  After
+a trivial modification, I introduced a new function called IconFix
+which &quot;moves&quot; the icon zero distance once placed (by setting ICON_MOVED),
+thus fixing the icon's position.
+I implemented the interface much the same way the &quot;Sticky&quot; attribute
+is implemented (Sticky was my implementation template -- valid??).
+The way I use the IconFix function is this:
+  bring up fvwm
+  run all programs
+  let fvwm position icons in the IconBox(es)
+  shuffle icons if necessary (by ordering of opens and closes)
+  run IconFix from each window's menu
+One could also use icon geometries, but coverage across all apps is
+varied, and plus, I really like the notion of IconBoxes, where &quot;permanent&quot;
+windows have icons in known locations, while apps that come and go
+are in the expected general area.  I also like the nice spacing that the
+initial auto-placement offers.
+Regular diff:
+-------------------------------------------------------------------------------
+diff -rc orig/builtins.c ./builtins.c
+*** orig/builtins.c	Wed Jan 22 05:37:28 1997
+--- ./builtins.c	Mon Apr 14 14:57:22 1997
+***************
+*** 950,955 ****
+--- 950,976 ----
+    SetTitleBar(tmp_win,(Scr.Hilite==tmp_win),True);
+  }
+  
++ 
++ void iconfix_function(XEvent *eventp,Window w,FvwmWindow *tmp_win,
++ 		      unsigned long context, char *action, int *Module)
++ {
++   if (DeferExecution(eventp,&amp;w,&amp;tmp_win,&amp;context,SELECT,ButtonRelease))
++     return;
++ 
++   /* making the icon stick to its current location can be achieved
++    * by marking the icon moved. */
++   if(tmp_win-&gt;flags &amp; ICON_MOVED)
++   {
++     tmp_win-&gt;flags &amp;= ~ICON_MOVED;
++   }
++   else
++   {
++     tmp_win-&gt;flags |= ICON_MOVED;
++   }
++   BroadcastConfig(M_CONFIGURE_WINDOW,tmp_win);
++   SetTitleBar(tmp_win,(Scr.Hilite==tmp_win),True);
++ }
++ 
+  void wait_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+  	       unsigned long context,char *action, int *Module)
+  {
+diff -rc orig/complex.c ./complex.c
+*** orig/complex.c	Fri Apr 19 07:00:41 1996
+--- ./complex.c	Mon Apr 14 14:59:49 1997
+***************
+*** 106,111 ****
+--- 106,112 ----
+     * F_RAISELOWER
+     * F_MAXIMIZE
+     * F_FOCUS
++    * F_ICONFIX
+     *
+     * These do not:
+     * The function code is &lt; 100
+diff -rc orig/functions.c ./functions.c
+*** orig/functions.c	Tue Jan 14 06:06:33 1997
+--- ./functions.c	Mon Apr 14 15:01:02 1997
+***************
+*** 81,86 ****
+--- 81,87 ----
+    {&quot;GotoPage&quot;,     goto_page_func,   F_GOTO_PAGE,           FUNC_NO_WINDOW},
+    {&quot;HilightColor&quot;, SetHiColor,       F_HICOLOR,             FUNC_NO_WINDOW},
+    {&quot;Iconify&quot;,      iconify_function, F_ICONIFY,             FUNC_NEEDS_WINDOW},
++   {&quot;IconFix&quot;,      iconfix_function, F_ICONFIX,             FUNC_NEEDS_WINDOW},
+    {&quot;IconFont&quot;,     LoadIconFont,     F_ICONFONT,            FUNC_NO_WINDOW},
+    {&quot;IconPath&quot;,     setIconPath,      F_ICON_PATH,           FUNC_NO_WINDOW},
+    {&quot;Key&quot;,          ParseKeyEntry,    F_KEY,                 FUNC_NO_WINDOW},
+diff -rc orig/fvwm2.man ./fvwm2.man
+*** orig/fvwm2.man	Wed Jan 22 08:13:38 1997
+--- ./fvwm2.man	Mon Apr 14 15:11:52 1997
+***************
+*** 1039,1044 ****
+--- 1039,1048 ----
+  positive the only iconification will be allowed.  It the optional
+  argument is negative only de-iconification will be allowed.
+  
++ .IP &quot;IconFix&quot;
++ Makes an icon more fixed in position if it is not already fixed,
++ or non-fixed if it is already fixed.
++ 
+  
+  .IP &quot;IconPath \fIpath\fP&quot;
+  Specifies a colon separated list of full path names of directories
+diff -rc orig/misc.h ./misc.h
+*** orig/misc.h	Mon Dec 23 14:07:47 1996
+--- ./misc.h	Mon Apr 14 15:01:22 1997
+***************
+*** 410,415 ****
+--- 410,417 ----
+  		      unsigned long context, char *action, int *Module);
+  void stick_function(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+  		    unsigned long context, char *action, int *Module);
++ void iconfix_function(XEvent *eventp,Window w,FvwmWindow *tmp_win,
++ 		      unsigned long context, char *action, int *Module);
+  
+  void changeDesks_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+  		      unsigned long context,char *action, int *Module);
+diff -rc orig/parse.h ./parse.h
+*** orig/parse.h	Mon Dec 23 14:07:47 1996
+--- ./parse.h	Mon Apr 14 15:00:25 1997
+***************
+*** 101,106 ****
+--- 101,107 ----
+  #define F_DESTROY_DECOR         124
+  #define F_UPDATE_DECOR          125
+  #define F_WINDOW_SHADE          126
++ #define F_ICONFIX               127
+  
+  /* Functions for use by modules only! */
+  #define F_SEND_WINDOW_LIST     1000
+-------------------------------------------------------------------------------
+Unified diff:
+-------------------------------------------------------------------------------
+diff -ru orig/builtins.c ./builtins.c
+--- orig/builtins.c	Wed Jan 22 05:37:28 1997
++++ ./builtins.c	Mon Apr 14 14:57:22 1997
+_at_&#64; -950,6 +950,27 &#64;&#64;
+   SetTitleBar(tmp_win,(Scr.Hilite==tmp_win),True);
+ }
+ 
++
++void iconfix_function(XEvent *eventp,Window w,FvwmWindow *tmp_win,
++		      unsigned long context, char *action, int *Module)
++{
++  if (DeferExecution(eventp,&amp;w,&amp;tmp_win,&amp;context,SELECT,ButtonRelease))
++    return;
++
++  /* making the icon stick to its current location can be achieved
++   * by marking the icon moved. */
++  if(tmp_win-&gt;flags &amp; ICON_MOVED)
++  {
++    tmp_win-&gt;flags &amp;= ~ICON_MOVED;
++  }
++  else
++  {
++    tmp_win-&gt;flags |= ICON_MOVED;
++  }
++  BroadcastConfig(M_CONFIGURE_WINDOW,tmp_win);
++  SetTitleBar(tmp_win,(Scr.Hilite==tmp_win),True);
++}
++
+ void wait_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+ 	       unsigned long context,char *action, int *Module)
+ {
+diff -ru orig/complex.c ./complex.c
+--- orig/complex.c	Fri Apr 19 07:00:41 1996
++++ ./complex.c	Mon Apr 14 14:59:49 1997
+_at_&#64; -106,6 +106,7 &#64;&#64;
+    * F_RAISELOWER
+    * F_MAXIMIZE
+    * F_FOCUS
++   * F_ICONFIX
+    *
+    * These do not:
+    * The function code is &lt; 100
+diff -ru orig/functions.c ./functions.c
+--- orig/functions.c	Tue Jan 14 06:06:33 1997
++++ ./functions.c	Mon Apr 14 15:01:02 1997
+_at_&#64; -81,6 +81,7 &#64;&#64;
+   {&quot;GotoPage&quot;,     goto_page_func,   F_GOTO_PAGE,           FUNC_NO_WINDOW},
+   {&quot;HilightColor&quot;, SetHiColor,       F_HICOLOR,             FUNC_NO_WINDOW},
+   {&quot;Iconify&quot;,      iconify_function, F_ICONIFY,             FUNC_NEEDS_WINDOW},
++  {&quot;IconFix&quot;,      iconfix_function, F_ICONFIX,             FUNC_NEEDS_WINDOW},
+   {&quot;IconFont&quot;,     LoadIconFont,     F_ICONFONT,            FUNC_NO_WINDOW},
+   {&quot;IconPath&quot;,     setIconPath,      F_ICON_PATH,           FUNC_NO_WINDOW},
+   {&quot;Key&quot;,          ParseKeyEntry,    F_KEY,                 FUNC_NO_WINDOW},
+diff -ru orig/fvwm2.man ./fvwm2.man
+--- orig/fvwm2.man	Wed Jan 22 08:13:38 1997
++++ ./fvwm2.man	Mon Apr 14 15:11:52 1997
+_at_&#64; -1039,6 +1039,10 &#64;&#64;
+ positive the only iconification will be allowed.  It the optional
+ argument is negative only de-iconification will be allowed.
+ 
++.IP &quot;IconFix&quot;
++Makes an icon more fixed in position if it is not already fixed,
++or non-fixed if it is already fixed.
++
+ 
+ .IP &quot;IconPath \fIpath\fP&quot;
+ Specifies a colon separated list of full path names of directories
+diff -ru orig/misc.h ./misc.h
+--- orig/misc.h	Mon Dec 23 14:07:47 1996
++++ ./misc.h	Mon Apr 14 15:01:22 1997
+_at_&#64; -410,6 +410,8 &#64;&#64;
+ 		      unsigned long context, char *action, int *Module);
+ void stick_function(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+ 		    unsigned long context, char *action, int *Module);
++void iconfix_function(XEvent *eventp,Window w,FvwmWindow *tmp_win,
++		      unsigned long context, char *action, int *Module);
+ 
+ void changeDesks_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+ 		      unsigned long context,char *action, int *Module);
+diff -ru orig/parse.h ./parse.h
+--- orig/parse.h	Mon Dec 23 14:07:47 1996
++++ ./parse.h	Mon Apr 14 15:00:25 1997
+_at_&#64; -101,6 +101,7 &#64;&#64;
+ #define F_DESTROY_DECOR         124
+ #define F_UPDATE_DECOR          125
+ #define F_WINDOW_SHADE          126
++#define F_ICONFIX               127
+ 
+ /* Functions for use by modules only! */
+ #define F_SEND_WINDOW_LIST     1000
+-------------------------------------------------------------------------------
+Brian Gregory  bgregory_at_cisco.com                   |           |
+Phone : (805) 961-3622                             |||         |||
+Fax   : (805) 961-3600                            |||||       |||||
+150 Castilian Drive                           ..:|||||||:...:|||||||:..
+Santa Barbara, CA 93117 (U.S.A.)              c i s c o   S y s t e m s
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue May 13 1997 - 17:42:51 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start19959">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="19960.html" title="Next message in the list">Brian Gregory: "Re: FVWM: feature patch: fixed icons"</a></li>
+<li><dfn>Previous message</dfn>: <a href="19958.html" title="Previous message in the list">Richard A. Guay: "FVWM: FvwmXse Module"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="19960.html" title="Next message in this discussion thread">Brian Gregory: "Re: FVWM: feature patch: fixed icons"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Maybe reply</dfn>: <a href="19960.html" title="Message sent in reply to this message">Brian Gregory: "Re: FVWM: feature patch: fixed icons"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19959" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19959" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19959" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19959" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

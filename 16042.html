@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: invoking popup menus from a module from David Barth on 1996-03-27 (fvwm-users)</title>
+<meta name="Author" content="David Barth (barth_at_di.epfl.ch)" />
+<meta name="Subject" content="FVWM: invoking popup menus from a module" />
+<meta name="Date" content="1996-03-27" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: invoking popup menus from a module</h1>
+<!-- received="Wed Mar 27 16:10:10 1996" -->
+<!-- isoreceived="19960327161010" -->
+<!-- sent="Wed, 27 Mar 1996 23:09:46 +0100" -->
+<!-- isosent="19960327220946" -->
+<!-- name="David Barth" -->
+<!-- email="barth_at_di.epfl.ch" -->
+<!-- subject="FVWM: invoking popup menus from a module" -->
+<!-- id="3159BCAA.2781_at_di.epfl.ch" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start16042" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="16043.html" accesskey="d" title="Jarl Totland: &quot;Re: FVWM: Popup menus&quot;">Next message</a> ]
+[ <a href="16041.html" title="Martin Cartwright: &quot;Re: FVWM: icon bar&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16042" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16042" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16042" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16042" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: David Barth &lt;<a href="mailto:barth_at_di.epfl.ch?Subject=Re%3A%20FVWM%3A%20invoking%20popup%20menus%20from%20a%20module">barth_at_di.epfl.ch</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 27 Mar 1996 23:09:46 +0100</span><br />
+</address>
+<br />
+I have a patch on my web page, allowing a module to invoke a popup menu.
+<br />
+<br />It's not perfect, as I realize it breaks menus placement like the
+<br />
+WinList. But I wondered if the design was suitable for fvwm.
+<br />
+Mainly the changes involved :
+<br />
+<br />* builtins.c : parse a Popup function to look for additional coordinates
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(using GetTwoArgs)
+<br />
+<br />* menus.h : adding to fields x,y in the MenuRoot structure (waste space
+<br />
+I know)
+<br />
+<br />* menu.c : try to place the menu with coordinate information as weel as
+<br />
+possible. the traditionnal Button1 Root menu works, but not
+<br />
+the Winlist. (I'll see that asap)
+<br />
+<br />* module.h : added a M_FUNCTION_END message to send at the end of
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ExecuteFunction. This allows feedback to a module. I did
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;that to know when to depress sort of a Start button on my
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;taskbar, but it can provide usefull information for a
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;general purpose module.
+<br />
+<br />* module.c : send the M_FUNCTION_END message
+<br />
+<br />If your're interested, see my web page and try the patch.
+<br />
+<br /><pre>
+--
+D.Barth (<a href="http://ltiwww.epfl.ch/~barth">http://ltiwww.epfl.ch/~barth</a>)
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Mar 27 1996 - 16:10:10 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start16042">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="16043.html" title="Next message in the list">Jarl Totland: "Re: FVWM: Popup menus"</a></li>
+<li><dfn>Previous message</dfn>: <a href="16041.html" title="Previous message in the list">Martin Cartwright: "Re: FVWM: icon bar"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16042" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16042" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16042" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16042" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

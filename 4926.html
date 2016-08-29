@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Re: Memory Allocations/XDrawSegment from Dave Trollope on 2002-04-20 (fvwm-users)</title>
+<meta name="Author" content="Dave Trollope (dave.trollope_at_worldnet.att.net)" />
+<meta name="Subject" content="FVWM: Re: Memory Allocations/XDrawSegment" />
+<meta name="Date" content="2002-04-20" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Re: Memory Allocations/XDrawSegment</h1>
+<!-- received="Fri Apr 19 21:05:25 2002" -->
+<!-- isoreceived="20020419200525" -->
+<!-- sent="Fri, 19 Apr 2002 21:04:52 -0500" -->
+<!-- isosent="20020420020452" -->
+<!-- name="Dave Trollope" -->
+<!-- email="dave.trollope_at_worldnet.att.net" -->
+<!-- subject="FVWM: Re: Memory Allocations/XDrawSegment" -->
+<!-- id="3CC0CCC3.CD7CF0E2_at_worldnet.att.net" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="20020322180100.C855&#64;lifebits.de" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start4926" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="4927.html" accesskey="d" title="Stian Sletner: &quot;FVWM: Alt-tab&quot;">Next message</a> ]
+[ <a href="4925.html" title="Dave Trollope: &quot;FVWM: Re: Memory Allocations/XDrawSegment&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="4971.html" accesskey="t" title="Dominik Vogt: &quot;Re: FVWM: Re: Memory Allocations/XDrawSegment&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg4926" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg4926" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg4926" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg4926" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Dave Trollope &lt;<a href="mailto:dave.trollope_at_worldnet.att.net?Subject=Re%3A%20FVWM%3A%20Re%3A%20Memory%20Allocations%2FXDrawSegment">dave.trollope_at_worldnet.att.net</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 19 Apr 2002 21:04:52 -0500</span><br />
+</address>
+<br />
+Hi Dominik, all,
+<br />
+<br />A few weeks back you had the following advice for me and I finally got to
+<br />
+taking a look at some things around ReleiveRectangle.
+<br />
+<br />I found that RelieveRectangle and RelieveRectangle2 both call
+<br />
+do_relieve_rectangle. In looking at do_relieve_rectangle I found that
+<br />
+XDrawSegments is called 4 times for two conditions, ShadowGC and RelieveGC. I
+<br />
+have merged the array two reduce the X calls XDrawSegment from 4 to 2 by
+<br />
+sending the data for two requests in one call.
+<br />
+<br />However, before we commit this patch, I'd like it to be tested on some other
+<br />
+systems rather than my own since my knowledge is limited. Can you take a look
+<br />
+at this patch, and apply it on your system and note any irregularities?
+<br />
+<br />Can some others take a look and apply this too? If no-one reports any bugs
+<br />
+within a week I propose we add it in to the repositary.
+<br />
+<br />What do you think?
+<br />
+<br />Thanks
+<br />
+Dave
+<br />
+<br /><br /><br /><em class="quotelev1">&gt; Fvwm's speed depends to 90% or more on how the communication with
+</em><br />
+<em class="quotelev1">&gt; the X server is done.  All other effects of calling functions and
+</em><br />
+<em class="quotelev1">&gt; such only add very little to the CPU load.  Once I profiled fvwm
+</em><br />
+<em class="quotelev1">&gt; for ten minutes using gprof, and as far as I remember it did not
+</em><br />
+<em class="quotelev1">&gt; even consume one second of CPU time.  The things that slow it down
+</em><br />
+<em class="quotelev1">&gt; are file I/O and X server communication.
+</em><br />
+<br /><em class="quotelev2">&gt; &gt; libs/Graphics.c - do_relieve_rectangle
+</em><br />
+<em class="quotelev2">&gt; &gt;
+</em><br />
+<em class="quotelev2">&gt; &gt;
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt; Yes, but what is the cost of the malloc?  RelieveRectangle is
+</em><br />
+<em class="quotelev1">&gt; perhaps called 20 times when a window changes focus.  I'd guess on
+</em><br />
+<em class="quotelev1">&gt; average you do not do this more than 5 times per minute, giving a
+</em><br />
+<em class="quotelev1">&gt; total of 6000 calls per hour.  I'd estimate that can easily be
+</em><br />
+<em class="quotelev1">&gt; done by any but the slowest machines in less than the tenth of a
+</em><br />
+<em class="quotelev1">&gt; second.  It is likely that more time could be saved by preventing
+</em><br />
+<em class="quotelev1">&gt; unnecessary calls to RelieveRectangle() in a single place in the
+</em><br />
+<em class="quotelev1">&gt; code since it requires communication over the network.
+</em><br />
+<br /><br />
+Index: libs/Graphics.c
+<br />
+===================================================================
+<br />
+RCS file: /home/cvs/fvwm/fvwm/libs/Graphics.c,v
+<br />
+retrieving revision 1.57
+<br />
+diff -u -r1.57 Graphics.c
+<br />
+--- libs/Graphics.c	2002/04/05 09:24:29	1.57
+<br />
++++ libs/Graphics.c	2002/04/20 01:05:51
+<br />
+_at_&#64; -60,7 +60,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GC ReliefGC, GC ShadowGC, int line_width, Bool use_alternate_shading)
+<br />
+&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XSegment* seg;
+<br />
+-	int i;
+<br />
++	int i,i2;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int a = (use_alternate_shading) ? 1 : 0;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (w &lt;= 0 || h &lt;= 0)
+<br />
+_at_&#64; -72,31 +72,31 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+-	seg = (XSegment*)alloca(sizeof(XSegment) * line_width);
+<br />
++	seg = (XSegment*)alloca((sizeof(XSegment) * line_width) * 2);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* left side, from 0 to the lesser of line_width &amp; just over half w */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (i = 0; (i &lt; line_width) &amp;&amp; (i &lt;= w / 2); i++) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seg[i].x1 = x+i; seg[i].y1 = y+i+a;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seg[i].x2 = x+i; seg[i].y2 = y+h-i-1+a;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+-	XDrawSegments(dpy, d, ReliefGC, seg, i);
+<br />
++	i2 = i;
+<br />
++	/* draw top segments */
+<br />
++	for (i = 0; (i &lt; line_width) &amp;&amp; (i &lt;= h / 2); i++,i2++) {
+<br />
++		seg[i2].x1 = x+w-i-a; seg[i2].y1 = y+i;
+<br />
++		seg[i2].x2 = x+i+1-a; seg[i2].y2 = y+i;
+<br />
++	}
+<br />
++	XDrawSegments(dpy, d, ReliefGC, seg, i2);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* bottom */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for (i = 0; (i &lt; line_width) &amp;&amp; (i &lt;= h / 2); i++) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seg[i].x1 = x+i+a;     seg[i].y1 = y+h-i;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seg[i].x2 = x+w-i-1+a; seg[i].y2 = y+h-i;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+-	XDrawSegments(dpy, d, ShadowGC, seg, i);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* right */
+<br />
+-	for (i = 0; (i &lt; line_width) &amp;&amp; (i &lt;= w / 2); i++) {
+<br />
+-		seg[i].x1 = x+w-i; seg[i].y1 = y+h-i-a;
+<br />
+-		seg[i].x2 = x+w-i; seg[i].y2 = y+i+1-a;
+<br />
+-	}
+<br />
+-	XDrawSegments(dpy, d, ShadowGC, seg, i);
+<br />
+-	/* draw top segments */
+<br />
+-	for (i = 0; (i &lt; line_width) &amp;&amp; (i &lt;= h / 2); i++) {
+<br />
+-		seg[i].x1 = x+w-i-a; seg[i].y1 = y+i;
+<br />
+-		seg[i].x2 = x+i+1-a; seg[i].y2 = y+i;
+<br />
++	i2 = i;
+<br />
++	for (i = 0; (i &lt; line_width) &amp;&amp; (i &lt;= w / 2); i++,i2++) {
+<br />
++		seg[i2].x1 = x+w-i; seg[i2].y1 = y+h-i-a;
+<br />
++		seg[i2].x2 = x+w-i; seg[i2].y2 = y+i+1-a;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+-	XDrawSegments(dpy, d, ReliefGC, seg, i);
+<br />
++	XDrawSegments(dpy, d, ShadowGC, seg, i2);
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+&nbsp;}
+<br />
+<br /><br /><pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Apr 19 2002 - 21:05:25 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start4926">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="4927.html" title="Next message in the list">Stian Sletner: "FVWM: Alt-tab"</a></li>
+<li><dfn>Previous message</dfn>: <a href="4925.html" title="Previous message in the list">Dave Trollope: "FVWM: Re: Memory Allocations/XDrawSegment"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="4971.html" title="Next message in this discussion thread">Dominik Vogt: "Re: FVWM: Re: Memory Allocations/XDrawSegment"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="4971.html" title="Message sent in reply to this message">Dominik Vogt: "Re: FVWM: Re: Memory Allocations/XDrawSegment"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg4926" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg4926" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg4926" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg4926" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:53 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Solved: FvwmM4 and pl35 from Chris Taylor on 1995-09-29 (fvwm-users)</title>
+<meta name="Author" content="Chris Taylor (shaggy_at_av8r.dwc.edu)" />
+<meta name="Subject" content="FVWM: Solved: FvwmM4 and pl35" />
+<meta name="Date" content="1995-09-29" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Solved: FvwmM4 and pl35</h1>
+<!-- received="Thu Sep 28 22:20:18 1995" -->
+<!-- isoreceived="19950928212018" -->
+<!-- sent="Thu, 28 Sep 1995 23:23:13 -0400 (EDT)" -->
+<!-- isosent="19950929032313" -->
+<!-- name="Chris Taylor" -->
+<!-- email="shaggy_at_av8r.dwc.edu" -->
+<!-- subject="FVWM: Solved: FvwmM4 and pl35" -->
+<!-- id="Pine.ULT.3.91.950928225836.27231C-100000_at_av8r.dwc.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start14328" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="14329.html" accesskey="d" title="Hideki Kato: &quot;FVWM: fvwm2.0-pl35 localization patch&quot;">Next message</a> ]
+[ <a href="14327.html" title="R. H. Wood: &quot;Re: FVWM: .fvwmrc file&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg14328" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg14328" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg14328" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg14328" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Chris Taylor &lt;<a href="mailto:shaggy_at_av8r.dwc.edu?Subject=Re%3A%20FVWM%3A%20Solved%3A%20FvwmM4%20and%20pl35">shaggy_at_av8r.dwc.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 28 Sep 1995 23:23:13 -0400 (EDT)</span><br />
+</address>
+<br />
+Last week I submitted a message to the list describing a problem with
+<br />
+pl35 and FvwmM4. Arguments meant for FvwmM4 were, for some reason,
+<br />
+passing to fvwm itself. Even simple lines like
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;fvwm -f &quot;FvwmM4 .fvwmrc&quot;
+<br />
+<br />weren't working correctly. In the above example, I'd get an error
+<br />
+stating that &quot;.fvwmrc&quot; wasn't an option to fvwm.
+<br />
+<br />Well folks, I feel pretty silly. I've learned yet again how Unix can
+<br />
+give you enough rope to shoot yourself in the foot. (Sorry for the
+<br />
+tortured analogy there...)
+<br />
+<br />I run on multiple architectures -- Sun (mostly), SGI, and HP. To make
+<br />
+things easier for me, most of the files in my binary directories are
+<br />
+actually hardlinks to a shell script that figures out what
+<br />
+architecture I'm on, selects the appropriate directory of binaries,
+<br />
+and executes the chosen binary.
+<br />
+<br />One of the Korn shell's more obscure quoting mechanisms is at the
+<br />
+heart of what tripped me up last week. The last line of my execution
+<br />
+script looks something like this:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;exec $BINDIR/$ARCHDIR/$PROGRAM $_at_
+<br />
+<br />By using $_at_ , any command-line arguments I pass to the script go on
+<br />
+to the real program.
+<br />
+<br />But! Here's the catch. That line should really look like this:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;exec $BINDIR/$ARCHDIR/$PROGRAM &quot;$_at_&quot;
+<br />
+<br />Those double-quote marks around $_at_ made all the difference. The
+<br />
+reason: without the double quotes, command-line arguments are combined
+<br />
+and passed along as a single string. If &quot;$_at_&quot; is used, command-line
+<br />
+arguments are kept separate from each other.
+<br />
+<br />So, it's no surprise fvwm was complaining about the command-line args.
+<br />
+It was getting exactly what I gave it! (grrr..)
+<br />
+<br />Now that that's fixed, I'm running both pl35 *and* FvwmM4 with no
+<br />
+problems. Thanks to everyone for their help.
+<br />
+<br />(For those interested in the details of my little goof-up, e-mail me
+<br />
+directly and I'll give you the scoop. Since my real problem was more
+<br />
+related to shell programming than Fvwm, I feel it's outside the scope of
+<br />
+the list.)
+<br />
+<br /><br />Christopher W. Taylor  |  You know you've been on the Net too long
+<br />
+shaggy_at_av8r.dwc.edu    |  when you're reading a book next to your
+<br />
+shaggy_at_mv.mv.com       |  computer and you press the computer's
+<br />
+God is an iron.        |  space bar at the end of the book's page.
+<br />
+<br /><pre>
+--
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Sep 28 1995 - 22:20:18 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start14328">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="14329.html" title="Next message in the list">Hideki Kato: "FVWM: fvwm2.0-pl35 localization patch"</a></li>
+<li><dfn>Previous message</dfn>: <a href="14327.html" title="Previous message in the list">R. H. Wood: "Re: FVWM: .fvwmrc file"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg14328" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg14328" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg14328" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg14328" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:57 BST
+</em></small></p>
+</body>
+</html>

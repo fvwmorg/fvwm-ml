@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: transient popups beneath my StaysOnTop from Michael M Han on 1997-10-21 (fvwm-users)</title>
+<meta name="Author" content="Michael M Han (han_at_windy.ckm.ucsf.edu)" />
+<meta name="Subject" content="FVWM: transient popups beneath my StaysOnTop" />
+<meta name="Date" content="1997-10-21" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: transient popups beneath my StaysOnTop</h1>
+<!-- received="Tue Oct 21 00:57:09 1997" -->
+<!-- isoreceived="19971020235709" -->
+<!-- sent="Mon, 20 Oct 1997 23:01:43 -0700" -->
+<!-- isosent="19971021060143" -->
+<!-- name="Michael M Han" -->
+<!-- email="han_at_windy.ckm.ucsf.edu" -->
+<!-- subject="FVWM: transient popups beneath my StaysOnTop" -->
+<!-- id="199710210601.XAA12181_at_windy.ckm.ucsf.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start21167" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="21168.html" accesskey="d" title="Nils Lohner: &quot;FVWM: Dynamic Menus&quot;">Next message</a> ]
+[ <a href="21166.html" title="Patrick K.: &quot;FVWM: Attachment issue (revisited??)&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21167" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21167" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21167" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21167" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Michael M Han &lt;<a href="mailto:han_at_windy.ckm.ucsf.edu?Subject=Re%3A%20FVWM%3A%20transient%20popups%20beneath%20my%20StaysOnTop">han_at_windy.ckm.ucsf.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 20 Oct 1997 23:01:43 -0700</span><br />
+</address>
+<br />
+I've noticed something a bit odd about Fvwm2. A small number of my
+<br />
+windows are Style'd StaysOnTop. An even smaller number of those popup
+<br />
+the occassional transient window, like a menu. In particular, my
+<br />
+FvwmButtons Swallow's a procmeter and an FvwmPager with the Balloons
+<br />
+patch. The first time one of these windows is popped up (i.e., the
+<br />
+first time Balloons pops up a balloon hint while I mouse about my
+<br />
+Pager or if I click my procmeter menu to select different things to
+<br />
+monitor) before the focus changes, the popup appears beneath my
+<br />
+StaysOnTop FvwmButtons.
+<br />
+<br />This is very strange to me. Back when I was using Style &quot;*&quot; MouseFocus
+<br />
+and FvwmAuto I thought it was a strange side effect of that, but I
+<br />
+recently switched to Style &quot;*&quot; ClickToFocus with no FvwmAuto and I'm
+<br />
+still seeing this happen. I also thought that perhaps twiddling
+<br />
+&quot;GlobalOpts ClickToFocusDoesntRaise&quot; and &quot;GlobalOpts
+<br />
+ClickToFocusDoesntPassClick&quot; would fix things, but that's also failed.
+<br />
+At this point I'm at a bit of a loss to explain what's happening. It
+<br />
+just dawned on me to watch xev while I duplicated my problem. Here's
+<br />
+what I see in xev:
+<br />
+<br />Mouse passes into FvwmPager over a window:
+<br />
+<em class="quotelev1">&gt; VisibilityNotify event, serial 16, synthetic NO, window 0x5000001,
+</em><br />
+<em class="quotelev1">&gt;     state VisibilityPartiallyObscured
+</em><br />
+Balloon pops up but beneath the FvwmButtons.
+<br />
+<br />Mouse leaves window w/o leaving FvwmPager:
+<br />
+<em class="quotelev1">&gt; VisibilityNotify event, serial 16, synthetic NO, window 0x5000001,
+</em><br />
+<em class="quotelev1">&gt;     state VisibilityUnobscured
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; Expose event, serial 16, synthetic NO, window 0x5000001,
+</em><br />
+<em class="quotelev1">&gt;     (0,109), width 136, height 16, count 0
+</em><br />
+Balloon disappears.
+<br />
+<br />Mouse reenters window in FvwmPager:
+<br />
+<em class="quotelev1">&gt; VisibilityNotify event, serial 16, synthetic NO, window 0x5000001,
+</em><br />
+<em class="quotelev1">&gt;     state VisibilityPartiallyObscured
+</em><br />
+Balloon pops back up, now correctly above the FvwmButtons.
+<br />
+<br />Unfortunately I can't see anything happening when I click the
+<br />
+procmeter menu. So this has me fairly confused, though not terribly
+<br />
+bothered. It's more a matter of idle curiosity than anything else.
+<br />
+<br />This is happening on my machine with RedHat 4.1 installed, with a
+<br />
+2.0.30 kernel, Accelerated-X 2.1 and fvwm-2.0.46 which I compiled.
+<br />
+Windows are not only StaysOnTop, but Sticky also, though some checking
+<br />
+indicates that the problem is StaysOnTop rather than Sticky. I just
+<br />
+noticed the same behavior for the xterm popup VT menus when Style
+<br />
+&quot;XTerm&quot; StaysOnTop is set. Relevant portions of my rc file are at the
+<br />
+end.
+<br />
+<br />Anyway, if anyone has any insight into what I'm seeing here, please
+<br />
+let me know. Thanks so much.
+<br />
+_____
+<br />
+Michael Han (han_at_library.ucsf.edu)                     voice: (415) 502-7542
+<br />
+Interactive Learning Center Consultant                        (415) 476-4309
+<br />
+San Francisco, California 94143-0840                     fax: (415) 476-4653
+<br />
+Why do we still live here in this repulsive town? All our friends are in New
+<br />
+York.&quot; Stephen Merritt
+<br />
+<br /><br /><em class="quotelev1">&gt;From my .fvwm2rc
+</em><br />
+Style	&quot;*&quot;	UseDecor Bronze, ForeColor black, BackColor AntiqueWhite4, \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BorderWidth 6, HandleWidth 6, Button 1, Button 2, Button 4, \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MWMFunctions, HintOverride, MWMDecor, MWMButtons, \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RandomPlacement, SmartPlacement, NoPPosition, DecorateTransient,\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IconBox 80 1 160 -1, Icon unknown1.xpm, MiniIcon diamond.xpm, \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ClickToFocus
+<br />
+<br />Style	&quot;Fvwm*&quot;	NoTitle, NoHandles, Sticky, BorderWidth 0, \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WindowListSkip, CirculateSkip, StaysOnTop, \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Icon fvwm.xpm
+<br />
+<br />&lt;snip&gt;
+<br />
+<br />*FvwmButtons(1x7, Padding 4 4, Frame 2, Container \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Padding 0 0, Frame -2, Columns 1))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*FvwmButtons(Swallow procmeter &quot;Exec procmeter -force-spkt -vertical \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cpu load mem-free mem-swap spkt&quot; )
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue Oct 21 1997 - 00:57:09 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start21167">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="21168.html" title="Next message in the list">Nils Lohner: "FVWM: Dynamic Menus"</a></li>
+<li><dfn>Previous message</dfn>: <a href="21166.html" title="Previous message in the list">Patrick K.: "FVWM: Attachment issue (revisited??)"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21167" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21167" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21167" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21167" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

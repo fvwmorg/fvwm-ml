@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: How often is an edge command executed from Piotr Zielinski on 2004-06-05 (fvwm-users)</title>
+<meta name="Author" content="Piotr Zielinski (Piotr.Zielinski_at_cl.cam.ac.uk)" />
+<meta name="Subject" content="FVWM: How often is an edge command executed" />
+<meta name="Date" content="2004-06-05" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: How often is an edge command executed</h1>
+<!-- received="Sat Jun  5 08:09:41 2004" -->
+<!-- isoreceived="20040605070941" -->
+<!-- sent="Sat, 05 Jun 2004 14:07:03 +0100" -->
+<!-- isosent="20040605130703" -->
+<!-- name="Piotr Zielinski" -->
+<!-- email="Piotr.Zielinski_at_cl.cam.ac.uk" -->
+<!-- subject="FVWM: How often is an edge command executed" -->
+<!-- id="ym9k6ymrw5k.fsf_at_wolf.cl.cam.ac.uk" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start12385" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="12386.html" accesskey="d" title="tj1000_at_click21.com.br: &quot;FVWM: [Auto Resposta] Re: excuse me&quot;">Next message</a> ]
+[ <a href="12384.html" title="Extemely Hot!: &quot;FVWM: _at_@  Launched just days ago! - BE FIRST for once!  @@&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="12387.html" accesskey="t" title="Uwe Pross: &quot;Re: FVWM: How often is an edge command executed&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg12385" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg12385" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg12385" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg12385" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Piotr Zielinski &lt;<a href="mailto:Piotr.Zielinski_at_cl.cam.ac.uk?Subject=Re%3A%20FVWM%3A%20How%20often%20is%20an%20edge%20command%20executed">Piotr.Zielinski_at_cl.cam.ac.uk</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sat, 05 Jun 2004 14:07:03 +0100</span><br />
+</address>
+<br />
+Hi,
+<br />
+<br />In my .fvwm2rc, I have a function bound to the edges of the screen
+<br />
+with EdgeCommand (see below for the details).  The problem is that
+<br />
+when the mouse pointer stays on the edge the function is being called
+<br />
+again and again, which prevents fvwm from doing any useful work until
+<br />
+the mouse pointer is moved away from the edge (for example the
+<br />
+scheduled commands do not work).  Can anybody tell me when exactly
+<br />
+the function bound to the edge is called, how can I control the
+<br />
+frequency of it being called?  The only solution I can think of is
+<br />
+removing the edge bindings for a second or so every time the edge
+<br />
+function is called.
+<br />
+<br />The manpage says the following about EdgeCommand
+<br />
+<br />&quot;Function is executed when the mouse pointer enters the invisible pan
+<br />
+frames that surround the visible screen.&quot;
+<br />
+<br />but my experience shows that Function can be callled even if the mouse
+<br />
+pointer stays on the edge (and does not reenter the pan frame).
+<br />
+<br />While still on this topic, what is the easier way of testing whether
+<br />
+the mouse pointer is currently over one of the pan frames?
+<br />
+<br />Thanks,
+<br />
+<br />Piotr
+<br />
+<br /><br /><br />EdgeCommand North ShowPager -80 20
+<br />
+EdgeCommand West ShowPager 20 -80
+<br />
+EdgeCommand East ShowPager -180 -80
+<br />
+<br />DestroyFunc Hide
+<br />
+AddToFunc Hide
+<br />
++ I         Move -10000p -10000p
+<br />
+<br />DestroyFunc HidePager
+<br />
+AddToFunc HidePager
+<br />
++ I All (FvwmPager) Hide
+<br />
++ I All (FvwmPager) Layer 0 2
+<br />
+<br />DestroyFunc ShowPager
+<br />
+AddToFunc ShowPager
+<br />
++ I All (FvwmPager, Layer 2) Move m$0p m$1p
+<br />
++ I All (FvwmPager, Layer 2) Layer 0 6
+<br />
++ I Deschedule 21
+<br />
++ I Schedule 500 21 PointerWindow (!FvwmPager) HidePager
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sat Jun 05 2004 - 08:09:41 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start12385">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="12386.html" title="Next message in the list">tj1000_at_click21.com.br: "FVWM: [Auto Resposta] Re: excuse me"</a></li>
+<li><dfn>Previous message</dfn>: <a href="12384.html" title="Previous message in the list">Extemely Hot!: "FVWM: _at_@  Launched just days ago! - BE FIRST for once!  @@"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="12387.html" title="Next message in this discussion thread">Uwe Pross: "Re: FVWM: How often is an edge command executed"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="12387.html" title="Message sent in reply to this message">Uwe Pross: "Re: FVWM: How often is an edge command executed"</a></li>
+<li><dfn>Reply</dfn>: <a href="12397.html" title="Message sent in reply to this message">Dominik Vogt: "Re: FVWM: How often is an edge command executed"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg12385" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg12385" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg12385" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg12385" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:56 BST
+</em></small></p>
+</body>
+</html>

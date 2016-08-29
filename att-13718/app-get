@@ -1,0 +1,123 @@
+#!/usr/bin/perl -w 
+
+
+=head1 usage
+
+
+app-get 'Buddy List'
+
+app-get -g 'Straw'
+(will grep xwininfo -root -tree)
+
+Key F4 A N  Piperead "app-get 'Buddy List'"
+Key F4 A S  Piperead "app-get -r 'Buddy List'"
+
+
+=head1 license
+
+   This package is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; version 2 dated June, 1991.
+
+
+=head1 copyright
+
+Copyright (c) 2004 8D Technologies, Xavier Renaut
+
+=cut
+
+
+use strict;
+use Getopt::Std;
+our ($opt_r,$opt_g,$opt_b);
+getopts('rgb');
+
+
+my $name=$ARGV[0];
+
+my $names=$name;
+
+$name =~ s/\s/_/g;
+$name =~ s/[^\w_]//g;
+
+
+my %appstick;
+my %appid;
+
+
+#export name="Buddy List";
+#export name=$1;
+#$appid{$name}
+# appstick{$name}
+
+
+
+
+$appid{$name}=$ENV{"id$name"};
+
+$appstick{$name}=$ENV{"stick$name"};
+$appid{$name}="" unless $appid{$name};
+$appstick{$name}="" unless $appstick{$name}; 
+
+print  "echo ----- '$names'   '$name' $appid{$name}  $appstick{$name} -------\n";
+
+if ($appid{$name} &&  $appid{$name} =~ /0x/  && ! $opt_r)
+{print "echo id$name already set to $appid{$name}\n"}
+
+else
+{ 
+    if ($opt_r){print "echo reload $names\n";}
+    print "echo getting id for $names...\n";
+    my $xwininfo;
+    if ($opt_g)
+    {
+	print "echo global grep for $names\n";
+	$xwininfo=`xwininfo -root -tree |egrep "$names"`;
+    }
+    else { $xwininfo=`xwininfo -name "$names"`;}
+    my @xwininfo=split /\n/,$xwininfo;
+    #foreach (@xwininfo){print "xwininfo : $_\n";}
+    my @appwinid;
+    map { if (/\s+(0x\S+)\s/){ push @appwinid,$1}} @xwininfo;
+    
+    foreach (@appwinid){print "echo id$name : $_\n"};
+    $appid{$name}=$appwinid[0];
+    
+    if (! $appid{$name} || $appid{$name} eq ""){print "echo no window named '$name' found ...\n";exit 0}
+    print "setenv id$name $appid{$name}\n";
+    print "echo setting id$name  to $appid{$name}\n";
+
+    
+
+
+}
+
+
+if   ((! exists $appstick{$name}) || $appstick{$name} eq "" ) 
+{
+    print "echo stick for $name empty, setting it to 0\n";
+    $appstick{$name}=0; print  "setenv stick$name 0\n";
+}
+else {
+     print "echo stick$name is  already \$[stick$name]\n";
+}  
+    
+    if ( "$appstick{$name}" eq "1" ){
+	print  "WindowId $appid{$name} \(sticky\) stick\n";
+	print  "WindowId $appid{$name} movetopage 9 0\n";
+	print "echo move back get $names 0 \n";
+	$appstick{$name}=0;
+	print " setenv stick$name 0\n";
+    }
+    
+    elsif ( $appstick{$name} == 0 ){ 
+	print "WindowId $appid{$name} stick \n";
+	print "WindowId $appid{$name} raise\n";
+	print "echo get $names 1\n";
+	$appstick{$name}=1;
+	print "setenv stick$name 1\n";
+    
+	
+    }
+print "echo stick$name is now  \$[stick$name] \n";
+

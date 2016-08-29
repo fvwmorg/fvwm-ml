@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: KDE-like taskbar or iconmanager behaviour from Denis Prost on 2002-02-18 (fvwm-users)</title>
+<meta name="Author" content="Denis Prost (denis.prost_at_wanadoo.fr)" />
+<meta name="Subject" content="Re: FVWM: KDE-like taskbar or iconmanager behaviour" />
+<meta name="Date" content="2002-02-18" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: KDE-like taskbar or iconmanager behaviour</h1>
+<!-- received="Sun Feb 17 23:50:58 2002" -->
+<!-- isoreceived="20020217235058" -->
+<!-- sent="Mon, 18 Feb 2002 05:43:42 +0100" -->
+<!-- isosent="20020218044342" -->
+<!-- name="Denis Prost" -->
+<!-- email="denis.prost_at_wanadoo.fr" -->
+<!-- subject="Re: FVWM: KDE-like taskbar or iconmanager behaviour" -->
+<!-- id="3c7086f63d073cea_at_mel-rta9.wanadoo.fr" -->
+<!-- charset="iso-8859-1" -->
+<!-- inreplyto="20020217194955.A16105_at_homemail.com" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start4294" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="4295.html" accesskey="d" title="Thomas Adam: &quot;FVWM: Binding actions to sliding panels&quot;">Next message</a> ]
+[ <a href="4293.html" title="Mikhael Goikhman: &quot;Re: FVWM: Window placement&quot;">Previous message</a> ]
+[ <a href="4291.html" title="Mikhael Goikhman: &quot;Re: FVWM: KDE-like taskbar or iconmanager behaviour&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg4294" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg4294" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg4294" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg4294" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Denis Prost &lt;<a href="mailto:denis.prost_at_wanadoo.fr?Subject=Re%3A%20FVWM%3A%20KDE-like%20taskbar%20or%20iconmanager%20behaviour">denis.prost_at_wanadoo.fr</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 18 Feb 2002 05:43:42 +0100</span><br />
+</address>
+<br />
+Hi Mikhael,
+<br />
+<br />I finally used the following function, that fits my need :
+<br />
+<br />AddToFunc SwitchIconification
+<br />
++ I DestroyFunc FuncIconifyRaised
+<br />
++ I AddToFunc FuncIconifyRaised
+<br />
++ I WindowId $w (Raised !Iconic) + I Iconify true
+<br />
++ I WindowId $w (!Raised) MyActivateWindow
+<br />
++ I WindowId $w (Iconic) MyActivateWindow
+<br />
++ I FuncIconifyRaised
+<br />
+<br />(I Had to add the Iconic condition since the windows seem to keep on 
+<br />
+satisfying the Raised condition, after they are iconified)
+<br />
+<br />Thanks again,
+<br />
+<br />Denis
+<br />
+<br />Le Dimanche 17 Février 2002 20:49, vous avez écrit :
+<br />
+<em class="quotelev1">&gt; On 17 Feb 2002 08:20:19 +0100, Denis Prost wrote:
+</em><br />
+<em class="quotelev2">&gt; &gt; Le Dimanche 17 Février 2002 02:51, vous avez écrit :
+</em><br />
+<em class="quotelev3">&gt; &gt; &gt; On 16 Feb 2002 11:29:45 +0100, Denis Prost wrote:
+</em><br />
+<em class="quotelev4">&gt; &gt; &gt; &gt; Could anyone help me to achieve the following common taskbar
+</em><br />
+<em class="quotelev4">&gt; &gt; &gt; &gt; behaviour, either with FvwmTaskBar or FvwmIconMan :
+</em><br />
+<em class="quotelev4">&gt; &gt; &gt; &gt;
+</em><br />
+<em class="quotelev4">&gt; &gt; &gt; &gt; - when you click on the focused window button, the window is
+</em><br />
+<em class="quotelev4">&gt; &gt; &gt; &gt; iconified - when you click on any other button, the window is
+</em><br />
+<em class="quotelev4">&gt; &gt; &gt; &gt; deiconified if it was iconified, raised and focused.
+</em><br />
+<em class="quotelev3">&gt; &gt; &gt;
+</em><br />
+<em class="quotelev3">&gt; &gt; &gt; Sorry, the behaviour you want is not common, it requires if-else
+</em><br />
+<em class="quotelev3">&gt; &gt; &gt; syntax. You may just bind these opposite actions to different mouse
+</em><br />
+<em class="quotelev3">&gt; &gt; &gt; buttons. Ok, one way to emulate if-else syntax is dynamically created
+</em><br />
+<em class="quotelev3">&gt; &gt; &gt; functions:
+</em><br />
+<em class="quotelev3">&gt; &gt; &gt;
+</em><br />
+<em class="quotelev3">&gt; &gt; &gt; *FvwmTaskBar: Action Click1 SwitchIconification
+</em><br />
+<em class="quotelev3">&gt; &gt; &gt;
+</em><br />
+<em class="quotelev3">&gt; &gt; &gt; AddToFunc SwitchIconification
+</em><br />
+<em class="quotelev3">&gt; &gt; &gt; + I DestroyFunc FuncIconifyFocused
+</em><br />
+<em class="quotelev3">&gt; &gt; &gt; + I AddToFunc   FuncIconifyFocused
+</em><br />
+<em class="quotelev3">&gt; &gt; &gt; + I WindowId $w (Focused) + I Iconify true
+</em><br />
+<em class="quotelev3">&gt; &gt; &gt; + I WindowId $w (!Focused, Iconic) MyActivateWindow
+</em><br />
+<em class="quotelev3">&gt; &gt; &gt; + I FuncIconifyFocused
+</em><br />
+<em class="quotelev3">&gt; &gt; &gt;
+</em><br />
+<em class="quotelev3">&gt; &gt; &gt; AddToFunc MyActivateWindow
+</em><br />
+<em class="quotelev3">&gt; &gt; &gt; + I Iconify false
+</em><br />
+<em class="quotelev3">&gt; &gt; &gt; + I Raise
+</em><br />
+<em class="quotelev3">&gt; &gt; &gt; + I Focus
+</em><br />
+<em class="quotelev3">&gt; &gt; &gt;
+</em><br />
+<em class="quotelev3">&gt; &gt; &gt; There probably will be if-else syntax in the future, but this works
+</em><br />
+<em class="quotelev3">&gt; &gt; &gt; well.
+</em><br />
+<em class="quotelev2">&gt; &gt;
+</em><br />
+<em class="quotelev2">&gt; &gt; Thanks a lot for your help. It works fine for windows that are not
+</em><br />
+<em class="quotelev2">&gt; &gt; focused, but I can't get the focused window iconified. I replaced &quot;+ I
+</em><br />
+<em class="quotelev2">&gt; &gt; Iconify true&quot; by &quot;+ I Echo Focused&quot; to see what happens, and it seems
+</em><br />
+<em class="quotelev2">&gt; &gt; that the condition (Focused) never gets satisfied, whatever button I
+</em><br />
+<em class="quotelev2">&gt; &gt; press.
+</em><br />
+<em class="quotelev2">&gt; &gt;
+</em><br />
+<em class="quotelev2">&gt; &gt; Do you have any idea about what happens ?
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt; I forgot to say that the &quot;Focused&quot; condition is introduced in 2.5.0.
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt; You may try to replace it with &quot;Raised&quot; and see whether it's ok for you.
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt; In 2.4.x it is possible to catch the name of the focused window using
+</em><br />
+<em class="quotelev1">&gt; SetEnv and then match against it, but I don't really suggest this, since
+</em><br />
+<em class="quotelev1">&gt; this only works well if all window names are unique.
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt; If you want the exact behaviour, I suggest you to upgrade to the latest
+</em><br />
+<em class="quotelev1">&gt; daily snapshot (pre-2.5.1).
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt; Regards,
+</em><br />
+<em class="quotelev1">&gt; Mikhael.
+</em><br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sun Feb 17 2002 - 23:50:58 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start4294">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="4295.html" title="Next message in the list">Thomas Adam: "FVWM: Binding actions to sliding panels"</a></li>
+<li><dfn>Previous message</dfn>: <a href="4293.html" title="Previous message in the list">Mikhael Goikhman: "Re: FVWM: Window placement"</a></li>
+<li><dfn>In reply to</dfn>: <a href="4291.html" title="Message to which this message replies">Mikhael Goikhman: "Re: FVWM: KDE-like taskbar or iconmanager behaviour"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg4294" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg4294" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg4294" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg4294" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:52 BST
+</em></small></p>
+</body>
+</html>

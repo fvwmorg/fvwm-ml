@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Strange behaviour of ClickToFocus and Java AWT... from Ripalda-Marin, Miguel-Angel on 2001-08-25 (fvwm-users)</title>
+<meta name="Author" content="Ripalda-Marin, Miguel-Angel (maripalda_at_elasa.siemens.es)" />
+<meta name="Subject" content="FVWM: Strange behaviour of ClickToFocus and Java AWT..." />
+<meta name="Date" content="2001-08-25" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Strange behaviour of ClickToFocus and Java AWT...</h1>
+<!-- received="Sat Aug 25 05:13:58 2001" -->
+<!-- isoreceived="20010825041358" -->
+<!-- sent="Sat, 25 Aug 2001 12:15:13 +0100" -->
+<!-- isosent="20010825111513" -->
+<!-- name="Ripalda-Marin, Miguel-Angel" -->
+<!-- email="maripalda_at_elasa.siemens.es" -->
+<!-- subject="FVWM: Strange behaviour of ClickToFocus and Java AWT..." -->
+<!-- id="15B5A0CA85F4D111814200A0C9B7B6290143DADD_at_ZARS001A" -->
+<!-- charset="iso-8859-1" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start3008" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="3009.html" accesskey="d" title="Nikolaj G.: &quot;Re: FVWM: make error ?&quot;">Next message</a> ]
+[ <a href="3007.html" title="Alexander Kotelnikov: &quot;Re: FVWM: make error ?&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg3008" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg3008" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg3008" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg3008" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Ripalda-Marin, Miguel-Angel &lt;<a href="mailto:maripalda_at_elasa.siemens.es?Subject=Re%3A%20FVWM%3A%20Strange%20behaviour%20of%20ClickToFocus%20and%20Java%20AWT...">maripalda_at_elasa.siemens.es</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sat, 25 Aug 2001 12:15:13 +0100</span><br />
+</address>
+<br />
+Hi everybody,
+<br />
+<br />I have noticed a strange behaviour of my java apps when working over FVWM,
+<br />
+maybe it is a little bit off-topic because has much to do with Java, but I
+<br />
+would like to know I somebody has noted this problem before and whether
+<br />
+theres a workaorund or something I am doing wrong... it looks like follows:
+<br />
+<br />I have stablished ClickToFocus in my .fvwm2rc, whose content is this:
+<br />
+- BEGIN OF .FVWM2RC -
+<br />
+DeskTopSize 1x1
+<br />
+<br /># Default Styles:
+<br />
+Style &quot;*&quot;           BorderWidth 0, HandleWidth 0, notitle, nohandles
+<br />
+Style &quot;*&quot;           NoPPosition, ClickToFocus
+<br />
+GlobalOpts ClickToFocusDoesntRaise
+<br />
+<br /># Some simple default mouse bindings:
+<br />
+#   for the root window:
+<br />
+Mouse 1 R N -
+<br />
+Mouse 2 R N -
+<br />
+Mouse 3 R N -
+<br />
+<br /># Initialization function
+<br />
+AddToFunc InitFunction    &quot;I&quot; Module FvwmEvent
+<br />
++ &quot;I&quot; exec xsetroot -solid Black
+<br />
+- END OF .FVWM2RC -
+<br />
+<br />ok... I launch also two apps from my InitFunction, one xterm and a java app,
+<br />
+but I doesn't seem to be relevant. The thing is that whenever I have
+<br />
+'native' apps, like two xterms, ClickToFocus works perfectly. But I my java
+<br />
+apps happens the following: if I have in the window of my java app one
+<br />
+JPanel (Swing) with several swing JComponents and one Panel (AWT) with AWT
+<br />
+Components I click on the swing components and start to write text...
+<br />
+everything works OK. But if I MOVE (not click) the mouse pointer to the AWT
+<br />
+panel, I cannot keep on editing, because my keystrokes are lost. The other
+<br />
+way seems to work OK: I can click one AWT Component to set the focus and
+<br />
+type-in my text, it doesn't matter if I move the mouse pointer to the swing
+<br />
+JPanel (as far as I don't click on it)... I can keep on editing in my AWT
+<br />
+Component.
+<br />
+<br />Once again, I think I has something to do with the way the JVM treats the
+<br />
+AWT Components (everyone has a native window as peer, I think)... but maybe
+<br />
+somebody has come through this problem yet, and has found any workaround...
+<br />
+It would be great.
+<br />
+<br />Thanks in advance and best regards,
+<br />
+<br />Miguel Ángel Ripalda
+<br />
+<br />Computer Engineer
+<br />
+maripalda_at_elasa.siemens.es
+<br />
+<br />P.S. I have tried over my linux box with RedHat 7.0 and FWVM 2.2.4 with Java
+<br />
+IBM JDK 1.1.8 and 1.3... and will try now with the blackdown port of JDK
+<br />
+1.1.8.
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sat Aug 25 2001 - 05:13:58 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start3008">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="3009.html" title="Next message in the list">Nikolaj G.: "Re: FVWM: make error ?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="3007.html" title="Previous message in the list">Alexander Kotelnikov: "Re: FVWM: make error ?"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg3008" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg3008" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg3008" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg3008" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:52 BST
+</em></small></p>
+</body>
+</html>

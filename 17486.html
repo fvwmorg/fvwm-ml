@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Bug in Style line parsing - fvwm 2.0.43 from Michael F Gordon on 1996-07-26 (fvwm-users)</title>
+<meta name="Author" content="Michael F Gordon (Michael.Gordon_at_ee.ed.ac.uk)" />
+<meta name="Subject" content="FVWM: Bug in Style line parsing - fvwm 2.0.43" />
+<meta name="Date" content="1996-07-26" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Bug in Style line parsing - fvwm 2.0.43</h1>
+<!-- received="Fri Jul 26 08:18:00 1996" -->
+<!-- isoreceived="19960726071800" -->
+<!-- sent="Fri, 26 Jul 1996 14:12:44 +0100" -->
+<!-- isosent="19960726131244" -->
+<!-- name="Michael F Gordon" -->
+<!-- email="Michael.Gordon_at_ee.ed.ac.uk" -->
+<!-- subject="FVWM: Bug in Style line parsing - fvwm 2.0.43" -->
+<!-- id="31F8C44C.41C67EA6_at_ee.ed.ac.uk" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start17486" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="17487.html" accesskey="d" title="Greg J. Badros: &quot;FVWM: RedHat Desktop Configuration Competition&quot;">Next message</a> ]
+[ <a href="17485.html" title="Manoj Kasichainula: &quot;Re: FVWM: (long) startup timing bug patch to test&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17486" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17486" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17486" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17486" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Michael F Gordon &lt;<a href="mailto:Michael.Gordon_at_ee.ed.ac.uk?Subject=Re%3A%20FVWM%3A%20Bug%20in%20Style%20line%20parsing%20-%20fvwm%202.0.43">Michael.Gordon_at_ee.ed.ac.uk</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 26 Jul 1996 14:12:44 +0100</span><br />
+</address>
+<br />
+(I'm not subscribed to this list, as I don't have the time or
+<br />
+inclination to do more with fvwm than use it, so please cc any
+<br />
+responses to me.  Thanks)
+<br />
+<br />I spent over an hour last night trying to work out why the line
+<br />
+<br />&nbsp;&nbsp;Style XTerm Icon xterm.xpm 
+<br />
+<br />in ~/.fvwmrc was apparently being ignored and eventually found the
+<br />
+problem by tracing the executable and watching which files it tried
+<br />
+to open.  The problem was a trailing space on the line after xterm.xpm,
+<br />
+left there by a previous edit.  This space was being taken as part of
+<br />
+the filename, causing the open to fail.  I haven't looked at the code
+<br />
+closely to see if the same happens elsewhere, but the problem seems to
+<br />
+be a missing isspace() around line 316 of style.c
+<br />
+<br /><br />Michael Gordon
+<br />
+<pre>
+-- 
+Politicians are like nappies, both should be changed regularly
+and for the same reason - graffito on a wall in Yeovil.
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Jul 26 1996 - 08:18:00 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start17486">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="17487.html" title="Next message in the list">Greg J. Badros: "FVWM: RedHat Desktop Configuration Competition"</a></li>
+<li><dfn>Previous message</dfn>: <a href="17485.html" title="Previous message in the list">Manoj Kasichainula: "Re: FVWM: (long) startup timing bug patch to test"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17486" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17486" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17486" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17486" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

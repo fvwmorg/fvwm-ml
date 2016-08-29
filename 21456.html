@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Starting an app when needed from Martin Bialasinski on 1997-12-07 (fvwm-users)</title>
+<meta name="Author" content="Martin Bialasinski (martin_at_internet-treff.uni-koeln.de)" />
+<meta name="Subject" content="FVWM: Starting an app when needed" />
+<meta name="Date" content="1997-12-07" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Starting an app when needed</h1>
+<!-- received="Sat Dec  6 21:40:53 1997" -->
+<!-- isoreceived="19971206214053" -->
+<!-- sent="Sun, 7 Dec 1997 03:56:31 +0100 (CET)" -->
+<!-- isosent="19971207025631" -->
+<!-- name="Martin Bialasinski" -->
+<!-- email="martin_at_internet-treff.uni-koeln.de" -->
+<!-- subject="FVWM: Starting an app when needed" -->
+<!-- id="Pine.LNX.3.96.971207023129.942C-100000_at_haitech.internet-treff.de" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="Pine.BSF.3.96.971207005204.2247A-100000_at_kushnir.kiev.ua" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start21456" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="21457.html" accesskey="d" title="R Dicaire: &quot;Re: FVWM: Starting an app when needed&quot;">Next message</a> ]
+[ <a href="21455.html" title="R Dicaire: &quot;FVWM: StubbornIcons obsoleted in 2.0?&quot;">Previous message</a> ]
+[ <a href="21454.html" title="Vladimir Kushnir: &quot;FVWM: FvwmWharf ColorLimit&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="21457.html" accesskey="t" title="R Dicaire: &quot;Re: FVWM: Starting an app when needed&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21456" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21456" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21456" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21456" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Martin Bialasinski &lt;<a href="mailto:martin_at_internet-treff.uni-koeln.de?Subject=Re%3A%20FVWM%3A%20Starting%20an%20app%20when%20needed">martin_at_internet-treff.uni-koeln.de</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sun, 7 Dec 1997 03:56:31 +0100 (CET)</span><br />
+</address>
+<br />
+Hi,
+<br />
+<br />I have a programm &quot;xisp&quot; which I use for dialup. This programm can react
+<br />
+to SIGUSR1 (connect) and SIGUSR2 (disconnect), so I want to have a
+<br />
+menuoption to connect/disconnect remotely.
+<br />
+<br />So far, I tried this:
+<br />
+<br />I added these two lines to my menudefinition:
+<br />
+<br />+ &quot;connect&quot; connect-xisp
+<br />
++ &quot;disconnect&quot; exec kill -SIGUSR2 `cat /home/martinb/.xisppid`
+<br />
+<br />AddToFunc       &quot;connect-xisp&quot;
+<br />
++       &quot;I&quot;     None [&quot;X-ISP&quot;] exec xisp
+<br />
++       &quot;I&quot;     Exec kill -SIGUSR1 `cat /home/martinb/.xisppid`
+<br />
+<br />Disconnecting works quite right, but the function connect-xisp has some
+<br />
+problems.
+<br />
+<br />If xisp is already running, it works well.
+<br />
+But if xisp is not started yet, fvwm will start it and the kill -SIGUSR1
+<br />
+gets executed too fast. 
+<br />
+<br />The function should wait until the windows gets mapped, or something
+<br />
+similar if I change the startline to start xisp iconic.
+<br />
+<br />Is there a way to do so? 
+<br />
+<br />Also sometimes xisp doesn't get started. The cursor changes from X to O
+<br />
+and back to X (you know what I mean :-), but xisp won't start...
+<br />
+<br />This is fvwm 2.0.46
+<br />
+&nbsp;
+<br />
+Ciao,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Martin
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sat Dec 06 1997 - 21:40:53 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start21456">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="21457.html" title="Next message in the list">R Dicaire: "Re: FVWM: Starting an app when needed"</a></li>
+<li><dfn>Previous message</dfn>: <a href="21455.html" title="Previous message in the list">R Dicaire: "FVWM: StubbornIcons obsoleted in 2.0?"</a></li>
+<li><dfn>In reply to</dfn>: <a href="21454.html" title="Message to which this message replies">Vladimir Kushnir: "FVWM: FvwmWharf ColorLimit"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="21457.html" title="Next message in this discussion thread">R Dicaire: "Re: FVWM: Starting an app when needed"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="21457.html" title="Message sent in reply to this message">R Dicaire: "Re: FVWM: Starting an app when needed"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="21459.html" title="Message sent in reply to this message">Michael M Han: "Re: FVWM: Starting an app when needed"</a></li>
+<li><dfn>Reply</dfn>: <a href="21480.html" title="Message sent in reply to this message">Bob Woodside: "RE: FVWM: Starting an app when needed"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21456" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21456" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21456" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21456" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

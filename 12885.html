@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Firefox fullscreen mode: an observation from Junren Shi And Xin Hu on 2004-07-22 (fvwm-users)</title>
+<meta name="Author" content="Junren Shi And Xin Hu (junrenshixinhu_at_hotmail.com)" />
+<meta name="Subject" content="FVWM: Firefox fullscreen mode: an observation" />
+<meta name="Date" content="2004-07-22" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Firefox fullscreen mode: an observation</h1>
+<!-- received="Thu Jul 22 08:10:44 2004" -->
+<!-- isoreceived="20040722071044" -->
+<!-- sent="Thu, 22 Jul 2004 03:43:37 -0400" -->
+<!-- isosent="20040722074337" -->
+<!-- name="Junren Shi And Xin Hu" -->
+<!-- email="junrenshixinhu_at_hotmail.com" -->
+<!-- subject="FVWM: Firefox fullscreen mode: an observation" -->
+<!-- id="BAY19-F18LISHlmJgGN0007d636_at_hotmail.com" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start12885" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="12886.html" accesskey="d" title="vladimir-fvwm_at_math.uic.edu: &quot;FVWM: Window refresh problems.&quot;">Next message</a> ]
+[ <a href="12884.html" title="Thomas Adam: &quot;Re: FVWM: Window focus problem?&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="12892.html" accesskey="t" title="Xiaoyong Jin: &quot;Re: FVWM: Firefox fullscreen mode: an observation&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg12885" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg12885" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg12885" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg12885" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Junren Shi And Xin Hu &lt;<a href="mailto:junrenshixinhu_at_hotmail.com?Subject=Re%3A%20FVWM%3A%20Firefox%20fullscreen%20mode%3A%20an%20observation">junrenshixinhu_at_hotmail.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 22 Jul 2004 03:43:37 -0400</span><br />
+</address>
+<br />
+Hi,
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I encountered an issue reported ealier in this list but there seems to 
+<br />
+be no solution.  The symptom is that: pressing F11 in firefox to enter the 
+<br />
+full screen mode will make it disappear from the desktop and the windowlist. 
+<br />
+&nbsp;&nbsp;The program keeps running but it just cannot be seen.  Sometimes the 
+<br />
+fullscreen may come up but usually the window will eventually disappear 
+<br />
+after switching F11 a number times.
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I am running firefox 0.91 under linux (Fedora core 2) and the fvwm 
+<br />
+version is 2.5.8 rpm downloaded from the main website.  The fullscreen mode 
+<br />
+runs ok in every other window managers including the old MWM -- but not in 
+<br />
+fvwm.
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A related issue: invoking View-&gt;Toolbars-&gt;Customize , the 
+<br />
+Customization window also disappears and nowhere to find.
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I have an observation: If I start firefox using &quot;strace -f firefox&quot; 
+<br />
+(to trace the system calls), then everything will be ok -- including the 
+<br />
+fullscreen mode and the customization window.
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Apparently &quot;strace -f firefox&quot; will greatly slowdown the firefox 
+<br />
+process.  My theory is that the bug originates from a tricky timing and 
+<br />
+scheduling issue.  In the normal running of firefox, fvwm may be not able to 
+<br />
+keep up the speed of firefox and response its request in a timely manner.  
+<br />
+But with &quot;strace -f firefox&quot; , the firefox will run slowly enough  so that 
+<br />
+fvwm can catch up.
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hope this will help to nail down the problem and fix it.
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Best
+<br />
+<br />Junren
+<br />
+<br />_________________________________________________________________
+<br />
+Express yourself instantly with MSN Messenger! Download today - it's FREE! 
+<br />
+<a href="http://messenger.msn.click-url.com/go/onm00200471ave/direct/01/">http://messenger.msn.click-url.com/go/onm00200471ave/direct/01/</a>
+<br />
+<br /><br /><pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Jul 22 2004 - 08:10:44 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start12885">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="12886.html" title="Next message in the list">vladimir-fvwm_at_math.uic.edu: "FVWM: Window refresh problems."</a></li>
+<li><dfn>Previous message</dfn>: <a href="12884.html" title="Previous message in the list">Thomas Adam: "Re: FVWM: Window focus problem?"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="12892.html" title="Next message in this discussion thread">Xiaoyong Jin: "Re: FVWM: Firefox fullscreen mode: an observation"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="12892.html" title="Message sent in reply to this message">Xiaoyong Jin: "Re: FVWM: Firefox fullscreen mode: an observation"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="12897.html" title="Message sent in reply to this message">Junren Shi And Xin Hu: "Re: FVWM: Firefox fullscreen mode: an observation"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="12913.html" title="Message sent in reply to this message">Junren Shi And Xin Hu: "Re: FVWM: Firefox fullscreen mode: an observation"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="12936.html" title="Message sent in reply to this message">Junren Shi And Xin Hu: "Re: FVWM: Firefox fullscreen mode: an observation"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg12885" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg12885" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg12885" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg12885" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:57 BST
+</em></small></p>
+</body>
+</html>

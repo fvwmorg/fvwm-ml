@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: CurrentScreen patch for fvwm 2.0.43 from Dan Niles on 1996-07-10 (fvwm-users)</title>
+<meta name="Author" content="Dan Niles (dan_at_more.net)" />
+<meta name="Subject" content="FVWM: CurrentScreen patch for fvwm 2.0.43" />
+<meta name="Date" content="1996-07-10" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: CurrentScreen patch for fvwm 2.0.43</h1>
+<!-- received="Wed Jul 10 08:12:59 1996" -->
+<!-- isoreceived="19960710071259" -->
+<!-- sent="Wed, 10 Jul 1996 08:06:27 -0500" -->
+<!-- isosent="19960710130627" -->
+<!-- name="Dan Niles" -->
+<!-- email="dan_at_more.net" -->
+<!-- subject="FVWM: CurrentScreen patch for fvwm 2.0.43" -->
+<!-- id="199607101306.IAA09730_at_Jane.apg.more.net" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start17333" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="17334.html" accesskey="d" title="Charles Hines: &quot;Re: FVWM: FlipFocus patch for 2.0.43&quot;">Next message</a> ]
+[ <a href="17332.html" title="Dan Niles: &quot;FVWM: FlipFocus patch for 2.0.43&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="17337.html" accesskey="t" title="Charles Hines: &quot;Re: FVWM: CurrentScreen patch for fvwm 2.0.43&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17333" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17333" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17333" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17333" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Dan Niles &lt;<a href="mailto:dan_at_more.net?Subject=Re%3A%20FVWM%3A%20CurrentScreen%20patch%20for%20fvwm%202.0.43">dan_at_more.net</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 10 Jul 1996 08:06:27 -0500</span><br />
+</address>
+<br />
+Here is my CurrentScreen patch for fvwm 2.0.43.  This patch makes CurrentScreen
+<br />
+(in the Next/Prev commands) work more intuitive.
+<br />
+<br />Before this patch, CurrentDesk selects windows on the current desk, and
+<br />
+CurrentScreen selects window on the current page.  To select only windows
+<br />
+on the current screen (view port), both CurrentDesk and CurrentScreen must
+<br />
+be specified.
+<br />
+<br />After the patch:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CurrentDesk	selects windows on the current virtual desk
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CurrentPage	selects windows on the current virtual page
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CurrentScreen	selects windows on the current screen, or view port.
+<br />
+<br />I apply it after the FlipFocus patch, but the FlipFocus patch is not
+<br />
+necessary.
+<br />
+<br />------------------------- fvwm-2.0.43-CurrentScreen.patch --------------------
+<br />
+--- builtins.c.orig	Tue Jul  9 11:16:15 1996
+<br />
++++ builtins.c	Tue Jul  9 11:29:07 1996
+<br />
+_at_&#64; -1794,7 +1794,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;Bool needsIconic = 0;
+<br />
+&nbsp;&nbsp;&nbsp;Bool needsNormal = 0;
+<br />
+&nbsp;&nbsp;&nbsp;Bool needsCurrentDesk = 0;
+<br />
+-  Bool needsCurrentScreen = 0;
+<br />
++  Bool needsCurrentPage = 0;
+<br />
+&nbsp;&nbsp;&nbsp;Bool needsVisible = 0;
+<br />
+&nbsp;&nbsp;&nbsp;Bool needsInvisible = 0;
+<br />
+&nbsp;&nbsp;&nbsp;char *AnyWindow = &quot;*&quot;;
+<br />
+_at_&#64; -1844,7 +1844,12 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if(mystrcasecmp(condition,&quot;!Visible&quot;)==0)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;needsInvisible = 1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if(mystrcasecmp(condition,&quot;CurrentScreen&quot;)==0)
+<br />
+-        needsCurrentScreen = 1;
+<br />
++	{
+<br />
++	  needsCurrentDesk = 1;
+<br />
++	  needsCurrentPage = 1;
+<br />
++	}
+<br />
++      else if(mystrcasecmp(condition,&quot;CurrentPage&quot;)==0)
+<br />
++        needsCurrentPage = 1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if(mystrcasecmp(condition,&quot;CirculateHit&quot;)==0)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;useCirculateHit = 1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if(mystrcasecmp(condition,&quot;CirculateHitIcon&quot;)==0)
+<br />
+_at_&#64; -1898,7 +1903,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((!needsCurrentDesk)||(fw-&gt;Desk == Scr.CurrentDesk))&amp;&amp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((!needsVisible)||(fw-&gt;flags &amp; VISIBLE))&amp;&amp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((!needsInvisible)||(!(fw-&gt;flags &amp; VISIBLE)))&amp;&amp;
+<br />
+-           ((!needsCurrentScreen)||((fw-&gt;frame_x &lt; Scr.MyDisplayWidth)&amp;&amp;
+<br />
++           ((!needsCurrentPage)||((fw-&gt;frame_x &lt; Scr.MyDisplayWidth)&amp;&amp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(fw-&gt;frame_y &lt; Scr.MyDisplayHeight)&amp;&amp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(fw-&gt;frame_x+fw-&gt;frame_width &gt; 0)&amp;&amp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(fw-&gt;frame_y+fw-&gt;frame_height &gt; 0)))))
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Jul 10 1996 - 08:12:59 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start17333">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="17334.html" title="Next message in the list">Charles Hines: "Re: FVWM: FlipFocus patch for 2.0.43"</a></li>
+<li><dfn>Previous message</dfn>: <a href="17332.html" title="Previous message in the list">Dan Niles: "FVWM: FlipFocus patch for 2.0.43"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="17337.html" title="Next message in this discussion thread">Charles Hines: "Re: FVWM: CurrentScreen patch for fvwm 2.0.43"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="17337.html" title="Message sent in reply to this message">Charles Hines: "Re: FVWM: CurrentScreen patch for fvwm 2.0.43"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="17341.html" title="Message sent in reply to this message">Dan Niles: "Re: FVWM: CurrentScreen patch for fvwm 2.0.43"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="17343.html" title="Message sent in reply to this message">Makoto MATSUSHITA: "Re: FVWM: CurrentScreen patch for fvwm 2.0.43"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17333" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17333" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17333" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17333" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

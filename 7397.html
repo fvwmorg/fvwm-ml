@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="iso-8859-2"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-2" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Iconification and PlaceAgain problem from Marcin Pawlik on 2002-12-31 (fvwm-users)</title>
+<meta name="Author" content="Marcin Pawlik (marcinp_at_pwr.wroc.pl)" />
+<meta name="Subject" content="FVWM: Iconification and PlaceAgain problem" />
+<meta name="Date" content="2002-12-31" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Iconification and PlaceAgain problem</h1>
+<!-- received="Tue Dec 31 11:38:22 2002" -->
+<!-- isoreceived="20021231113822" -->
+<!-- sent="Tue, 31 Dec 2002 18:36:51 +0100" -->
+<!-- isosent="20021231173651" -->
+<!-- name="Marcin Pawlik" -->
+<!-- email="marcinp_at_pwr.wroc.pl" -->
+<!-- subject="FVWM: Iconification and PlaceAgain problem" -->
+<!-- id="20021231173651.GA23192_at_mpmain" -->
+<!-- charset="iso-8859-2" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start7397" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="7398.html" accesskey="d" title="hugo vanwoerkom: &quot;FVWM: Icon with window title&quot;">Next message</a> ]
+[ <a href="7396.html" title="Dan Espen: &quot;Re: FVWM: How to use Hyper/Super as a modifier?&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg7397" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg7397" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg7397" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg7397" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Marcin Pawlik &lt;<a href="mailto:marcinp_at_pwr.wroc.pl?Subject=Re%3A%20FVWM%3A%20Iconification%20and%20PlaceAgain%20problem">marcinp_at_pwr.wroc.pl</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 31 Dec 2002 18:36:51 +0100</span><br />
+</address>
+<br />
+I have a problem with PlaceAgain command on windows which were
+<br />
+previously iconified.  If I iconify a window, move (GotoDesk) to another
+<br />
+desktop then deiconify the window and do PlaceAgain for it, the window
+<br />
+is moved to the desk where it was created.
+<br />
+<br />I read the CMD_PlaceAgain function code (placement.c) and I think the
+<br />
+problem is in PlaceWindow function invocation. It's called with
+<br />
+SGET_START_DESK(style). I don't understand what it really is but looks
+<br />
+like a desktop number the window was created on incremented by one (but
+<br />
+only for desktop numbers bigger than 0 - a kind of black magic for me).
+<br />
+The &quot;start desk&quot; number is changed in PlaceWindow (line 677 in CVS
+<br />
+version from 31.12) back to the &quot;fvwm desk number&quot; and then the window
+<br />
+desktop number is set to it.
+<br />
+<br />I tried to change PlaceWindow call in CMD_PlaceAgain function so that it
+<br />
+has 0 instead of SGET_START_DESK(style). 
+<br />
+The window placement in PlaceWindow is changed (I have no idea why) only:
+<br />
+&quot;if(SUSE_START_ON_DESK(sflags) &amp;&amp; Desk &amp;&amp; flags.do_honor_starts_on_page)&quot;
+<br />
+(line 676).
+<br />
+<br />So when Desk == 0 it works as I expected, but it's probably not the
+<br />
+solution.
+<br />
+<br />Maybe someone with a better code knowledge could look at it?
+<br />
+<br />Regards,
+<br />
+<br /><pre>
+-- 
+Marcin Pawlik
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue Dec 31 2002 - 11:38:22 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start7397">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="7398.html" title="Next message in the list">hugo vanwoerkom: "FVWM: Icon with window title"</a></li>
+<li><dfn>Previous message</dfn>: <a href="7396.html" title="Previous message in the list">Dan Espen: "Re: FVWM: How to use Hyper/Super as a modifier?"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg7397" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg7397" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg7397" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg7397" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:54 BST
+</em></small></p>
+</body>
+</html>

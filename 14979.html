@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: changing backs from menu from Chad Coulliette on 1995-12-05 (fvwm-users)</title>
+<meta name="Author" content="Chad Coulliette (chadc_at_stokes.UCSD.EDU)" />
+<meta name="Subject" content="FVWM: changing backs from menu" />
+<meta name="Date" content="1995-12-05" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: changing backs from menu</h1>
+<!-- received="Tue Dec  5 15:33:10 1995" -->
+<!-- isoreceived="19951205153310" -->
+<!-- sent="Tue, 05 Dec 1995 13:33:19 -0800" -->
+<!-- isosent="19951205213319" -->
+<!-- name="Chad Coulliette" -->
+<!-- email="chadc_at_stokes.UCSD.EDU" -->
+<!-- subject="FVWM: changing backs from menu" -->
+<!-- id="9512052133.AA28037_at_mavrolykos.UCSD.EDU" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start14979" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="14980.html" accesskey="d" title="Pete Siemsen: &quot;FVWM: problem with FvwmForm&quot;">Next message</a> ]
+[ <a href="14978.html" title="Romano Giannetti: &quot;FVWM: Little problem with knews...&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="14983.html" accesskey="t" title="spiegl_at_appl-math.tu-muenchen.de: &quot;Re: FVWM: changing backs from menu&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg14979" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg14979" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg14979" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg14979" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Chad Coulliette &lt;<a href="mailto:chadc_at_stokes.UCSD.EDU?Subject=Re%3A%20FVWM%3A%20changing%20backs%20from%20menu">chadc_at_stokes.UCSD.EDU</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 05 Dec 1995 13:33:19 -0800</span><br />
+</address>
+<br />
+Hello Everyone,
+<br />
+<br />I would like to say again that fvwm2 is quite awesome!  It adds an entirely
+<br />
+new depth to working with your computer.  After using it for only a couple
+<br />
+of weeks now, it would be very difficult to go back to twm.
+<br />
+<br />I have been trying to work out a way to have menu options for choosing 
+<br />
+different backs for our network of Suns.   I used an idea suggested by Todd
+<br />
+Fries and cofirmed by Chuck Hines.  Here is the implementation so far
+<br />
+<br /># Function for changing background patterns from menu
+<br />
+AddToFunc ChangeBack &quot;I&quot; Exec exec echo *FvwmBackerDesk $0 $1 &gt; .fvwm2bktmp
+<br />
++         &quot;I&quot; Read .fvwm2bktmp
+<br />
++         &quot;I&quot; FvwmBacker
+<br />
+<br /># Background Patterns
+<br />
+AddToMenu BackPatterns &quot;Backgrounds&quot; Title
+<br />
++              &quot;Honeycomb&quot; ChangeBack $CurrentDesk &quot;xpmroot 
+<br />
+/usr/local/X11R6/include/X11/pixmaps/background1.xpm&quot;
+<br />
++              &quot;Lighthouse&quot; ChangeBack $CurrentDesk &quot;xv -root -quit -max 
+<br />
+/usr/local/share/backgrounds/lighthouse.gif&quot;
+<br />
+<br />This is a very nice streamlined method, theoretically speaking. :-)  It creates
+<br />
+a file with the appropriate command to send to FvwmBacker, then reads the 
+<br />
+command from the temporary file.  There are two problems, though.  First, there
+<br />
+is global variable CurrentDesk that can be accessed from the menu, i.e. 
+<br />
+$CurrentDesk=''.  Does anyone know if there is a variable that has the value
+<br />
+of CurrentDesk?  Second, if I replace $CurrentDesk with a number, say 1, then
+<br />
+the FvwmBacker loads the new image or pattern, but the default image specified
+<br />
+in the .fvwm2rc file still dominates.  If you switch desks from desk 1 and then
+<br />
+back, the new pattern is there, but gets covered quickly by the default 
+<br />
+background pattern.  Does anybody know any solutions for this?
+<br />
+<br /><br /><br /><br />Thanks,
+<br />
+<br />Chad
+<br />
+<pre>
+-- 
+Chad M. Coulliette
+chadc_at_ames.ucsd.edu
+Applied Mechanics and Engineering Sciences
+University of California, San Diego
+--
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue Dec 05 1995 - 15:33:10 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start14979">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="14980.html" title="Next message in the list">Pete Siemsen: "FVWM: problem with FvwmForm"</a></li>
+<li><dfn>Previous message</dfn>: <a href="14978.html" title="Previous message in the list">Romano Giannetti: "FVWM: Little problem with knews..."</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="14983.html" title="Next message in this discussion thread">spiegl_at_appl-math.tu-muenchen.de: "Re: FVWM: changing backs from menu"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="14983.html" title="Message sent in reply to this message">spiegl_at_appl-math.tu-muenchen.de: "Re: FVWM: changing backs from menu"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg14979" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg14979" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg14979" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg14979" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:57 BST
+</em></small></p>
+</body>
+</html>

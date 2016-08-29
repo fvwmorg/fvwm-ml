@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: Audio with fvwm from Albrecht Kadlec on 1996-12-13 (fvwm-users)</title>
+<meta name="Author" content="Albrecht Kadlec (albrecht_at_auto.tuwien.ac.at)" />
+<meta name="Subject" content="Re: FVWM: Audio with fvwm" />
+<meta name="Date" content="1996-12-13" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: Audio with fvwm</h1>
+<!-- received="Fri Dec 13 08:11:28 1996" -->
+<!-- isoreceived="19961213081128" -->
+<!-- sent="Fri, 13 Dec 96 15:08:37 +0100" -->
+<!-- isosent="19961213140837" -->
+<!-- name="Albrecht Kadlec" -->
+<!-- email="albrecht_at_auto.tuwien.ac.at" -->
+<!-- subject="Re: FVWM: Audio with fvwm" -->
+<!-- id="9612131408.AA20210_at_einstein.auto.tuwien.ac.at" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="32B0CD67.3101B6B9_at_sympatico.ca" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start18717" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="18718.html" accesskey="d" title="Richard Everson: &quot;FVWM: Interrogating fvwm2 to get the current desk&quot;">Next message</a> ]
+[ <a href="18716.html" title="John J. Minkle: &quot;Re: FVWM: FvwmIconBox with page-specific icons?&quot;">Previous message</a> ]
+[ <a href="18715.html" title="Mike A. Harris: &quot;FVWM: Audio with fvwm&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="18721.html" accesskey="t" title="Mark Boyns: &quot;Re: FVWM: Audio with fvwm&quot;">Next in thread</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18717" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18717" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18717" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18717" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Albrecht Kadlec &lt;<a href="mailto:albrecht_at_auto.tuwien.ac.at?Subject=Re%3A%20FVWM%3A%20Audio%20with%20fvwm">albrecht_at_auto.tuwien.ac.at</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 13 Dec 96 15:08:37 +0100</span><br />
+</address>
+<br />
+<em class="quotelev1">&gt;&gt;&gt;&gt;&gt; Mike A Harris writes:
+</em><br />
+<br />M&gt; I'd like to assign audio files to different events in fvwm.  Is it
+<br />
+M&gt; possible?  
+<br />
+it is for fvwm events (FvwmAudio module)
+<br />
+<br /><br />M&gt; If so how?  For example:  How would I set it up so that when
+<br />
+M&gt; I get incoming mail a file called you_have_mail.au is played?
+<br />
+mail arrival is not an fvwm event.
+<br />
+But when mail is received, the demon looks for ~/.forward.
+<br />
+Usually a mail forward address is put there, but you can also start a
+<br />
+command from there.
+<br />
+Make this a batchfile and put some playaudio command there (or better
+<br />
+send a command to your fvwm to play sth, since another user would be
+<br />
+quite surprised if the demon was invoked while you're not there.)
+<br />
+<br />So:
+<br />
+~/.forward:
+<br />
+|~albrecht/.mailfilter
+<br />
+<br /><br />~/.mailfilter (shortened):
+<br />
+#!/usr/local/lbin/tcsh -f
+<br />
+# 
+<br />
+# Mail filter for various mail services with vaction support.
+<br />
+#
+<br />
+############### CONFIGURATION SECTION ###################################
+<br />
+#
+<br />
+# USER DATA
+<br />
+# must be set because $USER is 'root' and $HOME is the home dir. from 'root'
+<br />
+#
+<br />
+<br />setenv USER albrecht
+<br />
+setenv HOME ~albrecht
+<br />
+<br /><br />#########################################################################
+<br />
+umask 077
+<br />
+set tmpf=/tmp/mail_$$
+<br />
+<br /># copy stdin (piped in from .forward) to tmpfile to work on
+<br />
+cat &gt;$tmpf
+<br />
+<br /><br />#########################################################################
+<br />
+#
+<br />
+#	grep for mailing list adresses and copy to separate files
+<br />
+#
+<br />
+#########################################################################
+<br />
+<br />egrep -s -e '^Sender: owner-fvwm-workers_at_' $tmpf
+<br />
+if ($status == 0) then
+<br />
+&nbsp;&nbsp;cat $tmpf &gt;&gt; $HOME/fvwm2worker
+<br />
+&nbsp;&nbsp;goto cleanup
+<br />
+endif
+<br />
+<br />egrep -s -e '^Sender: owner-fvwm_at_' $tmpf
+<br />
+if ($status == 0) then
+<br />
+&nbsp;&nbsp;cat $tmpf &gt;&gt; $HOME/fvwm2
+<br />
+&nbsp;&nbsp;goto cleanup
+<br />
+endif
+<br />
+<br />#########################################################################
+<br />
+#
+<br />
+#				NORMAL MAIL
+<br />
+#
+<br />
+#########################################################################
+<br />
+<br />cat $tmpf &gt;&gt; /usr/spool/mail/$USER
+<br />
+<br /># this is to prepare fetching mail (not mailing lists) via modem - FAST !!!
+<br />
+/usr/local/bin/zip -k9 $HOME/mail.zip $tmpf
+<br />
+<br />cleanup:
+<br />
+<br />/bin/rm -f $tmpf
+<br />
+<br />exit 0
+<br />
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />so simply add
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if [ -p ~/.fvwmpipe ] then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# or any other test to check if fvwm2 is running under your account
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# e.g exit code of: ps -axu | grep $User | grep fvwm2
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;playaudio $HOME/mail_has_come_my_master.au
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# If your host is not the host receiving mail, you should
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# better send the command to fvwm2 for execution (via FvwmPipe)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo exec playaudio $HOME/mail_has_come_my_master.au &gt;&gt;~/.fvwmpipe 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endif
+<br />
+<br />on the top.
+<br />
+<br /><br />hope this helped,
+<br />
+albrecht
+<br />
+<pre>
+-- 
+Well I've always had a deep respect, and I mean that most sincerely.
+The band is just fantastic, that is really what I think. Oh by the way,
+   which one's Pink?						-- Pink Floyd
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Dec 13 1996 - 08:11:28 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start18717">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="18718.html" title="Next message in the list">Richard Everson: "FVWM: Interrogating fvwm2 to get the current desk"</a></li>
+<li><dfn>Previous message</dfn>: <a href="18716.html" title="Previous message in the list">John J. Minkle: "Re: FVWM: FvwmIconBox with page-specific icons?"</a></li>
+<li><dfn>In reply to</dfn>: <a href="18715.html" title="Message to which this message replies">Mike A. Harris: "FVWM: Audio with fvwm"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="18721.html" title="Next message in this discussion thread">Mark Boyns: "Re: FVWM: Audio with fvwm"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18717" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18717" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18717" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18717" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

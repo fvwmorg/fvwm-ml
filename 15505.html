@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: FvwmButtons patch here! from jarl_at_cptsu5.univ-mrs.fr on 1996-02-14 (fvwm-users)</title>
+<meta name="Author" content="jarl_at_cptsu5.univ-mrs.fr (jarl_at_cptsu5.univ-mrs.fr)" />
+<meta name="Subject" content="FVWM: FvwmButtons patch here!" />
+<meta name="Date" content="1996-02-14" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: FvwmButtons patch here!</h1>
+<!-- received="Wed Feb 14 01:35:13 1996" -->
+<!-- isoreceived="19960214013513" -->
+<!-- sent="Wed, 14 Feb 1996 08:36:09 +0100 (MET)" -->
+<!-- isosent="19960214073609" -->
+<!-- name="jarl_at_cptsu5.univ-mrs.fr" -->
+<!-- email="jarl_at_cptsu5.univ-mrs.fr" -->
+<!-- subject="FVWM: FvwmButtons patch here!" -->
+<!-- id="199602140736.IAA17499_at_cptsu1.univ-mrs.fr" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start15505" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="15506.html" accesskey="d" title="Chris Rode: &quot;Re: FVWM: FvwmButtons swallowing/unswallowing&quot;">Next message</a> ]
+[ <a href="15504.html" title="jarl_at_cptsu5.univ-mrs.fr: &quot;FVWM: FvwmButtons patch&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15505" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15505" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15505" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15505" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: &lt;<a href="mailto:jarl_at_cptsu5.univ-mrs.fr?Subject=Re%3A%20FVWM%3A%20FvwmButtons%20patch%20here!">jarl_at_cptsu5.univ-mrs.fr</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 14 Feb 1996 08:36:09 +0100 (MET)</span><br />
+</address>
+<br />
+Hmm, this wasn't too difficult! Here is the patch anyway.
+<br />
+<br />Cut and paste into the two files FvwmButtons.c_diff and icons.c_diff,
+<br />
+in the FvwmButtons directory of your favourite version of fvwm, preferably
+<br />
+2.0.40, then do
+<br />
+<br />&nbsp;&nbsp;patch FvwmButtons.c &lt; FvwmButtons.c_diff
+<br />
+&nbsp;&nbsp;patch icons.c &lt; icons.c_diff
+<br />
+&nbsp;&nbsp;make install
+<br />
+<br />Voila! Instant upgrade :-) Comments, ideas, everything appreciated.
+<br />
+<br />And a PS to Alan Wild on swallow/unswallow etc. I don't think it would be
+<br />
+very hard to do, I just don't see any practical application of it.. But we
+<br />
+might as well keep it on the list for one of those boring sleepless night :-)
+<br />
+<br />Vyrdsamt,
+<br />
+-Jarl
+<br />
+<br />## FvwmButtons.c_diff ######### CUT ### CUT ### CUT ### CUT ### CUT ### CUT ###
+<br />
+<br />68c68
+<br />
+&lt; int max_icon_width = 30,max_icon_height = 0;
+<br />
+<pre>
+---
+&gt; int max_internal_width = 30,max_internal_height = 0;
+73a74
+&gt; int xpad = 2, ypad = 3, framew = 2;
+93c94
+&lt;  */
+---
+&gt; */
+174a176,192
+&gt;   /* load the font, or none */
+&gt;   if (mystrncasecmp(font_string,&quot;none&quot;,4)==0)
+&gt;     {
+&gt;       font=NULL;
+&gt;     }
+&gt;   else 
+&gt;     {
+&gt;       if ((font = XLoadQueryFont(dpy, font_string)) == NULL)
+&gt;         {
+&gt;           if ((font = XLoadQueryFont(dpy, &quot;fixed&quot;)) == NULL)
+&gt; 	    {
+&gt; 	      fprintf(stderr,&quot;%s: No fonts available\n&quot;,MyName);
+&gt; 	      exit(1);
+&gt; 	    }
+&gt;         }
+&gt;     };
+&gt; 
+178,181c196,207
+&lt;       if(Buttons[i].icon_w/Buttons[i].BWidth &gt; max_icon_width)
+&lt; 	max_icon_width = Buttons[i].icon_w/Buttons[i].BWidth;
+&lt;       if(Buttons[i].icon_h/Buttons[i].BHeight &gt; max_icon_height)
+&lt; 	max_icon_height = Buttons[i].icon_h/Buttons[i].BHeight;
+---
+&gt;       if(Buttons[i].icon_w/Buttons[i].BWidth &gt; max_internal_width)
+&gt; 	max_internal_width = Buttons[i].icon_w/Buttons[i].BWidth;
+&gt;       if(Buttons[i].title &amp;&amp; strcmp(Buttons[i].title,&quot;-&quot;)==0||font==NULL)
+&gt; 	{
+&gt;           if(Buttons[i].icon_h/Buttons[i].BHeight &gt; max_internal_height)
+&gt; 	    max_internal_height = Buttons[i].icon_h/Buttons[i].BHeight;
+&gt; 	}
+&gt;       else
+&gt; 	{
+&gt; 	  if(Buttons[1].icon_h/Buttons[i].BHeight + font-&gt;ascent + font-&gt;descent &gt; max_internal_height)
+&gt; 	    max_internal_height=Buttons[1].icon_h/Buttons[i].BHeight + font-&gt;ascent + font-&gt;descent;
+&gt; 	};
+268a295,296
+&gt; 			    ih = Buttons[button].BHeight*ButtonHeight; 
+&gt; 			    iw = Buttons[button].BWidth*ButtonWidth; 
+270,271c298,299
+&lt; 			      Buttons[button].BWidth * ButtonWidth - 4;
+&lt; 			    if(strcmp(Buttons[button].title,&quot;-&quot;)==0)
+---
+&gt; 			      iw - 2*framew;
+&gt; 			    if(strcmp(Buttons[button].title,&quot;-&quot;)==0||font==NULL)
+274c302
+&lt; 				  Buttons[button].BHeight*ButtonHeight - 4;
+---
+&gt; 				  ih - 2*framew;
+279,280c307,308
+&lt; 				  Buttons[button].BHeight*ButtonHeight - 4 
+&lt; 				    - font-&gt;ascent - font-&gt;descent;
+---
+&gt; 				  ih - 2*framew - font-&gt;ascent - font-&gt;descent;
+&gt; 				ih -= font-&gt;ascent + font-&gt;descent;
+283,285d310
+&lt; 			    ih = Buttons[button].icon_h + 4 ; 
+&lt; 			    iw = Buttons[button].icon_w + 4 ; 
+&lt; 
+295c320
+&lt; 					(iw - Buttons[button].icon_w)/2,
+---
+&gt; 					((iw - Buttons[button].icon_w)&gt;&gt;1),
+297c322
+&lt; 					(ih - Buttons[button].icon_h)/2);
+---
+&gt; 					((ih - Buttons[button].icon_h)&gt;&gt;1));
+443,444c468,469
+&lt; 			ih = Buttons[button].icon_h + 4; 
+&lt; 			iw = Buttons[button].icon_w + 4; 
+---
+&gt; 			ih = Buttons[button].icon_h + 2*framew;
+&gt; 			iw = Buttons[button].icon_w + 2*framew;
+454c479
+&lt; 				    (iw - Buttons[button].icon_w)/2,
+---
+&gt; 				    ((iw - Buttons[button].icon_w)&gt;&gt;1),
+456c481
+&lt; 				    (ih - Buttons[button].icon_h)/2);
+---
+&gt; 				    ((ih - Buttons[button].icon_h)&gt;&gt;1));
+485,486d509
+&lt;   yoff = (ButtonHeight + font-&gt;ascent - font-&gt;descent)&gt;&gt;1;
+&lt; 
+500c523
+&lt; 		if(strcmp(Buttons[button].title,&quot;-&quot;)!=0)
+---
+&gt; 		if(strcmp(Buttons[button].title,&quot;-&quot;)!=0 &amp;&amp; font)
+504c527
+&lt; 		    while((w &gt; (BW-4))&amp;&amp;(len&gt;0))
+---
+&gt; 		    while((w &gt; (BW-2*framew))&amp;&amp;(len&gt;0))
+514c537
+&lt; 			    yoff2 = BH - font-&gt;descent - 4;
+---
+&gt; 			    yoff2 = BH - font-&gt;descent - 2*framew;
+524c547,548
+&lt; 					i*ButtonHeight+yoff,
+---
+&gt; 					i*ButtonHeight+((ButtonHeight + 
+&gt;                                         font-&gt;ascent - font-&gt;descent)&gt;&gt;1),
+622,631d645
+&lt;   /* load the font */
+&lt;   if ((font = XLoadQueryFont(dpy, font_string)) == NULL)
+&lt;     {
+&lt;       if ((font = XLoadQueryFont(dpy, &quot;fixed&quot;)) == NULL)
+&lt; 	{
+&lt; 	  fprintf(stderr,&quot;%s: No fonts available\n&quot;,MyName);
+&lt; 	  exit(1);
+&lt; 	}
+&lt;     };
+&lt; 
+834,837c848,851
+&lt;   /* subtract one for the right/bottom border */
+&lt;   mysizehints.width = (max_icon_width+8)*num_columns-1;
+&lt;   mysizehints.height=(font-&gt;ascent+font-&gt;descent+12+max_icon_height)*
+&lt;     num_rows-1;
+---
+&gt;   /* subtract one for the right/bottom border */ /* But that ruins it! Jarl */
+&gt;   mysizehints.width = (max_internal_width+2*(xpad+framew))*num_columns;
+&gt;   mysizehints.height= (max_internal_height+2*(ypad+framew))*num_rows;
+&gt; 
+839a854
+&gt; /* Stupid thing to do? Makes the window too small on my Xservers. Jarl
+841a857,859
+&gt; */
+&gt;   mysizehints.base_height = num_rows;
+&gt;   mysizehints.base_width = num_columns;
+856c874
+&lt; 	  mysizehints.x = DisplayWidth(dpy,screen) + x - mysizehints.width - 2;
+---
+&gt; 	  mysizehints.x = DisplayWidth(dpy,screen) + x - mysizehints.width;
+863c881
+&lt; 	  mysizehints.y = DisplayHeight(dpy,screen) + y - mysizehints.height-2;
+---
+&gt; 	  mysizehints.y = DisplayHeight(dpy,screen) + y - mysizehints.height;
+911c929,934
+&lt;   gcm = GCForeground|GCBackground|GCFont;
+---
+&gt;   gcm = GCForeground|GCBackground;
+&gt;   if(font)
+&gt;     {
+&gt;       gcv.font = font-&gt;fid;
+&gt;       gcm |= GCFont;
+&gt;     }
+914d936
+&lt;   gcv.font =  font-&gt;fid;
+1105a1128,1147
+&gt; 	      (mystrncasecmp(tline,CatString3(&quot;*&quot;,MyName,&quot;Padding&quot;),Clength+8)==0))
+&gt; 	{
+&gt; 	  len=sscanf(&amp;tline[Clength+8],&quot;%d %d&quot;,&amp;xpad,&amp;ypad);
+&gt; 	  if(len &lt; 2)
+&gt; 	    ypad=xpad;
+&gt; 	  if(len &lt; 1)
+&gt; 	    {
+&gt;   	      xpad = 2;
+&gt; 	      ypad = 3;
+&gt; 	    }
+&gt; 	}
+&gt; /*    else if((strlen(&amp;tline[0])&gt;1)&amp;&amp;
+&gt; 	      (mystrncasecmp(tline,CatString3(&quot;*&quot;,MyName,&quot;PadY&quot;),Clength+5)==0))
+&gt; 	{
+&gt; 	  len=sscanf(&amp;tline[Clength+5],&quot;%d&quot;,&amp;ypad);
+&gt; 	  if(len &lt; 1)
+&gt; 	    ypad = 3;
+&gt; 	}
+&gt; */
+&gt;       else if((strlen(&amp;tline[0])&gt;1)&amp;&amp;
+1453c1495
+&lt; 	    if(strcmp(Buttons[button].title,&quot;-&quot;)==0)
+---
+&gt; 	    if(strcmp(Buttons[button].title,&quot;-&quot;)==0 || font==NULL)
+## icons.c_diff ########_at_&#64;&#64;&#64;### CUT ### CUT ### CUT ### CUT ### CUT ### CUT ###
+41a42,44
+&gt; extern int xpad;
+&gt; extern int ypad;
+&gt; extern int framew;
+108,110c111,113
+&lt;   if(w &gt; Buttons[button].BWidth*ButtonWidth  - 8)
+&lt;     w = Buttons[button].BWidth*ButtonWidth  - 8;
+&lt;   if(strcmp(Buttons[button].title,&quot;-&quot;)==0)
+---
+&gt;   if(w &gt; Buttons[button].BWidth*ButtonWidth - 2*(xpad+framew))
+&gt;     w = Buttons[button].BWidth*ButtonWidth - 2*(xpad+framew);
+&gt;   if(strcmp(Buttons[button].title,&quot;-&quot;)==0 || font==NULL)
+112,113c115,116
+&lt;       if(h&gt;Buttons[button].BHeight*ButtonHeight-8)
+&lt; 	h= Buttons[button].BHeight*ButtonHeight-8;
+---
+&gt;       if(h&gt;Buttons[button].BHeight*ButtonHeight-2*(ypad+framew))
+&gt; 	h= Buttons[button].BHeight*ButtonHeight-2*(ypad+framew);
+117,118c120,121
+&lt;       if(h&gt;Buttons[button].BHeight*ButtonHeight-8-font-&gt;ascent-font-&gt;descent)
+&lt; 	h= Buttons[button].BHeight*ButtonHeight-8-font-&gt;ascent-font-&gt;descent;
+---
+&gt;       if(h&gt;Buttons[button].BHeight*ButtonHeight-2*(ypad+framew)-font-&gt;ascent-font-&gt;descent)
+&gt; 	h= Buttons[button].BHeight*ButtonHeight-2*(ypad+framew)-font-&gt;ascent-font-&gt;descent;
+121d123
+&lt; 	  
+130c132,140
+&lt;   yoff = (Buttons[button].BHeight*ButtonHeight - (h + font-&gt;ascent + font-&gt;descent))&gt;&gt;1;
+---
+&gt; 
+&gt;   if(strcmp(Buttons[button].title,&quot;-&quot;)==0 || font==NULL)
+&gt;     {
+&gt;       yoff = (Buttons[button].BHeight*ButtonHeight - h)&gt;&gt;1;
+&gt;     } 
+&gt;   else
+&gt;     {
+&gt;       yoff = (Buttons[button].BHeight*ButtonHeight - (h + font-&gt;ascent + font-&gt;descent))&gt;&gt;1;
+&gt;     }
+###############################################################################
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Feb 14 1996 - 01:35:13 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start15505">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="15506.html" title="Next message in the list">Chris Rode: "Re: FVWM: FvwmButtons swallowing/unswallowing"</a></li>
+<li><dfn>Previous message</dfn>: <a href="15504.html" title="Previous message in the list">jarl_at_cptsu5.univ-mrs.fr: "FVWM: FvwmButtons patch"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15505" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15505" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15505" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15505" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

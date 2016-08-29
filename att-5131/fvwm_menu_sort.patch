@@ -1,0 +1,153 @@
+Index: fvwm/windowlist.c
+===================================================================
+RCS file: /home/cvs/fvwm/fvwm/fvwm/windowlist.c,v
+retrieving revision 1.59
+diff -u -r1.59 windowlist.c
+--- fvwm/windowlist.c	2002/04/30 11:17:16	1.59
++++ fvwm/windowlist.c	2002/05/19 00:26:38
+@@ -59,22 +59,42 @@
+ #define NO_DESK_SORT            (1<<6)
+ #define SHOW_ICONNAME           (1<<7)
+ #define SHOW_ALPHABETIC         (1<<8)
+-#define SHOW_INFONOTGEO         (1<<9)
+-#define NO_DESK_NUM             (1<<10)
+-#define NO_CURRENT_DESK_TITLE   (1<<11)
+-#define TITLE_FOR_ALL_DESKS     (1<<12)
+-#define NO_NUM_IN_DESK_TITLE    (1<<13)
++#define SHOW_SORT_LASTWORD	(1<<9)
++#define SHOW_INFONOTGEO         (1<<10)
++#define NO_DESK_NUM             (1<<11)
++#define NO_CURRENT_DESK_TITLE   (1<<12)
++#define TITLE_FOR_ALL_DESKS     (1<<13)
++#define NO_NUM_IN_DESK_TITLE    (1<<14)
+ #define SHOW_EVERYTHING (SHOW_GEOMETRY | SHOW_ALLDESKS | SHOW_NORMAL | SHOW_ICONIC | SHOW_STICKY)
+ 
+ /* Function to compare window title names
++ * pscratch will contain the name to compare
++ * At the time of writing it could be one of visible_icon_name, visible_name
++ * 	and the added last word of one of the two so we can sort on the
++ * 	program name when the program name is the last word of the title.
++ * 05-18-2002 David Fries <dfries@mail.win.org>
+  */
+ static int globalFlags;
++static int winCompareLast(const  FvwmWindow **a, const  FvwmWindow **b)
++{
++	int result=strcasecmp((char*)((*a)->pscratch),(char*)((*b)->pscratch));
++	/* If we have an ordering with just the last word go with it. */
++	if(result)
++		return result;
++
++	/* compare the full name */
++	if(globalFlags & SHOW_ICONNAME)
++		return strcasecmp((*a)->visible_icon_name,
++			(*b)->visible_icon_name);
++	return strcasecmp((*a)->visible_name, (*b)->visible_name);
++}
++static int winCompareReverseLast(const  FvwmWindow **a, const  FvwmWindow **b)
++{
++  return -winCompareLast(a, b);
++}
+ static int winCompare(const  FvwmWindow **a, const  FvwmWindow **b)
+ {
+-  if(globalFlags & SHOW_ICONNAME)
+-    return strcasecmp((*a)->visible_icon_name,(*b)->visible_icon_name);
+-  else
+-    return strcasecmp((*a)->visible_name,(*b)->visible_name);
++    return strcasecmp((char*)((*a)->pscratch),(char*)((*b)->pscratch));
+ }
+ static int winCompareReverse(const  FvwmWindow **a, const  FvwmWindow **b)
+ {
+@@ -222,6 +242,10 @@
+         flags &= ~SHOW_ALPHABETIC;
+       else if (StrEquals(tok,"Alphabetic"))
+         flags |= SHOW_ALPHABETIC;
++      else if (StrEquals(tok,"NotSortLastWord"))
++        flags &= ~SHOW_SORT_LASTWORD;
++      else if (StrEquals(tok,"SortLastWord"))
++        flags |= SHOW_SORT_LASTWORD;
+       else if (StrEquals(tok,"ReverseOrder"))
+         do_reverse_sort_order = True;
+       else if (StrEquals(tok,"CurrentAtEnd"))
+@@ -348,7 +372,6 @@
+   }
+   globalFlags = flags;
+ 
+-
+   tlabel = get_desk_title(desk, flags, True);
+   mr = NewMenuRoot(tlabel);
+   if (!(flags & NO_CURRENT_DESK_TITLE))
+@@ -412,16 +435,63 @@
+   /* Do alphabetic sort */
+   if (flags & SHOW_ALPHABETIC)
+   {
+-    if (do_reverse_sort_order)
+-    {
+-      qsort(windowList,numWindows,sizeof(t),
+-	    (int(*)(const void*,const void*))winCompareReverse);
+-    }
+-    else
+-    {
+-      qsort(windowList,numWindows,sizeof(t),
+-	    (int(*)(const void*,const void*))winCompare);
+-    }
++  	if (flags & SHOW_SORT_LASTWORD )
++	{
++		int offset;
++		const char * src;
++		for( ii=0; ii<numWindows; ii++)
++		{
++			offset=0;
++
++			if(flags & SHOW_ICONNAME)
++				src=windowList[ii]->visible_icon_name;
++			else
++				src=windowList[ii]->visible_name;
++
++			for( ij=0; src[ij]; ij++)
++			{
++				if(src[ij]==' ')
++				{
++					/* After the space */
++					offset=ij+1;
++				}
++			}
++			windowList[ii]->pscratch=src+offset;
++		}
++		if (do_reverse_sort_order)
++		{
++			qsort(windowList,numWindows,sizeof(t),
++				(int(*)(const void*,const void*))
++					winCompareReverseLast);
++		}
++		else
++		{
++			qsort(windowList,numWindows,sizeof(t),
++				(int(*)(const void*,const void*))
++					winCompareLast);
++		}
++	}
++	else
++	{
++		if(flags & SHOW_ICONNAME)
++			for( ii=0; ii<numWindows; ii++)
++				windowList[ii]->pscratch=
++					windowList[ii]->visible_icon_name;
++		else
++			for( ii=0; ii<numWindows; ii++)
++				windowList[ii]->pscratch=
++					windowList[ii]->visible_name;
++		if (do_reverse_sort_order)
++		{
++			qsort(windowList,numWindows,sizeof(t),
++			  (int(*)(const void*,const void*))winCompareReverse);
++		}
++		else
++		{
++			qsort(windowList,numWindows,sizeof(t),
++				(int(*)(const void*,const void*))winCompare);
++		}
++	}
+   }
+ 
+   while(next_desk != INT_MAX)
+

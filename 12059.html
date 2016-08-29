@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Intricacies of the Next() function / Conditionals from Nicholas Paul Johnson on 2004-04-30 (fvwm-users)</title>
+<meta name="Author" content="Nicholas Paul Johnson (nickjohnson_at_virginia.edu)" />
+<meta name="Subject" content="FVWM: Intricacies of the Next() function / Conditionals" />
+<meta name="Date" content="2004-04-30" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Intricacies of the Next() function / Conditionals</h1>
+<!-- received="Fri Apr 30 00:43:14 2004" -->
+<!-- isoreceived="20040429234314" -->
+<!-- sent="Fri, 30 Apr 2004 00:33:57 -0400 (EDT)" -->
+<!-- isosent="20040430043357" -->
+<!-- name="Nicholas Paul Johnson" -->
+<!-- email="nickjohnson_at_virginia.edu" -->
+<!-- subject="FVWM: Intricacies of the Next() function / Conditionals" -->
+<!-- id="Pine.LNX.4.44.0404300025460.11198-100000_at_localhost.localdomain" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start12059" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="12060.html" accesskey="d" title="Xavier Maillard: &quot;Re: FVWM: Some changes to FvwmIconMan&quot;">Next message</a> ]
+[ <a href="12058.html" title="Michael White: &quot;FVWM: Icon Manager Problem - Disappearing Square&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="12076.html" accesskey="t" title="Nicholas Paul Johnson: &quot;Re: FVWM: Intricacies of the Next() function / Conditionals&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg12059" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg12059" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg12059" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg12059" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Nicholas Paul Johnson &lt;<a href="mailto:nickjohnson_at_virginia.edu?Subject=Re%3A%20FVWM%3A%20Intricacies%20of%20the%20Next()%20function%20%2F%20Conditionals">nickjohnson_at_virginia.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 30 Apr 2004 00:33:57 -0400 (EDT)</span><br />
+</address>
+<br />
+-----BEGIN PGP SIGNED MESSAGE-----
+<br />
+Hash: SHA1
+<br />
+<br />Howdy,
+<br />
+<br />I am trying to define a function, called Close_fcn, which is bound to the 
+<br />
+close button on my title bars.  I would like this function to, in addition 
+<br />
+to closing the window, automatically focus another window which may or may 
+<br />
+not be on the same desk.  What I have so far is:
+<br />
+<br />#------------------
+<br />
+DestroyFunc Close_fcn
+<br />
+AddToFunc Close_fcn
+<br />
++ &quot;I&quot; Close
+<br />
++ &quot;I&quot; Next (!Sticky) Focus
+<br />
+<br />Mouse 1 7 A             Close_fcn
+<br />
+#------------------
+<br />
+<br />However, I would like to impose an ordering on these windows: I would like 
+<br />
+it to (1) focus a window on the same desk if available, and (2) focus any 
+<br />
+other window if [1] fails.
+<br />
+<br />So, is this possible?  I use fvwm 2.4.16
+<br />
+<br />Also,
+<br />
+<br />Is it possibly for me to bind a function to the event that a window is 
+<br />
+closed (not necessarily explicitly)?  The example of this situation that 
+<br />
+comes to mind is xpdf, which has a big 'quit' button.  Can I bind a 
+<br />
+function to be called when this 'quit' button causes the window to close, 
+<br />
+just as if the close button on the titlebar were pushed?
+<br />
+<br />Thanks,
+<br />
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+<br />
+&nbsp;&nbsp;Nicholas Paul Johnson
+<br />
+&nbsp;&nbsp;o nickjohnson \at\ virginia \dot\ edu
+<br />
+&nbsp;&nbsp;o 3ebf10a7 subkeys.pgp.net
+<br />
+&nbsp;&nbsp;o <a href="http://manjac.ath.cx/nick">http://manjac.ath.cx/nick</a>
+<br />
+&nbsp;&nbsp;o &quot;When all you've got is a hammer,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;everything looks like a nail.
+<br />
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+<br />
+-----BEGIN PGP SIGNATURE-----
+<br />
+Version: GnuPG v1.2.1 (GNU/Linux)
+<br />
+Comment: Made with pgp4pine 1.75-6
+<br />
+<br />iD8DBQFAkddEfnGNDj6/EKcRAtj2AJ9OCZ7kq+XHXeO1dYk8Ny6Rnf5k9ACeIw6l
+<br />
+I6nvix3f192SgVuBMuG1fWc=
+<br />
+=2y2u
+<br />
+-----END PGP SIGNATURE-----
+<br />
+<br /><br /><pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Apr 30 2004 - 00:43:14 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start12059">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="12060.html" title="Next message in the list">Xavier Maillard: "Re: FVWM: Some changes to FvwmIconMan"</a></li>
+<li><dfn>Previous message</dfn>: <a href="12058.html" title="Previous message in the list">Michael White: "FVWM: Icon Manager Problem - Disappearing Square"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="12076.html" title="Next message in this discussion thread">Nicholas Paul Johnson: "Re: FVWM: Intricacies of the Next() function / Conditionals"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="12076.html" title="Message sent in reply to this message">Nicholas Paul Johnson: "Re: FVWM: Intricacies of the Next() function / Conditionals"</a></li>
+<li><dfn>Reply</dfn>: <a href="12081.html" title="Message sent in reply to this message">Mikhael Goikhman: "Re: FVWM: Intricacies of the Next() function / Conditionals"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="12082.html" title="Message sent in reply to this message">Nicholas Paul Johnson: "Re: FVWM: Intricacies of the Next() function / Conditionals"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg12059" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg12059" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg12059" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg12059" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:56 BST
+</em></small></p>
+</body>
+</html>

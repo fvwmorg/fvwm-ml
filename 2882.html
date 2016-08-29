@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: setting up special windows on startup automatically from Cyprian Laskowski on 2001-08-09 (fvwm-users)</title>
+<meta name="Author" content="Cyprian Laskowski (cyp_at_swagbelly.net)" />
+<meta name="Subject" content="FVWM: setting up special windows on startup automatically" />
+<meta name="Date" content="2001-08-09" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: setting up special windows on startup automatically</h1>
+<!-- received="Thu Aug  9 15:15:54 2001" -->
+<!-- isoreceived="20010809141554" -->
+<!-- sent="Thu, 09 Aug 2001 12:22:27 -0700" -->
+<!-- isosent="20010809192227" -->
+<!-- name="Cyprian Laskowski" -->
+<!-- email="cyp_at_swagbelly.net" -->
+<!-- subject="FVWM: setting up special windows on startup automatically" -->
+<!-- id="m38zgtujgs.fsf_at_swagbelly.net" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start2882" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="2883.html" accesskey="d" title="brendan_at_cs.uchicago.edu: &quot;FVWM: placement&quot;">Next message</a> ]
+[ <a href="2881.html" title="Dirk Wright: &quot;Re: FVWM: configuring fvwm2&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="2888.html" accesskey="t" title="Dominik Vogt: &quot;Re: FVWM: setting up special windows on startup automatically&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg2882" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg2882" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg2882" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg2882" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Cyprian Laskowski &lt;<a href="mailto:cyp_at_swagbelly.net?Subject=Re%3A%20FVWM%3A%20setting%20up%20special%20windows%20on%20startup%20automatically">cyp_at_swagbelly.net</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 09 Aug 2001 12:22:27 -0700</span><br />
+</address>
+<br />
+Hi,
+<br />
+<br />Yesterday, it occurred to me: wait a minute: why have I not upgraded
+<br />
+my fvwm (my system came with 2.2.4)?  I was astounded, as I could not
+<br />
+come up with a reasonable answer.  Needless to say, I immediately
+<br />
+upgraded to 2.4.0 and am very pleased with the changes.  Thanks a lot!
+<br />
+You guys rule!
+<br />
+<br />Playing around with it also brought up an old issue, which I still
+<br />
+don't know how to solve:
+<br />
+<br />On startup (in InitFunction), I like to start up one xterm and one
+<br />
+emacs, and have them treated specially for the duration of the
+<br />
+session: I want the xterm to be sticky, and I want special keybindings
+<br />
+that will immediately take me to both of these windows.  But the
+<br />
+following doesn't work, and my other similar variants don't either.
+<br />
+<br />AddToFunc InitFunction 
+<br />
++	'I'	Exec exec xmodmap $HOME/.xmodmaprc
+<br />
++       'I'     Exec exec xbiff -geometry 50x50+1080+5
+<br />
++	'I'	Exec exec xterm -font 7x13 -geometry 55x8+765+5 -T BANG
+<br />
++       'I'     Wait xterm
+<br />
++       'I'     Next FlipFocus
+<br />
++       'I'     Stick
+<br />
++       'I'     Key Return A 3 WindowId $w FlipFocus
+<br />
++	'I'	Exec exec emacs -f eshell
+<br />
++       'I'     Wait emacs
+<br />
++       'I'     Next (emacs) FlipFocus
+<br />
++       'I'     Key Return A 3C WindowId $w FlipFocus
+<br />
+<br />The problem begins with Stick, but I suspect that my Key commands
+<br />
+aren't set up right either (although I know that Mod3 is set up right,
+<br />
+as it works in other, more standard situations).  Could you show me
+<br />
+how to make this work?
+<br />
+<br />BTW, the problem with Stick is also a problem I sometimes have with
+<br />
+FvwmCommand.  Say I try (I know this is a silly example):
+<br />
+<br />% FvwmCommand 'Stick'
+<br />
+<br />Fvwm seems to wait for me to select a window, but I want it to just
+<br />
+use the current one.  There are other commands with which I have the
+<br />
+same problem.  But I'm probably just using the wrong approach, right?
+<br />
+<br />Thanks in advance for any help,
+<br />
+<br />cyp
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Aug 09 2001 - 15:15:54 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start2882">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="2883.html" title="Next message in the list">brendan_at_cs.uchicago.edu: "FVWM: placement"</a></li>
+<li><dfn>Previous message</dfn>: <a href="2881.html" title="Previous message in the list">Dirk Wright: "Re: FVWM: configuring fvwm2"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="2888.html" title="Next message in this discussion thread">Dominik Vogt: "Re: FVWM: setting up special windows on startup automatically"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="2888.html" title="Message sent in reply to this message">Dominik Vogt: "Re: FVWM: setting up special windows on startup automatically"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg2882" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg2882" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg2882" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg2882" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:51 BST
+</em></small></p>
+</body>
+</html>

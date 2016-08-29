@@ -1,0 +1,3736 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: I've added miniicons to fvwm. Here's the patch from Brady Montz on 1996-09-22 (fvwm-users)</title>
+<meta name="Author" content="Brady Montz (bradym_at_cs.arizona.edu)" />
+<meta name="Subject" content="FVWM: I've added miniicons to fvwm. Here's the patch" />
+<meta name="Date" content="1996-09-22" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: I've added miniicons to fvwm. Here's the patch</h1>
+<!-- received="Sun Sep 22 21:27:45 1996" -->
+<!-- isoreceived="19960922202745" -->
+<!-- sent="22 Sep 1996 11:37:47 -0700" -->
+<!-- isosent="19960922183747" -->
+<!-- name="Brady Montz" -->
+<!-- email="bradym_at_cs.arizona.edu" -->
+<!-- subject="FVWM: I've added miniicons to fvwm. Here's the patch" -->
+<!-- id="t8ohiyo0p0.fsf_at_mahler.cs.arizona.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start17920" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="17921.html" accesskey="d" title="Jerome GOUT: &quot;FVWM: looking for Xbiff&quot;">Next message</a> ]
+[ <a href="17919.html" title="Graeme McCaffery: &quot;FVWM: Broadway&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="17929.html" accesskey="t" title="Albrecht Kadlec: &quot;Re: FVWM: I&#0039;ve added miniicons to fvwm. Here&#0039;s the patch&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17920" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17920" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17920" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17920" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Brady Montz &lt;<a href="mailto:bradym_at_cs.arizona.edu?Subject=Re%3A%20FVWM%3A%20I've%20added%20miniicons%20to%20fvwm.%20Here's%20the%20patch">bradym_at_cs.arizona.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: 22 Sep 1996 11:37:47 -0700</span><br />
+</address>
+<br />
+Got tired of people (including me) talking about it, so I spent yesterday
+<br />
+adding miniicons into fvwm. I don't expect this stuff to be put into the 2.1
+<br />
+release (nor do I think it's necessarily wise to do so). I basically followed
+<br />
+what fvwm95 did, with the following changes:
+<br />
+<br />1. Instead of calling these things title icons, they're mini icons, since they
+<br />
+&nbsp;&nbsp;&nbsp;can be used in other places than the title bar.
+<br />
+<br />2. You use the ButtonStyle's to say where it goes, exactly like how
+<br />
+&nbsp;&nbsp;&nbsp;PixmapButtons does it. 
+<br />
+<br />I changed the builtin WindowList to use the icons, and added some stuff to
+<br />
+FvwmIconMan to use the miniicon to denote an iconified window instead of the
+<br />
+raised square thing. The FvwmIconMan code is rather rough proof-of-concept
+<br />
+type code (you can't turn off displaying icons mainly), but it seems to work.
+<br />
+Also, the version of FvwmIconMan that I hacked is the one that's due to come
+<br />
+out in the next release of fvwm, and is significantly different than the one
+<br />
+in 2.0.43. Read the CHANGES file and the manpage for info (nothing on
+<br />
+miniicons is mentioned though).
+<br />
+<br />I didn't do anything to FvwmWinList, since somebody else indicated that they
+<br />
+were willing to do that. 
+<br />
+<br />Here's the relevant lines from my .fvwm2rc file:
+<br />
+<br />Style &quot;*&quot;          MiniIcon mini-bx2.xpm
+<br />
+Style &quot;xterm&quot;      MiniIcon mini.xterm.xpm
+<br />
+Style &quot;Emacs&quot;      MiniIcon mini-doc.xpm
+<br />
+<br />ButtonStyle 1 MiniIcon
+<br />
+<br />That's it. As with pixmapbuttons, you can use a buttonstyle of MiniIcon
+<br />
+to have a relief put around the pixmap, or you can use FullMiniIcon to have no
+<br />
+relief.
+<br />
+<br />Also, there's no provision for a default MiniIcon, except for the &quot;*&quot; style. 
+<br />
+If it can't find one, you get a blank spot.
+<br />
+<br />I've protected all of the code that matters with #ifdef MINI_ICONS, so
+<br />
+(a) you need that set in your Fvwm.tmpl (the patch does that), and it pretty
+<br />
+clearly marks out where I've made changes. Finally, you need XPM. 
+<br />
+<br /><br /><pre>
+-- 
+ Brady Montz
+ bradym_at_cs.arizona.edu
+diff -rc fvwm-2.0.43/Fvwm.tmpl fvwm.patched/Fvwm.tmpl
+*** fvwm-2.0.43/Fvwm.tmpl	Thu Jun 27 07:57:21 1996
+--- fvwm.patched/Fvwm.tmpl	Sun Sep 22 11:06:08 1996
+***************
+*** 164,170 ****
+   * 
+   ***************************************************************************/
+  
+! OPTION_DEFINES = -DSHAPE -DPIXMAP_BUTTONS 
+  
+  
+  
+--- 164,170 ----
+   * 
+   ***************************************************************************/
+  
+! OPTION_DEFINES = -DSHAPE -DPIXMAP_BUTTONS -DMINI_ICONS
+  
+  
+  
+diff -rc fvwm-2.0.43/fvwm/add_window.c fvwm.patched/fvwm/add_window.c
+*** fvwm-2.0.43/fvwm/add_window.c	Thu Apr 11 08:25:58 1996
+--- fvwm.patched/fvwm/add_window.c	Sat Sep 21 22:03:29 1996
+***************
+*** 65,70 ****
+--- 65,72 ----
+      {&quot;-xrm&quot;,		NULL,		XrmoptionResArg, (caddr_t) NULL},
+  };
+  
++ extern char *IconPath, *PixmapPath;
++ 
+  /***********************************************************************
+   *
+   *  Procedure:
+***************
+*** 85,91 ****
+    XSetWindowAttributes attributes;	/* attributes for create windows */
+    int i,width,height;
+    int a,b;
+!   char *value;
+    unsigned long tflag;
+    int Desk, border_width, resize_width;
+    extern Bool NeedToResizeToo;
+--- 87,93 ----
+    XSetWindowAttributes attributes;	/* attributes for create windows */
+    int i,width,height;
+    int a,b;
+!   char *value, *mini_value;
+    unsigned long tflag;
+    int Desk, border_width, resize_width;
+    extern Bool NeedToResizeToo;
+***************
+*** 109,114 ****
+--- 111,120 ----
+    tmp_win-&gt;w = w;
+  
+    tmp_win-&gt;cmap_windows = (Window *)NULL;
++ #ifdef MINI_ICONS
++   tmp_win-&gt;mini_pixmap_file = NULL;
++   tmp_win-&gt;mini_icon = NULL;
++ #endif
+  
+    if(!PPosOverride)
+      if (XGetGeometry(dpy, tmp_win-&gt;w, &amp;JunkRoot, &amp;JunkX, &amp;JunkY,
+***************
+*** 177,183 ****
+    tmp_win-&gt;flags |= TITLE;
+    tmp_win-&gt;title_height = Scr.TitleHeight + tmp_win-&gt;bw;
+  
+!   tflag = LookInList(Scr.TheList,tmp_win-&gt;name,&amp;tmp_win-&gt;class, &amp;value, &amp;Desk,
+  		     &amp;border_width, &amp;resize_width,
+                       &amp;forecolor,&amp;backcolor,&amp;tmp_win-&gt;buttons, 
+  		     tmp_win-&gt;IconBox,&amp;(tmp_win-&gt;BoxFillMethod));
+--- 183,193 ----
+    tmp_win-&gt;flags |= TITLE;
+    tmp_win-&gt;title_height = Scr.TitleHeight + tmp_win-&gt;bw;
+  
+!   tflag = LookInList(Scr.TheList,tmp_win-&gt;name,&amp;tmp_win-&gt;class, &amp;value, 
+! #ifdef MINI_ICONS
+! 		     &amp;mini_value, 
+! #endif
+! 		     &amp;Desk,
+  		     &amp;border_width, &amp;resize_width,
+                       &amp;forecolor,&amp;backcolor,&amp;tmp_win-&gt;buttons, 
+  		     tmp_win-&gt;IconBox,&amp;(tmp_win-&gt;BoxFillMethod));
+***************
+*** 206,211 ****
+--- 216,230 ----
+        tmp_win-&gt;icon_bitmap_file = Scr.DefaultIcon;
+      }
+  
++ #ifdef MINI_ICONS
++   if (tflag &amp; MINIICON_FLAG) {
++     tmp_win-&gt;mini_pixmap_file = mini_value;
++   }
++   else {
++     tmp_win-&gt;mini_pixmap_file = NULL;
++   }
++ #endif
++ 
+    GetWindowSizeHints (tmp_win);
+  
+    /* Tentative size estimate */
+***************
+*** 406,411 ****
+--- 425,440 ----
+  	  else
+  	    tmp_win-&gt;right_w[i] = None;
+  	}
++ #ifdef MINI_ICONS
++       if (tmp_win-&gt;mini_pixmap_file) {
++ 	tmp_win-&gt;mini_icon = CachePicture (dpy, Scr.Root, 
++ 					   IconPath, PixmapPath, 
++ 					   tmp_win-&gt;mini_pixmap_file);
++       }
++       else {
++ 	tmp_win-&gt;mini_icon = NULL;
++       }
++ #endif
+      }
+  
+    if(tmp_win-&gt;flags &amp; BORDER)
+***************
+*** 521,526 ****
+--- 550,565 ----
+  		(unsigned long)tmp_win,tmp_win-&gt;class.res_class);
+    BroadcastName(M_RES_NAME,tmp_win-&gt;w,tmp_win-&gt;frame,
+  		(unsigned long)tmp_win,tmp_win-&gt;class.res_name);
++ #ifdef MINI_ICONS
++   if (tmp_win-&gt;mini_icon != NULL)
++     Broadcast(M_MINI_ICON, 6,
++               tmp_win-&gt;w, /* Watch Out ! : I reduced the set of infos... */
++               tmp_win-&gt;mini_icon-&gt;picture,
++               tmp_win-&gt;mini_icon-&gt;mask,
++               tmp_win-&gt;mini_icon-&gt;width,
++               tmp_win-&gt;mini_icon-&gt;height,
++               tmp_win-&gt;mini_icon-&gt;depth, 0);
++ #endif
+  
+    FetchWmProtocols (tmp_win);
+    FetchWmColormapWindows (tmp_win);
+***************
+*** 800,813 ****
+   *
+   ***********************************************************************/
+  unsigned long LookInList(name_list *list, char *name, XClassHint *class, 
+! 			 char **value, int *Desk, int *border_width,
+  			 int *resize_width, char **forecolor, char **backcolor,
+!                          unsigned long * buttons, int *IconBox, int *BoxFillMethod)
+  {
+    name_list *nptr;
+    unsigned long retval = 0;
+  
+    *value = NULL;
+    *forecolor = NULL;
+    *backcolor = NULL;
+    *Desk = 0;
+--- 839,861 ----
+   *
+   ***********************************************************************/
+  unsigned long LookInList(name_list *list, char *name, XClassHint *class, 
+! 			 char **value, 
+! #ifdef MINI_ICONS
+! 			 char **mini_value, 
+! #endif
+! 			 int *Desk, 
+! 			 int *border_width,
+  			 int *resize_width, char **forecolor, char **backcolor,
+!                          unsigned long * buttons, int *IconBox, 
+! 			 int *BoxFillMethod)
+  {
+    name_list *nptr;
+    unsigned long retval = 0;
+  
+    *value = NULL;
++ #ifdef MINI_ICONS
++   *mini_value = NULL;
++ #endif
+    *forecolor = NULL;
+    *backcolor = NULL;
+    *Desk = 0;
+***************
+*** 829,834 ****
+--- 877,885 ----
+  	  if (matchWildcards(nptr-&gt;name,class-&gt;res_class) == TRUE)
+  	    {
+  	      if(nptr-&gt;value != NULL)*value = nptr-&gt;value;
++ #ifdef MINI_ICONS
++ 	      if(nptr-&gt;mini_value != NULL) *mini_value = nptr-&gt;mini_value;
++ #endif
+  	      if(nptr-&gt;off_flags &amp; STARTSONDESK_FLAG)
+  		*Desk = nptr-&gt;Desk;
+  	      if(nptr-&gt;off_flags &amp; BW_FLAG)
+***************
+*** 858,863 ****
+--- 909,917 ----
+  	  if (matchWildcards(nptr-&gt;name,class-&gt;res_name) == TRUE)
+  	    {
+  	      if(nptr-&gt;value != NULL)*value = nptr-&gt;value;
++ #ifdef MINI_ICONS
++ 	      if(nptr-&gt;mini_value != NULL) *mini_value = nptr-&gt;mini_value;
++ #endif
+  	      if(nptr-&gt;off_flags &amp; STARTSONDESK_FLAG)
+  		*Desk = nptr-&gt;Desk;
+  	      if(nptr-&gt;off_flags &amp; FORE_COLOR_FLAG)
+***************
+*** 887,892 ****
+--- 941,949 ----
+        if (matchWildcards(nptr-&gt;name,name) == TRUE)
+  	{
+  	  if(nptr-&gt;value != NULL)*value = nptr-&gt;value;
++ #ifdef MINI_ICONS
++ 	  if(nptr-&gt;mini_value != NULL) *mini_value = nptr-&gt;mini_value;
++ #endif
+  	  if(nptr-&gt;off_flags &amp; STARTSONDESK_FLAG)	   
+  	    *Desk = nptr-&gt;Desk;
+  	  if(nptr-&gt;off_flags &amp; FORE_COLOR_FLAG)
+diff -rc fvwm-2.0.43/fvwm/borders.c fvwm.patched/fvwm/borders.c
+*** fvwm-2.0.43/fvwm/borders.c	Thu Apr 11 08:27:10 1996
+--- fvwm.patched/fvwm/borders.c	Sat Sep 21 18:33:11 1996
+***************
+*** 196,201 ****
+--- 196,238 ----
+                            t-&gt;title_height);
+  	    break;
+  
++ #ifdef MINI_ICONS
++ 	  case MiniIconButton:
++ 	  case FullMiniIconButton:
++ 	    if (!t-&gt;mini_icon)
++ 	      break;
++ 	    pbf = *t-&gt;mini_icon;
++ 	    if (Scr.button_style[button] == FullMiniIconButton) 
++ 	    {
++ 	      /* button face max width/height */
++ 	      a = t-&gt;title_height;
++ 	      x=(a - pbf.width) / 2; if (x &lt; 0) x = 0; 
++ 	      y=(a - pbf.height) / 2; if (y &lt; 0) y = 0;
++ 	      if (pbf.width &gt; a) pbf.width = a; 
++ 	      if (pbf.height &gt; a) pbf.height = a;
++ 	      XClearArea(dpy, t-&gt;left_w[i], 0, 0, a + 2, a + 2, False);
++ 	    }
++ 	    else
++ 	    {
++ 	      /* button face max width/height */
++ 	      a = t-&gt;title_height - 2;
++ 	      x=(a - pbf.width) / 2 + 1; if (x &lt; 1) x = 1; 
++ 	      y=(a - pbf.height) / 2 + 1; if (y &lt; 1) y = 1;
++ 	      if (pbf.width &gt;= a) pbf.width = a - 1; 
++ 	      if (pbf.height &gt;= a) pbf.height = a - 1;
++ 	      XClearArea(dpy, t-&gt;left_w[i], 1, 1, a - 1, a - 1, False);
++ 	    }
++ 
++ 	    /* set transparency mask */
++ 	    XSetClipMask(dpy, Scr.ButtonMaskGC, pbf.mask);
++ 	    XSetClipOrigin(dpy, Scr.ButtonMaskGC, x, y);
++ 
++ 	    /* draw the new button face */
++ 	    XCopyArea(dpy, pbf.picture, t-&gt;left_w[i], Scr.ButtonMaskGC,
++ 		      0, 0, pbf.width, pbf.height, x, y);
++ 	    break;
++ #endif
++ 
+  #ifdef XPM
+  #ifdef PIXMAP_BUTTONS
+  	  case PixmapButton:
+diff -rc fvwm-2.0.43/fvwm/builtins.c fvwm.patched/fvwm/builtins.c
+*** fvwm-2.0.43/fvwm/builtins.c	Thu Jun 27 07:34:19 1996
+--- fvwm.patched/fvwm/builtins.c	Sat Sep 21 18:23:06 1996
+***************
+*** 599,606 ****
+    if(tmp_win)
+      RaiseWindow(tmp_win);
+  
+!   if (LookInList(Scr.TheList,tmp_win-&gt;name, &amp;tmp_win-&gt;class, &amp;junk, &amp;junkD,
+! 		 &amp;junkD, &amp;junkD, &amp;junkC, &amp;junkC, &amp;junkN,
+  		 BoxJunk,  &amp;method)&amp; STAYSONTOP_FLAG)
+      tmp_win-&gt;flags |= ONTOP;
+    KeepOnTop();
+--- 599,609 ----
+    if(tmp_win)
+      RaiseWindow(tmp_win);
+  
+!   if (LookInList(Scr.TheList,tmp_win-&gt;name, &amp;tmp_win-&gt;class, &amp;junk, 
+! #ifdef MINI_ICONS
+! 		 &amp;junk,
+! #endif
+! 		 &amp;junkD, &amp;junkD, &amp;junkD, &amp;junkC, &amp;junkC, &amp;junkN,
+  		 BoxJunk,  &amp;method)&amp; STAYSONTOP_FLAG)
+      tmp_win-&gt;flags |= ONTOP;
+    KeepOnTop();
+***************
+*** 970,975 ****
+--- 973,981 ----
+    {
+      RaiseWindow(tmp_win);
+      if (LookInList(Scr.TheList,tmp_win-&gt;name, &amp;tmp_win-&gt;class,&amp;junk,
++ #ifdef MINI_ICONS
++ 		   &amp;junk,
++ #endif
+                     &amp;junkD,&amp;junkD, &amp;junkD, &amp;junkC,&amp;junkC,&amp;junkN,BoxJunk,
+                     &amp;method)&amp;STAYSONTOP_FLAG)
+        tmp_win-&gt;flags |= ONTOP;	    
+***************
+*** 1725,1730 ****
+--- 1731,1754 ----
+               &quot;Pixmap button style requires Xpm support -- line: %s&quot;,action);
+  #endif /* XPM */
+    } 
++   else if (!mystrncasecmp (button_style, &quot;MiniIcon&quot;, 8)) {
++ #ifdef MINI_ICONS
++     Scr.button_style[button] = MiniIconButton;
++ #else /* !defined (MINI_ICONS) */
++     fvwm_msg (ERR, &quot;ButtonStyle&quot;,
++ 	      &quot;MiniIcon button style not supported -- line: %s&quot;,
++ 	      action);
++ #endif /* MINI_ICONS */
++   }
++   else if (!mystrncasecmp (button_style, &quot;FullMiniIcon&quot;, 8)) {
++ #ifdef MINI_ICONS
++     Scr.button_style[button] = FullMiniIconButton;
++ #else /* !defined (MINI_ICONS) */
++     fvwm_msg (ERR, &quot;ButtonStyle&quot;,
++ 	      &quot;FullMiniIcon button style not supported -- line: %s&quot;,
++ 	      action);
++ #endif /* MINI_ICONS */
++   }
+    else 
+    {
+      fvwm_msg(ERR,&quot;ButtonStyle&quot;,
+diff -rc fvwm-2.0.43/fvwm/fvwm.h fvwm.patched/fvwm/fvwm.h
+*** fvwm-2.0.43/fvwm/fvwm.h	Thu Apr 11 08:22:24 1996
+--- fvwm.patched/fvwm/fvwm.h	Sat Sep 21 15:58:33 1996
+***************
+*** 118,123 ****
+--- 118,126 ----
+    Pixel back;
+  } ColorPair;
+  
++ #ifdef MINI_ICONS
++ #include &quot;../libs/fvwmlib.h&quot;
++ #endif
+  
+  /* for each window that is on the display, one of these structures
+   * is allocated and linked into a list 
+***************
+*** 180,185 ****
+--- 183,192 ----
+      Window transientfor;
+  
+      unsigned long flags;
++ #ifdef MINI_ICONS
++     char *mini_pixmap_file;
++     Picture *mini_icon;
++ #endif
+      char *icon_bitmap_file;
+  
+      int orig_x;                 /* unmaximized x coordinate */
+diff -rc fvwm-2.0.43/fvwm/misc.h fvwm.patched/fvwm/misc.h
+*** fvwm-2.0.43/fvwm/misc.h	Wed Jun 19 18:31:15 1996
+--- fvwm.patched/fvwm/misc.h	Sat Sep 21 17:03:09 1996
+***************
+*** 20,25 ****
+--- 20,28 ----
+    struct name_list_struct *next;   /* pointer to the next name */
+    char *name;		  	   /* the name of the window */
+    char *value;                     /* icon name */
++ #ifdef MINI_ICONS
++   char *mini_value;                /* mini icon name */
++ #endif
+    int Desk;                        /* Desktop number */
+    unsigned long on_flags; 
+    unsigned long off_flags; 
+***************
+*** 96,101 ****
+--- 99,108 ----
+  #define NO_PPOSITION_FLAG    (1&lt;&lt;29)
+  #define OL_DECOR_FLAG        (1&lt;&lt;30)
+  
++ #ifdef MINI_ICONS
++ #define MINIICON_FLAG        (1&lt;&lt;31)
++ #endif
++ 
+  /* some fancy font handling stuff */
+  #define NewFontAndColor(newfont,color,backcolor) {\
+     Globalgcv.font = newfont;\
+***************
+*** 121,127 ****
+  extern char NoResource[];
+  
+  extern unsigned long LookInList(name_list *, char *, XClassHint *, 
+! 				char **value, int *Desk, int *bw, int *nobw,
+  				char **forecolor, char **backcolor, 
+                                  unsigned long * buttons, int *IconBox, 
+  				int *BoxFillMethod);
+--- 128,139 ----
+  extern char NoResource[];
+  
+  extern unsigned long LookInList(name_list *, char *, XClassHint *, 
+! 				char **value, 
+! #ifdef MINI_ICONS
+! char **mini_value, 
+! #endif
+! 				int *Desk, 
+! 				int *bw, int *nobw,
+  				char **forecolor, char **backcolor, 
+                                  unsigned long * buttons, int *IconBox, 
+  				int *BoxFillMethod);
+***************
+*** 291,301 ****
+--- 303,323 ----
+  void ParseKeyEntry(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+  		unsigned long context, char *tline,int* Module);
+  void SetOneStyle(char *text,FILE *,char **,int *);
++ 
++ #ifdef MINI_ICONS
++ void AddToList(char *name, char *icon_name, char *miniicon_name, 
++ 	       unsigned long off_flags, 
++ 	       unsigned long on_flags, int desk,int bw, int nobw, 
++ 	       char *forecolor, char *backcolor,
++                unsigned long off_buttons, unsigned long on_buttons,
++ 	       int *IconBox, int BoxFillMethod);
++ #else
+  void AddToList(char *name, char *icon_name, unsigned long off_flags, 
+  	       unsigned long on_flags, int desk,int bw, int nobw, 
+  	       char *forecolor, char *backcolor,
+                 unsigned long off_buttons, unsigned long on_buttons,
+  	       int *IconBox, int BoxFillMethod);
++ #endif
+  
+  void ParseStyle(char *text,FILE *,char **,int *);
+  void assign_string(char *text, FILE *fd, char **arg,int *);
+diff -rc fvwm-2.0.43/fvwm/module.c fvwm.patched/fvwm/module.c
+*** fvwm-2.0.43/fvwm/module.c	Thu Jun  6 08:27:12 1996
+--- fvwm.patched/fvwm/module.c	Sat Sep 21 22:03:38 1996
+***************
+*** 762,767 ****
+--- 762,777 ----
+  	  if((t-&gt;flags &amp; ICONIFIED) &amp;&amp; (t-&gt;flags &amp; ICON_UNMAPPED))
+  	    SendPacket(*Module,M_ICONIFY,7,t-&gt;w,t-&gt;frame,
+  		       (unsigned long)t,0,0,0,0);
++ #ifdef MINI_ICONS
++ 	  if (t-&gt;mini_icon != NULL) 
++ 	    SendPacket(*Module, M_MINI_ICON, 6,
++                        t-&gt;w,
++                        t-&gt;mini_icon-&gt;picture,
++                        t-&gt;mini_icon-&gt;mask,
++                        t-&gt;mini_icon-&gt;width,
++                        t-&gt;mini_icon-&gt;height,
++                        t-&gt;mini_icon-&gt;depth, 0);
++ #endif
+  	}
+        if(Scr.Hilite == NULL)
+  	{
+diff -rc fvwm-2.0.43/fvwm/module.h fvwm.patched/fvwm/module.h
+*** fvwm-2.0.43/fvwm/module.h	Mon May 27 17:12:33 1996
+--- fvwm.patched/fvwm/module.h	Sat Sep 21 22:03:53 1996
+***************
+*** 39,44 ****
+--- 39,45 ----
+  #define M_ICON_FILE          (1&lt;&lt;20)
+  #define M_DEFAULTICON        (1&lt;&lt;21)
+  #define M_STRING             (1&lt;&lt;22)
++ #define M_MINI_ICON          (1&lt;&lt;23)
+  #define MAX_MESSAGES         23
+  #define MAX_MASK             ((1&lt;&lt;MAX_MESSAGES)-1)
+  
+diff -rc fvwm-2.0.43/fvwm/screen.h fvwm.patched/fvwm/screen.h
+*** fvwm-2.0.43/fvwm/screen.h	Thu Apr  4 17:18:23 1996
+--- fvwm.patched/fvwm/screen.h	Sat Sep 21 15:54:22 1996
+***************
+*** 90,95 ****
+--- 90,99 ----
+    PixmapButton,
+    FullPixmapButton,
+  #endif
++ #ifdef MINI_ICONS
++   MiniIconButton,
++   FullMiniIconButton,
++ #endif
+  #endif
+    SimpleButton
+  } ButtonFaceStyle;
+diff -rc fvwm-2.0.43/fvwm/style.c fvwm.patched/fvwm/style.c
+*** fvwm-2.0.43/fvwm/style.c	Wed May  8 14:09:06 1996
+--- fvwm.patched/fvwm/style.c	Sat Sep 21 16:17:55 1996
+***************
+*** 36,41 ****
+--- 36,44 ----
+    char *name, *line;
+    char *restofline,*tmp;
+    char *icon_name = NULL;
++ #ifdef MINI_ICONS
++   char *miniicon_name = NULL;
++ #endif
+    char *forecolor = NULL;
+    char *backcolor = NULL;
+    unsigned long off_buttons=0;
+***************
+*** 348,353 ****
+--- 351,378 ----
+            restofline +=10;
+            off_flags |= MWM_BUTTON_FLAG;
+          }
++ #ifdef MINI_ICONS
++ 	else if (mystrncasecmp(restofline,&quot;MINIICON&quot;, 8) == 0)
++ 	{
++ 	  restofline += 8;
++ 	  while (isspace (*restofline)) restofline++;
++ 	  tmp = restofline;
++ 	  len = 0;
++ 	  while((tmp != NULL)&amp;&amp;(*tmp != 0)&amp;&amp;(*tmp != ',')&amp;&amp;(*tmp != '\n'))
++           {
++             tmp++;
++             len++;
++           }
++           if(len &gt; 0)
++           {
++             miniicon_name = safemalloc(len+1);
++             strncpy(miniicon_name,restofline,len);
++             miniicon_name[len] = 0;
++             off_flags |= MINIICON_FLAG;
++           }
++           restofline = tmp;
++ 	}
++ #endif
+          else if(mystrncasecmp(restofline,&quot;MWMBORDER&quot;,9)==0)
+          {
+            restofline +=9;
+***************
+*** 568,573 ****
+--- 593,601 ----
+                on_flags      = nptr-&gt;on_flags;
+                off_flags     = nptr-&gt;off_flags;
+                icon_name     = nptr-&gt;value;
++ #ifdef MINI_ICONS
++               miniicon_name = nptr-&gt;mini_value;
++ #endif
+                desknumber    = nptr-&gt;Desk;
+                bw            = nptr-&gt;border_width;
+                nobw          = nptr-&gt;resize_width;
+***************
+*** 640,652 ****
+--- 668,688 ----
+      icon_name = NULL;
+    }
+  
++ #ifdef MINI_ICONS
++   AddToList(name,icon_name,miniicon_name,off_flags,on_flags,desknumber,bw,nobw,
++ 	    forecolor,backcolor,off_buttons,on_buttons,IconBox,BoxFillMethod);
++ #else
+    AddToList(name,icon_name,off_flags,on_flags,desknumber,bw,nobw,
+  	    forecolor,backcolor,off_buttons,on_buttons,IconBox,BoxFillMethod);
++ #endif
+  }
+  
+  
+  void AddToList(char *name,
+                 char *icon_name,
++ #ifdef MINI_ICONS
++ 	       char *miniicon_name,
++ #endif
+                 unsigned long off_flags, 
+  	       unsigned long on_flags,
+                 int desk,
+***************
+*** 685,690 ****
+--- 721,729 ----
+    nptr-&gt;on_flags = on_flags;
+    nptr-&gt;off_flags = off_flags;
+    nptr-&gt;value = icon_name;
++ #ifdef MINI_ICONS
++   nptr-&gt;mini_value = miniicon_name;
++ #endif
+    nptr-&gt;Desk = desk;
+    nptr-&gt;border_width = bw;
+    nptr-&gt;resize_width = nobw;
+diff -rc fvwm-2.0.43/fvwm/windows.c fvwm.patched/fvwm/windows.c
+*** fvwm-2.0.43/fvwm/windows.c	Thu Jun 27 06:39:25 1996
+--- fvwm.patched/fvwm/windows.c	Sat Sep 21 18:46:20 1996
+***************
+*** 131,136 ****
+--- 131,145 ----
+  	      strcat(t_hot,&quot;\t&quot;);
+  	      strcat(t_hot,tname);
+  	      AddToMenu(mr, t_hot, tlabel);
++ 
++ 	      /* Add the title pixmap */
++ 	      if (t-&gt;mini_icon) {
++ 		mr-&gt;last-&gt;lpicture = t-&gt;mini_icon;
++ 		t-&gt;mini_icon-&gt;count++; /* increase the cache count!!
++ 					  otherwise the pixmap will be
++ 					  eventually removed from the 
++ 					  cache by DestroyMenu */
++ 	      }
+  	      free(t_hot);
+  	      free(tname);
+  	    }
+diff -rc fvwm-2.0.43/modules/FvwmIconMan/CHANGES fvwm.patched/modules/FvwmIconMan/CHANGES
+*** fvwm-2.0.43/modules/FvwmIconMan/CHANGES	Sun Jun 23 13:21:16 1996
+--- fvwm.patched/modules/FvwmIconMan/CHANGES	Sun Sep 22 11:33:29 1996
+***************
+*** 1,3 ****
+--- 1,18 ----
++ 8/13/96         Version 0.7b:
++ 			fixed some bugs.
++ 			added better error messages.
++ 			grab pointer when in transient mode.
++ 
++ 8/11/96         Version 0.7:
++ 			removed showtitle option. 
++ 			added new option format, which allows for printf-like
++ 				formatting of the label for the window buttons.
++ 			added title and iconname options.
++ 			added ability to run transiently, like WinList.
++ 
++ 7/10/96		Version 0.6:
++ 			Bugfixes
++ 
+  6/23/96		Version 0.5:
+  			fvwm 2.0.43 changes: Focus, SendToModule
+  			redid actions, with builtin functions
+***************
+*** 8,14 ****
+  			FvwmIconMan put into fvwm 2.0 distribution.
+  			support for fvwm 1 discontinued
+  			one bug fix: wouldn't work without a numManagers
+! 					line in .fvwm2rc
+  
+  2/06/96		Version 0.3:
+  			added sort option
+--- 23,29 ----
+  			FvwmIconMan put into fvwm 2.0 distribution.
+  			support for fvwm 1 discontinued
+  			one bug fix: wouldn't work without a numManagers
+! 				line in .fvwm2rc
+  
+  2/06/96		Version 0.3:
+  			added sort option
+diff -rc fvwm-2.0.43/modules/FvwmIconMan/FvwmIconMan.c fvwm.patched/modules/FvwmIconMan/FvwmIconMan.c
+*** fvwm-2.0.43/modules/FvwmIconMan/FvwmIconMan.c	Sun Jun 23 13:21:15 1996
+--- fvwm.patched/modules/FvwmIconMan/FvwmIconMan.c	Sun Sep 22 11:00:02 1996
+***************
+*** 9,15 ****
+  
+  static int fd_width;
+  static FILE *console = NULL;
+! static char *VERSION = &quot;0.5&quot;;
+  
+  char *copy_string (char **target, char *src)
+  {
+--- 9,15 ----
+  
+  static int fd_width;
+  static FILE *console = NULL;
+! static char *VERSION = &quot;0.7&quot;;
+  
+  char *copy_string (char **target, char *src)
+  {
+***************
+*** 145,150 ****
+--- 145,151 ----
+  {
+    fd_set readset;
+    struct timeval tv;
++   int n;
+  
+    while(1) {
+      FD_ZERO( &amp;readset);
+***************
+*** 152,162 ****
+      FD_SET (x_fd,&amp;readset);
+      tv.tv_sec=0;
+      tv.tv_usec=0;
+!     if (!select(fd_width,&amp;readset,NULL,NULL,&amp;tv)) {
+        FD_ZERO (&amp;readset);
+        FD_SET (Fvwm_fd[1],&amp;readset);
+        FD_SET (x_fd, &amp;readset);
+!       select(fd_width,&amp;readset,NULL,NULL,NULL);
+      }
+  
+      if (FD_ISSET (x_fd, &amp;readset) || XPending (theDisplay)) {
+--- 153,168 ----
+      FD_SET (x_fd,&amp;readset);
+      tv.tv_sec=0;
+      tv.tv_usec=0;
+!     if (!(n = select(fd_width,&amp;readset,NULL,NULL,&amp;tv))) {
+!       XPending (theDisplay);
+        FD_ZERO (&amp;readset);
+        FD_SET (Fvwm_fd[1],&amp;readset);
+        FD_SET (x_fd, &amp;readset);
+!       n = select(fd_width,&amp;readset,NULL,NULL,NULL);
+!     }
+!     
+!     if (n &lt; 0) {
+!       ConsoleMessage (&quot;Internal error with select\n&quot;);
+      }
+  
+      if (FD_ISSET (x_fd, &amp;readset) || XPending (theDisplay)) {
+***************
+*** 185,190 ****
+--- 191,198 ----
+        VERSION);
+      ShutMeDown (1);
+    }
++   if (argc == 7 &amp;&amp; !strcasecmp (argv[6], &quot;Transient&quot;))
++     globals.transient = 1;
+  
+    Fvwm_fd[0] = atoi(argv[1]);
+    Fvwm_fd[1] = atoi(argv[2]);
+***************
+*** 202,211 ****
+                   M_ADD_WINDOW | M_DESTROY_WINDOW | M_ICON_NAME |
+                   M_DEICONIFY | M_ICONIFY | M_END_WINDOWLIST |
+                   M_NEW_DESK | M_NEW_PAGE | M_FOCUS_CHANGE | M_WINDOW_NAME |
+  		 M_STRING);
+  
+    SendInfo (Fvwm_fd, &quot;Send_WindowList&quot;, 0);
+-   
+    main_loop();
+  
+    ConsoleMessage (&quot;Shouldn't be here\n&quot;);
+--- 210,222 ----
+                   M_ADD_WINDOW | M_DESTROY_WINDOW | M_ICON_NAME |
+                   M_DEICONIFY | M_ICONIFY | M_END_WINDOWLIST |
+                   M_NEW_DESK | M_NEW_PAGE | M_FOCUS_CHANGE | M_WINDOW_NAME |
++ #ifdef MINI_ICONS
++ 		 M_MINI_ICON | M_STRING);
++ #else
+  		 M_STRING);
++ #endif
+  
+    SendInfo (Fvwm_fd, &quot;Send_WindowList&quot;, 0);
+    main_loop();
+  
+    ConsoleMessage (&quot;Shouldn't be here\n&quot;);
+diff -rc fvwm-2.0.43/modules/FvwmIconMan/FvwmIconMan.h fvwm.patched/modules/FvwmIconMan/FvwmIconMan.h
+*** fvwm-2.0.43/modules/FvwmIconMan/FvwmIconMan.h	Sun Jun 23 13:21:16 1996
+--- fvwm.patched/modules/FvwmIconMan/FvwmIconMan.h	Sun Sep 22 11:00:02 1996
+***************
+*** 18,23 ****
+--- 18,37 ----
+  #include &lt;X11/cursorfont.h&gt;
+  #include &lt;X11/keysym.h&gt;
+  
++ #ifdef MALLOC_H
++ #include &lt;malloc.h&gt;
++ #endif
++ 
++ #ifndef FVWM_VERSION
++ #define FVWM_VERSION 2
++ #endif
++ 
++ #ifdef COMPILE_STANDALONE
++ #include &quot;fvwmlib.h&quot;
++ #else
++ #include &quot;../../libs/fvwmlib.h&quot;
++ #endif
++ 
+  #if defined ___AIX || defined _AIX || defined __QNX__ || defined ___AIXV3 || defined AIXV3 || defined _SEQUENT_
+  #include &lt;sys/select.h&gt;
+  #endif
+***************
+*** 34,46 ****
+  #define MIN(a,b) ((a) &gt; (b) ? (b) : (a))
+  #endif
+  
+- #ifndef FVWM_VERSION
+- #define FVWM_VERSION 2
+- #endif
+  
+- #ifdef MALLOC_H
+- #include &lt;malloc.h&gt;
+- #endif
+  
+  #if 1
+  #define OUTPUT_FILE &quot;/dev/console&quot;
+--- 48,54 ----
+***************
+*** 109,114 ****
+--- 117,123 ----
+  } Contexts;
+  
+  typedef enum {
++   NO_NAME       = 0,
+    TITLE_NAME    = 1,
+    ICON_NAME     = 2,
+    RESOURCE_NAME = 4,
+***************
+*** 188,194 ****
+      reliefContext[NUM_CONTEXTS];
+    GC shadowContext[NUM_CONTEXTS], flatContext[NUM_CONTEXTS];
+    XFontStruct *ButtonFont;
+!   int fontheight, boxheight;
+    int win_width, win_height;
+    int win_x, win_y, win_title, win_border;
+    WinList icon_list;
+--- 197,206 ----
+      reliefContext[NUM_CONTEXTS];
+    GC shadowContext[NUM_CONTEXTS], flatContext[NUM_CONTEXTS];
+    XFontStruct *ButtonFont;
+! #ifdef MINI_ICONS
+!   int draw_icons;
+! #endif
+!   int fontheight, boxheight, fontwidth;
+    int win_width, win_height;
+    int win_x, win_y, win_title, win_border;
+    WinList icon_list;
+***************
+*** 199,206 ****
+    char *backColorName[NUM_CONTEXTS];
+    char *foreColorName[NUM_CONTEXTS];
+    char *geometry;
+!   Uchar use_titlename;
+!   Schar current_box, focus_box;
+    Uchar cursor_in_window;
+    Uchar window_up, window_mapped;
+    Schar grow_direction;
+--- 211,220 ----
+    char *backColorName[NUM_CONTEXTS];
+    char *foreColorName[NUM_CONTEXTS];
+    char *geometry;
+!   char *titlename, *iconname;
+!   char *formatstring;
+!   NameType format_depend;
+!   Schar select_box, focus_box;
+    Uchar cursor_in_window;
+    Uchar window_up, window_mapped;
+    Schar grow_direction;
+***************
+*** 217,223 ****
+    char *classname;
+    char *titlename;
+    char *iconname;
+!   char **name;      /* either titlename or iconname */
+    struct win_data *win_prev, *win_next, *icon_prev, *icon_next;
+    WinManager *manager;
+    Uchar iconified;
+--- 231,240 ----
+    char *classname;
+    char *titlename;
+    char *iconname;
+! #ifdef MINI_ICONS
+!   Picture pic;
+! #endif
+!   char *display_string; /* what gets shown in the manager window */
+    struct win_data *win_prev, *win_next, *icon_prev, *icon_next;
+    WinManager *manager;
+    Uchar iconified;
+***************
+*** 236,242 ****
+--- 253,261 ----
+    Ulong screenx, screeny; /* screen dimensions */
+    WinManager *managers;
+    int num_managers;
++   int transient;
+    WinData *focus_win;
++   WinData *select_win;
+  } GlobalData;
+  
+  typedef struct {
+***************
+*** 273,278 ****
+--- 292,298 ----
+  extern WinData *new_windata (void);
+  extern void free_windata (WinData *p);
+  extern int check_win_complete (WinData *p);
++ extern void set_displaystring (WinData *win);
+  extern int set_win_manager (WinData *win, Uchar mask);
+  extern void init_winlists (void);
+  extern void insert_win_iconlist (WinData *win);
+***************
+*** 298,312 ****
+  extern void draw_window (WinManager *man);
+  extern WinManager *find_windows_manager (Window win);
+  extern void map_new_manger (WinManager *man);
+! extern void move_highlight (WinManager *man, int to);
+  extern int move_win_iconlist (WinData *win);
+  
+- extern char *safemalloc(int length);
+- extern void SendText(int *fd,char *message,unsigned long window);
+- extern void SetMessageMask(int *fd, unsigned long mask);
+- extern void SendInfo(int *fd,char *message,unsigned long window);
+- extern int ReadFvwmPacket(int fd, unsigned long *header, unsigned long **body);
+- extern int matchWildcards(char *pattern, char *string);
+- #if FVWM_VERSION == 2
+- extern void *GetConfigLine(int *fd, char **tline);
+- #endif
+--- 318,323 ----
+  extern void draw_window (WinManager *man);
+  extern WinManager *find_windows_manager (Window win);
+  extern void map_new_manger (WinManager *man);
+! extern void move_highlight (WinManager *man, int box);
+  extern int move_win_iconlist (WinData *win);
+  
+diff -rc fvwm-2.0.43/modules/FvwmIconMan/FvwmIconMan.man fvwm.patched/modules/FvwmIconMan/FvwmIconMan.man
+*** fvwm-2.0.43/modules/FvwmIconMan/FvwmIconMan.man	Sun Jun 23 13:21:16 1996
+--- fvwm.patched/modules/FvwmIconMan/FvwmIconMan.man	Sun Sep 22 11:33:29 1996
+***************
+*** 1,6 ****
+  .\&quot; t
+! .\&quot; _at_(#)FvwmIconMan.1	6/23/96
+! .TH FvwmIconMan 0.5 &quot;Jun 23 1996&quot;
+  .UC
+  .SH NAME
+  FvwmIconMan \- an Fvwm Icon Manager
+--- 1,6 ----
+  .\&quot; t
+! .\&quot; _at_(#)FvwmIconMan.1	8/11/96
+! .TH FvwmIconMan 0.7 &quot;Aug 11 1996&quot;
+  .UC
+  .SH NAME
+  FvwmIconMan \- an Fvwm Icon Manager
+***************
+*** 43,48 ****
+--- 43,91 ----
+  invoke it later. FvwmIconMan should be placed in the ModulePath (defined in
+  the .fvwmrc file) in order for fvwm to find it.
+  
++ If you wish to run FvwmIconMan in a transient mode, such as with the built
++ in window list, then pass Transient as an argument. The invocation 
++ &quot;Module FvwmIconMan Transient&quot; will do nicely. In this mode, FvwmIconMan
++ will pop up one manager window directly under the cursor. When the mouse
++ button is released, it will execute the appropriate action, and then exit.
++ Things are somewhat complicated by the fact that you can specify that 
++ FvwmIconMan create multiple manager windows, behavior which is unsuitable
++ when running transiently. So, when running transiently, FvwmIconMan will
++ only create one manager window. Use the manager id 'transient' to specify
++ options for this manager window.
++ 
++ .SH CONFIGURATION OPTIONS REFERENCE CHART
++ FvwmIconMan has acquired quite a few options. I assume others share my
++ dislike of paging though a long manpage, so here is a terse reference
++ chart describing the available options. They are described in more detail
++ in the next section.
++ 
++ .ft C                   \&quot; Courier
++ .nf
++ Name            Description                Default
++ .ft P
++ 
++ nummanagers     number of managers         1
++ resolution      global, desk, or page      global  
++ font                                       8x13
++ format          describes button label     &quot;%c: %i&quot;
++ geometry                                   100x100
++ title           manager title              FvwmIconMan
++ iconname        manger icon name           FvwmIconMan
++ foreground      default text color         white
++ background      default background         gray
++ plainbutton     style for normal buttons   up,white,gray
++ selectbutton    style for selected buttons flat,white,gray 
++ focusbutton     style for focused buttons  up,black,white
++ focusandselectbutton                       flat,black,white
++ action          binds command to event     Mouse 0 N sendcommand select select Iconify
++ show            list of windows to show
++ dontshow        list of windows to ignore  
++ followfocus     show which win has focus   false
++ sort            keep managers sorted       true
++ 
++ .fi
++ 
+  .SH CONFIGURATION OPTIONS
+  With the exception of the nummanagers option, all of the options may be
+  defined on a per-manager basis. So, for example, the user may have his emacs
+***************
+*** 54,67 ****
+  for all managers.
+  .IP &quot;*FvwmIconMan*managerid*optionname optionvalue&quot;
+  To specify that the option \fIoptionname\fP takes the value \fIoptionvalue\fP
+! for manager \fImanagerid\fP.
+  
+  The following options may be specified:
+  
+  .IP &quot;*FvwmIconMan*nummanagers \fInum\fP&quot;
+  \fInum\fP is a positive integer specifying the total number of icon managers.
+  Since FvwmIconMan would like to know how many managers there are before
+! handling any manager specific options, this should come first. Default is 1.
+  
+  .IP &quot;*FvwmIconMan*[id*]resolution \fIresolution\fP&quot;
+  Specifies when the manager will display an entry for a certain
+--- 97,114 ----
+  for all managers.
+  .IP &quot;*FvwmIconMan*managerid*optionname optionvalue&quot;
+  To specify that the option \fIoptionname\fP takes the value \fIoptionvalue\fP
+! for manager \fImanagerid\fP. \fIMangerid\fP may either be a positive integer,
+! or the string &quot;transient&quot;. An integral id refers to managers which FvwmIconMan
+! creates when running normally, and an id of &quot;transient&quot; refers to the single
+! manager which FvwmIconMan creates when running transiently.
+  
+  The following options may be specified:
+  
+  .IP &quot;*FvwmIconMan*nummanagers \fInum\fP&quot;
+  \fInum\fP is a positive integer specifying the total number of icon managers.
+  Since FvwmIconMan would like to know how many managers there are before
+! handling any manager specific options, this should come first. The default
+! is 1.
+  
+  .IP &quot;*FvwmIconMan*[id*]resolution \fIresolution\fP&quot;
+  Specifies when the manager will display an entry for a certain
+***************
+*** 69,88 ****
+  or page. If global, then all windows of the appropriate type (see the show
+  and dontshow options below) will be shown. If desk, then only those windows 
+  on the current desk will be down. And if page, then only those windows on the 
+! current page will be shown. Default is global.
+! 
+! .IP &quot;*FvwmIconMan*[id*]showtitle \fIboolean\fP&quot;
+! If \fItrue\fP, then print the window title names in the
+! manager, if \fIfalse\fP, then print the icon names. Default is false.
+  
+  .IP &quot;*FvwmIconMan*[id*]font \fIfont\fP&quot;
+! Specifies the font to be used for labeling the buttons.
+  
+  .IP &quot;*FvwmIconMan*[id*]geometry \fIgeometry\fP&quot;
+! Specified the geometry of the manager. If the geometry is specified with a 
+  negative y coordinate, then the window manager will grow upwards. Otherwise,
+  it will shrink downwards.
+  
+  .IP &quot;*FvwmIconMan*[id*]foreground \fIforeground\fP&quot;
+  Specifies the default foreground color.
+  
+--- 116,148 ----
+  or page. If global, then all windows of the appropriate type (see the show
+  and dontshow options below) will be shown. If desk, then only those windows 
+  on the current desk will be down. And if page, then only those windows on the 
+! current page will be shown. The default is global.
+  
+  .IP &quot;*FvwmIconMan*[id*]font \fIfont\fP&quot;
+! Specifies the font to be used for labeling the buttons. The default is 8x13.
+! 
+! .IP &quot;*FvwmIconMan*[id*]format \fIformatstring\fP&quot;
+! A printf like format string which describes the string to be printed in the
+! manager window for each managed window. Possible flags are: %t, %i, %c, and
+! %r for the window's title, icon, class, or resource name, respectively. 
+! The default is &quot;%c: %i&quot;. \fBWarning\fP: m4 reserves the word \fIformat\fP, 
+! so if you use m4, take appropriate action.
+  
+  .IP &quot;*FvwmIconMan*[id*]geometry \fIgeometry\fP&quot;
+! Specifies the geometry of the manager. If the geometry is specified with a 
+  negative y coordinate, then the window manager will grow upwards. Otherwise,
+  it will shrink downwards.
+  
++ .IP &quot;*FvwmIconMan*[id*]title \fItitlestring\fP&quot;
++ Specifies the window title string for that manager window. \fITitlestring\fP
++ may either be a single word, or a string enclosed in quotes. The default is
++ &quot;FvwmIconMan&quot;.
++ 
++ .IP &quot;*FvwmIconMan*[id*]iconname \fIiconstring\fP&quot;
++ Specifies the window icon name for that manager window. \fIIconstring\fP
++ may either be a single word, or a string enclosed in quotes. The default is
++ &quot;FvwmIconMan&quot;.
++ 
+  .IP &quot;*FvwmIconMan*[id*]foreground \fIforeground\fP&quot;
+  Specifies the default foreground color.
+  
+***************
+*** 147,153 ****
+  .SH ACTIONS
+  Actions are commands which may be bound to an event of the type: a keypress,
+  a mouse click, or the mouse entering a window manager button - denoted by
+! the action types \fIKey\fP, \fIMouse\fP, and \fISelect\fP.
+  
+  The syntax for actions are:
+  
+--- 207,222 ----
+  .SH ACTIONS
+  Actions are commands which may be bound to an event of the type: a keypress,
+  a mouse click, or the mouse entering a window manager button - denoted by
+! the action types \fIKey\fP, \fIMouse\fP, and \fISelect\fP. 
+! 
+! Normally, actions bound to a mouse click are executed when the button is
+! pressed. In transient mode, the action is executed when the button is
+! released, since it is assumed that FvwmIconMan was bound to some mouse
+! event. A tip/warning: FvwmIconMan still keeps track of the mouse button
+! and any modifier keys in this case, so if you bind FvwmIconMan to say,
+! meta-button3, then it would be wise to ensure that the action you want
+! to execute will be executed when the meta-button3 event occurs (which would
+! be the button release, assuming you kept your finger on the meta key).
+  
+  The syntax for actions are:
+  
+***************
+*** 169,181 ****
+  \fIManager\fP, \fIWindow\fP, and \fIButton\fP types all look exactly the same
+  in the .fvwmrc file, but are interpreted either as specifing a manager, a
+  window, or a window manager button corresponding to a window. They can either
+! be an integer (which is intepreted module N where N is the number of managers
+! or buttons - so 0 is the first and -1 is the last), or a simple additive 
+! expression of the form &quot;\fIbutton\fP [+-] \fIinteger\fP&quot; where \fIbutton\fP
+! can be \fIselect\fP or \fIfocus\fP to specify the manager or button which 
+! is currently selected or focused. If \fIselect\fP or \fIfocus\fP is used in 
+! a command, then whenever it is executed it will do nothing if there is in
+! fact no selected (or focused) window. FvwmIconMan uses the same rules to 
+  tokenize as fvwm, so you must seperate all tokens with whitespace.
+  
+  The following functions are currently defined:
+--- 238,250 ----
+  \fIManager\fP, \fIWindow\fP, and \fIButton\fP types all look exactly the same
+  in the .fvwmrc file, but are interpreted either as specifing a manager, a
+  window, or a window manager button corresponding to a window. They can either
+! be an integer (which is intepreted module N where N is the number of nonempty
+! managers or buttons - so 0 is the first and -1 is the last), or a simple
+! additive expression of the form &quot;\fIbutton\fP [+-] \fIinteger\fP&quot; where
+! \fIbutton\fP can be \fIselect\fP or \fIfocus\fP to specify the manager or
+! button which is currently selected or focused. If \fIselect\fP or \fIfocus\fP
+! is used in a command, then whenever it is executed it will do nothing if there
+! is in fact no selected (or focused) window. FvwmIconMan uses the same rules to
+  tokenize as fvwm, so you must seperate all tokens with whitespace.
+  
+  The following functions are currently defined:
+***************
+*** 280,288 ****
+  *FvwmIconMan*action      Mouse  3 N sendcommand select select &quot;Module FvwmIdent FvwmIdent&quot;
+  *FvwmIconMan*action      Select     sendcommand select select Focus
+  *FvwmIconMan*action      Key    q N quit
+- *FvwmIconMan*showtitle   false
+  *FvwmIconMan*followfocus true
+  *FvwmIconMan*sort        true
+  *FvwmIconMan*plainbutton          up white steelblue
+  *FvwmIconMan*selectbutton         down white steelblue
+  *FvwmIconMan*focusbutton          up white brown
+--- 349,357 ----
+  *FvwmIconMan*action      Mouse  3 N sendcommand select select &quot;Module FvwmIdent FvwmIdent&quot;
+  *FvwmIconMan*action      Select     sendcommand select select Focus
+  *FvwmIconMan*action      Key    q N quit
+  *FvwmIconMan*followfocus true
+  *FvwmIconMan*sort        true
++ *FvwmIconMan*format      &quot;%i&quot;
+  *FvwmIconMan*plainbutton          up white steelblue
+  *FvwmIconMan*selectbutton         down white steelblue
+  *FvwmIconMan*focusbutton          up white brown
+***************
+*** 290,298 ****
+--- 359,376 ----
+  
+  *FvwmIconMan*1*geometry   194x100-204-90
+  *FvwmIconMan*1*show       resource=emacs resource=gemacs
++ *FvwmIconMan*1*title      &quot;Emacs windows&quot;
++ *FvwmIconMan*1*iconname   &quot;FvwmIconMan: Emacs&quot;
++ 
+  
+  *FvwmIconMan*2*geometry   194x100-0-90
+  *FvwmIconMan*2*dontshow   icon=Untitled
++ *FvwmIconMan*2*title      &quot;All windows&quot;
++ *FvwmIconMan*2*iconname   &quot;FvwmIconMan: all&quot;
++ 
++ *FvwmIconMan*transient*geometry 194x100
++ *FvwmIconMan*transient*dontshow icon=Untitled
++ *FvwmIconMan*transient*action   Mouse 0 A sendcommand select select Iconify
+  
+  .sp
+  .fi
+diff -rc fvwm-2.0.43/modules/FvwmIconMan/README fvwm.patched/modules/FvwmIconMan/README
+*** fvwm-2.0.43/modules/FvwmIconMan/README	Sun Jun 23 13:21:16 1996
+--- fvwm.patched/modules/FvwmIconMan/README	Sun Sep 22 11:33:29 1996
+***************
+*** 1,25 ****
+! This is version 0.5 of FvwmIconMan, an icon manager modeled roughly on 
+! TWM's icon manager.
+  
+! It has been tested under linux, solaris, OSF/1 3.0, and hp-ux 9.01. The latest
+! changes I made haven't been tested under sunos4, as I no longer have access to 
+! a sunos4 machine, but I believe they should work.
+  
+! The included man page gives some examples of how to configure FvwmIconMan, and
+! a description of what it is, so I won't repeat it here.
+! 
+! If something needs to be tweaked to make this more portable, then feel free
+! to inform me, and I would greatly appreciate any suggestions towards
+! improvement.
+  
+  I realize that the syntax for setting options is different from that used by
+  other modules.
+  
+! I have discontinued support for fvwm 1. If you need to compile it for
+! that version of fvwm, send me mail, and I'll tell you how. The version of
+  FvwmIconMan included in the fvwm 2.0 distribution WILL NOT run under fvwm 1.
+  
+! The latest up to date version can be found in <a href="ftp://mahler.cs.arizona.edu/pub">ftp://mahler.cs.arizona.edu/pub</a>,
+! if it's not in the fvwm distribution.
+  
+  bradym_at_cs.arizona.edu 
+--- 1,24 ----
+! Aug 13, 1996
+! ------------
+  
+! This is my second try for version 0.7 of FvwmIconMan, an icon manager modeled
+! roughly on TWM's icon manager. The file CHANGES lists what's new with this
+! version, and the included man page gives some examples of how to configure
+! FvwmIconMan, and a description of what it is, so I won't repeat it here.
+  
+! If something needs to be tweaked to make this more portable, then feel free to
+! inform me, and I would greatly appreciate any suggestions towards improvement.
+  
+  I realize that the syntax for setting options is different from that used by
+  other modules.
+  
+! I have discontinued support for fvwm 1. If you need to compile it for that
+! version of fvwm, send me mail, and I'll tell you how. The version of
+  FvwmIconMan included in the fvwm 2.0 distribution WILL NOT run under fvwm 1.
+  
+! The latest up to date version will be in the latest fvwm distribution, with
+! the exception of beta and emergency bugfix releases. You can find those
+! in <a href="ftp://mahler.cs.arizona.edu/pub/FvwmIconMan">ftp://mahler.cs.arizona.edu/pub/FvwmIconMan</a>, but note that mahler may
+! be retired soon. 
+  
+  bradym_at_cs.arizona.edu 
+diff -rc fvwm-2.0.43/modules/FvwmIconMan/functions.c fvwm.patched/modules/FvwmIconMan/functions.c
+*** fvwm-2.0.43/modules/FvwmIconMan/functions.c	Sun Jun 23 13:21:16 1996
+--- fvwm.patched/modules/FvwmIconMan/functions.c	Sun Sep 22 11:00:02 1996
+***************
+*** 3,32 ****
+  
+  extern WinData *find_win (WinManager *man, int box);
+  
+- 
+  static int find_selected_manager (void)
+  {
+!   int i, index = -1;
+! 
+!   for (i = 0; i &lt; globals.num_managers; i++) {
+!     if (globals.managers[i].current_box &gt;= 0) {
+!       index = i;
+!       break;
+!     }
+    }
+  
+!   if (i == globals.num_managers) {
+!     ConsoleDebug (&quot;No selected manager\n&quot;);
+    }
+    
+!   return index;
+  }
+  
+  /* Returns NULL if none found */
+  static WinManager *get_manager (BuiltinArg *arg)
+  {
+    ButtonType base;
+!   int offset, index;
+    
+    if (arg-&gt;type != ManagerArg) {
+      ConsoleMessage (&quot;Internal error in get_manager: 1\n&quot;);
+--- 3,39 ----
+  
+  extern WinData *find_win (WinManager *man, int box);
+  
+  static int find_selected_manager (void)
+  {
+!   WinManager *man;
+!   
+!   if (globals.select_win) {
+!     man = globals.select_win-&gt;manager;
+!     return man-&gt;index;
+    }
++   
++   ConsoleDebug (&quot;No selected manager\n&quot;);
++   return -1;
++ }
+  
+! static int find_focus_manager (void)
+! {
+!   WinManager *man;
+!   
+!   if (globals.focus_win) {
+!     man = globals.focus_win-&gt;manager;
+!     return man-&gt;index;
+    }
+    
+!   ConsoleDebug (&quot;No focus manager\n&quot;);
+!   return -1;
+  }
+  
+  /* Returns NULL if none found */
+  static WinManager *get_manager (BuiltinArg *arg)
+  {
+    ButtonType base;
+!   int offset, index, i;
+    
+    if (arg-&gt;type != ManagerArg) {
+      ConsoleMessage (&quot;Internal error in get_manager: 1\n&quot;);
+***************
+*** 46,62 ****
+      break;
+  
+    case FocusButton:
+!     index = globals.focus_win-&gt;manager-&gt;index;
+      break;
+  
+    case AbsoluteButton:
+      index = 0;
+      break;
+    }
+  
+!   index = (index + offset) % globals.num_managers;
+!   if (index &lt; 0) 
+!     index += globals.num_managers;
+  
+    return &amp;globals.managers[index];
+  }
+--- 53,99 ----
+      break;
+  
+    case FocusButton:
+!     index = find_focus_manager();;
+      break;
+  
+    case AbsoluteButton:
+      index = 0;
+      break;
++ 
++   default:
++     ConsoleMessage (&quot;Internal error in get_manager\n&quot;);
++     break;
+    }
+  
+!   if (index == -1 || globals.managers[index].icon_list.n == 0) {
+!     ConsoleDebug (&quot;get_manager: manager not found\n&quot;);
+!     return NULL;
+!   }
+! 
+!   /* Now we find the manager modulo the VISIBLE managers */
+!   /* If someone tries this with an obscenely huge offset, tough luck */
+!   /* We know that if we've made it this far, there must be a visible
+!      manager */
+! 
+!   i = 0;
+!   if (offset &gt; 0) {
+!     while (i != offset) {
+!       index++;
+!       if (index == globals.num_managers)
+! 	index = 0;
+!       if (globals.managers[index].icon_list.n &gt; 0)
+! 	i++;
+!     }
+!   }
+!   else if (offset &lt; 0) {
+!     while (i != offset) {
+!       index--;
+!       if (index == -1) 
+! 	index = globals.num_managers - 1;
+!       if (globals.managers[index].icon_list.n &gt; 0) 
+! 	i--;
+!     }
+!   }
+  
+    return &amp;globals.managers[index];
+  }
+***************
+*** 81,88 ****
+      return -1;
+  
+    case SelectButton:
+!     if (man-&gt;current_box &gt;= 0) {
+!       index = man-&gt;current_box;
+      }
+      else {
+        ConsoleDebug (&quot;No selected window\n&quot;);
+--- 118,125 ----
+      return -1;
+  
+    case SelectButton:
+!     if (man-&gt;select_box &gt;= 0) {
+!       index = man-&gt;select_box;
+      }
+      else {
+        ConsoleDebug (&quot;No selected window\n&quot;);
+***************
+*** 105,111 ****
+      break;
+    }
+  
+!   index = (index + offset) % man-&gt;icon_list.n;
+    if (index &lt; 0)
+      index += man-&gt;icon_list.n;
+  
+--- 142,154 ----
+      break;
+    }
+  
+!   if (man-&gt;icon_list.n == 0) {
+!     ConsoleMessage (&quot;Internal error in get_button\n&quot;);
+!     index = 0;
+!   }
+!   else {
+!     index = (index + offset) % man-&gt;icon_list.n;
+!   }
+    if (index &lt; 0)
+      index += man-&gt;icon_list.n;
+  
+***************
+*** 143,150 ****
+  
+  int builtin_selectbutton (int numargs, BuiltinArg *args)
+  {
+!   int button, index;
+!   WinManager *oldman, *man;
+  
+    ConsoleDebug (&quot;selectbutton: &quot;);
+    print_args (numargs, args);
+--- 186,193 ----
+  
+  int builtin_selectbutton (int numargs, BuiltinArg *args)
+  {
+!   int button;
+!   WinManager *man;
+  
+    ConsoleDebug (&quot;selectbutton: &quot;);
+    print_args (numargs, args);
+***************
+*** 157,170 ****
+    if (button == -1)
+      return 0;
+  
+-   index = find_selected_manager();
+-   if (index &gt;= 0) {
+-     oldman = &amp;globals.managers[index];
+-     if (oldman != man)
+-       move_highlight (oldman, -1);
+-   }
+    move_highlight (man, button);
+!   
+    return 1;
+  }
+  
+--- 200,207 ----
+    if (button == -1)
+      return 0;
+  
+    move_highlight (man, button);
+! 
+    return 1;
+  }
+  
+diff -rc fvwm-2.0.43/modules/FvwmIconMan/fvwm.c fvwm.patched/modules/FvwmIconMan/fvwm.c
+*** fvwm-2.0.43/modules/FvwmIconMan/fvwm.c	Sun Jun 23 13:21:15 1996
+--- fvwm.patched/modules/FvwmIconMan/fvwm.c	Sun Sep 22 11:00:03 1996
+***************
+*** 62,67 ****
+--- 62,73 ----
+    } name;
+  } m_name_data;
+  
++ #ifdef MINI_ICONS
++ typedef struct {
++   Ulong app_id, picture, mask, width, height, depth;
++ } m_mini_icon_data;
++ #endif
++ 
+  typedef struct {
+    Ulong start, type, len, time /* in fvwm 2 only */;
+  } FvwmPacketHeader;
+***************
+*** 74,79 ****
+--- 80,88 ----
+    m_minimal_data       minimal_data;
+    m_icon_data          icon_data;
+    m_name_data          name_data;
++ #ifdef MINI_ICONS
++   m_mini_icon_data     mini_icon_data;
++ #endif
+  } FvwmPacketBody;
+  
+  int window_up = 0;
+***************
+*** 368,373 ****
+--- 377,383 ----
+    copy_string (&amp;win-&gt;resname, (char *)name);
+    oldman = win-&gt;manager;
+    new = set_win_manager (win, ALL_NAME);
++   set_displaystring (win);
+    if (new) {
+      if (oldman &amp;&amp; win-&gt;in_iconlist) {
+        delete_win_iconlist  (win, oldman);
+***************
+*** 398,403 ****
+--- 408,414 ----
+    copy_string (&amp;win-&gt;classname, (char *)name);
+    oldman = win-&gt;manager;
+    new = set_win_manager (win, ALL_NAME);
++   set_displaystring (win);
+    if (new) {
+      if (oldman &amp;&amp; win-&gt;in_iconlist) {
+        delete_win_iconlist  (win, oldman);
+***************
+*** 433,440 ****
+--- 444,453 ----
+    }
+  
+    copy_string (&amp;win-&gt;iconname, (char *)name);
++   ConsoleDebug (&quot;new icon name: %s\n&quot;, win-&gt;iconname);
+    oldman = win-&gt;manager;
+    new = set_win_manager (win, ALL_NAME);
++   set_displaystring (win);
+    check_win_complete (win);
+    if (new) {
+      if (oldman &amp;&amp; win-&gt;in_iconlist) {
+***************
+*** 448,454 ****
+    }
+    else {
+      if (win-&gt;in_iconlist &amp;&amp; 
+! 	!win-&gt;manager-&gt;use_titlename &amp;&amp; win-&gt;manager-&gt;sort) {
+        moved = move_win_iconlist (win);
+      }
+      if (moved) 
+--- 461,467 ----
+    }
+    else {
+      if (win-&gt;in_iconlist &amp;&amp; 
+! 	(win-&gt;manager-&gt;format_depend &amp; ICON_NAME) &amp;&amp; win-&gt;manager-&gt;sort) {
+        moved = move_win_iconlist (win);
+      }
+      if (moved) 
+***************
+*** 485,490 ****
+--- 498,504 ----
+  
+    oldman = win-&gt;manager;
+    new = set_win_manager (win, ALL_NAME);
++   set_displaystring (win);
+    check_win_complete (win);
+    if (new) {
+      if (oldman &amp;&amp; win-&gt;in_iconlist) {
+***************
+*** 498,504 ****
+    }
+    else {
+      if (win-&gt;in_iconlist &amp;&amp; 
+! 	win-&gt;manager-&gt;use_titlename &amp;&amp; win-&gt;manager-&gt;sort) {
+        moved = move_win_iconlist (win);
+      }
+      if (moved) 
+--- 512,518 ----
+    }
+    else {
+      if (win-&gt;in_iconlist &amp;&amp; 
+! 	(win-&gt;manager-&gt;format_depend &amp; TITLE_NAME) &amp;&amp; win-&gt;manager-&gt;sort) {
+        moved = move_win_iconlist (win);
+      }
+      if (moved) 
+***************
+*** 558,563 ****
+--- 572,606 ----
+    free_windata (win);
+  }
+  
++ #ifdef MINI_ICONS
++ static void mini_icon (FvwmPacketBody *body)
++ {
++   Ulong app_id = body-&gt;mini_icon_data.app_id;
++   WinData *win;
++   int box;
++   
++   win = id_to_win (app_id);
++   win-&gt;pic.picture = body-&gt;mini_icon_data.picture;
++   win-&gt;pic.mask = body-&gt;mini_icon_data.mask;
++   win-&gt;pic.width = body-&gt;mini_icon_data.width;
++   win-&gt;pic.height = body-&gt;mini_icon_data.height;
++   win-&gt;pic.depth = body-&gt;mini_icon_data.depth;
++ 
++   ConsoleDebug (&quot;mini_icon: 0x%x 0x%x %dx%dx%d\n&quot;, win-&gt;pic.picture,
++ 		win-&gt;pic.mask, win-&gt;pic.width, win-&gt;pic.height,
++ 		win-&gt;pic.depth);
++ 
++   if (win-&gt;complete &amp;&amp; win-&gt;in_iconlist &amp;&amp; win-&gt;manager-&gt;draw_icons) {
++     box = win_to_box (win-&gt;manager, win);
++     if (box &gt;= 0)
++       draw_button (win-&gt;manager, win, box);
++     else
++       ConsoleMessage (&quot;Internal error in mini_icon\n&quot;); 
++   }
++ 
++ }
++ #endif
++ 
+  static void iconify (FvwmPacketBody *body, int dir)
+  {
+    Ulong app_id = body-&gt;minimal_data.app_id;
+***************
+*** 664,669 ****
+--- 707,719 ----
+      ConsoleDebug (&quot;DEBUG::M_DESTROY_WINDOW\n&quot;);
+      destroy_window (body);
+      break;
++ 
++ #ifdef MINI_ICONS
++   case M_MINI_ICON:
++     ConsoleDebug (&quot;DEBUG::M_MINI_ICON\n&quot;);
++     mini_icon (body);
++     break;
++ #endif
+  
+    case M_WINDOW_NAME:
+      ConsoleDebug (&quot;DEBUG::M_WINDOW_NAME\n&quot;);
+diff -rc fvwm-2.0.43/modules/FvwmIconMan/globals.c fvwm.patched/modules/FvwmIconMan/globals.c
+*** fvwm-2.0.43/modules/FvwmIconMan/globals.c	Sun Jun 23 13:21:15 1996
+--- fvwm.patched/modules/FvwmIconMan/globals.c	Sun Sep 22 11:00:03 1996
+***************
+*** 16,26 ****
+--- 16,38 ----
+  char *Module = &quot;*FvwmIconMan&quot;;
+  int ModuleLen = 12;
+  
++ /* This is solely so that we can turn a string constant into something
++    which can be freed */
++ 
++ static char *alloc_string (char *string)
++ {
++   int len = strlen (string);
++   char *ret = (char *)safemalloc ((len + 1) * sizeof (char));
++   strcpy (ret, string);
++   return ret;
++ }
++ 
+  static void init_win_manager (int id)
+  {
+    int i;
+  
+    globals.managers[id].index = id;
++   globals.managers[id].draw_icons = 1;
+    globals.managers[id].res = SHOW_PAGE;
+    globals.managers[id].icon_list.n = 0;
+    globals.managers[id].icon_list.head = NULL;  
+***************
+*** 28,33 ****
+--- 40,50 ----
+    globals.managers[id].window_up = 0;
+    globals.managers[id].window_mapped = 0;
+    globals.managers[id].fontname = NULL;
++   globals.managers[id].titlename = alloc_string (&quot;FvwmIconMan&quot;);
++   globals.managers[id].iconname = alloc_string (&quot;FvwmIconMan&quot;);
++   globals.managers[id].formatstring = alloc_string (&quot;%c: %i&quot;);
++   globals.managers[id].format_depend = CLASS_NAME | ICON_NAME;
++ 
+    for ( i = 0; i &lt; NUM_CONTEXTS; i++ ) {
+      globals.managers[id].backColorName[i] = NULL;
+      globals.managers[id].foreColorName[i] = NULL;
+***************
+*** 39,45 ****
+    globals.managers[id].dontshow.list = NULL;
+    globals.managers[id].dontshow.mask = ALL_NAME;
+    globals.managers[id].grow_direction = ForgetGravity;
+-   globals.managers[id].use_titlename = 1;
+    globals.managers[id].followFocus = 0;
+    globals.managers[id].sort = 1;
+    globals.managers[id].focus_box = -1;
+--- 56,61 ----
+***************
+*** 110,113 ****
+--- 126,131 ----
+    globals.num_managers = 1;
+    globals.managers = NULL;
+    globals.focus_win = NULL;
++   globals.select_win = NULL;
++   globals.transient = 0;
+  }
+diff -rc fvwm-2.0.43/modules/FvwmIconMan/readconfig.c fvwm.patched/modules/FvwmIconMan/readconfig.c
+*** fvwm-2.0.43/modules/FvwmIconMan/readconfig.c	Sun Jun 23 13:21:16 1996
+--- fvwm.patched/modules/FvwmIconMan/readconfig.c	Sun Sep 22 11:00:03 1996
+***************
+*** 73,78 ****
+--- 73,101 ----
+  static FILE *config_fp = NULL;
+  #endif
+  
++ 
++ /* This is only used for printing out the .fvwmrc line if an error
++    occured */
++ 
++ #define PRINT_LINE_LENGTH 80
++ static char current_line[PRINT_LINE_LENGTH];
++ 
++ static void save_current_line (char *s)
++ {
++   char *p = current_line;
++ 
++   while (*s &amp;&amp; p &lt; current_line + PRINT_LINE_LENGTH - 1) {
++     if (*s == '\n') {
++       *p = '\0';
++       return;
++     }
++     else {
++       *p++ = *s++;
++     }
++   }
++   *p = '\0';
++ }
++ 
+  void print_args (int numargs, BuiltinArg *args)
+  {
+  #ifdef PRINT_DEBUG
+***************
+*** 351,357 ****
+  	}
+        if(!matched)
+  	{
+! 	  ConsoleMessage (&quot;bad context in line %s\n&quot;,tline);
+  	}
+        i++;
+      }
+--- 374,381 ----
+  	}
+        if(!matched)
+  	{
+! 	  ConsoleMessage (&quot;Bad line: %s\n&quot;, current_line);
+! 	  ConsoleMessage (&quot;Bad context: %s\n&quot;, string);
+  	}
+        i++;
+      }
+***************
+*** 388,397 ****
+      term-&gt;buttontype = NoButton;
+      return NULL;
+    }
+!   if (!strcmp (token, &quot;focus&quot;)) {
+      term-&gt;buttontype = FocusButton;
+    }
+!   else if (!strcmp (token, &quot;select&quot;)) {
+      term-&gt;buttontype = SelectButton;
+    }
+    else if (extract_int (token, &amp;n)) {
+--- 412,421 ----
+      term-&gt;buttontype = NoButton;
+      return NULL;
+    }
+!   if (!strcasecmp (token, &quot;focus&quot;)) {
+      term-&gt;buttontype = FocusButton;
+    }
+!   else if (!strcasecmp (token, &quot;select&quot;)) {
+      term-&gt;buttontype = SelectButton;
+    }
+    else if (extract_int (token, &amp;n)) {
+***************
+*** 494,500 ****
+    }
+    
+    for (i = 0; i &lt; num_builtins; i++) {
+!     if (!strcmp (name, builtin_functions[i].name)) {
+        Free (name);
+        ftype-&gt;func = builtin_functions[i].func;
+        ftype-&gt;numargs = builtin_functions[i].numargs;
+--- 518,524 ----
+    }
+    
+    for (i = 0; i &lt; num_builtins; i++) {
+!     if (!strcasecmp (name, builtin_functions[i].name)) {
+        Free (name);
+        ftype-&gt;func = builtin_functions[i].func;
+        ftype-&gt;numargs = builtin_functions[i].numargs;
+***************
+*** 547,591 ****
+    return NULL;
+  }
+  
+- #if 0
+- static Function *parse_function_list (char *line)
+- {
+-   Function *func, *list = NULL, *finallist = NULL, *p;
+-   char *ptr = line, *token;
+-   
+-   while (1) {
+-     ptr = parse_function (ptr, &amp;func);
+-     if (ptr == NULL) {
+-       break;
+-     }
+-     func-&gt;next = list;
+-     list = func;
+-     ptr = GetNextToken (ptr, &amp;token);
+-     if (token == NULL)
+-       break;
+-     if (!strcmp (token, &quot;,&quot;)) {
+-       Free (token);
+-       break;
+-     }
+-     else {
+-       ConsoleMessage (&quot;Malformed sequence of functions\n&quot;);
+-     }
+-     Free (token);
+-   }
+- 
+-   /* reverse the list */
+- 
+-   while (list) {
+-     p = list-&gt;next;
+-     list-&gt;next = newlist;
+-     newlist = list;
+-     list = p;
+-   }
+- 
+-   return newlist;
+- }
+- #endif
+- 
+  Binding *ParseMouseEntry (char *tline)
+  {
+    char modifiers[20],*ptr,*action,*token;
+--- 571,576 ----
+***************
+*** 608,614 ****
+      Free(token);
+    }
+    if((n1 != 1)||(n2 != 1))
+!     ConsoleMessage (&quot;Mouse binding: Syntax error in line %s&quot;, tline);
+    
+    find_context(modifiers,&amp;mods,key_modifiers,tline);
+    if((mods &amp; AnyModifier)&amp;&amp;(mods&amp;(~AnyModifier))) {
+--- 593,599 ----
+      Free(token);
+    }
+    if((n1 != 1)||(n2 != 1))
+!     ConsoleMessage (&quot;Mouse binding: Syntax error&quot;);
+    
+    find_context(modifiers,&amp;mods,key_modifiers,tline);
+    if((mods &amp; AnyModifier)&amp;&amp;(mods&amp;(~AnyModifier))) {
+***************
+*** 676,683 ****
+     * XGrabKey call in GrabKeys().
+     */
+    if ((keysym = XStringToKeysym(key)) == NoSymbol || 
+!       XKeysymToKeycode(theDisplay, keysym) == 0)
+      return NULL;
+    
+   
+    XDisplayKeycodes(theDisplay, &amp;min, &amp;max);
+--- 661,670 ----
+     * XGrabKey call in GrabKeys().
+     */
+    if ((keysym = XStringToKeysym(key)) == NoSymbol || 
+!       XKeysymToKeycode(theDisplay, keysym) == 0) {
+!     ConsoleMessage (&quot;Can't find keysym: %s\n&quot;, key);
+      return NULL;
++   }
+    
+   
+    XDisplayKeycodes(theDisplay, &amp;min, &amp;max);
+***************
+*** 891,896 ****
+--- 878,923 ----
+      return copy_string (s1, s2);
+  }
+  
++ static NameType parse_format_dependencies (char *format)
++ {
++   NameType flags = NO_NAME;
++ 
++   ConsoleDebug (&quot;Parsing format: %s\n&quot;, format);
++ 
++   while (*format) {
++     if (*format != '%') {
++       format++;
++     }
++     else {
++       format++;
++       if (*format == 'i')
++ 	flags |= ICON_NAME;
++       else if (*format == 't')
++ 	flags |= TITLE_NAME;
++       else if (*format == 'c')
++ 	flags |= CLASS_NAME;
++       else if (*format == 'r')
++ 	flags |= RESOURCE_NAME;
++       else if (*format != '%')
++ 	ConsoleMessage (&quot;Bad format string: %s\n&quot;, format);
++     }
++   }
++ #ifdef PRINT_DEBUG
++   ConsoleDebug (&quot;Format depends on: &quot;);
++   if (flags &amp; ICON_NAME)
++     ConsoleDebug (&quot;Icon &quot;);
++   if (flags &amp; TITLE_NAME)
++     ConsoleDebug (&quot;Title &quot;);
++   if (flags &amp; CLASS_NAME)
++     ConsoleDebug (&quot;Class &quot;);
++   if (flags &amp; RESOURCE_NAME)
++     ConsoleDebug (&quot;Resource &quot;);
++   ConsoleDebug (&quot;\n&quot;);
++ #endif
++ 
++   return flags;
++ }
++ 
+  #define SET_MANAGER(manager,field,value)                           \
+     do {                                                            \
+       int id = manager;                                             \
+***************
+*** 921,948 ****
+  
+    while ((p = read_next_cmd (READ_LINE))) {
+      ConsoleDebug (&quot;line: %s\n&quot;, p);
+      option1 = read_next_cmd (READ_OPTION);
+      if (option1 == NULL)
+        continue;
+  
+      ConsoleDebug (&quot;option1: %s\n&quot;, option1);
+      if (!strcasecmp (option1, &quot;nummanagers&quot;)) {
+!       p = read_next_cmd (READ_ARG);
+!       if (!option1) {
+! 	ConsoleMessage (&quot;Error in input file\n&quot;);
+! 	continue;
+!       }
+!       if (extract_int (p, &amp;n) == 0) {
+! 	ConsoleMessage (&quot;This is not a number: %s\n&quot;, p);
+! 	continue;
+!       }
+!       if (n &gt; 0) {
+! 	allocate_managers (n);
+! 	ConsoleDebug (&quot;num managers: %d\n&quot;, n);
+!       }
+!       else {
+! 	ConsoleMessage (&quot;You can't have zero managers. I'll give you one.\n&quot;);
+! 	allocate_managers (1);
+        }
+      }
+      else {
+--- 948,983 ----
+  
+    while ((p = read_next_cmd (READ_LINE))) {
+      ConsoleDebug (&quot;line: %s\n&quot;, p);
++     save_current_line (p);
++ 
+      option1 = read_next_cmd (READ_OPTION);
+      if (option1 == NULL)
+        continue;
+  
+      ConsoleDebug (&quot;option1: %s\n&quot;, option1);
+      if (!strcasecmp (option1, &quot;nummanagers&quot;)) {
+!       /* If in transient mode, just use the default of 1 manager */
+!       if (!globals.transient) {
+! 	p = read_next_cmd (READ_ARG);
+! 	if (!p) {
+! 	  ConsoleMessage (&quot;Bad line: %s\n&quot;, current_line);
+! 	  continue;
+! 	}
+! 	if (extract_int (p, &amp;n) == 0) {
+! 	  ConsoleMessage (&quot;This is not a number: %s\n&quot;, p);
+! 	  ConsoleMessage (&quot;Bad line: %s\n&quot;, current_line);
+! 	  continue;
+! 	}
+! 	if (n &gt; 0) {
+! 	  allocate_managers (n);
+! 	  ConsoleDebug (&quot;num managers: %d\n&quot;, n);
+! 	}
+! 	else {
+! 	  ConsoleMessage (&quot;Bad line: %s\n&quot;, current_line);
+! 	  ConsoleMessage (&quot;You can't have zero managers. &quot;
+! 			  &quot;I'll give you one.\n&quot;);
+! 	  allocate_managers (1);
+! 	}
+        }
+      }
+      else {
+***************
+*** 956,969 ****
+        manager = 0;
+  
+        if (option1[0] &gt;= '0' &amp;&amp; option1[0] &lt;= '9') {
+  	if (extract_int (option1, &amp;manager) == 0 || 
+  	    manager &lt;= 0 || manager &gt; globals.num_managers) {
+  	  ConsoleMessage (&quot;This is not a valid manager: %s.\n&quot;, option1);
+  	  manager = 0;
+  	}
+  	option1 = read_next_cmd (READ_OPTION);
+  	if (!option1) {
+! 	  ConsoleMessage (&quot;Error in input file\n&quot;);
+  	  continue;
+  	}
+        }
+--- 991,1024 ----
+        manager = 0;
+  
+        if (option1[0] &gt;= '0' &amp;&amp; option1[0] &lt;= '9') {
++ 	if (globals.transient) {
++ 	  ConsoleDebug (&quot;In transient mode. Ignoring this line\n&quot;);
++ 	  continue;
++ 	}
+  	if (extract_int (option1, &amp;manager) == 0 || 
+  	    manager &lt;= 0 || manager &gt; globals.num_managers) {
++ 	  ConsoleMessage (&quot;Bad line: %s\n&quot;, current_line);
+  	  ConsoleMessage (&quot;This is not a valid manager: %s.\n&quot;, option1);
+  	  manager = 0;
+  	}
+  	option1 = read_next_cmd (READ_OPTION);
+  	if (!option1) {
+! 	  ConsoleMessage (&quot;Bad line: %s\n&quot;, current_line);
+! 	  continue;
+! 	}
+!       }
+!       else if (!strcasecmp (option1, &quot;transient&quot;)) {
+! 	if (globals.transient) {
+! 	  ConsoleDebug (&quot;Transient manager config line\n&quot;);
+! 	  manager = 1;
+! 	  option1 = read_next_cmd (READ_OPTION);
+! 	  if (!option1) {
+! 	    ConsoleMessage (&quot;Bad line: %s\n&quot;, current_line);
+! 	    continue;
+! 	  }
+! 	}
+! 	else {
+! 	  ConsoleDebug (&quot;Not in transient mode. Ignoring this line\n&quot;);
+  	  continue;
+  	}
+        }
+***************
+*** 975,981 ****
+        if (!strcasecmp (option1, &quot;resolution&quot;)) {
+  	p = read_next_cmd (READ_ARG);
+  	if (!p) {
+! 	  ConsoleMessage (&quot;Error in input file\n&quot;);
+  	  continue;
+  	}
+  	ConsoleDebug (&quot;resolution: %s\n&quot;, p);
+--- 1030,1036 ----
+        if (!strcasecmp (option1, &quot;resolution&quot;)) {
+  	p = read_next_cmd (READ_ARG);
+  	if (!p) {
+! 	  ConsoleMessage (&quot;Bad line: %s\n&quot;, current_line);
+  	  continue;
+  	}
+  	ConsoleDebug (&quot;resolution: %s\n&quot;, p);
+***************
+*** 985,997 ****
+  	  r = SHOW_DESKTOP;
+  	else if (!strcasecmp (p, &quot;page&quot;))
+  	  r = SHOW_PAGE;
+  
+  	SET_MANAGER (manager, res, r);
+        }
+        else if (!strcasecmp (option1, &quot;font&quot;)) {
+  	p = read_next_cmd (READ_ARG);
+  	if (!p) {
+! 	  ConsoleMessage (&quot;Error in input file\n&quot;);
+  	  continue;
+  	}
+  	ConsoleDebug (&quot;font: %s\n&quot;, p);
+--- 1040,1057 ----
+  	  r = SHOW_DESKTOP;
+  	else if (!strcasecmp (p, &quot;page&quot;))
+  	  r = SHOW_PAGE;
++ 	else {
++ 	  ConsoleMessage (&quot;Bad line: %s\n&quot;, current_line);
++ 	  ConsoleMessage (&quot;What kind of resolution is this?\n&quot;);
++ 	  continue;
++ 	}
+  
+  	SET_MANAGER (manager, res, r);
+        }
+        else if (!strcasecmp (option1, &quot;font&quot;)) {
+  	p = read_next_cmd (READ_ARG);
+  	if (!p) {
+! 	  ConsoleMessage (&quot;Bad line: %s\n&quot;, current_line);
+  	  continue;
+  	}
+  	ConsoleDebug (&quot;font: %s\n&quot;, p);
+***************
+*** 1002,1018 ****
+        else if (!strcasecmp (option1, &quot;geometry&quot;)) {
+  	p = read_next_cmd (READ_ARG);
+  	if (!p) {
+! 	  ConsoleMessage (&quot;Error in input file\n&quot;);
+  	  continue;
+  	}
+  
+  	SET_MANAGER (manager, geometry, 
+  		     copy_string (&amp;globals.managers[id].geometry, p));
+        }
+        else if (!strcasecmp (option1, &quot;dontshow&quot;)) {
+  	p = read_next_cmd (READ_ARG);
+  	if (!p) {
+! 	  ConsoleMessage (&quot;Error in input_file\n&quot;);
+  	  continue;
+  	}
+  	do {
+--- 1062,1121 ----
+        else if (!strcasecmp (option1, &quot;geometry&quot;)) {
+  	p = read_next_cmd (READ_ARG);
+  	if (!p) {
+! 	  ConsoleMessage (&quot;Bad line: %s\n&quot;, current_line);
+  	  continue;
+  	}
+  
+  	SET_MANAGER (manager, geometry, 
+  		     copy_string (&amp;globals.managers[id].geometry, p));
+        }
++       else if (!strcasecmp (option1, &quot;title&quot;)) {
++ 	char *token;
++ 	p = read_next_cmd (READ_REST_OF_LINE);
++ 	if (!p) {
++ 	  ConsoleMessage (&quot;Bad line: %s\n&quot;, current_line);
++ 	  continue;
++ 	}
++ 	GetNextToken (p, &amp;token);
++ 	
++ 	SET_MANAGER (manager, titlename,
++ 		     copy_string (&amp;globals.managers[id].titlename, token));
++ 	Free (token);
++       }
++       else if (!strcasecmp (option1, &quot;iconname&quot;)) {
++ 	char *token;
++ 	p = read_next_cmd (READ_REST_OF_LINE);
++ 	if (!p) {
++ 	  ConsoleMessage (&quot;Bad line: %s\n&quot;, current_line);
++ 	  continue;
++ 	}
++ 	GetNextToken (p, &amp;token);
++ 	
++ 	SET_MANAGER (manager, iconname,
++ 		     copy_string (&amp;globals.managers[id].iconname, token));
++ 	Free (token);
++       }
++       else if (!strcasecmp (option1, &quot;format&quot;)) {
++ 	char *token;
++ 	NameType flags;
++ 
++ 	p = read_next_cmd (READ_REST_OF_LINE);
++ 	if (!p) {
++ 	  ConsoleMessage (&quot;Bad line: %s\n&quot;, current_line);
++ 	  continue;
++ 	}
++ 	GetNextToken (p, &amp;token);
++ 	
++ 	SET_MANAGER (manager, formatstring,
++ 		     copy_string (&amp;globals.managers[id].formatstring, token));
++ 	flags = parse_format_dependencies (token);
++ 	SET_MANAGER (manager, format_depend, flags);
++ 	Free (token);
++       }
+        else if (!strcasecmp (option1, &quot;dontshow&quot;)) {
+  	p = read_next_cmd (READ_ARG);
+  	if (!p) {
+! 	  ConsoleMessage (&quot;Bad line: %s\n&quot;, current_line);
+  	  continue;
+  	}
+  	do {
+***************
+*** 1031,1037 ****
+        else if (!strcasecmp (option1, &quot;show&quot;)) {
+  	p = read_next_cmd (READ_ARG);
+  	if (!p) {
+! 	  ConsoleMessage (&quot;Error in input_file\n&quot;);
+  	  continue;
+  	}
+  	do {
+--- 1134,1140 ----
+        else if (!strcasecmp (option1, &quot;show&quot;)) {
+  	p = read_next_cmd (READ_ARG);
+  	if (!p) {
+! 	  ConsoleMessage (&quot;Bad line: %s\n&quot;, current_line);
+  	  continue;
+  	}
+  	do {
+***************
+*** 1050,1056 ****
+        else if (!strcasecmp (option1, &quot;background&quot;)) {
+  	p = read_next_cmd (READ_ARG);
+  	if (!p) {
+! 	  ConsoleMessage (&quot;Error in input file\n&quot;);
+  	  continue;
+  	}
+  	ConsoleDebug (&quot;default background: %s\n&quot;, p);
+--- 1153,1159 ----
+        else if (!strcasecmp (option1, &quot;background&quot;)) {
+  	p = read_next_cmd (READ_ARG);
+  	if (!p) {
+! 	  ConsoleMessage (&quot;Bad line: %s\n&quot;, current_line);
+  	  continue;
+  	}
+  	ConsoleDebug (&quot;default background: %s\n&quot;, p);
+***************
+*** 1063,1069 ****
+        else if (!strcasecmp (option1, &quot;foreground&quot;)) {
+  	p = read_next_cmd (READ_ARG);
+  	if (!p) {
+! 	  ConsoleMessage (&quot;Error in input file\n&quot;);
+  	  continue;
+  	}
+  	ConsoleDebug (&quot;default foreground: %s\n&quot;, p);
+--- 1166,1172 ----
+        else if (!strcasecmp (option1, &quot;foreground&quot;)) {
+  	p = read_next_cmd (READ_ARG);
+  	if (!p) {
+! 	  ConsoleMessage (&quot;Bad line: %s\n&quot;, current_line);
+  	  continue;
+  	}
+  	ConsoleDebug (&quot;default foreground: %s\n&quot;, p);
+***************
+*** 1076,1082 ****
+        else if (!strcasecmp (option1, &quot;action&quot;)) {
+  	p = read_next_cmd (READ_ARG);
+  	if (!p) {
+! 	  ConsoleMessage (&quot;Error in input file: need arguments to action\n&quot;);
+  	  continue;
+  	}
+  
+--- 1179,1185 ----
+        else if (!strcasecmp (option1, &quot;action&quot;)) {
+  	p = read_next_cmd (READ_ARG);
+  	if (!p) {
+! 	  ConsoleMessage (&quot;Bad line: %s\n&quot;, current_line);
+  	  continue;
+  	}
+  
+***************
+*** 1090,1102 ****
+  	  i = SELECT;
+  	}
+  	else {
+! 	  ConsoleMessage (&quot;Error in input file: this isn't a valid action name: %s\n&quot;, p);
+  	  continue;
+  	}
+  
+  	q = read_next_cmd (READ_REST_OF_LINE);
+  	if (!q) {
+! 	  ConsoleMessage (&quot;Error in input file: need an action\n&quot;);
+  	  continue;
+  	}
+  	
+--- 1193,1207 ----
+  	  i = SELECT;
+  	}
+  	else {
+! 	  ConsoleMessage (&quot;Bad line: %s\n&quot;, current_line);
+! 	  ConsoleMessage (&quot;This isn't a valid action name: %s\n&quot;, p);
+  	  continue;
+  	}
+  
+  	q = read_next_cmd (READ_REST_OF_LINE);
+  	if (!q) {
+! 	  ConsoleMessage (&quot;Bad line: %s\n&quot;, current_line);
+! 	  ConsoleMessage (&quot;Need an action\n&quot;);
+  	  continue;
+  	}
+  	
+***************
+*** 1115,1121 ****
+  	}
+  
+  	if (binding == NULL) {
+! 	  ConsoleMessage (&quot;Error in input file: bad action\n&quot;);
+  	  continue;
+  	}
+  
+--- 1220,1227 ----
+  	}
+  
+  	if (binding == NULL) {
+! 	  ConsoleMessage (&quot;Offending line: %s\n&quot;, current_line);
+! 	  ConsoleMessage (&quot;Bad action\n&quot;);
+  	  continue;
+  	}
+  
+***************
+*** 1129,1155 ****
+  	  add_to_binding (&amp;globals.managers[manager].bindings[i], binding);
+  	}
+  	else {
+  	  ConsoleMessage (&quot;There's no manager %d\n&quot;, manager);
+  	}
+        }
+        else if (!strcasecmp (option1, &quot;showtitle&quot;)) {
+! 	p = read_next_cmd (READ_ARG);
+! 	if (!p) {
+! 	  ConsoleMessage (&quot;Error in input file: need argument to showtitle\n&quot;);
+! 	  continue;
+! 	}
+! 	if (!strcasecmp (p, &quot;true&quot;)) {
+! 	  i = 1;
+! 	}
+! 	else if (!strcasecmp (p, &quot;false&quot;)) {
+! 	  i = 0;
+! 	}
+! 	else {
+! 	  ConsoleMessage (&quot;Error in input file. What is this: %s?\n&quot;, p);
+! 	  continue;
+! 	}
+! 	ConsoleDebug (&quot;Setting showtitle to: %d\n&quot;, i);
+! 	SET_MANAGER (manager, use_titlename, i);
+        }
+        else if (!strcasecmp (option1, &quot;plainButton&quot;)  ||
+                 !strcasecmp (option1, &quot;selectButton&quot;)  ||
+--- 1235,1248 ----
+  	  add_to_binding (&amp;globals.managers[manager].bindings[i], binding);
+  	}
+  	else {
++ 	  ConsoleMessage (&quot;Bad line: %s\n&quot;, current_line);
+  	  ConsoleMessage (&quot;There's no manager %d\n&quot;, manager);
+  	}
+        }
+        else if (!strcasecmp (option1, &quot;showtitle&quot;)) {
+! 	ConsoleMessage (&quot;Bad line: %s\n&quot;, current_line);
+! 	ConsoleMessage (&quot;showtitle is no longer an option. Use format\n&quot;);
+! 	continue;
+        }
+        else if (!strcasecmp (option1, &quot;plainButton&quot;)  ||
+                 !strcasecmp (option1, &quot;selectButton&quot;)  ||
+***************
+*** 1161,1173 ****
+              i = SELECT_CONTEXT;
+           else if (!strcasecmp (option1, &quot;focusandselectButton&quot;))
+  	   i = FOCUS_SELECT_CONTEXT;
+! 	 else
+              i = FOCUS_CONTEXT;
+           p = read_next_cmd (READ_ARG);
+           if (!p) {
+!             ConsoleMessage (&quot;Error in input file: need argument to %s\n&quot;,
+! 			    option1);
+!             continue;
+           }
+           else if (!strcasecmp (p, &quot;flat&quot;)) {
+              state = BUTTON_FLAT;
+--- 1254,1267 ----
+              i = SELECT_CONTEXT;
+           else if (!strcasecmp (option1, &quot;focusandselectButton&quot;))
+  	   i = FOCUS_SELECT_CONTEXT;
+!          else
+              i = FOCUS_CONTEXT;
++ 	   
+           p = read_next_cmd (READ_ARG);
+           if (!p) {
+! 	   ConsoleMessage (&quot;Bad line: %s\n&quot;, current_line);
+! 	   ConsoleMessage (&quot;Need argument to %s\n&quot;, option1);
+! 	   continue;
+           }
+           else if (!strcasecmp (p, &quot;flat&quot;)) {
+              state = BUTTON_FLAT;
+***************
+*** 1179,1185 ****
+              state = BUTTON_DOWN;
+           }
+           else {
+!            ConsoleMessage (&quot;Error in input file: this isn't a valid button state: %s\n&quot;, p);
+             continue;
+           }
+  	 ConsoleDebug (&quot;Setting buttonState[%s] to %s\n&quot;, 
+--- 1273,1280 ----
+              state = BUTTON_DOWN;
+           }
+           else {
+! 	   ConsoleMessage (&quot;Bad line: %s\n&quot;, current_line);
+!            ConsoleMessage (&quot;This isn't a valid button state: %s\n&quot;, p);
+             continue;
+           }
+  	 ConsoleDebug (&quot;Setting buttonState[%s] to %s\n&quot;, 
+***************
+*** 1209,1215 ****
+        else if (!strcasecmp (option1, &quot;followfocus&quot;)) {
+  	p = read_next_cmd (READ_ARG);
+  	if (!p) {
+! 	  ConsoleMessage (&quot;Error in input file: need argument to followfocus\n&quot;);
+  	  continue;
+  	}
+  	if (!strcasecmp (p, &quot;true&quot;)) {
+--- 1304,1311 ----
+        else if (!strcasecmp (option1, &quot;followfocus&quot;)) {
+  	p = read_next_cmd (READ_ARG);
+  	if (!p) {
+! 	  ConsoleMessage (&quot;Bad line: %s\n&quot;, current_line);
+! 	  ConsoleMessage (&quot;Need argument to followfocus\n&quot;);
+  	  continue;
+  	}
+  	if (!strcasecmp (p, &quot;true&quot;)) {
+***************
+*** 1219,1225 ****
+  	  i = 0;
+  	}
+  	else {
+! 	  ConsoleMessage (&quot;Error in input file. What is this: %s?\n&quot;, p);
+  	  continue;
+  	}
+  	ConsoleDebug (&quot;Setting followfocus to: %d\n&quot;, i);
+--- 1315,1322 ----
+  	  i = 0;
+  	}
+  	else {
+! 	  ConsoleMessage (&quot;Bad line: %s\n&quot;, current_line);
+! 	  ConsoleMessage (&quot;What is this: %s?\n&quot;, p);
+  	  continue;
+  	}
+  	ConsoleDebug (&quot;Setting followfocus to: %d\n&quot;, i);
+***************
+*** 1228,1234 ****
+        else if (!strcasecmp (option1, &quot;sort&quot;)) {
+  	p = read_next_cmd (READ_ARG);
+  	if (!p) {
+! 	  ConsoleMessage (&quot;Error in input file: need argument to sort\n&quot;);
+  	  continue;
+  	}
+  	if (!strcasecmp (p, &quot;true&quot;)) {
+--- 1325,1332 ----
+        else if (!strcasecmp (option1, &quot;sort&quot;)) {
+  	p = read_next_cmd (READ_ARG);
+  	if (!p) {
+! 	  ConsoleMessage (&quot;Bad line: %s\n&quot;, current_line);
+! 	  ConsoleMessage (&quot;Need argument to sort\n&quot;);
+  	  continue;
+  	}
+  	if (!strcasecmp (p, &quot;true&quot;)) {
+***************
+*** 1238,1250 ****
+  	  i = 0;
+  	}
+  	else {
+! 	  ConsoleMessage (&quot;Error in input file. What is this: %s?\n&quot;, p);
+  	  continue;
+  	}
+  	ConsoleDebug (&quot;Setting sort to: %d\n&quot;, i);
+  	SET_MANAGER (manager, sort, i);
+        }
+        else {
+  	ConsoleMessage (&quot;Unknown option: %s\n&quot;, p);
+        }
+      }
+--- 1336,1350 ----
+  	  i = 0;
+  	}
+  	else {
+! 	  ConsoleMessage (&quot;Bad line: %s\n&quot;, current_line);
+! 	  ConsoleMessage (&quot;What is this: %s?\n&quot;, p);
+  	  continue;
+  	}
+  	ConsoleDebug (&quot;Setting sort to: %d\n&quot;, i);
+  	SET_MANAGER (manager, sort, i);
+        }
+        else {
++ 	ConsoleMessage (&quot;Bad line: %s\n&quot;, current_line);
+  	ConsoleMessage (&quot;Unknown option: %s\n&quot;, p);
+        }
+      }
+diff -rc fvwm-2.0.43/modules/FvwmIconMan/winlist.c fvwm.patched/modules/FvwmIconMan/winlist.c
+*** fvwm-2.0.43/modules/FvwmIconMan/winlist.c	Sun Jun 23 13:21:15 1996
+--- fvwm.patched/modules/FvwmIconMan/winlist.c	Sun Sep 22 11:00:03 1996
+***************
+*** 29,34 ****
+--- 29,37 ----
+      case CLASS_NAME:
+        s = &quot;class&quot;;
+        break;
++       
++     default:
++       s = &quot;unknown type&quot;;
+      }
+      ConsoleDebug (&quot;\t%s = %s\n&quot;, s, p-&gt;string);
+    }
+***************
+*** 45,57 ****
+    pat = strchr (s, '=');
+    if (pat) {
+      *pat++ = '\0';
+!     if (!strcmp (s, &quot;icon&quot;))
+        type = ICON_NAME;
+!     else if (!strcmp (s, &quot;title&quot;))
+        type = TITLE_NAME;
+!     else if (!strcmp (s, &quot;resource&quot;))
+        type = RESOURCE_NAME;
+!     else if (!strcmp (s, &quot;class&quot;))
+        type = CLASS_NAME;
+      else {
+        ConsoleMessage (&quot;Bad element in show/dontshow list: %s\n&quot;, s);
+--- 48,60 ----
+    pat = strchr (s, '=');
+    if (pat) {
+      *pat++ = '\0';
+!     if (!strcasecmp (s, &quot;icon&quot;))
+        type = ICON_NAME;
+!     else if (!strcasecmp (s, &quot;title&quot;))
+        type = TITLE_NAME;
+!     else if (!strcasecmp (s, &quot;resource&quot;))
+        type = RESOURCE_NAME;
+!     else if (!strcasecmp (s, &quot;class&quot;))
+        type = CLASS_NAME;
+      else {
+        ConsoleMessage (&quot;Bad element in show/dontshow list: %s\n&quot;, s);
+***************
+*** 86,100 ****
+  {
+    int ans = 0;
+    
+!   if (tname &amp;&amp; (type == ALL_NAME || type == TITLE_NAME))
+      ans |= matchWildcards (pattern, tname);
+!   if (iname &amp;&amp; (type == ALL_NAME || type == ICON_NAME))
+      ans |= matchWildcards (pattern, iname);
+!   if (rname &amp;&amp; (type == ALL_NAME || type == RESOURCE_NAME))
+      ans |= matchWildcards (pattern, rname);
+!   if (cname &amp;&amp; (type == ALL_NAME || type == CLASS_NAME))
+      ans |= matchWildcards (pattern, cname);
+  
+    return ans;
+  }
+  
+--- 89,111 ----
+  {
+    int ans = 0;
+    
+!   ConsoleDebug (&quot;matches_string: type: 0x%x pattern: %s\n&quot;, type, pattern);
+!   ConsoleDebug (&quot;\tstrings: %s:%s %s:%s\n&quot;, tname, iname, rname, cname);
+! 
+!   if (tname &amp;&amp; (type == ALL_NAME || type == TITLE_NAME)) {
+      ans |= matchWildcards (pattern, tname);
+!   }
+!   if (iname &amp;&amp; (type == ALL_NAME || type == ICON_NAME)) {
+      ans |= matchWildcards (pattern, iname);
+!   }
+!   if (rname &amp;&amp; (type == ALL_NAME || type == RESOURCE_NAME)) {
+      ans |= matchWildcards (pattern, rname);
+!   }
+!   if (cname &amp;&amp; (type == ALL_NAME || type == CLASS_NAME)) {
+      ans |= matchWildcards (pattern, cname);
++   }
+  
++   ConsoleDebug (&quot;\tmatches_string: %d\n&quot;, ans);
+    return ans;
+  }
+  
+***************
+*** 193,199 ****
+    new-&gt;classname = NULL;
+    new-&gt;iconname = NULL;
+    new-&gt;titlename = NULL;
+!   new-&gt;name = NULL;
+    new-&gt;manager = NULL;
+    new-&gt;win_prev = new-&gt;win_next = NULL;
+    new-&gt;icon_prev = new-&gt;icon_next = NULL;
+--- 204,210 ----
+    new-&gt;classname = NULL;
+    new-&gt;iconname = NULL;
+    new-&gt;titlename = NULL;
+!   new-&gt;display_string = NULL;
+    new-&gt;manager = NULL;
+    new-&gt;win_prev = new-&gt;win_next = NULL;
+    new-&gt;icon_prev = new-&gt;icon_next = NULL;
+***************
+*** 203,208 ****
+--- 214,222 ----
+    new-&gt;focus = 0;
+    new-&gt;sticky = 0;
+    new-&gt;winlistskip = 0;
++ #ifdef MINI_ICONS
++   new-&gt;pic.picture = 0;
++ #endif
+    return new;
+  }
+  
+***************
+*** 214,222 ****
+    Free (p);
+  }
+  
+  int set_win_manager (WinData *win, Uchar name_mask)
+  {
+!   int i;
+    char *tname = win-&gt;titlename;
+    char *iname = win-&gt;iconname;
+    char *rname = win-&gt;resname;
+--- 228,319 ----
+    Free (p);
+  }
+  
++ static char *make_display_string (WinData *win, char *format, int len)
++ {
++ #define MAX_DISPLAY_SIZE 1024
++ #define COPY(field)                                       \
++   temp_p = win-&gt;##field;                                  \
++   if (temp_p)                                             \
++     while (*temp_p &amp;&amp; out_p - buf &lt; len - 1) \
++       *out_p++ = *temp_p++;                               \
++   in_p++;
++ 
++   static char buf[MAX_DISPLAY_SIZE];
++   char *string, *in_p, *out_p, *temp_p;
++ 
++   in_p = format;
++   out_p = buf;
++ 
++   if (len &gt; MAX_DISPLAY_SIZE || len &lt;= 0)
++     len = MAX_DISPLAY_SIZE;
++   
++   while (*in_p &amp;&amp; out_p - buf &lt; len - 1) {
++     if (*in_p == '%') {
++       switch (*(++in_p)) {
++       case 'i':
++ 	COPY (iconname);
++ 	break;
++ 
++       case 't':
++ 	COPY (titlename);
++ 	break;
++ 
++       case 'r':
++ 	COPY (resname);
++ 	break;
++ 
++       case 'c':
++ 	COPY (classname);
++ 	break;
++ 
++       default:
++ 	*out_p++ = *in_p++;
++ 	break;
++       }
++     }
++     else {
++       *out_p++ = *in_p++;
++     }
++   }
++ 
++   *out_p++ = '\0';
++ 
++   string = buf;
++   return string;
++ 
++ #undef COPY
++ #undef MAX_DISPLAY_SIZE
++ }
++ 
++ void set_displaystring (WinData *win)
++ {
++   WinManager *man = win-&gt;manager;
++   int maxlen;
++ 
++   if (!man || ((man-&gt;format_depend &amp; CLASS_NAME) &amp;&amp; !win-&gt;classname)
++       || ((man-&gt;format_depend &amp; ICON_NAME) &amp;&amp; !win-&gt;iconname)
++       || ((man-&gt;format_depend &amp; TITLE_NAME) &amp;&amp; !win-&gt;titlename)
++       || ((man-&gt;format_depend &amp; RESOURCE_NAME) &amp;&amp; !win-&gt;resname)) {
++     return;
++   }
++ 
++   if (man-&gt;window_up) {
++     assert (man-&gt;win_width &amp;&amp; man-&gt;fontwidth);
++     maxlen = man-&gt;win_width / man-&gt;fontwidth + 2 /* fudge factor */;
++   }
++   else {
++     maxlen = 0;
++   }
++   copy_string (&amp;win-&gt;display_string, 
++ 	       make_display_string (win, man-&gt;formatstring, maxlen));
++ }
++ 
++ 
++ /* This ALWAYS gets called when one of the name strings changes */
++ 
+  int set_win_manager (WinData *win, Uchar name_mask)
+  {
+!   int i, new_manager = 0;
+    char *tname = win-&gt;titlename;
+    char *iname = win-&gt;iconname;
+    char *rname = win-&gt;resname;
+***************
+*** 224,248 ****
+    WinManager *man;
+  
+    assert (tname || iname || rname || cname);
+  
+    for (i = 0, man = &amp;globals.managers[0]; i &lt; globals.num_managers;
+         i++, man++) {
+      if (iconmanager_show (man, tname, iname, rname, cname)) {
+        if (man != win-&gt;manager) {
+  	win-&gt;manager = man;
+! 	if (win-&gt;manager-&gt;use_titlename)
+! 	  win-&gt;name = &amp;win-&gt;titlename;
+! 	else
+! 	  win-&gt;name = &amp;win-&gt;iconname;
+! 	return 1;
+!       }
+!       else {
+! 	return 0;
+        }
+      }
+    }
+  
+!   return 0;
+  }
+  
+  int check_win_complete (WinData *p)
+--- 321,346 ----
+    WinManager *man;
+  
+    assert (tname || iname || rname || cname);
++   ConsoleDebug (&quot;set_win_manager: %s %s %s %s\n&quot;, tname, iname, rname, cname);
+  
+    for (i = 0, man = &amp;globals.managers[0]; i &lt; globals.num_managers;
+         i++, man++) {
+      if (iconmanager_show (man, tname, iname, rname, cname)) {
+        if (man != win-&gt;manager) {
+  	win-&gt;manager = man;
+! 	new_manager = 1;
+        }
++       return new_manager;
+      }
+    }
+  
+!   /* No manager wants this window */
+!   if (win-&gt;manager) {
+!     win-&gt;manager = NULL;
+!     return 1;
+!   }
+! 
+!   return new_manager;
+  }
+  
+  int check_win_complete (WinData *p)
+***************
+*** 255,260 ****
+--- 353,359 ----
+    ConsoleDebug (&quot;\ticonname: %s\n&quot;, p-&gt;iconname);
+    ConsoleDebug (&quot;\tres: %s\n&quot;, p-&gt;resname);
+    ConsoleDebug (&quot;\tclass: %s\n&quot;, p-&gt;classname);
++   ConsoleDebug (&quot;\tdisplaystring: %s\n&quot;, p-&gt;display_string);
+    ConsoleDebug (&quot;\t(x, y): (%d, %d)\n&quot;, p-&gt;x, p-&gt;y);
+    ConsoleDebug (&quot;\tapp_id: 0x%x %d\n&quot;, p-&gt;app_id, p-&gt;app_id_set);
+    ConsoleDebug (&quot;\tdesknum: %d\n&quot;, p-&gt;desknum);
+***************
+*** 324,335 ****
+    ConsoleDebug (&quot;in find_win_insert\n&quot;);
+    
+    assert (win-&gt;manager);
+!   assert (win-&gt;name);
+    list = &amp;win-&gt;manager-&gt;icon_list;
+  
+    if (win-&gt;manager-&gt;sort) {
+      for (p = list-&gt;head; 
+! 	 p &amp;&amp; strcmp (*win-&gt;name, *p-&gt;name) &gt; 0; 
+  	 p = p-&gt;icon_next) 
+        ;
+    }
+--- 423,434 ----
+    ConsoleDebug (&quot;in find_win_insert\n&quot;);
+    
+    assert (win-&gt;manager);
+!   assert (win-&gt;display_string);
+    list = &amp;win-&gt;manager-&gt;icon_list;
+  
+    if (win-&gt;manager-&gt;sort) {
+      for (p = list-&gt;head; 
+! 	 p &amp;&amp; strcmp (win-&gt;display_string, p-&gt;display_string) &gt; 0; 
+  	 p = p-&gt;icon_next) 
+        ;
+    }
+diff -rc fvwm-2.0.43/modules/FvwmIconMan/xmanager.c fvwm.patched/modules/FvwmIconMan/xmanager.c
+*** fvwm-2.0.43/modules/FvwmIconMan/xmanager.c	Sun Jun 23 13:21:15 1996
+--- fvwm.patched/modules/FvwmIconMan/xmanager.c	Sun Sep 22 11:00:03 1996
+***************
+*** 1,8 ****
+  #include &quot;FvwmIconMan.h&quot;
+  #include &quot;readconfig.h&quot;
+  
+  #define FONT_STRING &quot;8x13&quot;
+- #define WIN_WIDTH   12
+  #define DEFAULT_WIN_WIDTH  100
+  #define DEFAULT_WIN_HEIGHT 100
+  
+--- 1,9 ----
+  #include &quot;FvwmIconMan.h&quot;
+  #include &quot;readconfig.h&quot;
+  
++ #define GRAB_EVENTS (ButtonPressMask|ButtonReleaseMask|ButtonMotionMask|EnterWindowMask|LeaveWindowMask)
++ 
+  #define FONT_STRING &quot;8x13&quot;
+  #define DEFAULT_WIN_WIDTH  100
+  #define DEFAULT_WIN_HEIGHT 100
+  
+***************
+*** 10,15 ****
+--- 11,22 ----
+  static Window theRoot;
+  static int theDepth, theScreen;
+  
++ static enum {
++   NOT_GRABBED = 0,
++   NEED_TO_GRAB = 1,
++   HAVE_GRABBED = 2
++ } grab_state = NOT_GRABBED;
++ 
+  WinData *find_win (WinManager *man, int box);
+  
+  static void ClipRectangle (WinManager *man, int focus,
+***************
+*** 29,40 ****
+  {
+  }
+  
+  static void map_manager (WinManager *man)
+  {
+    if (man-&gt;window_mapped == 0 &amp;&amp; man-&gt;win_height &gt; 0) {
+      XMapWindow (theDisplay, man-&gt;theWindow);
+      man-&gt;window_mapped = 1;
+! 	 XFlush (theDisplay);
+    }
+  }
+  
+--- 36,65 ----
+  {
+  }
+  
++ static void grab_pointer (WinManager *man)
++ {
++   /* This should only be called after we get our EXPOSE event */
++   if (grab_state == NEED_TO_GRAB) {
++     if (XGrabPointer (theDisplay, man-&gt;theWindow, True, GRAB_EVENTS,
++ 		      GrabModeAsync, GrabModeAsync, None, 
++ 		      None, CurrentTime) != GrabSuccess) {
++       ConsoleMessage (&quot;Couldn't grab pointer\n&quot;);
++       ShutMeDown (0);
++     }
++     grab_state = HAVE_GRABBED;
++   }
++ }
++ 
+  static void map_manager (WinManager *man)
+  {
+    if (man-&gt;window_mapped == 0 &amp;&amp; man-&gt;win_height &gt; 0) {
+      XMapWindow (theDisplay, man-&gt;theWindow);
+      man-&gt;window_mapped = 1;
+!     XFlush (theDisplay);
+!     if (globals.transient) {
+!       /* wait for an expose event to actually do the grab */
+!       grab_state = NEED_TO_GRAB;
+!     }
+    }
+  }
+  
+***************
+*** 225,235 ****
+    
+  
+    /* this routine should only be called from draw_button() */
+! static void iconify_box (WinManager *man, int box, int iconified,
+                           Contexts contextId)
+  {
+!   int x, y, h;
+    int focus;
+  
+    focus = (box == man-&gt;focus_box);
+    
+--- 250,264 ----
+    
+  
+    /* this routine should only be called from draw_button() */
+! static void iconify_box (WinManager *man, WinData *win, int box, int iconified,
+                           Contexts contextId)
+  {
+!   int x, y, w, h;
+    int focus;
++ #ifdef MINI_ICONS
++   XGCValues gcv;
++   unsigned long gcm;
++ #endif
+  
+    focus = (box == man-&gt;focus_box);
+    
+***************
+*** 241,247 ****
+    h = man-&gt;boxheight - 8;
+    
+    if (theDepth &gt; 2) {
+!     draw_3d_icon (man, box, iconified, 1, contextId);
+    }
+    else {
+      if (iconified == 0) {
+--- 270,302 ----
+    h = man-&gt;boxheight - 8;
+    
+    if (theDepth &gt; 2) {
+! #ifdef MINI_ICONS
+!     if (man-&gt;draw_icons &amp;&amp; win-&gt;pic.picture) {
+!       if (iconified == 1) {
+! 	x = 4;
+! 	y = man-&gt;boxheight * box + 2;
+! 	w = MIN (win-&gt;pic.width, man-&gt;boxheight);
+! 	h = MIN (man-&gt;boxheight - 4, win-&gt;pic.height);
+!       
+! 	gcm = GCClipMask|GCClipXOrigin|GCClipYOrigin;
+! 	gcv.clip_mask = win-&gt;pic.mask;
+! 	gcv.clip_x_origin = x;
+! 	gcv.clip_y_origin = y;
+! 	XChangeGC (theDisplay, man-&gt;hiContext[contextId], gcm, &amp;gcv);
+!       
+! 	XCopyArea(theDisplay, win-&gt;pic.picture, man-&gt;theWindow, 
+! 		  man-&gt;hiContext[contextId], 0, 0, w, h, x, y);
+! 	gcm = GCClipMask;
+! 	gcv.clip_mask = None;
+! 	XChangeGC(theDisplay, man-&gt;hiContext[contextId], gcm, &amp;gcv);
+!       }
+!     } 
+!     else {
+! #endif
+!       draw_3d_icon (man, box, iconified, 1, contextId);
+! #ifdef MINI_ICONS
+!     }
+! #endif
+    }
+    else {
+      if (iconified == 0) {
+***************
+*** 261,270 ****
+    GC context1, context2;
+    ButtonState state;
+    int focus = (button == man-&gt;focus_box &amp;&amp; man-&gt;followFocus);
+!   int selected = (button == man-&gt;current_box);
+    int draw_name;
+    Contexts contextId;
+!   int len, x, y, w, h;
+    char *name;
+  
+    assert (man);
+--- 316,325 ----
+    GC context1, context2;
+    ButtonState state;
+    int focus = (button == man-&gt;focus_box &amp;&amp; man-&gt;followFocus);
+!   int selected = (button == man-&gt;select_box);
+    int draw_name;
+    Contexts contextId;
+!   int len, x, y, w, h, text_pos;
+    char *name;
+  
+    assert (man);
+***************
+*** 310,320 ****
+--- 365,382 ----
+        context1 = man-&gt;shadowContext[contextId];
+        context2 = man-&gt;reliefContext[contextId];
+        break;
++ 
++     default:
++       ConsoleMessage (&quot;Internal error in draw_button\n&quot;);
++       break;
+      }
+      draw_3d_square (man, 0, button * man-&gt;boxheight, 
+  		    man-&gt;win_width, man-&gt;boxheight, context1, context2 );
++ 
++     text_pos = 10 + (man-&gt;boxheight - 8);
+    }
+    else {
++     text_pos = 10 + (man-&gt;boxheight - 8);
+      if (selected)
+        XDrawRectangle (theDisplay, man-&gt;theWindow, man-&gt;hiContext[contextId], 
+  		      2, button * man-&gt;boxheight + 1, 
+***************
+*** 323,331 ****
+    }
+  
+    if (draw_name) {
+!     name = *win-&gt;name;
+      len = strlen (name);
+!     x = 10 + (man-&gt;boxheight - 8);
+      y = man-&gt;boxheight * button + 2;
+      w = man-&gt;win_width - 4 - x;
+      h = man-&gt;fontheight;
+--- 385,394 ----
+    }
+  
+    if (draw_name) {
+!     name = win-&gt;display_string;
+!     assert (name);
+      len = strlen (name);
+!     x = text_pos;
+      y = man-&gt;boxheight * button + 2;
+      w = man-&gt;win_width - 4 - x;
+      h = man-&gt;fontheight;
+***************
+*** 333,365 ****
+      ClipRectangle (man, focus, x, y, w, h);
+      
+      XDrawString (theDisplay, man-&gt;theWindow, man-&gt;hiContext[contextId], 
+! 		 10 + (man-&gt;boxheight - 8), 
+! 		 man-&gt;boxheight * (button + 1) - 4,
+  		 name, len);
+      
+      XSetClipMask (theDisplay, man-&gt;hiContext[contextId], None);
+    }
+  
+    if ( win ) 
+!     iconify_box( man, button, win-&gt;iconified, contextId );
+  }
+  
+- void move_highlight (WinManager *man, int to)
+- {
+-   int box;
+  
+!   ConsoleDebug (&quot;move_highlight: current %d to %d\n&quot;, man-&gt;current_box, to);
+  
+!   if (man-&gt;current_box &gt;= 0) { 
+!     box = man-&gt;current_box;
+!     man-&gt;current_box = -1;
+!     draw_button( man, NULL, box );
+!   }
+  
+!   man-&gt;current_box = to;
+  
+!   if (to &gt;= 0)
+!     draw_button( man, NULL, to );
+  }
+    
+  
+--- 396,450 ----
+      ClipRectangle (man, focus, x, y, w, h);
+      
+      XDrawString (theDisplay, man-&gt;theWindow, man-&gt;hiContext[contextId], 
+! 		 x, man-&gt;boxheight * (button + 1) - 4,
+  		 name, len);
+      
+      XSetClipMask (theDisplay, man-&gt;hiContext[contextId], None);
+    }
+  
+    if ( win ) 
+!     iconify_box( man, win, button, win-&gt;iconified, contextId );
+  }
+  
+  
+! /* If man == NULL || box &lt; 0, then there will be no selected button */
+  
+! void move_highlight (WinManager *man, int box)
+! {
+!   WinData *new_win;
+!   WinManager *select_man;
+!   int select_box;
+  
+!   ConsoleDebug (&quot;move_highlight: 0x%x, %d\n&quot;, man, box);
+  
+!   if (man &amp;&amp; box &gt;= 0) {
+!     new_win = find_win (man, box);
+!     if (new_win == NULL) {
+!       ConsoleMessage (&quot;Internal error in move_highlight\n&quot;);
+!       return;
+!     }
+!     if (new_win == globals.select_win) {
+!       return;
+!     }
+!     if (globals.select_win) {
+!       select_man = globals.select_win-&gt;manager;
+!       select_box = select_man-&gt;select_box;
+!       select_man-&gt;select_box = -1;
+!       draw_button (select_man, NULL, select_box);
+!     }
+!     globals.select_win = new_win;
+!     globals.select_win-&gt;manager-&gt;select_box = box;
+!     draw_button (globals.select_win-&gt;manager, NULL, box);
+!   }
+!   else {
+!     if (globals.select_win) {
+!       select_man = globals.select_win-&gt;manager;
+!       select_box = select_man-&gt;select_box;
+!       select_man-&gt;select_box = -1;
+!       globals.select_win = NULL;
+!       draw_button (select_man, NULL, select_box);
+!     }
+!   }
+  }
+    
+  
+***************
+*** 494,506 ****
+    return NULL;
+  }
+  
+  void xevent_loop (void)
+  {
+    XEvent theEvent;
+-   WinData *win;
+    int k, glob_x, glob_y, x, y, mask;
+    unsigned int modifier;
+!   Binding *key, *MouseEntry;
+    static int flag = 0;
+    WinManager *man;
+    Window root, child;
+--- 579,631 ----
+    return NULL;
+  }
+  
++ static void handle_buttonevent (XEvent *theEvent, WinManager *man)
++ {
++   int k;
++   WinData *win;
++   unsigned int modifier;
++   Binding *MouseEntry;
++ 
++   k = which_box (man, theEvent-&gt;xbutton.x, theEvent-&gt;xbutton.y);
++   ConsoleDebug (&quot;Got a Button event %d in box: %d\n&quot;, 
++ 		theEvent-&gt;xbutton.button, k);
++   if (k &gt;= 0 &amp;&amp; theEvent-&gt;xbutton.button &gt;= 1 &amp;&amp; 
++       theEvent-&gt;xbutton.button &lt;= 3) {
++     win = find_win (man, k);
++     if (win != NULL) {
++       ConsoleDebug (&quot;Found the window:\n&quot;);
++       ConsoleDebug (&quot;\tid:        %d\n&quot;, win-&gt;app_id);
++       ConsoleDebug (&quot;\tdesknum:   %d\n&quot;, win-&gt;desknum);
++       ConsoleDebug (&quot;\tx, y:      %d %d\n&quot;, win-&gt;x, win-&gt;y);
++       ConsoleDebug (&quot;\ticon:      %d\n&quot;, win-&gt;iconname);
++       ConsoleDebug (&quot;\ticonified: %d\n&quot;, win-&gt;iconified);
++       ConsoleDebug (&quot;\tcomplete:  %d\n&quot;, win-&gt;complete);
++ 
++       modifier = (theEvent-&gt;xbutton.state &amp; MODS_USED);
++       /* need to search for an appropriate mouse binding */
++       for (MouseEntry = man-&gt;bindings[MOUSE]; MouseEntry != NULL;
++ 	   MouseEntry= MouseEntry-&gt;NextBinding) {
++ 	if(((MouseEntry-&gt;Button_Key == theEvent-&gt;xbutton.button)||
++ 	    (MouseEntry-&gt;Button_Key == 0))&amp;&amp;
++ 	   ((MouseEntry-&gt;Modifier == AnyModifier)||
++ 	    (MouseEntry-&gt;Modifier == (modifier&amp; (~LockMask)))))
++ 	{
++ 	  Function *ftype = MouseEntry-&gt;Function;
++ 	  if (ftype &amp;&amp; ftype-&gt;func) 
++ 	    run_function_list (ftype);
++ 	  break;
++ 	}
++       }
++     }
++   }
++ }
++ 
+  void xevent_loop (void)
+  {
+    XEvent theEvent;
+    int k, glob_x, glob_y, x, y, mask;
+    unsigned int modifier;
+!   Binding *key;
+    static int flag = 0;
+    WinManager *man;
+    Window root, child;
+***************
+*** 511,526 ****
+    }
+    while (XPending (theDisplay)) {
+      XNextEvent (theDisplay, &amp;theEvent);
+!     if (theEvent.type == MappingNotify)
+        continue;
+  
+      man = find_windows_manager (theEvent.xany.window);
+!     if (!man)
+        continue;
+  
+      switch (theEvent.type) {
+  #if 0
+      case ReparentNotify:
+        man-&gt;theParent = theEvent.xreparent.parent;
+        XQueryTree (theDisplay, man-&gt;theParent, &amp;junkroot, &amp;man-&gt;theFrame, 
+  		  &amp;junkwinlist, &amp;junknumchildren);
+--- 636,657 ----
+    }
+    while (XPending (theDisplay)) {
+      XNextEvent (theDisplay, &amp;theEvent);
+!     ConsoleDebug (&quot;theEvent.type: %d\n&quot;, theEvent.type);
+!     if (theEvent.type == MappingNotify) {
+!       ConsoleDebug (&quot;XEVENT: MappingNotify\n&quot;);
+        continue;
++     }
+  
+      man = find_windows_manager (theEvent.xany.window);
+!     if (!man) {
+!       ConsoleDebug (&quot;Event doesn't belong to a manager\n&quot;);
+        continue;
++     }
+  
+      switch (theEvent.type) {
+  #if 0
+      case ReparentNotify:
++       ConsoleDebug (&quot;XEVENT: ReparentNotify\n&quot;);
+        man-&gt;theParent = theEvent.xreparent.parent;
+        XQueryTree (theDisplay, man-&gt;theParent, &amp;junkroot, &amp;man-&gt;theFrame, 
+  		  &amp;junkwinlist, &amp;junknumchildren);
+***************
+*** 537,542 ****
+--- 668,674 ----
+  #endif
+  
+      case KeyPress:
++       ConsoleDebug (&quot;XEVENT: KeyPress\n&quot;);
+        /* Here's a real hack - some systems have two keys with the
+         * same keysym and different keycodes. This converts all
+         * the cases to one keycode. */
+***************
+*** 562,607 ****
+      break;
+  
+      case Expose:
+!       if (theEvent.xexpose.count == 0)
+  	draw_window (man);
+        break;
+  
+      case ButtonPress:
+!       k = which_box (man, theEvent.xbutton.x, theEvent.xbutton.y);
+!       ConsoleDebug (&quot;Got a Button press %d in box: %d\n&quot;, 
+! 		    theEvent.xbutton.button, k);
+!       if (k &gt;= 0 &amp;&amp; theEvent.xbutton.button &gt;= 1 &amp;&amp; 
+! 	  theEvent.xbutton.button &lt;= 3) {
+! 	win = find_win (man, k);
+! 	if (win != NULL) {
+! 	  ConsoleDebug (&quot;Found the window:\n&quot;);
+! 	  ConsoleDebug (&quot;\tid:        %d\n&quot;, win-&gt;app_id);
+! 	  ConsoleDebug (&quot;\tdesknum:   %d\n&quot;, win-&gt;desknum);
+! 	  ConsoleDebug (&quot;\tx, y:      %d %d\n&quot;, win-&gt;x, win-&gt;y);
+! 	  ConsoleDebug (&quot;\ticon:      %d\n&quot;, win-&gt;iconname);
+! 	  ConsoleDebug (&quot;\ticonified: %d\n&quot;, win-&gt;iconified);
+! 	  ConsoleDebug (&quot;\tcomplete:  %d\n&quot;, win-&gt;complete);
+! 
+! 	  modifier = (theEvent.xbutton.state &amp; MODS_USED);
+! 	  /* need to search for an appropriate mouse binding */
+! 	  for (MouseEntry = man-&gt;bindings[MOUSE]; MouseEntry != NULL;
+! 	       MouseEntry= MouseEntry-&gt;NextBinding) {
+! 	    if(((MouseEntry-&gt;Button_Key == theEvent.xbutton.button)||
+! 		(MouseEntry-&gt;Button_Key == 0))&amp;&amp;
+! 	       ((MouseEntry-&gt;Modifier == AnyModifier)||
+! 		(MouseEntry-&gt;Modifier == (modifier&amp; (~LockMask)))))
+! 	    {
+! 	      Function *ftype = MouseEntry-&gt;Function;
+! 	      if (ftype &amp;&amp; ftype-&gt;func) 
+! 		run_function_list (ftype);
+! 	      break;
+! 	    }
+! 	  }
+! 	}
+        }
+        break;
+  
+      case EnterNotify:
+        man-&gt;cursor_in_window = 1;
+        k = which_box (man, theEvent.xcrossing.x, theEvent.xcrossing.y);
+        move_highlight (man, k);
+--- 694,724 ----
+      break;
+  
+      case Expose:
+!       ConsoleDebug (&quot;XEVENT: Expose\n&quot;);
+!       if (theEvent.xexpose.count == 0) {
+  	draw_window (man);
++ 	if (globals.transient) {
++ 	  grab_pointer (man);
++ 	}
++       }
+        break;
+  
+      case ButtonPress:
+!       ConsoleDebug (&quot;XEVENT: ButtonPress\n&quot;);
+!       if (!globals.transient)
+! 	handle_buttonevent (&amp;theEvent, man);
+!       break;
+! 
+!     case ButtonRelease:
+!       ConsoleDebug (&quot;XEVENT: ButtonRelease\n&quot;);
+!       if (globals.transient) {
+! 	handle_buttonevent (&amp;theEvent, man);
+! 	ShutMeDown (0);
+        }
+        break;
+  
+      case EnterNotify:
++       ConsoleDebug (&quot;XEVENT: EnterNotify\n&quot;);
+        man-&gt;cursor_in_window = 1;
+        k = which_box (man, theEvent.xcrossing.x, theEvent.xcrossing.y);
+        move_highlight (man, k);
+***************
+*** 609,619 ****
+        break;
+  
+      case LeaveNotify:
+!       move_highlight (man, -1);
+        break;
+  
+      case ConfigureNotify:
+!       ConsoleDebug (&quot;Configure Notify: %d %d %d %d\n&quot;,
+  		    theEvent.xconfigure.x, theEvent.xconfigure.y,
+  		    theEvent.xconfigure.width, theEvent.xconfigure.height);
+        if (theEvent.xconfigure.send_event) {
+--- 726,737 ----
+        break;
+  
+      case LeaveNotify:
+!       ConsoleDebug (&quot;XEVENT: LeaveNotify\n&quot;);
+!       move_highlight (NULL, -1);
+        break;
+  
+      case ConfigureNotify:
+!       ConsoleDebug (&quot;XEVENT: Configure Notify: %d %d %d %d\n&quot;,
+  		    theEvent.xconfigure.x, theEvent.xconfigure.y,
+  		    theEvent.xconfigure.width, theEvent.xconfigure.height);
+        if (theEvent.xconfigure.send_event) {
+***************
+*** 635,685 ****
+  			 &amp;x, &amp;y, &amp;mask)) {
+  	k = which_box (man, x, y);
+  	ConsoleDebug (&quot;&gt;&gt;&gt;&gt;&gt; Query: %d %d = %d\n&quot;, x, y, k);
+! 	if (k != man-&gt;current_box) {
+  	  move_highlight (man, k);
+  	  run_binding (man, SELECT);
+  	}
+        }
+        else {
+! 	if (man-&gt;current_box != -1)
+! 	  move_highlight (man, -1);
+        }
+        break;
+  
+      case MotionNotify:
+        k = which_box (man, theEvent.xmotion.x, theEvent.xmotion.y);
+!       if (k != man-&gt;current_box) {
+  	move_highlight (man, k);
+  	run_binding (man, SELECT);
+        }
+        break;
+      }
+    }
+    XFlush (theDisplay);
+  }
+  
+! void set_window_properties (Window win, char *p, XSizeHints *sizehints)
+  {
+!   XTextProperty name;
+    XClassHint class;
+    XWMHints wmhints;
+  
+    wmhints.initial_state = NormalState;
+    wmhints.flags = StateHint;
+  
+!   if (XStringListToTextProperty (&amp;p, 1, &amp;name) == 0) {
+      ConsoleMessage (&quot;%s: cannot allocate window name.\n&quot;,Module);
+      return;
+    }
+  
+    class.res_name = Module + 1;
+    class.res_class = &quot;FvwmModule&quot;;
+    
+  
+!   XSetWMProperties (theDisplay, win, &amp;name, &amp;name, NULL, 0,
+  		    sizehints, &amp;wmhints, &amp;class);
+  
+!   XFree (name.value);
+  }
+  
+  static int load_default_context_fore (WinManager *man, int i)
+--- 753,814 ----
+  			 &amp;x, &amp;y, &amp;mask)) {
+  	k = which_box (man, x, y);
+  	ConsoleDebug (&quot;&gt;&gt;&gt;&gt;&gt; Query: %d %d = %d\n&quot;, x, y, k);
+! 	if (k != man-&gt;select_box) {
+  	  move_highlight (man, k);
+  	  run_binding (man, SELECT);
+  	}
+        }
+        else {
+! 	if (man-&gt;select_box != -1)
+! 	  move_highlight (NULL, -1);
+        }
+        break;
+  
+      case MotionNotify:
++    /* ConsoleDebug (&quot;XEVENT: MotionNotify\n&quot;); */
+        k = which_box (man, theEvent.xmotion.x, theEvent.xmotion.y);
+!       if (k != man-&gt;select_box) {
+  	move_highlight (man, k);
+  	run_binding (man, SELECT);
+        }
+        break;
++ 
++     default:
++       ConsoleDebug (&quot;XEVENT: unknown\n&quot;);
+      }
+    }
+    XFlush (theDisplay);
+  }
+  
+! static void set_window_properties (Window win, char *name, char *icon, 
+! 				   XSizeHints *sizehints)
+  {
+!   XTextProperty win_name;
+!   XTextProperty win_icon;
+    XClassHint class;
+    XWMHints wmhints;
+  
+    wmhints.initial_state = NormalState;
+    wmhints.flags = StateHint;
+  
+!   if (XStringListToTextProperty (&amp;name, 1, &amp;win_name) == 0) {
+      ConsoleMessage (&quot;%s: cannot allocate window name.\n&quot;,Module);
+      return;
+    }
++   if (XStringListToTextProperty (&amp;icon, 1, &amp;win_icon) == 0) {
++     ConsoleMessage (&quot;%s: cannot allocate window icon.\n&quot;,Module);
++     return;
++   }
+  
+    class.res_name = Module + 1;
+    class.res_class = &quot;FvwmModule&quot;;
+    
+  
+!   XSetWMProperties (theDisplay, win, &amp;win_name, &amp;win_icon, NULL, 0,
+  		    sizehints, &amp;wmhints, &amp;class);
+  
+!   XFree (win_name.value);
+!   XFree (win_icon.value);
+  }
+  
+  static int load_default_context_fore (WinManager *man, int i)
+***************
+*** 731,737 ****
+  
+    man-&gt;win_height = DEFAULT_WIN_HEIGHT;
+    man-&gt;win_width = DEFAULT_WIN_WIDTH;
+!   man-&gt;current_box = -1;
+    man-&gt;cursor_in_window = 0;
+  
+    if (man-&gt;fontname) {
+--- 860,866 ----
+  
+    man-&gt;win_height = DEFAULT_WIN_HEIGHT;
+    man-&gt;win_width = DEFAULT_WIN_WIDTH;
+!   man-&gt;select_box = -1;
+    man-&gt;cursor_in_window = 0;
+  
+    if (man-&gt;fontname) {
+***************
+*** 793,798 ****
+--- 922,932 ----
+      man-&gt;ButtonFont-&gt;descent;
+    man-&gt;boxheight = man-&gt;fontheight + 4;
+  
++   /* silly hack to guess the minimum char width of the font 
++      doesn't have to be perfect. */
++ 
++   man-&gt;fontwidth = XTextWidth (man-&gt;ButtonFont, &quot;.&quot;, 1);
++ 
+    man-&gt;win_height = man-&gt;boxheight * man-&gt;icon_list.n;
+    if (man-&gt;win_height == 0) {
+      man-&gt;win_height = 1;
+***************
+*** 832,893 ****
+      ConsoleDebug (&quot;gravity: %d %d\n&quot;, sizehints.win_gravity, gravity);
+      sizehints.flags |= USPosition;
+    }
+! 
+!   if (0 &amp;&amp; man-&gt;geometry) {
+!     val = XParseGeometry (man-&gt;geometry, &amp;x, &amp;y, &amp;width, &amp;height);
+!     if (val &amp; WidthValue) {
+!       man-&gt;win_width = sizehints.width = width;
+!     }
+!     if (val &amp; XValue) {
+!       sizehints.x = x;
+!       if (val &amp; XNegative) {
+! 	sizehints.x += globals.screenx - sizehints.width - 2;
+!       }
+!     }
+!     if (val &amp; YValue) {
+!       sizehints.y = y;
+!       if (val &amp; YNegative) {
+! 	sizehints.y += globals.screeny - sizehints.height - 2;
+!       }
+!     }
+! 
+!     if (val &amp; XNegative) { 
+!       if (val &amp; YNegative) {
+! 	sizehints.win_gravity = SouthEastGravity;
+! 	man-&gt;grow_direction = SouthGravity;
+!       }
+!       else { 
+! 	sizehints.win_gravity = NorthEastGravity;
+!       }
+!     }
+!     else { 
+!       if (val &amp; YNegative) { 
+! 	sizehints.win_gravity = SouthWestGravity;
+! 	man-&gt;grow_direction = SouthGravity;
+!       }
+!       else { 
+! 	sizehints.win_gravity = NorthWestGravity;
+!       }
+!     }
+!     /*
+! 
+!     if ((val &amp; YValue) &amp;&amp; (val &amp; YNegative)) {
+!       man-&gt;grow_direction = SouthGravity;
+!       if (val &amp; XValue &amp; XNegative) 
+! 	sizehints.win_gravity = SouthEastGravity;
+!       else 
+! 	sizehints.win_gravity = SouthWestGravity;
+!     } else {
+!       man-&gt;grow_direction = NorthGravity;
+!       if (val &amp; XValue &amp; XNegative) 
+! 	sizehints.win_gravity = NorthWestGravity;
+!       else 
+! 	sizehints.win_gravity = NorthEastGravity;
+!     }
+!     */
+! 
+      sizehints.flags |= USPosition;
+-     ConsoleDebug (&quot;Got geometry: %d %d\n&quot;, sizehints.x, sizehints.y);
+    }
+  
+    man-&gt;win_x = sizehints.x;
+--- 966,979 ----
+      ConsoleDebug (&quot;gravity: %d %d\n&quot;, sizehints.win_gravity, gravity);
+      sizehints.flags |= USPosition;
+    }
+!   if (globals.transient) {
+!     Window dummyroot, dummychild;
+!     int x, y, dummymask;
+! 
+!     XQueryPointer(theDisplay, theRoot, &amp;dummyroot, &amp;dummychild, &amp;sizehints.x,
+! 		  &amp;sizehints.y, &amp;x, &amp;y, &amp;dummymask);
+!     sizehints.win_gravity = NorthWestGravity;
+      sizehints.flags |= USPosition;
+    }
+  
+    man-&gt;win_x = sizehints.x;
+***************
+*** 896,911 ****
+    winattr.background_pixel = man-&gt;backcolor[PLAIN_CONTEXT];
+    winattr.border_pixel = man-&gt;forecolor[PLAIN_CONTEXT];
+    winattr.backing_store = WhenMapped;
+!   winattr.event_mask = ExposureMask | ButtonPressMask | 
+!     PointerMotionMask | EnterWindowMask | LeaveWindowMask |
+!       KeyPressMask | StructureNotifyMask;
+  
+    man-&gt;theWindow = XCreateWindow (theDisplay, theRoot, sizehints.x,
+  				  sizehints.y, man-&gt;win_width, man-&gt;win_height,
+  				  1, CopyFromParent, InputOutput, 
+  				  (Visual *)CopyFromParent, winattrmask,
+  				  &amp;winattr);
+!   
+    for (i = 0; i &lt; NUM_CONTEXTS; i++) {
+      man-&gt;backContext[i] =
+        XCreateGC (theDisplay, man-&gt;theWindow, gcmask, &amp;gcval);
+--- 982,1001 ----
+    winattr.background_pixel = man-&gt;backcolor[PLAIN_CONTEXT];
+    winattr.border_pixel = man-&gt;forecolor[PLAIN_CONTEXT];
+    winattr.backing_store = WhenMapped;
+!   winattr.event_mask = ExposureMask | PointerMotionMask | EnterWindowMask | 
+!     LeaveWindowMask | KeyPressMask | StructureNotifyMask;
+! 
+!   if (globals.transient)
+!     winattr.event_mask |= ButtonReleaseMask;
+!   else
+!     winattr.event_mask |= ButtonPressMask;
+  
+    man-&gt;theWindow = XCreateWindow (theDisplay, theRoot, sizehints.x,
+  				  sizehints.y, man-&gt;win_width, man-&gt;win_height,
+  				  1, CopyFromParent, InputOutput, 
+  				  (Visual *)CopyFromParent, winattrmask,
+  				  &amp;winattr);
+! 
+    for (i = 0; i &lt; NUM_CONTEXTS; i++) {
+      man-&gt;backContext[i] =
+        XCreateGC (theDisplay, man-&gt;theWindow, gcmask, &amp;gcval);
+***************
+*** 939,945 ****
+      }
+    }
+      
+!   set_window_properties (man-&gt;theWindow, Module + 1, &amp;sizehints);
+    man-&gt;window_up = 1;
+    update_window_stuff (man);
+  
+--- 1029,1036 ----
+      }
+    }
+      
+!   set_window_properties (man-&gt;theWindow, man-&gt;titlename, 
+! 			 man-&gt;iconname, &amp;sizehints);
+    man-&gt;window_up = 1;
+    update_window_stuff (man);
+  
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sun Sep 22 1996 - 21:27:45 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start17920">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="17921.html" title="Next message in the list">Jerome GOUT: "FVWM: looking for Xbiff"</a></li>
+<li><dfn>Previous message</dfn>: <a href="17919.html" title="Previous message in the list">Graeme McCaffery: "FVWM: Broadway"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="17929.html" title="Next message in this discussion thread">Albrecht Kadlec: "Re: FVWM: I&#0039;ve added miniicons to fvwm. Here&#0039;s the patch"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="17929.html" title="Message sent in reply to this message">Albrecht Kadlec: "Re: FVWM: I&#0039;ve added miniicons to fvwm. Here&#0039;s the patch"</a></li>
+<li><dfn>Reply</dfn>: <a href="17930.html" title="Message sent in reply to this message">Don Mahurin: "FVWM: FvwmWinList, added mini-icons"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17920" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17920" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17920" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17920" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

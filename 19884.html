@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Compiling fvwm2 on SCO 5.0.2 - cpp problems from Maxwell Spangler on 1997-04-30 (fvwm-users)</title>
+<meta name="Author" content="Maxwell Spangler (maxwell_at_clark.net)" />
+<meta name="Subject" content="FVWM: Compiling fvwm2 on SCO 5.0.2 - cpp problems" />
+<meta name="Date" content="1997-04-30" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Compiling fvwm2 on SCO 5.0.2 - cpp problems</h1>
+<!-- received="Wed Apr 30 13:00:09 1997" -->
+<!-- isoreceived="19970430120009" -->
+<!-- sent="Wed, 30 Apr 1997 13:57:50 -0400" -->
+<!-- isosent="19970430175750" -->
+<!-- name="Maxwell Spangler" -->
+<!-- email="maxwell_at_clark.net" -->
+<!-- subject="FVWM: Compiling fvwm2 on SCO 5.0.2 - cpp problems" -->
+<!-- id="3367881E.660A_at_clark.net" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start19884" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="19885.html" accesskey="d" title="Randy J. Ray: &quot;FVWM: Archive of this mailing list?&quot;">Next message</a> ]
+[ <a href="19883.html" title="Sam Farthing: &quot;FVWM: &#0034;no symbols&#0034; error from libfvwm2.a&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="19888.html" accesskey="t" title="David Nugent: &quot;Re: FVWM: Compiling fvwm2 on SCO 5.0.2 - cpp problems&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19884" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19884" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19884" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19884" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Maxwell Spangler &lt;<a href="mailto:maxwell_at_clark.net?Subject=Re%3A%20FVWM%3A%20Compiling%20fvwm2%20on%20SCO%205.0.2%20-%20cpp%20problems">maxwell_at_clark.net</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 30 Apr 1997 13:57:50 -0400</span><br />
+</address>
+<br />
+I'm continuing my attempt to compile the fvwm2 window manager on my SCO
+<br />
+OpenServer 5.0.2 system. (It's basically unusable until I can get this
+<br />
+done! please help!)
+<br />
+<br />Users have suggested I look into c preprocessor macro expansion problems
+<br />
+which we believe are causing at least part of my problem.
+<br />
+<br />It appears as though the expanded macros have more spaces in them than
+<br />
+the c compiler would like to see.
+<br />
+<br />Here's a snippet from the original code, in add_window.c:
+<br />
+<br />----------------------------------------------------------------
+<br />
+/* ORIGINAL CODE WHICH CAUSES SCO COMPILER TO PRODUCE AN ERROR
+<br />
+&nbsp;&nbsp;tmp_win-&gt;title_height = GetDecor(tmp_win,TitleHeight) + tmp_win-&gt;bw;
+<br />
+*/
+<br />
+<br />/* THIS LINE, WHICH SHOULD BE EXPANED BY THE MACRO, COMPILES. */
+<br />
+&nbsp;&nbsp;tmp_win-&gt;title_height = ( ( tmp_win )-&gt;fl-&gt;TitleHeight ) +
+<br />
+tmp_win-&gt;bw;
+<br />
+------------------------------------------------------------------
+<br />
+<br />This is what cc -E add_window.c (with all other Makefile options like
+<br />
+-DUSEDECOR added, also.)
+<br />
+<br /># 227
+<br />
+&nbsp;&nbsp;tmp_win-&gt;title_height =  ( ( tmp_win ) -&gt; fl -&gt;TitleHeight ) + tmp_win
+<br />
+-&gt; bw ;
+<br />
+<br />I'm guessing that with the extra spaces, the compiler doesn't recognize
+<br />
+-&gt; for pointers and is producing errors.  The above code is exactly this
+<br />
+minus the spaces and seems to compile fine.
+<br />
+<br />Here's the macro, unmodified:
+<br />
+---------------------------------------------------------------------
+<br />
+/* FROM screen.h THE ORIGINAL MACRO CODE
+<br />
+&nbsp;&nbsp;&nbsp;Macro which gets specific decor or default decor.
+<br />
+&nbsp;&nbsp;&nbsp;This saves an indirection in case you don't want
+<br />
+&nbsp;&nbsp;&nbsp;the UseDecor mechanism.
+<br />
+&nbsp;*/
+<br />
+#ifdef USEDECOR     /* THIS IS WHAT i WANT TO USE */
+<br />
+#define GetDecor(window,part) ((window)-&gt;fl-&gt;##part)
+<br />
+#else
+<br />
+#define GetDecor(window,part) (Scr.DefaultDecor.##part)
+<br />
+#endif
+<br />
+------------------------------------------------------------------------
+<br />
+<br />I'd appreciate any help, especially if there are c/cpp switches I can
+<br />
+use to overcome this.  I'm 80% done, but this last 20% is not so easy.
+<br />
+<br />THANKS! (PLEASE HELP!?!)
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Apr 30 1997 - 13:00:09 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start19884">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="19885.html" title="Next message in the list">Randy J. Ray: "FVWM: Archive of this mailing list?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="19883.html" title="Previous message in the list">Sam Farthing: "FVWM: &#0034;no symbols&#0034; error from libfvwm2.a"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="19888.html" title="Next message in this discussion thread">David Nugent: "Re: FVWM: Compiling fvwm2 on SCO 5.0.2 - cpp problems"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Maybe reply</dfn>: <a href="19888.html" title="Message sent in reply to this message">David Nugent: "Re: FVWM: Compiling fvwm2 on SCO 5.0.2 - cpp problems"</a></li>
+<li><dfn>Reply</dfn>: <a href="19889.html" title="Message sent in reply to this message">Bela Lubkin: "FVWM: Re: Compiling fvwm2 on SCO 5.0.2 - cpp problems"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19884" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19884" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19884" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19884" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

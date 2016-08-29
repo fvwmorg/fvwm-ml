@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: Window placement from Marc-Jano Knopp on 2002-02-17 (fvwm-users)</title>
+<meta name="Author" content="Marc-Jano Knopp (mjk_at_rbg.informatik.tu-darmstadt.de)" />
+<meta name="Subject" content="Re: FVWM: Window placement" />
+<meta name="Date" content="2002-02-17" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: Window placement</h1>
+<!-- received="Sun Feb 17 13:51:22 2002" -->
+<!-- isoreceived="20020217135122" -->
+<!-- sent="Sun, 17 Feb 2002 20:50:56 +0100" -->
+<!-- isosent="20020217195056" -->
+<!-- name="Marc-Jano Knopp" -->
+<!-- email="mjk_at_rbg.informatik.tu-darmstadt.de" -->
+<!-- subject="Re: FVWM: Window placement" -->
+<!-- id="20020217195056.GA25516_at_rbg.informatik.tu-darmstadt.de" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="FVWM: Window placement" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start4292" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="4293.html" accesskey="d" title="Mikhael Goikhman: &quot;Re: FVWM: Window placement&quot;">Next message</a> ]
+[ <a href="4291.html" title="Mikhael Goikhman: &quot;Re: FVWM: KDE-like taskbar or iconmanager behaviour&quot;">Previous message</a> ]
+[ <a href="21071.html" title="Anders Eriksson: &quot;FVWM: Window placement&quot;">Maybe in reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg4292" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg4292" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg4292" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg4292" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Marc-Jano Knopp &lt;<a href="mailto:mjk_at_rbg.informatik.tu-darmstadt.de?Subject=Re%3A%20FVWM%3A%20Window%20placement">mjk_at_rbg.informatik.tu-darmstadt.de</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sun, 17 Feb 2002 20:50:56 +0100</span><br />
+</address>
+<br />
+On Sun, 17 Feb 2002 at 16:43:50 (+0000), Andy Arbon wrote:
+<br />
+<em class="quotelev1">&gt; I'd like to be able to have new windows appear centered around the 
+</em><br />
+<em class="quotelev1">&gt; location of the mouse pointer [...]. Is there any way to accomplish
+</em><br />
+<em class="quotelev1">&gt; that with FVWM?
+</em><br />
+<br />Yes :)
+<br />
+<br /><br /><em class="quotelev1">&gt; I've not seen an existing placement style that sounds right.
+</em><br />
+<br />That would be nice! Because my solution is a hack, I think:
+<br />
+<br />~/.fvwm/modules:
+<br />
+<br />&nbsp;&nbsp;DestroyFunc FuncFocusWindow
+<br />
+&nbsp;&nbsp;AddToFunc   FuncFocusWindow
+<br />
+<br />&nbsp;&nbsp;# Move WINDOW to MOUSE position
+<br />
+&nbsp;&nbsp;+ I WindowId $0 (&quot;xterm-kb&quot;) Focus
+<br />
+&nbsp;&nbsp;+ I WindowId $0 (&quot;xterm-kb&quot;) Move m-10p m-10p
+<br />
+<br />&nbsp;&nbsp;# Same for a window reading input for dict
+<br />
+&nbsp;&nbsp;+ I WindowId $0 (&quot;DICT&quot;) Focus
+<br />
+&nbsp;&nbsp;+ I WindowId $0 (&quot;DICT&quot;) Move m-10p m-10p
+<br />
+<br />&nbsp;&nbsp;# Move MOUSE to WINDOW position
+<br />
+&nbsp;&nbsp;+ I WindowId $0 (&quot;xterm-ptr-kb&quot;) WarpToWindow 50 50
+<br />
+<br /><br />And in ~/.fvwm/bindings:
+<br />
+<br />&nbsp;&nbsp;Key n   A       CM      Exec exec xterm -title xterm-kb
+<br />
+&nbsp;&nbsp;Key n   A       CM2     Exec exec xterm -title xterm-kb
+<br />
+&nbsp;&nbsp;Key m   A       CM      Exec exec xterm -title xterm-ptr-kb
+<br />
+&nbsp;&nbsp;Key m   A       CM2     Exec exec xterm -title xterm-ptr-kb
+<br />
+<br />&nbsp;&nbsp;Mouse 1         A       CM      Exec exec xterm -title DICT -e dict &quot;$(xcb -p 0)&quot;
+<br />
+&nbsp;&nbsp;Mouse 1         A       CM2     Exec exec xterm -title DICT -e dict &quot;$(xcb -p 0)&quot;
+<br />
+<br />&nbsp;&nbsp;Key Return      A       SM      Exec exec xterm -title DICT -e /usr/local/bin/askdict
+<br />
+&nbsp;&nbsp;Key Return      A       SM2     Exec exec xterm -title DICT -e /usr/local/bin/askdict
+<br />
+<br /><br />So, Ctrl-Alt-n pops up an xterm at the current mouse pointer position,
+<br />
+and Ctrl-Alt-m pops up an xterm and warps the mouse pointer to its
+<br />
+position.
+<br />
+<br />Selecting a word with the mouse in an xterm and then pressing
+<br />
+Ctrl-Alt-LeftMouseButton anywhere pops up an xterm with dict $WORD
+<br />
+right under your mouse pointer.
+<br />
+<br />Hitting Shift-Alt-Enter pops up a dict window under the mouse pointer.
+<br />
+<br /><br />Best regards
+<br />
+<br />&nbsp;&nbsp;Marc-Jano
+<br />
+<br /><br /><br /><pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sun Feb 17 2002 - 13:51:22 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start4292">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="4293.html" title="Next message in the list">Mikhael Goikhman: "Re: FVWM: Window placement"</a></li>
+<li><dfn>Previous message</dfn>: <a href="4291.html" title="Previous message in the list">Mikhael Goikhman: "Re: FVWM: KDE-like taskbar or iconmanager behaviour"</a></li>
+<li><dfn>Maybe in reply to</dfn>: <a href="21071.html" title="Message to which this message replies">Anders Eriksson: "FVWM: Window placement"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg4292" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg4292" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg4292" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg4292" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:52 BST
+</em></small></p>
+</body>
+</html>

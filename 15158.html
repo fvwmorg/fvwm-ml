@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: FvwmPager DeskColor from Alan Wild on 1995-12-23 (fvwm-users)</title>
+<meta name="Author" content="Alan Wild (arwild01_at_starbase.spd.louisville.edu)" />
+<meta name="Subject" content="FVWM: FvwmPager DeskColor" />
+<meta name="Date" content="1995-12-23" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: FvwmPager DeskColor</h1>
+<!-- received="Fri Dec 22 18:28:30 1995" -->
+<!-- isoreceived="19951222182830" -->
+<!-- sent="Fri, 22 Dec 1995 19:28:26 -0500 (EST)" -->
+<!-- isosent="19951223002826" -->
+<!-- name="Alan Wild" -->
+<!-- email="arwild01_at_starbase.spd.louisville.edu" -->
+<!-- subject="FVWM: FvwmPager DeskColor" -->
+<!-- id="199512230028.TAA25507_at_talos.spd.louisville.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start15158" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="15159.html" accesskey="d" title="mistere_at_tsrcom.com: &quot;FVWM: Problem compiling 2.0.40.&quot;">Next message</a> ]
+[ <a href="15157.html" title="Alan Wild: &quot;FVWM: HP-UX patch&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15158" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15158" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15158" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15158" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Alan Wild &lt;<a href="mailto:arwild01_at_starbase.spd.louisville.edu?Subject=Re%3A%20FVWM%3A%20FvwmPager%20DeskColor">arwild01_at_starbase.spd.louisville.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 22 Dec 1995 19:28:26 -0500 (EST)</span><br />
+</address>
+<br />
+I read a post a while back about someone wished that FvwmPager would
+<br />
+allow you to set different color backgrounds.  This is a small patch
+<br />
+that I made that uses the syntax:
+<br />
+<br />*FvwmPagerDeskColor &lt;desk&gt; &lt;color&gt;
+<br />
+<br />to set the desk color for each desktop.  Note:  The Icon mode still uses
+<br />
+the color specified in *FvwmPagerBack.  If a color is not specifed for a
+<br />
+particuliar desk, it defaults to the value of FvwmPagerBack or to white
+<br />
+if the later is also not specified.  Here is a tidbit from my .fvwm2rc:
+<br />
+<br />*FvwmPagerFore		#a4978e
+<br />
+*FvwmPagerLabel		0	main()
+<br />
+*FvwmPagerLabel		1	Netscape
+<br />
+*FvwmPagerLabel		2	Ileaf
+<br />
+*FvwmPagerLabel		3	other
+<br />
+*FvwmPagerDeskColor	0	#25383c
+<br />
+*FvwmPagerDeskColor	1	#413839
+<br />
+*FvwmPagerDeskColor	2	#610521
+<br />
+*FvwmPagerDeskColor	3	#052567
+<br />
+*FvwmPagerColumns	1
+<br />
+*FvwmPagerFont		-*-new century schoolbook-medium-r-*-*-10-*-*-*-*-*-*-*
+<br />
+<br />-Alan
+<br />
+<br /><br />diff -c ../FvwmPager.orig/FvwmPager.c ./FvwmPager.c
+<br />
+*** ../FvwmPager.orig/FvwmPager.c	Tue Oct  3 11:43:19 1995
+<br />
+--- ./FvwmPager.c	Thu Dec 21 22:41:19 1995
+<br />
+***************
+<br />
+*** 134,139 ****
+<br />
+--- 134,140 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sprintf(line,&quot;Desk %d&quot;,i+desk1);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CopyString(&amp;Desks[i].label,line);
+<br />
++       CopyString(&amp;Desks[i].Dcolor,PagerBack);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;/* Initialize X connection */
+<br />
+***************
+<br />
+*** 894,901 ****
+<br />
+--- 895,923 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(mystrncasecmp(tline,CatString3(&quot;*&quot;, MyName, &quot;Back&quot;),Clength+5)==0))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(Scr.d_depth &gt; 1)
+<br />
++ 	    {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CopyString(&amp;PagerBack,&amp;tline[Clength+5]);
+<br />
++ 	    for (n=0;n&lt;ndesks;n++)
+<br />
++ 	      {
+<br />
++ 	        free(Desks[desk - desk1].Dcolor);
+<br />
++ 	        CopyString(&amp;Desks[n].Dcolor,PagerBack);
+<br />
++ 	      }
+<br />
++ 	    }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}	
+<br />
++       else if((strlen(&amp;tline[0])&gt;1)&amp;&amp;
+<br />
++ 	      (mystrncasecmp(tline,CatString3(&quot;*&quot;,MyName,&quot;DeskColor&quot;),Clength+10)==0))
+<br />
++ 	{
+<br />
++ 	  desk = desk1;
+<br />
++ 	  sscanf(&amp;tline[Clength+10],&quot;%d&quot;,&amp;desk);
+<br />
++ 	  if((desk &gt;= desk1)&amp;&amp;(desk &lt;=desk2))
+<br />
++ 	    {
+<br />
++ 	      n = 0;
+<br />
++ 	      while(isspace(tline[Clength+10+n]))n++;
+<br />
++ 	      while(!isspace(tline[Clength+10+n]))n++;
+<br />
++ 	      free(Desks[desk - desk1].Dcolor);
+<br />
++ 	      CopyString(&amp;Desks[desk - desk1].Dcolor,&amp;tline[Clength+10+n]);
+<br />
++ 	    }
+<br />
++ 	}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if((strlen(&amp;tline[0])&gt;1)&amp;&amp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(mystrncasecmp(tline,CatString3(&quot;*&quot;,MyName,&quot;Hilight&quot;),Clength+8)==0))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+diff -c ../FvwmPager.orig/FvwmPager.c ./FvwmPager.c../FvwmPager.orig/FvwmPager.h ./FvwmPager.h
+<br />
+*** ../FvwmPager.orig/FvwmPager.h	Fri Dec  2 16:06:25 1994
+<br />
+--- ./FvwmPager.h	Thu Dec 21 22:07:58 1995
+<br />
+***************
+<br />
+*** 70,75 ****
+<br />
+--- 70,76 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Window CPagerWin;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int x;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int y;
+<br />
++   char *Dcolor;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;char *label;
+<br />
+&nbsp;&nbsp;} DeskInfo;
+<br />
+&nbsp;&nbsp;
+<br />
+diff -c ../FvwmPager.orig/FvwmPager.h ./FvwmPager.h../FvwmPager.orig/x_pager.c ./x_pager.c
+<br />
+*** ../FvwmPager.orig/x_pager.c	Wed Nov 15 16:10:31 1995
+<br />
+--- ./x_pager.c	Thu Dec 21 22:41:43 1995
+<br />
+***************
+<br />
+*** 316,322 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y = 0;
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;valuemask = (CWBackPixel | CWBorderPixel | CWEventMask);
+<br />
+!       attributes.background_pixel = back_pix;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;attributes.border_pixel = fore_pix;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;attributes.event_mask = (ExposureMask | ButtonReleaseMask);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Desks[i].title_w = XCreateWindow(dpy,Scr.Pager_w, x, y, w, h,1,
+<br />
+--- 316,322 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y = 0;
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;valuemask = (CWBackPixel | CWBorderPixel | CWEventMask);
+<br />
+!       attributes.background_pixel = GetColor(Desks[i].Dcolor);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;attributes.border_pixel = fore_pix;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;attributes.event_mask = (ExposureMask | ButtonReleaseMask);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Desks[i].title_w = XCreateWindow(dpy,Scr.Pager_w, x, y, w, h,1,
+<br />
+<pre>
+-- 
+   / \                                                             Alan Wild
+  /---\                                                     &quot;Speed News Guy&quot;
+ /  |  \                                arwild01_at_starbase.spd.louisville.edu
+ -------      &lt;a HREF=&quot;<a href="http://www.spd.louisville.edu/~arwild01">http://www.spd.louisville.edu/~arwild01</a>&quot;&gt;Homepage&lt;/a&gt;
+--
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Dec 22 1995 - 18:28:30 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start15158">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="15159.html" title="Next message in the list">mistere_at_tsrcom.com: "FVWM: Problem compiling 2.0.40."</a></li>
+<li><dfn>Previous message</dfn>: <a href="15157.html" title="Previous message in the list">Alan Wild: "FVWM: HP-UX patch"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15158" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15158" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15158" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15158" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

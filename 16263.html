@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: [2.0.42] new Exec functionality from Paul D. Smith on 1996-04-18 (fvwm-users)</title>
+<meta name="Author" content="Paul D. Smith (paul_smith_at_BayNetworks.com)" />
+<meta name="Subject" content="FVWM: [2.0.42] new Exec functionality" />
+<meta name="Date" content="1996-04-18" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: [2.0.42] new Exec functionality</h1>
+<!-- received="Thu Apr 18 16:13:37 1996" -->
+<!-- isoreceived="19960418151337" -->
+<!-- sent="Thu, 18 Apr 96 17:15:46 EDT" -->
+<!-- isosent="19960418211546" -->
+<!-- name="Paul D. Smith" -->
+<!-- email="paul_smith_at_BayNetworks.com" -->
+<!-- subject="FVWM: [2.0.42] new Exec functionality" -->
+<!-- id="9604182115.AA16784_at_lemming.engeast" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start16263" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="16264.html" accesskey="d" title="Brady Montz: &quot;FVWM: [2.0.42] new Exec functionality&quot;">Next message</a> ]
+[ <a href="16262.html" title="Justin L. Gaither: &quot;FVWM: FVWM xpm&#0039;s in title bar&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="16276.html" accesskey="t" title="Dan Espen: &quot;Re: FVWM: [2.0.42] new Exec functionality&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16263" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16263" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16263" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16263" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Paul D. Smith &lt;<a href="mailto:paul_smith_at_BayNetworks.com?Subject=Re%3A%20FVWM%3A%20%5B2.0.42%5D%20new%20Exec%20functionality">paul_smith_at_BayNetworks.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 18 Apr 96 17:15:46 EDT</span><br />
+</address>
+<br />
+I'd like to talk about the new Exec feature Chuck added where the &quot;exec&quot;
+<br />
+and &quot;&amp;&quot; aren't necessary any more.
+<br />
+<br />I know one person posted saying a command he used to use didn't work any
+<br />
+more under the new style, and Chuck said he was going to remove the
+<br />
+feature.
+<br />
+<br />I'd like to discuss this further, first: I _LIKE_ the enhancement, and I
+<br />
+really hope we keep it.
+<br />
+<br />I like that I don't have to worry about adding &quot;exec&quot;.  And for newer
+<br />
+users who don't really know what's going on, it's a big win in
+<br />
+ease-of-use and readability.
+<br />
+<br />Instead of removing the feature, can't we add a bit of smarts to it to
+<br />
+get it working correctly so that in the vast majority of the cases, when
+<br />
+you just want to start some app, you can just say &quot;Exec foo&quot;, and yet
+<br />
+still get what you want for more advanced situations?  I think the
+<br />
+problem was something like this:
+<br />
+<br />&nbsp;&nbsp;&quot;foo&quot; Exec cd /home/foo; foo
+<br />
+<br />was translated to this:
+<br />
+<br />&nbsp;&nbsp;exec cd /home/foo; foo
+<br />
+<br />since the cd was exec'd, foo was never run.
+<br />
+<br />One idea would be for fvwm2 to look through the string to be exec'd and,
+<br />
+if it sees something that means multiple apps are running, doesn't add
+<br />
+the exec.  GNU make, for example, does something similar.
+<br />
+<br />I think a sufficient rule is if fvwm sees any unquoted instance of &quot;;&quot;
+<br />
+or &quot;|&quot; in the command string, it should not add exec.  For Bourne shell,
+<br />
+anyway, that should definitely do it.  I wouldn't get pathological about
+<br />
+testing for quoting, either; what's an extra shell or two now and then
+<br />
+for obscure cases?
+<br />
+<br />Another alternative is to keep the default behavior as is, but add a way
+<br />
+to turn it off for advanced cases... a workaround that is gross but that
+<br />
+works right now is this:
+<br />
+<br />&nbsp;&nbsp;&quot;foo&quot; Exec /bin/sh -c 'cd /home/foo; foo'
+<br />
+<br />which would expand to:
+<br />
+<br />&nbsp;&nbsp;exec /bin/sh -c 'cd /home/foo; foo'
+<br />
+<br />Certainly that's not optimal, but it works and this is not a normal case
+<br />
+so maybe it's acceptable.  Maybe someone has a better idea.
+<br />
+<br />Bottom line, I think the enhancement is very useful for the vast
+<br />
+majority of cases, and we should try to resolve the problem raised above
+<br />
+somehow without punting the enhancement.
+<br />
+<br />My $0.02.
+<br />
+<br />-------------------------------------------------------------------------------
+<br />
+&nbsp;Paul D. Smith &lt;psmith_at_baynetworks.com&gt;         Network Management Development
+<br />
+&nbsp;Senior Software Engineer                                   Bay Networks, Inc.
+<br />
+-----------------------------------------------==&lt;<a href="http://www.baynetworks.com/">http://www.baynetworks.com/</a>&gt;-
+<br />
+&nbsp;&quot;Please remain calm...I may be mad, but I am a professional.&quot; --Mad Scientist
+<br />
+-------------------------------------------------------------------------------
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;These are my opinions--Bay Networks takes no responsibility for them.
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Apr 18 1996 - 16:13:37 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start16263">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="16264.html" title="Next message in the list">Brady Montz: "FVWM: [2.0.42] new Exec functionality"</a></li>
+<li><dfn>Previous message</dfn>: <a href="16262.html" title="Previous message in the list">Justin L. Gaither: "FVWM: FVWM xpm&#0039;s in title bar"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="16276.html" title="Next message in this discussion thread">Dan Espen: "Re: FVWM: [2.0.42] new Exec functionality"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Maybe reply</dfn>: <a href="16276.html" title="Message sent in reply to this message">Dan Espen: "Re: FVWM: [2.0.42] new Exec functionality"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16263" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16263" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16263" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16263" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: large PipeReads from Gregg Dameron on 2002-04-18 (fvwm-users)</title>
+<meta name="Author" content="Gregg Dameron (gregg.dameron_at_lmco.com)" />
+<meta name="Subject" content="FVWM: large PipeReads" />
+<meta name="Date" content="2002-04-18" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: large PipeReads</h1>
+<!-- received="Wed Apr 17 20:29:02 2002" -->
+<!-- isoreceived="20020417192902" -->
+<!-- sent="Wed, 17 Apr 2002 19:29:25 -0600" -->
+<!-- isosent="20020418012925" -->
+<!-- name="Gregg Dameron" -->
+<!-- email="gregg.dameron_at_lmco.com" -->
+<!-- subject="FVWM: large PipeReads" -->
+<!-- id="3CBE2175.7AB3C9BD_at_lmco.com" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start4894" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="4895.html" accesskey="d" title="Steve Talley: &quot;FVWM: Remember icon placement?&quot;">Next message</a> ]
+[ <a href="4893.html" title="Mikhael Goikhman: &quot;Re: FVWM: Modifier keys for clicking on menus/WindowList.&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="4896.html" accesskey="t" title="Dominik Vogt: &quot;Re: FVWM: large PipeReads&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg4894" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg4894" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg4894" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg4894" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Gregg Dameron &lt;<a href="mailto:gregg.dameron_at_lmco.com?Subject=Re%3A%20FVWM%3A%20large%20PipeReads">gregg.dameron_at_lmco.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 17 Apr 2002 19:29:25 -0600</span><br />
+</address>
+<br />
+Running 2.4.5 on Solaris.
+<br />
+<br />It seems that as a PipeRead script increases in size, fvwm2 struggles to
+<br />
+read and execute it.  The maximum seems to be 1024 bytes, measured by
+<br />
+the string output in debug mode that begins:
+<br />
+<br />&lt;&lt;DEBUG&gt;&gt; about to attempt '&lt;script here&gt;'.
+<br />
+<br />Larger than that, and things get strange.  Reading in the file
+<br />
+containing the PipeRead may give an error such as:
+<br />
+<br />&lt;&lt;DEBUG&gt;&gt; Module switch -1, about to exec: '&lt;truncated PipeRead script&gt;'
+<br />
+<br />&lt;&lt;DEBUG&gt;&gt; Module switch -1, about to exec: '&lt;characters after truncation
+<br />
+point&gt;'
+<br />
+&lt;&lt;ERROR&gt;&gt; No such command '&lt;characters after truncation point&gt;'
+<br />
+<br />Or, at runtime, Bourne may report an unexpected end-of-file, or other
+<br />
+syntax error, where none exists.
+<br />
+<br />I haven't studied the source code in detail, but in read.c, I see:
+<br />
+<br />&nbsp;&nbsp;char line[1024];
+<br />
+<br />More than a coincidence?
+<br />
+<br />I suppose one workaround is to Exec a separate script and FvwmCommand
+<br />
+the output, but I'm anxious to optimize performance.  Any help is
+<br />
+appreciated.  I guess my preference would be dynamic memory allocation
+<br />
+supporting arbitrarily large PipeReads.
+<br />
+<br />BTW, I noticed that the &quot;about to exec&quot; debug messages chop off the last
+<br />
+character of the line read in.  In read.c:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;if (debugging)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fvwm_msg(DBG,&quot;ReadSubFunc&quot;,&quot;Module switch %d, about to exec:
+<br />
+'%.*s'&quot;,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Module,strlen(tline)-1,tline);
+<br />
+<br />Perhaps the &quot;-1&quot; shouldn't be there?
+<br />
+<br />Gregg Dameron
+<br />
+<br /><br /><pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Apr 17 2002 - 20:29:02 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start4894">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="4895.html" title="Next message in the list">Steve Talley: "FVWM: Remember icon placement?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="4893.html" title="Previous message in the list">Mikhael Goikhman: "Re: FVWM: Modifier keys for clicking on menus/WindowList."</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="4896.html" title="Next message in this discussion thread">Dominik Vogt: "Re: FVWM: large PipeReads"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="4896.html" title="Message sent in reply to this message">Dominik Vogt: "Re: FVWM: large PipeReads"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="4904.html" title="Message sent in reply to this message">Gregg Dameron: "Re: FVWM: large PipeReads"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="4911.html" title="Message sent in reply to this message">Dan Espen: "Re: FVWM: large PipeReads"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg4894" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg4894" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg4894" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg4894" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:53 BST
+</em></small></p>
+</body>
+</html>

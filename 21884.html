@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: Re: Root menu pops up where window border is... from Eddy J. Gurney on 1998-03-16 (fvwm-users)</title>
+<meta name="Author" content="Eddy J. Gurney (eddy_at_ans.net)" />
+<meta name="Subject" content="Re: FVWM: Re: Root menu pops up where window border is..." />
+<meta name="Date" content="1998-03-16" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: Re: Root menu pops up where window border is...</h1>
+<!-- received="Mon Mar 16 12:38:07 1998" -->
+<!-- isoreceived="19980316123807" -->
+<!-- sent="Mon, 16 Mar 1998 13:37:42 -0500" -->
+<!-- isosent="19980316183742" -->
+<!-- name="Eddy J. Gurney" -->
+<!-- email="eddy_at_ans.net" -->
+<!-- subject="Re: FVWM: Re: Root menu pops up where window border is..." -->
+<!-- id="980316133742.ZM21714_at_gizmo.aa.ans.net" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="3532B5BD.280C9C3F_at_percy.wisc.edu" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start21884" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="21885.html" accesskey="d" title="Toshi Isogai: &quot;FVWM: Drag a window into FvwmPager&quot;">Next message</a> ]
+[ <a href="21883.html" title="Jui-Hsuan Joshua Feng: &quot;FVWM: Re: Root menu pops up where window border is...&quot;">Previous message</a> ]
+[ <a href="21883.html" title="Jui-Hsuan Joshua Feng: &quot;FVWM: Re: Root menu pops up where window border is...&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21884" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21884" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21884" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21884" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Eddy J. Gurney &lt;<a href="mailto:eddy_at_ans.net?Subject=Re%3A%20FVWM%3A%20Re%3A%20Root%20menu%20pops%20up%20where%20window%20border%20is...">eddy_at_ans.net</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 16 Mar 1998 13:37:42 -0500</span><br />
+</address>
+<br />
+,--
+<br />
+| &gt; Now, take the mouse and quickly slide it to the bottom border of the
+<br />
+| &gt; xterm and click the left button. Since the mouse is in the window's
+<br />
+| &gt; border region, it SHOULD perform the Mouse 1 action associated with
+<br />
+| &gt; the window side (in my case, Raise-or-Resize). Unfortunately, what it
+<br />
+| &gt; does is perform the action associated with clicking in the root window
+<br />
+| &gt; (in my case, popping up a &quot;Root Menu&quot;).
+<br />
+| &gt;
+<br />
+| &gt; I've looked at the code in virtual.c, and it appears that fvwm creates
+<br />
+| &gt; four windows around the edge of the screen that it uses strictly for
+<br />
+| &gt; &quot;input notification&quot; to tell when the mouse has entered one of these
+<br />
+| &gt; four &quot;invisible&quot; windows around the edge of the screen (they are 2
+<br />
+| &gt; pixels wide). I think somehow these windows are interfering with the
+<br />
+| &gt; desired action, but that is just a guess.
+<br />
+|
+<br />
+| Try to comment out the following line in the file 'misc.c' under
+<br />
+| the directory 'fvwm-2.0.46/fvwm'
+<br />
+|
+<br />
+| void RaiseWindow(FvwmWindow *t)
+<br />
+| {
+<br />
+| ....
+<br />
+|
+<br />
+|   /* raisePanFrames(); */
+<br />
+| }
+<br />
+|
+<br />
+| and recompile fvwm2. I guess here is the only place raisePanFrames
+<br />
+| is called. Hope this helps.
+<br />
+`--
+<br />
+Unfortunately, this did NOT have any affect, from what I could tell.
+<br />
+The one thing that did have an effect was changing the
+<br />
+PAN_FRAME_THICKNESS in fvwm.h from 2 to 0 and recompiling.
+<br />
+<br />Of course, a thickness of zero on the pan frames means you cannot use
+<br />
+the mouse to change virtual screens; you must rely on FvwmPager or
+<br />
+key bindings.
+<br />
+<br />I would like to see a solution that allows both; I can see no reason
+<br />
+where clicking on the border of a window should not perform the action
+<br />
+associated with clicking on the border. Why a window-border click is
+<br />
+being treated as a root-window click makes no sense to me and seems
+<br />
+very broken.
+<br />
+<br />Eddy
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon Mar 16 1998 - 12:38:07 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start21884">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="21885.html" title="Next message in the list">Toshi Isogai: "FVWM: Drag a window into FvwmPager"</a></li>
+<li><dfn>Previous message</dfn>: <a href="21883.html" title="Previous message in the list">Jui-Hsuan Joshua Feng: "FVWM: Re: Root menu pops up where window border is..."</a></li>
+<li><dfn>In reply to</dfn>: <a href="21883.html" title="Message to which this message replies">Jui-Hsuan Joshua Feng: "FVWM: Re: Root menu pops up where window border is..."</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21884" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21884" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21884" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21884" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: sticky windows and changing desks from Greg Klanderman on 1998-02-26 (fvwm-users)</title>
+<meta name="Author" content="Greg Klanderman (greg_at_alphatech.com)" />
+<meta name="Subject" content="FVWM: sticky windows and changing desks" />
+<meta name="Date" content="1998-02-26" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: sticky windows and changing desks</h1>
+<!-- received="Wed Feb 25 18:10:21 1998" -->
+<!-- isoreceived="19980225181021" -->
+<!-- sent="Wed, 25 Feb 1998 19:03:01 -0500 (EST)" -->
+<!-- isosent="19980226000301" -->
+<!-- name="Greg Klanderman" -->
+<!-- email="greg_at_alphatech.com" -->
+<!-- subject="FVWM: sticky windows and changing desks" -->
+<!-- id="199802260003.TAA12491_at_pochacco.alphatech.com" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start21809" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="21810.html" accesskey="d" title="Paul vdM: &quot;Re: FVWM: Odd behavior of Swallowed Pager&quot;">Next message</a> ]
+[ <a href="21808.html" title="Mark Fardal: &quot;FVWM: Click to bring to front?&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21809" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21809" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21809" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21809" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Greg Klanderman &lt;<a href="mailto:greg_at_alphatech.com?Subject=Re%3A%20FVWM%3A%20sticky%20windows%20and%20changing%20desks">greg_at_alphatech.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 25 Feb 1998 19:03:01 -0500 (EST)</span><br />
+</address>
+<br />
+When focus-follows-mouse is set and you're focused on a sticky window, 
+<br />
+changing desks results in no window having the focus, even though the
+<br />
+sticky window remains under the mouse.
+<br />
+<br />The code in fvwm/virtual.c (function changeDesks) has a bit of code
+<br />
+commented out which as far as I can tell does the right thing.  There
+<br />
+is a cryptic comment indicating that it doesn't work.  If someone
+<br />
+could explain it I would greatly appreciate it.  The only thing I can
+<br />
+guess is that it might be buggy due to the variable StickyWin being
+<br />
+static in the function.  I uncommented the code and made StickyWin
+<br />
+non-static and it all seems to work right.  I can't see any problem
+<br />
+with sticky click-to-focus windows.  Am I missing something?
+<br />
+<br />thank you for your time,
+<br />
+Greg
+<br />
+<br />ps - Could you please include me directly in followups.  
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I am not on either list.  
+<br />
+<br />Also, I sent a few patches last November and December and have not
+<br />
+heard anything.  Would it be possible to get some feedback as to
+<br />
+whether these have been accepted?
+<br />
+<br />Finally, on your TODO list on the web you mention you'd like FvwmAuto
+<br />
+to be customizable on a per- window-{name,class..} basis.  I've got a
+<br />
+fvwmperl module that does this - its rather general.  If you'd like to 
+<br />
+include it I'd be happy to let you have it.
+<br />
+<br /><br /><br />--- ../../.backups/virtual.c!!!proj!mstar!software!fvwm!fvwm-2.0.46!fvwm!.~1~	Thu Aug 14 16:21:17 1997
+<br />
++++ virtual.c	Wed Feb 25 18:23:49 1998
+<br />
+_at_&#64; -442,7 +442,8 &#64;&#64;
+<br />
+&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;int oldDesk;
+<br />
+&nbsp;&nbsp;&nbsp;FvwmWindow *FocusWin = 0, *t;
+<br />
+-  static FvwmWindow *StickyWin = 0;
+<br />
++  /* static below seems wrong.. -gk */
+<br />
++  /* static */ FvwmWindow *StickyWin = 0;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;oldDesk = Scr.CurrentDesk;
+<br />
+&nbsp;
+<br />
+_at_&#64; -514,8 +515,10 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;* focus-follows-mouse person, but put in one sticky click-to-focus window
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;* (typically because you don't really want to give focus to this window),
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;* then the following lines are screwed up. */
+<br />
+-/*  else if (StickyWin &amp;&amp; (StickyWin-&gt;flags &amp;&amp; STICKY))
+<br />
+-    SetFocus(StickyWin-&gt;w, StickyWin,1);*/
+<br />
++
+<br />
++  /* Uncommented next 2 lines - this seems totally reasonable... -gk */
+<br />
++  else if (StickyWin &amp;&amp; (StickyWin-&gt;flags &amp;&amp; STICKY))
+<br />
++    SetFocus(StickyWin-&gt;w, StickyWin,1);
+<br />
+&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;#endif
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SetFocus(Scr.NoFocusWin,NULL,1);
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Feb 25 1998 - 18:10:21 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start21809">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="21810.html" title="Next message in the list">Paul vdM: "Re: FVWM: Odd behavior of Swallowed Pager"</a></li>
+<li><dfn>Previous message</dfn>: <a href="21808.html" title="Previous message in the list">Mark Fardal: "FVWM: Click to bring to front?"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21809" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21809" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21809" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21809" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

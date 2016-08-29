@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Feature requests from Sullivan N. Beck on 1999-02-04 (fvwm-users)</title>
+<meta name="Author" content="Sullivan N. Beck (sbeck_at_cise.ufl.edu)" />
+<meta name="Subject" content="FVWM: Feature requests" />
+<meta name="Date" content="1999-02-04" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Feature requests</h1>
+<!-- received="Thu Feb  4 11:44:07 1999" -->
+<!-- isoreceived="19990204114407" -->
+<!-- sent="Thu, 04 Feb 1999 12:43:24 -0500" -->
+<!-- isosent="19990204174324" -->
+<!-- name="Sullivan N. Beck" -->
+<!-- email="sbeck_at_cise.ufl.edu" -->
+<!-- subject="FVWM: Feature requests" -->
+<!-- id="199902041743.MAA26159_at_cise.ufl.edu" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start23581" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="23582.html" accesskey="d" title="Brian T. O&#0039;Neill: &quot;FVWM: XPM problem&quot;">Next message</a> ]
+[ <a href="23580.html" title="Dan Espen: &quot;Re: FVWM: Bug in 2.1.7 and 2.1.10 ?&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="23591.html" accesskey="t" title="Pete Forman: &quot;Re: FVWM: Feature requests&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg23581" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg23581" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg23581" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg23581" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Sullivan N. Beck &lt;<a href="mailto:sbeck_at_cise.ufl.edu?Subject=Re%3A%20FVWM%3A%20Feature%20requests">sbeck_at_cise.ufl.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 04 Feb 1999 12:43:24 -0500</span><br />
+</address>
+<br />
+There are a couple features that I'd like to see in fvwm and was wondering if
+<br />
+they were planned:
+<br />
+<br />1)  I use the FvwmIconMan a lot, and one thing that I'd really like to be able
+<br />
+to do is place my cursor in one of the bars and then be able to type and have
+<br />
+the keystrokes go to the window (not necessarily on this screen).  In order to
+<br />
+do this, I'd need a function similar to Focus but which did NOT switch to that
+<br />
+screen.
+<br />
+<br />As an example, I could use this to control my CD player (xmcd) from a different
+<br />
+page without first jumping to the page it was on.
+<br />
+<br />I thought I'd give this one a shot and I created a new function (FocusRemote)
+<br />
+which calls the focus_remote_func (identical to focus_func except it calls
+<br />
+FocusOn_NoMove instead of FocusOn -- same arguments).  Then, I wrote the
+<br />
+FocusOn_NoMove function (basically FocusOn without any moving/raising/etc.):
+<br />
+<br />void FocusOn_NoMove(FvwmWindow *t,Bool FocusByMouse)
+<br />
+{
+<br />
+&nbsp;&nbsp;if(t == (FvwmWindow *)0)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+<br />&nbsp;&nbsp;UngrabEm();
+<br />
+&nbsp;&nbsp;SetFocus(t-&gt;w,t,FocusByMouse);
+<br />
+}
+<br />
+<br />I thought it would be that simple... but it turns out that there are a number
+<br />
+of problems with it.  I'm not at all familiar with the fvwm source code (today
+<br />
+is the first time I've looked at it)... but if I'm missing something simple,
+<br />
+please let me know.
+<br />
+<br /><br />2)  I'd really like to see the geometry always be relative to the upper left
+<br />
+hand corner of the desktop... NOT page.  For example, I always have Netscape in
+<br />
+(1,1) page.  In order to have it pop up in the right screen, I have to go back
+<br />
+to the (0,0) page before I can run it, otherwise, it will not appear in the
+<br />
+corect screen.
+<br />
+<br />The StartsOnPage function does this great... except that now, I have to modify
+<br />
+my fvwm2rc file every time I want to add a new X client.  I have to create a
+<br />
+special style for it.  I am willing to do this to get the setup I want... but
+<br />
+it doesn't seem to me that the fvwm2rc file is the correct place to be defining
+<br />
+all my clients.
+<br />
+<br />The ideal solution (which is of course impossible) would be for every X client
+<br />
+to accept a geometry and page.  That won't happen, but being able to specify a
+<br />
+geometry relative to the (0,0) page is the next best thing (IMO).
+<br />
+<br />Perhaps the most important problem is that I like to switch back and forth
+<br />
+between window managers (mainly to test them since I'm in charge of installing
+<br />
+software).  Other virtual window managers tend not to use the page concept
+<br />
+(instead, they're just a screen looking at one portion of the whole very large
+<br />
+screen) so geometries are relative to the upper left corner.  So, using the
+<br />
+-geometry option, I can make a list of clients work in all window manager
+<br />
+(except fvwm... unless I'm in the (0,0) page).  There are ways to get around
+<br />
+this... but none are very elegant.
+<br />
+<br />Anyway, just hoping.  Perhaps a compile time option to specify which behavior
+<br />
+to use?
+<br />
+<br /><br />------------------------------------------------------------------------------
+<br />
+Sullivan Beck                      <a href="http://www.cise.ufl.edu/~sbeck/">http://www.cise.ufl.edu/~sbeck/</a>
+<br />
+&nbsp;sbeck_at_cise.ufl.edu  | This space reserved for some saying demonstrating great
+<br />
+&nbsp;PH : (352) 392-1057 | wisdom, wit, or insight.  I'll fill it in just as soon
+<br />
+&nbsp;Fax: (352) 392-1220 | as I have any of the above.
+<br />
+------------------------------------------------------------------------------
+<br />
+<br /><br /><pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://fvwm.math.uh.edu/">http://fvwm.math.uh.edu/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Feb 04 1999 - 11:44:07 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start23581">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="23582.html" title="Next message in the list">Brian T. O&#0039;Neill: "FVWM: XPM problem"</a></li>
+<li><dfn>Previous message</dfn>: <a href="23580.html" title="Previous message in the list">Dan Espen: "Re: FVWM: Bug in 2.1.7 and 2.1.10 ?"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="23591.html" title="Next message in this discussion thread">Pete Forman: "Re: FVWM: Feature requests"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="23591.html" title="Message sent in reply to this message">Pete Forman: "Re: FVWM: Feature requests"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg23581" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg23581" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg23581" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg23581" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:02 BST
+</em></small></p>
+</body>
+</html>

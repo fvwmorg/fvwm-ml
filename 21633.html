@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Application binding changes patch from Ted Faber on 1998-01-17 (fvwm-users)</title>
+<meta name="Author" content="Ted Faber (faber_at_ISI.EDU)" />
+<meta name="Subject" content="FVWM: Application binding changes patch" />
+<meta name="Date" content="1998-01-17" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Application binding changes patch</h1>
+<!-- received="Fri Jan 16 19:32:53 1998" -->
+<!-- isoreceived="19980116193253" -->
+<!-- sent="Fri, 16 Jan 1998 17:32:32 -0800" -->
+<!-- isosent="19980117013232" -->
+<!-- name="Ted Faber" -->
+<!-- email="faber_at_ISI.EDU" -->
+<!-- subject="FVWM: Application binding changes patch" -->
+<!-- id="199801170132.RAA07241_at_tnt.isi.edu" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start21633" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="21634.html" accesskey="d" title="Guido Notari: &quot;FVWM: rxvt 2.4.5&quot;">Next message</a> ]
+[ <a href="21632.html" title="Ted Faber: &quot;Re: FVWM: Releasing Mouse bindings under fvwm 2.0.46&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21633" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21633" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21633" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21633" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Ted Faber &lt;<a href="mailto:faber_at_ISI.EDU?Subject=Re%3A%20FVWM%3A%20Application%20binding%20changes%20patch">faber_at_ISI.EDU</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 16 Jan 1998 17:32:32 -0800</span><br />
+</address>
+<br />
+Yes, I know I said I didn't have time to patch this, but it
+<br />
+exasperated me to the point of fixing it.
+<br />
+<br /><br />The problem:
+<br />
+<br />Mouse 1 A C Iconify
+<br />
+<br />followed by a later 
+<br />
+<br />Mouse 1 A C -
+<br />
+<br />doesn't pass events like Mouse 1 C through to application windows,
+<br />
+although windows created with the second binding in effect do see such
+<br />
+events.  This seems inconsistent with removing the binding.
+<br />
+<br />Why do I care:
+<br />
+<br />I don't use titlebars, and I want to be able to turn off my iconify
+<br />
+binding (above) to use application features.
+<br />
+<br />The cause:
+<br />
+<br />Whenever a new window is created, the bindings list is used to set
+<br />
+passive grabs in the various application windows.  On the event, fvwm
+<br />
+scans the bindings list and executes the bound function.
+<br />
+<br />However, when a binding is cancelled, the binding is only removed from
+<br />
+the list, the grabs are unaltered.   This means that keys/buttons
+<br />
+formerly bound (like the mouse button above) are still grabbed, but no
+<br />
+function is executed.  Unfortunately the application never sees the event.
+<br />
+<br />Because the majority of people bind keys and buttons in titlebars and
+<br />
+root contexts and rarely change them, this hasn't been a problem for
+<br />
+them - the root window wouldn't act on the keypress if fvwm didn't.
+<br />
+<br />The solution:
+<br />
+<br />I added code to the part of remove_binding() that removes the binding
+<br />
+from the list.  The new code checks to see if the removed binding was
+<br />
+an application context or all context binding, and if so it removes
+<br />
+all the grabs on application windows and reinstates relevent ones
+<br />
+using GrabButtons or GrabKeys as appropriate after the binding list
+<br />
+has been changed.  (Note this is just removing and establishing Grabs,
+<br />
+nothing is redrawn.)
+<br />
+<br />It's linear in the number of windows, but it's also easier than
+<br />
+parsing the whole bindings list to see which bindings would have to be in
+<br />
+effect, too.  I think these changes are infrequent enough, and there
+<br />
+are few enough windows that this brute force algorithm is sure to be
+<br />
+right, and not too expensive.
+<br />
+<br />Let me know what you think.  Since I'm posting patches, I'm now
+<br />
+subscribed to the list.
+<br />
+<br />The patch:
+<br />
+<br />Relative to fvwm-2.0.46/fvwm
+<br />
+<br />*** bindings.c	Fri Jan 16 17:06:06 1998
+<br />
+--- bindings.c.orig	Wed Jun 19 20:02:12 1996
+<br />
+***************
+<br />
+*** 72,78 ****
+<br />
+&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Binding *temp=Scr.AllBindings, *temp2, *prev=NULL;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;KeyCode keycode;
+<br />
+-   FvwmWindow *w;
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if (!mouse_binding)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;keycode=XKeysymToKeycode(dpy,keysym);
+<br />
+--- 72,77 ----
+<br />
+***************
+<br />
+*** 97,119 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;free(temp);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;temp=NULL;
+<br />
+- 
+<br />
+- 	/* if we change an application or an all context binding,
+<br />
+-            adjust the grabs on all application windows so the
+<br />
+-            applications can see the events */
+<br />
+- 	
+<br />
+- 	if ( contexts == C_ALL || contexts == C_WINDOW ) {
+<br />
+- 	    for ( w = Scr.FvwmRoot.next; w != NULL ; w = w-&gt;next) {
+<br />
+- 		if (mouse_binding) {
+<br />
+- 		    XUngrabButton(dpy,AnyButton,AnyModifier,w-&gt;w);
+<br />
+- 		    GrabButtons(w);
+<br />
+- 		}
+<br />
+- 		else {
+<br />
+- 		    XUngrabKey(dpy,AnyKey,AnyModifier,w-&gt;w);
+<br />
+- 		    GrabKeys(w);
+<br />
+- 		}
+<br />
+- 	    }
+<br />
+- 	}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (temp)
+<br />
+--- 96,101 ----
+<br />
+<br /><br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Jan 16 1998 - 19:32:53 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start21633">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="21634.html" title="Next message in the list">Guido Notari: "FVWM: rxvt 2.4.5"</a></li>
+<li><dfn>Previous message</dfn>: <a href="21632.html" title="Previous message in the list">Ted Faber: "Re: FVWM: Releasing Mouse bindings under fvwm 2.0.46"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21633" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21633" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21633" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21633" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

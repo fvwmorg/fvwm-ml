@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: XMMS Problems from Dominik Vogt on 2000-11-12 (fvwm-users)</title>
+<meta name="Author" content="Dominik Vogt (dominik.vogt_at_gmx.de)" />
+<meta name="Subject" content="Re: FVWM: XMMS Problems" />
+<meta name="Date" content="2000-11-12" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: XMMS Problems</h1>
+<!-- received="Sun Nov 12 20:19:38 2000" -->
+<!-- isoreceived="20001112201938" -->
+<!-- sent="Sun, 12 Nov 2000 14:57:07 +0100" -->
+<!-- isosent="20001112135707" -->
+<!-- name="Dominik Vogt" -->
+<!-- email="dominik.vogt_at_gmx.de" -->
+<!-- subject="Re: FVWM: XMMS Problems" -->
+<!-- id="20001112145707.B656_at_gmx.de" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="20001106212137.B32487_at_bertha.umr.edu" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start1611" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="1612.html" accesskey="d" title="Paul D. Smith: &quot;Re: FVWM: Window avoidance&quot;">Next message</a> ]
+[ <a href="1610.html" title="Dominik Vogt: &quot;Re: FVWM: Window avoidance&quot;">Previous message</a> ]
+[ <a href="1594.html" title="Joe Wingbermuehle: &quot;FVWM: XMMS Problems&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="1614.html" accesskey="t" title="Joe Wingbermuehle: &quot;Re: FVWM: XMMS Problems&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg1611" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg1611" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg1611" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg1611" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Dominik Vogt &lt;<a href="mailto:dominik.vogt_at_gmx.de?Subject=Re%3A%20FVWM%3A%20XMMS%20Problems">dominik.vogt_at_gmx.de</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sun, 12 Nov 2000 14:57:07 +0100</span><br />
+</address>
+<br />
+On Mon, Nov 06, 2000 at 09:21:37PM -0600, Joe Wingbermuehle wrote:
+<br />
+<em class="quotelev1">&gt; Hi,
+</em><br />
+<em class="quotelev1">&gt; Lately I have been having problems with the latest snapshots of FVWM and XMMS.
+</em><br />
+<em class="quotelev1">&gt; XMMS starts fine and everything, but when I try to move it, it moves very
+</em><br />
+<em class="quotelev1">&gt; slowly. Moving XMMS works just fine under other window managers. Does anyone
+</em><br />
+<em class="quotelev1">&gt; know what is happening and/or how to fix it?
+</em><br />
+<em class="quotelev1">&gt; Also of interest, when I restart FVWM, XMMS is dies.
+</em><br />
+<br />I pinned down this problem in the xmms sources and sent a patch to the
+<br />
+developers.  Here it goes:
+<br />
+<br />----------------------------- snip -----------------------------
+<br />
+--- main.c.orig Sun Nov 12 14:20:01 2000
+<br />
++++ main.c      Sun Nov 12 14:33:23 2000
+<br />
+_at_&#64; -1094,6 +1095,8 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;draw_main_window(FALSE);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gdk_flush();
+<br />
++       /* give the X server a chance to handle our requests */
+<br />
++       xmms_usleep(1);
+<br />
+<br />&nbsp;}
+<br />
+<br />----------------------------- snip -----------------------------
+<br />
+<br />Apply this patch to the file xmms/main.c in the xmms sources.
+<br />
+<br />Bye
+<br />
+<br />Dominik ^_^  ^_^
+<br />
+<br /><pre>
+--
+Dominik Vogt, dominik.vogt_at_gmx.de
+Reply-To: dominik.vogt_at_gmx.de
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sun Nov 12 2000 - 20:19:38 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start1611">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="1612.html" title="Next message in the list">Paul D. Smith: "Re: FVWM: Window avoidance"</a></li>
+<li><dfn>Previous message</dfn>: <a href="1610.html" title="Previous message in the list">Dominik Vogt: "Re: FVWM: Window avoidance"</a></li>
+<li><dfn>In reply to</dfn>: <a href="1594.html" title="Message to which this message replies">Joe Wingbermuehle: "FVWM: XMMS Problems"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="1614.html" title="Next message in this discussion thread">Joe Wingbermuehle: "Re: FVWM: XMMS Problems"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="1614.html" title="Message sent in reply to this message">Joe Wingbermuehle: "Re: FVWM: XMMS Problems"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg1611" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg1611" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg1611" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg1611" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:51 BST
+</em></small></p>
+</body>
+</html>

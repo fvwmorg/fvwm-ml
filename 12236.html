@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: How to make 2.5.10 center all new windows (with some exceptions)? from Francis Litterio on 2004-05-16 (fvwm-users)</title>
+<meta name="Author" content="Francis Litterio (franl_at_world.std.com)" />
+<meta name="Subject" content="FVWM: How to make 2.5.10 center all new windows (with some exceptions)?" />
+<meta name="Date" content="2004-05-16" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: How to make 2.5.10 center all new windows (with some exceptions)?</h1>
+<!-- received="Sun May 16 09:42:27 2004" -->
+<!-- isoreceived="20040516084227" -->
+<!-- sent="Sun, 16 May 2004 10:35:50 -0400" -->
+<!-- isosent="20040516143550" -->
+<!-- name="Francis Litterio" -->
+<!-- email="franl_at_world.std.com" -->
+<!-- subject="FVWM: How to make 2.5.10 center all new windows (with some exceptions)?" -->
+<!-- id="m3vfiwigfo.fsf_at_world.std.com" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start12236" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="12237.html" accesskey="d" title="Nicholas Paul Johnson: &quot;Re: FVWM: numeric keypad as pointing device.&quot;">Next message</a> ]
+[ <a href="12235.html" title="Mikhael Goikhman: &quot;Re: FVWM: numeric keypad as pointing device.&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="12238.html" accesskey="t" title="Mikhael Goikhman: &quot;Re: FVWM: How to make 2.5.10 center all new windows (with some exceptions)?&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg12236" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg12236" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg12236" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg12236" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Francis Litterio &lt;<a href="mailto:franl_at_world.std.com?Subject=Re%3A%20FVWM%3A%20How%20to%20make%202.5.10%20center%20all%20new%20windows%20(with%20some%20exceptions)%3F">franl_at_world.std.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sun, 16 May 2004 10:35:50 -0400</span><br />
+</address>
+<br />
+Is there a way to tell FVWM 2.5.10 to center all newly created windows
+<br />
+(with some exceptions based on the window name)?
+<br />
+<br />Right now, I'm using FvwmEvent's add_window command to do it, but the
+<br />
+window is created first then moved, which looks crappy.  Here's what I'm
+<br />
+doing now, which works but makes windows jump around when they are first
+<br />
+created:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AddToFunc StartFunction
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ I Module FvwmEvent
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*FvwmEvent: StartDelay 5
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*FvwmEvent: Cmd
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*FvwmEvent: add_window &quot;Function MyPositionWindow&quot;
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AddToFunc MyPositionWindow
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ I ThisWindow (&quot;Emacs&quot;) Nop
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ I TestRc (Match) Break
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ I ThisWindow (&quot;XTerm&quot;) Nop
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ I TestRc (Match) Break
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ I ThisWindow (&quot;Download:Manager&quot;) Move 0 0
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ I TestRc (Match) Break
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ I ThisWindow (&quot;asclock&quot;) Move -0p -0p
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ I TestRc (Match) Break
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ I ThisWindow Function MyCenterWindow     # Center all others by default
+<br />
+<br />Is there a way to do this that prevents windows from being moved after
+<br />
+they are created?
+<br />
+<pre>
+--
+Francis Litterio
+franl_at_world.std.com
+<a href="http://world.std.com/~franl/">http://world.std.com/~franl/</a>
+GPG and PGP public keys available on keyservers.
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sun May 16 2004 - 09:42:27 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start12236">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="12237.html" title="Next message in the list">Nicholas Paul Johnson: "Re: FVWM: numeric keypad as pointing device."</a></li>
+<li><dfn>Previous message</dfn>: <a href="12235.html" title="Previous message in the list">Mikhael Goikhman: "Re: FVWM: numeric keypad as pointing device."</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="12238.html" title="Next message in this discussion thread">Mikhael Goikhman: "Re: FVWM: How to make 2.5.10 center all new windows (with some exceptions)?"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="12238.html" title="Message sent in reply to this message">Mikhael Goikhman: "Re: FVWM: How to make 2.5.10 center all new windows (with some exceptions)?"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg12236" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg12236" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg12236" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg12236" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:56 BST
+</em></small></p>
+</body>
+</html>

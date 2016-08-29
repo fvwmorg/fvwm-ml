@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: FvwmButtons problem, more... from Jason Lingohr on 1996-06-19 (fvwm-users)</title>
+<meta name="Author" content="Jason Lingohr (jason_at_cyber.com.au)" />
+<meta name="Subject" content="FVWM: FvwmButtons problem, more..." />
+<meta name="Date" content="1996-06-19" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: FvwmButtons problem, more...</h1>
+<!-- received="Wed Jun 19 00:17:51 1996" -->
+<!-- isoreceived="19960618231751" -->
+<!-- sent="Wed, 19 Jun 1996 15:13:08 +1000 (EST)" -->
+<!-- isosent="19960619051308" -->
+<!-- name="Jason Lingohr" -->
+<!-- email="jason_at_cyber.com.au" -->
+<!-- subject="FVWM: FvwmButtons problem, more..." -->
+<!-- id="Pine.LNX.3.91.960619150906.21840d-100000_at_soy.cyber.com.au" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start17189" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="17190.html" accesskey="d" title="Markus Gutschke: &quot;Re: FVWM: Problem with fvwm2 and nethack/X11&quot;">Next message</a> ]
+[ <a href="17188.html" title="Jason Lingohr: &quot;FVWM: FvwmButtons problem...&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17189" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17189" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17189" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17189" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Jason Lingohr &lt;<a href="mailto:jason_at_cyber.com.au?Subject=Re%3A%20FVWM%3A%20FvwmButtons%20problem%2C%20more...">jason_at_cyber.com.au</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 19 Jun 1996 15:13:08 +1000 (EST)</span><br />
+</address>
+<br />
+Just did a truss on both the running fvwm process clicking on an xterm 
+<br />
+button, and trussing an xterm from a commandline.  Got this from the 
+<br />
+commandline truss:
+<br />
+<br />19541:  getuid()                                        = 347 [347]
+<br />
+19541:  getgid()                                        = 20 [20]
+<br />
+19541:  sigaction(SIGTTOU, 0xEFFFEBD0, 0xEFFFECD0)      = 0
+<br />
+19541:  sigaction(SIGALRM, 0xEFFFEBD0, 0xEFFFECD0)      = 0
+<br />
+19541:  alarm(2)                                        = 0
+<br />
+19541:  open(&quot;/dev/tty&quot;, O_RDWR)                        = 6
+<br />
+19541:  alarm(0)                                        = 2
+<br />
+19541:  sigaction(SIGALRM, 0xEFFFEBD0, 0xEFFFECD0)      = 0
+<br />
+19541:  ioctl(6, TCGETS, 0xEFFFF63C)                    = 0
+<br />
+19541:  close(6)                                        = 0
+<br />
+<br /><br />And this from the fvwm process:
+<br />
+<br />18678:  getuid()                                        = 347 [347]
+<br />
+18678:  getgid()                                        = 20 [20]
+<br />
+18678:  sigaction(SIGTTOU, 0xEFFFF0A0, 0xEFFFF1A0)      = 0
+<br />
+18678:  sigaction(SIGALRM, 0xEFFFF0A0, 0xEFFFF1A0)      = 0
+<br />
+18678:  alarm(2)                                        = 0
+<br />
+18678:  open(&quot;/dev/tty&quot;, O_RDWR)                        Err#22 EINVAL
+<br />
+18678:  alarm(0)                                        = 2
+<br />
+18678:  sigaction(SIGALRM, 0xEFFFF0A0, 0xEFFFF1A0)      = 0
+<br />
+18678:  write(2, &quot; x t e r m&quot;, 5)                       = 5
+<br />
+18678:  write(2, &quot; :   E r r o r  &quot;, 8)                 = 8
+<br />
+18678:  write(2, &quot; 1 4&quot;, 2)                             = 2
+<br />
+18678:  write(2, &quot; ,   e r r n o  &quot;, 8)                 = 8
+<br />
+18678:  write(2, &quot; 2 2 :  &quot;, 4)                         = 4
+<br />
+18678:  write(2, &quot; I n v a l i d   a r g u&quot;.., 16)      = 16
+<br />
+18678:  write(2, &quot;\n&quot;, 1)                               = 1
+<br />
+18678:  sigprocmask(SIG_BLOCK, 0xEFFFF0E8, 0xEFFFF0D8)  = 0
+<br />
+<br /><br />As it shows, the already-exec'ed xterm process is trying to get to 
+<br />
+/dev/tty, and failing with an EINVAL.  The weirdest thing is that 
+<br />
+according to the open(2) man page, EINVAL shouldn't even be a returned 
+<br />
+error value upon a call to open().
+<br />
+<br />Does this give anyone a better idea?
+<br />
+<br /><br /><br /><br />-----------------------------------------------------------------------------
+<br />
+Jason Lingohr                            Frankston Monash Yoyo Administration
+<br />
+lingman_at_yoyo.cc.monash.edu.au                       B.Comp(Inf. Sys.) student
+<br />
+<a href="http://yoyo.cc.monash.edu.au/~lingman">http://yoyo.cc.monash.edu.au/~lingman</a>             Internet Systems Consultant
+<br />
+Mobile: +61-(0)411-46-9939         IT Consultant with Cybersource Pty Limited 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IT Journalist -- LAN Magazine Australia/New Zealand
+<br />
+-----------------------------------------------------------------------------
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Jun 19 1996 - 00:17:51 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start17189">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="17190.html" title="Next message in the list">Markus Gutschke: "Re: FVWM: Problem with fvwm2 and nethack/X11"</a></li>
+<li><dfn>Previous message</dfn>: <a href="17188.html" title="Previous message in the list">Jason Lingohr: "FVWM: FvwmButtons problem..."</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17189" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17189" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17189" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17189" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

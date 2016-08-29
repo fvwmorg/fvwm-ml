@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: 300+MB for fwvm? from David Fries on 2002-07-14 (fvwm-users)</title>
+<meta name="Author" content="David Fries (dfries_at_mail.win.org)" />
+<meta name="Subject" content="FVWM: 300+MB for fwvm?" />
+<meta name="Date" content="2002-07-14" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: 300+MB for fwvm?</h1>
+<!-- received="Sun Jul 14 15:12:05 2002" -->
+<!-- isoreceived="20020714141205" -->
+<!-- sent="Sun, 14 Jul 2002 15:12:42 -0500" -->
+<!-- isosent="20020714201242" -->
+<!-- name="David Fries" -->
+<!-- email="dfries_at_mail.win.org" -->
+<!-- subject="FVWM: 300+MB for fwvm?" -->
+<!-- id="20020714201242.GA23105_at_spacedout.fries.net" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="20020711064737.GC851_at_snoopy.parislyon" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start5562" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="5563.html" accesskey="d" title="David Fries: &quot;FVWM: Re: 300+MB for fwvm?&quot;">Next message</a> ]
+[ <a href="5561.html" title="Rob &#0039;Feztaa&#0039; Park: &quot;Re: FVWM: Execute function at desk change&quot;">Previous message</a> ]
+[ <a href="5540.html" title="Olivier Chapuis: &quot;Re: FVWM: Re: What&#0039;s a good memory debugger?&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="5563.html" accesskey="t" title="David Fries: &quot;FVWM: Re: 300+MB for fwvm?&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg5562" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg5562" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg5562" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg5562" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: David Fries &lt;<a href="mailto:dfries_at_mail.win.org?Subject=Re%3A%20FVWM%3A%20300%2BMB%20for%20fwvm%3F">dfries_at_mail.win.org</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sun, 14 Jul 2002 15:12:42 -0500</span><br />
+</address>
+<br />
+I can say for sure that fvwm 2.4.7 is leaking memory per program
+<br />
+window.  I don't think the cvs version 2.5.3 is leaking, but I can't
+<br />
+be completely sure.  I just ran a bunch of xterms and it seemed fine.
+<br />
+<br />I've included a program to ponder, and I'll suggest using Xnest if
+<br />
+anyone wants to run it, or an X session they don't want to use for a
+<br />
+while.
+<br />
+<br />&nbsp;&nbsp;PID USER     PRI  NI  SIZE SWAP  RSS SHARE STAT %CPU %MEM   TIME COMMAND
+<br />
+23686 david      9   0   856  240  616   616 S     0.0  0.1   0:00 FvwmPager
+<br />
+23677 david      9   0   488  112  376   376 S     0.0  0.1   0:00 FvwmTheme
+<br />
+23653 david      9   0  321M 310M  10M 11060 S     0.0  3.5   2:49 fvwm
+<br />
+<br />The program is simple enough, but here's what it does anyway.
+<br />
+1. open X connection
+<br />
+2. create window
+<br />
+3. destroy window
+<br />
+4. go to #2 n times (I'm using 1000000)
+<br />
+5. close X connection 
+<br />
+<br />I'm just throwing this program out for anyone to look at if they are
+<br />
+interested, I'm not going to look into it myself.  I tried it against
+<br />
+kde maybe I didn't wait long enough (over night) but kde didn't
+<br />
+recover where fvwm fully recovers, although it doesn't give the memory
+<br />
+back to Linux.
+<br />
+<br />On Thu, Jul 11, 2002 at 08:47:37AM +0200, Olivier Chapuis wrote:
+<br />
+<em class="quotelev1">&gt; On Tue, Jul 09, 2002 at 12:51:01AM -0500, David Fries wrote:
+</em><br />
+<em class="quotelev2">&gt; &gt; Speaking of memory usage, has anyone thought about looking for some
+</em><br />
+<em class="quotelev2">&gt; &gt; memory leaks?  Ok so I've been a lazy Debian user and I'm not up to
+</em><br />
+<em class="quotelev2">&gt; &gt; what's in CVS (2.4.7 right now), but here's what I'm seeing (from top).
+</em><br />
+<em class="quotelev2">&gt; &gt; 
+</em><br />
+<em class="quotelev2">&gt; &gt;   PID USER     PRI  NI  SIZE SWAP  RSS SHARE STAT %CPU %MEM   TIME COMMAND
+</em><br />
+<em class="quotelev2">&gt; &gt;   668 david      8   0 15300 8948 6352  3440 S     0.0  1.9   3:35 fvwm2
+</em><br />
+<em class="quotelev2">&gt; &gt; after restarting fvwm, same windows etc
+</em><br />
+<em class="quotelev2">&gt; &gt;   668 david     10   0  2468    0 2468  1348 S     0.1  0.7   3:36 fvwm2
+</em><br />
+<em class="quotelev2">&gt; &gt;
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; Maybe some part the leaks come from the Xlib. I think that the
+</em><br />
+<em class="quotelev1">&gt; debian package is compiled with --enable-multibyte. There is some memory
+</em><br />
+<em class="quotelev1">&gt; leaks in XCreateFontSet: each time a font is unloaded ~4kb is lost (this
+</em><br />
+<em class="quotelev1">&gt; depends on the font, with an utf8 locale and if you use an iso106464-1
+</em><br />
+<em class="quotelev1">&gt; font with a big coverage this may be a lot more).
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; For example:
+</em><br />
+<em class="quotelev1">&gt; - if you delete a window ~4kb is lost (0kb with 2.5.2) 
+</em><br />
+<em class="quotelev1">&gt; - if you change your font and you have 20 windows, ~80kb is
+</em><br />
+<em class="quotelev1">&gt; lost (only 4kb with 2.5.2).
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; I've recently sent a patch to the XFree developers but no feedback yet ...
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; Note that I do not claim that all the leak come from the Xlib,
+</em><br />
+<em class="quotelev1">&gt; it is just a possibility. So one question and one query:
+</em><br />
+<em class="quotelev1">&gt; - Do you do something special regarding the fvwm config
+</em><br />
+<em class="quotelev1">&gt; (as regularly changing some config parameters)
+</em><br />
+<em class="quotelev1">&gt; - Can you send me your config file(s) if this is possible.
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; Regards, Olivier 
+</em><br />
+<br /><pre>
+-- 
+		+---------------------------------+
+		|      David Fries                |
+		|      dfries_at_mail.win.org        |
+		| <a href="http://fries.net/~david/pgp.txt">http://fries.net/~david/pgp.txt</a> |
+		+---------------------------------+
+
+
+</pre>
+<br />
+<br /><br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<div>
+<ul>
+<li>text/plain attachment: <a href="att-5562/Makefile">Makefile</a></li>
+</ul>
+<!-- attachment="Makefile" -->
+<ul>
+<li>text/x-csrc attachment: <a href="att-5562/wm_killer.c">wm_killer.c</a></li>
+</ul>
+<!-- attachment="wm_killer.c" -->
+<ul>
+<li>application/pgp-signature attachment: <a href="att-5562/03-part">stored</a></li>
+</ul>
+<!-- attachment="03-part" -->
+</div>
+<span id="received"><dfn>Received on</dfn> Sun Jul 14 2002 - 15:12:05 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start5562">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="5563.html" title="Next message in the list">David Fries: "FVWM: Re: 300+MB for fwvm?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="5561.html" title="Previous message in the list">Rob &#0039;Feztaa&#0039; Park: "Re: FVWM: Execute function at desk change"</a></li>
+<li><dfn>In reply to</dfn>: <a href="5540.html" title="Message to which this message replies">Olivier Chapuis: "Re: FVWM: Re: What&#0039;s a good memory debugger?"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="5563.html" title="Next message in this discussion thread">David Fries: "FVWM: Re: 300+MB for fwvm?"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="5563.html" title="Message sent in reply to this message">David Fries: "FVWM: Re: 300+MB for fwvm?"</a></li>
+<li><dfn>Reply</dfn>: <a href="9323.html" title="Message sent in reply to this message">dominik.vogt_at_gmx.de: "Re: FVWM: 300+MB for fwvm?"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg5562" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg5562" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg5562" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg5562" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:53 BST
+</em></small></p>
+</body>
+</html>

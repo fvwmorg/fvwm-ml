@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Problem with fvwm2 and nethack/X11 from Alan Shutko on 1996-06-19 (fvwm-users)</title>
+<meta name="Author" content="Alan Shutko (ats_at_shep1.wustl.edu)" />
+<meta name="Subject" content="FVWM: Problem with fvwm2 and nethack/X11" />
+<meta name="Date" content="1996-06-19" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Problem with fvwm2 and nethack/X11</h1>
+<!-- received="Tue Jun 18 18:37:29 1996" -->
+<!-- isoreceived="19960618173729" -->
+<!-- sent="Tue, 18 Jun 1996 18:34:59 -0500" -->
+<!-- isosent="19960618233459" -->
+<!-- name="Alan Shutko" -->
+<!-- email="ats_at_shep1.wustl.edu" -->
+<!-- subject="FVWM: Problem with fvwm2 and nethack/X11" -->
+<!-- id="199606182335.SAA27257_at_hubert.wustl.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start17183" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="17184.html" accesskey="d" title="Emilio Lopes: &quot;Re: FVWM: Dynamic Xterm title fix&quot;">Next message</a> ]
+[ <a href="17182.html" title="Jason L Tibbitts III: &quot;FVWM: fvwm-workers mailing list&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="17190.html" accesskey="t" title="Markus Gutschke: &quot;Re: FVWM: Problem with fvwm2 and nethack/X11&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17183" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17183" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17183" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17183" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Alan Shutko &lt;<a href="mailto:ats_at_shep1.wustl.edu?Subject=Re%3A%20FVWM%3A%20Problem%20with%20fvwm2%20and%20nethack%2FX11">ats_at_shep1.wustl.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 18 Jun 1996 18:34:59 -0500</span><br />
+</address>
+<br />
+Nethack does something which seems to display a problem in fvwm,
+<br />
+versions 1.24 and 2.0.42.
+<br />
+<br />Nethack/X11 displays a lot of small windows (eg 266x18) to ask about
+<br />
+actions, to display more input, etc.  In some cases, it pops up
+<br />
+several of these windows in succession, for further input.  When it
+<br />
+does this, there is a large pause between the windows.  (The main
+<br />
+nethack window doesn't refresh, NH seems stuck.)  If I cause NH to
+<br />
+open a larger window (like an inventory window) to break up a sequence
+<br />
+of smaller windows, there is no such problem.
+<br />
+<br />There is no such problem with twm.  What information would be useful
+<br />
+in debugging this?  I'm including below a commented typescript of
+<br />
+xwininfo and xprop for a typical window sequence.  I can reproduce
+<br />
+this problem at will, so I can look at anything needed.
+<br />
+<br />Script started on Tue Jun 18 17:53:14 1996
+<br />
+<br />#
+<br />
+# Win 1 up
+<br />
+#
+<br />
+<br />[17:53:14] hubert:~ $ xprop
+<br />
+WM_STATE(WM_STATE):
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window state: Normal
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;icon window: 0x0
+<br />
+WM_PROTOCOLS(ATOM): protocols  WM_DELETE_WINDOW
+<br />
+WM_TRANSIENT_FOR(WINDOW): window id # 0x4c00020
+<br />
+WM_CLIENT_LEADER(WINDOW): window id # 0x4c00020
+<br />
+WM_CLASS(STRING) = &quot;query&quot;, &quot;NetHack&quot;
+<br />
+WM_HINTS(WM_HINTS):
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Client accepts input or input focus: True
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Initial state is Normal State.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window id # of group leader: 0x4c00020
+<br />
+WM_NORMAL_HINTS(WM_SIZE_HINTS):
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program specified location: 333, 439
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program specified size: 266 by 17
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window gravity: NorthWest
+<br />
+WM_CLIENT_MACHINE(STRING) = &quot;hubert&quot;
+<br />
+WM_NAME(STRING) = &quot;query&quot;
+<br />
+[17:53:24] hubert:~ $ xwininfo
+<br />
+<br />xwininfo: Please select the window about which you
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;would like information by clicking the
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mouse in that window.
+<br />
+<br />xwininfo: Window id: 0x4c0007e &quot;query&quot;
+<br />
+<br />&nbsp;&nbsp;Absolute upper-left X:  338
+<br />
+&nbsp;&nbsp;Absolute upper-left Y:  461
+<br />
+&nbsp;&nbsp;Relative upper-left X:  0
+<br />
+&nbsp;&nbsp;Relative upper-left Y:  0
+<br />
+&nbsp;&nbsp;Width: 266
+<br />
+&nbsp;&nbsp;Height: 17
+<br />
+&nbsp;&nbsp;Depth: 8
+<br />
+&nbsp;&nbsp;Visual Class: PseudoColor
+<br />
+&nbsp;&nbsp;Border width: 0
+<br />
+&nbsp;&nbsp;Class: InputOutput
+<br />
+&nbsp;&nbsp;Colormap: 0x21 (installed)
+<br />
+&nbsp;&nbsp;Bit Gravity State: NorthWestGravity
+<br />
+&nbsp;&nbsp;Window Gravity State: NorthWestGravity
+<br />
+&nbsp;&nbsp;Backing Store State: NotUseful
+<br />
+&nbsp;&nbsp;Save Under State: yes
+<br />
+&nbsp;&nbsp;Map State: IsViewable
+<br />
+&nbsp;&nbsp;Override Redirect State: no
+<br />
+&nbsp;&nbsp;Corners:  +338+461  -420+461  -420-290  +338-290
+<br />
+&nbsp;&nbsp;-geometry 266x17+333+439
+<br />
+<br /><br />#
+<br />
+# Win 2 up
+<br />
+#
+<br />
+<br />[17:53:34] hubert:~ $ xwininfo[3Pprop
+<br />
+WM_STATE(WM_STATE):
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window state: Normal
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;icon window: 0x0
+<br />
+WM_PROTOCOLS(ATOM): protocols  WM_DELETE_WINDOW
+<br />
+WM_TRANSIENT_FOR(WINDOW): window id # 0x4c00020
+<br />
+WM_CLIENT_LEADER(WINDOW): window id # 0x4c00020
+<br />
+WM_CLASS(STRING) = &quot;query&quot;, &quot;NetHack&quot;
+<br />
+WM_HINTS(WM_HINTS):
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Client accepts input or input focus: True
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Initial state is Normal State.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window id # of group leader: 0x4c00020
+<br />
+WM_NORMAL_HINTS(WM_SIZE_HINTS):
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program specified location: 327, 450
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program specified size: 266 by 17
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window gravity: NorthWest
+<br />
+WM_CLIENT_MACHINE(STRING) = &quot;hubert&quot;
+<br />
+WM_NAME(STRING) = &quot;query&quot;
+<br />
+[17:54:58] hubert:~ $ xpropwininfo
+<br />
+<br />xwininfo: Please select the window about which you
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;would like information by clicking the
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mouse in that window.
+<br />
+<br />xwininfo: Window id: 0x4c00080 &quot;query&quot;
+<br />
+<br />&nbsp;&nbsp;Absolute upper-left X:  332
+<br />
+&nbsp;&nbsp;Absolute upper-left Y:  472
+<br />
+&nbsp;&nbsp;Relative upper-left X:  0
+<br />
+&nbsp;&nbsp;Relative upper-left Y:  0
+<br />
+&nbsp;&nbsp;Width: 266
+<br />
+&nbsp;&nbsp;Height: 17
+<br />
+&nbsp;&nbsp;Depth: 8
+<br />
+&nbsp;&nbsp;Visual Class: PseudoColor
+<br />
+&nbsp;&nbsp;Border width: 0
+<br />
+&nbsp;&nbsp;Class: InputOutput
+<br />
+&nbsp;&nbsp;Colormap: 0x21 (installed)
+<br />
+&nbsp;&nbsp;Bit Gravity State: NorthWestGravity
+<br />
+&nbsp;&nbsp;Window Gravity State: NorthWestGravity
+<br />
+&nbsp;&nbsp;Backing Store State: NotUseful
+<br />
+&nbsp;&nbsp;Save Under State: yes
+<br />
+&nbsp;&nbsp;Map State: IsViewable
+<br />
+&nbsp;&nbsp;Override Redirect State: no
+<br />
+&nbsp;&nbsp;Corners:  +332+472  -426+472  -426-279  +332-279
+<br />
+&nbsp;&nbsp;-geometry 266x17+327+450
+<br />
+<br /><br />#
+<br />
+# Win 3 up
+<br />
+#
+<br />
+<br />[17:55:04] hubert:~ $ xwininfo
+<br />
+<br />xwininfo: Please select the window about which you
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;would like information by clicking the
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mouse in that window.
+<br />
+<br />xwininfo: Window id: 0x4c00082 &quot;query&quot;
+<br />
+<br />&nbsp;&nbsp;Absolute upper-left X:  363
+<br />
+&nbsp;&nbsp;Absolute upper-left Y:  469
+<br />
+&nbsp;&nbsp;Relative upper-left X:  0
+<br />
+&nbsp;&nbsp;Relative upper-left Y:  0
+<br />
+&nbsp;&nbsp;Width: 266
+<br />
+&nbsp;&nbsp;Height: 17
+<br />
+&nbsp;&nbsp;Depth: 8
+<br />
+&nbsp;&nbsp;Visual Class: PseudoColor
+<br />
+&nbsp;&nbsp;Border width: 0
+<br />
+&nbsp;&nbsp;Class: InputOutput
+<br />
+&nbsp;&nbsp;Colormap: 0x21 (installed)
+<br />
+&nbsp;&nbsp;Bit Gravity State: NorthWestGravity
+<br />
+&nbsp;&nbsp;Window Gravity State: NorthWestGravity
+<br />
+&nbsp;&nbsp;Backing Store State: NotUseful
+<br />
+&nbsp;&nbsp;Save Under State: yes
+<br />
+&nbsp;&nbsp;Map State: IsViewable
+<br />
+&nbsp;&nbsp;Override Redirect State: no
+<br />
+&nbsp;&nbsp;Corners:  +363+469  -395+469  -395-282  +363-282
+<br />
+&nbsp;&nbsp;-geometry 266x17+358+447
+<br />
+<br />[17:55:22] hubert:~ $ xwininfo[3Pprop
+<br />
+WM_STATE(WM_STATE):
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window state: Normal
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;icon window: 0x0
+<br />
+WM_PROTOCOLS(ATOM): protocols  WM_DELETE_WINDOW
+<br />
+WM_TRANSIENT_FOR(WINDOW): window id # 0x4c00020
+<br />
+WM_CLIENT_LEADER(WINDOW): window id # 0x4c00020
+<br />
+WM_CLASS(STRING) = &quot;query&quot;, &quot;NetHack&quot;
+<br />
+WM_HINTS(WM_HINTS):
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Client accepts input or input focus: True
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Initial state is Normal State.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window id # of group leader: 0x4c00020
+<br />
+WM_NORMAL_HINTS(WM_SIZE_HINTS):
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program specified location: 358, 447
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program specified size: 266 by 17
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window gravity: NorthWest
+<br />
+WM_CLIENT_MACHINE(STRING) = &quot;hubert&quot;
+<br />
+WM_NAME(STRING) = &quot;query&quot;
+<br />
+<br /><pre>
+--
+Alan Shutko &lt;ats_at_hubert.wustl.edu&gt; - The Few, the Proud, the Remaining.
+&quot;I am BillDCat of Borg. You will be ass--&lt;Acckk! Thbbbpt!&amp;lt;--imilated!&quot;
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue Jun 18 1996 - 18:37:29 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start17183">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="17184.html" title="Next message in the list">Emilio Lopes: "Re: FVWM: Dynamic Xterm title fix"</a></li>
+<li><dfn>Previous message</dfn>: <a href="17182.html" title="Previous message in the list">Jason L Tibbitts III: "FVWM: fvwm-workers mailing list"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="17190.html" title="Next message in this discussion thread">Markus Gutschke: "Re: FVWM: Problem with fvwm2 and nethack/X11"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="17190.html" title="Message sent in reply to this message">Markus Gutschke: "Re: FVWM: Problem with fvwm2 and nethack/X11"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17183" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17183" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17183" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17183" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Building problems FVWM 2.1.4 from Eric Vannier on 1998-12-13 (fvwm-users)</title>
+<meta name="Author" content="Eric Vannier (Eric.Vannier_at_sv.sc.philips.com)" />
+<meta name="Subject" content="FVWM: Building problems FVWM 2.1.4" />
+<meta name="Date" content="1998-12-13" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Building problems FVWM 2.1.4</h1>
+<!-- received="Sat Dec 12 20:56:59 1998" -->
+<!-- isoreceived="19981212205659" -->
+<!-- sent="Sun, 13 Dec 1998 02:56:30 +0000" -->
+<!-- isosent="19981213025630" -->
+<!-- name="Eric Vannier" -->
+<!-- email="Eric.Vannier_at_sv.sc.philips.com" -->
+<!-- subject="FVWM: Building problems FVWM 2.1.4" -->
+<!-- id="36732CDE.64BE_at_sv.sc.philips.com" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start23142" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="23143.html" accesskey="d" title="Dominik Vogt: &quot;Re: FVWM: How do I turn on mouse autofocus?&quot;">Next message</a> ]
+[ <a href="23141.html" title="Jim Nicholson: &quot;FVWM: I hate to ask but...&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="23144.html" accesskey="t" title="Brad Giaccio: &quot;Re: FVWM: Building problems FVWM 2.1.4&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg23142" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg23142" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg23142" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg23142" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Eric Vannier &lt;<a href="mailto:Eric.Vannier_at_sv.sc.philips.com?Subject=Re%3A%20FVWM%3A%20Building%20problems%20FVWM%202.1.4">Eric.Vannier_at_sv.sc.philips.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sun, 13 Dec 1998 02:56:30 +0000</span><br />
+</address>
+<br />
+Hi,
+<br />
+<br />I ran into some problems while compiling the FVWM distribution
+<br />
+on Solaris 5.6
+<br />
+uname -a : SunOS solls1 5.6 Generic_105181-10 sun4u sparc
+<br />
+SUNW,Ultra-5_10
+<br />
+compiling w/ gcc : 
+<br />
+gcc -v : gcc version 2.7.2.1
+<br />
+<br />I tried acc with no luck.
+<br />
+SC3.0.1 7/13/94
+<br />
+acomp: SC3.0.1 7/13/94 Sun C 3.0.1
+<br />
+<br />This problem comes at first from the M_ERROR macro
+<br />
+which is present in /usr/include/sys/stream.h.
+<br />
+This was in Fvwmcpp.c
+<br />
+This was an easy fix, since I discovered that on some places
+<br />
+a conditonnal code could be seen :
+<br />
+#ifdef RPLAY
+<br />
+#undef M_ERROR /* Solaris fix */
+<br />
+#endif
+<br />
+So I undef M_ERROR ...
+<br />
+Then a new problem arrived ... this time, this was NBBY  ...
+<br />
+I ignored it ... Since a bigger problem came out :
+<br />
+<br />--------------
+<br />
+Making all in FvwmCpp
+<br />
+gcc -DHAVE_CONFIG_H -I. -I. -I../.. -I../../libs
+<br />
+-I/usr/openwin/include  
+<br />
+-DFVW_MODULEDIR=\&quot;/usr/local/libexec/fvwm/2.1.4\&quot;
+<br />
+-DFVWM_CONFIGDIR=\&quot;/usr/local/etc\ -DFVWM_CPP=\&quot;/t/lang/cpp\&quot;    -g -O2
+<br />
+-c FvwmCpp.c
+<br />
+In file included from FvwmCpp.c:26:
+<br />
+/usr/local/lib/gcc-lib/sparc-sun-solaris2.5.1/2.7.2.1/include/sys/param.h:187:
+<br />
+arning: `NBBY' redefined
+<br />
+/usr/include/sys/select.h:45: warning: this is the location of the
+<br />
+previous defnition
+<br />
+In file included from /usr/include/sys/stream.h:26,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from /usr/include/netinet/in.h:38,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from /usr/include/netdb.h:96,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from FvwmCpp.c:29:
+<br />
+/usr/include/sys/model.h:32: #error &quot;No DATAMODEL_NATIVE specified&quot;
+<br />
+In file included from FvwmCpp.c:37:
+<br />
+-----------
+<br />
+<br />Basically, this model.h defines a model (but I do not have a clue
+<br />
+about what it is right now), and if no model is defined, it 
+<br />
+complains. There are two models : _ILP32 and _LP64.
+<br />
+Anyway, when  I force the definition of one or another, this 
+<br />
+is not any better :
+<br />
+<br />-----------
+<br />
+In file included from /usr/include/sys/stream.h:21,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from /usr/include/netinet/in.h:38,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from /usr/include/netdb.h:96,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from FvwmCpp.c:32:
+<br />
+/usr/include/sys/vnode.h:155: parse error before `u_offset_t'
+<br />
+/usr/include/sys/vnode.h:155: warning: no semicolon at end of struct or
+<br />
+union
+<br />
+/usr/include/sys/vnode.h:163: parse error before `}'
+<br />
+/usr/include/sys/vnode.h:163: warning: data definition has no type or
+<br />
+storage class
+<br />
+/usr/include/sys/vnode.h:271: parse error before `intptr_t'
+<br />
+/usr/include/sys/vnode.h:324: parse error before `u_offset_t'
+<br />
+In file included from /usr/include/netdb.h:96,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from FvwmCpp.c:32:
+<br />
+/usr/include/netinet/in.h:156: parse error before `uint32_t'
+<br />
+/usr/include/netinet/in.h:156: warning: no semicolon at end of struct or
+<br />
+union
+<br />
+/usr/include/netinet/in.h:156: warning: no semicolon at end of struct or
+<br />
+union
+<br />
+/usr/include/netinet/in.h:160: warning: data definition has no type or
+<br />
+storage class
+<br />
+/usr/include/netinet/in.h:167: parse error before `}'
+<br />
+/usr/include/netinet/in.h:226: field `sin_addr' has incomplete type
+<br />
+/usr/include/netinet/in.h:286: field `imr_multiaddr' has incomplete type
+<br />
+/usr/include/netinet/in.h:287: field `imr_interface' has incomplete type
+<br />
+-----------
+<br />
+<br />Ok, this output is a bit big ...
+<br />
+Sorry about that.
+<br />
+<br />You might wonder why I tried acc ... just because I supposed
+<br />
+there might be some conflicts between the gcc includes and the
+<br />
+Solaris includes ...
+<br />
+<br />I just wanted to know if somebody ran into similar problems on
+<br />
+Solaris. And if yes, what would be a quick fix ... without having
+<br />
+to check everything in the /usr/include includes for possible
+<br />
+conflicts, etc ...
+<br />
+<br /><br />Thanks for your help.
+<br />
+Anyway, this is the first time I try to configure this on Solaris,
+<br />
+this ran just perfectly under Linux ... but this is a different system
+<br />
+:)
+<br />
+<br />Eric
+<br />
+<br /><pre>
+-- 
+Eric Vannier             / Mail    : Eric.Vannier_at_sv.sc.philips.com
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://fvwm.math.uh.edu/">http://fvwm.math.uh.edu/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sat Dec 12 1998 - 20:56:59 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start23142">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="23143.html" title="Next message in the list">Dominik Vogt: "Re: FVWM: How do I turn on mouse autofocus?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="23141.html" title="Previous message in the list">Jim Nicholson: "FVWM: I hate to ask but..."</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="23144.html" title="Next message in this discussion thread">Brad Giaccio: "Re: FVWM: Building problems FVWM 2.1.4"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="23144.html" title="Message sent in reply to this message">Brad Giaccio: "Re: FVWM: Building problems FVWM 2.1.4"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg23142" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg23142" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg23142" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg23142" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:02 BST
+</em></small></p>
+</body>
+</html>

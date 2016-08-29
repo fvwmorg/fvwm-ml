@@ -1,0 +1,35 @@
+WindowTitle {FvwmApplet-ACPI}
+WindowSize 64 16		# Taille
+#Font		"Shadow=1 1 SE:xft:Seized Future A:bold:pixelsize=18:minspace=true"
+Font		"Shadow=1 1 SE:xft:ZeroHour:bold:pixelsize=18:minspace=true"
+
+Init
+ Begin
+  Set $tmp = (GetOutput {exec /usr/local/bin/bat_level} 1 1)
+  ChangeTitle 1 $tmp
+End
+
+PeriodicTasks
+ Begin 
+  If (RemainderOfDiv (GetTime) 30)==0 Then
+  Begin
+    Set $tmp = (GetOutput {exec /usr/local/bin/bat_level} 1 1)
+    ChangeTitle  1 $tmp
+  End
+End
+
+Widget 1
+Property
+ Position 0 0
+ Size 64 16
+ Type ItemDraw
+ Colorset 3
+ Flags NoReliefString
+ Title {}
+Main
+ Case message of
+  SingleClic :
+  Begin
+  End
+End
+

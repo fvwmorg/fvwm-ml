@@ -1,0 +1,1676 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: FvwmBacker from Richard Everson on 1996-12-29 (fvwm-users)</title>
+<meta name="Author" content="Richard Everson (rme_at_camelot.mssm.edu)" />
+<meta name="Subject" content="FVWM: FvwmBacker" />
+<meta name="Date" content="1996-12-29" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: FvwmBacker</h1>
+<!-- received="Sun Dec 29 17:46:46 1996" -->
+<!-- isoreceived="19961229174646" -->
+<!-- sent="29 Dec 1996 18:48:25 -0500" -->
+<!-- isosent="19961229234825" -->
+<!-- name="Richard Everson" -->
+<!-- email="rme_at_camelot.mssm.edu" -->
+<!-- subject="FVWM: FvwmBacker" -->
+<!-- id="w9pvzs9ak6.fsf_at_excalibur.cns.mssm.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start18784" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="18785.html" accesskey="d" title="Charles Hines: &quot;Re: FVWM: FVWM v2.0.44?&quot;">Next message</a> ]
+[ <a href="18783.html" title="miSh: &quot;FVWM: FVWM v2.0.44?&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18784" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18784" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18784" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18784" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Richard Everson &lt;<a href="mailto:rme_at_camelot.mssm.edu?Subject=Re%3A%20FVWM%3A%20FvwmBacker">rme_at_camelot.mssm.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: 29 Dec 1996 18:48:25 -0500</span><br />
+</address>
+<br />
+Hello,
+<br />
+<br />Here is a patch for FvwmBacker.  Its principal function is to allow
+<br />
+different animated backgrounds (eg xearth, xsnow, xroach) on different
+<br />
+desks.  In addition sets the appropriate background for the current
+<br />
+desktop when FvwmBacker is invoked rather than next time the desk is
+<br />
+changed, and it fixes a small bug that stopped the -solid
+<br />
+option working for me.
+<br />
+<br />Is this the right place for the patch to find its way into 2.0.44?
+<br />
+<br />Happy New Year,
+<br />
+Richard Everson.
+<br />
+<br />*** FvwmBacker.c.orig	Sun Dec 29 18:09:18 1996
+<br />
+--- FvwmBacker.c	Sun Dec 29 18:16:19 1996
+<br />
+***************
+<br />
+*** 25,30 ****
+<br />
+--- 25,43 ----
+<br />
+&nbsp;&nbsp;&nbsp;* A. Davison
+<br />
+&nbsp;&nbsp;&nbsp;* Septmber 1994.
+<br />
+&nbsp;&nbsp;&nbsp;*/
+<br />
++ 
+<br />
++ /*
+<br />
++  * Modified to send a running command (eg xearth, xsnow) a SIGCONT when a
+<br />
++  * particular desk is selected and a SIGSTOP when the desk is left.
+<br />
++  * Also fork and exec commands rather than using system.
+<br />
++  * FvwmBacker now sets the background for the current desk when it is invoked
+<br />
++  * rather than waiting for a change of desks.
+<br />
++  * Corrected a typo in root_bits.c which stopped the -solid option 
+<br />
++  * working for me.
+<br />
++  *
+<br />
++  * Richard Everson  &lt;rme_at_camelot.mssm.edu&gt;.  Sun Dec 29 14:08:47 1996 
+<br />
++  */
+<br />
++ 
+<br />
+&nbsp;&nbsp;#include &quot;../../configure.h&quot;
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;#include &lt;stdio.h&gt;
+<br />
+***************
+<br />
+*** 51,66 ****
+<br />
+&nbsp;&nbsp;#include &lt;X11/Xlib.h&gt;
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;unsigned long NameToPixel(char*, unsigned long);
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;typedef struct 
+<br />
+&nbsp;&nbsp;{
+<br />
+! 	int		type;		/* The command type. 			 */
+<br />
+! 						/* -1 = no command.              */
+<br />
+! 						/*  0 = command to be spawned 	 */
+<br />
+! 						/*  1 = a solid color to be set  */
+<br />
+! 	char*	cmdStr;		/* The command string (Type 0)   */
+<br />
+! 	unsigned long solidColor;
+<br />
+! 						/* A solid color after X parsing (Type 1) */
+<br />
+&nbsp;&nbsp;} Command;
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;Command *commands;
+<br />
+--- 64,83 ----
+<br />
+&nbsp;&nbsp;#include &lt;X11/Xlib.h&gt;
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;unsigned long NameToPixel(char*, unsigned long);
+<br />
++ static char *stripwhite (char *);
+<br />
++ 
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;typedef struct 
+<br />
+&nbsp;&nbsp;{
+<br />
+!   int type;			/* The command type. 			 */
+<br />
+! 				/* -1 = no command.              */
+<br />
+! 				/*  0 = command to be spawned 	 */
+<br />
+! 				/*  1 = a solid color to be set  */
+<br />
+!   char *cmdStr;			/* The command string (Type 0)   */
+<br />
+!   char *sscmd;			/* Command to be started and stopped */
+<br />
+!   unsigned long solidColor;	/* A solid color after X parsing (Type 1) */
+<br />
+!   pid_t pid;			/* Pid of StartStop command */
+<br />
+!   int running;			/* Is this pid running or is it stopped? */
+<br />
+&nbsp;&nbsp;} Command;
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;Command *commands;
+<br />
+***************
+<br />
+*** 81,87 ****
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;/* Comment this out if you don't want a logfile. */
+<br />
+&nbsp;&nbsp;
+<br />
+! /* #define LOGFILE &quot;/tmp/FvwmBacker.log&quot;*/
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;void main(int argc, char **argv)
+<br />
+--- 98,106 ----
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;/* Comment this out if you don't want a logfile. */
+<br />
+&nbsp;&nbsp;
+<br />
+! /* #define LOGFILE &quot;/tmp/FvwmBacker.log&quot; */
+<br />
+! 
+<br />
+! 
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;void main(int argc, char **argv)
+<br />
+***************
+<br />
+*** 105,140 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit(1);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Fvwm_fd[0] = atoi(argv[1]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Fvwm_fd[1] = atoi(argv[2]);
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;/* Grab the X display information now. */
+<br />
+&nbsp;&nbsp;
+<br />
+! 	dpy = XOpenDisplay(displayName);
+<br />
+! 	if (!dpy) 
+<br />
+! 	{
+<br />
+! 		fprintf(stderr, &quot;%s:  unable to open display '%s'\n&quot;,
+<br />
+! 			Module, XDisplayName (displayName));
+<br />
+! 		exit (2);
+<br />
+! 	}
+<br />
+! 	screen = DefaultScreen(dpy);
+<br />
+! 	root = RootWindow(dpy, screen);
+<br />
+&nbsp;&nbsp;
+<br />
+! 	/* Open a log file if necessary */
+<br />
+! #	ifdef LOGFILE
+<br />
+! 		logFile = fopen(LOGFILE,&quot;a&quot;);
+<br />
+! 		fprintf(logFile,&quot;Initialising FvwmBacker\n&quot;);
+<br />
+! #	endif
+<br />
+&nbsp;&nbsp;
+<br />
+!   signal (SIGPIPE, DeadPipe);  
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;/* Parse the config file */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ParseConfig();
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;fd_width = GetFdWidth();
+<br />
+&nbsp;&nbsp;
+<br />
+!   SetMessageMask(Fvwm_fd,M_NEW_DESK|M_CONFIG_INFO|M_END_CONFIG_INFO);
+<br />
+! 
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;/* Recieve all messages from Fvwm */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EndLessLoop();
+<br />
+--- 124,161 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit(1);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
++   signal (SIGPIPE, DeadPipe);  
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Fvwm_fd[0] = atoi(argv[1]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Fvwm_fd[1] = atoi(argv[2]);
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;/* Grab the X display information now. */
+<br />
+&nbsp;&nbsp;
+<br />
+!   dpy = XOpenDisplay(displayName);
+<br />
+!   if (!dpy) 
+<br />
+!     {
+<br />
+!       fprintf(stderr, &quot;%s:  unable to open display '%s'\n&quot;,
+<br />
+! 	      Module, XDisplayName (displayName));
+<br />
+!       exit (2);
+<br />
+!     }
+<br />
+!   screen = DefaultScreen(dpy);
+<br />
+!   root = RootWindow(dpy, screen);
+<br />
+&nbsp;&nbsp;
+<br />
+!   /* Open a log file if necessary */
+<br />
+! #ifdef LOGFILE
+<br />
+!   logFile = fopen(LOGFILE,&quot;a&quot;);
+<br />
+!   fprintf(logFile,&quot;Initialising FvwmBacker\n&quot;);
+<br />
+!   fflush(logFile);
+<br />
+! #endif
+<br />
+&nbsp;&nbsp;
+<br />
+!  SetMessageMask(Fvwm_fd,  M_NEW_DESK|M_CONFIG_INFO|M_END_CONFIG_INFO);
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;/* Parse the config file */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ParseConfig();
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;fd_width = GetFdWidth();
+<br />
+&nbsp;&nbsp;
+<br />
+!   /* This will elicit a M_NEW_DESK message specifying the current desk */
+<br />
+!   SendInfo(Fvwm_fd, &quot;Send_WindowList&quot;, 0);
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;/* Recieve all messages from Fvwm */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EndLessLoop();
+<br />
+***************
+<br />
+*** 201,206 ****
+<br />
+--- 222,233 ----
+<br />
+&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;char* color;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;char* tmp;
+<br />
++   Command *c;
+<br />
++ 
+<br />
++ #ifdef LOGFILE
+<br />
++   fprintf(logFile, &quot;Message %d\n&quot;, type);
+<br />
++   fflush(logFile);
+<br />
++ #endif
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if (type==M_NEW_DESK) 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+***************
+<br />
+*** 208,253 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;#ifdef LOGFILE
+<br />
+!       fprintf(logFile,&quot;Desk: %d\n&quot;,body[0]);
+<br />
+!       fprintf(logFile,&quot;Command type: %d\n&quot;,commands[body[0]].type);
+<br />
+!       if (commands[body[0]].type == 0)
+<br />
+! 	fprintf(logFile,&quot;Command String: %s\n&quot;,commands[body[0]].cmdStr);
+<br />
+!       else if (commands[body[0]].type == 1)
+<br />
+! 	fprintf(logFile,&quot;Color Number: %d\n&quot;,commands[body[0]].solidColor);
+<br />
+!       else if (commands[body[0]].type == -1)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(logFile,&quot;No Command\n&quot;);
+<br />
+!       else
+<br />
+! 	{
+<br />
+! 	  fprintf(logFile,&quot;Illegal command type !\n&quot;);
+<br />
+! 	  exit(1);
+<br />
+! 	}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fflush(logFile);
+<br />
+! #	endif
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+!       if (commands[body[0]].type == 1)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* Process a solid color request */
+<br />
+! 	  
+<br />
+! 	  XSetWindowBackground(dpy, root, commands[body[0]].solidColor);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XClearWindow(dpy, root);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XFlush(dpy);
+<br />
+- 	  /*	XSetWindowBackground(dpy, root, commands[body[0]].solidColor);
+<br />
+- 	   */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+! #		ifdef LOGFILE
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(logFile,&quot;Color set.\n&quot;);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fflush(logFile);
+<br />
+! #		endif
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+!       else if(commands[body[0]].cmdStr != NULL)
+<br />
+! 	{
+<br />
+! 	  system(commands[body[0]].cmdStr);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;/******************************************************************************
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SendFvwmPipe - Send a message back to fvwm 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Based on SendInfo() from FvwmIdent:
+<br />
+--- 235,300 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
++       c = commands+body[0];
+<br />
++       
+<br />
+&nbsp;&nbsp;#ifdef LOGFILE
+<br />
+!       fprintf(logFile, &quot;Desk: %d\n&quot;, body[0]);
+<br />
+!       fprintf(logFile, &quot;Command type: %d\n&quot;, c-&gt;type);
+<br />
+!       if (c-&gt;type == 0)
+<br />
+! 	fprintf(logFile,&quot;Command String: %s\n&quot;, 
+<br />
+! 		(c-&gt;cmdStr) ? c-&gt;cmdStr : &quot;(none)&quot;);
+<br />
+!       else if (c-&gt;type == 1)
+<br />
+! 	fprintf(logFile,&quot;Color Number: %d\n&quot;, c-&gt;solidColor);
+<br />
+!       else if (c-&gt;type == -1)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(logFile,&quot;No Command\n&quot;);
+<br />
+!       else {
+<br />
+! 	fprintf(logFile,&quot;Illegal command type!\n&quot;);
+<br />
+! 	exit(1);
+<br />
+!       }
+<br />
+!       if (c-&gt;sscmd)
+<br />
+! 	fprintf(logFile,&quot;StartStop command: %s\n&quot;, c-&gt;sscmd);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fflush(logFile);
+<br />
+! #endif
+<br />
+&nbsp;&nbsp;
+<br />
++       StopBackgrounds(); /* Send SIGSTOP to any running backgrounds */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+!       if (c-&gt;type == 1)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* Process a solid color request */
+<br />
+! 	  XSetWindowBackground(dpy, root, c-&gt;solidColor);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XClearWindow(dpy, root);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XFlush(dpy);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+! #ifdef LOGFILE
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(logFile,&quot;Color set.\n&quot;);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fflush(logFile);
+<br />
+! #endif
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+!       else if (c-&gt;type == 0) {
+<br />
+! 	  if(c-&gt;cmdStr != NULL)	/* Just fire it up */	  
+<br />
+! 	    Spawn(c-&gt;cmdStr);
+<br />
+!       }
+<br />
+! 
+<br />
+!       if (c-&gt;sscmd) {	/* StartStop */
+<br />
+! 	  
+<br />
+! 	  if (!c-&gt;pid) {
+<br />
+! 	    c-&gt;pid = Spawn(c-&gt;sscmd); /* Start a new process */
+<br />
+! 	    c-&gt;running = 1;
+<br />
+! 	  }
+<br />
+! 	  else {
+<br />
+! 	    kill(c-&gt;pid, SIGCONT); /* Ask it to continue */
+<br />
+! 	    c-&gt;running = 1;
+<br />
+! #ifdef LOGFILE
+<br />
+! 	    fprintf(logFile,&quot;Sent SIGCONT to %s (pid %d)\n&quot;, c-&gt;sscmd, c-&gt;pid);
+<br />
+! 	    fflush(logFile);
+<br />
+! #endif
+<br />
+! 	  }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
++   return;
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
++   
+<br />
+&nbsp;&nbsp;/******************************************************************************
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SendFvwmPipe - Send a message back to fvwm 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Based on SendInfo() from FvwmIdent:
+<br />
+***************
+<br />
+*** 290,295 ****
+<br />
+--- 337,357 ----
+<br />
+&nbsp;&nbsp;&nbsp;**********************************************************************/
+<br />
+&nbsp;&nbsp;void DeadPipe(int nonsense)
+<br />
+&nbsp;&nbsp;{
+<br />
++   int d;
+<br />
++   Command *cp;
+<br />
++   
+<br />
++   /* Try to clean up by killing all the running children */
+<br />
++   
+<br />
++   for (d = 0, cp = commands; d &lt; DeskCount; d++, cp++)
+<br />
++     if (cp-&gt;sscmd &amp;&amp; cp-&gt;pid &gt; 0) {
+<br />
++ #ifdef LOGFILE
+<br />
++       fprintf(logFile, &quot;Sending SIGKILL to %s (pid %d)\n&quot;,
+<br />
++ 	      cp-&gt;sscmd, cp-&gt;pid);
+<br />
++       fflush(logFile);
+<br />
++ #endif
+<br />
++       kill(cp-&gt;pid, SIGKILL);
+<br />
++     }
+<br />
++   
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;exit(1);
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+***************
+<br />
+*** 304,309 ****
+<br />
+--- 366,376 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;char *tline;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;sprintf(line2,&quot;*%sDesk&quot;,Module);
+<br />
++ 
+<br />
++ #ifdef LOGFILE  
+<br />
++   fprintf(logFile, &quot;Parsing config\n&quot;);
+<br />
++   fflush(logFile);
+<br />
++ #endif
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;GetConfigLine(Fvwm_fd,&amp;tline);
+<br />
+&nbsp;&nbsp;
+<br />
+***************
+<br />
+*** 323,330 ****
+<br />
+&nbsp;&nbsp;******************************************************************************/
+<br />
+&nbsp;&nbsp;void AddCommand(char *string)
+<br />
+&nbsp;&nbsp;{
+<br />
+! char *temp;
+<br />
+! int num;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;temp=string;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;while(isspace(*temp)) temp++;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;num=atoi(temp);
+<br />
+--- 390,399 ----
+<br />
+&nbsp;&nbsp;******************************************************************************/
+<br />
+&nbsp;&nbsp;void AddCommand(char *string)
+<br />
+&nbsp;&nbsp;{
+<br />
+!   char *temp, *t, *color;
+<br />
+!   int num;
+<br />
+!   Command *c;
+<br />
+!   
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;temp=string;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;while(isspace(*temp)) temp++;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;num=atoi(temp);
+<br />
+***************
+<br />
+*** 340,381 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while(DeskCount&lt;num+1) commands[DeskCount++].type= -1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+- /*  commands[num]=(Command*)safemalloc(sizeof(Command));
+<br />
+- */
+<br />
+&nbsp;&nbsp;
+<br />
+!     /* Now check the type of command... */
+<br />
+!     /* strcpy(commands[num],temp);*/
+<br />
+&nbsp;&nbsp;
+<br />
+- 	if (strncmp(temp,&quot;-solid&quot;,6)==0)
+<br />
+- 	{
+<br />
+- 		char* color;
+<br />
+- 		char* tmp;
+<br />
+- 		/* Process a solid color request */
+<br />
+- 
+<br />
+- 		color = &amp;temp[7];
+<br />
+- 		while (isspace(*color))
+<br />
+- 			color++;
+<br />
+- 		tmp= color;
+<br />
+- 		while (!isspace(*tmp))
+<br />
+- 			tmp++;
+<br />
+- 		*tmp = 0;
+<br />
+- 		commands[num].type = 1;
+<br />
+- 		commands[num].solidColor = NameToPixel(color, BlackPixel(dpy, screen));
+<br />
+&nbsp;&nbsp;#ifdef LOGFILE
+<br />
+! 		fprintf(logFile,&quot;Adding color: %s as number %d to desk %d\n&quot;,
+<br />
+! 			color,commands[num].solidColor, num);
+<br />
+! 		fflush(logFile);
+<br />
+&nbsp;&nbsp;#endif
+<br />
+! 	}
+<br />
+! 	else
+<br />
+! 	{
+<br />
+&nbsp;&nbsp;#ifdef LOGFILE
+<br />
+! 		fprintf(logFile,&quot;Adding command: %s to desk %d\n&quot;,temp, num);
+<br />
+! 		fflush(logFile);
+<br />
+&nbsp;&nbsp;#endif
+<br />
+- 		commands[num].type = 0;
+<br />
+- 		commands[num].cmdStr = (char *)safemalloc(strlen(temp)+1);
+<br />
+- 		strcpy(commands[num].cmdStr,temp);
+<br />
+- 	}
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;}
+<br />
+--- 409,572 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while(DeskCount&lt;num+1) commands[DeskCount++].type= -1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+!   /* Now check the type of command... */
+<br />
+! 
+<br />
+!   c = commands+num;
+<br />
+!   c-&gt;cmdStr = c-&gt;sscmd = NULL;
+<br />
+!   c-&gt;solidColor = 0;
+<br />
+!   
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;#ifdef LOGFILE
+<br />
+!   fprintf(logFile, &quot;Parsing %s\n&quot;, temp);
+<br />
+!   fprintf(logFile, &quot;Desk %d\n&quot;, num);
+<br />
+!   fflush(logFile);
+<br />
+&nbsp;&nbsp;#endif
+<br />
+! 
+<br />
+!   /* Look for a StartStop command */
+<br />
+!   if ((t = strstr(temp, &quot;StartStop&quot;))) {	
+<br />
+!     *t = '\0';
+<br />
+!     t = stripwhite(t+9);
+<br />
+!     c-&gt;sscmd = (char *)safemalloc(strlen(t)+1);
+<br />
+!     strcpy(c-&gt;sscmd, t);
+<br />
+!     c-&gt;pid = c-&gt;running = 0;
+<br />
+!   }
+<br />
+!     
+<br />
+!   temp = stripwhite(temp);
+<br />
+!     
+<br />
+!   if (strncmp(temp, &quot;-solid&quot;, 6)==0)  {
+<br />
+!     char* tmp;
+<br />
+!     /* Process a solid color request */
+<br />
+!     c-&gt;type = 1;
+<br />
+!       
+<br />
+!     color = &amp;temp[7];
+<br />
+!     while (isspace(*color))
+<br />
+!       color++;
+<br />
+!     tmp= color;
+<br />
+!     while (!isspace(*tmp))
+<br />
+!       tmp++;
+<br />
+!     *tmp = '\0';
+<br />
+!     fprintf(logFile, &quot;  BlackPixel = %d\n&quot;, BlackPixel(dpy, screen));
+<br />
+!     c-&gt;solidColor = NameToPixel(color, BlackPixel(dpy, screen));
+<br />
+!   }
+<br />
+!   else {
+<br />
+!     c-&gt;type = 0;
+<br />
+!     if (strlen(temp) &gt;   0) {
+<br />
+!       c-&gt;cmdStr = (char *)safemalloc(strlen(temp)+1);
+<br />
+!       strcpy(c-&gt;cmdStr,temp);
+<br />
+!     }
+<br />
+!     else 
+<br />
+!       c-&gt;cmdStr = NULL;
+<br />
+!   }
+<br />
+! 
+<br />
+&nbsp;&nbsp;#ifdef LOGFILE
+<br />
+!   fprintf(logFile, &quot;  Type %d\n&quot;, c-&gt;type);
+<br />
+!   if (c-&gt;type == 1)
+<br />
+!     fprintf(logFile,&quot;  Solid color %s as number %d\n&quot;,color, c-&gt;solidColor);
+<br />
+!   if (c-&gt;cmdStr)
+<br />
+!     fprintf(logFile, &quot;  Command: %s\n&quot;, c-&gt;cmdStr);
+<br />
+!   if (c-&gt;sscmd)
+<br />
+!     fprintf(logFile, &quot;  StartStop command: %s\n&quot;, c-&gt;sscmd);
+<br />
+!   fprintf(logFile, &quot;\n&quot;);
+<br />
+!   fflush(logFile);
+<br />
+&nbsp;&nbsp;#endif
+<br />
+&nbsp;&nbsp;
+<br />
++   return;
+<br />
++ }
+<br />
++ 
+<br />
++ 
+<br />
++ void StopBackgrounds(void)
+<br />
++ {
+<br />
++   /* 
+<br />
++    * Send SIGSTOP to any running background programs.  
+<br />
++    * There should be at most one of them, but we try them all anyway.
+<br />
++    */
+<br />
++ 
+<br />
++   int d;
+<br />
++   Command *cp;
+<br />
++   
+<br />
++   
+<br />
++   for (d = 0, cp = commands; d &lt; DeskCount; d++, cp++)
+<br />
++     if (cp-&gt;sscmd &amp;&amp; cp-&gt;running &amp;&amp; cp-&gt;pid &gt; 0) {
+<br />
++ #ifdef LOGFILE
+<br />
++       fprintf(logFile, &quot;Sending SIGSTOP to %s (pid %d) on desk %d\n&quot;,
+<br />
++ 	      cp-&gt;sscmd, cp-&gt;pid, d);
+<br />
++       fflush(logFile);
+<br />
++ #endif
+<br />
++       kill(cp-&gt;pid, SIGSTOP);
+<br />
++       cp-&gt;running = 0;
+<br />
++     }
+<br />
++   return;
+<br />
++ }
+<br />
++ 
+<br />
++ 
+<br />
++ pid_t Spawn(char *c)
+<br />
++ {
+<br />
++   /*
+<br />
++    * Fork and exec the command in c, returning the pid
+<br />
++    */
+<br />
++ 
+<br />
++   
+<br />
++   int j, n = 0;
+<br />
++   pid_t pid = 0;
+<br />
++   char **av, *s;
+<br />
++  
+<br />
++ 
+<br />
++   if ((pid = fork()) != 0) {
+<br />
++ #ifdef LOGFILE 
+<br />
++     fprintf(logFile, &quot;forked pid %d\n&quot;, pid);
+<br />
++     fflush(logFile);
+<br />
++ #endif  
+<br />
++     return pid;
+<br />
++   }
+<br />
++   
+<br />
++   /* Child */
+<br />
++   for (n = 0, s = c; *s; )
+<br />
++     n += isspace(*s++);		/* Count the number of words */
+<br />
++   
+<br />
++   av = (char **)safemalloc(n*sizeof(char *));
+<br />
++   
+<br />
++   s = strtok(c, &quot; \t\n&quot;);
+<br />
++ 
+<br />
++   n = 0;
+<br />
++   av[n++] = s;
+<br />
++   while ((s = strtok(NULL, &quot; \t\n&quot;)))
+<br />
++     av[n++] = s;
+<br />
++   av[n] = NULL;
+<br />
++ 
+<br />
++ #ifdef LOGFILE 
+<br />
++   fprintf(logFile, &quot;Spawning: &quot;);
+<br />
++   for (j = 0; j &lt; n; j++)
+<br />
++     fprintf(logFile, &quot;%s &quot;, av[j]);
+<br />
++   fprintf(logFile, &quot;\n&quot;);
+<br />
++   fflush(logFile);
+<br />
++ #endif
+<br />
++   execvp(av[0], av);
+<br />
++   /* NOTREACHED */
+<br />
++   return -1;
+<br />
++ }
+<br />
++ 
+<br />
++ 
+<br />
++ #ifndef whitespace
+<br />
++ #define whitespace(c) (((c) == ' ') || ((c) == '\t') || ((c) == '\n'))
+<br />
++ #endif
+<br />
++ 
+<br />
++ 
+<br />
++ static char *stripwhite (char *string)
+<br />
++ {
+<br />
++   register int i = 0;
+<br />
++ 
+<br />
++   while (whitespace (string[i]))
+<br />
++     i++;
+<br />
++ 
+<br />
++   if (i)
+<br />
++     strcpy (string, string + i);
+<br />
++ 
+<br />
++   i = strlen (string) - 1;
+<br />
++ 
+<br />
++   while (i &gt; 0 &amp;&amp; whitespace (string[i]))
+<br />
++     i--;
+<br />
++ 
+<br />
++   string[++i] = '\0';
+<br />
++   return(string);
+<br />
+&nbsp;&nbsp;}
+<br />
+*** FvwmBacker.h.orig	Sun Dec 29 18:09:18 1996
+<br />
+--- FvwmBacker.h	Mon Dec  9 23:14:52 1996
+<br />
+***************
+<br />
+*** 29,31 ****
+<br />
+--- 29,35 ----
+<br />
+&nbsp;&nbsp;void DeadPipe(int nonsense);
+<br />
+&nbsp;&nbsp;void ParseConfig(void);
+<br />
+&nbsp;&nbsp;void AddCommand(char *string);
+<br />
++ void StopBackgrounds(void);
+<br />
++ pid_t Spawn(char *c);
+<br />
++ 
+<br />
++ 
+<br />
+*** FvwmBacker.man.orig	Sun Dec 29 18:09:18 1996
+<br />
+--- FvwmBacker.man	Sun Dec 29 17:54:41 1996
+<br />
+***************
+<br />
+*** 1,6 ****
+<br />
+&nbsp;&nbsp;.\&quot; t
+<br />
+&nbsp;&nbsp;.\&quot; _at_(#)FvwmBacker.1	11/8/94
+<br />
+! .TH FvwmBacker 0.1 &quot;September 8th, 1994&quot;
+<br />
+&nbsp;&nbsp;.UC
+<br />
+&nbsp;&nbsp;.SH NAME
+<br />
+&nbsp;&nbsp;FvwmBacker \- the FVWM background changer module
+<br />
+--- 1,6 ----
+<br />
+&nbsp;&nbsp;.\&quot; t
+<br />
+&nbsp;&nbsp;.\&quot; _at_(#)FvwmBacker.1	11/8/94
+<br />
+! .TH FvwmBacker 0.1 &quot;December 29th, 1996&quot;
+<br />
+&nbsp;&nbsp;.UC
+<br />
+&nbsp;&nbsp;.SH NAME
+<br />
+&nbsp;&nbsp;FvwmBacker \- the FVWM background changer module
+<br />
+***************
+<br />
+*** 10,18 ****
+<br />
+&nbsp;&nbsp;.SH DESCRIPTION
+<br />
+&nbsp;&nbsp;The FvwmBacker module provides functionality to change the background
+<br />
+&nbsp;&nbsp;when changing desktops.  Any command can be executed to change the
+<br />
+! backgrounds.  The commands used to change the backgrounds must exit
+<br />
+! after changing the root window, (i.e. 'xv -root zzz.gif' does not,
+<br />
+! without the -quit option) otherwise FvwmBacker will hang.
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;.SH COPYRIGHTS
+<br />
+&nbsp;&nbsp;The FvwmBacker module is the original work of Mike Finger.
+<br />
+--- 10,17 ----
+<br />
+&nbsp;&nbsp;.SH DESCRIPTION
+<br />
+&nbsp;&nbsp;The FvwmBacker module provides functionality to change the background
+<br />
+&nbsp;&nbsp;when changing desktops.  Any command can be executed to change the
+<br />
+! backgrounds.  In addition a command that continuously draws to the
+<br />
+! root window 
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;.SH COPYRIGHTS
+<br />
+&nbsp;&nbsp;The FvwmBacker module is the original work of Mike Finger.
+<br />
+***************
+<br />
+*** 37,43 ****
+<br />
+&nbsp;&nbsp;.SH CONFIGURATION OPTIONS
+<br />
+&nbsp;&nbsp;The following is the only supported option at present:
+<br />
+&nbsp;&nbsp;
+<br />
+! .IP &quot;*FvwmBackerDesk \fIDeskNumber command\fP&quot;
+<br />
+&nbsp;&nbsp;Specifies the \fIcommand\fP to execute when the specified
+<br />
+&nbsp;&nbsp;\fIDeskNumber\fP becomes active.
+<br />
+&nbsp;&nbsp;
+<br />
+--- 36,42 ----
+<br />
+&nbsp;&nbsp;.SH CONFIGURATION OPTIONS
+<br />
+&nbsp;&nbsp;The following is the only supported option at present:
+<br />
+&nbsp;&nbsp;
+<br />
+! .IP &quot;*FvwmBackerDesk \fIDeskNumber command \fP[StartStop \fIsscommand\fP]&quot;
+<br />
+&nbsp;&nbsp;Specifies the \fIcommand\fP to execute when the specified
+<br />
+&nbsp;&nbsp;\fIDeskNumber\fP becomes active.
+<br />
+&nbsp;&nbsp;
+<br />
+***************
+<br />
+*** 46,51 ****
+<br />
+--- 45,59 ----
+<br />
+&nbsp;&nbsp;color without generating a system call to xsetroot. Only single word
+<br />
+&nbsp;&nbsp;color names may be used.
+<br />
+&nbsp;&nbsp;
+<br />
++ If the optional keyword StartStop and an additional command
+<br />
++ \fIsscommand\fP are specified, \fIsscommand\fP will be invoked the
+<br />
++ first time \fIDeskNumber\fP becomes active; when it becomes inactive
+<br />
++ \fIsscommand\fP will be stopped by sending it a STOP signal and it
+<br />
++ will be restarted (with a SIGCONT) when the desk next becomes active.
+<br />
++ This behaviour is designed to be used with programs such as xearth(1)
+<br />
++ and xsnow(1) which continuously draw on the root window.  By using
+<br />
++ StartStop commands you can have a different animation on each desktop.
+<br />
++ 
+<br />
+&nbsp;&nbsp;.SH SAMPLE CONFIGURATION
+<br />
+&nbsp;&nbsp;The following are excepts from a .fvwmrc file which describe
+<br />
+&nbsp;&nbsp;FvwmBacker initialization commands:
+<br />
+***************
+<br />
+*** 56,70 ****
+<br />
+&nbsp;&nbsp;# Set Up Backgrounds for different desktops.
+<br />
+&nbsp;&nbsp;####
+<br />
+&nbsp;&nbsp;*FvwmBackerDesk 0 -solid steelblue
+<br />
+! *FvwmBackerDesk 1 -solid midnightblue
+<br />
+! *FvwmBackerDesk 2 -solid yellow
+<br />
+! *FvwmBackerDesk 3 xpmroot /usr/include/X11/pixmaps/background2.xpm
+<br />
+&nbsp;&nbsp;.sp
+<br />
+&nbsp;&nbsp;.fi
+<br />
+! 
+<br />
+&nbsp;&nbsp;.SH AUTHOR
+<br />
+&nbsp;&nbsp;Mike Finger (mfinger_at_mermaid.micro.umn.edu)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Mike_Finger_at_atk.com)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(doodman on IRC, check the #linux channel)
+<br />
+&nbsp;&nbsp;.SH Modified by
+<br />
+! Andrew Davison (davison_at_cs.monash.edu.au)
+<br />
+--- 64,96 ----
+<br />
+&nbsp;&nbsp;# Set Up Backgrounds for different desktops.
+<br />
+&nbsp;&nbsp;####
+<br />
+&nbsp;&nbsp;*FvwmBackerDesk 0 -solid steelblue
+<br />
+! *FvwmBackerDesk 1 StartStop xearth -wait 30
+<br />
+! *FvwmBackerDesk 2 -solid MidnightBlue StartStop xsnow
+<br />
+! *FvwmBackerDesk 3 xpmroot /usr/include/X11/pixmaps/background2.xpm StartStop xroach
+<br />
+&nbsp;&nbsp;.sp
+<br />
+&nbsp;&nbsp;.fi
+<br />
+! Desk 0 is plain steel-blue.  Xearth(1) runs on desk 1 and xsnow(1)
+<br />
+! runs on desk 2.  Each time desk 2 becomes active the background is
+<br />
+! reset to midnight-blue because xsnow does not redraw the background
+<br />
+! when it is restarted.  Similarly desk 3 has roaches running around on
+<br />
+! a background of background2.xpm pixmaps; xpmroot is rerun each time
+<br />
+! the desk is selected to redraw the background.
+<br />
+! .SH NOTES
+<br />
+! Version 1.0 of xearth redraws the root window every five minutes by
+<br />
+! default.  Thus you might have to wait five minutes after selecting a
+<br />
+! desk before the background is redrawn.  One solution to this problem
+<br />
+! is to ask xearth to update itself every few seconds (eg xearth -wait
+<br />
+! 5), but this is clearly wasteful and will chew up noticable amounts of
+<br />
+! CPU time.   An alternative is to apply a patch to xearth (supplied
+<br />
+! with FvwmBacker) so that xearth updates itself each time it is sent a
+<br />
+! SIGCONT.  The patch has been sent to Kirk Lauritz Johnson and I hope
+<br />
+! will find its way into later releases of the xearth.
+<br />
+! .SH SEE ALSO
+<br />
+! xearth(1), xsnow(1), xroach(1), xpmroot(1), signal(2).
+<br />
+&nbsp;&nbsp;.SH AUTHOR
+<br />
+&nbsp;&nbsp;Mike Finger (mfinger_at_mermaid.micro.umn.edu)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Mike_Finger_at_atk.com)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(doodman on IRC, check the #linux channel)
+<br />
+&nbsp;&nbsp;.SH Modified by
+<br />
+! Andrew Davison (davison_at_cs.monash.edu.au) (September 1994) and Richard
+<br />
+! Everson (rme_at_camelot.mssm.edu) (December 1996).
+<br />
+*** root_bits.c.orig	Sun Dec 29 18:09:18 1996
+<br />
+--- root_bits.c	Sun Dec 29 14:15:56 1996
+<br />
+***************
+<br />
+*** 66,73 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit(1);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*NOTREACHED*/
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+!     if ((ecolor.pixel != BlackPixel(dpy, screen)) &amp;&amp;
+<br />
+! 	(ecolor.pixel != WhitePixel(dpy, screen)) &amp;&amp;
+<br />
+! 	(DefaultVisual(dpy, screen)-&gt;class &amp; Dynamic))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return(ecolor.pixel);
+<br />
+&nbsp;&nbsp;}
+<br />
+--- 66,71 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit(1);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*NOTREACHED*/
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+!     
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return(ecolor.pixel);
+<br />
+&nbsp;&nbsp;}
+<br />
+*** /dev/null	Mon Dec 31 23:00:00 1979
+<br />
+--- xearth.patch	Sun Dec 29 18:07:32 1996
+<br />
+***************
+<br />
+*** 0 ****
+<br />
+--- 1,56 ----
+<br />
++ *** x11.c.orig	Sun Sep 24 21:12:44 1995
+<br />
++ --- x11.c	Thu Dec 26 18:58:53 1996
+<br />
++ ***************
+<br />
++ *** 46,51 ****
+<br />
++ --- 46,53 ----
+<br />
++    */
+<br />
++   
+<br />
++   #include &quot;xearth.h&quot;
+<br />
++ + #include &lt;signal.h&gt;
+<br />
++ + 
+<br />
++   #include &lt;X11/Xlib.h&gt;
+<br />
++   #include &lt;X11/Intrinsic.h&gt;
+<br />
++   #include &lt;X11/Xatom.h&gt;
+<br />
++ ***************
+<br />
++ *** 470,475 ****
+<br />
++ --- 472,481 ----
+<br />
++     /* preserveResource(dsply, vroot); */
+<br />
++   }
+<br />
++   
+<br />
++ + static void wakeup(int s)
+<br />
++ + {
+<br />
++ +   /* Catch SIGALRM and SIGCONT, but don't do anything */
+<br />
++ + }
+<br />
++   
+<br />
++   void x11_output()
+<br />
++   {
+<br />
++ ***************
+<br />
++ *** 499,507 ****
+<br />
++         return;
+<br />
++       }
+<br />
++   
+<br />
++ !     /* sleep for designated wait_time
+<br />
++        */
+<br />
++ !     sleep((unsigned) wait_time);
+<br />
++     }
+<br />
++   }
+<br />
++   
+<br />
++ --- 505,522 ----
+<br />
++         return;
+<br />
++       }
+<br />
++   
+<br />
++ !     /*
+<br />
++ !      * Schedule an alarm for wait_time seconds and pause.  Alarm and pause are
+<br />
++ !      * used instead of sleep, so that if xearth is sent a SIGSTOP and SIGCONT
+<br />
++ !      * separated by more that wait_time, it will refreash the screen as 
+<br />
++ !      * soon as the SIGCONT is received.   This facilitates interaction 
+<br />
++ !      * with FvwmBacker.
+<br />
++        */
+<br />
++ ! 
+<br />
++ !     signal(SIGALRM, wakeup);
+<br />
++ !     signal(SIGCONT, wakeup);
+<br />
++ !     alarm(wait_time);
+<br />
++ !     pause();
+<br />
++     }
+<br />
++   }
+<br />
++   
+<br />
+<br /><pre>
+-- 
+Laboratory for Applied Mathematics,       Telephone: +1 212 241 4033
+CUNY/Mount Sinai School of Medicine,            Fax: +1 212 425 5037
+Box 1012, One Gustave Levy Place,
+NY, NY, 10029-6574.                      Email: rme_at_camelot.mssm.edu
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sun Dec 29 1996 - 17:46:46 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start18784">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="18785.html" title="Next message in the list">Charles Hines: "Re: FVWM: FVWM v2.0.44?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="18783.html" title="Previous message in the list">miSh: "FVWM: FVWM v2.0.44?"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18784" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18784" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18784" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18784" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

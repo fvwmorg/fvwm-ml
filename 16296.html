@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Perl script to convert all users .fvwmrc's from Austin Donnelly on 1996-04-19 (fvwm-users)</title>
+<meta name="Author" content="Austin Donnelly (and1000_at_cam.ac.uk)" />
+<meta name="Subject" content="FVWM: Perl script to convert all users .fvwmrc's" />
+<meta name="Date" content="1996-04-19" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Perl script to convert all users .fvwmrc's</h1>
+<!-- received="Fri Apr 19 09:48:44 1996" -->
+<!-- isoreceived="19960419084844" -->
+<!-- sent="Fri, 19 Apr 96 15:51 BST" -->
+<!-- isosent="19960419145100" -->
+<!-- name="Austin Donnelly" -->
+<!-- email="and1000_at_cam.ac.uk" -->
+<!-- subject="FVWM: Perl script to convert all users .fvwmrc's" -->
+<!-- id="m0uAHWd-000z68C_at_valour.pem.cam.ac.uk" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start16296" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="16297.html" accesskey="d" title="Martin Kraemer: &quot;Re: FVWM: fvwm using &#0034;compatible&#0034; colors (addendum)&quot;">Next message</a> ]
+[ <a href="16295.html" title="Charles Hines: &quot;Re: FVWM: cool&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16296" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16296" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16296" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16296" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Austin Donnelly &lt;<a href="mailto:and1000_at_cam.ac.uk?Subject=Re%3A%20FVWM%3A%20Perl%20script%20to%20convert%20all%20users%20.fvwmrc's">and1000_at_cam.ac.uk</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 19 Apr 96 15:51 BST</span><br />
+</address>
+<br />
+Hi,
+<br />
+<br />I'm in the process of packaging up fvwm2 for Debian, so I'm doing
+<br />
+quite a bit of integration of fvwm with the rest of the system.
+<br />
+<br />To help this, I have written a perl script which, when run as root,
+<br />
+will go through all the users who have .fvwmrcs and convert them
+<br />
+using the fvwmrc_convert AWK script provided with fvwm2.
+<br />
+<br />I have also improved the AWK script somewhat: see my other message for
+<br />
+the diffs.
+<br />
+<br />Chuck: could you put this script in the utils directory, please ?
+<br />
+<br /><br />Thanks,
+<br />
+Austin
+<br />
+<br /><br />------------------------- cut cut cut ---------------------------------
+<br />
+#!/usr/bin/perl
+<br />
+#  Copyright (C)1996 Austin Donnelly &lt;and1000_at_cam.ac.uk&gt;.
+<br />
+#  This is free software; you may modify and distribute it under the
+<br />
+#  terms of the GNU General Public Licence as published by the Free
+<br />
+#  Software Foundation, version 2 or at your option any later version.
+<br />
+#  There is NO WARRANTY.
+<br />
+<br />$CONVPROG=&quot;fvwmrc_convert&quot;;
+<br />
+<br /># Syscall number for setgroups(), from /usr/include/sys/syscall.h
+<br />
+#$SYS_SETGROUPS=81; # valid for linux, fill in for your flavour of unix
+<br />
+die &quot;I need configuring&quot; if (!defined($SYS_SETGROUPS));
+<br />
+<br />print &quot;Checking which users have untranslated ~/.fvwmrc files...\n&quot;;
+<br />
+<br /># Read password file &amp; build list of affected users
+<br />
+_at_todo=();
+<br />
+setpwent();
+<br />
+($name,$passwd,$uid,$gid,
+<br />
+&nbsp;$quota,$comment,$gcos,$dir,$shell) = getpwent();
+<br />
+while(defined($uid))
+<br />
+{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;push(_at_todo, &quot;$uid:$gid:$dir&quot;)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (-f &quot;$dir/.fvwmrc&quot; &amp;&amp; ! -f &quot;$dir/.fvwm2rc&quot;);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;($name,$passwd,$uid,$gid,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$quota,$comment,$gcos,$dir,$shell) = getpwent();
+<br />
+}
+<br />
+endpwent();
+<br />
+<br />if ($#todo == -1)
+<br />
+{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;print &quot;No user has an untranslated ~/.fvwmrc - no conversion necessary.\n&quot;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;exit 0;
+<br />
+}
+<br />
+<br />print ($#todo + 1);
+<br />
+print &quot; users need conversion, shall I convert them all now?\n&quot;;
+<br />
+$resp=&quot;&lt;invalid&gt;&quot;;
+<br />
+while(! (($resp eq &quot;&quot;) || ($resp =~ /^y/io) || ($resp =~ /^n/io)))
+<br />
+{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;print &quot;Type Y to convert, N to skip [Y]: &quot;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;$resp=&lt;STDIN&gt;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;chop($resp);
+<br />
+}
+<br />
+<br />if ($resp =~ /^n/io)
+<br />
+{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;print &quot;Ok, not converting\n&quot;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;exit 0;
+<br />
+}
+<br />
+<br />print &lt;&lt;EOT ;
+<br />
+<br />Warnings during the conversion process will be written to
+<br />
+/home/&lt;username&gt;/.fvwm2rc.conversion
+<br />
+for each user.
+<br />
+<br />EOT
+<br />
+<br /># Do all the files
+<br />
+$unum=1;
+<br />
+printf(STDERR &quot;Processing user: %3d/%3d&quot;, 0, $#todo+1);
+<br />
+foreach $line (_at_todo)
+<br />
+{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;printf(STDERR &quot;\b\b\b\b\b\b\b&quot;); # 7 backspaces
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;printf(STDERR &quot;%3d/%3d&quot;, $unum, $#todo+1);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;# XXX: assumes all directories in /home have corresponding uids.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&amp;translate($line);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;$unum++;
+<br />
+}
+<br />
+print STDERR &quot;\n&quot;;
+<br />
+<br />&amp;mark_config_done;
+<br />
+<br />print &quot;All done!\n&quot;;
+<br />
+exit 0;
+<br />
+<br />###########################
+<br />
+<br /># run $CONVPROG
+<br />
+sub translate
+<br />
+{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;local ($line) = _at__;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;local ($uid, $gid, $dir);
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;$line =~ m/^([^:]+):([^:]+):(.+)$/o;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;$uid=$1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;$gid=$2;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;$dir=$3;
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;# fork, child drops privs &amp; does work, while parent waits for child
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;$pid=fork();
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;die &quot;fork() failed: $!\n&quot; if ($pid==-1);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if ($pid==0) # child
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;syscall($SYS_SETGROUPS, 0, 0); # SYS_setgroups(0, NULL); /* nasty! */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$( = $) = $gid;  # real, eff gid
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$&lt; = $&gt; = $uid;  # real, eff uid
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# ok, now plain mortal, so run conversion
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;open(STDOUT, &quot;&gt;$dir/.fvwm2rc.conversion&quot;) ||
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;die &quot;cannot open $dir/.fvwm2rc.conversion for write: $!\n&quot;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;open(STDERR, &quot;&gt;&amp;STDOUT&quot;) || die &quot;Can't dup stdout&quot;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exec($CONVPROG, &quot;$dir/.fvwmrc&quot;, &quot;$dir/.fvwm2rc&quot;,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;&gt;$dir/.fvwm2rc.conversion 2&gt;&amp;1&quot;);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;die &quot;exec() of $CONVPROG failed: $!\n&quot;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;} else {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# parent
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;waitpid($pid, 0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$ret=$?&gt;&gt;8;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;die &quot;Child returned with non-zero exit status($ret)\n&quot; if ($ret);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+}
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Apr 19 1996 - 09:48:44 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start16296">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="16297.html" title="Next message in the list">Martin Kraemer: "Re: FVWM: fvwm using &#0034;compatible&#0034; colors (addendum)"</a></li>
+<li><dfn>Previous message</dfn>: <a href="16295.html" title="Previous message in the list">Charles Hines: "Re: FVWM: cool"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16296" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16296" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16296" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16296" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

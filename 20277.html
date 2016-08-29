@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: FvwmButtons and Mouse 1,2,3... from Thomas Honigmann on 1997-06-24 (fvwm-users)</title>
+<meta name="Author" content="Thomas Honigmann (honig_at_mathematik.hu-berlin.de)" />
+<meta name="Subject" content="Re: FVWM: FvwmButtons and Mouse 1,2,3..." />
+<meta name="Date" content="1997-06-24" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: FvwmButtons and Mouse 1,2,3...</h1>
+<!-- received="Tue Jun 24 16:58:59 1997" -->
+<!-- isoreceived="19970624155859" -->
+<!-- sent="Tue, 24 Jun 1997 23:58:13 +0200" -->
+<!-- isosent="19970624215813" -->
+<!-- name="Thomas Honigmann" -->
+<!-- email="honig_at_mathematik.hu-berlin.de" -->
+<!-- subject="Re: FVWM: FvwmButtons and Mouse 1,2,3..." -->
+<!-- id="199706242158.XAA06291_at_kummer.mathematik.hu-berlin.de" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="FVWM: FvwmButtons and Mouse 1,2,3..." -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start20277" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="20278.html" accesskey="d" title="William J. Stotts: &quot;RE: FVWM: A key for space&quot;">Next message</a> ]
+[ <a href="20276.html" title="Zachariah Baum: &quot;FVWM: passing mouse clicks through to apps&quot;">Previous message</a> ]
+[ <a href="20262.html" title="Christopher Wolf: &quot;FVWM: FvwmButtons and Mouse 1,2,3...&quot;">Maybe in reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg20277" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg20277" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg20277" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg20277" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Thomas Honigmann &lt;<a href="mailto:honig_at_mathematik.hu-berlin.de?Subject=Re%3A%20FVWM%3A%20FvwmButtons%20and%20Mouse%201%2C2%2C3...">honig_at_mathematik.hu-berlin.de</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 24 Jun 1997 23:58:13 +0200</span><br />
+</address>
+<br />
+Christopher Wolf &lt;cwolf_at_micro.ti.com&gt; wrote:
+<br />
+<em class="quotelev1">&gt; If one creates an FvwmButtons button and specifies actions for mouse 1
+</em><br />
+<em class="quotelev1">&gt; and mouse 2, and then presses mouse 3 on it, the entire FvwmButtons
+</em><br />
+<em class="quotelev1">&gt; will die.  
+</em><br />
+<br />It seems that in the situation you describe a NULL pointer gets passed
+<br />
+to mystrncasecmp() which calls strlen() on it without checking and
+<br />
+that causes the segmentation fault.
+<br />
+<br /><em class="quotelev1">&gt; Granted, this can be prevented by specifying a mouse 3
+</em><br />
+<em class="quotelev1">&gt; action or a default action, but couldn't it also just beep or
+</em><br />
+<em class="quotelev1">&gt; something if there is no action?  Segfaulting seems a little harsh.
+</em><br />
+<br />Attached is a patch which hopefully does what you want. Maybe it would
+<br />
+also be a good idea to make mystrncasecmp() more robust?
+<br />
+<br />By the way: I was looking around the code to see if how fvwm does the beeping.
+<br />
+I found that it always calls XBell(dpy,Scr.screen). I just don't understand
+<br />
+why this is better than XBell(dpy, 0). What am I missing?
+<br />
+<br />Cheers,
+<br />
+Thomas
+<br />
+<br /><br />--- FvwmButtons.c~	Tue Jun 24 10:15:56 1997
+<br />
++++ FvwmButtons.c	Tue Jun 24 19:52:41 1997
+<br />
+_at_&#64; -597,6 +597,11 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RedrawButton(b,0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(!(act=GetButtonAction(b,Event.xbutton.button)))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;act=GetButtonAction(b,0);
+<br />
++	    if (!act) 
+<br />
++	      {
+<br />
++	        XBell(Dpy, 0);
+<br />
++		break;
+<br />
++	      }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(mystrncasecmp(act,&quot;popup&quot;,5)!=0)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else /* i.e. action is Popup */
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue Jun 24 1997 - 16:58:59 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start20277">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="20278.html" title="Next message in the list">William J. Stotts: "RE: FVWM: A key for space"</a></li>
+<li><dfn>Previous message</dfn>: <a href="20276.html" title="Previous message in the list">Zachariah Baum: "FVWM: passing mouse clicks through to apps"</a></li>
+<li><dfn>Maybe in reply to</dfn>: <a href="20262.html" title="Message to which this message replies">Christopher Wolf: "FVWM: FvwmButtons and Mouse 1,2,3..."</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg20277" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg20277" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg20277" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg20277" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Frameless maximized windows from Daniel Richard G. on 2001-10-11 (fvwm-users)</title>
+<meta name="Author" content="Daniel Richard G. (skunk_at_graphics.lcs.mit.edu)" />
+<meta name="Subject" content="FVWM: Frameless maximized windows" />
+<meta name="Date" content="2001-10-11" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Frameless maximized windows</h1>
+<!-- received="Thu Oct 11 02:09:28 2001" -->
+<!-- isoreceived="20011011010928" -->
+<!-- sent="Thu, 11 Oct 2001 03:09:01 -0400" -->
+<!-- isosent="20011011070901" -->
+<!-- name="Daniel Richard G." -->
+<!-- email="skunk_at_graphics.lcs.mit.edu" -->
+<!-- subject="FVWM: Frameless maximized windows" -->
+<!-- id="Pine.SGI.4.33.0110110149140.29874-100000_at_acetone.lcs.mit.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start3361" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="3362.html" accesskey="d" title="Glen Lee Edwards: &quot;Re: FVWM: How about voting for FVWM!&quot;">Next message</a> ]
+[ <a href="3360.html" title="Marcus Lundblad: &quot;FVWM: Ooops...&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="3370.html" accesskey="t" title="Mikhael Goikhman: &quot;Re: FVWM: Frameless maximized windows&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg3361" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg3361" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg3361" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg3361" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Daniel Richard G. &lt;<a href="mailto:skunk_at_graphics.lcs.mit.edu?Subject=Re%3A%20FVWM%3A%20Frameless%20maximized%20windows">skunk_at_graphics.lcs.mit.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 11 Oct 2001 03:09:01 -0400</span><br />
+</address>
+<br />
+Hello all,
+<br />
+<br />[Recent convert from Window Maker here! :D  Other window managers may be
+<br />
+prettier than Fvwm, but I've come to realize that *feel* is really what
+<br />
+counts. Kudos to everyone who's worked on this fine project; I think I'll
+<br />
+be sticking with it for a long time to come]
+<br />
+<br />I'm building my own perfect .fvwm2rc file, and would like to have windows
+<br />
+lose their borders/handles when they are maximized. (Both to disable
+<br />
+resizing in an obvious way, and to free up a tad more screen space)
+<br />
+<br />So, as far as I could grok the man page, the way to do this would be with
+<br />
+a decor. The maximize function is thus:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DestroyFunc FuncMaximize
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AddToFunc FuncMaximize
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ I Current (!Maximized) ChangeDecor DecorMaximized
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ I Current (Maximized) ChangeDecor Default
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ I Maximize
+<br />
+<br />But then, I run into trouble declaring the decor. Below is the code I have
+<br />
+so far:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Maximized windows will have no borders or handles
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DestroyDecor DecorMaximized
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AddToDecor DecorMaximized
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ Style StyleMaximized UseDecor Default, BorderWidth 0, NoHandles
+<br />
+<br />This fails in at least four ways, which are detailed below. If anyone
+<br />
+knows what I'm doing wrong above, or perhaps can think of a better way of
+<br />
+doing this altogether, I'd greatly appreciate hearing from you!
+<br />
+<br /><br />Sincerely,
+<br />
+<br />--Danny
+<br />
+<br /><br />1. BorderWidth and NoHandles are accessible only in a Style command, and
+<br />
+Style is not permitted in a decor definition. (The man page says this,
+<br />
+somewhat indirectly, in the AddToDecor section---but the example given
+<br />
+contradicts that. Bug?). Fvwm complains, and effectively executes the
+<br />
+Style command immediately. (If I replace &quot;StyleMaximized&quot; with &quot;*&quot; then
+<br />
+all windows, maximized or not, lose their borders)
+<br />
+<br />2. &quot;Style&quot; appears to be a bad way of implementing the &quot;borderless
+<br />
+maximize&quot; functionality, because its scope can only be specified by a
+<br />
+window name/class/resource---it cannot be applied to *one specific window*
+<br />
+and no other. If I maximize an XV window, say, and start up another XV
+<br />
+instance elsewhere, the second XV window should have borders!
+<br />
+<br />3. DecorMaximized, as given above, doesn't seem to inherit the effects of
+<br />
+the large number of &quot;Style *&quot; and other ____Style commands that precede
+<br />
+it. Right now, when I maximize a window, the window decorations take on a
+<br />
+distinctly uncustomized look. How do I make DecorMaximized inherit
+<br />
+everything from the Default decor?
+<br />
+<br />4. Even if I jury-rig the first snippet of code to use &quot;Style $n&quot; to
+<br />
+assign &quot;BorderWidth 0 ...&quot; to the maximized window, the borderless window
+<br />
+does not fill the entire screen---it leaves a space at the right and
+<br />
+bottom edges that is twice the normal BorderWidth. Fvwm doesn't seem to be
+<br />
+taking into account the changed dimensions of the window. (Would some
+<br />
+invocation of Recapture do the trick here? How?)
+<br />
+<br /><br />Daniel Richard G.
+<br />
+&lt;skunk_at_graphics.lcs.mit.edu&gt;
+<br />
+MIT Computer Graphics Group
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Oct 11 2001 - 02:09:28 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start3361">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="3362.html" title="Next message in the list">Glen Lee Edwards: "Re: FVWM: How about voting for FVWM!"</a></li>
+<li><dfn>Previous message</dfn>: <a href="3360.html" title="Previous message in the list">Marcus Lundblad: "FVWM: Ooops..."</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="3370.html" title="Next message in this discussion thread">Mikhael Goikhman: "Re: FVWM: Frameless maximized windows"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="3370.html" title="Message sent in reply to this message">Mikhael Goikhman: "Re: FVWM: Frameless maximized windows"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg3361" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg3361" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg3361" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg3361" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:52 BST
+</em></small></p>
+</body>
+</html>

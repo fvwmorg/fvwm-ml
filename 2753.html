@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: I might have a bug fix. from Paul Koshevoy on 2001-06-26 (fvwm-users)</title>
+<meta name="Author" content="Paul Koshevoy (paul_at_bart.aragog.com)" />
+<meta name="Subject" content="Re: FVWM: I might have a bug fix." />
+<meta name="Date" content="2001-06-26" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: I might have a bug fix.</h1>
+<!-- received="Mon Jun 25 23:06:44 2001" -->
+<!-- isoreceived="20010625220644" -->
+<!-- sent="Mon, 25 Jun 2001 22:08:06 -0600 (MDT)" -->
+<!-- isosent="20010626040806" -->
+<!-- name="Paul Koshevoy" -->
+<!-- email="paul_at_bart.aragog.com" -->
+<!-- subject="Re: FVWM: I might have a bug fix." -->
+<!-- id="Pine.LNX.4.33.0106252205020.16751-100000_at_bart.aragog.com" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="Pine.LNX.4.33.0106252058000.16751-100000_at_bart.aragog.com" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start2753" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="2754.html" accesskey="d" title="Dominik Vogt: &quot;Re: FVWM: font problem&quot;">Next message</a> ]
+[ <a href="2752.html" title="Paul Koshevoy: &quot;FVWM: I might have a bug fix.&quot;">Previous message</a> ]
+[ <a href="2752.html" title="Paul Koshevoy: &quot;FVWM: I might have a bug fix.&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="2758.html" accesskey="t" title="Dominik Vogt: &quot;Re: FVWM: I might have a bug fix.&quot;">Next in thread</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg2753" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg2753" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg2753" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg2753" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Paul Koshevoy &lt;<a href="mailto:paul_at_bart.aragog.com?Subject=Re%3A%20FVWM%3A%20I%20might%20have%20a%20bug%20fix.">paul_at_bart.aragog.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 25 Jun 2001 22:08:06 -0600 (MDT)</span><br />
+</address>
+<br />
+On Mon, 25 Jun 2001, Paul Koshevoy wrote:
+<br />
+<br /><em class="quotelev1">&gt; Hi,
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt; I've looked through HandleConfigureRequest() in fvwm-2.2.5/fvwm/events.c,
+</em><br />
+<em class="quotelev1">&gt; and I found some code that I believe to be in error.
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt; At line 1450, the code reads:
+</em><br />
+<em class="quotelev1">&gt;   if (cre-&gt;value_mask &amp; CWX)
+</em><br />
+<em class="quotelev1">&gt;     x = cre-&gt;x - Tmp_win-&gt;boundary_width - Tmp_win-&gt;bw;
+</em><br />
+<em class="quotelev1">&gt;   if (cre-&gt;value_mask &amp; CWY)
+</em><br />
+<em class="quotelev1">&gt;     y = cre-&gt;y - Tmp_win-&gt;boundary_width - Tmp_win-&gt;title_height - Tmp_win-&gt;bw;
+</em><br />
+<em class="quotelev1">&gt;   if (cre-&gt;value_mask &amp; CWWidth)
+</em><br />
+<em class="quotelev1">&gt;     width = cre-&gt;width + 2*Tmp_win-&gt;boundary_width;
+</em><br />
+<em class="quotelev1">&gt;   if (cre-&gt;value_mask &amp; CWHeight)
+</em><br />
+<em class="quotelev1">&gt;     height = cre-&gt;height+Tmp_win-&gt;title_height+2*Tmp_win-&gt;boundary_width;
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt; I beleve it should read:
+</em><br />
+<em class="quotelev1">&gt;   if (cre-&gt;value_mask &amp; CWX)
+</em><br />
+<em class="quotelev1">&gt;     x = cre-&gt;x;
+</em><br />
+<em class="quotelev1">&gt;   if (cre-&gt;value_mask &amp; CWY)
+</em><br />
+<em class="quotelev1">&gt;     y = cre-&gt;y;
+</em><br />
+<em class="quotelev1">&gt;   if (cre-&gt;value_mask &amp; CWWidth)
+</em><br />
+<em class="quotelev1">&gt;     width = cre-&gt;width;
+</em><br />
+<em class="quotelev1">&gt;   if (cre-&gt;value_mask &amp; CWHeight)
+</em><br />
+<em class="quotelev1">&gt;     height = cre-&gt;height;
+</em><br />
+<br />Actually, although this places the window at the right coordinates,
+<br />
+it screws up the size. Here is the revised fix:
+<br />
+&nbsp;&nbsp;if (cre-&gt;value_mask &amp; CWX)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;x = cre-&gt;x;
+<br />
+&nbsp;&nbsp;if (cre-&gt;value_mask &amp; CWY)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;y = cre-&gt;y;
+<br />
+&nbsp;&nbsp;if (cre-&gt;value_mask &amp; CWWidth)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;width = cre-&gt;width + 2*Tmp_win-&gt;boundary_width;
+<br />
+&nbsp;&nbsp;if (cre-&gt;value_mask &amp; CWHeight)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;height = cre-&gt;height+Tmp_win-&gt;title_height+2*Tmp_win-&gt;boundary_width;
+<br />
+<br /><br /><em class="quotelev1">&gt; I believe that the code is trying to account for the size of frame decorations.
+</em><br />
+<em class="quotelev1">&gt; However, the event sender is supposed to include all the right information in
+</em><br />
+<em class="quotelev1">&gt; the event already. Here is a comment from the code:
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt;   /*
+</em><br />
+<em class="quotelev1">&gt;    * SetupWindow (x,y) are the location of the upper-left outer corner and
+</em><br />
+<em class="quotelev1">&gt;    * are passed directly to XMoveResizeWindow (frame).  The (width,height)
+</em><br />
+<em class="quotelev1">&gt;    * are the inner size of the frame.  The inner width is the same as the
+</em><br />
+<em class="quotelev1">&gt;    * requested client window width; the inner height is the same as the
+</em><br />
+<em class="quotelev1">&gt;    * requested client window height plus any title bar slop.
+</em><br />
+<em class="quotelev1">&gt;    */
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt; I am working on a small project where correct window placement is desireable.
+</em><br />
+<em class="quotelev1">&gt; It's written using the Qt toolkit. The program behaves as expected under kwin,
+</em><br />
+<em class="quotelev1">&gt; but misbehaves under FVWM2. When I tell the pogram to move itself to
+</em><br />
+<em class="quotelev1">&gt; coordinates 0,0, fvwm2 puts it at -2,-18 (the size of the window
+</em><br />
+<em class="quotelev1">&gt; decoration at that location).
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt; So, I have a fix in my local copy of fvwm2-2.2.5, but I would strongly prefer
+</em><br />
+<em class="quotelev1">&gt; to see it in the official code. Actually, last night I was ready to fix
+</em><br />
+<em class="quotelev1">&gt; every major window manager that did not agree with my program ;-), but I started
+</em><br />
+<em class="quotelev1">&gt; with fvwm2 because I use it the most. Here is the reason why I think that in
+</em><br />
+<em class="quotelev1">&gt; this fvwm2 is in error and not my program:
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt; <a href="http://doc.trolltech.com/geometry.html">http://doc.trolltech.com/geometry.html</a>
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt; If you want, I can send you the source to my program to remove any doubts.
+</em><br />
+<em class="quotelev1">&gt; It needs Qt 2.3.x to compile (RH 7.1 has 2.3.0, but I tested it under 2.3.1
+</em><br />
+<em class="quotelev1">&gt; as well).
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt; Thank you,
+</em><br />
+<em class="quotelev1">&gt; 	Paul.
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt; --
+</em><br />
+<em class="quotelev1">&gt; Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+</em><br />
+<em class="quotelev1">&gt; To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+</em><br />
+<em class="quotelev1">&gt; message to majordomo_at_fvwm.org.
+</em><br />
+<em class="quotelev1">&gt; To report problems, send mail to fvwm-owner_at_fvwm.org.
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon Jun 25 2001 - 23:06:44 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start2753">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="2754.html" title="Next message in the list">Dominik Vogt: "Re: FVWM: font problem"</a></li>
+<li><dfn>Previous message</dfn>: <a href="2752.html" title="Previous message in the list">Paul Koshevoy: "FVWM: I might have a bug fix."</a></li>
+<li><dfn>In reply to</dfn>: <a href="2752.html" title="Message to which this message replies">Paul Koshevoy: "FVWM: I might have a bug fix."</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="2758.html" title="Next message in this discussion thread">Dominik Vogt: "Re: FVWM: I might have a bug fix."</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg2753" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg2753" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg2753" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg2753" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:51 BST
+</em></small></p>
+</body>
+</html>

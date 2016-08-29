@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Re: fvwm / FvwmAuto problem from Romano Giannetti on 1997-02-15 (fvwm-users)</title>
+<meta name="Author" content="Romano Giannetti (romano_at_iet.unipi.it)" />
+<meta name="Subject" content="FVWM: Re: fvwm / FvwmAuto problem" />
+<meta name="Date" content="1997-02-15" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Re: fvwm / FvwmAuto problem</h1>
+<!-- received="Sat Feb 15 02:44:41 1997" -->
+<!-- isoreceived="19970215024441" -->
+<!-- sent="Sat, 15 Feb 1997 09:43:26 +0100" -->
+<!-- isosent="19970215084326" -->
+<!-- name="Romano Giannetti" -->
+<!-- email="romano_at_iet.unipi.it" -->
+<!-- subject="FVWM: Re: fvwm / FvwmAuto problem" -->
+<!-- id="3305772E.74E868C1_at_iet.unipi.it" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start19261" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="19262.html" accesskey="d" title="Mattias Brandstrom: &quot;FVWM: BUG I found...&quot;">Next message</a> ]
+[ <a href="19260.html" title="Joey Hess: &quot;Re: FVWM: fvwm2 bug&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="19283.html" accesskey="t" title="Jose M. Pereira: &quot;FVWM: Re: fvwm / FvwmAuto problem&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19261" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19261" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19261" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19261" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Romano Giannetti &lt;<a href="mailto:romano_at_iet.unipi.it?Subject=Re%3A%20FVWM%3A%20Re%3A%20fvwm%20%2F%20FvwmAuto%20problem">romano_at_iet.unipi.it</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sat, 15 Feb 1997 09:43:26 +0100</span><br />
+</address>
+<br />
+<em class="quotelev1">&gt;- AutoRaise can only be reliable if done by fvwm. (I think I couldn't
+</em><br />
+<em class="quotelev1">&gt; convince Rob of this, sigh)
+</em><br />
+<br />So I understand that it is not possible from FvwmAuto to check if a
+<br />
+window 
+<br />
+exists or it is really focused before trying to raise it. I can
+<br />
+understand 
+<br />
+the Rob (and Chuck, I suppose) idea of keeping small fvwm2, and...
+<br />
+well...
+<br />
+autoraising is almost a religious issue, I think. But colud not be
+<br />
+possible
+<br />
+to add a function to the main fvwm2 (or an option to Raise and Lower
+<br />
+command) 
+<br />
+in the style &quot;raise it if and only if the window exists and is focused,
+<br />
+otherwise do a Nop&quot;? Then FvwmAuto can use it to solve (I think) both
+<br />
+the black 
+<br />
+dot and the flip-flop problem. 
+<br />
+<br /><em class="quotelev1">&gt; PS:
+</em><br />
+<em class="quotelev1">&gt; If you have any suggestions to hack out the &quot;black dot&quot;, I'm ready to try
+</em><br />
+<em class="quotelev1">&gt; anything -- my sparc10 is always slower than me :-)
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<br />I used the hack proposed by albrecht (thanks*1000!) and it works for me:
+<br />
+<br />AddToFunc raise_if_exist &quot;I&quot; WindowId $w raise
+<br />
+AddToFunc &quot;InitFunction&quot; &quot;I&quot; Module FvwmAuto 1500 raise_if_exist
+<br />
+<br />I have no more black dots since then. Hope this helps you.
+<br />
+Bye,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Romano
+<br />
+<br />PD : I am no subscribed to the list, so please Cc: the answer to me. I
+<br />
+will 
+<br />
+try to read the list via the www archive interface. 
+<br />
+<br /><br /><pre>
+-- 
+------------------------------------------------------------------
+Dr. Romano Giannetti     Dip. di Ingegneria dell'Informazione 
+Researcher               Elettronica Informatica Telecomunicazioni
+romano_at_iet.unipi.it      University of Pisa
+------------------------------------------------------------------
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sat Feb 15 1997 - 02:44:41 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start19261">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="19262.html" title="Next message in the list">Mattias Brandstrom: "FVWM: BUG I found..."</a></li>
+<li><dfn>Previous message</dfn>: <a href="19260.html" title="Previous message in the list">Joey Hess: "Re: FVWM: fvwm2 bug"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="19283.html" title="Next message in this discussion thread">Jose M. Pereira: "FVWM: Re: fvwm / FvwmAuto problem"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="19283.html" title="Message sent in reply to this message">Jose M. Pereira: "FVWM: Re: fvwm / FvwmAuto problem"</a></li>
+<li><dfn>Reply</dfn>: <a href="19309.html" title="Message sent in reply to this message">Albrecht Kadlec: "FVWM: Re: fvwm / FvwmAuto problem"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19261" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19261" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19261" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19261" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

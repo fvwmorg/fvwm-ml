@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Small bug in FvwmPager? from Timothy C Hagman on 1996-04-17 (fvwm-users)</title>
+<meta name="Author" content="Timothy C Hagman (hagmanti_at_cps.msu.edu)" />
+<meta name="Subject" content="FVWM: Small bug in FvwmPager?" />
+<meta name="Date" content="1996-04-17" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Small bug in FvwmPager?</h1>
+<!-- received="Wed Apr 17 06:10:16 1996" -->
+<!-- isoreceived="19960417051016" -->
+<!-- sent="Wed, 17 Apr 1996 07:13:02 -0400 (EDT)" -->
+<!-- isosent="19960417111302" -->
+<!-- name="Timothy C Hagman" -->
+<!-- email="hagmanti_at_cps.msu.edu" -->
+<!-- subject="FVWM: Small bug in FvwmPager?" -->
+<!-- id="199604171113.HAA25354_at_arctic.cps.msu.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start16178" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="16179.html" accesskey="d" title="Mario.Dupuis_at_mfg.canadair.ca: &quot;FVWM: timing bug fixed on 2.0.42 ?&quot;">Next message</a> ]
+[ <a href="16177.html" title="Martin Kraemer: &quot;Re: FVWM: Correspondance between color names and numbers&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16178" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16178" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16178" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16178" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Timothy C Hagman &lt;<a href="mailto:hagmanti_at_cps.msu.edu?Subject=Re%3A%20FVWM%3A%20Small%20bug%20in%20FvwmPager%3F">hagmanti_at_cps.msu.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 17 Apr 1996 07:13:02 -0400 (EDT)</span><br />
+</address>
+<br />
+I'm not sure if this really qualifies (it's late enough my
+<br />
+time that it's early again), so before I do any more playing
+<br />
+with the sources, I'd like to check something.
+<br />
+<br />It seems like the (NoClose,UseOld) flags for the Swallow command (in
+<br />
+FvwmButtons) should work even during a Restart-- i.e., I should
+<br />
+be able to click on my Restart button, the pager closes itself,
+<br />
+all the swallowed apps get regurgitated, fvwm2 restarts, and they
+<br />
+get reswallowed...
+<br />
+<br />Unfortunately, restart behaves the same way as &quot;Destroying&quot;
+<br />
+FvwmButtons... all the apps get nuked...
+<br />
+<br />It seems to me that this is because Done() in fvwm.c just
+<br />
+calls XCloseDisplay.  Is there any reason for it _not_ to send 
+<br />
+messages to the modules saying that its shutting down? Am I 
+<br />
+missing something obvious here?  
+<br />
+<br />I can understand if the modules don't survive a restart (although
+<br />
+I wouldn't mind if they did), but is it necessary to &quot;destroy&quot;
+<br />
+the FvwmButtons on a restart?
+<br />
+<br />If it's not, then I'll be happy to volunteer to implement a 
+<br />
+change to this behavior/make it user modifiable... 
+<br />
+<br />But if it is, then my sleep-deprived mind will be very glad
+<br />
+I decided to ask before banging my brain against a wall...
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Good day, all,
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Me
+<br />
+<pre>
+-- 
+Disclaimer:  Anything I said, writ, or thought in my life should not
+necessarily be held or thought to imply any view, opinion, or idea
+of mine, any organization I have chosen to associate  with, or those
+people who choose to associate with me. - hagmanti_at_pilot.msu.edu
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Apr 17 1996 - 06:10:16 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start16178">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="16179.html" title="Next message in the list">Mario.Dupuis_at_mfg.canadair.ca: "FVWM: timing bug fixed on 2.0.42 ?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="16177.html" title="Previous message in the list">Martin Kraemer: "Re: FVWM: Correspondance between color names and numbers"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16178" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16178" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16178" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16178" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: multiple sessions from Tim Hanson on 2005-03-21 (fvwm-users)</title>
+<meta name="Author" content="Tim Hanson (tjhanson_at_comcast.net)" />
+<meta name="Subject" content="FVWM: multiple sessions" />
+<meta name="Date" content="2005-03-21" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: multiple sessions</h1>
+<!-- received="Sun Mar 20 22:42:48 2005" -->
+<!-- isoreceived="20050320224248" -->
+<!-- sent="Sun, 20 Mar 2005 20:41:39 -0800" -->
+<!-- isosent="20050321044139" -->
+<!-- name="Tim Hanson" -->
+<!-- email="tjhanson_at_comcast.net" -->
+<!-- subject="FVWM: multiple sessions" -->
+<!-- id="1111380099.8208.21.camel_at_susedesk.timh" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start13949" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="13950.html" accesskey="d" title="Michelle Konzack: &quot;FVWM: Re: multiple sessions&quot;">Next message</a> ]
+[ <a href="13948.html" title="laura: &quot;FVWM: http://theSMSzone.com/?ref=leechdorre&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="13950.html" accesskey="t" title="Michelle Konzack: &quot;FVWM: Re: multiple sessions&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg13949" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg13949" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg13949" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg13949" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Tim Hanson &lt;<a href="mailto:tjhanson_at_comcast.net?Subject=Re%3A%20FVWM%3A%20multiple%20sessions">tjhanson_at_comcast.net</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sun, 20 Mar 2005 20:41:39 -0800</span><br />
+</address>
+<br />
+I'm trying to figure out something for my laptop.  It has two
+<br />
+environments: One is hooked to the home network, where it has a ready
+<br />
+source of power, access to nfs directories on two desktops, and can
+<br />
+serve vnc to those machines.  The other is as a standalone, sometimes
+<br />
+with a wireless hook to the internet, on battery, and only the internal
+<br />
+hard drive.
+<br />
+<br />The application would go a lot more smoothly with two completely
+<br />
+separate fvwm sessions, since many of the menu choices for one won't
+<br />
+work with the other.
+<br />
+<br />My config file is ~/.fvwm/.fvwm2rc (I know, I'm going to change it RSN).
+<br />
+It is nothing but a series of a half-dozen Read statements, accessing a
+<br />
+set of subdirectories, each with files consisting of one menu's worth of
+<br />
+statements.  This very distributed structure is great for keeping track
+<br />
+of things.  I copied the entire ~/.fvwm directory from one of my
+<br />
+desktops, and it will serve as a basis of the two sessions I'm creating.
+<br />
+The &quot;docked&quot; session will require few changes, since nearly everything
+<br />
+available to the desktops is available to the laptop in this mode.
+<br />
+<br />I copied the directory again to ~/.fvwmundocked, which I intend to
+<br />
+modify for standalone use.  My startx wrapper looks something like this:
+<br />
+<br /><br />#!/bin/sh
+<br />
+<br /># NETlock is the file my startup script creates when I'm hooked to my 
+<br />
+# home network
+<br />
+&nbsp;
+<br />
+if [ -e /etc/NETlock ] ;then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FVWM_USERDIR=/home/timh/.fvwm
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;export FVWM_USERDIR
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;startx fvwm2
+<br />
+else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FVWM_USERDIR=/home/timh/.fvwmundocked
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;export FVWM_USERDIR
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;startx fvwm2 -c ~/.fvwmundocked/.fvwm2rc
+<br />
+fi
+<br />
+<br />It seems like that should take care of it, but all 
+<br />
+my Read statements fail because they are in ~/.fvwmundocked.
+<br />
+Do I need to set something else?
+<br />
+<br /><br /><pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sun Mar 20 2005 - 22:42:48 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start13949">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="13950.html" title="Next message in the list">Michelle Konzack: "FVWM: Re: multiple sessions"</a></li>
+<li><dfn>Previous message</dfn>: <a href="13948.html" title="Previous message in the list">laura: "FVWM: http://theSMSzone.com/?ref=leechdorre"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="13950.html" title="Next message in this discussion thread">Michelle Konzack: "FVWM: Re: multiple sessions"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="13950.html" title="Message sent in reply to this message">Michelle Konzack: "FVWM: Re: multiple sessions"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg13949" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg13949" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg13949" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg13949" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:57 BST
+</em></small></p>
+</body>
+</html>

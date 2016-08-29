@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: problem opening libXpm.so.4 from Paul D. Smith on 1999-01-15 (fvwm-users)</title>
+<meta name="Author" content="Paul D. Smith (pasmith_at_nortelnetworks.com)" />
+<meta name="Subject" content="Re: FVWM: problem opening libXpm.so.4" />
+<meta name="Date" content="1999-01-15" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: problem opening libXpm.so.4</h1>
+<!-- received="Fri Jan 15 11:09:53 1999" -->
+<!-- isoreceived="19990115110953" -->
+<!-- sent="15 Jan 1999 00:53:30 -0500" -->
+<!-- isosent="19990115055330" -->
+<!-- name="Paul D. Smith" -->
+<!-- email="pasmith_at_nortelnetworks.com" -->
+<!-- subject="Re: FVWM: problem opening libXpm.so.4" -->
+<!-- id="p5soddrsit.fsf_at_baynetworks.com" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="Thu, 14 Jan 1999 20:27:19 -0800&quot;" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start23434" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="23435.html" accesskey="d" title="Michael F Gordon: &quot;FVWM: Ideas for improvements to the configuration file&quot;">Next message</a> ]
+[ <a href="23433.html" title="Vikas Agnihotri: &quot;Re: FVWM: Fvwm for Windows95?&quot;">Previous message</a> ]
+[ <a href="23431.html" title="Andrew Griffin: &quot;FVWM: problem opening libXpm.so.4&quot;">Maybe in reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg23434" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg23434" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg23434" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg23434" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Paul D. Smith &lt;<a href="mailto:pasmith_at_nortelnetworks.com?Subject=Re%3A%20FVWM%3A%20problem%20opening%20libXpm.so.4">pasmith_at_nortelnetworks.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: 15 Jan 1999 00:53:30 -0500</span><br />
+</address>
+<br />
+%% &quot;Andrew Griffin&quot; &lt;agriffin_at_cwo.com&gt; writes:
+<br />
+<br />&nbsp;&nbsp;ag&gt; That said. I recently attempted to install the most recent version of
+<br />
+&nbsp;&nbsp;ag&gt; fvwm2 (I forget the version number, it is in beta).
+<br />
+<br />All versions of fvwm2 so far have been in beta: it's important to know
+<br />
+the number (esp. if it's 2.0.x or 2.1.x) so we know if it's autoconf or
+<br />
+imake.
+<br />
+<br />&nbsp;&nbsp;ag&gt; The compile and install seemed to go fine but attempting to start
+<br />
+&nbsp;&nbsp;ag&gt; Xwindows (v. 3.3.3.1) I've been getting the message that
+<br />
+&nbsp;&nbsp;ag&gt; libXpm.so.3 could not be opened.
+<br />
+<br />It's always important to provide the exact error message wherever
+<br />
+possible.  Small differences in wording may not seem significant to the
+<br />
+casual reader, but can be very instructive to those familiar with them.
+<br />
+<br />For instance are you sure it said libXpm.so.3?  Most libXpm versions
+<br />
+I've seen are 4.x, not 3.x.
+<br />
+<br />Anyway, this is usually caused by not having the runtime application
+<br />
+linked properly.
+<br />
+<br />The most useful tool for these problems is &quot;ldd&quot;.
+<br />
+<br />Run this:
+<br />
+<br />&nbsp;&nbsp;$ ldd /usr/local/bin/fvwm2
+<br />
+<br />(or wherever you installed it).  This will list all the shared libs that
+<br />
+fvwm2 wants to find.  Probably you'll see something about not being able
+<br />
+to find libXpm.so.
+<br />
+<br />If so, it's a link problem.  Try adding a --with-xpm-library option to
+<br />
+the configure invocation for fvwm (run make distclean first).  If that
+<br />
+doesn't help, try setting the environment var LD_RUN_PATH to the right
+<br />
+directory to find libXpm.so before making fvwm.
+<br />
+<br />If you have an old version of fvwm which works, you can use ldd on that
+<br />
+to see where it's getting _it's_ libXpm.
+<br />
+<br /><pre>
+-- 
+-------------------------------------------------------------------------------
+ Paul D. Smith &lt;psmith_at_baynetworks.com&gt;         Network Management Development
+ &quot;Please remain calm...I may be mad, but I am a professional.&quot; --Mad Scientist
+-------------------------------------------------------------------------------
+   These are my opinions---Nortel Networks takes no responsibility for them.
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://fvwm.math.uh.edu/">http://fvwm.math.uh.edu/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Jan 15 1999 - 11:09:53 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start23434">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="23435.html" title="Next message in the list">Michael F Gordon: "FVWM: Ideas for improvements to the configuration file"</a></li>
+<li><dfn>Previous message</dfn>: <a href="23433.html" title="Previous message in the list">Vikas Agnihotri: "Re: FVWM: Fvwm for Windows95?"</a></li>
+<li><dfn>Maybe in reply to</dfn>: <a href="23431.html" title="Message to which this message replies">Andrew Griffin: "FVWM: problem opening libXpm.so.4"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg23434" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg23434" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg23434" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg23434" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:02 BST
+</em></small></p>
+</body>
+</html>

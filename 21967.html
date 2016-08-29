@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Bool != Boolean from Chris Siebenmann on 1998-04-13 (fvwm-users)</title>
+<meta name="Author" content="Chris Siebenmann (cks_at_hawkwind.utcs.toronto.edu)" />
+<meta name="Subject" content="FVWM: Bool != Boolean" />
+<meta name="Date" content="1998-04-13" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Bool != Boolean</h1>
+<!-- received="Mon Apr 13 17:58:33 1998" -->
+<!-- isoreceived="19980413165833" -->
+<!-- sent="Mon, 13 Apr 1998 18:58:02 -0400" -->
+<!-- isosent="19980413225802" -->
+<!-- name="Chris Siebenmann" -->
+<!-- email="cks_at_hawkwind.utcs.toronto.edu" -->
+<!-- subject="FVWM: Bool != Boolean" -->
+<!-- id="98Apr13.185804edt.4884_at_nikwind.utcs.toronto.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start21967" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="21968.html" accesskey="d" title="Pete Forman: &quot;Re: FVWM: Bool != Boolean&quot;">Next message</a> ]
+[ <a href="21966.html" title="Senthil Kamireddy: &quot;FVWM: FVWM and colorCursor&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="21968.html" accesskey="t" title="Pete Forman: &quot;Re: FVWM: Bool != Boolean&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21967" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21967" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21967" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21967" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Chris Siebenmann &lt;<a href="mailto:cks_at_hawkwind.utcs.toronto.edu?Subject=Re%3A%20FVWM%3A%20Bool%20!%3D%20Boolean">cks_at_hawkwind.utcs.toronto.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 13 Apr 1998 18:58:02 -0400</span><br />
+</address>
+<br />
+&nbsp;Compiling fvwm2 on a SGI Irix machine, I discovered a small mistake in
+<br />
+the fvwm2 code: it incorrectly assumes that a Bool is the same as a
+<br />
+Boolean, by declaring the same variable as 'Bool' in some places and as
+<br />
+'Boolean' in others. The simple fix:
+<br />
+<br />--- 1.1	1998/04/13 21:42:34
+<br />
++++ fvwm/fvwm.c	1998/04/13 21:42:59
+<br />
+_at_&#64; -83,9 +83,10 &#64;&#64;
+<br />
+&nbsp;int JunkX = 0, JunkY = 0;
+<br />
+&nbsp;Window JunkRoot, JunkChild;		/* junk window */
+<br />
+&nbsp;unsigned int JunkWidth, JunkHeight, JunkBW, JunkDepth, JunkMask;
+<br />
+&nbsp;
+<br />
+-Boolean debugging = False,PPosOverride,Blackout = False;
+<br />
++Boolean debugging = False, Blackout = False;
+<br />
++Bool PPosOverride;
+<br />
+&nbsp;
+<br />
+&nbsp;char **g_argv;
+<br />
+&nbsp;int g_argc;
+<br />
+&nbsp;
+<br />
+<br />&nbsp;I believe this mistake can cause mysterious memory corruption and/or
+<br />
+core dumps in some situations.
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- cks
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon Apr 13 1998 - 17:58:33 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start21967">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="21968.html" title="Next message in the list">Pete Forman: "Re: FVWM: Bool != Boolean"</a></li>
+<li><dfn>Previous message</dfn>: <a href="21966.html" title="Previous message in the list">Senthil Kamireddy: "FVWM: FVWM and colorCursor"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="21968.html" title="Next message in this discussion thread">Pete Forman: "Re: FVWM: Bool != Boolean"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="21968.html" title="Message sent in reply to this message">Pete Forman: "Re: FVWM: Bool != Boolean"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21967" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21967" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21967" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21967" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Two bug I found in FvwmButtons with panel (Fvwm-2.1.4) from Guangyong Xu on 1998-12-06 (fvwm-users)</title>
+<meta name="Author" content="Guangyong Xu (gxu_at_pha.jhu.edu)" />
+<meta name="Subject" content="FVWM: Two bug I found in FvwmButtons with panel (Fvwm-2.1.4)" />
+<meta name="Date" content="1998-12-06" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Two bug I found in FvwmButtons with panel (Fvwm-2.1.4)</h1>
+<!-- received="Sat Dec  5 20:26:07 1998" -->
+<!-- isoreceived="19981205202607" -->
+<!-- sent="Sat, 5 Dec 1998 21:25:17 -0500 (EST)" -->
+<!-- isosent="19981206022517" -->
+<!-- name="Guangyong Xu" -->
+<!-- email="gxu_at_pha.jhu.edu" -->
+<!-- subject="FVWM: Two bug I found in FvwmButtons with panel (Fvwm-2.1.4)" -->
+<!-- id="Pine.SOL.3.95.981205211412.11758A-100000_at_wizard" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start23096" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="23097.html" accesskey="d" title="William Denton: &quot;Re: FVWM: Two bug I found in FvwmButtons with panel (Fvwm-2.1.4)&quot;">Next message</a> ]
+[ <a href="23095.html" title="Guangyong Xu: &quot;Re: FVWM: FVWM-2.1.4&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="23097.html" accesskey="t" title="William Denton: &quot;Re: FVWM: Two bug I found in FvwmButtons with panel (Fvwm-2.1.4)&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg23096" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg23096" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg23096" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg23096" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Guangyong Xu &lt;<a href="mailto:gxu_at_pha.jhu.edu?Subject=Re%3A%20FVWM%3A%20Two%20bug%20I%20found%20in%20FvwmButtons%20with%20panel%20(Fvwm-2.1.4)">gxu_at_pha.jhu.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sat, 5 Dec 1998 21:25:17 -0500 (EST)</span><br />
+</address>
+<br />
+Hi, I think I've found another two bugs in FvwmButtons using panel in
+<br />
+fvwm-2.1.4 on my linux 2.0.36 PC.
+<br />
+&nbsp;I have a buttonbar composed of a few panels, like the flollowing:
+<br />
+<br />*FvwmButtons(Title Terminal,Icon xterm.linux_3d.xpm,Panel (right)
+<br />
+Terminal)
+<br />
+*FvwmButtons(Title PPP,Icon ppp.xpm,Panel (right) PPP)
+<br />
+*FvwmButtons(Title Softwares,Icon pick_3d.xpm,Panel (right) Softwares)
+<br />
+*FvwmButtons(Title Games,Icon games.xpm ,Panel (right) Games)
+<br />
+*FvwmButtons(Title WinOps,Icon bomb_defuse_3d.xpm,Panel (right) WinOps)
+<br />
+*FvwmButtons(Title Exit,Icon quit.xpm,Panel (right) Exit)
+<br />
+#*FvwmButtons(Title ,Icon ,Panel (right) )
+<br />
+<br />and in the panel &quot;Softwares&quot; I have two more sub-panel defined:
+<br />
+<br />*FvwmButtonsPanel Softwares
+<br />
+*FvwmButtonsGeometry +0+0
+<br />
+*FvwmButtonsRows 1		
+<br />
+*FvwmButtonsBack bisque2	
+<br />
+*FvwmButtonsFore #f020f0
+<br />
+*FvwmButtonsFont -adobe-helvetica-bold-r-*-*-13-*-*-*-*-*-*-*
+<br />
+<br />*FvwmButtons(Title Emacs,Icon gnu-animal.xpm, Action  `Exec
+<br />
+/usr/bin/emacs &amp;`) 
+<br />
+*FvwmButtons(Title Plan,Icon cal_3d.xpm, Action  `Exec
+<br />
+/usr/local/bin/plan`) 
+<br />
+*FvwmButtons(Title ICQ,Icon icq.xpm, Action  `Exec /home/gxu/bin/ICQ`) 
+<br />
+*FvwmButtons(Title StarOffice ,Icon office.xpm, Action  `Exec
+<br />
+/home/gxu/opt/Office50/bin/soffice`) 
+<br />
+*FvwmButtons(Title Top,Icon xload.next.xpm, Action  `Exec
+<br />
+/home/gxu/bin/xtop`)
+<br />
+*FvwmButtons(Title Audio,Icon Music.xpm,Panel (up) Audio )
+<br />
+*FvwmButtons(Title Graphics,Icon paint2_3d.xpm,Panel (down) Graphics)
+<br />
+<br /><br /><br />The first bug comes like this:
+<br />
+When I press the botton &quot;Softwares&quot; to bring out the panel &quot;Softwares&quot;,
+<br />
+then press the botton &quot;Audio&quot; in the panel to bring out a second panel,
+<br />
+a child of the first one. I press the botton &quot;Softwares&quot; again, the first
+<br />
+panel &quot;Softwares&quot; disappeared, but the panel &quot;Audio&quot; is still there,
+<br />
+hanging in the air!!
+<br />
+<br />The second bug: if I bring out more in one panels at a time such as
+<br />
+&quot;Terminal&quot;, &quot;Softwares&quot;, &quot;PPP&quot;, etc., and press a button in any of these
+<br />
+panel bars, as the command gets executed, all the panels disappear! I
+<br />
+believe the right way is either the panel with the button I pressed should
+<br />
+disappear and the others should remain, or they should all remain until
+<br />
+being pulled back manually. 
+<br />
+<br />Did anyone else on other systems experience the same thing? I'd like to
+<br />
+know if this is a bug of the program. Thanks.
+<br />
+<br />Best wishes,
+<br />
+G.Xu
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sat Dec 05 1998 - 20:26:07 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start23096">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="23097.html" title="Next message in the list">William Denton: "Re: FVWM: Two bug I found in FvwmButtons with panel (Fvwm-2.1.4)"</a></li>
+<li><dfn>Previous message</dfn>: <a href="23095.html" title="Previous message in the list">Guangyong Xu: "Re: FVWM: FVWM-2.1.4"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="23097.html" title="Next message in this discussion thread">William Denton: "Re: FVWM: Two bug I found in FvwmButtons with panel (Fvwm-2.1.4)"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="23097.html" title="Message sent in reply to this message">William Denton: "Re: FVWM: Two bug I found in FvwmButtons with panel (Fvwm-2.1.4)"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="23098.html" title="Message sent in reply to this message">Guangyong Xu: "Re: FVWM: Two bug I found in FvwmButtons with panel (Fvwm-2.1.4)"</a></li>
+<li><dfn>Reply</dfn>: <a href="23137.html" title="Message sent in reply to this message">Dominik Vogt: "FVWM: Re: Two bug I found in FvwmButtons with panel (Fvwm-2.1.4)"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg23096" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg23096" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg23096" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg23096" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

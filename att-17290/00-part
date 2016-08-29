@@ -1,0 +1,47 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+
+...an obvious enhancement to my previous solution:
+
+To do the same thing without the temporary file:
+
+Key	F1	A	SM	Nop
+Mouse	0	5	N	Key F1 A SM Module FvwmWarpTo $w
+
+The perl script becomes:
+
+    #!/usr/bin/perl
+    # this could use some error checking...
+    $winid = hex($ARGV[5]);
+    $fd = $ARGV[0];
+    close(STDOUT);
+    open(STDOUT, ">&$fd");
+    print STDOUT pack("lla6l", $winid, 6, "Focus", 0);
+
+Note: The 'Key F1...Nop' command is necessary because of a known
+feature*.  Adding new key bindings seems to require that a Recapture
+take place before they take effect; binding the key to a null action
+initially works around that problem by ensuring a binding already exists
+when fvwm2 begins.
+
+*The behaviour is documented in the TO-DO file, not the BUGS file.
+
+- --                          People shouldn't think that it's better to have
+Dan Astoorian               loved and lost than never loved at all.  It's
+http://www.utopia.csas.com  not, it's better to have loved and won.  All
+djast@utopia.csas.com       the other options really suck.    --Dan Redican
+
+-----BEGIN PGP SIGNATURE-----
+Version: 2.6.i
+
+iQCVAgUBMdpjxJztKqi7J1ZpAQH9KwP8Dqsj+fNDI0e6pEMRxpwMRVaXRBbvJePx
+qMUzD7qymWRMtlKgkLcXXR2wTo24H/S8KJhA8KQCSmjH2TMnh+Aqhy0J0vr87sEj
+EDdPORSZUXeyVKQsGQdKDA6Xisd9W+VTfXMj7p4z/27zeikiAqIom1547WMIqd+X
+PlzdKXHUIp4=
+=5ClE
+-----END PGP SIGNATURE-----
+--
+Visit the official FVWM web page at <URL:http://www.hpc.uh.edu/fvwm/>.
+To unsubscribe from the list, send "unsubscribe fvwm" in the body of a
+message to majordomo@hpc.uh.edu.
+To report problems, send mail to fvwm-owner@hpc.uh.edu.
+

@@ -1,0 +1,1177 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: FvwmWinList patches to 2.0.47b and a bug/question on 2.0.47b FvwmButtons. from Rocky - Rakesh Patel on 1998-06-30 (fvwm-users)</title>
+<meta name="Author" content="Rocky - Rakesh Patel (rapatel_at_hardees.Rutgers.EDU)" />
+<meta name="Subject" content="FVWM: FvwmWinList patches to 2.0.47b and a bug/question on 2.0.47b FvwmButtons." />
+<meta name="Date" content="1998-06-30" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: FvwmWinList patches to 2.0.47b and a bug/question on 2.0.47b FvwmButtons.</h1>
+<!-- received="Tue Jun 30 16:46:31 1998" -->
+<!-- isoreceived="19980630154631" -->
+<!-- sent="Tue, 30 Jun 1998 17:45:45 -0400 (EDT)" -->
+<!-- isosent="19980630214545" -->
+<!-- name="Rocky - Rakesh Patel" -->
+<!-- email="rapatel_at_hardees.Rutgers.EDU" -->
+<!-- subject="FVWM: FvwmWinList patches to 2.0.47b and a bug/question on 2.0.47b FvwmButtons." -->
+<!-- id="IpaJm9201V92M2tdt__at_grimaldi.rutgers.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start22519" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="22520.html" accesskey="d" title="Neil Zanella: &quot;Re: FVWM: trouble with pager&quot;">Next message</a> ]
+[ <a href="22518.html" title="A. van Werven: &quot;Re: FVWM: creating a pixmap&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg22519" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg22519" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg22519" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg22519" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Rocky - Rakesh Patel &lt;<a href="mailto:rapatel_at_hardees.Rutgers.EDU?Subject=Re%3A%20FVWM%3A%20FvwmWinList%20patches%20to%202.0.47b%20and%20a%20bug%2Fquestion%20on%202.0.47b%20FvwmButtons.">rapatel_at_hardees.Rutgers.EDU</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 30 Jun 1998 17:45:45 -0400 (EDT)</span><br />
+</address>
+<br />
+At the end of this message are the FvwmWinList patches to 2.0.47b for
+<br />
+sorting and the geometry fix for the problem that becomes visible when
+<br />
+using the sorting option. [Diffs are relative to the FvwmButtons
+<br />
+directory].
+<br />
+<br />When converting over to 2.0.47b, I suddenly ran into a problem with
+<br />
+FvwmButtons where the icons do not appear [only the title appears for
+<br />
+some reason - woth 2.0.46 the icon appears]. The syntax I use in my
+<br />
+.fvwm2rc is :
+<br />
+<br />ModulePath /usr/local/lib/X11/fvwm2
+<br />
+PixmapPath /usr/local/X11/include/X11/pixmaps:/td/nog/unix/X/images
+<br />
+IconPath /usr/local/X11/include/X11/bitmaps
+<br />
+<br />DestroyModuleConfig FvwmButtons
+<br />
+<br />*FvwmButtonsRows 2
+<br />
+<br />############################################################################
+<br />
+# FvwmButtons
+<br />
+#
+<br />
+# Colors
+<br />
+*FvwmButtonsFore Black
+<br />
+*FvwmButtonsBack #908090
+<br />
+<br /># Font 
+<br />
+# *FvwmButtonsFont      6x9
+<br />
+*FvwmButtonsFont -adobe-helvetica-bold-r-*-*-11-*-*-*-*-*-*-*
+<br />
+<br /># Geometry-- really likes to pick its own size, but giving a position is OK
+<br />
+*FvwmButtonsGeometry -0-0
+<br />
+<br /># Layout: specify rows or columns, not both
+<br />
+#*FvwmButtonsColumns 9
+<br />
+*FvwmButtonsRows 2
+<br />
+<br /># Define the buttons to use.....
+<br />
+# *FvwmButtons (9x2, Swallow &quot;FvwmPager&quot;)
+<br />
+*FvwmButtons Netscape mini-nscape.xpm Exec /usr/local/netscape/netscape
+<br />
+*FvwmButtons Remedy     remedy.xpm      Exec LD_LIBRARY_PATH=/td/nog/unix/solaris/lib /usr/local/bin/aruser
+<br />
+*FvwmButtons Mail       mail2.xpm       Exec messages
+<br />
+*FvwmButtons Xterm      xterm-sun.xpm   Exec xterm -T `hostname`
+<br />
+*FvwmButtons Lock       xlock.xpm       Exec /usr/local/X11R5/bin/xlock -mode blank
+<br />
+*FvwmButtons Telnet     xterm-sun.xpm   Module FvwmForm Telnet
+<br />
+*FvwmButtons Kxrsh      xterm-sun.xpm   Module FvwmForm Kxrsh
+<br />
+*FvwmButtons Xrsh       xterm-sun.xpm   Module FvwmForm Xrsh
+<br />
+*FvwmButtons eKtelnet   xterm-sun.xpm   Module FvwmForm eKtelnet
+<br />
+*FvwmButtons Quit       exit.xpm        Popup &quot;Quit-Verify&quot;
+<br />
+<br /><br />Any suggestions as to why the title only appears with the new FvwmButtons code?
+<br />
+<br />Here are the FvwmWinList patches:
+<br />
+<br />*** ButtonArray.c.ORIG	Mon Sep 23 20:04:56 1996
+<br />
+--- ButtonArray.c	Tue Jun 30 15:50:32 1998
+<br />
+***************
+<br />
+*** 175,180 ****
+<br />
+--- 175,250 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;return 1;
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
++ /* [VS: Adding an update mechanism that will preserve alphabetical order.] */
+<br />
++ 
+<br />
++ /* 
+<br />
++  * This finds a pointer to the memory location that points to the button
+<br />
++  * we are seeking.  (I take the pointer of the location because it eliminates
+<br />
++  * the special case involved with the head pointer.)
+<br />
++  */
+<br />
++ Button **ppBGetButton(ButtonArray *pBAArray, int iPos) {
+<br />
++   Button **ppBTmp;
+<br />
++ 
+<br />
++   ppBTmp = &amp;(pBAArray-&gt;head);
+<br />
++   while (*ppBTmp != NULL &amp;&amp; iPos != 0) {
+<br />
++     ppBTmp = &amp;((*ppBTmp)-&gt;next);
+<br />
++     iPos--;
+<br />
++   }
+<br />
++   return(ppBTmp);
+<br />
++ }
+<br />
++ 
+<br />
++ /******************************************************************************
+<br />
++   UpdateButtonAlpha - Change the name/state/position of a button
+<br />
++ ******************************************************************************/
+<br />
++ int UpdateButtonAlpha(ButtonArray *pBAArray, int iOldPos, int iNewPos,
+<br />
++ 		      char *pcTitle, int iUp) {
+<br />
++ 
+<br />
++   Button **ppBTmp, *pBTmp, *pBMove;
+<br />
++ 
+<br />
++   if (iOldPos == iNewPos)
+<br />
++     return(UpdateButton(pBAArray, iOldPos, pcTitle, iUp));
+<br />
++ 
+<br />
++   ppBTmp = ppBGetButton(pBAArray, iOldPos);
+<br />
++   pBMove = pBTmp = *ppBTmp;
+<br />
++   if (pBTmp == NULL) return(-1);
+<br />
++   *ppBTmp = pBTmp-&gt;next;
+<br />
++ 
+<br />
++   if (pcTitle != NULL) {
+<br />
++     pBTmp-&gt;title = (char *) realloc(pBTmp-&gt;title, strlen(pcTitle) + 1);
+<br />
++     strcpy(pBTmp-&gt;title, pcTitle);
+<br />
++     pBTmp-&gt;tw=XTextWidth(ButtonFont, pcTitle, strlen(pcTitle));
+<br />
++     pBTmp-&gt;truncatewidth = 0;
+<br />
++   }
+<br />
++   if ( iUp != -1) pBTmp-&gt;up = iUp;
+<br />
++ 
+<br />
++   if (iOldPos &lt; iNewPos) {
+<br />
++     while (pBTmp-&gt;next != NULL &amp;&amp; iOldPos &lt; iNewPos) {
+<br />
++       pBTmp-&gt;needsupdate = 1;
+<br />
++       pBTmp = pBTmp-&gt;next;
+<br />
++       iOldPos++;
+<br />
++     }
+<br />
++   }
+<br />
++ 
+<br />
++   ppBTmp = ppBGetButton(pBAArray, iNewPos);
+<br />
++   pBMove-&gt;next = *ppBTmp;
+<br />
++   *ppBTmp = pBMove;
+<br />
++ 
+<br />
++   while (pBMove-&gt;next != NULL) {
+<br />
++     if (iNewPos &lt; iOldPos) {
+<br />
++       pBMove-&gt;needsupdate = 1;
+<br />
++       iNewPos++;
+<br />
++     }
+<br />
++     pBMove = pBMove-&gt;next;
+<br />
++   }
+<br />
++   if (iNewPos &lt; iOldPos) pBMove-&gt;needsupdate = 1;
+<br />
++ 
+<br />
++   pBAArray-&gt;tail = pBMove;
+<br />
++ 
+<br />
++   return(1);
+<br />
++ }
+<br />
++ 
+<br />
++ /* [VS: End of this change.] */
+<br />
++ 
+<br />
+&nbsp;&nbsp;/******************************************************************************
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;UpdateButtonSet - Change colour set of a button
+<br />
+&nbsp;&nbsp;******************************************************************************/
+<br />
+***************
+<br />
+*** 335,343 ****
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;newx += button-&gt;p.width+4;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+! 	else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+! 		newx = 4;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;string=button-&gt;title;
+<br />
+--- 405,416 ----
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;newx += button-&gt;p.width+4;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+!     else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+! 	   if ( LeftJustify)
+<br />
+! 	     newx = 4;
+<br />
+! 	   else
+<br />
+! 	     newx=max((w-button-&gt;tw)/2,4);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;string=button-&gt;title;
+<br />
+*** ButtonArray.h.ORIG	Wed May 22 06:24:25 1996
+<br />
+--- ButtonArray.h	Tue Jun 30 15:50:55 1998
+<br />
+***************
+<br />
+*** 38,43 ****
+<br />
+--- 38,50 ----
+<br />
+&nbsp;&nbsp;void UpdateArray(ButtonArray *array,int x,int y,int w, int h);
+<br />
+&nbsp;&nbsp;int AddButton(ButtonArray *array, char *title, Picture *p,int up);
+<br />
+&nbsp;&nbsp;int UpdateButton(ButtonArray *array, int butnum, char *title, int up);
+<br />
++ 
+<br />
++ /* [VS: I added two functions that would allow alphabetically sorted items.] */
+<br />
++ Button **ppBGetButton(ButtonArray *pBAArray, int iPos);
+<br />
++ int UpdateButtonAlpha(ButtonArray *pBAArray, int iOldPos, int iNewPos,
+<br />
++ 		      char *pcTitle, int iUp);
+<br />
++ /* [VS: End of this change.] */
+<br />
++ 
+<br />
+&nbsp;&nbsp;int UpdateButtonPicture(ButtonArray *array, int butnum, Picture *p);
+<br />
+&nbsp;&nbsp;int UpdateButtonSet(ButtonArray *array, int butnum, int set);
+<br />
+&nbsp;&nbsp;void RemoveButton(ButtonArray *array, int butnum);
+<br />
+*** FvwmWinList.c.ORIG	Mon Jan 26 16:02:46 1998
+<br />
+--- FvwmWinList.c	Tue Jun 30 15:57:05 1998
+<br />
+***************
+<br />
+*** 116,122 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*ForeColor[MAX_COLOUR_SETS] = { &quot;black&quot; },
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*geometry=&quot;&quot;;
+<br />
+&nbsp;&nbsp;char *font_string = &quot;fixed&quot;;
+<br />
+! int UseSkipList=0,Anchor=1,UseIconNames=0,LeftJustify=0,TruncateLeft=1;
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;long CurrentDesk = 0;
+<br />
+&nbsp;&nbsp;int ShowCurrentDesk = 0;
+<br />
+--- 116,122 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*ForeColor[MAX_COLOUR_SETS] = { &quot;black&quot; },
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*geometry=&quot;&quot;;
+<br />
+&nbsp;&nbsp;char *font_string = &quot;fixed&quot;;
+<br />
+! int UseSkipList=0,Anchor=1,UseIconNames=0,LeftJustify=0,TruncateLeft=1,Alpha=0;
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;long CurrentDesk = 0;
+<br />
+&nbsp;&nbsp;int ShowCurrentDesk = 0;
+<br />
+***************
+<br />
+*** 268,274 ****
+<br />
+&nbsp;&nbsp;******************************************************************************/
+<br />
+&nbsp;&nbsp;void ProcessMessage(unsigned long type,unsigned long *body)
+<br />
+&nbsp;&nbsp;{
+<br />
+!   int redraw=0,i;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;long flags;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;char *name,*string;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;static current_focus=-1;
+<br />
+--- 268,274 ----
+<br />
+&nbsp;&nbsp;******************************************************************************/
+<br />
+&nbsp;&nbsp;void ProcessMessage(unsigned long type,unsigned long *body)
+<br />
+&nbsp;&nbsp;{
+<br />
+!   int redraw=0,i, iOldPos, iNewPos;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;long flags;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;char *name,*string;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;static current_focus=-1;
+<br />
+***************
+<br />
+*** 301,308 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+!       if (!(body[8]&amp;WINDOWLISTSKIP) || !UseSkipList)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AddItem(&amp;windows,body[0],body[8], body[7] /* desk */);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case M_DESTROY_WINDOW:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ((i=DeleteItem(&amp;windows,body[0]))==-1) break;
+<br />
+--- 301,317 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+! 
+<br />
+! /* [VS: If we are preserving alphabetical order, we need to add a button]
+<br />
+!    [VS: as soon as we know there is a need for one.] */
+<br />
+! 
+<br />
+!       if (!(body[8]&amp;WINDOWLISTSKIP) || !UseSkipList) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AddItem(&amp;windows,body[0],body[8], body[7] /* desk */);
+<br />
++         if (Alpha) AddButton(&amp;buttons,&quot;&quot;, NULL ,1);
+<br />
++       }
+<br />
++ 
+<br />
++ /* [VS: End of this change.] */
+<br />
++ 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case M_DESTROY_WINDOW:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ((i=DeleteItem(&amp;windows,body[0]))==-1) break;
+<br />
+***************
+<br />
+*** 335,349 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case M_ICON_NAME:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ((type==M_ICON_NAME &amp;&amp; !UseIconNames) || 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(type==M_WINDOW_NAME &amp;&amp; UseIconNames)) break;
+<br />
+!       if ((i=UpdateItemName(&amp;windows,body[0],(char *)&amp;body[3]))==-1) break;
+<br />
+!       string=(char *)&amp;body[3];
+<br />
+!       name=makename(string,ItemFlags(&amp;windows,body[0]));
+<br />
+!       if (UpdateButton(&amp;buttons,i,name,-1)==-1)
+<br />
+!       {
+<br />
+! 	AddButton(&amp;buttons, name, NULL, 1);
+<br />
+! 	UpdateButtonSet(&amp;buttons,i,ItemFlags(&amp;windows,body[0])&amp;ICONIFIED?1:0);
+<br />
+!         UpdateButtonDesk(&amp;buttons,i,ItemDesk(&amp;windows, body[0]));
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;free(name);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (WindowIsUp) AdjustWindow();
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;redraw=1;
+<br />
+--- 344,375 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case M_ICON_NAME:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ((type==M_ICON_NAME &amp;&amp; !UseIconNames) || 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(type==M_WINDOW_NAME &amp;&amp; UseIconNames)) break;
+<br />
+! /* [VS: More stuff for the alphabetical ordering of buttons.] */
+<br />
+! 
+<br />
+!       if (Alpha) {
+<br />
+!         if (UpdateItemNameAlpha(&amp;windows,body[0],(char *)&amp;body[3], &amp;iOldPos,
+<br />
+! 				&amp;iNewPos) == -1) break;
+<br />
+! 
+<br />
+!         string=(char *)&amp;body[3];
+<br />
+!         name=makename(string, ItemFlags(&amp;windows,body[0]));
+<br />
+! 	UpdateButtonAlpha(&amp;buttons, iOldPos, iNewPos, name, -1);
+<br />
+!         UpdateButtonSet(&amp;buttons, iNewPos,ItemFlags(&amp;windows, body[0]) &amp;ICONIFIED?1:0);
+<br />
+!         UpdateButtonDesk(&amp;buttons,iNewPos,ItemDesk(&amp;windows, body[0]));
+<br />
+!       }
+<br />
+!       else {
+<br />
+! 	if ((i=UpdateItemName(&amp;windows,body[0],(char *)&amp;body[3]))==-1) break;
+<br />
+! 	string=(char *)&amp;body[3];
+<br />
+! 	name=makename(string,ItemFlags(&amp;windows,body[0]));
+<br />
+! 	if (UpdateButton(&amp;buttons,i,name,-1)==-1)
+<br />
+! 	  {
+<br />
+! 	    AddButton(&amp;buttons, name, NULL, 1);
+<br />
+! 	    UpdateButtonSet(&amp;buttons,i,ItemFlags(&amp;windows,body[0])&amp;ICONIFIED?1:0);
+<br />
+! 	    UpdateButtonDesk(&amp;buttons,i,ItemDesk(&amp;windows, body[0]));
+<br />
+! 	  }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
++ 
+<br />
++ /* [VS: End of this change.] */
+<br />
++ 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;free(name);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (WindowIsUp) AdjustWindow();
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;redraw=1;
+<br />
+***************
+<br />
+*** 572,577 ****
+<br />
+--- 598,608 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Clength+8)==0) MinWidth=atoi(&amp;tline[Clength+8]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if(mystrncasecmp(tline,CatString3(Module, &quot;MaxWidth&quot;,&quot;&quot;),
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Clength+8)==0) MaxWidth=atoi(&amp;tline[Clength+8]);
+<br />
++ /* [VS: How about making the items alphabetically ordered?] */
+<br />
++           else if(mystrncasecmp(tline,CatString3(Module, &quot;AlphaOrder&quot;,&quot;&quot;),
+<br />
++                                 Clength+10)==0) Alpha=1;
+<br />
++ /* [VS: End of this change.] */
+<br />
++ 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GetConfigLine(Fvwm_fd,&amp;tline);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+***************
+<br />
+*** 716,727 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;new_height=(total*(fontheight+6+1)-1);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if (WindowIsUp &amp;&amp; (new_height!=win_height  || new_width!=win_width))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!     if (Anchor)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!       if (win_grav==SouthEastGravity || win_grav==NorthEastGravity)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;win_x-=(new_width-win_width);
+<br />
+&nbsp;&nbsp;
+<br />
+!       if (win_grav==SouthEastGravity || win_grav==SouthWestGravity)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;win_y-=(new_height-win_height);
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;#if 0
+<br />
+--- 747,758 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;new_height=(total*(fontheight+6+1)-1);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if (WindowIsUp &amp;&amp; (new_height!=win_height  || new_width!=win_width))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!     if (Anchor &amp;&amp; win_grav != NorthWestGravity &amp;&amp; win_grav != StaticGravity)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!       if (win_x &gt; 0 &amp;&amp; (win_grav==SouthEastGravity || win_grav==NorthEastGravity))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;win_x-=(new_width-win_width);
+<br />
+&nbsp;&nbsp;
+<br />
+!       if (win_y&gt; 0 &amp;&amp; (win_grav==SouthEastGravity || win_grav==SouthWestGravity))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;win_y-=(new_height-win_height);
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;#if 0
+<br />
+***************
+<br />
+*** 738,757 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;win_y-=win_border;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;#else /* ckh - need to come up w/ better way to calculate win_x &amp; _y */
+<br />
+!         if (win_grav==SouthEastGravity || win_grav==NorthEastGravity)
+<br />
+! 		win_x+= win_border-3;
+<br />
+! 	else
+<br />
+! 		win_x-=win_border;
+<br />
+&nbsp;&nbsp;
+<br />
+! 	if (win_grav==SouthEastGravity || win_grav==SouthWestGravity)
+<br />
+! 		win_y+=win_border-3;
+<br />
+! 	else	
+<br />
+! 		win_y-=win_border;
+<br />
+&nbsp;&nbsp;#endif /* 0 */
+<br />
+&nbsp;&nbsp;
+<br />
+-       XMoveResizeWindow(dpy,win,win_x+win_border,win_y+win_title+win_border,
+<br />
+-         new_width,new_height);
+<br />
+- 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XResizeWindow(dpy, win, new_width,new_height);
+<br />
+--- 769,787 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;win_y-=win_border;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;#else /* ckh - need to come up w/ better way to calculate win_x &amp; _y */
+<br />
+!       {
+<br />
+! 	int movedy = win_y, movedx = win_x ;
+<br />
+!   
+<br />
+! 	if ( win_y &gt;= 0 )
+<br />
+! 	  movedy+=win_border+win_title+1;
+<br />
+! 	if ( win_x &gt;= 0 )
+<br />
+! 	  movedx+=win_border+1;
+<br />
+&nbsp;&nbsp;
+<br />
+! 	XMoveResizeWindow(dpy,win,movedx,
+<br />
+! 			movedy, new_width,new_height);
+<br />
+!       }
+<br />
+&nbsp;&nbsp;#endif /* 0 */
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XResizeWindow(dpy, win, new_width,new_height);
+<br />
+***************
+<br />
+*** 776,785 ****
+<br />
+&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;char *ptr;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ptr=safemalloc(strlen(string)+3);
+<br />
+!   if (flags&amp;ICONIFIED) strcpy(ptr,&quot;(&quot;);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;else strcpy(ptr,&quot;&quot;);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;strcat(ptr,string);
+<br />
+!   if (flags&amp;ICONIFIED) strcat(ptr,&quot;)&quot;);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;return ptr;
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+--- 806,823 ----
+<br />
+&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;char *ptr;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ptr=safemalloc(strlen(string)+3);
+<br />
+! 
+<br />
+! /* [VS: I don't like the addition of parens around items that are iconified.]*/
+<br />
+! /* [VS: They should really not appear if the colors are defined to be] */
+<br />
+! /* [VS: different.] */
+<br />
+! /*  if (flags&amp;ICONIFIED) strcpy(ptr,&quot;(&quot;); */
+<br />
+!   if (fore[0] == fore[1] &amp;&amp; back[0] == back[1] &amp;&amp; (flags&amp;ICONIFIED))
+<br />
+!     strcpy(ptr,&quot;(&quot;);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;else strcpy(ptr,&quot;&quot;);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;strcat(ptr,string);
+<br />
+! /*  if (flags&amp;ICONIFIED) strcpy(ptr,&quot;)&quot;); */
+<br />
+!   if (fore[0] == fore[1] &amp;&amp; back[0] == back[1] &amp;&amp; (flags&amp;ICONIFIED))
+<br />
+!     strcat(ptr,&quot;)&quot;);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;return ptr;
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+***************
+<br />
+*** 865,870 ****
+<br />
+--- 903,911 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;win_x=hints.x;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;win_y=hints.y;
+<br />
+&nbsp;&nbsp;
+<br />
++ /*
+<br />
++   [VS: Had to move this earlier in the initialization.]
+<br />
++ 
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;for (i = 0; i != MAX_COLOUR_SETS; i++)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(d_depth &lt; 2)
+<br />
+***************
+<br />
+*** 878,883 ****
+<br />
+--- 919,927 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fore[i] = GetColor(ForeColor[i] == NULL ? ForeColor[0] : ForeColor[i]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
++   [VS: End of this change.]
+<br />
++ */
+<br />
++ 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;win=XCreateSimpleWindow(dpy,Root,hints.x,hints.y,hints.width,hints.height,1,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fore[0],back[0]);
+<br />
+&nbsp;&nbsp;
+<br />
+***************
+<br />
+*** 955,960 ****
+<br />
+--- 999,1006 ----
+<br />
+&nbsp;&nbsp;******************************************************************************/
+<br />
+&nbsp;&nbsp;void StartMeUp()
+<br />
+&nbsp;&nbsp;{
+<br />
++   int i;
+<br />
++ 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if (!(dpy = XOpenDisplay(&quot;&quot;)))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(stderr,&quot;%s: can't open display %s&quot;, Module,
+<br />
+***************
+<br />
+*** 977,982 ****
+<br />
+--- 1023,1050 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;fontheight = ButtonFont-&gt;ascent+ButtonFont-&gt;descent;
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;win_width=XTextWidth(ButtonFont,&quot;XXXXXXXXXXXXXXX&quot;,10);
+<br />
++ 
+<br />
++ /*
+<br />
++   [VS: I moved this here to initialize the color information earlier.]
+<br />
++   [VS: The window list (along with all the window names) was created]
+<br />
++   [VS: before the colors are generated.  Since I am trying to decide]
+<br />
++   [VS: to use text or color clues to visually differentiate between]
+<br />
++   [VS: iconified and uniconified windows, I moved it up in the processing. ]
+<br />
++ */
+<br />
++ 
+<br />
++   for (i = 0; i != MAX_COLOUR_SETS; i++)
+<br />
++   if(d_depth &lt; 2)
+<br />
++   {
+<br />
++     back[i] = GetColor(&quot;white&quot;);
+<br />
++     fore[i] = GetColor(&quot;black&quot;);
+<br />
++   }
+<br />
++   else
+<br />
++   {
+<br />
++     back[i] = GetColor(BackColor[i] == NULL ? BackColor[0] : BackColor[i]);
+<br />
++     fore[i] = GetColor(ForeColor[i] == NULL ? ForeColor[0] : ForeColor[i]);
+<br />
++   }
+<br />
++ 
+<br />
++ /* [VS: End of this change.] */
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+*** List.c.ORIG	Mon Sep 23 20:01:58 1996
+<br />
+--- List.c	Tue Jun 30 15:52:06 1998
+<br />
+***************
+<br />
+*** 129,134 ****
+<br />
+--- 129,173 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;return 0;
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
++ /* [VS: Adding an update mechanism that will preserve alphabetical order.] */
+<br />
++ 
+<br />
++ /******************************************************************************
+<br />
++   UpdateItemNameAlpha - Update the item in the list, setting name, flags and
+<br />
++                         ordering as necessary.
+<br />
++ ******************************************************************************/
+<br />
++ int UpdateItemNameAlpha(List *pLList, long lID, char *pcString, int *piOldPos,
+<br />
++ 			int *piNewPos) {
+<br />
++   Item **ppITmp, *pITmp;
+<br />
++ 
+<br />
++   *piOldPos = *piNewPos = 0;
+<br />
++ 
+<br />
++   ppITmp = &amp;(pLList-&gt;head);
+<br />
++   while (*ppITmp != NULL &amp;&amp; (*ppITmp)-&gt;id != lID) {
+<br />
++     ppITmp = &amp;((*ppITmp)-&gt;next);
+<br />
++     (*piOldPos)++;
+<br />
++   }
+<br />
++   pITmp = *ppITmp;
+<br />
++   if (pITmp == NULL) return(-1);
+<br />
++   *ppITmp = pITmp-&gt;next;
+<br />
++ 
+<br />
++   UpdateString(&amp;pITmp-&gt;name, pcString);
+<br />
++ 
+<br />
++   ppITmp = &amp;(pLList-&gt;head);
+<br />
++   while (*ppITmp != NULL &amp;&amp; strcmp(pITmp-&gt;name, (*ppITmp)-&gt;name) &gt; 0) {
+<br />
++     ppITmp = &amp;((*ppITmp)-&gt;next);
+<br />
++     (*piNewPos)++;
+<br />
++   }
+<br />
++   pITmp-&gt;next = *ppITmp;
+<br />
++   *ppITmp = pITmp;
+<br />
++ 
+<br />
++   while (pITmp-&gt;next != NULL) pITmp = pITmp-&gt;next;
+<br />
++   pLList-&gt;tail = pITmp;
+<br />
++ 
+<br />
++   return(1);
+<br />
++ }
+<br />
++ 
+<br />
++ /* [VS: End of this change.] */
+<br />
++ 
+<br />
+&nbsp;&nbsp;int UpdateItemFlags(List *list, long id, long flags)
+<br />
+&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;Item *temp;
+<br />
+*** List.h.ORIG	Wed May 22 06:24:27 1996
+<br />
+--- List.h	Tue Jun 30 15:52:10 1998
+<br />
+***************
+<br />
+*** 35,40 ****
+<br />
+--- 35,46 ----
+<br />
+&nbsp;&nbsp;int FindItemDesk(List *list, long id, long desk);
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;int UpdateItemName(List *list, long id, char *string);
+<br />
++ 
+<br />
++ /* [VS: I added a function that would allow alphabetically sorted items.] */
+<br />
++ int UpdateItemNameAlpha(List *pLList, long lID, char *pcString, int *piOldPos,
+<br />
++ 			int *piNewPos);
+<br />
++ /* [VS: End of this change.] */
+<br />
++ 
+<br />
+&nbsp;&nbsp;int UpdateItemDesk(List *list, long id, long desk);
+<br />
+&nbsp;&nbsp;int UpdateItemFlags(List *list, long id, long flags);
+<br />
+&nbsp;&nbsp;void FreeItem(Item *ptr);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rakesh B. Patel
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rapatel_at_noc.rutgers.edu
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Network Operations
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Telecommunications Division
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rutgers University Computing Services (RUCS)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+1 732-445-3436
+<br />
+<br />Love is an ocean of emotions, entirely surrounded by expenses.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-Thomas Robert Dewar
+<br />
+But it's worth it.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Rakesh Patel
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue Jun 30 1998 - 16:46:31 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start22519">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="22520.html" title="Next message in the list">Neil Zanella: "Re: FVWM: trouble with pager"</a></li>
+<li><dfn>Previous message</dfn>: <a href="22518.html" title="Previous message in the list">A. van Werven: "Re: FVWM: creating a pixmap"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg22519" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg22519" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg22519" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg22519" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

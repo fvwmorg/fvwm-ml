@@ -1,0 +1,1647 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: fvwm 2.0.46: patches and bugs from Grant McDorman on 1997-08-26 (fvwm-users)</title>
+<meta name="Author" content="Grant McDorman (grant_at_isgtec.com)" />
+<meta name="Subject" content="FVWM: fvwm 2.0.46: patches and bugs" />
+<meta name="Date" content="1997-08-26" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: fvwm 2.0.46: patches and bugs</h1>
+<!-- received="Tue Aug 26 13:32:24 1997" -->
+<!-- isoreceived="19970826123224" -->
+<!-- sent="Tue, 26 Aug 1997 14:31:02 -0400 (EDT)" -->
+<!-- isosent="19970826183102" -->
+<!-- name="Grant McDorman" -->
+<!-- email="grant_at_isgtec.com" -->
+<!-- subject="FVWM: fvwm 2.0.46: patches and bugs" -->
+<!-- id="XFMail.970826143102.grant_at_isgtec.com" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start20801" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="20802.html" accesskey="d" title="Grant McDorman: &quot;FVWM: fvwm 2.0.46: missing part of patch to TaskBar&quot;">Next message</a> ]
+[ <a href="20800.html" title="Marcin Klimowski: &quot;FVWM: Icon position in FvwmIconBox&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="20824.html" accesskey="t" title="Grant McDorman: &quot;RE: FVWM: fvwm 2.0.46: patches and bugs: NEW PATCH&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg20801" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg20801" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg20801" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg20801" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Grant McDorman &lt;<a href="mailto:grant_at_isgtec.com?Subject=Re%3A%20FVWM%3A%20fvwm%202.0.46%3A%20patches%20and%20bugs">grant_at_isgtec.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 26 Aug 1997 14:31:02 -0400 (EDT)</span><br />
+</address>
+<br />
+-----BEGIN PGP SIGNED MESSAGE-----
+<br />
+<br />I have just finished installing - and patching - 2.0.46.
+<br />
+<br />The patches (attached) are as follows:
+<br />
+&nbsp;&nbsp;&nbsp;modules:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FvwmWinList:  do not call ShutMeDown in DeadPipe, just exit (to avoid
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FvwmWinList looping)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FvwmAudio:    ditto
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FvwmIconBox:  ditto, may need more work if the XDeleteProperty is needed
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FvwmIconMan:  ditto
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FvwmButtons:  do not do X calls in signal handling; also, allow
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;swallowmodule&quot; as well as &quot;swallow&quot; in FvwmGoodStuff
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;compatiblity [this patch previously submitted against
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.0.43]
+<br />
+<br />&nbsp;&nbsp;&nbsp;fvwm:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;colormaps.c: If, on Sun systems, TRUECOLOR_ALWAYS_INSTALLED is defined,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;do not install a 24-bit TrueColor colormap. (Despite what
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the server says, it is always installed.)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;add_window.c: Instead of doing button grabs for click-to-focus using no
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modifiers and Caps Lock, use AnyModifer
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;events.c:    Button press handing: Check for user-defined button action
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;first, then allow click-to-focus/click-to-raise with any
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modifier.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;placement.c: If a transient has no position specified, fall back to
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;random/smart placement (as per configuration) instead of
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;placing the transient at 0,0
+<br />
+<br />&nbsp;&nbsp;&nbsp;extras:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FvwmTaskBar: fixes for signal handling like those above
+<br />
+<br />Other &quot;extras&quot; programs require fixes for signal handling, including (at least)
+<br />
+FvwmWharf. If these programs are not fixed, they can go into a loop when fvwm
+<br />
+is terminated or the X server reset (i.e. logout). I would suggest these
+<br />
+programs be removed from the release, or at least have a very strong warning
+<br />
+attached, until they are fixed.
+<br />
+<br /><br />Grant McDorman &lt;grant_at_isgtec.com&gt;
+<br />
+ISG Technologies, Inc.  <a href="http://www.isgtec.com">http://www.isgtec.com</a>
+<br />
+Mississauga, Ontario, Canada
+<br />
+<br /><br />-----BEGIN PGP SIGNATURE-----
+<br />
+Version: 2.6.2
+<br />
+<br />iQBVAwUBNAMg5UDmya2cFZ8ZAQEiOAIAuWYub8sUblDwYN5GkyL3NoYc1wtq0gVI
+<br />
+559BZRWU6ehBzj+CWv9Ih/YitA6IVT8JVOtmobpAHxWFHeMlbIhjig==
+<br />
+=ikmu
+<br />
+-----END PGP SIGNATURE-----
+<br />
+<br /><br />
+*** fvwm-2.0.46/modules/FvwmWinList/FvwmWinList.c.orig	Wed Aug  6 16:19:28 1997
+<br />
+--- fvwm-2.0.46/modules/FvwmWinList/FvwmWinList.c	Tue Aug 26 11:56:22 1997
+<br />
+***************
+<br />
+*** 457,463 ****
+<br />
+&nbsp;&nbsp;&nbsp;**********************************************************************/
+<br />
+&nbsp;&nbsp;void DeadPipe(int nonsense)
+<br />
+&nbsp;&nbsp;{
+<br />
+!   ShutMeDown(1);
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;/*****************************************************************************
+<br />
+*
+<br />
+--- 457,467 ----
+<br />
+&nbsp;&nbsp;&nbsp;**********************************************************************/
+<br />
+&nbsp;&nbsp;void DeadPipe(int nonsense)
+<br />
+&nbsp;&nbsp;{
+<br />
+!     /*
+<br />
+!      * do not call ShutMeDown, it may make X calls which are not allowed
+<br />
+!      * in a signal hander.
+<br />
+!      */
+<br />
+!   exit(1);
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;/*****************************************************************************
+<br />
+*
+<br />
+*** fvwm-2.0.46/modules/FvwmAudio/FvwmAudio.c.orig	Fri Jan 17 11:10:49 1997
+<br />
+--- fvwm-2.0.46/modules/FvwmAudio/FvwmAudio.c	Tue Aug 26 11:48:53 1997
+<br />
+***************
+<br />
+*** 469,474 ****
+<br />
+--- 469,479 ----
+<br />
+&nbsp;&nbsp;&nbsp;***********************************************************************/
+<br />
+&nbsp;&nbsp;void DeadPipe(int nonsense)
+<br />
+&nbsp;&nbsp;{
+<br />
++     /*
+<br />
++      * In most cases, the only legal operation here is to exit. However,
+<br />
++      * for this module done(0) is acceptable since all done does is
+<br />
++      * to play an audio sample [see below].
+<br />
++      */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;done(0);
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+*** fvwm-2.0.46/modules/FvwmIconBox/FvwmIconBox.c.orig	Thu Jan  2 15:19:31 1997
+<br />
+--- fvwm-2.0.46/modules/FvwmIconBox/FvwmIconBox.c	Tue Aug 26 11:51:38 1997
+<br />
+***************
+<br />
+*** 1419,1427 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tmpi = tmpi-&gt;next;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;freeitem(tmpi2, 0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+!   if ((local_flags &amp; SETWMICONSIZE))
+<br />
+!     XDeleteProperty(dpy, Root, XA_WM_ICON_SIZE); 
+<br />
+!   XSync(dpy,0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;exit(0);
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+--- 1419,1431 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tmpi = tmpi-&gt;next;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;freeitem(tmpi2, 0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+!   /*
+<br />
+!    * This cannot be done in a signal handler.
+<br />
+!    */
+<br />
+! /*  if ((local_flags &amp; SETWMICONSIZE))
+<br />
+!  *   XDeleteProperty(dpy, Root, XA_WM_ICON_SIZE); 
+<br />
+!  * XSync(dpy,0);
+<br />
+!  */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;exit(0);
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+*** fvwm-2.0.46/modules/FvwmButtons/FvwmButtons.c.orig	Thu Jun 26 17:32:31 1997
+<br />
+--- fvwm-2.0.46/modules/FvwmButtons/FvwmButtons.c	Tue Aug 26 11:46:29 1997
+<br />
+***************
+<br />
+*** 27,32 ****
+<br />
+--- 27,33 ----
+<br />
+&nbsp;&nbsp;#include &lt;string.h&gt;
+<br />
+&nbsp;&nbsp;#include &lt;sys/wait.h&gt;
+<br />
+&nbsp;&nbsp;#include &lt;sys/time.h&gt;
+<br />
++ #include &lt;sys/stat.h&gt;
+<br />
+&nbsp;&nbsp;#if defined ___AIX || defined _AIX || defined __QNX__ || defined ___AIXV3 || d
+<br />
+efined AIXV3 || defined _SEQUENT_
+<br />
+&nbsp;&nbsp;#include &lt;sys/select.h&gt;
+<br />
+&nbsp;&nbsp;#endif
+<br />
+***************
+<br />
+*** 78,83 ****
+<br />
+--- 79,85 ----
+<br />
+&nbsp;&nbsp;/* ------------------------------ prototypes ------------------------------- *
+<br />
+/
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;void DeadPipe(int nonsense);
+<br />
++ void CleanUp(void);
+<br />
+&nbsp;&nbsp;void SetButtonSize(button_info*,int,int);
+<br />
+&nbsp;&nbsp;/* main */
+<br />
+&nbsp;&nbsp;void Loop(void);
+<br />
+***************
+<br />
+*** 126,131 ****
+<br />
+--- 128,135 ----
+<br />
+&nbsp;&nbsp;GC  NormalGC;
+<br />
+&nbsp;&nbsp;int Width,Height;
+<br />
+&nbsp;&nbsp;
+<br />
++ int running = 1;
+<br />
++ 
+<br />
+&nbsp;&nbsp;int x= -30000,y= -30000,w= -1,h= -1,gravity = NorthWestGravity;
+<br />
+&nbsp;&nbsp;int new_desk = 0;
+<br />
+&nbsp;&nbsp;int ready = 0;
+<br />
+***************
+<br />
+*** 173,185 ****
+<br />
+&nbsp;&nbsp;**/
+<br />
+&nbsp;&nbsp;void DeadPipe(int whatever)
+<br />
+&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;button_info *b,*ub=UberButton;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int button=-1;
+<br />
+&nbsp;&nbsp;
+<br />
+-   signal(SIGPIPE, SIG_IGN);/* Xsync may cause SIGPIPE */
+<br />
+- 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;XSync(Dpy,0); /* Wait for thing to settle down a bit */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;XGrabServer(Dpy); /* We don't want interference right now */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;while(NextButton(&amp;ub,&amp;b,&amp;button,0))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* delete swallowed windows */
+<br />
+--- 177,220 ----
+<br />
+&nbsp;&nbsp;**/
+<br />
+&nbsp;&nbsp;void DeadPipe(int whatever)
+<br />
+&nbsp;&nbsp;{
+<br />
++   struct stat buf;
+<br />
++     
+<br />
++   /*
+<br />
++    * If a SIGPIPE arrives during this operation, just exit.
+<br />
++    *  - the signal will probably because the server is shutting
+<br />
++    *    down. Attempting to do any further processing is useless
+<br />
++    *    and may in fact, on some platforms, put the process into
+<br />
++    *    a tight loop (if SIGPIPE is ignored).
+<br />
++    * 22 July 1996 GRM.
+<br />
++    * 
+<br />
++    * Further investigation: XSync may loop *without* causing a SIGPIPE.
+<br />
++    * This may be because the connection is dead, or because of the
+<br />
++    * fact that X operations in signal handlers are discouraged.
+<br />
++    * 
+<br />
++    * In order to cover all the bases, then, this function will now
+<br />
++    * set a global flag which will cause the main loop to stop.
+<br />
++    *
+<br />
++    * SIGPIPE is reset to DeadPipe, as well.
+<br />
++    */
+<br />
++   signal(SIGPIPE, DeadPipe);
+<br />
++ 
+<br />
++   /*
+<br />
++    * Try to check status of X connection.
+<br />
++    */
+<br />
++   if (fstat(XConnectionNumber(Dpy), &amp;buf) == -1)
+<br />
++       exit(0);
+<br />
++   
+<br />
++   running = 0;
+<br />
++ }
+<br />
++ 
+<br />
++ void CleanUp(void)
+<br />
++ {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;button_info *b,*ub=UberButton;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int button=-1;
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;XSync(Dpy,0); /* Wait for thing to settle down a bit */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;XGrabServer(Dpy); /* We don't want interference right now */
+<br />
++ 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;while(NextButton(&amp;ub,&amp;b,&amp;button,0))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* delete swallowed windows */
+<br />
+***************
+<br />
+*** 587,593 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int ex=10000,ey=10000,ex2=0,ey2=0;
+<br />
+&nbsp;&nbsp;#endif
+<br />
+&nbsp;&nbsp;
+<br />
+!   while(1)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(My_XNextEvent(Dpy,&amp;Event))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+--- 622,628 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int ex=10000,ey=10000,ex2=0,ey2=0;
+<br />
+&nbsp;&nbsp;#endif
+<br />
+&nbsp;&nbsp;
+<br />
+!   while(running)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(My_XNextEvent(Dpy,&amp;Event))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+***************
+<br />
+*** 814,819 ****
+<br />
+--- 849,855 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
++     CleanUp();
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;/**
+<br />
+*** fvwm-2.0.46/modules/FvwmButtons/parse.c.orig	Thu Jun 26 17:32:33 1997
+<br />
+--- fvwm-2.0.46/modules/FvwmButtons/parse.c	Tue Aug 26 11:44:18 1997
+<br />
+***************
+<br />
+*** 670,675 ****
+<br />
+--- 670,682 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit(1);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s+=7;
+<br />
++       /*
+<br />
++        * Swallow old 'swallowmodule' command
+<br />
++        */
+<br />
++       if (mystrncasecmp(s,&quot;module&quot;,6)==0)
+<br />
++       {
+<br />
++           s+=6;
+<br />
++       }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b-&gt;hangon=seekright(&amp;s);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b-&gt;flags|=(b_Swallow|b_Hangon);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b-&gt;swallow|=1;
+<br />
+*** fvwm-2.0.46/modules/FvwmIconMan/FvwmIconMan.c.orig	Wed Jul 16 21:31:21 1997
+<br />
+--- fvwm-2.0.46/modules/FvwmIconMan/FvwmIconMan.c	Tue Aug 26 11:53:22 1997
+<br />
+***************
+<br />
+*** 96,102 ****
+<br />
+&nbsp;&nbsp;void DeadPipe (int nothing)
+<br />
+&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ConsoleDebug (CORE, &quot;Bye Bye\n&quot;);
+<br />
+!   ShutMeDown (0);
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;void SendFvwmPipe (char *message,unsigned long window)
+<br />
+--- 96,107 ----
+<br />
+&nbsp;&nbsp;void DeadPipe (int nothing)
+<br />
+&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ConsoleDebug (CORE, &quot;Bye Bye\n&quot;);
+<br />
+!   /*
+<br />
+!    * ShutMeDown is not called because most operations, especially X
+<br />
+!    * calls, are not allowed in signal handlers. Currently, of course,
+<br />
+!    * ShutMeDown doesn't do anything significant, but it may in future.
+<br />
+!    */
+<br />
+!   exit (0);
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;void SendFvwmPipe (char *message,unsigned long window)
+<br />
+*** fvwm-2.0.46/fvwm/colormaps.c.orig	Fri Apr 28 08:38:32 1995
+<br />
+--- fvwm-2.0.46/fvwm/colormaps.c	Tue Aug 26 12:03:50 1997
+<br />
+***************
+<br />
+*** 152,159 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(w == tmp-&gt;w)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ThisWinInstalled = True;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XGetWindowAttributes(dpy,w,&amp;attributes);
+<br />
+! 	  
+<br />
+! 	  if(last_cmap != attributes.colormap)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;last_cmap = attributes.colormap;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XInstallColormap(dpy,attributes.colormap);    
+<br />
+--- 152,168 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(w == tmp-&gt;w)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ThisWinInstalled = True;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XGetWindowAttributes(dpy,w,&amp;attributes);
+<br />
+! 
+<br />
+!             /*
+<br />
+!              * On Sun X servers, don't install 24 bit TrueColor colourmaps.
+<br />
+!              * Despite what the server says, these colourmaps are always
+<br />
+!              * installed.
+<br />
+!              */
+<br />
+! 	  if(last_cmap != attributes.colormap
+<br />
+! #if defined(sun) &amp;&amp; defined(TRUECOLOR_ALWAYS_INSTALLED)
+<br />
+!              &amp;&amp; !(attributes.depth == 24 &amp;&amp; attributes.visual-&gt;class == TrueCo
+<br />
+lor)
+<br />
+! #endif
+<br />
+!              )
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;last_cmap = attributes.colormap;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XInstallColormap(dpy,attributes.colormap);    
+<br />
+***************
+<br />
+*** 163,169 ****
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(!ThisWinInstalled)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!       if(last_cmap != tmp-&gt;attr.colormap)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;last_cmap = tmp-&gt;attr.colormap;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XInstallColormap(dpy,tmp-&gt;attr.colormap);    
+<br />
+--- 172,182 ----
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(!ThisWinInstalled)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!       if(last_cmap != tmp-&gt;attr.colormap
+<br />
+! #if defined(sun) &amp;&amp; defined(TRUECOLOR_ALWAYS_INSTALLED)
+<br />
+!          &amp;&amp; !(attributes.depth == 24 &amp;&amp; attributes.visual-&gt;class == TrueColor)
+<br />
+! #endif
+<br />
+!         )
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;last_cmap = tmp-&gt;attr.colormap;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XInstallColormap(dpy,tmp-&gt;attr.colormap);    
+<br />
+*** fvwm-2.0.46/fvwm/add_window.c.orig	Wed Aug  6 15:35:12 1997
+<br />
+--- fvwm-2.0.46/fvwm/add_window.c	Tue Aug 26 11:25:56 1997
+<br />
+***************
+<br />
+*** 656,667 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for(i=0;i&lt;3;i++)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(Scr.buttons2grab &amp; (1&lt;&lt;i))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+! 	    XGrabButton(dpy,(i+1),0,tmp_win-&gt;frame,True,
+<br />
+! 			ButtonPressMask, GrabModeSync,GrabModeAsync,None,
+<br />
+! 			Scr.FvwmCursors[SYS]);
+<br />
+! 	    XGrabButton(dpy,(i+1),LockMask,tmp_win-&gt;frame,True,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ButtonPressMask, GrabModeSync,GrabModeAsync,None,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Scr.FvwmCursors[SYS]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;BroadcastConfig(M_ADD_WINDOW,tmp_win);
+<br />
+--- 656,669 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for(i=0;i&lt;3;i++)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(Scr.buttons2grab &amp; (1&lt;&lt;i))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!               /* accept any modifier on this button */
+<br />
+! 	    XGrabButton(dpy,(i+1),AnyModifier,tmp_win-&gt;frame,True,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ButtonPressMask, GrabModeSync,GrabModeAsync,None,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Scr.FvwmCursors[SYS]);
+<br />
++ /*	    XGrabButton(dpy,(i+1),LockMask,tmp_win-&gt;frame,True,
+<br />
++  *			ButtonPressMask, GrabModeSync,GrabModeAsync,None,
+<br />
++  *			Scr.FvwmCursors[SYS]);
+<br />
++  */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;BroadcastConfig(M_ADD_WINDOW,tmp_win);
+<br />
+*** fvwm-2.0.46/fvwm/decorations.c.orig	Mon Aug  4 16:52:51 1997
+<br />
+--- fvwm-2.0.46/fvwm/decorations.c	Tue Aug 26 11:29:57 1997
+<br />
+***************
+<br />
+*** 589,594 ****
+<br />
+--- 589,598 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(!(t-&gt;functions &amp; MWM_FUNC_CLOSE)))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 0;
+<br />
+&nbsp;&nbsp;
+<br />
++   if((function == F_CLOSE)&amp;&amp;(t)&amp;&amp;
+<br />
++      (!(t-&gt;functions &amp; MWM_FUNC_CLOSE)))
+<br />
++     return 0;
+<br />
++ 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if((function == F_DESTROY)&amp;&amp;(t)&amp;&amp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(!(t-&gt;functions &amp; MWM_FUNC_CLOSE)))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 0;
+<br />
+*** fvwm-2.0.46/fvwm/events.c.orig	Thu Aug  7 11:14:22 1997
+<br />
+--- fvwm-2.0.46/fvwm/events.c	Tue Aug 26 12:13:14 1997
+<br />
+***************
+<br />
+*** 968,1035 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DBUG(&quot;HandleButtonPress&quot;,&quot;Routine Entered&quot;);
+<br />
+&nbsp;&nbsp;
+<br />
+!   /* click to focus stuff goes here */
+<br />
+!   if((Tmp_win)&amp;&amp;(Tmp_win-&gt;flags &amp; ClickToFocus)&amp;&amp;(Tmp_win != Scr.Ungrabbed) &amp;&amp;
+<br />
+!      ((Event.xbutton.state&amp;
+<br />
+!        (ControlMask|Mod1Mask|Mod2Mask|Mod3Mask|Mod4Mask|Mod5Mask)) == 0))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!     if(Tmp_win)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!       SetFocus(Tmp_win-&gt;w,Tmp_win,1);
+<br />
+&nbsp;&nbsp;/* #ifdef CLICKY_MODE_1 */
+<br />
+!       if (Scr.ClickToFocusRaises ||
+<br />
+!           ((Event.xany.window != Tmp_win-&gt;w)&amp;&amp;
+<br />
+!            (Event.xbutton.subwindow != Tmp_win-&gt;w)&amp;&amp;
+<br />
+!            (Event.xany.window != Tmp_win-&gt;Parent)&amp;&amp;
+<br />
+!            (Event.xbutton.subwindow != Tmp_win-&gt;Parent)))
+<br />
+&nbsp;&nbsp;/* #endif */
+<br />
+!       {
+<br />
+!         RaiseWindow(Tmp_win);
+<br />
+!       }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+!       KeepOnTop();
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* Why is this here? Seems to cause breakage with
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* non-focusing windows! */
+<br />
+!       if(!(Tmp_win-&gt;flags &amp; ICONIFIED))
+<br />
+!       {
+<br />
+!         XSync(dpy,0);
+<br />
+!         /* pass click event to just clicked to focus window? */
+<br />
+!         if (Scr.ClickToFocusPassesClick)
+<br />
+!           XAllowEvents(dpy,ReplayPointer,CurrentTime);
+<br />
+!         else /* don't pass click to just focused window */
+<br />
+!           XAllowEvents(dpy,AsyncPointer,CurrentTime);
+<br />
+!         XSync(dpy,0);
+<br />
+!         return;
+<br />
+!       }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+!   }
+<br />
+!   else if ((Tmp_win) &amp;&amp; !(Tmp_win-&gt;flags &amp; ClickToFocus) &amp;&amp;
+<br />
+!            (Event.xbutton.window == Tmp_win-&gt;frame) &amp;&amp;
+<br />
+!           Scr.MouseFocusClickRaises)
+<br />
+!   {
+<br />
+!     if (Tmp_win != Scr.LastWindowRaised &amp;&amp;
+<br />
+!         (Event.xbutton.state &amp;
+<br />
+!          (ControlMask|Mod1Mask|Mod2Mask|Mod3Mask|Mod4Mask|Mod5Mask)) == 0 &amp;&amp;
+<br />
+!         GetContext(Tmp_win,&amp;Event, &amp;PressedW) == C_WINDOW)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!       RaiseWindow(Tmp_win);
+<br />
+!       KeepOnTop();
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+-     XSync(dpy,0);
+<br />
+-     XAllowEvents(dpy,ReplayPointer,CurrentTime);
+<br />
+-     XSync(dpy,0);
+<br />
+-     return;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+-   XSync(dpy,0);
+<br />
+-   XAllowEvents(dpy,ReplayPointer,CurrentTime);
+<br />
+-   XSync(dpy,0);
+<br />
+-   
+<br />
+-   Context = GetContext(Tmp_win,&amp;Event, &amp;PressedW);
+<br />
+-   LocalContext = Context;
+<br />
+-   x= PressedW;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(Context == C_TITLE)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SetTitleBar(Tmp_win,(Scr.Hilite == Tmp_win),False);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+--- 968,1058 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DBUG(&quot;HandleButtonPress&quot;,&quot;Routine Entered&quot;);
+<br />
+&nbsp;&nbsp;
+<br />
+!   /*
+<br />
+!    * First, look for button bindings.
+<br />
+!    */
+<br />
+!   Context = GetContext(Tmp_win,&amp;Event, &amp;PressedW);
+<br />
+!   LocalContext = Context;
+<br />
+!   x= PressedW;
+<br />
+! 
+<br />
+!   /* we have to execute a function or pop up a menu
+<br />
+!    */
+<br />
+!   
+<br />
+!   modifier = (Event.xbutton.state &amp; mods_used);
+<br />
+!   /* need to search for an appropriate mouse binding */
+<br />
+!   for (MouseEntry = Scr.AllBindings; MouseEntry != NULL;
+<br />
+!        MouseEntry= MouseEntry-&gt;NextBinding)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!     if(((MouseEntry-&gt;Button_Key == Event.xbutton.button)||
+<br />
+!         (MouseEntry-&gt;Button_Key == 0))&amp;&amp;
+<br />
+!        (MouseEntry-&gt;Context &amp; Context)&amp;&amp;
+<br />
+!        ((MouseEntry-&gt;Modifier == AnyModifier)||
+<br />
+!         (MouseEntry-&gt;Modifier == (modifier&amp; (~LockMask))))&amp;&amp;
+<br />
+!        (MouseEntry-&gt;IsMouse == 1))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!       /* got a match ... save it and exit loop */
+<br />
+!       break;
+<br />
+!     }
+<br />
+!   }
+<br />
+! 
+<br />
+!   /*
+<br />
+!    * do no click to focus if a mouse function was found
+<br />
+!    */
+<br />
+!   if (MouseEntry == NULL) {
+<br />
+!     /* click to focus stuff goes here */
+<br />
+!     /* any modifier is acceptable for click-to-focus */
+<br />
+!     if((Tmp_win)&amp;&amp;(Tmp_win-&gt;flags &amp; ClickToFocus)&amp;&amp;(Tmp_win != Scr.Ungrabbed))
+<br />
+!     {
+<br />
+!       if(Tmp_win)
+<br />
+!       {
+<br />
+!         SetFocus(Tmp_win-&gt;w,Tmp_win,1);
+<br />
+&nbsp;&nbsp;/* #ifdef CLICKY_MODE_1 */
+<br />
+!           if (Scr.ClickToFocusRaises ||
+<br />
+!               ((Event.xany.window != Tmp_win-&gt;w)&amp;&amp;
+<br />
+!                (Event.xbutton.subwindow != Tmp_win-&gt;w)&amp;&amp;
+<br />
+!                (Event.xany.window != Tmp_win-&gt;Parent)&amp;&amp;
+<br />
+!                (Event.xbutton.subwindow != Tmp_win-&gt;Parent)))
+<br />
+&nbsp;&nbsp;/* #endif */
+<br />
+!           {
+<br />
+!             RaiseWindow(Tmp_win);
+<br />
+!           }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+!           KeepOnTop();
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* Why is this here? Seems to cause breakage with
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* non-focusing windows! */
+<br />
+!           if(!(Tmp_win-&gt;flags &amp; ICONIFIED))
+<br />
+!           {
+<br />
+!             XSync(dpy,0);
+<br />
+!               /* pass click event to just clicked to focus window? */
+<br />
+!               if (Scr.ClickToFocusPassesClick)
+<br />
+!                 XAllowEvents(dpy,ReplayPointer,CurrentTime);
+<br />
+!               else /* don't pass click to just focused window */
+<br />
+!                 XAllowEvents(dpy,AsyncPointer,CurrentTime);
+<br />
+!               XSync(dpy,0);
+<br />
+!               return;
+<br />
+!           }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
++       }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+!     else if ((Tmp_win) &amp;&amp; !(Tmp_win-&gt;flags &amp; ClickToFocus) &amp;&amp;
+<br />
+!              (Event.xbutton.window == Tmp_win-&gt;frame) &amp;&amp;
+<br />
+!              Scr.MouseFocusClickRaises)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!         /* click-to-raise. Again, ignore any modifiers. */
+<br />
+!         if (Tmp_win != Scr.LastWindowRaised &amp;&amp;
+<br />
+!             GetContext(Tmp_win,&amp;Event, &amp;PressedW) == C_WINDOW)
+<br />
+!         {
+<br />
+!             RaiseWindow(Tmp_win);
+<br />
+!             KeepOnTop();
+<br />
+!         }
+<br />
+!         XSync(dpy,0);
+<br />
+!         XAllowEvents(dpy,ReplayPointer,CurrentTime);
+<br />
+!         XSync(dpy,0);
+<br />
+!         return;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(Context == C_TITLE)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SetTitleBar(Tmp_win,(Scr.Hilite == Tmp_win),False);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+***************
+<br />
+*** 1037,1062 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ButtonWindow = Tmp_win;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+!   /* we have to execute a function or pop up a menu
+<br />
+!    */
+<br />
+!   
+<br />
+!   modifier = (Event.xbutton.state &amp; mods_used);
+<br />
+!   /* need to search for an appropriate mouse binding */
+<br />
+!   for (MouseEntry = Scr.AllBindings; MouseEntry != NULL;
+<br />
+!        MouseEntry= MouseEntry-&gt;NextBinding)
+<br />
+!   {
+<br />
+!     if(((MouseEntry-&gt;Button_Key == Event.xbutton.button)||
+<br />
+!         (MouseEntry-&gt;Button_Key == 0))&amp;&amp;
+<br />
+!        (MouseEntry-&gt;Context &amp; Context)&amp;&amp;
+<br />
+!        ((MouseEntry-&gt;Modifier == AnyModifier)||
+<br />
+!         (MouseEntry-&gt;Modifier == (modifier&amp; (~LockMask))))&amp;&amp;
+<br />
+!        (MouseEntry-&gt;IsMouse == 1))
+<br />
+!     {
+<br />
+!       /* got a match, now process it */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ExecuteFunction(MouseEntry-&gt;Action,Tmp_win, &amp;Event,Context,-1);
+<br />
+!       break;
+<br />
+!     }
+<br />
+!   }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PressedW = None;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(LocalContext!=C_TITLE)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SetBorder(ButtonWindow,(Scr.Hilite == ButtonWindow),True,True,x);
+<br />
+--- 1060,1072 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ButtonWindow = Tmp_win;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+!   XSync(dpy,0);
+<br />
+!   XAllowEvents(dpy,ReplayPointer,CurrentTime);
+<br />
+!   XSync(dpy,0);
+<br />
+! 
+<br />
+!   if (MouseEntry != NULL)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ExecuteFunction(MouseEntry-&gt;Action,Tmp_win, &amp;Event,Context,-1);
+<br />
+! 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PressedW = None;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(LocalContext!=C_TITLE)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SetBorder(ButtonWindow,(Scr.Hilite == ButtonWindow),True,True,x);
+<br />
+*** fvwm-2.0.46/fvwm/placement.c.orig	Fri Jan 17 09:39:21 1997
+<br />
+--- fvwm-2.0.46/fvwm/placement.c	Tue Aug 26 14:24:49 1997
+<br />
+***************
+<br />
+*** 396,402 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;/* Desk has been selected, now pick a location for the window */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;/*
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*  If
+<br />
+!    *     o  the window is a transient, or
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*     o  a USPosition was requested
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* 
+<br />
+--- 396,402 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;/* Desk has been selected, now pick a location for the window */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;/*
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*  If
+<br />
+!    *     o  the window is a transient with a position, or
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*     o  a USPosition was requested
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* 
+<br />
+***************
+<br />
+*** 405,411 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*   If RandomPlacement was specified,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*       then place the window in a psuedo-random location
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<br />
+!   if (!(tmp_win-&gt;flags &amp; TRANSIENT) &amp;&amp; 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;!(tmp_win-&gt;hints.flags &amp; USPosition) &amp;&amp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((tflag &amp; NO_PPOSITION_FLAG)||
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;!(tmp_win-&gt;hints.flags &amp; PPosition)) &amp;&amp;
+<br />
+--- 405,411 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*   If RandomPlacement was specified,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*       then place the window in a psuedo-random location
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<br />
+!   if (!((tmp_win-&gt;flags &amp; TRANSIENT) &amp;&amp; (tmp_win-&gt;hints.flags &amp; PPosition)) &amp;&amp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;!(tmp_win-&gt;hints.flags &amp; USPosition) &amp;&amp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((tflag &amp; NO_PPOSITION_FLAG)||
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;!(tmp_win-&gt;hints.flags &amp; PPosition)) &amp;&amp;
+<br />
+***************
+<br />
+*** 415,421 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(tmp_win-&gt;wmhints-&gt;initial_state == IconicState)) )
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* Get user's window placement, unless RandomPlacement is specified */   
+<br />
+!     if(tflag &amp; RANDOM_PLACE_FLAG)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(tflag &amp; SMART_PLACE_FLAG)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SmartPlacement(tmp_win,tmp_win-&gt;frame_width+2*tmp_win-&gt;bw,
+<br />
+--- 415,421 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(tmp_win-&gt;wmhints-&gt;initial_state == IconicState)) )
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* Get user's window placement, unless RandomPlacement is specified */   
+<br />
+!     if(tflag &amp; RANDOM_PLACE_FLAG || (tmp_win-&gt;flags &amp; TRANSIENT))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(tflag &amp; SMART_PLACE_FLAG)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SmartPlacement(tmp_win,tmp_win-&gt;frame_width+2*tmp_win-&gt;bw,
+<br />
+*** fvwm-2.0.46/extras/FvwmTaskBar/FvwmTaskBar.c.orig	Tue Sep 24 06:54:59 1996
+<br />
+--- fvwm-2.0.46/extras/FvwmTaskBar/FvwmTaskBar.c	Tue Aug 26 13:59:45 1997
+<br />
+***************
+<br />
+*** 78,83 ****
+<br />
+--- 78,90 ----
+<br />
+&nbsp;&nbsp;int   Fvwm_fd[2];
+<br />
+&nbsp;&nbsp;int   x_fd;
+<br />
+&nbsp;&nbsp;
+<br />
++ /* Signal handling */
+<br />
++ int   signal_pipes[2];
+<br />
++ enum e_SignalActions {
+<br />
++     SIGNAL_DEAD_PIPE=1,
+<br />
++     SIGNAL_ALARM=2
+<br />
++ };
+<br />
++ 
+<br />
+&nbsp;&nbsp;/* X related things */
+<br />
+&nbsp;&nbsp;Display *dpy;
+<br />
+&nbsp;&nbsp;Window  Root, win;
+<br />
+***************
+<br />
+*** 181,188 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Fvwm_fd[1] = atoi(argv[2]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;fd_width = GetFdWidth();
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;signal (SIGPIPE, DeadPipe);
+<br />
+!   signal (SIGALRM, Alarm);
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SetMessageMask(Fvwm_fd,M_ADD_WINDOW | M_CONFIGURE_WINDOW | M_DESTROY_WINDOW 
+<br />
+|
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;M_WINDOW_NAME | M_ICON_NAME | M_RES_NAME | M_DEICONIFY | M_ICONIFY |
+<br />
+--- 188,197 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Fvwm_fd[1] = atoi(argv[2]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;fd_width = GetFdWidth();
+<br />
+&nbsp;&nbsp;
+<br />
++   /* set up signal and alarm pipes */
+<br />
++   pipe(signal_pipes);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;signal (SIGPIPE, DeadPipe);
+<br />
+!   signal (SIGALRM, SigAlarm);
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SetMessageMask(Fvwm_fd,M_ADD_WINDOW | M_CONFIGURE_WINDOW | M_DESTROY_WINDOW 
+<br />
+|
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;M_WINDOW_NAME | M_ICON_NAME | M_RES_NAME | M_DEICONIFY | M_ICONIFY |
+<br />
+***************
+<br />
+*** 281,286 ****
+<br />
+--- 290,311 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DrawGoodies();
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
++       /*
+<br />
++        * signal notification handling
+<br />
++        */
+<br />
++     if (FD_ISSET(signal_pipes[1], &amp;readset)) {
+<br />
++         char buffer[1];
+<br />
++         read(signal_pipes[1], buffer, sizeof buffer);
+<br />
++         switch (buffer[0]) {
+<br />
++          case SIGNAL_DEAD_PIPE:
+<br />
++             ShutMeDown(1);
+<br />
++             break;
+<br />
++             
+<br />
++          case SIGNAL_ALARM:
+<br />
++             Alarm();
+<br />
++         }
+<br />
++     }
+<br />
++ 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+***************
+<br />
+*** 495,502 ****
+<br />
+&nbsp;&nbsp;&nbsp;**********************************************************************/
+<br />
+&nbsp;&nbsp;void DeadPipe(int nonsense)
+<br />
+&nbsp;&nbsp;{
+<br />
+!   ConsoleMessage(&quot;received SIGPIPE signal: exiting...\n&quot;);
+<br />
+!   ShutMeDown(1);
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;/*****************************************************************************
+<br />
+*
+<br />
+--- 520,530 ----
+<br />
+&nbsp;&nbsp;&nbsp;**********************************************************************/
+<br />
+&nbsp;&nbsp;void DeadPipe(int nonsense)
+<br />
+&nbsp;&nbsp;{
+<br />
+!   /*
+<br />
+!    * Send notification to the main loop
+<br />
+!    */
+<br />
+!   static char buffer[1] = { (char) SIGNAL_DEAD_PIPE  };
+<br />
+!   write(signal_pipes[0], buffer, sizeof buffer);
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;/*****************************************************************************
+<br />
+*
+<br />
+***************
+<br />
+*** 717,725 ****
+<br />
+&nbsp;&nbsp;/*****************************************************************************
+<br />
+*
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Alarm - Handle a SIGALRM - used to implement timeout events
+<br />
+&nbsp;&nbsp;******************************************************************************
+<br />
+/
+<br />
+! void Alarm(int nonsense) {
+<br />
+&nbsp;&nbsp;
+<br />
+!   switch(AlarmSet) {
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;case SHOW_TIP:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ShowTipWindow(1);
+<br />
+--- 745,763 ----
+<br />
+&nbsp;&nbsp;/*****************************************************************************
+<br />
+*
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Alarm - Handle a SIGALRM - used to implement timeout events
+<br />
+&nbsp;&nbsp;******************************************************************************
+<br />
+/
+<br />
+! void SigAlarm(int nonsense) {
+<br />
+! 
+<br />
+!     /*
+<br />
+!      * send an alarm to the main loop
+<br />
+!      */
+<br />
+!   static char buffer[1] = { (char) SIGNAL_ALARM };
+<br />
+!   write(signal_pipes[0], buffer, sizeof buffer);
+<br />
+! 
+<br />
+!   signal (SIGALRM, SigAlarm);
+<br />
+! }
+<br />
+&nbsp;&nbsp;
+<br />
+! void Alarm(void) {
+<br />
+! switch(AlarmSet) {
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;case SHOW_TIP:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ShowTipWindow(1);
+<br />
+***************
+<br />
+*** 731,737 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AlarmSet = NOT_SET;
+<br />
+-   signal (SIGALRM, Alarm);
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;/*****************************************************************************
+<br />
+*
+<br />
+--- 769,774 ----
+<br />
+<br />End of MIME message
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue Aug 26 1997 - 13:32:24 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start20801">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="20802.html" title="Next message in the list">Grant McDorman: "FVWM: fvwm 2.0.46: missing part of patch to TaskBar"</a></li>
+<li><dfn>Previous message</dfn>: <a href="20800.html" title="Previous message in the list">Marcin Klimowski: "FVWM: Icon position in FvwmIconBox"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="20824.html" title="Next message in this discussion thread">Grant McDorman: "RE: FVWM: fvwm 2.0.46: patches and bugs: NEW PATCH"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="20824.html" title="Message sent in reply to this message">Grant McDorman: "RE: FVWM: fvwm 2.0.46: patches and bugs: NEW PATCH"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg20801" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg20801" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg20801" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg20801" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

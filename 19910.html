@@ -1,0 +1,491 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Patch: Expand the M_MINI_ICON packet from Randy J. Ray on 1997-05-04 (fvwm-users)</title>
+<meta name="Author" content="Randy J. Ray (rjray_at_uswest.com)" />
+<meta name="Subject" content="FVWM: Patch: Expand the M_MINI_ICON packet" />
+<meta name="Date" content="1997-05-04" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Patch: Expand the M_MINI_ICON packet</h1>
+<!-- received="Sun May  4 03:44:32 1997" -->
+<!-- isoreceived="19970504024432" -->
+<!-- sent="Sun, 4 May 1997 02:43:50 -0600" -->
+<!-- isosent="19970504084350" -->
+<!-- name="Randy J. Ray" -->
+<!-- email="rjray_at_uswest.com" -->
+<!-- subject="FVWM: Patch: Expand the M_MINI_ICON packet" -->
+<!-- id="rjray-9704040843.AA000119943_at_snakepit.ecte.uswc.uswest.com" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start19910" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="19911.html" accesskey="d" title="Raymond Toy: &quot;Re: FVWM: Backspace key doesn&#0039;t work in Netscape&quot;">Next message</a> ]
+[ <a href="19909.html" title="jmknoble_at_pobox.com: &quot;Re: FVWM: fvwm and M4&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19910" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19910" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19910" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19910" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Randy J. Ray &lt;<a href="mailto:rjray_at_uswest.com?Subject=Re%3A%20FVWM%3A%20Patch%3A%20Expand%20the%20M_MINI_ICON%20packet">rjray_at_uswest.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sun, 4 May 1997 02:43:50 -0600</span><br />
+</address>
+<br />
+As promised, here is a patch to expand the M_MINI_ICON packet type to include
+<br />
+the normal window-identification triple, as well as tack the filename of the
+<br />
+icon itself at the end. Apply this patch from the *root* of your fvwm 2.0.45
+<br />
+source tree (my patch to the windowshade packets was relative to the fvwm
+<br />
+subdir; however, this patch also affects modules/FvwmIconMan) with:
+<br />
+<br />patch -p -N &lt; this_file
+<br />
+<br />This patch does the following:
+<br />
+<br />* Cause M_MINI_ICON packets to use their own send routines: SendMiniIcon and
+<br />
+&nbsp;&nbsp;BroadcastMiniIcon
+<br />
+<br />* Updates add_window.c to use these routines, as well as later in module.c
+<br />
+<br />* Updates the struct used in modules/FvwmIconMan/fvwm.c to recognize the new
+<br />
+&nbsp;&nbsp;format. The code itself needed no update, since it doesn't use any of the
+<br />
+&nbsp;&nbsp;added fields
+<br />
+<br />The new structure for packets of type M_MINI_ICON is:
+<br />
+<br />word	meaning
+<br />
+0	0xffffffff
+<br />
+1	packet type (M_MINI_ICON)
+<br />
+2	length of packet
+<br />
+3	timestamp
+<br />
+4	X window ID
+<br />
+5	X ID of frame encompassing window
+<br />
+6	Fvwm internal database pointer
+<br />
+7	Width of mini-icon
+<br />
+8	Height of mini-icon
+<br />
+9	Depth (number of planes) of mini-icon
+<br />
+10	X Pixmap ID (not to confuse with XPM) of the mini-icon
+<br />
+11	X Pixmap ID of the mask
+<br />
+12+	Name cast into longs as per other textual packets, null-padded
+<br />
+<br />I do not update the modules.tex file, because it doesn't yet mention these
+<br />
+packets, and it needs heavy revision anyway.
+<br />
+<br />Release 0.4 of my Perl module X11::Fvwm will support this format, and will
+<br />
+also bundle this patch along with the code. Any code utilizing these packets
+<br />
+will need to be updated after this patch is applied.
+<br />
+<br />Randy
+<br />
+- --
+<br />
+===============================================================================
+<br />
+Randy J. Ray -- U S WEST Technologies IAD/CSS/DPDS         Phone: (303)595-2869
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Denver, CO                                     rjray_at_uswest.com
+<br />
+&quot;It's not denial. I'm just very selective about the reality I accept.&quot; --Calvin
+<br />
+===============================================================================
+<br />
+<br />(patch begins here)
+<br />
+<br />Index: ./modules/FvwmIconMan/fvwm.c
+<br />
+*** ./modules/FvwmIconMan/fvwm.c.orig	Tue Apr 29 14:58:16 1997
+<br />
+--- ./modules/FvwmIconMan/fvwm.c	Tue Apr 29 15:32:58 1997
+<br />
+***************
+<br />
+*** 64,70 ****
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;#ifdef MINI_ICONS
+<br />
+&nbsp;&nbsp;typedef struct {
+<br />
+!   Ulong app_id, picture, mask, width, height, depth;
+<br />
+&nbsp;&nbsp;} m_mini_icon_data;
+<br />
+&nbsp;&nbsp;#endif
+<br />
+&nbsp;&nbsp;
+<br />
+--- 64,75 ----
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;#ifdef MINI_ICONS
+<br />
+&nbsp;&nbsp;typedef struct {
+<br />
+!   Ulong app_id, frame_id, dbase_entry;
+<br />
+!   Ulong width, height, depth, picture, mask;
+<br />
+!   union {
+<br />
+!     Ulong name_long[1];
+<br />
+!     Uchar name[4];
+<br />
+!   } name;
+<br />
+&nbsp;&nbsp;} m_mini_icon_data;
+<br />
+&nbsp;&nbsp;#endif
+<br />
+&nbsp;&nbsp;
+<br />
+<br />Index: ./fvwm/module.c
+<br />
+*** ./fvwm/module.c.orig	Sun May  4 01:20:28 1997
+<br />
+--- ./fvwm/module.c	Sun May  4 01:42:33 1997
+<br />
+***************
+<br />
+*** 533,538 ****
+<br />
+--- 533,589 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SendName(i,event_type,data1,data2,data3,name);
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
++ #ifdef MINI_ICONS
+<br />
++ void SendMiniIcon(int module, unsigned long event_type,
+<br />
++ 		  unsigned long data1, unsigned long data2, 
+<br />
++ 		  unsigned long data3, unsigned long data4,
+<br />
++ 		  unsigned long data5, unsigned long data6,
+<br />
++ 		  unsigned long data7, unsigned long data8,
+<br />
++ 		  char *name)
+<br />
++ {
+<br />
++   int l;
+<br />
++   unsigned long *body;
+<br />
++   extern Time lastTimestamp;
+<br />
++ 
+<br />
++   if ((name == NULL) || (event_type != M_MINI_ICON))
+<br />
++     return;
+<br />
++   l = strlen(name)/(sizeof(unsigned long))+HEADER_SIZE+9;
+<br />
++   body = (unsigned long *)safemalloc(l*sizeof(unsigned long));
+<br />
++ 
+<br />
++   body[0] = START_FLAG;
+<br />
++   body[1] = event_type;
+<br />
++   body[2] = l;
+<br />
++   body[3] = lastTimestamp;
+<br />
++ 
+<br />
++   body[HEADER_SIZE] = data1;
+<br />
++   body[HEADER_SIZE+1] = data2;
+<br />
++   body[HEADER_SIZE+2] = data3; 
+<br />
++   body[HEADER_SIZE+3] = data4; 
+<br />
++   body[HEADER_SIZE+4] = data5; 
+<br />
++   body[HEADER_SIZE+5] = data6; 
+<br />
++   body[HEADER_SIZE+6] = data7; 
+<br />
++   body[HEADER_SIZE+7] = data8; 
+<br />
++   strcpy((char *)&amp;body[HEADER_SIZE+8],name);
+<br />
++ 
+<br />
++   PositiveWrite(module,(unsigned long *)body, l*sizeof(unsigned long));
+<br />
++ 
+<br />
++   free(body);
+<br />
++ }
+<br />
++ 
+<br />
++ void BroadcastMiniIcon(unsigned long event_type,
+<br />
++ 		       unsigned long data1, unsigned long data2, 
+<br />
++ 		       unsigned long data3, unsigned long data4,
+<br />
++ 		       unsigned long data5, unsigned long data6,
+<br />
++ 		       unsigned long data7, unsigned long data8,
+<br />
++ 		       char *name)
+<br />
++ {
+<br />
++   int i;
+<br />
++ 
+<br />
++   for(i=0;i&lt;npipes;i++)
+<br />
++     SendMiniIcon(i, event_type,
+<br />
++ 		 data1, data2, data3, data4, data5, data6, data7, data8, name);
+<br />
++ }
+<br />
++ #endif /* MINI_ICONS */
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;/*
+<br />
+&nbsp;&nbsp;** send an arbitrary string to all instances of a module
+<br />
+***************
+<br />
+*** 696,708 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(unsigned long)t,0,0,0,0);
+<br />
+&nbsp;&nbsp;#ifdef MINI_ICONS
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (t-&gt;mini_icon != NULL) 
+<br />
+! 	    SendPacket(*Module, M_MINI_ICON, 6,
+<br />
+!                        t-&gt;w,
+<br />
+!                        t-&gt;mini_icon-&gt;picture,
+<br />
+!                        t-&gt;mini_icon-&gt;mask,
+<br />
+!                        t-&gt;mini_icon-&gt;width,
+<br />
+!                        t-&gt;mini_icon-&gt;height,
+<br />
+!                        t-&gt;mini_icon-&gt;depth, 0);
+<br />
+&nbsp;&nbsp;#endif
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(Scr.Hilite == NULL)
+<br />
+--- 747,760 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(unsigned long)t,0,0,0,0);
+<br />
+&nbsp;&nbsp;#ifdef MINI_ICONS
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (t-&gt;mini_icon != NULL) 
+<br />
+!             SendMiniIcon(*Module, M_MINI_ICON,
+<br />
+!                          t-&gt;w, t-&gt;frame, (unsigned long)t,
+<br />
+!                          t-&gt;mini_icon-&gt;width,
+<br />
+!                          t-&gt;mini_icon-&gt;height,
+<br />
+!                          t-&gt;mini_icon-&gt;depth,
+<br />
+!                          t-&gt;mini_icon-&gt;picture,
+<br />
+!                          t-&gt;mini_icon-&gt;mask,
+<br />
+!                          t-&gt;mini_pixmap_file);
+<br />
+&nbsp;&nbsp;#endif
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(Scr.Hilite == NULL)
+<br />
+<br /><br />Index: ./fvwm/add_window.c
+<br />
+*** ./fvwm/add_window.c.orig	Sun May  4 01:20:42 1997
+<br />
+--- ./fvwm/add_window.c	Sun May  4 02:24:18 1997
+<br />
+***************
+<br />
+*** 684,696 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(unsigned long)tmp_win,tmp_win-&gt;class.res_name);
+<br />
+&nbsp;&nbsp;#ifdef MINI_ICONS
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if (tmp_win-&gt;mini_icon != NULL)
+<br />
+!     Broadcast(M_MINI_ICON, 6,
+<br />
+!               tmp_win-&gt;w, /* Watch Out ! : I reduced the set of infos... */
+<br />
+!               tmp_win-&gt;mini_icon-&gt;picture,
+<br />
+!               tmp_win-&gt;mini_icon-&gt;mask,
+<br />
+!               tmp_win-&gt;mini_icon-&gt;width,
+<br />
+!               tmp_win-&gt;mini_icon-&gt;height,
+<br />
+!               tmp_win-&gt;mini_icon-&gt;depth, 0);
+<br />
+&nbsp;&nbsp;#endif
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FetchWmProtocols (tmp_win);
+<br />
+--- 684,697 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(unsigned long)tmp_win,tmp_win-&gt;class.res_name);
+<br />
+&nbsp;&nbsp;#ifdef MINI_ICONS
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if (tmp_win-&gt;mini_icon != NULL)
+<br />
+!     BroadcastMiniIcon(M_MINI_ICON,
+<br />
+!                       tmp_win-&gt;w, tmp_win-&gt;frame, (unsigned long)tmp_win,
+<br />
+!                       tmp_win-&gt;mini_icon-&gt;width,
+<br />
+!                       tmp_win-&gt;mini_icon-&gt;height,
+<br />
+!                       tmp_win-&gt;mini_icon-&gt;depth,
+<br />
+!                       tmp_win-&gt;mini_icon-&gt;picture,
+<br />
+!                       tmp_win-&gt;mini_icon-&gt;mask,
+<br />
+!                       tmp_win-&gt;mini_pixmap_file);
+<br />
+&nbsp;&nbsp;#endif
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FetchWmProtocols (tmp_win);
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sun May 04 1997 - 03:44:32 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start19910">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="19911.html" title="Next message in the list">Raymond Toy: "Re: FVWM: Backspace key doesn&#0039;t work in Netscape"</a></li>
+<li><dfn>Previous message</dfn>: <a href="19909.html" title="Previous message in the list">jmknoble_at_pobox.com: "Re: FVWM: fvwm and M4"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19910" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19910" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19910" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19910" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

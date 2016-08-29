@@ -1,0 +1,173 @@
+*** ./builtins.c.orig	Mon Jul 24 01:24:01 2000
+--- ./builtins.c	Mon Jul 24 01:23:21 2000
+***************
+*** 2756,2762 ****
+  
+  /* A function to handle stroke (olicha Nov 11, 1999) */
+  #ifdef HAVE_STROKE
+- #define MAX_DRAWING_LINES 120
+  void strokeFunc(F_CMD_ARGS)
+  {
+    int finished = 0;
+--- 2756,2761 ----
+***************
+*** 2772,2782 ****
+    Bool echo_sequence = False;
+    Bool draw_motion = False;
+    int i = 0;
+!   int x[MAX_DRAWING_LINES+1], y[MAX_DRAWING_LINES+1];
+    Window JunkRoot, JunkChild;
+    int JunkX, JunkY;
+    unsigned int JunkMask;
+    Bool feed_back = False;
+  
+    if(!GrabEm(CRS_STROKE, GRAB_NORMAL))
+    {
+--- 2771,2796 ----
+    Bool echo_sequence = False;
+    Bool draw_motion = False;
+    int i = 0;
+! 
+!   int* x = (int*)0;
+!   int* y = (int*)0;
+!   const int STROKE_CHUNK_SIZE = 0xff;
+!   int coords_size = STROKE_CHUNK_SIZE;
+! 
+    Window JunkRoot, JunkChild;
+    int JunkX, JunkY;
+    unsigned int JunkMask;
+    Bool feed_back = False;
++   int stroke_width = 1;
++ 
++   x = (int*)malloc(coords_size * sizeof(int));
++   y = (int*)malloc(coords_size * sizeof(int));
++ 
++   if (!x || !y)
++   {
++     fvwm_msg(WARN,"strokeFunc","out of memory.");
++     return;
++   }
+  
+    if(!GrabEm(CRS_STROKE, GRAB_NORMAL))
+    {
+***************
+*** 2802,2807 ****
+--- 2816,2836 ----
+        draw_motion = True;
+      else if (StrEquals("FeedBack",opt))
+        feed_back = True;
++     else if (StrEquals("StrokeWidth",opt))
++     {
++       /* stroke width takes a positive integer argument */
++       if (opt)
++         free(opt);
++       action = GetNextToken(action, &opt);
++       if (!opt)
++ 	fvwm_msg(WARN,"StrokeWidth","needs an integer argument");
++       /* we allow stroke_width == 0 which means drawing a `fast' line
++        * of width 1; the upper level of 100 is arbitrary */
++       else if (!sscanf(opt, "%d", &stroke_width) || stroke_width < 0 || stroke_width > 100) {
++ 	fvwm_msg(WARN,"StrokeWidth","Bad integer argument %d", stroke_width);
++ 	stroke_width = 1;
++       }
++     }
+      else
+        fvwm_msg(WARN,"StrokeFunc","Unknown option %s", opt);
+      /* Programming is not Mathematics ... */
+***************
+*** 2837,2843 ****
+      MyXGrabServer(dpy);
+      XQueryPointer(dpy, Scr.Root, &JunkRoot, &JunkChild, &x[0], &y[0],
+  		&JunkX, &JunkY, &JunkMask);
+!     XSetLineAttributes(dpy,Scr.XorGC,1,LineSolid,CapButt,JoinMiter);
+    }
+  
+    while (!finished && !abort)
+--- 2866,2872 ----
+      MyXGrabServer(dpy);
+      XQueryPointer(dpy, Scr.Root, &JunkRoot, &JunkChild, &x[0], &y[0],
+  		&JunkX, &JunkY, &JunkMask);
+!     XSetLineAttributes(dpy,Scr.XorGC,stroke_width,LineSolid,CapButt,JoinMiter);
+    }
+  
+    while (!finished && !abort)
+***************
+*** 2854,2863 ****
+        stroke_record(eventp->xmotion.x,eventp->xmotion.y);
+        if (draw_motion)
+        {
+! 	if ((x[i] != eventp->xmotion.x || y[i] != eventp->xmotion.y) &&
+! 	    i < MAX_DRAWING_LINES)
+  	{
+  	  i++;
+  	  x[i] = eventp->xmotion.x;
+  	  y[i] = eventp->xmotion.y;
+  	  XDrawLine(dpy, Scr.Root, Scr.XorGC, x[i-1], y[i-1], x[i], y[i]);
+--- 2883,2905 ----
+        stroke_record(eventp->xmotion.x,eventp->xmotion.y);
+        if (draw_motion)
+        {
+! 	if ((x[i] != eventp->xmotion.x || y[i] != eventp->xmotion.y))
+  	{
+  	  i++;
++ 	  if (i >= coords_size) {
++ 	    coords_size += STROKE_CHUNK_SIZE;
++ 	    x = (int*)realloc(x, coords_size * sizeof(int));
++ 	    y = (int*)realloc(y, coords_size * sizeof(int));
++ 	    if (!x || !y)
++ 	    {
++ 	      /* unlikely */
++ 	      fvwm_msg(WARN, "strokeFunc","unable to allocate %d bytes ... aborted.",
++ 		coords_size * sizeof(int));
++ 	      abort = 1;
++ 	      i = -1; /* no undrawing possible since either x or y == 0 */
++ 	      break;
++ 	    }
++ 	  }
+  	  x[i] = eventp->xmotion.x;
+  	  y[i] = eventp->xmotion.y;
+  	  XDrawLine(dpy, Scr.Root, Scr.XorGC, x[i-1], y[i-1], x[i], y[i]);
+***************
+*** 2901,2906 ****
+--- 2943,2950 ----
+      }
+      XSetLineAttributes(dpy,Scr.XorGC,0,LineSolid,CapButt,JoinMiter);
+      MyXUngrabServer(dpy);
++     free(x);
++     free(y);
+    }
+    if (start_event_type == KeyPress && finish_on_release)
+      XUngrabKeyboard(dpy, CurrentTime);
+*** ./fvwm2.1.orig	Mon Jul 24 01:30:57 2000
+--- ./fvwm2.1	Mon Jul 24 01:30:15 2000
+***************
+*** 3974,3981 ****
+  
+  The
+  .B StrokeFunc
+! command has four options:
+! .IR NotStayPressed ", " EchoSequence ", " DrawMotion " and " FeedBack .
+  These options are disabled by default.
+  .I EchoSequence
+  causes fvwm to Echo the recorded stroke sequence.
+--- 3974,3981 ----
+  
+  The
+  .B StrokeFunc
+! command has five options:
+! .IR NotStayPressed ", " EchoSequence ", " DrawMotion ", " FeedBack " and " StrokeWidth.
+  These options are disabled by default.
+  .I EchoSequence
+  causes fvwm to Echo the recorded stroke sequence.
+***************
+*** 3987,3992 ****
+--- 3987,3994 ----
+  context of the
+  .B CursorStyle
+  command if the recorded stroke sequence corresponds to a stroke binding.
++ .IR StrokeWidth
++ takes an integer argument, which must be  >= 0 and <= 100.
+  
+  .I NotStayPressed
+  works only if
+

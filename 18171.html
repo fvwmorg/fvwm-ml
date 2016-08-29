@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: windowlist patch from Trent Piepho on 1996-10-22 (fvwm-users)</title>
+<meta name="Author" content="Trent Piepho (xyzzy_at_u.washington.edu)" />
+<meta name="Subject" content="FVWM: windowlist patch" />
+<meta name="Date" content="1996-10-22" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: windowlist patch</h1>
+<!-- received="Mon Oct 21 22:35:17 1996" -->
+<!-- isoreceived="19961021213517" -->
+<!-- sent="Mon, 21 Oct 1996 20:35:03 -0700 (PDT)" -->
+<!-- isosent="19961022033503" -->
+<!-- name="Trent Piepho" -->
+<!-- email="xyzzy_at_u.washington.edu" -->
+<!-- subject="FVWM: windowlist patch" -->
+<!-- id="Pine.LNX.3.91.961021201755.524A-100000_at_s5-171-9.student.washington.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start18171" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="18172.html" accesskey="d" title="Anthony Martin: &quot;FVWM: Fix for SmartPlacement.&quot;">Next message</a> ]
+[ <a href="18170.html" title="Scott Raney: &quot;FVWM: fvwm 1.24r problems with &#0034;active focus&#0034; applications&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18171" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18171" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18171" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18171" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Trent Piepho &lt;<a href="mailto:xyzzy_at_u.washington.edu?Subject=Re%3A%20FVWM%3A%20windowlist%20patch">xyzzy_at_u.washington.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 21 Oct 1996 20:35:03 -0700 (PDT)</span><br />
+</address>
+<br />
+I'm new to fvwm hacking, but after getting 2.0.43 I found the window list
+<br />
+still wasn't working.  It would raise the window and transfer focus to it,
+<br />
+sure, but because I have point to focus set it would immediately unfocus the
+<br />
+window.
+<br />
+<br />I changed it to warp to the pointer to the window after raising it, if the
+<br />
+window isn't click to focus, otherwise the window list was pretty dumb.
+<br />
+<br />As far as I can tell raise_it_func is only called to raise windows from the
+<br />
+window list, so I hacked it to this:
+<br />
+<br />void raise_it_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long context, char *action, int *Module)
+<br />
+{
+<br />
+&nbsp;&nbsp;int val1_unit,n;
+<br />
+&nbsp;&nbsp;long val1;
+<br />
+&nbsp;&nbsp;n = GetOneArgument(action, &amp;val1, &amp;val1_unit);
+<br />
+&nbsp;&nbsp;if(val1 != 0)
+<br />
+&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if (((FvwmWindow *)(val1))-&gt;flags &amp; ICONIFIED)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DeIconify((FvwmWindow *)val1);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;};
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FocusOn((FvwmWindow *)val1,0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if (!(((FvwmWindow *)(val1))-&gt;flags &amp; ClickToFocus))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WarpOn((FvwmWindow *)val1,0,0,0,0);
+<br />
+&nbsp;&nbsp;}
+<br />
+}
+<br />
+<br /><br />|Gazing up to the breeze of the heavens \ on a quest, meaning, reason  |
+<br />
+|came to be, how it begun \ all alone in the family of the sun         |
+<br />
+|curiosity teasing everyone \ on our home, third stone from the sun.   |
+<br />
+|Trent Piepho (xyzzy_at_u.washington.edu)                   -- Metallica  |
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon Oct 21 1996 - 22:35:17 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start18171">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="18172.html" title="Next message in the list">Anthony Martin: "FVWM: Fix for SmartPlacement."</a></li>
+<li><dfn>Previous message</dfn>: <a href="18170.html" title="Previous message in the list">Scott Raney: "FVWM: fvwm 1.24r problems with &#0034;active focus&#0034; applications"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18171" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18171" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18171" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18171" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

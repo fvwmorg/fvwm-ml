@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: problem with compiling FvwmScript (2.4.5) on dec-osf5 from John H Palmieri on 2002-03-04 (fvwm-users)</title>
+<meta name="Author" content="John H Palmieri (palmieri_at_math.washington.edu)" />
+<meta name="Subject" content="FVWM: problem with compiling FvwmScript (2.4.5) on dec-osf5" />
+<meta name="Date" content="2002-03-04" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: problem with compiling FvwmScript (2.4.5) on dec-osf5</h1>
+<!-- received="Mon Mar  4 16:30:38 2002" -->
+<!-- isoreceived="20020304163038" -->
+<!-- sent="Mon, 04 Mar 2002 14:30:18 -0800" -->
+<!-- isosent="20020304223018" -->
+<!-- name="John H Palmieri" -->
+<!-- email="palmieri_at_math.washington.edu" -->
+<!-- subject="FVWM: problem with compiling FvwmScript (2.4.5) on dec-osf5" -->
+<!-- id="s5t664cq83p.fsf_at_goedel2.math.washington.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start4368" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="4369.html" accesskey="d" title="Marcus Lundblad: &quot;FVWM: Style * HandleWidth bug&quot;">Next message</a> ]
+[ <a href="4367.html" title="Buchs, Kevin J.: &quot;FVWM: Xmgrace application causing window remnants.&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg4368" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg4368" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg4368" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg4368" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: John H Palmieri &lt;<a href="mailto:palmieri_at_math.washington.edu?Subject=Re%3A%20FVWM%3A%20problem%20with%20compiling%20FvwmScript%20(2.4.5)%20on%20dec-osf5">palmieri_at_math.washington.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 04 Mar 2002 14:30:18 -0800</span><br />
+</address>
+<br />
+Hi,
+<br />
+<br />I'm new to the mailing list, but I tried searching through the
+<br />
+archives for an answer, and didn't find anything.  I also couldn't
+<br />
+find it in the bug tracker.  Apologies if this has been asked and
+<br />
+answered before.
+<br />
+<br />When I try to compile fvwm-2.4.5, I run into a problem with
+<br />
+FvwmScript: 
+<br />
+<br /><br />gcc -DHAVE_CONFIG_H -I. -I. -I../.. -I../..     -DFVWM_DATADIR=\&quot;/scratch/window-managers/share/fvwm\&quot; -I/scratch/palmieri/include -L/scratch/palmieri/lib -c Instructions.c
+<br />
+Instructions.c:1451: conflicting types for `WarpPointer'
+<br />
+/usr/local/lib/gcc-lib/alphaev5-dec-osf5.1/3.0.3/include/X11/Xlib.h:4141: previous declaration of `WarpPointer'
+<br />
+gmake[1]: *** [Instructions.o] Error 1
+<br />
+gmake[1]: Leaving directory `/scratch/palmieri/junk/fvwm-2.4.5/modules/FvwmScript'
+<br />
+gmake: *** [all-recursive] Error 1
+<br />
+<br /><br />I can avoid this by changing WarpPointer to some new name, like
+<br />
+&quot;fWarpPointer&quot;.  That is, I apply this patch:
+<br />
+<br /><br /><br />
+<br />Is that a reasonable solution, or is it going to
+<br />
+cause troubles somewhere else?
+<br />
+<br /><pre>
+-- 
+J. H. Palmieri                      
+Dept of Mathematics, Box 354350    mailto:palmieri_at_math.washington.edu
+University of Washington           <a href="http://www.math.washington.edu/~palmieri/">http://www.math.washington.edu/~palmieri/</a>
+Seattle, WA 98195-4350
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<div>
+<ul>
+<li>text/x-patch attachment: <a href="att-4368/fvwm-patch">patch for modules/FvwmScript/Instructions.c</a></li>
+</ul>
+<!-- attachment="fvwm-patch" -->
+</div>
+<span id="received"><dfn>Received on</dfn> Mon Mar 04 2002 - 16:30:38 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start4368">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="4369.html" title="Next message in the list">Marcus Lundblad: "FVWM: Style * HandleWidth bug"</a></li>
+<li><dfn>Previous message</dfn>: <a href="4367.html" title="Previous message in the list">Buchs, Kevin J.: "FVWM: Xmgrace application causing window remnants."</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg4368" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg4368" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg4368" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg4368" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:52 BST
+</em></small></p>
+</body>
+</html>

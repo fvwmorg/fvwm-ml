@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: [2.2.2] Finding a CirculateSkip Window from Fuzzy Fox on 1999-07-10 (fvwm-users)</title>
+<meta name="Author" content="Fuzzy Fox (fox_at_dallas.net)" />
+<meta name="Subject" content="FVWM: [2.2.2] Finding a CirculateSkip Window" />
+<meta name="Date" content="1999-07-10" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: [2.2.2] Finding a CirculateSkip Window</h1>
+<!-- received="Fri Jul  9 18:47:16 1999" -->
+<!-- isoreceived="19990709174716" -->
+<!-- sent="Fri, 9 Jul 1999 18:45:46 -0500" -->
+<!-- isosent="19990709234546" -->
+<!-- name="Fuzzy Fox" -->
+<!-- email="fox_at_dallas.net" -->
+<!-- subject="FVWM: [2.2.2] Finding a CirculateSkip Window" -->
+<!-- id="19990709184546.A11522_at_fuzzy.foxtaur.com" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start24535" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="24536.html" accesskey="d" title="Dominik Vogt: &quot;Re: FVWM: changing the loction of the geometry box&quot;">Next message</a> ]
+[ <a href="24534.html" title="multiman: &quot;FVWM: changing the loction of the geometry box&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="24541.html" accesskey="t" title="Tim Phipps: &quot;Re: FVWM: [2.2.2] Finding a CirculateSkip Window&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg24535" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg24535" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg24535" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg24535" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Fuzzy Fox &lt;<a href="mailto:fox_at_dallas.net?Subject=Re%3A%20FVWM%3A%20%5B2.2.2%5D%20Finding%20a%20CirculateSkip%20Window">fox_at_dallas.net</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 9 Jul 1999 18:45:46 -0500</span><br />
+</address>
+<br />
+I want to write a function that finds where my Netscape window is, and
+<br />
+brings it up.  And if there isn't a Netscape window, it'll launch the
+<br />
+program.  This looks like it should work:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;AddToFunc Netscape	&quot;I&quot; Next (Navigator) Iconify -1
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;+			&quot;I&quot; Next (Navigator) Raise
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;+			&quot;I&quot; Next (Navigator) Focus
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;+			&quot;I&quot; None (Navigator) Exec netscape
+<br />
+<br />However, it doesn't.  It launches a new Netscape every time.  The reason
+<br />
+seems to be this line in my config:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;Style &quot;Navigator&quot;	CirculateSkip
+<br />
+<br />I guess the &quot;Next&quot; function skips any windows with this style attribute. 
+<br />
+Indeed, removing this attribute makes the function work correctly.  But
+<br />
+I want that attribute, because I want to Alt-Tab between all my impor-
+<br />
+tant windows, and Netscape isn't important enough.  :)
+<br />
+<br />So what do I do?
+<br />
+<br />Well, the man page says that I can add the &quot;CirculateHit&quot; option, like so:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;AddToFunc Netscape	&quot;I&quot; Next (Navigator,CirculateHit) Iconify -1
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;+			&quot;I&quot; Next (Navigator,CirculateHit) Raise
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;+			&quot;I&quot; Next (Navigator,CirculateHit) Focus
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;+			&quot;I&quot; None (Navigator,CirculateHit) Exec netscape
+<br />
+<br />But it just does the same thing.
+<br />
+<br />What am I doing wrong?
+<br />
+<br /><pre>
+-- 
+   fox_at_dallas.net (Fuzzy Fox)      || &quot;Nothing takes the taste out of peanut
+sometimes known as David DeSimone  ||  butter quite like unrequited love.&quot;
+  <a href="http://www.dallas.net/~fox/">http://www.dallas.net/~fox/</a>      ||                       -- Charlie Brown
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Jul 09 1999 - 18:47:16 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start24535">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="24536.html" title="Next message in the list">Dominik Vogt: "Re: FVWM: changing the loction of the geometry box"</a></li>
+<li><dfn>Previous message</dfn>: <a href="24534.html" title="Previous message in the list">multiman: "FVWM: changing the loction of the geometry box"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="24541.html" title="Next message in this discussion thread">Tim Phipps: "Re: FVWM: [2.2.2] Finding a CirculateSkip Window"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="24541.html" title="Message sent in reply to this message">Tim Phipps: "Re: FVWM: [2.2.2] Finding a CirculateSkip Window"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg24535" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg24535" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg24535" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg24535" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:02 BST
+</em></small></p>
+</body>
+</html>

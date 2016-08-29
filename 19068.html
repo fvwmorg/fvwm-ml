@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: MWM Button Functions Patch from Andrew Veliath on 1997-01-27 (fvwm-users)</title>
+<meta name="Author" content="Andrew Veliath (veliaa_at_rpi.edu)" />
+<meta name="Subject" content="FVWM: MWM Button Functions Patch" />
+<meta name="Date" content="1997-01-27" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: MWM Button Functions Patch</h1>
+<!-- received="Mon Jan 27 16:17:58 1997" -->
+<!-- isoreceived="19970127161758" -->
+<!-- sent="Mon, 27 Jan 1997 17:09:44 -0500 (EST)" -->
+<!-- isosent="19970127220944" -->
+<!-- name="Andrew Veliath" -->
+<!-- email="veliaa_at_rpi.edu" -->
+<!-- subject="FVWM: MWM Button Functions Patch" -->
+<!-- id="Pine.LNX.3.95.970127163848.2392A-100000_at_pluto.solarsystem.org" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start19068" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="19069.html" accesskey="d" title="John Tillema: &quot;FVWM: Window Placement problems (Active placment broken?)&quot;">Next message</a> ]
+[ <a href="19067.html" title="Scott Seighman: &quot;FVWM: Module FvwmCpp compile error: gethostbyname&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19068" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19068" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19068" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19068" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Andrew Veliath &lt;<a href="mailto:veliaa_at_rpi.edu?Subject=Re%3A%20FVWM%3A%20MWM%20Button%20Functions%20Patch">veliaa_at_rpi.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 27 Jan 1997 17:09:44 -0500 (EST)</span><br />
+</address>
+<br />
+Okay okay ;-), here is a solution to the problem with MWM button function
+<br />
+hints. What it does is remove the MWMButton button flag, and adds the
+<br />
+following, from the changed man page entries:
+<br />
+<br />...  
+<br />
+These flags are usually used to tell fvwm which buttons should be affected
+<br />
+by MWM function hints. This is not done automatically since you might have
+<br />
+buttons bound to complex functions, for instance.
+<br />
+<br />&quot;MWMDecorMenu&quot; should be assigned to title bar buttons which display a
+<br />
+menu.  The default assignment is the leftmost button.  When a window
+<br />
+with the MWMFunctions Style option requests not to show this button,
+<br />
+it will be hidden.
+<br />
+<br />&quot;MWMDecorMin&quot; should be assigned to title bar buttons which minimize
+<br />
+or iconify the window.  The default assignment is the second button
+<br />
+over from the rightmost button.  When a window with the MWMFunctions
+<br />
+Style option requests not to show this button, it will be hidden.
+<br />
+<br />&quot;MWMDecorMax&quot; should be assigned to title bar buttons which maximize
+<br />
+the window.  The default assignment is the rightmost button.  When a
+<br />
+window with the MWMFunctions Style option requests not to show this
+<br />
+button, it will be hidden.
+<br />
+...
+<br />
+<br />The default setup is defined automatically for each decor as (this does
+<br />
+not need to be specified):
+<br />
+ButtonStyle 1 - MWMDecorMenu
+<br />
+ButtonStyle 4 - MWMDecorMin
+<br />
+ButtonStyle 2 - MWMDecorMax
+<br />
+<br />But, for instance, I had two maximize buttons, 6 and 4, one minimize
+<br />
+button, 2, and a title menu button, 3.  I could specify the following: 
+<br />
+<br />ButtonStyle All - Clear
+<br />
+ButtonStyle 3 - MWMDecorMenu
+<br />
+ButtonStyle 2 - MWMDecorMin
+<br />
+ButtonStyle 4 - MWMDecorMax
+<br />
+ButtonStyle 6 - MWMDecorMax
+<br />
+<br />The &quot;Clear&quot; special flag clears any old flags first to be safe.
+<br />
+<br />The patch is named mwmbtnfuncs.diff and is located in:
+<br />
+<br /><a href="http://www.rpi.edu/~veliaa/projects/fvwm_patches/dist">http://www.rpi.edu/~veliaa/projects/fvwm_patches/dist</a>
+<br />
+<br />Andrew
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon Jan 27 1997 - 16:17:58 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start19068">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="19069.html" title="Next message in the list">John Tillema: "FVWM: Window Placement problems (Active placment broken?)"</a></li>
+<li><dfn>Previous message</dfn>: <a href="19067.html" title="Previous message in the list">Scott Seighman: "FVWM: Module FvwmCpp compile error: gethostbyname"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19068" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19068" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19068" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19068" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

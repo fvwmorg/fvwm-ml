@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: SloppyFocus is obsolete... from Kobus Retief on 2005-02-04 (fvwm-users)</title>
+<meta name="Author" content="Kobus Retief (kobus.retief_at_telkomsa.net)" />
+<meta name="Subject" content="FVWM: SloppyFocus is obsolete..." />
+<meta name="Date" content="2005-02-04" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: SloppyFocus is obsolete...</h1>
+<!-- received="Fri Feb  4 14:01:42 2005" -->
+<!-- isoreceived="20050204140142" -->
+<!-- sent="Fri, 4 Feb 2005 22:00:08 +0200" -->
+<!-- isosent="20050204200008" -->
+<!-- name="Kobus Retief" -->
+<!-- email="kobus.retief_at_telkomsa.net" -->
+<!-- subject="FVWM: SloppyFocus is obsolete..." -->
+<!-- id="20050204200008.GA27662_at_Gormenghast.koos.org" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start13769" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="13770.html" accesskey="d" title="fvwm.org_at_rainstick.net: &quot;FVWM: PeriodicTasks bug?&quot;">Next message</a> ]
+[ <a href="13768.html" title="Antigen_COSISV09_at_sdis68.fr: &quot;FVWM: Antigen Notification: Notification de non remise&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg13769" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg13769" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg13769" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg13769" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Kobus Retief &lt;<a href="mailto:kobus.retief_at_telkomsa.net?Subject=Re%3A%20FVWM%3A%20SloppyFocus%20is%20obsolete...">kobus.retief_at_telkomsa.net</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 4 Feb 2005 22:00:08 +0200</span><br />
+</address>
+<br />
+Ola
+<br />
+<br />Thanks to Thomas Adam and Tavis Ormandy for the pointers about the
+<br />
+PackWindow complex functions (in reply to my SnapWindow patch
+<br />
+&lt;<a href="http://www.hpc.uh.edu/fvwm/archive/0502/msg00024.html">http://www.hpc.uh.edu/fvwm/archive/0502/msg00024.html</a>&gt;).  I'm scanning
+<br />
+through the fvwm2rc as we speak.  But speaking of complex functions... 
+<br />
+<br />Fvwm has SloppyFocus styles, FPGrabFocus, and all sorts of related funky
+<br />
+focus options.  But I needed something a little more sophisticated.  So,
+<br />
+without further ado:
+<br />
+<br /><br />################################################################################
+<br />
+# Automatic window focusing, raising and warping
+<br />
+<br />Style *         ClickToFocus, MouseFocusClickRaise
+<br />
+<br /><br /># Do a minimal-distance warp to inside the window's border -- distance
+<br />
+# inside (in pixels) can be specified as single parameter, defaults to
+<br />
+# 10.
+<br />
+DestroyFunc     Warp_If_Outside
+<br />
+AddToFunc       Warp_If_Outside
+<br />
++ I     PipeRead &quot; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x=$[pointer.wx]; y=$[pointer.wy]; border=$0;                                    \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[[ ! &quot;${border}&quot; ]] &amp;&amp; border=10;                                               \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[[ ${x} -lt ${border} ]]                        &amp;&amp; x=${border};                 \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[[ ${y} -lt ${border} ]]                        &amp;&amp; y=${border};                 \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[[ ${x} -gt $(($[w.width]-${border})) ]]        &amp;&amp; x=$(($[w.width]-${border})); \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[[ ${y} -gt $(($[w.height]-${border})) ]]       &amp;&amp; y=$(($[w.height]-${border}));\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo WarpToWindow ${x}p ${y}p;&quot;
+<br />
+<br /><br />DestroyFunc     AutoRaise_Raise_Func
+<br />
+AddToFunc       AutoRaise_Raise_Func
+<br />
++ I     Raise
+<br />
++ I     FlipFocus
+<br />
++ I     Warp_If_Outside
+<br />
+<br />DestroyFunc     AutoRaise_Add 
+<br />
+AddToFunc       AutoRaise_Add 
+<br />
++ I     WindowId $* (CurrentDesk AcceptsFocus !Iconic)  AutoRaise_Raise_Func
+<br />
+<br />DestroyFunc     AutoRaise_Destroy
+<br />
+AddToFunc       AutoRaise_Destroy
+<br />
++ I     DeSchedule $*
+<br />
++ I     Prev (CurrentDesk AcceptsFocus !Iconic)         AutoRaise_Raise_Func
+<br />
+<br />DestroyFunc     AutoRaise_Enter
+<br />
+AddToFunc       AutoRaise_Enter 
+<br />
++ I     WindowId $* Silent FlipFocus
+<br />
++ I     Schedule 750 $* WindowId $* Silent Raise
+<br />
+<br />DestroyFunc     AutoRaise_Leave
+<br />
+AddToFunc       AutoRaise_Leave 
+<br />
++ I     DeSchedule $*
+<br />
+<br />*AutoRaise:PassId
+<br />
+*AutoRaise:add_window           AutoRaise_Add
+<br />
+*AutoRaise:destroy_window       AutoRaise_Destroy
+<br />
+*AutoRaise:enter_window         AutoRaise_Enter
+<br />
+*AutoRaise:leave_window         AutoRaise_Leave
+<br />
+<br />Module FvwmEvent AutoRaise
+<br />
+<br /><br />################################################################################
+<br />
+<br /><br />So, what have we achieved?  Without using SloppyFocus or any other
+<br />
+strange focusing options, fvwm is now configured to
+<br />
+a)	Emulate SloppyFocus (without actually using it)
+<br />
+b)	Emulate FvwmAuto (Autoraise windows after 750 miliseconds)
+<br />
+c)	Emulate FPGrabFocus and FPReleaseFocus
+<br />
+d)	Warp the mouse pointer to inside a newly created window, or back
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to the previously focused window on window destruction (I
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;couldn't find any simple way to do this, leading to this
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;solution).
+<br />
+<br />Is it possible to emulate ALL fvwm's *Focus options (and a couple of
+<br />
+other Style settings) using FvwmEvent like this?  If so, is it really a
+<br />
+good idea keeping these styles, since we're effectively duplicating
+<br />
+functionality?  If the styles are removed, will fvwm be noticably
+<br />
+smaller and more memory-efficient?  Shouldn't such a blatantly useful
+<br />
+module be integrated directly into fvwm, possibly through
+<br />
+automatically-called functions (i.e. FvwmAddWindow, FvwmEnterWindow,
+<br />
+analogous to InitFunction and its ilk)?
+<br />
+<br />Oh, and most important, does anybody else have pointers to other cool
+<br />
+complex configuration ideas using FvwmEvent, Schedule, PipeRead and the
+<br />
+other less-commonly used options?
+<br />
+<br />Cheers!
+<br />
+<pre>
+-- 
+Kobus Retief
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Feb 04 2005 - 14:01:42 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start13769">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="13770.html" title="Next message in the list">fvwm.org_at_rainstick.net: "FVWM: PeriodicTasks bug?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="13768.html" title="Previous message in the list">Antigen_COSISV09_at_sdis68.fr: "FVWM: Antigen Notification: Notification de non remise"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg13769" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg13769" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg13769" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg13769" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:57 BST
+</em></small></p>
+</body>
+</html>

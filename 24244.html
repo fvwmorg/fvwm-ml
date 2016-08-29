@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Re: .fvwmrc files and multiheaded displays from Brand Hilton on 1999-05-21 (fvwm-users)</title>
+<meta name="Author" content="Brand Hilton (bhilton_at_adc.com)" />
+<meta name="Subject" content="FVWM: Re: .fvwmrc files and multiheaded displays" />
+<meta name="Date" content="1999-05-21" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Re: .fvwmrc files and multiheaded displays</h1>
+<!-- received="Fri May 21 14:16:50 1999" -->
+<!-- isoreceived="19990521131650" -->
+<!-- sent="Fri, 21 May 1999 14:15:44 -0500" -->
+<!-- isosent="19990521191544" -->
+<!-- name="Brand Hilton" -->
+<!-- email="bhilton_at_adc.com" -->
+<!-- subject="FVWM: Re: .fvwmrc files and multiheaded displays" -->
+<!-- id="19990521141544.C6313_at_adc.com" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="19990520170522.A1680_at_adc.com" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start24244" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="24245.html" accesskey="d" title="Dan Espen: &quot;Re: FVWM: Re: .fvwmrc files and multiheaded displays&quot;">Next message</a> ]
+[ <a href="24243.html" title="Paul Hurley: &quot;Re: FVWM: Help, newbie drowning !&quot;">Previous message</a> ]
+[ <a href="24226.html" title="Brand Hilton: &quot;FVWM: .fvwmrc files and multiheaded displays&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="24245.html" accesskey="t" title="Dan Espen: &quot;Re: FVWM: Re: .fvwmrc files and multiheaded displays&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg24244" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg24244" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg24244" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg24244" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Brand Hilton &lt;<a href="mailto:bhilton_at_adc.com?Subject=Re%3A%20FVWM%3A%20Re%3A%20.fvwmrc%20files%20and%20multiheaded%20displays">bhilton_at_adc.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 21 May 1999 14:15:44 -0500</span><br />
+</address>
+<br />
+Many thanks to Dan for putting me on the right path to solve my
+<br />
+problem.  I thought I'd share what I ended up doing in case someone
+<br />
+else might benefit from it.
+<br />
+<br />The key problem is that I need to do different things based on the
+<br />
+value of the DISPLAY environment variable.  Dan suggested FvwmM4 and
+<br />
+FvwmCpp.  Either of these would have worked great, if only FVWM passed
+<br />
+the value of DISPLAY down to them.  Unfortunately, it doesn't.
+<br />
+(Consider this a request for feature, if you wish :-)
+<br />
+<br />Dan also mentioned PipeRead, which turned out to be the best thing.  I
+<br />
+just wrote a shell script that spits different things to standard
+<br />
+output based on the value of DISPLAY.  Here it is, in case anyone's
+<br />
+interested:
+<br />
+<br /><br />&nbsp;&nbsp;#!/bin/sh
+<br />
+<br />&nbsp;&nbsp;if [ &quot;$DISPLAY&quot; = &quot;:0.1&quot; ] 
+<br />
+&nbsp;&nbsp;then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cat &lt;&lt;'EOT'
+<br />
+&nbsp;&nbsp;AddToFunc InitFunction    &quot;I&quot;  Exec exec xconsole -geometry 800x100-1+0 -iconic &amp;
+<br />
+&nbsp;&nbsp;+                         &quot;I&quot;  Exec exec xterm -geometry 100x50+71-1 -T $HOSTNAME -n $HOSTNAME &amp;
+<br />
+&nbsp;&nbsp;+                         &quot;I&quot;  Exec exec xterm -geometry 80x50-1-1 -T $HOSTNAME -n $HOSTNAME &amp;
+<br />
+&nbsp;&nbsp;#+                         &quot;I&quot;  Exec exec netscape45 -install -geometry 1072x872+70+900 &amp;
+<br />
+&nbsp;&nbsp;EOT
+<br />
+&nbsp;&nbsp;fi
+<br />
+<br />&nbsp;&nbsp;###################### button-bar ################################
+<br />
+<br />&nbsp;&nbsp;cat &lt;&lt;'EOT'
+<br />
+&nbsp;&nbsp;# Colors
+<br />
+&nbsp;&nbsp;*FvwmButtonsFore Black
+<br />
+&nbsp;&nbsp;*FvwmButtonsBack #908090
+<br />
+<br />&nbsp;&nbsp;# Font
+<br />
+&nbsp;&nbsp;*FvwmButtonsFont -adobe-helvetica-bold-r-*-*-10-*-*-*-*-*-*-*
+<br />
+<br />&nbsp;&nbsp;# Geometry - really likes to pick its own size, but giving a position is OK
+<br />
+<br />&nbsp;&nbsp;EOT
+<br />
+<br />&nbsp;&nbsp;if [ $DISPLAY = ':0.1' ]
+<br />
+&nbsp;&nbsp;then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;*FvwmButtonsGeometry +0-1\n\n&quot;
+<br />
+&nbsp;&nbsp;elif [ $DISPLAY = ':0.0' ]
+<br />
+&nbsp;&nbsp;then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;*FvwmButtonsGeometry -1-1\n\n&quot;
+<br />
+&nbsp;&nbsp;fi
+<br />
+<br />&nbsp;&nbsp;cat &lt;&lt;'EOT'
+<br />
+&nbsp;&nbsp;# Layout: specify rows or columns, not both
+<br />
+&nbsp;&nbsp;*FvwmButtonsColumns 1
+<br />
+<br />&nbsp;&nbsp;# Define the buttons to use.....
+<br />
+<br />&nbsp;&nbsp;*FvwmButtons(Icon xterm.xpm, Action 'Exec xterm -T $HOSTNAME -n $HOSTNAME')
+<br />
+<br />&nbsp;&nbsp;EOT
+<br />
+<br />&nbsp;&nbsp;if [ $DISPLAY = ':0.1' ]
+<br />
+&nbsp;&nbsp;then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cat &lt;&lt;'EOT'
+<br />
+&nbsp;&nbsp;*FvwmButtons(Swallow(UseOld,NoRespawn) perfmeter1 `Exec exec $OPENWINHOME/bin/perfmeter -t load -g -S -V -Wn -s 2 -name perfmeter1 -bg '#908090'`)
+<br />
+&nbsp;&nbsp;*FvwmButtons(Swallow(UseOld,NoRespawn) xbiff `Exec exec $OPENWINHOME/bin/xbiff -bg '#908090'`)
+<br />
+&nbsp;&nbsp;*FvwmButtons(Icon LetterEnvelope.xpm, Action 'Exec xterm -geometry 80x50 -T mutt -n mutt -e mutt')
+<br />
+&nbsp;&nbsp;EOT
+<br />
+&nbsp;&nbsp;fi
+<br />
+<br />&nbsp;&nbsp;cat &lt;&lt;'EOT'
+<br />
+&nbsp;&nbsp;*FvwmButtons - whatever Swallow &quot;FvwmPager&quot; Module FvwmPager 0 0
+<br />
+&nbsp;&nbsp;EOT
+<br />
+<br />What this does is, on my main monitor (:0.1), fvwm starts up two
+<br />
+xterms.  The button bar is in the lower left corner and has five
+<br />
+buttons: xterm, xperfmon, xbiff, mutt, and pager.  On the auxiliary
+<br />
+monitor (:0.0), the button bar is in the lower right corner and has
+<br />
+only two buttons: xterm and pager.
+<br />
+<br />That's about it.  Thanks again, Dan, for the help.
+<br />
+<br /><pre>
+-- 
+ _____ 
+|///  |   Brand Hilton  bhilton_at_adc.com
+|  ADC|   ADC Telecommunications
+|_____|   Richardson, Texas
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri May 21 1999 - 14:16:50 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start24244">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="24245.html" title="Next message in the list">Dan Espen: "Re: FVWM: Re: .fvwmrc files and multiheaded displays"</a></li>
+<li><dfn>Previous message</dfn>: <a href="24243.html" title="Previous message in the list">Paul Hurley: "Re: FVWM: Help, newbie drowning !"</a></li>
+<li><dfn>In reply to</dfn>: <a href="24226.html" title="Message to which this message replies">Brand Hilton: "FVWM: .fvwmrc files and multiheaded displays"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="24245.html" title="Next message in this discussion thread">Dan Espen: "Re: FVWM: Re: .fvwmrc files and multiheaded displays"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Maybe reply</dfn>: <a href="24245.html" title="Message sent in reply to this message">Dan Espen: "Re: FVWM: Re: .fvwmrc files and multiheaded displays"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg24244" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg24244" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg24244" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg24244" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:02 BST
+</em></small></p>
+</body>
+</html>

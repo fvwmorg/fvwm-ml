@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: Gnome from Thomas A. Gardiner on 2000-03-23 (fvwm-users)</title>
+<meta name="Author" content="Thomas A. Gardiner (gardiner_at_pas.rochester.edu)" />
+<meta name="Subject" content="Re: FVWM: Gnome" />
+<meta name="Date" content="2000-03-23" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: Gnome</h1>
+<!-- received="Wed Mar 22 19:44:13 2000" -->
+<!-- isoreceived="20000322194413" -->
+<!-- sent="Wed, 22 Mar 2000 20:44:09 -0500 (EST)" -->
+<!-- isosent="20000323014409" -->
+<!-- name="Thomas A. Gardiner" -->
+<!-- email="gardiner_at_pas.rochester.edu" -->
+<!-- subject="Re: FVWM: Gnome" -->
+<!-- id="Pine.LNX.3.96URPAS-R.1000322203058.27830A-100000_at_alfalfa.pas.rochester.edu" -->
+<!-- charset="iso-8859-1" -->
+<!-- inreplyto="20000322235321.29563.qmail_at_web4001.mail.yahoo.com" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start536" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="0537.html" accesskey="d" title="Neil Bird: &quot;Re: FVWM: Moving windows with default values&quot;">Next message</a> ]
+[ <a href="0535.html" title="Nathan Froyd: &quot;FVWM: Moving windows with default values&quot;">Previous message</a> ]
+[ <a href="0532.html" title="Charles Parsels: &quot;FVWM: Gnome&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="0548.html" accesskey="t" title="John Latham: &quot;Re: FVWM: Gnome&quot;">Next in thread</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg536" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg536" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg536" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg536" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Thomas A. Gardiner &lt;<a href="mailto:gardiner_at_pas.rochester.edu?Subject=Re%3A%20FVWM%3A%20Gnome">gardiner_at_pas.rochester.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 22 Mar 2000 20:44:09 -0500 (EST)</span><br />
+</address>
+<br />
+I noticed that a couple of other people have responded already as to how
+<br />
+they managed to do this.  What I personally think is the most simple way
+<br />
+to do this is to put a .xsession or .Xclients file in your home directory.
+<br />
+If you look at the file
+<br />
+<br />/etc/X11/gdm/Sessions/Default
+<br />
+<br />you will see
+<br />
+<br />$ cat Default 
+<br />
+#!/bin/bash -login
+<br />
+<br />/etc/X11/xdm/Xsession
+<br />
+<br />(yep, that's it...)
+<br />
+<br />Now if you look at this file you will find a bunch of stuff at the top
+<br />
+which handles the case in which the Xsession script was called with
+<br />
+arguments.  In the case that no arguments were supplied (which is what
+<br />
+we're interested in with the Default script) the script falls back onto
+<br />
+this
+<br />
+<br /># otherwise, take default action
+<br />
+if [ -x &quot;$HOME/.xsession&quot; ]; then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;exec &quot;$HOME/.xsession&quot;
+<br />
+elif [ -x &quot;$HOME/.Xclients&quot; ]; then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;exec &quot;$HOME/.Xclients&quot;
+<br />
+elif [ -x /etc/X11/xinit/Xclients ]; then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;exec /etc/X11/xinit/Xclients
+<br />
+else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;exec xsm
+<br />
+fi
+<br />
+<br />So, if you simply put a .xsession file in your home directory which runs
+<br />
+fvwm2 you're set!  Looking at this Xsession script will suggest that one
+<br />
+way to do this is to call switchdesk just as they do in the case that you 
+<br />
+choose AnotherLevel. Another way is to call 
+<br />
+<br />/usr/X11/bin/RunWM._______
+<br />
+<br />where the ______ is Fvwm95 or which the decors which you want.  I'm
+<br />
+assuming that it's still around in the base install of RH6.1 
+<br />
+<br />Of course there are many other ways as well, but I think I've more than
+<br />
+answered your question. :-)
+<br />
+<br />Tom
+<br />
+<br /><br />On Thu, 23 Mar 2000, Charles Parsels wrote:
+<br />
+<br /><em class="quotelev1">&gt;Hi,
+</em><br />
+<em class="quotelev1">&gt;    I am new to Linux, and FVWM. My Red Hat Linux
+</em><br />
+<em class="quotelev1">&gt;distribution (that's 6.1) comes with fvwm2.x and I
+</em><br />
+<em class="quotelev1">&gt;would like to know how you configure the X Window
+</em><br />
+<em class="quotelev1">&gt;System to load FVWM instead of the gnome desktop
+</em><br />
+<em class="quotelev1">&gt;environment? Any suggestions?
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt;Anything appreciated!
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt;Thank you!
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt;__________________________________________________________________
+</em><br />
+<em class="quotelev1">&gt;Do You Yahoo!?
+</em><br />
+<em class="quotelev1">&gt;Gesendet von Yahoo! Mail - <a href="http://mail.yahoo.de">http://mail.yahoo.de</a>
+</em><br />
+<em class="quotelev1">&gt;Yahoo! Mail auf Ihrem Handy? - <a href="http://mobil.yahoo.de">http://mobil.yahoo.de</a>
+</em><br />
+<em class="quotelev1">&gt;--
+</em><br />
+<em class="quotelev1">&gt;Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+</em><br />
+<em class="quotelev1">&gt;To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+</em><br />
+<em class="quotelev1">&gt;message to majordomo_at_fvwm.org.
+</em><br />
+<em class="quotelev1">&gt;To report problems, send mail to fvwm-owner_at_fvwm.org.
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Mar 22 2000 - 19:44:13 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start536">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="0537.html" title="Next message in the list">Neil Bird: "Re: FVWM: Moving windows with default values"</a></li>
+<li><dfn>Previous message</dfn>: <a href="0535.html" title="Previous message in the list">Nathan Froyd: "FVWM: Moving windows with default values"</a></li>
+<li><dfn>In reply to</dfn>: <a href="0532.html" title="Message to which this message replies">Charles Parsels: "FVWM: Gnome"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="0548.html" title="Next message in this discussion thread">John Latham: "Re: FVWM: Gnome"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg536" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg536" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg536" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg536" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:50 BST
+</em></small></p>
+</body>
+</html>

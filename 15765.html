@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Fvwm Shell enhancement patch from Olivier DUGEON - FT.CNET/LAA/RSL/ATM on 1996-03-08 (fvwm-users)</title>
+<meta name="Author" content="Olivier DUGEON - FT.CNET/LAA/RSL/ATM (dugeon_at_lannion.cnet.fr)" />
+<meta name="Subject" content="FVWM: Fvwm Shell enhancement patch" />
+<meta name="Date" content="1996-03-08" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Fvwm Shell enhancement patch</h1>
+<!-- received="Fri Mar  8 01:24:32 1996" -->
+<!-- isoreceived="19960308012432" -->
+<!-- sent="Fri, 8 Mar 1996 08:20:42 +0100" -->
+<!-- isosent="19960308072042" -->
+<!-- name="Olivier DUGEON - FT.CNET/LAA/RSL/ATM" -->
+<!-- email="dugeon_at_lannion.cnet.fr" -->
+<!-- subject="FVWM: Fvwm Shell enhancement patch" -->
+<!-- id="9603080820.ZM27793_at_losquet" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start15765" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="15766.html" accesskey="d" title="michah_at_htsa.hva.nl: &quot;Re: FVWM: Fvwm Improvement / Question&quot;">Next message</a> ]
+[ <a href="15764.html" title="Tudor Hulubei: &quot;FVWM: Fvwm Improvement / Question.&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="15768.html" accesskey="t" title="David Kennedy: &quot;Re: FVWM: Fvwm Shell enhancement patch&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15765" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15765" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15765" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15765" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Olivier DUGEON - FT.CNET/LAA/RSL/ATM &lt;<a href="mailto:dugeon_at_lannion.cnet.fr?Subject=Re%3A%20FVWM%3A%20Fvwm%20Shell%20enhancement%20patch">dugeon_at_lannion.cnet.fr</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 8 Mar 1996 08:20:42 +0100</span><br />
+</address>
+<br />
+Hi folks,
+<br />
+<br />Here is a patch to exec command through your favorite shell instead of
+<br />
+&nbsp;/bin/sh.
+<br />
+fvwm get the shell from the SHELL environment variable (if it found it) or put
+<br />
+/bin/sh as the default shell.
+<br />
+<br />I tested it on my sun box solaris 2.4 (i use csh). it work fine for me.
+<br />
+<br />Just a question how can i patch code from diff -ur command (on my solaris i
+<br />
+haven't this option) and patch hang to patch the code.
+<br />
+<br />Here's the patch.
+<br />
+<br />diff -c fvwm.c.orig fvwm.c
+<br />
+*** fvwm.c.orig Thu Mar  7 09:40:28 1996
+<br />
+--- fvwm.c      Thu Mar  7 16:55:18 1996
+<br />
+***************
+<br />
+*** 46,51 ****
+<br />
+--- 46,53 ----
+<br />
+<br />&nbsp;&nbsp;int master_pid;                       /* process number of 1st fvwm process
+<br />
+*/
+<br />
+<br />+ char *exec_shell;        /* SHELL environement variable */
+<br />
++
+<br />
+&nbsp;&nbsp;ScreenInfo Scr;                       /* structures for the screen */
+<br />
+&nbsp;&nbsp;Display *dpy;                 /* which display are we talking to */
+<br />
+<br />***************
+<br />
+*** 127,132 ****
+<br />
+--- 129,139 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;g_argv = argv;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;g_argc = argc;
+<br />
+<br />+   if (getenv(&quot;SHELL&quot;) != NULL)
+<br />
++       exec_shell = strdup(getenv(&quot;SHELL&quot;));
+<br />
++   else
+<br />
++       exec_shell = strdup(&quot;/bin/sh&quot;);
+<br />
++
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DBUG(&quot;main&quot;,&quot;Entered, about to parse args&quot;);
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;for (i = 1; i &lt; argc; i++)
+<br />
+<br /><br />diff -c fvwm.h.orig fvwm.h
+<br />
+*** fvwm.h.orig Mon Nov  6 20:36:04 1995
+<br />
+--- fvwm.h      Thu Mar  7 17:00:52 1996
+<br />
+***************
+<br />
+*** 271,276 ****
+<br />
+--- 271,278 ----
+<br />
+<br />&nbsp;&nbsp;extern int master_pid;
+<br />
+<br />+ extern char *exec_shell;
+<br />
++
+<br />
+&nbsp;&nbsp;extern Display *dpy;
+<br />
+<br />&nbsp;&nbsp;extern XContext FvwmContext;
+<br />
+diff -c builtins.c.orig builtins.c
+<br />
+*** builtins.c.orig     Thu Mar  7 09:24:07 1996
+<br />
+--- builtins.c  Thu Mar  7 16:38:06 1996
+<br />
+***************
+<br />
+*** 624,630 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* The man page says that its better. */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;/* Not everyone has vfork! */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if (!(fork())) /* child process */
+<br />
+!     if (execl(&quot;/bin/csh&quot;, &quot;/bin/csh&quot;, &quot;-c&quot;, action, (char *)0)==-1)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit(100);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+&nbsp;&nbsp;}
+<br />
+--- 624,630 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* The man page says that its better. */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;/* Not everyone has vfork! */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if (!(fork())) /* child process */
+<br />
+!     if (execl(exec_shell, exec_shell, &quot;-c&quot;, action, (char *)0)==-1)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit(100);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+&nbsp;&nbsp;}
+<br />
+<br />It's all
+<br />
+<br />Bye
+<br />
+<br />Olivier
+<br />
+<br /><pre>
+-- 
+                                   _\\|//_ 
+                                   ( O-O )
+---------------------------------ooO-(_)-Ooo-----------------------------------
+  FRANCE TELECOM - CENTRE NATIONAL d'ETUDES et DES TELECOMMUNICATIONS
+ Dugeon olivier                     X-400:    G=Olivier; S=Dugeon; OU=LANNION
+ FT-CNET LAA/RSL/ATM                          P=CNET; A=ATLAS; C=FR;
+ Technopole Anticipa                E-mail:   dugeon_at_lannion.cnet.fr
+ 2, Avenue Pierre Marzin            Phone:    +(33) 96 05 28 80
+ F-22307 LANNION                    Fax       +(33) 96 05 11 98
+ FRANCE                             Telex:    740801F
+--------------------------------ooO-------Ooo----------------------------------
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Mar 08 1996 - 01:24:32 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start15765">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="15766.html" title="Next message in the list">michah_at_htsa.hva.nl: "Re: FVWM: Fvwm Improvement / Question"</a></li>
+<li><dfn>Previous message</dfn>: <a href="15764.html" title="Previous message in the list">Tudor Hulubei: "FVWM: Fvwm Improvement / Question."</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="15768.html" title="Next message in this discussion thread">David Kennedy: "Re: FVWM: Fvwm Shell enhancement patch"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Maybe reply</dfn>: <a href="15768.html" title="Message sent in reply to this message">David Kennedy: "Re: FVWM: Fvwm Shell enhancement patch"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="15770.html" title="Message sent in reply to this message">Olivier DUGEON - FT.CNET/LAA/RSL/ATM: "Re: FVWM: Fvwm Shell enhancement patch"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15765" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15765" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15765" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15765" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

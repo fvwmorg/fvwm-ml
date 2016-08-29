@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: XEmacs frame mapping causes fvwm desktop switch (Solar from Bryan Bayerdorffer on 1998-05-05 (fvwm-users)</title>
+<meta name="Author" content="Bryan Bayerdorffer (bryan.bayerdorffer_at_analog.com)" />
+<meta name="Subject" content="Re: FVWM: XEmacs frame mapping causes fvwm desktop switch (Solar" />
+<meta name="Date" content="1998-05-05" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: XEmacs frame mapping causes fvwm desktop switch (Solar</h1>
+<!-- received="Tue May  5 13:39:13 1998" -->
+<!-- isoreceived="19980505123913" -->
+<!-- sent="Tue, 05 May 1998 13:38:07 -0500" -->
+<!-- isosent="19980505183807" -->
+<!-- name="Bryan Bayerdorffer" -->
+<!-- email="bryan.bayerdorffer_at_analog.com" -->
+<!-- subject="Re: FVWM: XEmacs frame mapping causes fvwm desktop switch (Solar" -->
+<!-- id="199805051838.NAA17099_at_mano.spd.analog.com" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="XFMail.980505061923.proteus&#64;pcnet.com" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start22158" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="22159.html" accesskey="d" title="Jason L Tibbitts III: &quot;FVWM: Re: Re: Tcl, fvwm, etc.&quot;">Next message</a> ]
+[ <a href="22157.html" title="brian moore: &quot;Re: FVWM: fvwm2: Please don&#0039;t shoot (offensive win95 subject matter)&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="22167.html" accesskey="t" title="Randy J. Ray: &quot;Re: FVWM: XEmacs frame mapping causes fvwm desktop switch (Solar&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg22158" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg22158" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg22158" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg22158" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Bryan Bayerdorffer &lt;<a href="mailto:bryan.bayerdorffer_at_analog.com?Subject=Re%3A%20FVWM%3A%20XEmacs%20frame%20mapping%20causes%20fvwm%20desktop%20switch%20(Solar">bryan.bayerdorffer_at_analog.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 05 May 1998 13:38:07 -0500</span><br />
+</address>
+<br />
+In message &lt;XFMail.980505061923.proteus_at_pcnet.com&gt;, Bob Woodside writes:
+<br />
+=-        Sounds like they've changed the way XEmacs sets window titles for
+<br />
+=-the various frames, and you have StartsOnDesk specified for XEmacs. Do a
+<br />
+=-little poking around with FvwmIdent to see what looks different. I still 
+<br />
+=-have 19.15, so I can't check this out directly.
+<br />
+<br />It wasn't a StartsOnDesk problem, however it did have to do with the window
+<br />
+title.  Thanks to vroonhof_at_math.ethz.ch for the following patch, which made
+<br />
+the problem go away (for me):
+<br />
+<br />--------------
+<br />
+<br />olaf_at_bigred.inka.de (Olaf Titz) writes:
+<br />
+<br /><em class="quotelev1">&gt; No, it doesn't use the last buffer's name, or anything set in .emacs
+</em><br />
+<em class="quotelev1">&gt; any more. It uses the fixed string &quot;shell&quot;, and this has changed from
+</em><br />
+<em class="quotelev1">&gt; 20.2 to 20.4. At least for me.
+</em><br />
+<br />File an official bug report if you haven't already done so and apply
+<br />
+this patch (this changed between 20.3 and 20.4). Note that the comment 
+<br />
+still applies, be carefull with the the modeline spec.
+<br />
+<br />Index: frame-x.c
+<br />
+===================================================================
+<br />
+RCS file: /usr/CVSroot/XEmacs/xemacs-20/src/frame-x.c,v
+<br />
+retrieving revision 1.30
+<br />
+diff -u -r1.30 frame-x.c
+<br />
+--- frame-x.c	1998/04/07 05:39:41	1.30
+<br />
++++ frame-x.c	1998/04/21 20:58:50
+<br />
+_at_&#64; -2038,7 +2038,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;* frame, and that may not have been set up yet.  The redisplay
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;* will update the frame title anyway, so nothing is lost.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;*/
+<br />
+-  /* update_frame_title (f); */
+<br />
++  update_frame_title (f); 
+<br />
+&nbsp;}
+<br />
+&nbsp;
+<br />
+&nbsp;static void
+<br />
+<br /><br />Jan
+<br />
+<br />P.S. Note, the patch is against 21.0b36, you might need to apply it by 
+<br />
+hand. 
+<br />
+<br /><br /><pre>
+-- 
+ .. ..-. ..- -.-. .- -. .-. . .- -.. - .... .. ... --. . - .- .-.. .. ..-. . !!
+Bryan Bayerdorffer         bryan_at_outer.net                bryan_at_spd&#46;<!--nospam-->analog.com
+                   (Wit's End Computation Center)           (Analog Devices)
++1 512-427-1063  +1 512-427-1059 (fax)     Bar code: || | |||| || | ||  || ||||
+PGP key via finger     O-     Rock on completely with some brand-new components
+Problem:  &quot;Number three engine missing.&quot;
+Solution: &quot;Engine found on right wing after brief search.&quot;
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue May 05 1998 - 13:39:13 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start22158">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="22159.html" title="Next message in the list">Jason L Tibbitts III: "FVWM: Re: Re: Tcl, fvwm, etc."</a></li>
+<li><dfn>Previous message</dfn>: <a href="22157.html" title="Previous message in the list">brian moore: "Re: FVWM: fvwm2: Please don&#0039;t shoot (offensive win95 subject matter)"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="22167.html" title="Next message in this discussion thread">Randy J. Ray: "Re: FVWM: XEmacs frame mapping causes fvwm desktop switch (Solar"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Maybe reply</dfn>: <a href="22167.html" title="Message sent in reply to this message">Randy J. Ray: "Re: FVWM: XEmacs frame mapping causes fvwm desktop switch (Solar"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg22158" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg22158" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg22158" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg22158" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

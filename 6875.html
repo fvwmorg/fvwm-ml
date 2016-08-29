@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: MouseFocusClickRaises and mouse bindings on lower windows from Tom Alsberg on 2002-11-09 (fvwm-users)</title>
+<meta name="Author" content="Tom Alsberg (alsbergt_at_zoopee.org)" />
+<meta name="Subject" content="FVWM: MouseFocusClickRaises and mouse bindings on lower windows" />
+<meta name="Date" content="2002-11-09" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: MouseFocusClickRaises and mouse bindings on lower windows</h1>
+<!-- received="Sat Nov  9 03:55:46 2002" -->
+<!-- isoreceived="20021109035546" -->
+<!-- sent="Sat, 9 Nov 2002 11:54:31 +0200" -->
+<!-- isosent="20021109095431" -->
+<!-- name="Tom Alsberg" -->
+<!-- email="alsbergt_at_zoopee.org" -->
+<!-- subject="FVWM: MouseFocusClickRaises and mouse bindings on lower windows" -->
+<!-- id="20021109095431.GA27123_at_zoopee.org" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start6875" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="6876.html" accesskey="d" title="Riswick, J.G.A. van: &quot;RE: FVWM: new fvwm-perllib&quot;">Next message</a> ]
+[ <a href="6874.html" title="Erik Steffl: &quot;Re: FVWM: moving xmms around the screen&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="6884.html" accesskey="t" title="Dominik Vogt: &quot;Re: FVWM: MouseFocusClickRaises and mouse bindings on lower windows&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg6875" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg6875" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg6875" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg6875" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Tom Alsberg &lt;<a href="mailto:alsbergt_at_zoopee.org?Subject=Re%3A%20FVWM%3A%20MouseFocusClickRaises%20and%20mouse%20bindings%20on%20lower%20windows">alsbergt_at_zoopee.org</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sat, 9 Nov 2002 11:54:31 +0200</span><br />
+</address>
+<br />
+Hi there.
+<br />
+<br />I recently built a new version of FVWM, updated yesterday from CVS
+<br />
+(FVWM 2.5.5 from CVS).
+<br />
+<br />I have the following in my .fvwm2rc:
+<br />
+<br />&lt;snip&gt;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DestroyFunc	MoveOrRaise
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AddToFunc	MoveOrRaise
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ I Raise
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ M Move
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ D WindowShade
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Alt+Click should raise, Alt+Drag should raise and move:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mouse	1	FWST	M	MoveOrRaise
+<br />
+&lt;/snip&gt;
+<br />
+<br />It used to be so that with those lines, when clicking on a window with
+<br />
+the left mouse button and the Meta key pressed, the window would
+<br />
+raise, not getting the mouse event, and when dragging a window with
+<br />
+the left mouse button and the Meta key pressed, the window would raise
+<br />
+and move, not getting the mouse event.
+<br />
+<br />Now, since the upgrade of FVWM, this does not work so anymore, if the
+<br />
+window is not already raised.
+<br />
+<br />Now if the window is not already raised, when clicking on a window
+<br />
+with the left mouse button and the Meta key pressed, the window
+<br />
+raises, but gets the mouse event as well (for example, XTerm beeps).
+<br />
+<br />When dragging a window with the left mouse button and the Meta key
+<br />
+pressed, if the window is not already raised, it is raised, but not
+<br />
+moved, and gets the event.  If the window is already raised, it moves
+<br />
+and does not get the event.
+<br />
+<br />I noticed that when removing the following line from my .fvwm2rc, this
+<br />
+behaviour is fixed:
+<br />
+<br />&lt;snip&gt;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Click to raise:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Style	*	MouseFocusClickRaises
+<br />
+&lt;/snip&gt;
+<br />
+<br />But I do want windows which are clicked on to raise, in addition to
+<br />
+getting the event, if the Meta key is not pressed when clicking on
+<br />
+them.
+<br />
+<br /><br />I checked in the ChangeLog, and saw one thing regarding
+<br />
+MouseFocusClickRaises.
+<br />
+I also checked in the fvwm(1) manual page, and I see that many new
+<br />
+style directives for focus policies were added.  Maybe the semantics
+<br />
+for old styles have changed a bit as well, but I couldn't figure out
+<br />
+what it is exactly.
+<br />
+<br />I tried playing somewhat with the new FP... styles, but did not manage
+<br />
+to get the previous behaviour.
+<br />
+<br />The FPClickRaisesFocused style did not seem to work for me - the
+<br />
+windows were not raised when clicked on.
+<br />
+<br />I also have the SloppyFocus style on all windows.
+<br />
+<br />Any idea why the old behaviour does not work anymore, or how I can get
+<br />
+it again?
+<br />
+<br />&nbsp;&nbsp;Thanks, any help appreciated,
+<br />
+&nbsp;&nbsp;-- Tom
+<br />
+<br /><pre>
+-- 
+  Tom Alsberg - certified insane, complete illiterate.
+        e-mail: &lt;alsbergt_at_softhome.net&gt;
+	Homepage: <a href="http://www.cs.huji.ac.il/~alsbergt/">http://www.cs.huji.ac.il/~alsbergt/</a>
+  * An idea is not responsible for the people who believe in it.
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sat Nov 09 2002 - 03:55:46 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start6875">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="6876.html" title="Next message in the list">Riswick, J.G.A. van: "RE: FVWM: new fvwm-perllib"</a></li>
+<li><dfn>Previous message</dfn>: <a href="6874.html" title="Previous message in the list">Erik Steffl: "Re: FVWM: moving xmms around the screen"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="6884.html" title="Next message in this discussion thread">Dominik Vogt: "Re: FVWM: MouseFocusClickRaises and mouse bindings on lower windows"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="6884.html" title="Message sent in reply to this message">Dominik Vogt: "Re: FVWM: MouseFocusClickRaises and mouse bindings on lower windows"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="6894.html" title="Message sent in reply to this message">Elliot Sowadsky: "Re: FVWM: MouseFocusClickRaises and mouse bindings on lower windows"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="6895.html" title="Message sent in reply to this message">Elliot Sowadsky: "re: FVWM: MouseFocusClickRaises and mouse bindings on lower windows"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg6875" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg6875" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg6875" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg6875" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:53 BST
+</em></small></p>
+</body>
+</html>

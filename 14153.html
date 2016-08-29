@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: bug report for FVWM 2.5.12 from Cameron Simpson on 2005-05-19 (fvwm-users)</title>
+<meta name="Author" content="Cameron Simpson (cs_at_zip.com.au)" />
+<meta name="Subject" content="FVWM: bug report for FVWM 2.5.12" />
+<meta name="Date" content="2005-05-19" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: bug report for FVWM 2.5.12</h1>
+<!-- received="Wed May 18 23:45:55 2005" -->
+<!-- isoreceived="20050518224555" -->
+<!-- sent="Thu, 19 May 2005 14:44:16 +1000" -->
+<!-- isosent="20050519044416" -->
+<!-- name="Cameron Simpson" -->
+<!-- email="cs_at_zip.com.au" -->
+<!-- subject="FVWM: bug report for FVWM 2.5.12" -->
+<!-- id="20050519044416.GA22576_at_cskk.homeip.net" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start14153" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="14154.html" accesskey="d" title="BingYU: &quot;FVWM: what&#0039;s the HotKey for mouse?&quot;">Next message</a> ]
+[ <a href="14152.html" title="Thomas Adam: &quot;Re: FVWM: Iconify All&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg14153" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg14153" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg14153" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg14153" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Cameron Simpson &lt;<a href="mailto:cs_at_zip.com.au?Subject=Re%3A%20FVWM%3A%20bug%20report%20for%20FVWM%202.5.12">cs_at_zip.com.au</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 19 May 2005 14:44:16 +1000</span><br />
+</address>
+<br />
+I have a Colorset that is used for my menus.
+<br />
+It appears that AspectPixmap does not work correctly for menus.
+<br />
+I have:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MenuStyle &quot;*&quot; MenuColorset 2
+<br />
+<br />and I say, via FvwmCommand, some Colorset commands to set the menu backdrop.
+<br />
+When I say:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Colorset 2 AspectPixmap /path/to/image.png
+<br />
+<br />I get an image that appears somewhat adjusted for the menu, but incorrectly.
+<br />
+The image width appears to have been stretched to fit the menu, but the
+<br />
+height is grossly wrong (generally it seems too short), and so the Aspect
+<br />
+of the image is not the original aspect.
+<br />
+<br />Further, if I pop up a tall menu I get an image apparently sized for the
+<br />
+width of the menu (but with the aspect ratio shorter than the original
+<br />
+image), with the root background in the unfilled areas.
+<br />
+<br />Then a subsequent short menu gets the image apparently again sized for
+<br />
+the width  of the menu (and again with the aspect ratio to short - more
+<br />
+so than before) and with left over pixels from the previous, larger,
+<br />
+image resize for the previous tall menu.
+<br />
+<br />It appears to me that the image resizing is being called with the correct
+<br />
+menu width (and presumably then the correct menu height), but the new
+<br />
+image size computation based on this to preserve the image backdrop is
+<br />
+not quite right. And the buffer used for the backdrop is not initialised
+<br />
+correctly, but reused from an earlier buffer (or maybe just memory that
+<br />
+happens to overlap that).
+<br />
+<br />[ Pulls out 2.5.12 source... ]
+<br />
+Should I be concerned by menustyle_free_face() in menustyle.c that says:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;switch (mf-&gt;type)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case GradientMenu:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[...]
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case PixmapMenu: 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case TiledPixmapMenu:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (mf-&gt;u.p)  
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{       
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PDestroyFvwmPicture(dpy, mf-&gt;u.p);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mf-&gt;u.p = NULL;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case SolidMenu:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FreeColors(&amp;mf-&gt;u.back, 1, True);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mf-&gt;type = SimpleMenu;
+<br />
+<br />No AspectPixmap there. Is that a problem?
+<br />
+<br />Pixmap and TiledPixmap seem to behave, but they are not what I want.
+<br />
+<br />AspectPixmap would be I hope.
+<br />
+<br />I basicly want a full view of the image, shrunk/enlarged to fill the menu
+<br />
+in one direction and padded by the default background in the other to fit
+<br />
+(or maybe left aligned, or tiled in that size). Since menus are dynamic
+<br />
+in size (i.e. WindowList menus mostly) neither Pixmap nor TiledPixmap
+<br />
+quite cut it because my desired backgrounds are pictures and not tiles.
+<br />
+<br />Cheers,
+<br />
+<pre>
+--
+Cameron Simpson &lt;cs_at_zip.com.au&gt; DoD#743
+<a href="http://www.cskk.ezoshosting.com/cs/">http://www.cskk.ezoshosting.com/cs/</a>
+Disclaimer: Opinions expressed here are CORRECT, mine, and not PSLs or NMSUs..
+        - Larry Cunningham &lt;larry_at_psl.nmsu.edu&gt;
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed May 18 2005 - 23:45:55 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start14153">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="14154.html" title="Next message in the list">BingYU: "FVWM: what&#0039;s the HotKey for mouse?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="14152.html" title="Previous message in the list">Thomas Adam: "Re: FVWM: Iconify All"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg14153" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg14153" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg14153" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg14153" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:57 BST
+</em></small></p>
+</body>
+</html>

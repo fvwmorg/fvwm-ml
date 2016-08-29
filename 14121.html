@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: FvwmScript &amp; SendToModule issues from David Vilar on 2005-05-10 (fvwm-users)</title>
+<meta name="Author" content="David Vilar (vilar_at_i6.informatik.rwth-aachen.de)" />
+<meta name="Subject" content="FVWM: FvwmScript &amp; SendToModule issues" />
+<meta name="Date" content="2005-05-10" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: FvwmScript &amp; SendToModule issues</h1>
+<!-- received="Tue May 10 04:21:15 2005" -->
+<!-- isoreceived="20050510032115" -->
+<!-- sent="Tue, 10 May 2005 11:20:42 +0200" -->
+<!-- isosent="20050510092042" -->
+<!-- name="David Vilar" -->
+<!-- email="vilar_at_i6.informatik.rwth-aachen.de" -->
+<!-- subject="FVWM: FvwmScript &amp; SendToModule issues" -->
+<!-- id="20050510092042.GK7859_at_i6" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start14121" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="14122.html" accesskey="d" title="Philipp Kolmann: &quot;FVWM: Swallowed FBPanel only shows Icon after a resize of the Menubar&quot;">Next message</a> ]
+[ <a href="14120.html" title="Felix Karpfen: &quot;Re: FVWM: Session Management under fvwm2&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg14121" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg14121" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg14121" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg14121" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: David Vilar &lt;<a href="mailto:vilar_at_i6.informatik.rwth-aachen.de?Subject=Re%3A%20FVWM%3A%20FvwmScript%20%26%20SendToModule%20issues">vilar_at_i6.informatik.rwth-aachen.de</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 10 May 2005 11:20:42 +0200</span><br />
+</address>
+<br />
+Hi,
+<br />
+<br />I have written a small FvwmScript consisting of a single ItemDraw
+<br />
+whose text should be changed while changing pages. The text should
+<br />
+be sent externally via a SendToModule call. I have two questions
+<br />
+about it:
+<br />
+<br />1. I use the command 'WindowTitle {FvwmPageName}' in the FvwmScript
+<br />
+&nbsp;&nbsp;&nbsp;and the window is identified as such with FvwmIdent. However,
+<br />
+&nbsp;&nbsp;&nbsp;issuing an
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SendToModule FvwmPageName SendString 1 1 aaa
+<br />
+&nbsp;&nbsp;&nbsp;doesn't work. Experimenting around I found out that
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SendToModule *fvwmPageName SendString 1 1 aaa
+<br />
+&nbsp;&nbsp;&nbsp;works. Is that expected behaviour?
+<br />
+<br />2. I bound the SendToModule call to a FvwmEvent (new_page). This
+<br />
+&nbsp;&nbsp;&nbsp;works ok, but when I change the page in the pager dragging the
+<br />
+&nbsp;&nbsp;&nbsp;right mouse button (for having parts of several pages on screen),
+<br />
+&nbsp;&nbsp;&nbsp;the FvwmEvent is triggered constantly, so the &quot;scroll effect&quot; is
+<br />
+&nbsp;&nbsp;&nbsp;not smooth as it used to be. Is there a workaround for it? I can
+<br />
+&nbsp;&nbsp;&nbsp;not use '*FvwmEvent: Delay' because when I change pages with the
+<br />
+&nbsp;&nbsp;&nbsp;keyboard I DO want the FvwmEvent to be triggered, even if the
+<br />
+&nbsp;&nbsp;&nbsp;changes are nearly simultanous. I think FvwmPager should
+<br />
+&nbsp;&nbsp;&nbsp;produce only a new_page event when the page with maximum area on
+<br />
+&nbsp;&nbsp;&nbsp;screen changes.
+<br />
+<br />BTW: In the FvwmScript man page in 2.5.12, in the 'PERIODIC TASKS'
+<br />
+section it is stated that the block shouls start with a 'Periodic
+<br />
+Task' keyword. This should be changed to 'PeriodicTasks', shouldn't
+<br />
+it? Perhaps it is already so in the last development version.	
+<br />
+<br />Greetings,
+<br />
+<br />David
+<br />
+<br /><pre>
+-- 
+My fvwm config: <a href="http://www-i6.informatik.rwth-aachen.de/~vilar/fvwm.html">http://www-i6.informatik.rwth-aachen.de/~vilar/fvwm.html</a>
+David Vilar Torres			RWTH Aachen
+Tel: (+49) 241 80 21611			Lehrstuhl f. Informatik VI
+Fax: (+49) 241 80 22219			Ahornstr. 55
+vilar_at_informatik.rwth-aachen.de		D-52056 Aachen (Germany)
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue May 10 2005 - 04:21:15 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start14121">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="14122.html" title="Next message in the list">Philipp Kolmann: "FVWM: Swallowed FBPanel only shows Icon after a resize of the Menubar"</a></li>
+<li><dfn>Previous message</dfn>: <a href="14120.html" title="Previous message in the list">Felix Karpfen: "Re: FVWM: Session Management under fvwm2"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg14121" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg14121" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg14121" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg14121" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:57 BST
+</em></small></p>
+</body>
+</html>

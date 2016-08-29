@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Bug: fvwm failing to unmap window sometimes from Grant McDorman on 1996-11-26 (fvwm-users)</title>
+<meta name="Author" content="Grant McDorman (grant_at_isgtec.com)" />
+<meta name="Subject" content="FVWM: Bug: fvwm failing to unmap window sometimes" />
+<meta name="Date" content="1996-11-26" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Bug: fvwm failing to unmap window sometimes</h1>
+<!-- received="Tue Nov 26 09:10:21 1996" -->
+<!-- isoreceived="19961126091021" -->
+<!-- sent="Tue, 26 Nov 1996 09:51:50 -0500 (EST)" -->
+<!-- isosent="19961126145150" -->
+<!-- name="Grant McDorman" -->
+<!-- email="grant_at_isgtec.com" -->
+<!-- subject="FVWM: Bug: fvwm failing to unmap window sometimes" -->
+<!-- id="XFMail.961126100114.grant_at_isgtec.com" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start18513" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="18514.html" accesskey="d" title="Jamie Sparks: &quot;Re: FVWM: Bug: fvwm failing to unmap window sometimes&quot;">Next message</a> ]
+[ <a href="18512.html" title="Adam Megacz: &quot;FVWM: Make a single window unfocusable?&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="18514.html" accesskey="t" title="Jamie Sparks: &quot;Re: FVWM: Bug: fvwm failing to unmap window sometimes&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18513" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18513" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18513" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18513" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Grant McDorman &lt;<a href="mailto:grant_at_isgtec.com?Subject=Re%3A%20FVWM%3A%20Bug%3A%20fvwm%20failing%20to%20unmap%20window%20sometimes">grant_at_isgtec.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 26 Nov 1996 09:51:50 -0500 (EST)</span><br />
+</address>
+<br />
+I have discovered, and patched, a bug in 2.0.43.
+<br />
+<br />If a Motif client quickly maps and then immediately unmaps a window, the events sent
+<br />
+are:
+<br />
+&nbsp;client:   MapRequest
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;synthetic UnmapNotify with selecting window ('event') equal to the root
+<br />
+&nbsp;fvwm:     Map (as per MapRequest)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;synthetic UnmapNotify ignored because 'event' field (selecting window)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not equal to 'window' (window being unmapped)
+<br />
+<br />The result is typically a blank window; moreover, as far as the application is
+<br />
+concerned this window isn't there.
+<br />
+<br />Comments and code in events.c appear to be checking for this synthetic event;
+<br />
+however, because of the immediately preceeding 'if' statement the code in
+<br />
+question will never get executed:
+<br />
+<br /><br />void HandleUnmapNotify()
+<br />
+{
+<br />
+&nbsp;&nbsp;int dstx, dsty;
+<br />
+&nbsp;&nbsp;Window dumwin;
+<br />
+&nbsp;&nbsp;XEvent dummy;
+<br />
+&nbsp;&nbsp;extern FvwmWindow *colormap_win;
+<br />
+<br />&nbsp;&nbsp;if(Event.xunmap.event != Event.xunmap.window)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+&nbsp;&nbsp;/*
+<br />
+&nbsp;&nbsp;&nbsp;* The July 27, 1988 ICCCM spec states that a client wishing to switch
+<br />
+&nbsp;&nbsp;&nbsp;* to WithdrawnState should send a synthetic UnmapNotify with the
+<br />
+&nbsp;&nbsp;&nbsp;* event field set to (pseudo-)root, in case the window is already
+<br />
+&nbsp;&nbsp;&nbsp;* unmapped (which is the case for fvwm for IconicState).  Unfortunately,
+<br />
+&nbsp;&nbsp;&nbsp;* we looked for the FvwmContext using that field, so try the window
+<br />
+&nbsp;&nbsp;&nbsp;* field also.
+<br />
+&nbsp;&nbsp;&nbsp;*/
+<br />
+&nbsp;&nbsp;if (!Tmp_win)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Event.xany.window = Event.xunmap.window;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (XFindContext(dpy, Event.xany.window,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FvwmContext, (caddr_t *)&amp;Tmp_win) == XCNOENT)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tmp_win = NULL;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+<br />The obvious quick fix is to remove the if statement and Unmap() the window.
+<br />
+However, presumably the if statement is there for some reason; so my patch
+<br />
+changes the if statement to return if the 'event' and 'window' fields don't
+<br />
+match AND the 'event' field is not the root window, or the event is not
+<br />
+synthetic (send_event is false).
+<br />
+<br />The patch is attached.
+<br />
+&nbsp;&nbsp;
+<br />
+<br />Grant McDorman &lt;grant_at_isgtec.com&gt;
+<br />
+ISG Technologies, Inc.  <a href="http://www.isgtec.com">http://www.isgtec.com</a>
+<br />
+Mississauga, Ontario, Canada
+<br />
+<br /><br /><br />
+*** events.c.orig	Mon May 27 15:33:26 1996
+<br />
+--- events.c	Mon Nov 25 11:48:11 1996
+<br />
+***************
+<br />
+*** 872,880 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Window dumwin;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;XEvent dummy;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;extern FvwmWindow *colormap_win;
+<br />
+&nbsp;&nbsp;
+<br />
+!   if(Event.xunmap.event != Event.xunmap.window)
+<br />
+!     return;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;/*
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* The July 27, 1988 ICCCM spec states that a client wishing to switch
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* to WithdrawnState should send a synthetic UnmapNotify with the
+<br />
+--- 872,887 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Window dumwin;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;XEvent dummy;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;extern FvwmWindow *colormap_win;
+<br />
++   int    weMustUnmap;
+<br />
+&nbsp;&nbsp;
+<br />
+!   /*
+<br />
+!    * Don't ignore events as described below.
+<br />
+!    */
+<br />
+!   if(Event.xunmap.event != Event.xunmap.window &amp;&amp; 
+<br />
+!      (Event.xunmap.event != Scr.Root || !Event.xunmap.send_event) )
+<br />
+!     {
+<br />
+!       return;
+<br />
+!     }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;/*
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* The July 27, 1988 ICCCM spec states that a client wishing to switch
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* to WithdrawnState should send a synthetic UnmapNotify with the
+<br />
+***************
+<br />
+*** 883,891 ****
+<br />
+--- 890,900 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* we looked for the FvwmContext using that field, so try the window
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* field also.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<br />
++   weMustUnmap = 0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if (!Tmp_win)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Event.xany.window = Event.xunmap.window;
+<br />
++       weMustUnmap = 1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (XFindContext(dpy, Event.xany.window,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FvwmContext, (caddr_t *)&amp;Tmp_win) == XCNOENT)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tmp_win = NULL;
+<br />
+***************
+<br />
+*** 893,898 ****
+<br />
+--- 902,910 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(!Tmp_win)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
++ 
+<br />
++   if(weMustUnmap)
+<br />
++     XUnmapWindow(dpy, Event.xunmap.window);
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(Tmp_win ==  Scr.Hilite)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Scr.Hilite = NULL;
+<br />
+<br />End of MIME message
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue Nov 26 1996 - 09:10:21 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start18513">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="18514.html" title="Next message in the list">Jamie Sparks: "Re: FVWM: Bug: fvwm failing to unmap window sometimes"</a></li>
+<li><dfn>Previous message</dfn>: <a href="18512.html" title="Previous message in the list">Adam Megacz: "FVWM: Make a single window unfocusable?"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="18514.html" title="Next message in this discussion thread">Jamie Sparks: "Re: FVWM: Bug: fvwm failing to unmap window sometimes"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="18514.html" title="Message sent in reply to this message">Jamie Sparks: "Re: FVWM: Bug: fvwm failing to unmap window sometimes"</a></li>
+<li><dfn>Reply</dfn>: <a href="18526.html" title="Message sent in reply to this message">Bob Woodside: "Re: FVWM: Bug: fvwm failing to unmap window sometimes"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="18527.html" title="Message sent in reply to this message">Madhukar Sinha: "Re: FVWM: Bug: fvwm failing to unmap window sometimes"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18513" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18513" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18513" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18513" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

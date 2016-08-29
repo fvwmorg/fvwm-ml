@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: applications during startup from calmar on 2004-02-17 (fvwm-users)</title>
+<meta name="Author" content="calmar (mac_at_calmar.ws)" />
+<meta name="Subject" content="Re: FVWM: applications during startup" />
+<meta name="Date" content="2004-02-17" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: applications during startup</h1>
+<!-- received="Tue Feb 17 17:43:25 2004" -->
+<!-- isoreceived="20040217174325" -->
+<!-- sent="Wed, 18 Feb 2004 00:41:13 +0100" -->
+<!-- isosent="20040217234113" -->
+<!-- name="calmar" -->
+<!-- email="mac_at_calmar.ws" -->
+<!-- subject="Re: FVWM: applications during startup" -->
+<!-- id="877jylmfza.fsf_at_news.calmar.ws" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="87r7wtny4a.fsf_at_news.calmar.ws" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start11298" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="11299.html" accesskey="d" title="Robert Knighten: &quot;FVWM: Visually locating mouse cursor&quot;">Next message</a> ]
+[ <a href="11297.html" title="Frank Gruellich: &quot;Re: FVWM: multiple keybindings&quot;">Previous message</a> ]
+[ <a href="11296.html" title="calmar: &quot;Re: FVWM: applications during startup&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="11315.html" accesskey="t" title="calmar: &quot;Re: FVWM: applications during startup&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg11298" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg11298" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg11298" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg11298" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: calmar &lt;<a href="mailto:mac_at_calmar.ws?Subject=Re%3A%20FVWM%3A%20applications%20during%20startup">mac_at_calmar.ws</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 18 Feb 2004 00:41:13 +0100</span><br />
+</address>
+<br />
+&nbsp;Hi all,
+<br />
+<br />&nbsp;Thanks for you hints.
+<br />
+<br />&nbsp;So I have still an additional issue.
+<br />
+<br />&nbsp;This is what I'm fiddling/working around with:
+<br />
+<br />&nbsp;,----
+<br />
+&nbsp;| DestroyFunc StartFunction
+<br />
+&nbsp;| AddToFunc StartFunction
+<br />
+&nbsp;| + I Style *aterm* StartsOnPage 1 0, SkipMapping,!Borders, NoTitle
+<br />
+&nbsp;| + I exec aterm
+<br />
+&nbsp;| + I Wait aterm
+<br />
+&nbsp;| + I All (*aterm*)  ResizeMove 100 100 0 0
+<br />
+&nbsp;`----
+<br />
+<br />&nbsp;When I don't have the `+ I Wait aterm', aterm will not get
+<br />
+&nbsp;Resized. So this (probably) is easy to understand, because while
+<br />
+&nbsp;fvwm executes the ResizeMove Command, aterm is not yet loaded (in
+<br />
+&nbsp;this Window-Ring).
+<br />
+<br />&nbsp;When I have the `+ I Wait aterm' line, ResizeMove will get the
+<br />
+&nbsp;aterm, and it will ResizeMove it, but aterm will be on page 0 0
+<br />
+&nbsp;instead on 1 0 (StartsOnPage 1 0).
+<br />
+<br />&nbsp;So obviously when that ResizeMove  gets its action to the
+<br />
+&nbsp;aterm app, it obviously interferes with the above statement
+<br />
+&nbsp;`StartsOnPage' in some way.
+<br />
+&nbsp;Or maybe the `Wait' interferes in some way.
+<br />
+<br />&nbsp;At least configured like above, I get an aterm on desk/page 0 0
+<br />
+&nbsp;instead of `1 0'.
+<br />
+<br />&nbsp;When I paste this into the FvwmKonsole:
+<br />
+<br />&nbsp;,----
+<br />
+&nbsp;| Style *aterm* StartsOnPage 2 0, SkipMapping,!Borders, NoTitle
+<br />
+&nbsp;| exec aterm
+<br />
+&nbsp;| Wait aterm
+<br />
+&nbsp;`----
+<br />
+<br />&nbsp;The aterm is landing on 2 0 correctly.
+<br />
+<br />&nbsp;when I paste something like this
+<br />
+<br />&nbsp;,----
+<br />
+&nbsp;| Style *aterm* StartsOnPage 2 0, SkipMapping,!Borders, NoTitle
+<br />
+&nbsp;| exec aterm
+<br />
+&nbsp;| Wait aterm
+<br />
+&nbsp;| All (*aterm*)  ResizeMove 100 100 0 0
+<br />
+&nbsp;`----
+<br />
+<br />&nbsp;again the aterm gets ResizeMove's _but_ on the actualy page.
+<br />
+<br />&nbsp;In this area, I found also this:
+<br />
+<br />&nbsp;When I open an aterm on page 2, then open an FvwmKonsole on p.e
+<br />
+&nbsp;page 1, and execute there this:
+<br />
+<br />&nbsp;,----
+<br />
+&nbsp;| All (*aterm*)  Move 100 100 0 0  
+<br />
+&nbsp;`----
+<br />
+<br />&nbsp;.. Then when I go again to page 2 again, there is no such window
+<br />
+&nbsp;anymore.
+<br />
+&nbsp;I can get it back when I open the WindowList and select it there.
+<br />
+<br /><br />&nbsp;Thanks for any hints!
+<br />
+<br />&nbsp;Greetings
+<br />
+&nbsp;marco candrian
+<br />
+<br /><pre>
+-- 
+  calmar 
+           (o_         GNU/Linux is GREAT      
+           //\                 
+           V_/_        <a href="http://www.calmar.ws">http://www.calmar.ws</a> 
+                                          
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue Feb 17 2004 - 17:43:25 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start11298">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="11299.html" title="Next message in the list">Robert Knighten: "FVWM: Visually locating mouse cursor"</a></li>
+<li><dfn>Previous message</dfn>: <a href="11297.html" title="Previous message in the list">Frank Gruellich: "Re: FVWM: multiple keybindings"</a></li>
+<li><dfn>In reply to</dfn>: <a href="11296.html" title="Message to which this message replies">calmar: "Re: FVWM: applications during startup"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="11315.html" title="Next message in this discussion thread">calmar: "Re: FVWM: applications during startup"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="11315.html" title="Message sent in reply to this message">calmar: "Re: FVWM: applications during startup"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg11298" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg11298" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg11298" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg11298" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:56 BST
+</em></small></p>
+</body>
+</html>

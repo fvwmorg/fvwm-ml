@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: RE: fvwmrc_convert from Lionel Cons on 1996-12-04 (fvwm-users)</title>
+<meta name="Author" content="Lionel Cons (cons_at_mail.cern.ch)" />
+<meta name="Subject" content="FVWM: RE: fvwmrc_convert" />
+<meta name="Date" content="1996-12-04" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: RE: fvwmrc_convert</h1>
+<!-- received="Wed Dec  4 11:19:20 1996" -->
+<!-- isoreceived="19961204111920" -->
+<!-- sent="Wed, 4 Dec 1996 18:16:21 +0100" -->
+<!-- isosent="19961204171621" -->
+<!-- name="Lionel Cons" -->
+<!-- email="cons_at_mail.cern.ch" -->
+<!-- subject="FVWM: RE: fvwmrc_convert" -->
+<!-- id="199612041716.SAA19634_at_dxmint.cern.ch" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="XFMail.961204102301.grant_at_isgtec.com" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start18597" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="18598.html" accesskey="d" title="Grant McDorman: &quot;FVWM: RE: fvwmrc_convert&quot;">Next message</a> ]
+[ <a href="18596.html" title="David S. Goldberg: &quot;FVWM: Re: Security hole in FvwmM4 (?) and Manpage patch for FvwmM4&quot;">Previous message</a> ]
+[ <a href="18591.html" title="Grant McDorman: &quot;FVWM: RE: fvwmrc_convert&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="18598.html" accesskey="t" title="Grant McDorman: &quot;FVWM: RE: fvwmrc_convert&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18597" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18597" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18597" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18597" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Lionel Cons &lt;<a href="mailto:cons_at_mail.cern.ch?Subject=Re%3A%20FVWM%3A%20RE%3A%20fvwmrc_convert">cons_at_mail.cern.ch</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 4 Dec 1996 18:16:21 +0100</span><br />
+</address>
+<br />
+Grant McDorman writes:
+<br />
+<em class="quotelev1"> &gt; 
+</em><br />
+<em class="quotelev1"> &gt; I do have a more recent version; however, the only change is the addition
+</em><br />
+<em class="quotelev1"> &gt; of handling for ClickToFocus. Other than that, it is [functionally] identical
+</em><br />
+<em class="quotelev1"> &gt; to the current version. [...]
+</em><br />
+<em class="quotelev1"> &gt; Other than that, I can't suggest anything. If you're familiar with awk,
+</em><br />
+<em class="quotelev1"> &gt; you can try to extend the script. What features do you think are needed?
+</em><br />
+<br />Here is what we did. We will have a closer look at the new script from
+<br />
+2.0.44 soon...
+<br />
+<br />We modified fvwmrc_convert for easy things that we've found. You'll
+<br />
+find the diff under my signature.
+<br />
+<br />Because we are not awk experts, we made a Perl front-end that
+<br />
+understands the things that we've found in our fvwmrc files and that
+<br />
+are not handled by fvwmrc_convert, namely:
+<br />
+&nbsp;- ignore the case for popups (we had PopUp, Endpopup...)
+<br />
+&nbsp;- handle submenus that are not indented:
+<br />
+Popup &quot;SystemMenu&quot;
+<br />
+Title   &quot;System Menu&quot;
+<br />
+Exec    &quot;New Window&quot;     exec xterm &amp;
+<br />
+Popup   &quot;Standard Tools&quot; StdTools
+<br />
+[...]
+<br />
+EndPopup
+<br />
+&nbsp;- handle menu names with spaces inside
+<br />
+<br />Of course we would like very much to have a single script that can
+<br />
+handle all these...
+<br />
+<br />___________________________________________________
+<br />
+Lionel Cons        <a href="http://wwwcn.cern.ch/~cons">http://wwwcn.cern.ch/~cons</a>
+<br />
+CERN               <a href="http://www.cern.ch">http://www.cern.ch</a>
+<br />
+<br />*** fvwmrc_convert-2.0.43	Fri Nov 29 11:22:50 1996
+<br />
+--- fvwmrc_convert	Fri Nov 29 10:59:33 1996
+<br />
+***************
+<br />
+*** 25,32 ****
+<br />
+&nbsp;&nbsp;# 24 May 95
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;echo &quot;fvwmrc-to-2 1.7a&quot;
+<br />
+! if [ ! -x /usr/local/contrib/bin/gnu/gawk ];then
+<br />
+!    echo &quot;gawk (/usr/local/contrib/bin/gnu/gawk) missing, cannot run&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit 1
+<br />
+&nbsp;&nbsp;fi
+<br />
+&nbsp;&nbsp;source=${1:-$HOME/.fvwmrc}
+<br />
+--- 25,32 ----
+<br />
+&nbsp;&nbsp;# 24 May 95
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;echo &quot;fvwmrc-to-2 1.7a&quot;
+<br />
+! if [ ! -x /usr/local/bin/gawk ];then
+<br />
+!    echo &quot;gawk (/usr/local/bin/gawk) missing, cannot run&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit 1
+<br />
+&nbsp;&nbsp;fi
+<br />
+&nbsp;&nbsp;source=${1:-$HOME/.fvwmrc}
+<br />
+***************
+<br />
+*** 246,252 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;/^StdBackColor[	 ]/ {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dflt[&quot;stdbackcolor&quot;]=stdbackcolor=$2;
+<br />
+! 	    printf (&quot;#!%s (new command=Style \&quot;*\&quot; Color f/b)\n)\n&quot;, $0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print &quot;Style \&quot;*\&quot; BackColor &quot; $2;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;next;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+--- 246,252 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;/^StdBackColor[	 ]/ {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dflt[&quot;stdbackcolor&quot;]=stdbackcolor=$2;
+<br />
+! 	    printf (&quot;#!%s (new command=Style \&quot;*\&quot; Color f/b)\n&quot;, $0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print &quot;Style \&quot;*\&quot; BackColor &quot; $2;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;next;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+***************
+<br />
+*** 257,279 ****
+<br />
+&nbsp;&nbsp;/^MWMFunctionHints$/ { printf (&quot;Style \&quot;*\&quot; MWMFunctions\n&quot;); next; }
+<br />
+&nbsp;&nbsp;/^MWMDecor$/         { printf (&quot;Style \&quot;*\&quot; MWMDecor\n&quot;); next; }
+<br />
+&nbsp;&nbsp;/^MWMDecorHints$/         { printf (&quot;Style \&quot;*\&quot; MWMDecor\n&quot;); next; }
+<br />
+! /^MWMBorder$/        { printf (&quot;Style \&quot;*\&quot; MWMBorder\n&quot;); next; }
+<br />
+&nbsp;&nbsp;/^MWMButtons$/       { printf (&quot;Style \&quot;*\&quot; MWMButtons\n&quot;); next; }
+<br />
+&nbsp;&nbsp;/^MWMHintOverride$/  { printf (&quot;Style \&quot;*\&quot; HintOverride\n&quot;); next; }
+<br />
+&nbsp;&nbsp;/^RandomPlacement$/ { print &quot;Style \&quot;*\&quot; &quot; $0; next; }
+<br />
+&nbsp;&nbsp;/^SmartPlacement$/ { print &quot;Style \&quot;*\&quot; &quot; $0; next; }
+<br />
+! /^BorderWidth$/ { print &quot;Style \&quot;*\&quot; &quot; $0; next; }
+<br />
+! /^HandleWidth$/ { print &quot;Style \&quot;*\&quot; &quot; $0; next; }
+<br />
+&nbsp;&nbsp;/^NoPPosition$/ { print &quot;Style \&quot;*\&quot; &quot; $0; next; }
+<br />
+&nbsp;&nbsp;/^DecorateTransients$/ { print &quot;Style \&quot;*\&quot; DecorateTransient&quot;; next; }
+<br />
+&nbsp;&nbsp;/^SuppressIcons$/      { print &quot;Style \&quot;*\&quot; NoIcon&quot;; next; }
+<br />
+&nbsp;&nbsp;/^StickyIcons$/      { print &quot;Style \&quot;*\&quot; StickyIcon&quot;; next; }
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;/^AutoRaise[	 ]/	{ print &quot;#! &quot; $0 &quot; (use Module FvwmAuto)&quot;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print &quot;AddToFunc \&quot;InitFunction\&quot; \&quot;I\&quot; Module FvwmAuto &quot; $2;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;next;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+! /^ModulePath[	 ]/    { print &quot;ModulePath /isg/proj/x11/contrib/clients/fvwm2&quot;; next; }
+<br />
+&nbsp;&nbsp;/^PixmapPath[	 ]/    { print $0; next; }
+<br />
+&nbsp;&nbsp;/^IconPath[	 ]/      { print $0; next; }
+<br />
+&nbsp;&nbsp;/^Style[	 ]/         { print $0; next; }
+<br />
+--- 257,281 ----
+<br />
+&nbsp;&nbsp;/^MWMFunctionHints$/ { printf (&quot;Style \&quot;*\&quot; MWMFunctions\n&quot;); next; }
+<br />
+&nbsp;&nbsp;/^MWMDecor$/         { printf (&quot;Style \&quot;*\&quot; MWMDecor\n&quot;); next; }
+<br />
+&nbsp;&nbsp;/^MWMDecorHints$/         { printf (&quot;Style \&quot;*\&quot; MWMDecor\n&quot;); next; }
+<br />
+! /^MWMBorders$/        { printf (&quot;Style \&quot;*\&quot; MWMBorder\n&quot;); next; }
+<br />
+&nbsp;&nbsp;/^MWMButtons$/       { printf (&quot;Style \&quot;*\&quot; MWMButtons\n&quot;); next; }
+<br />
+&nbsp;&nbsp;/^MWMHintOverride$/  { printf (&quot;Style \&quot;*\&quot; HintOverride\n&quot;); next; }
+<br />
+&nbsp;&nbsp;/^RandomPlacement$/ { print &quot;Style \&quot;*\&quot; &quot; $0; next; }
+<br />
+&nbsp;&nbsp;/^SmartPlacement$/ { print &quot;Style \&quot;*\&quot; &quot; $0; next; }
+<br />
+! /^BoundaryWidth[ 	]/ { print &quot;Style \&quot;*\&quot; &quot; $0 $2; next; }
+<br />
+! /^HandleWidth[ 	]/ { print &quot;Style \&quot;*\&quot; &quot; $0 $2; next; }
+<br />
+&nbsp;&nbsp;/^NoPPosition$/ { print &quot;Style \&quot;*\&quot; &quot; $0; next; }
+<br />
+&nbsp;&nbsp;/^DecorateTransients$/ { print &quot;Style \&quot;*\&quot; DecorateTransient&quot;; next; }
+<br />
+&nbsp;&nbsp;/^SuppressIcons$/      { print &quot;Style \&quot;*\&quot; NoIcon&quot;; next; }
+<br />
+&nbsp;&nbsp;/^StickyIcons$/      { print &quot;Style \&quot;*\&quot; StickyIcon&quot;; next; }
+<br />
++ /^SloppyFocus/	{ print &quot;Style \&quot;*\&quot; &quot; $0; next; }
+<br />
++ /^ClickToFocus/	{ print &quot;Style \&quot;*\&quot; &quot; $0; next; }
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;/^AutoRaise[	 ]/	{ print &quot;#! &quot; $0 &quot; (use Module FvwmAuto)&quot;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print &quot;AddToFunc \&quot;InitFunction\&quot; \&quot;I\&quot; Module FvwmAuto &quot; $2;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;next;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+! /^ModulePath[	 ]/    { print &quot;ModulePath /usr/local/lib/X11/fvwm2&quot;; next; }
+<br />
+&nbsp;&nbsp;/^PixmapPath[	 ]/    { print $0; next; }
+<br />
+&nbsp;&nbsp;/^IconPath[	 ]/      { print $0; next; }
+<br />
+&nbsp;&nbsp;/^Style[	 ]/         { print $0; next; }
+<br />
+***************
+<br />
+*** 302,309 ****
+<br />
+&nbsp;&nbsp;/^EdgeResistance[	 ]/ { print $0; next; }
+<br />
+&nbsp;&nbsp;/^DeskTopSize[	 ]/ { print $0; next; }
+<br />
+&nbsp;&nbsp;/^DeskTopScale/ {
+<br />
+! 	print &quot;#! &quot; $0;
+<br />
+! 	print &quot;Warning: &quot; $1 &quot; not in Fvwm2, command dropped&quot;&gt;&quot;/dev/stderr&quot;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;next;
+<br />
+&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;/^WindowListSkip[	 ]/ { print &quot;#! $0 [deleted]&quot;;
+<br />
+--- 304,311 ----
+<br />
+&nbsp;&nbsp;/^EdgeResistance[	 ]/ { print $0; next; }
+<br />
+&nbsp;&nbsp;/^DeskTopSize[	 ]/ { print $0; next; }
+<br />
+&nbsp;&nbsp;/^DeskTopScale/ {
+<br />
+! 	printf (&quot;#!%s (using module FvwmPager)\n&quot;, $0);
+<br />
+! 	print &quot;*FvwmPagerDesktopSize &quot; $2;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;next;
+<br />
+&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;/^WindowListSkip[	 ]/ { print &quot;#! $0 [deleted]&quot;;
+<br />
+***************
+<br />
+*** 318,323 ****
+<br />
+--- 320,333 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (warned[$1]==FALSE)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print &quot;Warning: &quot; $1 &quot; commented out, obsolete (use FvwmPager)&quot; &gt;&quot;/dev/stderr&quot;;
+<br />
++ 		warned[$1] = TRUE;
+<br />
++ 		}
+<br />
++ 		next;
+<br />
++ 	}
+<br />
++ /^Cursor[ 	]/ { print &quot;#! $0 [deleted]&quot;;
+<br />
++ 		if (warned[$1]==FALSE)
+<br />
++ 		{
+<br />
++ 		print &quot;Warning: &quot; $1 &quot; commented out, obsolete&quot; &gt;&quot;/dev/stderr&quot;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;warned[$1] = TRUE;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;next;
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Dec 04 1996 - 11:19:20 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start18597">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="18598.html" title="Next message in the list">Grant McDorman: "FVWM: RE: fvwmrc_convert"</a></li>
+<li><dfn>Previous message</dfn>: <a href="18596.html" title="Previous message in the list">David S. Goldberg: "FVWM: Re: Security hole in FvwmM4 (?) and Manpage patch for FvwmM4"</a></li>
+<li><dfn>In reply to</dfn>: <a href="18591.html" title="Message to which this message replies">Grant McDorman: "FVWM: RE: fvwmrc_convert"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="18598.html" title="Next message in this discussion thread">Grant McDorman: "FVWM: RE: fvwmrc_convert"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="18598.html" title="Message sent in reply to this message">Grant McDorman: "FVWM: RE: fvwmrc_convert"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18597" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18597" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18597" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18597" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

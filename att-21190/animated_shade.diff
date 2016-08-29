@@ -1,0 +1,269 @@
+diff -ru fvwm-2.0.46.orig/fvwm/builtins.c fvwm-2.0.46/fvwm/builtins.c
+--- fvwm-2.0.46.orig/fvwm/builtins.c	Wed Aug 20 01:41:27 1997
++++ fvwm-2.0.46/fvwm/builtins.c	Mon Oct 27 04:31:24 1997
+@@ -22,6 +22,12 @@
+ #include "screen.h"
+ #include "module.h"
+ 
++#ifdef WINDOWSHADE
++/*->CT set shade_anim and shade_anim_steps defaults */
++static int shade_anim_steps=10;
++/*<-CT*/
++#endif
++
+ static char *exec_shell_name="/bin/sh";
+ /* button state strings must match the enumerated states */
+ static char  *button_states[MaxButtonState]={
+@@ -34,6 +40,7 @@
+ #endif
+ };
+ 
++
+ /***********************************************************************
+  *
+  *  Procedure:
+@@ -383,48 +390,91 @@
+  *
+  *  Args: 1 -- force shade, 2 -- force unshade  No Arg: toggle
+  * 
++ ***********************************************************************
++ *
++ *  Animation added. 
++ *     Based on code from AfterStep-1.0 (CT: ctibirna@gch.ulaval.ca)
++ *     Additional fixes by Tomas Ogren <stric@ing.umu.se>
++ *
++ *  Builtin function: WindowShadeAnimate <steps>
++ *      <steps> is number of steps in animation. If 0, the
++ *              windowshade animation goes off. Default = 10.
++ *
+  ***********************************************************************/
+ void WindowShade(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+ 		 unsigned long context, char *action, int *Module)
+-{
++{       
+     int n = 0;
++    int f_w, f_oh, tb_h;
++    int h, y, s;
+ 
+     if (DeferExecution(eventp,&w,&tmp_win,&context, SELECT,ButtonRelease))
+-	return;
+-
++        return;
++    if (tmp_win == NULL)
++        return;
+     if (!(tmp_win->flags & TITLE) || (tmp_win->flags & MAXIMIZED)) {
+-	XBell(dpy, Scr.screen);
+-	return;
++        XBell(dpy, Scr.screen);
++        return;
+     }
+-    while (isspace(*action))++action;
++
++    f_w   = tmp_win->frame_width;
++    tb_h  = tmp_win->title_height+tmp_win->boundary_width;
++    f_oh  = tmp_win->orig_ht;
++
++    if (shade_anim_steps)
++        s = f_oh/shade_anim_steps;
++    if (s<=0)  /* We don't want an endless loop, do we? */
++        s = 1;
++
++    while (isspace(*action))
++        ++action;
+     if (isdigit(*action))
+-	sscanf(action,"%d",&n);
++        sscanf(action,"%d",&n);
+ 
+-    if (((tmp_win->buttons & WSHADE)||(n==2))&&(n!=1))
+-    {
+-	tmp_win->buttons &= ~WSHADE;
+-	SetupFrame(tmp_win,
+-		   tmp_win->frame_x, 
+-		   tmp_win->frame_y, 
+-		   tmp_win->orig_wd,
+-		   tmp_win->orig_ht,
+-		   True);
+-        Broadcast(M_DEWINDOWSHADE, 3, tmp_win->w, tmp_win->frame,
+-                  (unsigned long)tmp_win, 0, 0, 0, 0);
+-    }
+-    else
+-    {
+-	tmp_win->buttons |= WSHADE;
+-	SetupFrame(tmp_win,
+-		   tmp_win->frame_x,
+-		   tmp_win->frame_y,
+-		   tmp_win->frame_width,
+-		   tmp_win->title_height + tmp_win->boundary_width,
+-		   False);
+-        Broadcast(M_WINDOWSHADE, 3, tmp_win->w, tmp_win->frame,
+-                  (unsigned long)tmp_win, 0, 0, 0, 0);
++    if (((tmp_win->buttons & WSHADE)||(n==2))&&(n!=1)) {
++        tmp_win->buttons &= ~WSHADE;
++
++        if(shade_anim_steps) {
++            XMoveWindow(dpy, tmp_win->w, 0, - (f_oh-tb_h));
++            h = tb_h;
++            y = -(tmp_win->orig_ht - tb_h);
++                while (h<f_oh) {
++                    XResizeWindow(dpy, tmp_win->frame, f_w, h);
++                    XMoveWindow(dpy, tmp_win->w, 0, y);
++                    XSync(dpy, 0);
++                    h+=s;
++                    y+=s;
++                }
++            XMoveWindow(dpy, tmp_win->w, 0, 0);
++        }
++        SetupFrame(tmp_win, tmp_win->frame_x, tmp_win->frame_y,
++                f_w, f_oh, True);
++        Broadcast(M_DEWINDOWSHADE,3,tmp_win->w,tmp_win->frame,
++                (unsigned long)tmp_win,0,0,0,0);	
++    } else {
++        tmp_win->buttons |= WSHADE;
++
++        if (shade_anim_steps) {
++            XLowerWindow(dpy, tmp_win->w);
++            h = tmp_win->frame_height;
++            y = 0;
++            while (h>tb_h) {
++                XMoveWindow(dpy, tmp_win->w, 0, y);
++                XResizeWindow(dpy, tmp_win->frame, f_w, h);
++                XSync(dpy, 0);
++                h-=s;
++                y-=s;
++            }
++            XMoveWindow(dpy, tmp_win->w, 0, 0);
++        }
++        SetupFrame(tmp_win, tmp_win->frame_x, tmp_win->frame_y,
++                f_w, tb_h, False);
++        Broadcast(M_WINDOWSHADE,3,tmp_win->w,tmp_win->frame,
++                (unsigned long)tmp_win,0,0,0,0);	
+     }
++
+ }
++
+ #endif /* WINDOWSHADE */
+ 
+ /* For Ultrix 4.2 */
+@@ -671,7 +721,7 @@
+ 		      unsigned long context,char *action, int *Module)
+ 
+ {
+-  int val1;
++  long val1;
+   int val1_unit,n;
+ 
+   if (DeferExecution(eventp,&w,&tmp_win,&context, SELECT, 
+@@ -1240,7 +1290,7 @@
+ void SetClick(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+               unsigned long context, char *action,int* Module)
+ {
+-  int val1;
++  long val1;
+   int val1_unit,n;
+ 
+   n = GetOneArgument(action, &val1, &val1_unit);
+@@ -1256,7 +1306,7 @@
+ void SetXOR(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+             unsigned long context, char *action,int* Module)
+ {
+-  int val1;
++  long val1;
+   int val1_unit,n;
+   XGCValues gcv;
+   unsigned long gcm;
+@@ -1283,7 +1333,7 @@
+ void SetOpaque(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+ 	       unsigned long context, char *action,int* Module)
+ {
+-  int val1;
++  long val1;
+   int val1_unit,n;
+ 
+   n = GetOneArgument(action, &val1, &val1_unit);
+@@ -3329,3 +3379,23 @@
+   if (opts) /* should be empty at this point... */
+     free(opts);
+ }
++
++#ifdef WINDOWSHADE
++/*->CT set shade_anim_steps */
++void setShadeAnim (XEvent *eventp,Window w,FvwmWindow *tmp_win,
++            unsigned long context, char *action,int* Module) 
++{
++  int val_unit,n;
++  long val;
++ 
++  n=GetOneArgument(action, &val, &val_unit);
++  if(n != 1) {
++    fvwm_msg(ERR,"setShadeAnim","WindowShadeAnimate requires 1 argument");
++    return;
++  }
++ 
++  shade_anim_steps = val;
++}
++/*<-CT*/
++#endif
++   
+diff -ru fvwm-2.0.46.orig/fvwm/functions.c fvwm-2.0.46/fvwm/functions.c
+--- fvwm-2.0.46.orig/fvwm/functions.c	Mon Aug 11 22:09:29 1997
++++ fvwm-2.0.46/fvwm/functions.c	Mon Oct 27 04:31:24 1997
+@@ -139,6 +139,9 @@
+   {"WindowsDesk",  changeWindowsDesk,F_CHANGE_WINDOWS_DESK, FUNC_NEEDS_WINDOW},
+ #ifdef WINDOWSHADE
+   {"WindowShade",  WindowShade,      F_WINDOW_SHADE,        FUNC_NEEDS_WINDOW},
++  /*->CT for SHADE_ANIMATE*/
++  {"WindowShadeAnimate",setShadeAnim,F_SHADE_ANIMATE,      FUNC_NO_WINDOW},
++  /*<-CT*/
+ #endif /* WINDOWSHADE */
+   {"XORValue",     SetXOR,           F_XOR,                 FUNC_NO_WINDOW},
+   {"",0,0,0}
+diff -ru fvwm-2.0.46.orig/fvwm/fvwm.c fvwm-2.0.46/fvwm/fvwm.c
+--- fvwm-2.0.46.orig/fvwm/fvwm.c	Mon Aug  4 22:53:32 1997
++++ fvwm-2.0.46/fvwm/fvwm.c	Mon Oct 27 04:31:24 1997
+@@ -630,6 +630,7 @@
+   char *defaults[] = {
+     "HilightColor black grey",
+     "XORValue 0",
++    "WindowShadeAnimate 0",
+     "MenuStyle black grey slategrey fixed fvwm",
+     "TitleStyle Centered -- Raised",
+     "IconFont fixed",
+diff -ru fvwm-2.0.46.orig/fvwm/misc.h fvwm-2.0.46/fvwm/misc.h
+--- fvwm-2.0.46.orig/fvwm/misc.h	Mon Aug 11 22:10:19 1997
++++ fvwm-2.0.46/fvwm/misc.h	Mon Oct 27 04:31:24 1997
+@@ -217,7 +217,13 @@
+ #ifdef  WINDOWSHADE
+ void WindowShade(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+ 		 unsigned long context, char *action, int *Module);
++
++/*->CT for window shade animation */
++void setShadeAnim(XEvent *eventp,Window w,FvwmWindow *tmp_win,
++		 unsigned long context, char *action, int *Module);
++/*<-CT*/
+ #endif
++
+ extern void       RaiseWindow(FvwmWindow *t);
+ extern void       LowerWindow(FvwmWindow *t);
+ extern Bool       GrabEm(int);
+diff -ru fvwm-2.0.46.orig/fvwm/parse.h fvwm-2.0.46/fvwm/parse.h
+--- fvwm-2.0.46.orig/fvwm/parse.h	Mon Aug 11 22:10:39 1997
++++ fvwm-2.0.46/fvwm/parse.h	Mon Oct 27 04:31:24 1997
+@@ -75,6 +75,9 @@
+ #define F_EXEC_SETUP            57
+ #define F_CURSOR_STYLE          58
+ #define F_CURRENT               59
++/*->CT*/
++#define F_SHADE_ANIMATE         60
++/*<-CT*/
+ 
+ /* Functions which require a target window */
+ #define F_RESIZE		100
+@@ -104,6 +107,7 @@
+ #define F_DESTROY_DECOR         124
+ #define F_UPDATE_DECOR          125
+ #define F_WINDOW_SHADE          126
++
+ 
+ /* Functions for use by modules only! */
+ #define F_SEND_WINDOW_LIST     1000
+

@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: [2.0.41] fvwm core on bad Event.type from Paul D. Smith on 1996-03-13 (fvwm-users)</title>
+<meta name="Author" content="Paul D. Smith (psmith_at_BayNetworks.com)" />
+<meta name="Subject" content="Re: FVWM: [2.0.41] fvwm core on bad Event.type" />
+<meta name="Date" content="1996-03-13" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: [2.0.41] fvwm core on bad Event.type</h1>
+<!-- received="Wed Mar 13 13:14:17 1996" -->
+<!-- isoreceived="19960313131417" -->
+<!-- sent="Wed, 13 Mar 96 14:13:40 EST" -->
+<!-- isosent="19960313191340" -->
+<!-- name="Paul D. Smith" -->
+<!-- email="psmith_at_BayNetworks.com" -->
+<!-- subject="Re: FVWM: [2.0.41] fvwm core on bad Event.type" -->
+<!-- id="9603131913.AA13966_at_lemming.engeast" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="9603131837.AA13735_at_lemming.engeast" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start15879" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="15880.html" accesskey="d" title="Charles Hines: &quot;Re: FVWM: Reducing color use for pixmaps (home made solution)&quot;">Next message</a> ]
+[ <a href="15878.html" title="Romano Giannetti: &quot;FVWM: Reducing color use for pixmaps (home made solution)&quot;">Previous message</a> ]
+[ <a href="15877.html" title="Paul D. Smith: &quot;FVWM: [2.0.41] fvwm core on bad Event.type&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="15881.html" accesskey="t" title="Charles Hines: &quot;Re: FVWM: [2.0.41] fvwm core on bad Event.type&quot;">Next in thread</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15879" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15879" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15879" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15879" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Paul D. Smith &lt;<a href="mailto:psmith_at_BayNetworks.com?Subject=Re%3A%20FVWM%3A%20%5B2.0.41%5D%20fvwm%20core%20on%20bad%20Event.type">psmith_at_BayNetworks.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 13 Mar 96 14:13:40 EST</span><br />
+</address>
+<br />
+%% Regarding FVWM: [2.0.41] fvwm core on bad Event.type; I wrote:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;pds&gt; OK, it turns out that resizing absolutely _any_ X application,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;pds&gt; then moving the mouse outside the window will cause FVWM to
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;pds&gt; core with the same problem: Event.type is 64 and you get a core
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;pds&gt; dump.  I tried it with Netscape, xterm, etc. and all did the
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;pds&gt; same thing.
+<br />
+<br />Ugh.  Sorry for the glut of email :(
+<br />
+<br />Anyway, I added some code to check for bogus Event.type values in both
+<br />
+events.c:DispatchEvent() _and_ in events.c:My_XNextEvent(), right after
+<br />
+the XNextEvent() function returns.
+<br />
+<br />It turns out that the Event.type==64 is happening fairly regularly,
+<br />
+every 30 seconds or so, and it's being returned that way from
+<br />
+XNextEvent().  It happens even if I don't resize the window... even if I
+<br />
+just let my mouse sit idle.
+<br />
+<br />And I found the culprit: xfaces!  Every time xfaces polls for mail it
+<br />
+does something with its window that generates that event.
+<br />
+<br />I recompiled FVWM to catch that event type and ignore it; then xfaces
+<br />
+didn't quite work: when I had no mail I got the proper shaped mailbox
+<br />
+pixmap.  When I received some mail, it tried to put up a square bitmap,
+<br />
+but the shape of the bitmap was still the mailbox shape (i.e., it still
+<br />
+looked like a mailbox but it was &quot;filled in&quot; with the mail sender's
+<br />
+icon).
+<br />
+<br />I don't understand why it works sometimes and core dumps other times;
+<br />
+very odd.  Even more strange is that if I add a test so it doesn't core,
+<br />
+xfaces doesn't reshape correctly as I mentioned above!  It's almost like
+<br />
+there's _normally_ some valid function pointer at location
+<br />
+EventHandlerJumpTable[64] that makes things work, but it gets
+<br />
+overwritten by 1 every now and then.
+<br />
+<br />My xfaces app _was_ compiled a long time ago, with older X and Xpm
+<br />
+libraries; ldd says:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lXpm.4 =&gt; /usr/X11R5/lib/libXpm.so.4.2
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lXaw.5 =&gt; /usr/X11R5/lib/libXaw.so.5.0
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lXmu.4 =&gt; /usr/X11R5/lib/libXmu.so.4.10
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lXt.4 =&gt; /usr/X11R5/lib/libXt.so.4.10
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lXext.4 =&gt; /usr/X11R5/lib/libXext.so.4.10
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lX11.4 =&gt; /usr/X11R5/lib/libX11.so.4.10
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lc.1 =&gt; /usr/lib/libc.so.1.9
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-ldl.1 =&gt; /usr/lib/libdl.so.1.0
+<br />
+<br />I suppose that might be part of the problem.  I'll recompile and see if
+<br />
+there's any difference.
+<br />
+<br />-------------------------------------------------------------------------------
+<br />
+&nbsp;Paul D. Smith &lt;psmith_at_baynetworks.com&gt;         Network Management Development
+<br />
+&nbsp;Senior Software Engineer                                   Bay Networks, Inc.
+<br />
+-----------------------------------------------==&lt;<a href="http://www.baynetworks.com/">http://www.baynetworks.com/</a>&gt;-
+<br />
+&nbsp;&quot;Please remain calm...I may be mad, but I am a professional.&quot; --Mad Scientist
+<br />
+-------------------------------------------------------------------------------
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;These are my opinions--Bay Networks takes no responsibility for them.
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Mar 13 1996 - 13:14:17 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start15879">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="15880.html" title="Next message in the list">Charles Hines: "Re: FVWM: Reducing color use for pixmaps (home made solution)"</a></li>
+<li><dfn>Previous message</dfn>: <a href="15878.html" title="Previous message in the list">Romano Giannetti: "FVWM: Reducing color use for pixmaps (home made solution)"</a></li>
+<li><dfn>In reply to</dfn>: <a href="15877.html" title="Message to which this message replies">Paul D. Smith: "FVWM: [2.0.41] fvwm core on bad Event.type"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="15881.html" title="Next message in this discussion thread">Charles Hines: "Re: FVWM: [2.0.41] fvwm core on bad Event.type"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15879" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15879" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15879" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15879" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

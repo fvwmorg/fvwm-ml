@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Patch to make FVWM 2.5.7 build cleanly under Cygwin. from Francis Litterio on 2003-06-01 (fvwm-users)</title>
+<meta name="Author" content="Francis Litterio (franl_at_world.std.com)" />
+<meta name="Subject" content="FVWM: Patch to make FVWM 2.5.7 build cleanly under Cygwin." />
+<meta name="Date" content="2003-06-01" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Patch to make FVWM 2.5.7 build cleanly under Cygwin.</h1>
+<!-- received="Sun Jun  1 18:28:53 2003" -->
+<!-- isoreceived="20030601172853" -->
+<!-- sent="Sun, 01 Jun 2003 18:53:38 -0400" -->
+<!-- isosent="20030601225338" -->
+<!-- name="Francis Litterio" -->
+<!-- email="franl_at_world.std.com" -->
+<!-- subject="FVWM: Patch to make FVWM 2.5.7 build cleanly under Cygwin." -->
+<!-- id="u65npbcop.fsf_at_world.std.com" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start9107" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="9108.html" accesskey="d" title="Jules Alberts: &quot;FVWM: [OT] alpha mouse cursor problem, RedHat 9&quot;">Next message</a> ]
+[ <a href="9106.html" title="Loren M Lang: &quot;FVWM: Happy Birthday&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg9107" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg9107" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg9107" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg9107" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Francis Litterio &lt;<a href="mailto:franl_at_world.std.com?Subject=Re%3A%20FVWM%3A%20Patch%20to%20make%20FVWM%202.5.7%20build%20cleanly%20under%20Cygwin.">franl_at_world.std.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sun, 01 Jun 2003 18:53:38 -0400</span><br />
+</address>
+<br />
+Greetings,
+<br />
+<br />I managed to get FVWM 2.5.7 to build cleanly under Cygwin by making the
+<br />
+following small patch.  I hope this helps.
+<br />
+<pre>
+--
+Francis Litterio
+franl_at_world.std.com
+<a href="http://world.std.com/~franl/">http://world.std.com/~franl/</a>
+GPG and PGP public keys available on keyservers.
+--- modules/FvwmScript/Makefile.in~     2003-05-30 14:24:08.000000000 -0400
++++ modules/FvwmScript/Makefile.in      2003-06-01 18:58:40.000000000 -0400
+_at_&#64; -212,7 +212,7 &#64;&#64;
+ LDADD = Widgets/libWidgets.a -L$(top_builddir)/libs -lfvwm $(Xft_LIBS) \
+        $(X_LIBS) $(xpm_LIBS) $(Xinerama_LIBS) $(X_PRE_LIBS) -lXext -lX11 \
+        $(X_EXTRA_LIBS) -lm $(Xrender_LIBS) $(iconv_LIBS) $(Bidi_LIBS) \
+-       $(png_LIBS)
++       $(png_LIBS) $(intl_LIBS)
+ 
+ 
+ INCLUDES = -I$(top_srcdir) $(xpm_CFLAGS) $(Xft_CFLAGS) $(X_CFLAGS) \
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sun Jun 01 2003 - 18:28:53 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start9107">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="9108.html" title="Next message in the list">Jules Alberts: "FVWM: [OT] alpha mouse cursor problem, RedHat 9"</a></li>
+<li><dfn>Previous message</dfn>: <a href="9106.html" title="Previous message in the list">Loren M Lang: "FVWM: Happy Birthday"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg9107" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg9107" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg9107" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg9107" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:55 BST
+</em></small></p>
+</body>
+</html>

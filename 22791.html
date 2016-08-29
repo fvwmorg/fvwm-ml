@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: HELP: how to use fvwm variable '$w' in shell scripts ? from Josin Etienne on 1998-09-10 (fvwm-users)</title>
+<meta name="Author" content="Josin Etienne (josin_at_dimensional.com)" />
+<meta name="Subject" content="FVWM: HELP: how to use fvwm variable '$w' in shell scripts ?" />
+<meta name="Date" content="1998-09-10" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: HELP: how to use fvwm variable '$w' in shell scripts ?</h1>
+<!-- received="Thu Sep 10 13:17:17 1998" -->
+<!-- isoreceived="19980910121717" -->
+<!-- sent="Thu, 10 Sep 1998 01:10:03 -0600 (MDT)" -->
+<!-- isosent="19980910071003" -->
+<!-- name="Josin Etienne" -->
+<!-- email="josin_at_dimensional.com" -->
+<!-- subject="FVWM: HELP: how to use fvwm variable '$w' in shell scripts ?" -->
+<!-- id="Pine.SUN.3.96.980910001124.4789A-200000_at_flatland.dimensional.com" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start22791" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="22792.html" accesskey="d" title="Toshi Isogai: &quot;Re: FVWM: HELP: how to use fvwm variable &#0039;$w&#0039; in shell scripts ?&quot;">Next message</a> ]
+[ <a href="22790.html" title="Michael Hucka: &quot;FVWM: Re: resizing windows&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="22792.html" accesskey="t" title="Toshi Isogai: &quot;Re: FVWM: HELP: how to use fvwm variable &#0039;$w&#0039; in shell scripts ?&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg22791" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg22791" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg22791" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg22791" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Josin Etienne &lt;<a href="mailto:josin_at_dimensional.com?Subject=Re%3A%20FVWM%3A%20HELP%3A%20how%20to%20use%20fvwm%20variable%20'%24w'%20in%20shell%20scripts%20%3F">josin_at_dimensional.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 10 Sep 1998 01:10:03 -0600 (MDT)</span><br />
+</address>
+<br />
+hi,
+<br />
+<br />i want to ask what is the proper way to use Fvwm variables within
+<br />
+a shell script for FvwmCommand.  
+<br />
+<br />Especifically, what about $w ?
+<br />
+<br />In the shell script i am attaching, in the second if clause,
+<br />
+i am attempting to use $w, to write a window id to a file.
+<br />
+<br />I tested the 'Prev' command by itself in FvwmTalk, and it succeeds in writing
+<br />
+the window id to a file.
+<br />
+<br />But it does not work from my shell script.  File does not get written.
+<br />
+(i tried using '$$' and quoting...  -- no luck) 
+<br />
+<br />BTW, the rest of the script works just fine.  I can toggle back and
+<br />
+forth between 2 windows in different pages, from the xterms' command line.
+<br />
+<br />[There must be simpler ways of doing window toggling, 
+<br />
+but I just wanted to play...]
+<br />
+<br />- thanks, josin
+<br />
+<br />_________________________________________________________________________
+<br />
+In Heaven there will be no DOS, no Intel, and above all, no Bill.
+<br />
+<br /><br /><br />
+#!/bin/bash
+<br />
+###############################################################################
+<br />
+# FvwmCommand to toggle between windows.
+<br />
+#
+<br />
+# 980901 j.alvistur
+<br />
+##############################################################################
+<br />
+
+<br />
+# NO UNDEFINED VARS ALLOWED...
+<br />
+set -u
+<br />
+
+<br />
+# FOR DEBUGGING 
+<br />
+# set -x
+<br />
+
+<br />
+. FvwmCommand.sh
+<br />
+
+<br />
+PN=`basename $0`
+<br />
+
+<br />
+USAGE=&quot;\a\
+<br />
+To:    toggle between windows.
+<br />
+Usage: $PN -gG window_name
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$PN -r 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-r return to previous window.               
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-g go to 'window_name'  Arg can be any string found in actual
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window name.  Beware of mismatches.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sorry no regexps.              
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-G go to 'window_name'  Same as '-g' above.  But this is for when
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it is invoked from FvwmTalk.   &quot;
+<br />
+
+<br />
+
+<br />
+
+<br />
+#bash does not have built-in 'which'... so this should return the path echo...
+<br />
+eco=`which echo`
+<br />
+
+<br />
+
+<br />
+return_to=/tmp/window_return_to
+<br />
+went_to=/tmp/window_went_to
+<br />
+
+<br />
+
+<br />
+#=============================================================================
+<br />
+# unloading args...
+<br />
+#=============================================================================
+<br />
+
+<br />
+RETURN=&quot;FALSE&quot;
+<br />
+INVOKING_FROM=&quot;NOTHING&quot;
+<br />
+window_name=&quot;NOTHING_AT_ALL&quot;
+<br />
+
+<br />
+# echo &quot;\$#: $#&quot;
+<br />
+while getopts rg:G: opt
+<br />
+do
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;case $opt in
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;r ) 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN=&quot;TRUE&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;g ) 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INVOKING_FROM=&quot;SHELL&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window_name=&quot;$OPTARG&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;G ) 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INVOKING_FROM=&quot;FvwmTalk&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window_name=&quot;$OPTARG&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;\?) 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;$PN: bad option passed&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$eco &quot;$USAGE&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit 2
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;esac
+<br />
+done
+<br />
+
+<br />
+
+<br />
+shift `expr $OPTIND - 1`
+<br />
+
+<br />
+test  $# -ne 0  &amp;&amp; { 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;$PN: too many args&quot;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$eco &quot;$USAGE&quot;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit 1; }
+<br />
+
+<br />
+#=============================================================================
+<br />
+# doing the work...
+<br />
+#=============================================================================
+<br />
+
+<br />
+if [ &quot;$INVOKING_FROM&quot; = &quot;SHELL&quot; ] ; then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;# win_name -first_match -id -m $WINNAME &gt; $return_to || { exit 1; }        
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# OR
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;# Current [ * ] Exec echo $w &gt; $return_to
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;# using environ variable here...
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;echo $WINDOWID &gt; $return_to || { 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;$PN: cannot write to file $return_to&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit 1; }
+<br />
+
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;win_name -first_match -id -m $window_name &gt; $went_to || {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;$PN: cannot write to file $went_to&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit 1; }
+<br />
+
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Next [ *${window_name}* ] FocusAndWarp
+<br />
+
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;exit 0
+<br />
+elif [ &quot;$INVOKING_FROM&quot; = &quot;FvwmTalk&quot; ] ; then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# IF INVOKING FROM FVWMTALK.... 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;from fvwmtalks &quot; &gt;&gt; /tmp/zlog
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Prev [ * ] Exec echo $w &gt; $return_to
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Next [ *${window_name}* ] Exec echo $w &gt; $went_to
+<br />
+
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Next [ *${window_name}* ] FocusAndWarp
+<br />
+
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;exit 0
+<br />
+elif [ &quot;$RETURN&quot; = &quot;TRUE&quot; ] ; then
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WID=`cat $return_to` || { exit 1; }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;swap_files $return_to $went_to  || { exit 1; }
+<br />
+
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WindowId $WID WarpToWindow 10 10 
+<br />
+
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;exit 0
+<br />
+else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;$PN: in default case. Fell thru.&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;$eco &quot;$USAGE&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;exit 1
+<br />
+fi
+<br />
+
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Sep 10 1998 - 13:17:17 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start22791">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="22792.html" title="Next message in the list">Toshi Isogai: "Re: FVWM: HELP: how to use fvwm variable &#0039;$w&#0039; in shell scripts ?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="22790.html" title="Previous message in the list">Michael Hucka: "FVWM: Re: resizing windows"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="22792.html" title="Next message in this discussion thread">Toshi Isogai: "Re: FVWM: HELP: how to use fvwm variable &#0039;$w&#0039; in shell scripts ?"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="22792.html" title="Message sent in reply to this message">Toshi Isogai: "Re: FVWM: HELP: how to use fvwm variable &#0039;$w&#0039; in shell scripts ?"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg22791" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg22791" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg22791" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg22791" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

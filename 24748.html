@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: FvwmSaveDesk question from Robert H. Ford II on 1999-09-02 (fvwm-users)</title>
+<meta name="Author" content="Robert H. Ford II (rhford2_at_lucent.com)" />
+<meta name="Subject" content="Re: FVWM: FvwmSaveDesk question" />
+<meta name="Date" content="1999-09-02" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: FvwmSaveDesk question</h1>
+<!-- received="Thu Sep  2 15:04:32 1999" -->
+<!-- isoreceived="19990902140432" -->
+<!-- sent="Thu, 02 Sep 1999 13:59:21 -0500" -->
+<!-- isosent="19990902185921" -->
+<!-- name="Robert H. Ford II" -->
+<!-- email="rhford2_at_lucent.com" -->
+<!-- subject="Re: FVWM: FvwmSaveDesk question" -->
+<!-- id="37CEC909.6C1F00D_at_lucent.com" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="37C19E02.73416002_at_lucent.com" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start24748" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="24749.html" accesskey="d" title="Pablo Osinaga: &quot;Re: FVWM: having a window with frames but no resizing&quot;">Next message</a> ]
+[ <a href="24747.html" title="esteffl_at_pbi.net: &quot;RE: FVWM: FvwmPager questions&quot;">Previous message</a> ]
+[ <a href="24685.html" title="Robert H. Ford II: &quot;FVWM: FvwmSaveDesk question&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg24748" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg24748" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg24748" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg24748" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Robert H. Ford II &lt;<a href="mailto:rhford2_at_lucent.com?Subject=Re%3A%20FVWM%3A%20FvwmSaveDesk%20question">rhford2_at_lucent.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 02 Sep 1999 13:59:21 -0500</span><br />
+</address>
+<br />
+&quot;Robert H. Ford II&quot; wrote:
+<br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; Also I would like to use FvwmM4 to process this file but when I use the
+</em><br />
+<em class="quotelev1">&gt; following:
+</em><br />
+<em class="quotelev1">&gt;         fvwm2 -cmd &quot;FvwmM4 -m4-prefix -m4opt -I$HOME $HOME/.fvwm2rc&quot;
+</em><br />
+<em class="quotelev1">&gt; and have this
+</em><br />
+<em class="quotelev1">&gt;         &quot;m4_include(`.fvwm2desk') .
+</em><br />
+<em class="quotelev1">&gt; in my .fvwm2rc file, I get the following error:
+</em><br />
+<em class="quotelev1">&gt;         m4: bad option: --prefix-buttons
+</em><br />
+<br />I found where the &quot;--prefix-builtins&quot; (not --prefix-buttons) is coming from. 
+<br />
+FvwmM4.c:
+<br />
+<br />259    if(m4_prefix)
+<br />
+260      sprintf(options, &quot;%s --prefix-builtins %s &gt; %s\n&quot;,
+<br />
+261              m4_prog,
+<br />
+262              m4_options, tmp_name);
+<br />
+263    else
+<br />
+264      sprintf(options, &quot;%s  %s &gt; %s\n&quot;,
+<br />
+265              m4_prog,
+<br />
+266              m4_options, tmp_name);
+<br />
+267    tmpf = popen(options, &quot;w&quot;);
+<br />
+268    if (tmpf == NULL) {
+<br />
+269      perror(&quot;Cannot open pipe to m4&quot;);
+<br />
+270      exit(0377);
+<br />
+271    }
+<br />
+<br />So when I use the &quot;-m4-prefix&quot; option the &quot;--prefix-builtins&quot; is added but m4
+<br />
+sees this as a bad option.  The current version of m4 on my system does not
+<br />
+support this option.  I will fix this.
+<br />
+<br />I was finally able to get the .fvwm2desk to read in without being processed by
+<br />
+either M4 or CPP.  Here is what I did:
+<br />
+<br />###################### Initialization Functions ##########################
+<br />
+AddToFunc &quot;InitFunction&quot; &quot;I&quot; Module FvwmBanner
+<br />
++                        &quot;I&quot; Module FvwmButtons
+<br />
++                        &quot;I&quot; Module FvwmBacker
+<br />
++                        &quot;I&quot; Module FvwmTaskBar
+<br />
++                        &quot;I&quot; Module FvwmAuto 500
+<br />
++                        &quot;I&quot; Module FvwmCommandS
+<br />
++                        &quot;I&quot; Module FvwmAnimate
+<br />
++                        &quot;I&quot; read /home/misha21/.fvwm2desk
+<br />
+<br />Now the only problem I have is my &quot;re-labeled&quot; windows.  Is there a way to have
+<br />
+the &quot;Wait&quot; label be passed back from the application and not what the current
+<br />
+window label is.  Here is a snippet of what I mean.
+<br />
+<br />Here is what I currently get from FvwmSaveDesk:
+<br />
+<br />AddToFunc InitFunction  &quot;I&quot; Desk 0 1
+<br />
++               &quot;I&quot; Exec xterm -geometry 80x45+67+1 -name ssbun -title ssbun -bg
+<br />
+&nbsp;antiquewhite -fg black -bd magenta4 -e rlogin -8 ssbun &amp;
+<br />
++               &quot;I&quot; Wait ssbun pts/50 /home/misha21
+<br />
+<br />In this case, how hard would it be to have the &quot;Wait&quot; label use the same name as
+<br />
+the xterms &quot;-title&quot; option?
+<br />
+<br />For now I will have to hand edit this file, but it sure would be nice to have it
+<br />
+be hands off.
+<br />
+<br />Thank you for all the hard work and time spent on improving Fvwm.
+<br />
+<br />Bob
+<br />
+<br /><br /><br /><pre>
+-- 
+    _/_/_/     _/  _/   _/_/_/_/   _/_/_/_/_/_/ Robert H. Ford II
+   _/   _/    _/  _/   _/           _/    _/    Lucent Technologies
+  _/_/_/     _/_/_/   _/_/_/       _/    _/     Bell Labs Innovations
+ _/   _/    _/  _/   _/           _/    _/      Naperville IL, 60566-7045
+_/    _/   _/  _/   _/         _/_/_/_/_/_/     mailto:rhford2_at_lucent.com
+                                                Voice: (630) 713-4957
+__________________________________________________
+|  M R spiders!                    |      |   |  |
+|  M N O spiders!                  |      |   |  |
+|  O S A R - C D E D B D I's?      |      |   |  |
+|  Y I B, M R spiders...           |      |   *  |
+|                                  *      |      |
+|                                         *      |
+--------------------------------------------------
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Sep 02 1999 - 15:04:32 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start24748">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="24749.html" title="Next message in the list">Pablo Osinaga: "Re: FVWM: having a window with frames but no resizing"</a></li>
+<li><dfn>Previous message</dfn>: <a href="24747.html" title="Previous message in the list">esteffl_at_pbi.net: "RE: FVWM: FvwmPager questions"</a></li>
+<li><dfn>In reply to</dfn>: <a href="24685.html" title="Message to which this message replies">Robert H. Ford II: "FVWM: FvwmSaveDesk question"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg24748" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg24748" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg24748" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg24748" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:02 BST
+</em></small></p>
+</body>
+</html>

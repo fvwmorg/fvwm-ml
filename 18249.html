@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Updated CleverPlacement and stuff. from Anthony Martin on 1996-10-26 (fvwm-users)</title>
+<meta name="Author" content="Anthony Martin (amartin_at_engr.csulb.edu)" />
+<meta name="Subject" content="FVWM: Updated CleverPlacement and stuff." />
+<meta name="Date" content="1996-10-26" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Updated CleverPlacement and stuff.</h1>
+<!-- received="Sat Oct 26 03:23:00 1996" -->
+<!-- isoreceived="19961026022300" -->
+<!-- sent="Sat, 26 Oct 1996 01:22:42 -0700 (PDT)" -->
+<!-- isosent="19961026082242" -->
+<!-- name="Anthony Martin" -->
+<!-- email="amartin_at_engr.csulb.edu" -->
+<!-- subject="FVWM: Updated CleverPlacement and stuff." -->
+<!-- id="Pine.SGI.3.93.961026003005.11541A-100000_at_heart.engr.csulb.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start18249" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="18250.html" accesskey="d" title="Bob Woodside: &quot;Re: FVWM: Updated CleverPlacement and stuff.&quot;">Next message</a> ]
+[ <a href="18248.html" title="Markus Gutschke: &quot;Re: FVWM: Re: &#0034;active focus&#0034; applications (MetaCard)&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="18250.html" accesskey="t" title="Bob Woodside: &quot;Re: FVWM: Updated CleverPlacement and stuff.&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18249" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18249" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18249" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18249" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Anthony Martin &lt;<a href="mailto:amartin_at_engr.csulb.edu?Subject=Re%3A%20FVWM%3A%20Updated%20CleverPlacement%20and%20stuff.">amartin_at_engr.csulb.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sat, 26 Oct 1996 01:22:42 -0700 (PDT)</span><br />
+</address>
+<br />
+I made a couple of one-liner speed optimizations suggested by Dan
+<br />
+Astoorian to CleverPlacement.  I doubt that anyone will notice anything.
+<br />
+If placement was instantaneous before, it is still instantaneous, but I
+<br />
+suppose that there are extreme cases where placement time could be
+<br />
+measurable (many many windows on slow computer).  In any case, the new
+<br />
+CleverPlacement should be faster than the old SmartPlacement.  It is at:
+<br />
+<a href="http://www.engr.csulb.edu/~amartin/placement.c">http://www.engr.csulb.edu/~amartin/placement.c</a>
+<br />
+<br />I received a report that CleverPlacement works fine with fvwm95 with only
+<br />
+a header file change.  I have been trying to get the source for the latest
+<br />
+fvwm95, but the home page seems to be down.  Is it still at this location?
+<br />
+<a href="http://ltiwww.epfl.ch/~barth/fvwm95.html">http://ltiwww.epfl.ch/~barth/fvwm95.html</a>
+<br />
+<br />There is a bug somewhere in fvwm that sometimes causes it to subtract 1
+<br />
+from the x and y values returned by SmartPlacement/CleverPlacement.  This
+<br />
+bug has been there for a very long time and is unrelated to the new
+<br />
+CleverPlacement code.  If your first window starts at -1,-1 instead of 0,0
+<br />
+then I suggest changing your placement line as follows:
+<br />
+<br />Style &quot;*&quot; SmartPlacement, ActivePlacement
+<br />
+<br />This seems to suppress the bug as far as I can tell.  If you want to
+<br />
+verify that there is a bug, try the two sample.fvwmrc files distributed
+<br />
+with fvwm-2.  One of these files exposes the bug, the other doesn't.  I
+<br />
+started looking for the cause of this bug, which I think is in placement.c
+<br />
+(the part I didn't touch), but the code is so confusing, I gave up. 
+<br />
+Perhaps someone else has an idea. 
+<br />
+<br />Tony.
+<br />
+<br /><br /><br /><br /><br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sat Oct 26 1996 - 03:23:00 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start18249">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="18250.html" title="Next message in the list">Bob Woodside: "Re: FVWM: Updated CleverPlacement and stuff."</a></li>
+<li><dfn>Previous message</dfn>: <a href="18248.html" title="Previous message in the list">Markus Gutschke: "Re: FVWM: Re: &#0034;active focus&#0034; applications (MetaCard)"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="18250.html" title="Next message in this discussion thread">Bob Woodside: "Re: FVWM: Updated CleverPlacement and stuff."</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="18250.html" title="Message sent in reply to this message">Bob Woodside: "Re: FVWM: Updated CleverPlacement and stuff."</a></li>
+<li><dfn>Reply</dfn>: <a href="18258.html" title="Message sent in reply to this message">Dan Miner: "Re: FVWM: Updated CleverPlacement and stuff."</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18249" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18249" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18249" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18249" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

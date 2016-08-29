@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Re: make pointer stay in place when switching windows (windows list) from Parv on 2004-04-29 (fvwm-users)</title>
+<meta name="Author" content="Parv (parv_at_pair.com)" />
+<meta name="Subject" content="FVWM: Re: make pointer stay in place when switching windows (windows list)" />
+<meta name="Date" content="2004-04-29" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Re: make pointer stay in place when switching windows (windows list)</h1>
+<!-- received="Wed Apr 28 20:00:44 2004" -->
+<!-- isoreceived="20040428190044" -->
+<!-- sent="Wed, 28 Apr 2004 20:58:44 -0400" -->
+<!-- isosent="20040429005844" -->
+<!-- name="Parv" -->
+<!-- email="parv_at_pair.com" -->
+<!-- subject="FVWM: Re: make pointer stay in place when switching windows (windows list)" -->
+<!-- id="20040429005844.GB1507_at_moo.holy.cow" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="20040428173135.GC10084_at_luna.mooo.com" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start12055" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="12056.html" accesskey="d" title="Perry Hutchison: &quot;FVWM: reining in an ill-behaved application&quot;">Next message</a> ]
+[ <a href="12054.html" title="Dan Espen: &quot;Re: FVWM: I&#0039;m very new at this but something easy is unclear&quot;">Previous message</a> ]
+[ <a href="12052.html" title="Micha Feigin: &quot;FVWM: make pointer stay in place when switching windows (windows list)&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg12055" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg12055" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg12055" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg12055" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Parv &lt;<a href="mailto:parv_at_pair.com?Subject=Re%3A%20FVWM%3A%20Re%3A%20make%20pointer%20stay%20in%20place%20when%20switching%20windows%20(windows%20list)">parv_at_pair.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 28 Apr 2004 20:58:44 -0400</span><br />
+</address>
+<br />
+in message &lt;20040428173135.GC10084_at_luna.mooo.com&gt;, wrote Micha
+<br />
+Feigin thusly...
+<br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt; If I have to move the pointer, a better behavior would be to move
+</em><br />
+<em class="quotelev1">&gt; the pointer to the center of the new window, this would also solve
+</em><br />
+<em class="quotelev1">&gt; the focus problems I had with sloppy focus and focusing a window
+</em><br />
+<em class="quotelev1">&gt; that is not under the mouse when the mouse is over a different
+</em><br />
+<em class="quotelev1">&gt; window.
+</em><br />
+<br />To center them mouse, among other things, (after a selection from WindowList),
+<br />
+i use...
+<br />
+<br />&nbsp;&nbsp;DestroyFunc  WindowListFunc
+<br />
+&nbsp;&nbsp;AddToFunc    WindowListFunc
+<br />
+&nbsp;&nbsp;+  I Function deiconify-func Raise
+<br />
+&nbsp;&nbsp;+  I FlipFocus
+<br />
+&nbsp;&nbsp;+  I WarpToWindow 50 50
+<br />
+<br />&nbsp;&nbsp;DestroyFunc  deiconify-func
+<br />
+&nbsp;&nbsp;AddToFunc    deiconify-func
+<br />
+&nbsp;&nbsp;+  I Iconify false
+<br />
+&nbsp;&nbsp;+  I WindowShade false
+<br />
+&nbsp;&nbsp;+  I $0
+<br />
+<br />...the big idea is to (re)define WindowListFunc ... eh ... function
+<br />
+which is used by WindowList.  See fvwm(1) for default &amp; other
+<br />
+data.
+<br />
+<br /><br />&nbsp;&nbsp;- Parv
+<br />
+<br /><pre>
+-- 
+----- End forwarded message -----
+  - Parv
+  - Anubhav
+-- 
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Apr 28 2004 - 20:00:44 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start12055">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="12056.html" title="Next message in the list">Perry Hutchison: "FVWM: reining in an ill-behaved application"</a></li>
+<li><dfn>Previous message</dfn>: <a href="12054.html" title="Previous message in the list">Dan Espen: "Re: FVWM: I&#0039;m very new at this but something easy is unclear"</a></li>
+<li><dfn>In reply to</dfn>: <a href="12052.html" title="Message to which this message replies">Micha Feigin: "FVWM: make pointer stay in place when switching windows (windows list)"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg12055" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg12055" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg12055" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg12055" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:56 BST
+</em></small></p>
+</body>
+</html>

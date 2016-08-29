@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: fvwm-pre-2.0-patchlevel-35 configure.h from Randall S. Winchester on 1995-09-21 (fvwm-users)</title>
+<meta name="Author" content="Randall S. Winchester (rsw_at_eng.umd.edu)" />
+<meta name="Subject" content="FVWM: fvwm-pre-2.0-patchlevel-35 configure.h" />
+<meta name="Date" content="1995-09-21" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: fvwm-pre-2.0-patchlevel-35 configure.h</h1>
+<!-- received="Thu Sep 21 09:06:15 1995" -->
+<!-- isoreceived="19950921080615" -->
+<!-- sent="Thu, 21 Sep 1995 10:05:32 -0400 (EDT)" -->
+<!-- isosent="19950921140532" -->
+<!-- name="Randall S. Winchester" -->
+<!-- email="rsw_at_eng.umd.edu" -->
+<!-- subject="FVWM: fvwm-pre-2.0-patchlevel-35 configure.h" -->
+<!-- id="Pine.SUN.3.91.950921095256.27316M-100000_at_atlantis.eng.umd.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start14254" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="14255.html" accesskey="d" title="Charles Hines: &quot;Re: FVWM: Window titles don&#0039;t update on pl34.&quot;">Next message</a> ]
+[ <a href="14253.html" title="Charles Hines: &quot;Re: FVWM: The list has list moved!&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="14276.html" accesskey="t" title="Charles Hines: &quot;Re: FVWM: fvwm-pre-2.0-patchlevel-35 configure.h&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg14254" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg14254" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg14254" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg14254" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Randall S. Winchester &lt;<a href="mailto:rsw_at_eng.umd.edu?Subject=Re%3A%20FVWM%3A%20fvwm-pre-2.0-patchlevel-35%20configure.h">rsw_at_eng.umd.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 21 Sep 1995 10:05:32 -0400 (EDT)</span><br />
+</address>
+<br />
+I had to make two changes to configure.h. 
+<br />
+One is new for pl-35, the other I have always made. I think both of these 
+<br />
+changes should be made for pl-36. (A patch follows.)
+<br />
+<br />This first one is that I had to put the following back;
+<br />
+/* Imake command needed to put modules in desired target location */
+<br />
+/* Use the second version if it causes grief */
+<br />
+#define TARGET_DIR BINDIR=FVWMDIR
+<br />
+/* #define TARGET_DIR */
+<br />
+<br />If you just &quot;#define TARGET_DIR&quot;, you will have your modules installed
+<br />
+in the X11 bin directory (/usr/local/X11R6/bin in my case). The intent
+<br />
+is to have them installed in FVWMDIR (i.e /usr/local/X11R6/lib/X11/fvwm2).
+<br />
+Otherwise you may not be able to run fvwm and fvwm2 concurently.
+<br />
+<br /><br />The second one  is that I always comment out;
+<br />
+/*************************************************************************
+<br />
+&nbsp;*
+<br />
+&nbsp;* Really, no one but me should need this 
+<br />
+&nbsp;*
+<br />
+&nbsp;************************************************************************/
+<br />
+/*
+<br />
+#if defined __sun__ &amp;&amp; !defined SYSV
+<br />
+#define BROKEN_SUN_HEADERS          
+<br />
+#endif
+<br />
+*/
+<br />
+<br /><br />Here is the patch;
+<br />
+*** 1.1	1995/09/20 20:30:43
+<br />
+--- configure.h	1995/09/21 14:04:06
+<br />
+***************
+<br />
+*** 20,27 ****
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;/* Imake command needed to put modules in desired target location */
+<br />
+&nbsp;&nbsp;/* Use the second version if it causes grief */
+<br />
+! /* #define TARGET_DIR BINDIR=FVWMDIR */
+<br />
+! #define TARGET_DIR
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;/* If you want Imake to leave your binary in the standard place where
+<br />
+--- 20,27 ----
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;/* Imake command needed to put modules in desired target location */
+<br />
+&nbsp;&nbsp;/* Use the second version if it causes grief */
+<br />
+! #define TARGET_DIR BINDIR=FVWMDIR
+<br />
+! /* #define TARGET_DIR */
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;/* If you want Imake to leave your binary in the standard place where
+<br />
+***************
+<br />
+*** 100,108 ****
+<br />
+--- 100,110 ----
+<br />
+&nbsp;&nbsp;&nbsp;* Really, no one but me should need this 
+<br />
+&nbsp;&nbsp;&nbsp;*
+<br />
+&nbsp;&nbsp;&nbsp;************************************************************************/
+<br />
++ /*
+<br />
+&nbsp;&nbsp;#if defined __sun__ &amp;&amp; !defined SYSV
+<br />
+&nbsp;&nbsp;#define BROKEN_SUN_HEADERS          
+<br />
+&nbsp;&nbsp;#endif
+<br />
++ */
+<br />
+&nbsp;&nbsp;/***************************************************************************
+<br />
+&nbsp;&nbsp;&nbsp;*
+<br />
+&nbsp;&nbsp;&nbsp;* In theory, this stuff can be replaced with GNU Autoconf 
+<br />
+<br /><pre>
+--
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Sep 21 1995 - 09:06:15 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start14254">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="14255.html" title="Next message in the list">Charles Hines: "Re: FVWM: Window titles don&#0039;t update on pl34."</a></li>
+<li><dfn>Previous message</dfn>: <a href="14253.html" title="Previous message in the list">Charles Hines: "Re: FVWM: The list has list moved!"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="14276.html" title="Next message in this discussion thread">Charles Hines: "Re: FVWM: fvwm-pre-2.0-patchlevel-35 configure.h"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="14276.html" title="Message sent in reply to this message">Charles Hines: "Re: FVWM: fvwm-pre-2.0-patchlevel-35 configure.h"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg14254" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg14254" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg14254" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg14254" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:57 BST
+</em></small></p>
+</body>
+</html>

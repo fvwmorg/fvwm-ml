@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: .fvwmrc or .fvwm2rc from David Shochat on 1998-12-07 (fvwm-users)</title>
+<meta name="Author" content="David Shochat (shochat_at_chelmsford.com)" />
+<meta name="Subject" content="Re: FVWM: .fvwmrc or .fvwm2rc" />
+<meta name="Date" content="1998-12-07" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: .fvwmrc or .fvwm2rc</h1>
+<!-- received="Mon Dec  7 05:18:14 1998" -->
+<!-- isoreceived="19981207051814" -->
+<!-- sent="Mon, 07 Dec 1998 06:18:53 -0500" -->
+<!-- isosent="19981207111853" -->
+<!-- name="David Shochat" -->
+<!-- email="shochat_at_chelmsford.com" -->
+<!-- subject="Re: FVWM: .fvwmrc or .fvwm2rc" -->
+<!-- id="366BB99D.4E48278A_at_chelmsford.com" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="001501be21b0$0eec9920$101e40ca_at_aa" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start23106" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="23107.html" accesskey="d" title="Dominik Vogt: &quot;Re: FVWM: Desk range problem&quot;">Next message</a> ]
+[ <a href="23105.html" title="Frank Wilcox: &quot;Re: FVWM: .fvwmrc or .fvwm2rc&quot;">Previous message</a> ]
+[ <a href="23104.html" title="Michael Yick: &quot;FVWM: .fvwmrc or .fvwm2rc&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg23106" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg23106" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg23106" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg23106" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: David Shochat &lt;<a href="mailto:shochat_at_chelmsford.com?Subject=Re%3A%20FVWM%3A%20.fvwmrc%20or%20.fvwm2rc">shochat_at_chelmsford.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 07 Dec 1998 06:18:53 -0500</span><br />
+</address>
+<br />
+Ah, but xinitrc is the key. I ran into the same problem myself, so I'll
+<br />
+tell you what I found out. I have RedHat 5.2 which has numerous window
+<br />
+managers, but the one that comes more or less pre-configured is fvwm2.
+<br />
+It
+<br />
+uses what you could call a &quot;configuration scheme&quot; called AnotherLevel,
+<br />
+which works as follows:
+<br />
+<br />If you don't have your own ~/.xinitrc, the one that runs things is   
+<br />
+/etc/X11/xinit/xinitrc (no dot).
+<br />
+That in turn invokes Xclients (assuming no ~/.Xclients).
+<br />
+That looks for ~/.wm_style to see if you like things to look Windows
+<br />
+95-ish or Motif-ish (defaults to W 95 if no .wm_style). Then it invokes:
+<br />
+/usr/X11R6/bin/RunWM --Fvwm95 (assuming the W 95 case).
+<br />
+RunWM is actually a script which you can look at.
+<br />
+<br />Here's where things get inconsistent. RunWM looks to see if you have 
+<br />
+~/.fvwm2rc.m4. If not, it's going to use
+<br />
+/etc/X11/AnotherLevel/fvwm2rc.m4
+<br />
+instead. Lets say you don't have ~/.fvwm2rc.m4 for example. Then the key 
+<br />
+next thing it does is:
+<br />
+<br />exec fvwm2 -cmd FvwmM4 -debug /etc/X11/AnotherLevel/fvwm2rc.m4
+<br />
+<br />You won't see that literally, but if you look at what all
+<br />
+the variables evaluate to, that's what you've got. Now what the &quot;-cmd
+<br />
+FvwmM4&quot; means is that the file specified is written in the m4 macro
+<br />
+language and is going to be preprocessed by m4 before being fed to
+<br />
+fvwm2.
+<br />
+To go further, you must learn the basics of the m4 language (although
+<br />
+you
+<br />
+are free to throw out the whole AnotherLevel scheme if you want to in
+<br />
+which case you could forget about m4). Can't find the m4 man page?
+<br />
+Neither
+<br />
+could I. That's because it's documented using the &quot;info&quot; system. If
+<br />
+you're
+<br />
+an Emacs user, you know all about that. You can also just invoke &quot;info
+<br />
+m4&quot;
+<br />
+from the command line. This is much better than a man page. It is
+<br />
+essentially a hypertext tutorial.
+<br />
+<br />Once you come back from learning m4, you can look at fvwm2rc.m4. Now
+<br />
+remember, if you want your own customized version, you have to copy it
+<br />
+to 
+<br />
+your home directory as .fvwm2rc.m4 (add the dot). But if you look at
+<br />
+what
+<br />
+IT does, you'll find a glaring inconsitency. It &quot;includes&quot; a whole host
+<br />
+of
+<br />
+m4 special-purpose configuration files. The default ones are all in
+<br />
+/etc/X11/AnotherLevel. But if you want to customize, say,
+<br />
+fvwm2rc.defines.m4 (you probably do), should you copy it to
+<br />
+~/.fvwm2rc.defines.m4? No, that would be too logical. Instead, you have
+<br />
+to
+<br />
+copy it to ~/.fvwm2rc.defines (NO .m4 SUFFIX!). Whoever came up with all
+<br />
+this obviously didn't want you to figure it out. The same goes for all
+<br />
+the
+<br />
+other subsidiary configuration files.
+<br />
+<br />The -debug after the FvwmM4 above, does something very valuable. It
+<br />
+causes
+<br />
+much of (but not all) the output from the m4 preprocessing of all those
+<br />
+files into a file in /tmp. for instance the one created most recently
+<br />
+for
+<br />
+me is:
+<br />
+/tmp/fvwmrca02670. It's instructive to look at this and the m4 &quot;source&quot; 
+<br />
+files side by side. It is this that gets fed to fvwm2.
+<br />
+<br />Well, hopefully that's enough to get you started. I have not found any
+<br />
+place where the AnotherLevel scheme is documented!
+<br />
+<br />-- David
+<br />
+<br /><em class="quotelev1">&gt; Michael Yick wrote:
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; Hi,
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; I am confused which config file should I use. I have installed the
+</em><br />
+<em class="quotelev1">&gt; RedHat 5.1 and configured the XF86.
+</em><br />
+<em class="quotelev1">&gt; I find that .fvwmrc is for ver.1.xx and .fvwm2rc is for ver.2.xx,
+</em><br />
+<em class="quotelev1">&gt; right?
+</em><br />
+<em class="quotelev1">&gt; How can I find out which version I am running (beside looking at
+</em><br />
+<em class="quotelev1">&gt; xinitrc because I cannot interpret it properly)?
+</em><br />
+<em class="quotelev1">&gt; Do I then use the appropriate configure file in my home directory?
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; Many thanks and regards,
+</em><br />
+<em class="quotelev1">&gt; Michael
+</em><br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon Dec 07 1998 - 05:18:14 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start23106">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="23107.html" title="Next message in the list">Dominik Vogt: "Re: FVWM: Desk range problem"</a></li>
+<li><dfn>Previous message</dfn>: <a href="23105.html" title="Previous message in the list">Frank Wilcox: "Re: FVWM: .fvwmrc or .fvwm2rc"</a></li>
+<li><dfn>In reply to</dfn>: <a href="23104.html" title="Message to which this message replies">Michael Yick: "FVWM: .fvwmrc or .fvwm2rc"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg23106" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg23106" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg23106" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg23106" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

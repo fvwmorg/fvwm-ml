@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Thoughts about default XORValue from Martin Trampler on 1997-02-25 (fvwm-users)</title>
+<meta name="Author" content="Martin Trampler (trampler_at_pi1.informatik.uni-mannheim.de)" />
+<meta name="Subject" content="FVWM: Thoughts about default XORValue" />
+<meta name="Date" content="1997-02-25" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Thoughts about default XORValue</h1>
+<!-- received="Tue Feb 25 09:51:53 1997" -->
+<!-- isoreceived="19970225095153" -->
+<!-- sent="Tue, 25 Feb 1997 16:51:19 +0100 (MET)" -->
+<!-- isosent="19970225155119" -->
+<!-- name="Martin Trampler" -->
+<!-- email="trampler_at_pi1.informatik.uni-mannheim.de" -->
+<!-- subject="FVWM: Thoughts about default XORValue" -->
+<!-- id="199702251551.QAA08554_at_pi2suns1.informatik.uni-mannheim.de" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start19340" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="19341.html" accesskey="d" title="Grant McDorman: &quot;Re: FVWM: Multi-screen patch redux&quot;">Next message</a> ]
+[ <a href="19339.html" title="Rene Pineda: &quot;re:FVWM: fvwm95 click-to-focus &#0038; autoraise?&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="19362.html" accesskey="t" title="alex korobka: &quot;Re: FVWM: Thoughts about default XORValue&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19340" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19340" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19340" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19340" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Martin Trampler &lt;<a href="mailto:trampler_at_pi1.informatik.uni-mannheim.de?Subject=Re%3A%20FVWM%3A%20Thoughts%20about%20default%20XORValue">trampler_at_pi1.informatik.uni-mannheim.de</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 25 Feb 1997 16:51:19 +0100 (MET)</span><br />
+</address>
+<br />
+Hi all,
+<br />
+<br />I've just compiled and installed fvwm-2.0.45 on our Solaris-Server
+<br />
+without any problems. It's getting better with every release !
+<br />
+<br />I experienced the puzzling behaviour that the outlines of windows were
+<br />
+not drawn during resize or move operations on both 16 and 24 bpp
+<br />
+displays. Looking through the mailing list archives I found that the
+<br />
+reason is that the default XORValue for those &quot;rubberbands&quot; was
+<br />
+changed from 255 to 1, giving better results on 8bpp (correct me if
+<br />
+I'm wrong)
+<br />
+<br />I think this is not a good idea: 
+<br />
+<br />The old value was fine (maybe not perfect) for _all_ kinds of
+<br />
+depths. At least it worked. If one of our users found it
+<br />
+insufficiently (nobody ever did) she could have easily set the value
+<br />
+herself. At our site we have the policy to give users a set of
+<br />
+dotfiles with the promise, that they can get their work done if they
+<br />
+leave them as they are. These files are minimal, without bells and
+<br />
+whistles. If users fiddle with them, they're on their own.
+<br />
+With our &quot;minimal&quot; .fvwmrc they can run the WM, if they want to
+<br />
+explore its features they have to RTFM.
+<br />
+<br />I understand that this release is still considered beta, so I can't
+<br />
+rely on backward compatibility. But to change the default for XORValue
+<br />
+means to introduce the necessity to configure another option in
+<br />
+.fvwm(2)rc. My personal point of view is that it should be possible to
+<br />
+provide a _minimal_ &quot;one size fits all&quot;-configuration.
+<br />
+<br />(Btw: Is the system-wide configuration-file still -as the Manpage
+<br />
+says- /.../.fvwmrc ?? I remember a discussion in this group about
+<br />
+changing it to /.../fvwmrc or /.../system.fvwmrc, so it would not be a
+<br />
+hidden file anymore)
+<br />
+<br />Regards
+<br />
+<br />&nbsp;&nbsp;&nbsp;Martin Trampler
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue Feb 25 1997 - 09:51:53 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start19340">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="19341.html" title="Next message in the list">Grant McDorman: "Re: FVWM: Multi-screen patch redux"</a></li>
+<li><dfn>Previous message</dfn>: <a href="19339.html" title="Previous message in the list">Rene Pineda: "re:FVWM: fvwm95 click-to-focus &#0038; autoraise?"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="19362.html" title="Next message in this discussion thread">alex korobka: "Re: FVWM: Thoughts about default XORValue"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="19362.html" title="Message sent in reply to this message">alex korobka: "Re: FVWM: Thoughts about default XORValue"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19340" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19340" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19340" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19340" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

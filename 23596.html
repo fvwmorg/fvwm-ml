@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: FvwmButtonsPanel placement issue from Jim Nicholson on 1999-02-05 (fvwm-users)</title>
+<meta name="Author" content="Jim Nicholson (jim_at_osiris.kosmic.org)" />
+<meta name="Subject" content="FVWM: FvwmButtonsPanel placement issue" />
+<meta name="Date" content="1999-02-05" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: FvwmButtonsPanel placement issue</h1>
+<!-- received="Fri Feb  5 17:29:48 1999" -->
+<!-- isoreceived="19990205172948" -->
+<!-- sent="Fri, 5 Feb 1999 12:29:06 -0500 (EST)" -->
+<!-- isosent="19990205172906" -->
+<!-- name="Jim Nicholson" -->
+<!-- email="jim_at_osiris.kosmic.org" -->
+<!-- subject="FVWM: FvwmButtonsPanel placement issue" -->
+<!-- id="14011.10850.47024.131468_at_osiris.kosmic.org" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start23596" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="23597.html" accesskey="d" title="Scott Barber: &quot;FVWM: Determine is WM is running?&quot;">Next message</a> ]
+[ <a href="23595.html" title="Toshi Isogai: &quot;Re:FVWM: FvwmPager (2.1.10) Button 2 problem...&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg23596" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg23596" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg23596" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg23596" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Jim Nicholson &lt;<a href="mailto:jim_at_osiris.kosmic.org?Subject=Re%3A%20FVWM%3A%20FvwmButtonsPanel%20placement%20issue">jim_at_osiris.kosmic.org</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 5 Feb 1999 12:29:06 -0500 (EST)</span><br />
+</address>
+<br />
+I've just upgraded to 2.1.10, and finally decided to tackle converting 
+<br />
+my configuration to use some of the more recent features. Primarily,
+<br />
+I'm trying to see how much of what I did in the past with FvwmWharf
+<br />
+and FvwmTaskBar can actually be done with FvwmButtons.
+<br />
+<br />I think I found a problem with the Panel placement logic. I'm
+<br />
+attaching my configuration below. The gist of what I've discovered is
+<br />
+that if the panel invoked with &quot;Panel(up) has padding set to 0 0, the
+<br />
+panel always appears at +0+0 on the screen. If I take the Padding
+<br />
+setting off the panel, the panel comes up where you would expect it to 
+<br />
+(above the invoking button).
+<br />
+<br />I'm posting here first before the developer's list because I'm not
+<br />
+certain if this is a bug, or if I just misunderstand something.
+<br />
+<br />Style MyMenu*  NoTitle, NoHandles, Sticky, WindowListSkip,BorderWidth 1, StaysOnTop
+<br />
+<br />*MyMenuBack Grey
+<br />
+*MyMenuBoxSize Smart
+<br />
+*MyMenuGeometry +0-0
+<br />
+*MyMenuRows 1
+<br />
+*MyMenuFont -*-lucida-bold-r-*-*-12-*-*-*-*-*-*-*
+<br />
+*MyMenuFore Black
+<br />
+*MyMenuPadding 0 0
+<br />
+*MyMenuFrame 1
+<br />
+<br />*MyMenu(1x1, Size 64 22, Title (Side) Menu, Icon mini-penguin.xpm, Panel(up) Menu ) 
+<br />
+*MyMenu(3x1, Size 64 22, Swallow &quot;FvwmPager&quot; &quot;FvwmPager 0 2&quot;)
+<br />
+<br />*MyMenuPanel Menu
+<br />
+*MyMenuColumns 1
+<br />
+*MyMenuPadding 0 0
+<br />
+*MyMenu(Size 64 22, Title(Side) Xterm, Icon mini.xterm.xpm, Action 'Exec  xterm -cn -T local -n local -ls -fg Green -bg Black')
+<br />
+<br />AddToFunc &quot;RestartFunction&quot; 
+<br />
++ &quot;I&quot; Module FvwmButtons MyMenu
+<br />
+<br />AddToFunc &quot;InitFunction&quot; 
+<br />
++ &quot;I&quot; Module FvwmButtons MyMenu
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://fvwm.math.uh.edu/">http://fvwm.math.uh.edu/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Feb 05 1999 - 17:29:48 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start23596">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="23597.html" title="Next message in the list">Scott Barber: "FVWM: Determine is WM is running?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="23595.html" title="Previous message in the list">Toshi Isogai: "Re:FVWM: FvwmPager (2.1.10) Button 2 problem..."</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg23596" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg23596" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg23596" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg23596" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:02 BST
+</em></small></p>
+</body>
+</html>

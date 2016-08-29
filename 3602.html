@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: Scrolling pages and focusing... from Dominik Vogt on 2001-11-10 (fvwm-users)</title>
+<meta name="Author" content="Dominik Vogt (dominik.vogt_at_gmx.de)" />
+<meta name="Subject" content="Re: FVWM: Scrolling pages and focusing..." />
+<meta name="Date" content="2001-11-10" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: Scrolling pages and focusing...</h1>
+<!-- received="Sat Nov 10 15:25:15 2001" -->
+<!-- isoreceived="20011110152515" -->
+<!-- sent="Sat, 10 Nov 2001 20:02:51 +0100" -->
+<!-- isosent="20011110190251" -->
+<!-- name="Dominik Vogt" -->
+<!-- email="dominik.vogt_at_gmx.de" -->
+<!-- subject="Re: FVWM: Scrolling pages and focusing..." -->
+<!-- id="20011110200251.B5420_at_gmx.de" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="20011026154454.C14867_at_manta" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start3602" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="3603.html" accesskey="d" title="Dominik Vogt: &quot;Re: FVWM: Patch for FvwmTaskBar&quot;">Next message</a> ]
+[ <a href="3601.html" title="Dominik Vogt: &quot;Re: FVWM: constraining &#0034;maximized&#0034; window to some portion of the screen&quot;">Previous message</a> ]
+[ <a href="3465.html" title="johannes karlsmyr: &quot;FVWM: Scrolling pages and focusing...&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg3602" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg3602" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg3602" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg3602" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Dominik Vogt &lt;<a href="mailto:dominik.vogt_at_gmx.de?Subject=Re%3A%20FVWM%3A%20Scrolling%20pages%20and%20focusing...">dominik.vogt_at_gmx.de</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sat, 10 Nov 2001 20:02:51 +0100</span><br />
+</address>
+<br />
+On Fri, Oct 26, 2001 at 03:44:54PM +0200, johannes karlsmyr wrote:
+<br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; If i want to scroll +100000+0 and focus and raise the last focused window on
+</em><br />
+<em class="quotelev1">&gt; that page, how do i do that. Right now i have a ugly function like this:
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; AddToFunc ScrollRight		
+</em><br />
+<em class="quotelev1">&gt; +				&quot;I&quot; Scroll +100000+0
+</em><br />
+<em class="quotelev1">&gt; +				&quot;I&quot; Next (CurrentPage !Iconic) Focus
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; but that doesn't work as satisfying as i want it too. Any other ideas?
+</em><br />
+<br />I don't think there's currently an easy way to do this.  Fvwm only
+<br />
+keeps track of a focused window on any single desktop.  You could
+<br />
+try to write the WindowId of the focused window in a file when you
+<br />
+switch pages and parse that with a shell script via the PipeRead
+<br />
+command, but that requires a bit of shell programming.
+<br />
+<br />But perhaps this approach works for you:  Instead of deviding your
+<br />
+desktopn into X by Y pages, use X by Y separate desktops.  You have
+<br />
+to replace the &quot;Scroll&quot; command with GotoDesk, e.g.
+<br />
+<br />&nbsp;&nbsp;*FvwmPagerColumns      X
+<br />
+&nbsp;&nbsp;*FvwmPagerRows         Y
+<br />
+&nbsp;&nbsp;FvwmPager 0 X*Y-1
+<br />
+<br />&nbsp;&nbsp;AddToFunc ScrollRight
+<br />
+&nbsp;&nbsp;+ I GotoDesk 1 0 X*Y-1
+<br />
+&nbsp;&nbsp;AddToFunc ScrollLeft
+<br />
+&nbsp;&nbsp;+ I GotoDesk -1 0 X*Y-1
+<br />
+&nbsp;&nbsp;AddToFunc ScrollUp
+<br />
+&nbsp;&nbsp;+ I GotoDesk Y 0 X*Y-1
+<br />
+&nbsp;&nbsp;AddToFunc ScrollDown
+<br />
+&nbsp;&nbsp;+ I GotoDesk -Y 0 X*Y-1
+<br />
+<br />(replace X, Y and X*Y-1 with the values you get when you insert
+<br />
+the actual number of rows/columns).
+<br />
+<br />However, you can't move windows between the &quot;fake&quot; pages anymore.
+<br />
+<br />Bye
+<br />
+<br />Dominik ^_^  ^_^
+<br />
+<br />&nbsp;--
+<br />
+Dominik Vogt, dominik.vogt_at_gmx.de
+<br />
+Reply-To: dominik.vogt_at_gmx.de
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sat Nov 10 2001 - 15:25:15 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start3602">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="3603.html" title="Next message in the list">Dominik Vogt: "Re: FVWM: Patch for FvwmTaskBar"</a></li>
+<li><dfn>Previous message</dfn>: <a href="3601.html" title="Previous message in the list">Dominik Vogt: "Re: FVWM: constraining &#0034;maximized&#0034; window to some portion of the screen"</a></li>
+<li><dfn>In reply to</dfn>: <a href="3465.html" title="Message to which this message replies">johannes karlsmyr: "FVWM: Scrolling pages and focusing..."</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg3602" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg3602" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg3602" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg3602" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:52 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: fvwm-2.3.30 crashes from Max Ischenko on 2001-03-30 (fvwm-users)</title>
+<meta name="Author" content="Max Ischenko (max_at_malva.com.ua)" />
+<meta name="Subject" content="FVWM: fvwm-2.3.30 crashes" />
+<meta name="Date" content="2001-03-30" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: fvwm-2.3.30 crashes</h1>
+<!-- received="Fri Mar 30 03:28:35 2001" -->
+<!-- isoreceived="20010330022835" -->
+<!-- sent="Fri, 30 Mar 2001 12:27:58 +0300" -->
+<!-- isosent="20010330092758" -->
+<!-- name="Max Ischenko" -->
+<!-- email="max_at_malva.com.ua" -->
+<!-- subject="FVWM: fvwm-2.3.30 crashes" -->
+<!-- id="20010330122758.A4363_at_malva.com.ua" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start2323" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="2324.html" accesskey="d" title="Thomas Bark: &quot;FVWM: fvwm-2.3.30 not able to compile on SUNOS&quot;">Next message</a> ]
+[ <a href="2322.html" title="Mikhael Goikhman: &quot;FVWM: Updates to FVWM related software&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg2323" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg2323" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg2323" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg2323" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Max Ischenko &lt;<a href="mailto:max_at_malva.com.ua?Subject=Re%3A%20FVWM%3A%20fvwm-2.3.30%20crashes">max_at_malva.com.ua</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 30 Mar 2001 12:27:58 +0300</span><br />
+</address>
+<br />
+fvwm2 crashes when I'm trying to execute
+<br />
++ &quot;  &amp;tin&quot; Exec exec rxvt -title 'net: news' -e tinlock
+<br />
+Having
+<br />
+Style &quot;net:*&quot;           MiniIcon mini-news.xpm, Icon Jnews.xpm, StartsOnPage
+<br />
+0 1 2
+<br />
+Style &quot;tinlock&quot;         MiniIcon mini-news.xpm, Icon Jnews.xpm, StartsOnPage
+<br />
+0 1 2
+<br />
+<br /><br />This is because it cannot open mini-news.xpm. (Why? I have ImagePath)
+<br />
+Anyway, I think absence of icon is too weird reason to crash ;-)
+<br />
+<br /><br />Backtrace:
+<br />
+(gdb) bt
+<br />
+#0  0x8057205 in DrawButton (t=0x80bfa10, win=10485903, w=17, h=17, df=0x80976a8, 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ReliefGC=0x809a0d0, ShadowGC=0x809a148, is_lowest=1, stateflags=MWM_DECOR_MENU, 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;left1right0=1, rclip=0x0, pbutton_background_pixmap=0x80bfab8) at borders.c:290
+<br />
+#1  0x8058661 in RedrawButtons (cd=0xbffff258, t=0x80bfa10, has_focus=0, force=1, 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;expose_win=10485906, rclip=0xbffff340) at borders.c:1097
+<br />
+#2  0x805930f in draw_clipped_decorations (t=0x80bfa10, draw_parts=DRAW_BUTTONS, has_focus=0, 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;force=1, expose_win=10485906, rclip=0xbffff340) at borders.c:1648
+<br />
+#3  0x8065a34 in fake_map_unmap_notify (tmp_win=0x23000, event_type=0) at events.c:945
+<br />
+#4  0x8067cdd in HandleEvents () at events.c:2725
+<br />
+#5  0x8067d74 in GetContext (t=0x8098810, e=0x0, w=0xbffff7b0) at events.c:2762
+<br />
+#6  0x80834ea in StartupStuff () at fvwm.c:785
+<br />
+#7  0x40178bfc in __libc_start_main (main=0x8082210 &lt;main+128&gt;, argc=1, ubp_av=0xbffff81c, 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;init=0x804af7c &lt;_init&gt;, fini=0x808c14c &lt;_IO_stdin_used+168&gt;, 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;rtld_fini=0x4000d674 &lt;_dl_fini&gt;, stack_end=0xbffff814)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;at ../sysdeps/generic/libc-start.c:118
+<br />
+<br /><pre>
+-- 
+You said I would get 98 windows with this computer. Where are they?
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Mar 30 2001 - 03:28:35 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start2323">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="2324.html" title="Next message in the list">Thomas Bark: "FVWM: fvwm-2.3.30 not able to compile on SUNOS"</a></li>
+<li><dfn>Previous message</dfn>: <a href="2322.html" title="Previous message in the list">Mikhael Goikhman: "FVWM: Updates to FVWM related software"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg2323" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg2323" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg2323" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg2323" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:51 BST
+</em></small></p>
+</body>
+</html>

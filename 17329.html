@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Compatibility patch to FvwmButtons from Grant McDorman on 1996-07-09 (fvwm-users)</title>
+<meta name="Author" content="Grant McDorman (grant_at_isgtec.com)" />
+<meta name="Subject" content="FVWM: Compatibility patch to FvwmButtons" />
+<meta name="Date" content="1996-07-09" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Compatibility patch to FvwmButtons</h1>
+<!-- received="Tue Jul  9 12:23:02 1996" -->
+<!-- isoreceived="19960709112302" -->
+<!-- sent="Tue, 09 Jul 1996 13:10:40 -0400 (EDT)" -->
+<!-- isosent="19960709171040" -->
+<!-- name="Grant McDorman" -->
+<!-- email="grant_at_isgtec.com" -->
+<!-- subject="FVWM: Compatibility patch to FvwmButtons" -->
+<!-- id="XFMail.960709131310.grant_at_isgtec.com" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start17329" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="17330.html" accesskey="d" title="Hank Hughes: &quot;FVWM: Re: beta 2.0.43 ready&quot;">Next message</a> ]
+[ <a href="17328.html" title="Grant McDorman: &quot;FVWM: Patch to 2.0.43 for transient placement&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17329" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17329" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17329" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17329" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Grant McDorman &lt;<a href="mailto:grant_at_isgtec.com?Subject=Re%3A%20FVWM%3A%20Compatibility%20patch%20to%20FvwmButtons">grant_at_isgtec.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 09 Jul 1996 13:10:40 -0400 (EDT)</span><br />
+</address>
+<br />
+The enclosed patch enhances compatiblity of FvwmButtons with the old version.
+<br />
+<br />The old version (at some point in its life) had a SwallowModule option. If
+<br />
+this is supplied to the new version, it gets confused. This patch simply
+<br />
+strips out the 'Module' suffix to the option; things work fine then.
+<br />
+<br />Grant McDorman &lt;grant_at_isgtec.com&gt;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ISG Technologies, Inc.
+<br />
+<br /><br />
+*** parse.c.orig	Thu Jun 27 10:46:22 1996
+<br />
+--- parse.c	Tue Jul  9 13:07:27 1996
+<br />
+***************
+<br />
+*** 670,675 ****
+<br />
+--- 670,679 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit(1);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s+=7;
+<br />
++       if (mystrncasecmp(s,&quot;module&quot;,6)==0)
+<br />
++ 	{
+<br />
++ 	  s+=6;
+<br />
++ 	}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b-&gt;hangon=seekright(&amp;s);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b-&gt;flags|=(b_Swallow|b_Hangon);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b-&gt;swallow|=1;
+<br />
+<br />End of MIME message
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue Jul 09 1996 - 12:23:02 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start17329">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="17330.html" title="Next message in the list">Hank Hughes: "FVWM: Re: beta 2.0.43 ready"</a></li>
+<li><dfn>Previous message</dfn>: <a href="17328.html" title="Previous message in the list">Grant McDorman: "FVWM: Patch to 2.0.43 for transient placement"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17329" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17329" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17329" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17329" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

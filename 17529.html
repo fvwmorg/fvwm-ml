@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: (long) startup timing bug patch to test from Charles Hines on 1996-08-05 (fvwm-users)</title>
+<meta name="Author" content="Charles Hines (chuck_hines_at_VNET.IBM.COM)" />
+<meta name="Subject" content="Re: FVWM: (long) startup timing bug patch to test" />
+<meta name="Date" content="1996-08-05" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: (long) startup timing bug patch to test</h1>
+<!-- received="Mon Aug  5 08:29:42 1996" -->
+<!-- isoreceived="19960805072942" -->
+<!-- sent="Mon, 5 Aug 1996 09:24:51 -0400" -->
+<!-- isosent="19960805132451" -->
+<!-- name="Charles Hines" -->
+<!-- email="chuck_hines_at_VNET.IBM.COM" -->
+<!-- subject="Re: FVWM: (long) startup timing bug patch to test" -->
+<!-- id="9608051324.AA33509_at_cold.fishkill.ibm.com" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="Pine.LNX.3.95.960725162951.21937B-100000_at_chutney.ini.cmu.edu" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start17529" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="17530.html" accesskey="d" title="Monty Scroggins: &quot;FVWM: libXpm&quot;">Next message</a> ]
+[ <a href="17528.html" title="Douglas K. Rand: &quot;FVWM: Buglet with FvwmButtons.c&quot;">Previous message</a> ]
+[ <a href="17476.html" title="Manoj Kasichainula: &quot;Re: FVWM: (long) startup timing bug patch to test&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="17535.html" accesskey="t" title="Manoj Kasichainula: &quot;Re: FVWM: (long) startup timing bug patch to test&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17529" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17529" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17529" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17529" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Charles Hines &lt;<a href="mailto:chuck_hines_at_VNET.IBM.COM?Subject=Re%3A%20FVWM%3A%20(long)%20startup%20timing%20bug%20patch%20to%20test">chuck_hines_at_VNET.IBM.COM</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 5 Aug 1996 09:24:51 -0400</span><br />
+</address>
+<br />
+<em class="quotelev1">&gt;&gt;&gt;&gt;&gt; &quot;Manoj&quot; == Manoj Kasichainula &lt;manojk_at_andrew.cmu.edu&gt; writes:
+</em><br />
+<br />....
+<br />
+Manoj&gt; Now, I've applied this patch, but I'm still getting the same timing
+<br />
+Manoj&gt; problem with a window not getting Style flags. :(
+<br />
+<br />I know it's been a few weeks, but getting back to this problem - I
+<br />
+think I missed one little thing that could cause the timing bug if
+<br />
+you're starting w/ FvwmM4 or FvwmCpp, which I don't know since I
+<br />
+couldn't access the URL which you specified as containing your
+<br />
+..fvwm2rc file.
+<br />
+<br />I've really got to walk through all the code and verify all of the
+<br />
+server grabs and ungrabs too, but I think this is the last big
+<br />
+problem...  Whoops!  Spoke too soon - just found one more potential
+<br />
+problem.
+<br />
+<br />Ok, please try applying this patch on top of the one I already sent:
+<br />
+<br />----------------------------------------------------------------------
+<br />
+--- fvwm.c-patch1      Mon Aug  5 09:02:23 1996
+<br />
++++ fvwm.c    Mon Aug  5 08:58:53 1996
+<br />
+_at_&#64; -492,10 +492,15 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;unsigned int nchildren;
+<br />
+&nbsp;&nbsp;&nbsp;Window root, parent, *children;
+<br />
+<br />+  MyXGrabServer(dpy);
+<br />
++
+<br />
+&nbsp;&nbsp;&nbsp;PPosOverride = TRUE;
+<br />
+<br />&nbsp;&nbsp;&nbsp;if(!XQueryTree(dpy, Scr.Root, &amp;root, &amp;parent, &amp;children, &amp;nchildren))
+<br />
++  {
+<br />
++    MyXUngrabServer(dpy);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
++  }
+<br />
+<br />&nbsp;&nbsp;&nbsp;/*
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;* weed out icon windows
+<br />
+_at_&#64; -546,7 +551,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;PPosOverride = FALSE;
+<br />
+&nbsp;&nbsp;&nbsp;Scr.flags |= WindowsCaptured;
+<br />
+&nbsp;&nbsp;&nbsp;KeepOnTop();
+<br />
+-
+<br />
++  MyXUngrabServer(dpy);
+<br />
+&nbsp;}
+<br />
+<br />&nbsp;/*
+<br />
+--- builtins.c-patch1  Mon Aug  5 09:02:21 1996
+<br />
++++ builtins.c        Mon Aug  5 09:00:34 1996
+<br />
+_at_&#64; -987,6 +987,15 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;Done(0,NULL);
+<br />
+&nbsp;}
+<br />
+<br />+void echo_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
++               unsigned long context, char *action,int *Module)
+<br />
++{
+<br />
++  if (action &amp;&amp; *action)
+<br />
++  {
+<br />
++    fvwm_msg(INFO,&quot;Echo&quot;,action);
+<br />
++  }
+<br />
++}
+<br />
++
+<br />
+&nbsp;void raiselower_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long context, char *action,int *Module)
+<br />
+&nbsp;{
+<br />
+_at_&#64; -2024,14 +2033,19 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;unsigned long nitems, bytes_remain;
+<br />
+&nbsp;&nbsp;&nbsp;Window root, parent, *children;
+<br />
+<br />+  MyXGrabServer(dpy);
+<br />
++
+<br />
+&nbsp;&nbsp;&nbsp;if(!XQueryTree(dpy, Scr.Root, &amp;root, &amp;parent, &amp;children, &amp;nchildren))
+<br />
++  {
+<br />
++    MyXUngrabServer(dpy);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
++  }
+<br />
+<br />&nbsp;&nbsp;&nbsp;BlackoutScreen();
+<br />
+<br />&nbsp;&nbsp;&nbsp;PPosOverride = True;
+<br />
++
+<br />
+&nbsp;&nbsp;&nbsp;/* put a border back around all windows */
+<br />
+-  MyXGrabServer(dpy);
+<br />
+&nbsp;&nbsp;&nbsp;tmp = Scr.FvwmRoot.next;
+<br />
+&nbsp;&nbsp;&nbsp;for(i=0;i&lt;nchildren;i++)
+<br />
+&nbsp;&nbsp;&nbsp;{
+<br />
+_at_&#64; -2074,5 +2088,4 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;KeepOnTop();
+<br />
+&nbsp;&nbsp;&nbsp;MyXUngrabServer(dpy);
+<br />
+&nbsp;&nbsp;&nbsp;XSync(dpy,0);
+<br />
+-
+<br />
+&nbsp;}
+<br />
+----------------------------------------------------------------------
+<br />
+<br />Let me know if this helps.  If it does then I may be able to move
+<br />
+around some of the other grabs that I put in.
+<br />
+<br />Thanks,
+<br />
+Chuck
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon Aug 05 1996 - 08:29:42 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start17529">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="17530.html" title="Next message in the list">Monty Scroggins: "FVWM: libXpm"</a></li>
+<li><dfn>Previous message</dfn>: <a href="17528.html" title="Previous message in the list">Douglas K. Rand: "FVWM: Buglet with FvwmButtons.c"</a></li>
+<li><dfn>In reply to</dfn>: <a href="17476.html" title="Message to which this message replies">Manoj Kasichainula: "Re: FVWM: (long) startup timing bug patch to test"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="17535.html" title="Next message in this discussion thread">Manoj Kasichainula: "Re: FVWM: (long) startup timing bug patch to test"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="17535.html" title="Message sent in reply to this message">Manoj Kasichainula: "Re: FVWM: (long) startup timing bug patch to test"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17529" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17529" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17529" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17529" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

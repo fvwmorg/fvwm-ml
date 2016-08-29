@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: Opaque Resize? from Henrique Martins on 1996-05-01 (fvwm-users)</title>
+<meta name="Author" content="Henrique Martins (martins_at_martins.hpl.hp.com)" />
+<meta name="Subject" content="Re: FVWM: Opaque Resize?" />
+<meta name="Date" content="1996-05-01" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: Opaque Resize?</h1>
+<!-- received="Wed May  1 11:26:20 1996" -->
+<!-- isoreceived="19960501102620" -->
+<!-- sent="Wed, 01 May 1996 09:29:03 -0700" -->
+<!-- isosent="19960501162903" -->
+<!-- name="Henrique Martins" -->
+<!-- email="martins_at_martins.hpl.hp.com" -->
+<!-- subject="Re: FVWM: Opaque Resize?" -->
+<!-- id="199605011629.AA021198144_at_martins.hpl.hp.com" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="199604302112.RAA02212&#64;anthem.CNRI.Reston.Va.US" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start16599" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="16600.html" accesskey="d" title="Charles Hines: &quot;Re: FVWM: SendToModule?&quot;">Next message</a> ]
+[ <a href="16598.html" title="Barry A. Warsaw: &quot;FVWM: SendToModule?&quot;">Previous message</a> ]
+[ <a href="16558.html" title="Barry A. Warsaw: &quot;FVWM: Opaque Resize?&quot;">Maybe in reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16599" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16599" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16599" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16599" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Henrique Martins &lt;<a href="mailto:martins_at_martins.hpl.hp.com?Subject=Re%3A%20FVWM%3A%20Opaque%20Resize%3F">martins_at_martins.hpl.hp.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 01 May 1996 09:29:03 -0700</span><br />
+</address>
+<br />
+Barry&gt; Did this go away?  I think it was there for 1.24r, but it seems like
+<br />
+Barry&gt; rubberband resize is the only option for 2.0.42.
+<br />
+<br />&nbsp;&nbsp;It is actually quite easy to re enable this feature IF one doesn't mind
+<br />
+&nbsp;&nbsp;having opaque resize ON for ALL windows, i.e. no per window/class/etc
+<br />
+&nbsp;&nbsp;opaque resize.
+<br />
+<br />&nbsp;&nbsp;The patch below does it in its simplest form by defining a static
+<br />
+&nbsp;&nbsp;variable within resize.c, setting this to 1 (opaque resize on) or 0
+<br />
+&nbsp;&nbsp;(opaque resize off), and by recompiling, installing, etc, one would get
+<br />
+&nbsp;&nbsp;opaque resize back.
+<br />
+<br />&nbsp;&nbsp;A more elegant way would be to add OpaqueResize to the Scr structure, add
+<br />
+&nbsp;&nbsp;code to parse it out of the fvwmrc file, setting on the fly, etc, but
+<br />
+&nbsp;&nbsp;this would imply changing a few more files, recompiling everything (as
+<br />
+&nbsp;&nbsp;opposed to just resize.c with the patch above) and it will all go away
+<br />
+&nbsp;&nbsp;with TGSFRW (The Great Style Flag Re-Write.)
+<br />
+<br />&nbsp;&nbsp;-- Henrique (martins_at_hpl.hp.com)
+<br />
+<br /><br />*** resize.c.orig	Wed May  1 08:46:34 1996
+<br />
+--- resize.c	Wed May  1 09:13:44 1996
+<br />
+***************
+<br />
+*** 37,42 ****
+<br />
+--- 37,44 ----
+<br />
+&nbsp;&nbsp;extern int menuFromFrameOrWindowOrTitlebar;
+<br />
+&nbsp;&nbsp;extern Window PressedW;
+<br />
+&nbsp;&nbsp;
+<br />
++ static int OpaqueResize = 1;
+<br />
++ 
+<br />
+&nbsp;&nbsp;/****************************************************************************
+<br />
+&nbsp;&nbsp;&nbsp;*
+<br />
+&nbsp;&nbsp;&nbsp;* Starts a window resize operation
+<br />
+***************
+<br />
+*** 108,114 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+!   XGrabServer(dpy);
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;/* handle problems with edge-wrapping while resizing */
+<br />
+--- 110,117 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+!   if (!OpaqueResize)
+<br />
+!     XGrabServer(dpy);
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;/* handle problems with edge-wrapping while resizing */
+<br />
+***************
+<br />
+*** 166,174 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;/* draw the rubber-band window */
+<br />
+!   MoveOutline (Scr.Root, dragx - tmp_win-&gt;bw, dragy - tmp_win-&gt;bw, 
+<br />
+! 	       dragWidth + 2 * tmp_win-&gt;bw,
+<br />
+! 	       dragHeight + 2 * tmp_win-&gt;bw);
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;/* loop to resize */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;while(!finished)
+<br />
+--- 169,178 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;/* draw the rubber-band window */
+<br />
+!   if (!OpaqueResize)
+<br />
+!     MoveOutline (Scr.Root, dragx - tmp_win-&gt;bw, dragy - tmp_win-&gt;bw, 
+<br />
+!                  dragWidth + 2 * tmp_win-&gt;bw,
+<br />
+!                  dragHeight + 2 * tmp_win-&gt;bw);
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;/* loop to resize */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;while(!finished)
+<br />
+***************
+<br />
+*** 229,239 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(!done)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+! 	  MoveOutline(Scr.Root,0,0,0,0);
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DispatchEvent();
+<br />
+&nbsp;&nbsp;
+<br />
+! 	  MoveOutline(Scr.Root, dragx - tmp_win-&gt;bw, dragy - tmp_win-&gt;bw,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dragWidth + 2 * tmp_win-&gt;bw, dragHeight + 2 * tmp_win-&gt;bw);
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+--- 233,245 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(!done)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!           if (!OpaqueResize)
+<br />
+!             MoveOutline(Scr.Root,0,0,0,0);
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DispatchEvent();
+<br />
+&nbsp;&nbsp;
+<br />
+!           if (!OpaqueResize)
+<br />
+!             MoveOutline (Scr.Root, dragx - tmp_win-&gt;bw, dragy - tmp_win-&gt;bw,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dragWidth + 2 * tmp_win-&gt;bw, dragHeight + 2 * tmp_win-&gt;bw);
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+***************
+<br />
+*** 253,259 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;UninstallRootColormap();
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ResizeWindow = None; 
+<br />
+!   XUngrabServer(dpy);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;UngrabEm();
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;xmotion = 0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ymotion = 0;
+<br />
+--- 259,266 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;UninstallRootColormap();
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ResizeWindow = None; 
+<br />
+!   if (!OpaqueResize)
+<br />
+!     XUngrabServer(dpy);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;UngrabEm();
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;xmotion = 0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ymotion = 0;
+<br />
+***************
+<br />
+*** 321,328 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (ymotion == 1)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dragy = origy + origHeight - dragHeight;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+!       MoveOutline(Scr.Root, dragx - tmp_win-&gt;bw,dragy - tmp_win-&gt;bw,
+<br />
+! 		  dragWidth + 2 * tmp_win-&gt;bw, dragHeight + 2 * tmp_win-&gt;bw);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DisplaySize(tmp_win, dragWidth, dragHeight,False);
+<br />
+&nbsp;&nbsp;}
+<br />
+--- 328,342 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (ymotion == 1)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dragy = origy + origHeight - dragHeight;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+!       if (!OpaqueResize)
+<br />
+!         MoveOutline(Scr.Root, dragx - tmp_win-&gt;bw,dragy - tmp_win-&gt;bw,
+<br />
+!                     dragWidth + 2 * tmp_win-&gt;bw, dragHeight + 2 * tmp_win-&gt;bw);
+<br />
+!       else {
+<br />
+!         ConstrainSize (tmp_win, &amp;dragWidth, &amp;dragHeight);
+<br />
+!         SetupFrame (tmp_win, dragx - tmp_win-&gt;bw, 
+<br />
+!                     dragy - tmp_win-&gt;bw, dragWidth, dragHeight,FALSE);
+<br />
+!       }
+<br />
+! 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DisplaySize(tmp_win, dragWidth, dragHeight,False);
+<br />
+&nbsp;&nbsp;}
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed May 01 1996 - 11:26:20 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start16599">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="16600.html" title="Next message in the list">Charles Hines: "Re: FVWM: SendToModule?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="16598.html" title="Previous message in the list">Barry A. Warsaw: "FVWM: SendToModule?"</a></li>
+<li><dfn>Maybe in reply to</dfn>: <a href="16558.html" title="Message to which this message replies">Barry A. Warsaw: "FVWM: Opaque Resize?"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16599" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16599" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16599" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16599" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

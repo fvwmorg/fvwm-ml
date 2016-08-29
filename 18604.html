@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: Fvwm configuration questions: ClickToRaise &amp; WindowName style from Markus Gutschke on 1996-12-04 (fvwm-users)</title>
+<meta name="Author" content="Markus Gutschke (gutschk_at_uni-muenster.de)" />
+<meta name="Subject" content="Re: FVWM: Fvwm configuration questions: ClickToRaise &amp; WindowName style" />
+<meta name="Date" content="1996-12-04" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: Fvwm configuration questions: ClickToRaise &amp; WindowName style</h1>
+<!-- received="Wed Dec  4 17:02:27 1996" -->
+<!-- isoreceived="19961204170227" -->
+<!-- sent="04 Dec 1996 23:56:06 +0100" -->
+<!-- isosent="19961204225606" -->
+<!-- name="Markus Gutschke" -->
+<!-- email="gutschk_at_uni-muenster.de" -->
+<!-- subject="Re: FVWM: Fvwm configuration questions: ClickToRaise &amp; WindowName style" -->
+<!-- id="m2iv6hor5l.fsf_at_cortex.corpus.uni-muenster.de" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="Sun, 1 Dec 1996 18:34:54 +0200 (IST)" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start18604" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="18605.html" accesskey="d" title="Andrew Veliath: &quot;FVWM: Major New Pixmap/Title/Border Patch Released (Beta)&quot;">Next message</a> ]
+[ <a href="18603.html" title="ZACHCIAL Slawomir: &quot;FVWM: Question&quot;">Previous message</a> ]
+[ <a href="18562.html" title="Elad Eyal: &quot;Re: FVWM: Fvwm configuration questions: ClickToRaise &#0038; WindowName style&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="18608.html" accesskey="t" title="Markus Gutschke: &quot;Re: FVWM: Fvwm configuration questions: ClickToRaise &#0038; WindowName style&quot;">Next in thread</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18604" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18604" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18604" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18604" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Markus Gutschke &lt;<a href="mailto:gutschk_at_uni-muenster.de?Subject=Re%3A%20FVWM%3A%20Fvwm%20configuration%20questions%3A%20ClickToRaise%20%26%20WindowName%20style">gutschk_at_uni-muenster.de</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: 04 Dec 1996 23:56:06 +0100</span><br />
+</address>
+<br />
+Elad Eyal &lt;elad_at_CS.bgu.ac.il&gt; writes:
+<br />
+<em class="quotelev2">&gt; &gt; Howver if anyone knows how to get a single mouse click in a window area to
+</em><br />
+<em class="quotelev2">&gt; &gt; raise the window, without loosing the &quot;cut (from cut and paste)
+</em><br />
+<em class="quotelev2">&gt; &gt; functionality, I would be grateful. 
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; ... And without losing MouseFocus..!
+</em><br />
+<br />I think, I finally understand what you are trying to achieve. As I
+<br />
+could not find a solution that required changes to my .fvwmrc, only. I
+<br />
+had a look at the C source code and came up with a little
+<br />
+patch. Please note, that I do not really have a clue of what I am
+<br />
+doing ;-) I hope, Chuck won't kill me for introducing this
+<br />
+hack... OTOH, maybe it is a proper solution?
+<br />
+<br /><br />Markus
+<br />
+<br />--- fvwm/add_window.c.orig	Thu Apr 11 17:25:58 1996
+<br />
++++ fvwm/add_window.c	Wed Dec  4 23:41:13 1996
+<br />
+_at_&#64; -492,8 +492,10 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;a,&amp;b,&amp;JunkChild);
+<br />
+&nbsp;&nbsp;&nbsp;tmp_win-&gt;xdiff -= a;
+<br />
+&nbsp;&nbsp;&nbsp;tmp_win-&gt;ydiff -= b;
+<br />
++#ifdef SUPPRESS_CLICKTORAISE
+<br />
+&nbsp;&nbsp;&nbsp;if(tmp_win-&gt;flags &amp; ClickToFocus)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
++#endif
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* need to grab all buttons for window that we are about to
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* unhighlight */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for(i=0;i&lt;3;i++)
+<br />
+_at_&#64; -506,7 +508,9 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ButtonPressMask, GrabModeSync,GrabModeAsync,None,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Scr.FvwmCursors[SYS]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
++#ifdef SUPPRESS_CLICKTORAISE
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
++#endif
+<br />
+&nbsp;&nbsp;&nbsp;BroadcastConfig(M_ADD_WINDOW,tmp_win);
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;BroadcastName(M_WINDOW_NAME,tmp_win-&gt;w,tmp_win-&gt;frame,
+<br />
+--- fvwm/events.c.orig	Mon May 27 21:33:26 1996
+<br />
++++ fvwm/events.c	Wed Dec  4 23:46:03 1996
+<br />
+_at_&#64; -1030,6 +1030,25 &#64;&#64;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
++
+<br />
++#ifndef SUPPRESS_CLICKTORAISE
+<br />
++  else if ((Tmp_win) &amp;&amp; !(Tmp_win-&gt;flags &amp; ClickToFocus) &amp;&amp;
+<br />
++	   Event.xbutton.window == Tmp_win-&gt;frame)
+<br />
++    {
+<br />
++	  if (Tmp_win != Scr.LastWindowRaised &amp;&amp;
+<br />
++	      ((Event.xbutton.state&amp;
+<br />
++		(ControlMask|Mod1Mask|Mod2Mask|Mod3Mask|Mod4Mask|Mod5Mask))
+<br />
++	       == 0)) {
+<br />
++	    RaiseWindow(Tmp_win);
+<br />
++	    KeepOnTop();
+<br />
++	  }
+<br />
++	  XSync(dpy,0);
+<br />
++	  XAllowEvents(dpy,ReplayPointer,CurrentTime);
+<br />
++	  XSync(dpy,0);
+<br />
++	  return;
+<br />
++    }
+<br />
++#endif
+<br />
++  
+<br />
+&nbsp;&nbsp;&nbsp;XSync(dpy,0);
+<br />
+&nbsp;&nbsp;&nbsp;XAllowEvents(dpy,ReplayPointer,CurrentTime);
+<br />
+&nbsp;&nbsp;&nbsp;XSync(dpy,0);
+<br />
+<br /><br /><br /><pre>
+-- 
+Markus Gutschke            Internet: gutschk_at_math.uni-muenster.de
+Schlage 5a
+D-48268 Greven-Gimbte
+Germany
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Dec 04 1996 - 17:02:27 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start18604">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="18605.html" title="Next message in the list">Andrew Veliath: "FVWM: Major New Pixmap/Title/Border Patch Released (Beta)"</a></li>
+<li><dfn>Previous message</dfn>: <a href="18603.html" title="Previous message in the list">ZACHCIAL Slawomir: "FVWM: Question"</a></li>
+<li><dfn>In reply to</dfn>: <a href="18562.html" title="Message to which this message replies">Elad Eyal: "Re: FVWM: Fvwm configuration questions: ClickToRaise &#0038; WindowName style"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="18608.html" title="Next message in this discussion thread">Markus Gutschke: "Re: FVWM: Fvwm configuration questions: ClickToRaise &#0038; WindowName style"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18604" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18604" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18604" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18604" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

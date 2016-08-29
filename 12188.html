@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: Using Schedule reliably from Tavis Ormandy on 2004-05-11 (fvwm-users)</title>
+<meta name="Author" content="Tavis Ormandy (taviso_at_sdf.lonestar.org)" />
+<meta name="Subject" content="Re: FVWM: Using Schedule reliably" />
+<meta name="Date" content="2004-05-11" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: Using Schedule reliably</h1>
+<!-- received="Tue May 11 15:35:52 2004" -->
+<!-- isoreceived="20040511143552" -->
+<!-- sent="Tue, 11 May 2004 21:34:11 +0100" -->
+<!-- isosent="20040511203411" -->
+<!-- name="Tavis Ormandy" -->
+<!-- email="taviso_at_sdf.lonestar.org" -->
+<!-- subject="Re: FVWM: Using Schedule reliably" -->
+<!-- id="44410000.1084307651_at_[192.168.0.1]" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="FVWM: Using Schedule reliably" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start12188" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="12189.html" accesskey="d" title="Xavier Maillard: &quot;Re: FVWM: cycling/arranging/moving windows&quot;">Next message</a> ]
+[ <a href="12187.html" title="Phil Stracchino: &quot;FVWM: MoveToPage and tabular menu&quot;">Previous message</a> ]
+[ <a href="12182.html" title="Tavis Ormandy: &quot;FVWM: Using Schedule reliably&quot;">Maybe in reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg12188" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg12188" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg12188" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg12188" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Tavis Ormandy &lt;<a href="mailto:taviso_at_sdf.lonestar.org?Subject=Re%3A%20FVWM%3A%20Using%20Schedule%20reliably">taviso_at_sdf.lonestar.org</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 11 May 2004 21:34:11 +0100</span><br />
+</address>
+<br />
+--On Tuesday, May 11, 2004 18:27:24 +0100 Piotr Zielinski
+<br />
+&lt;Piotr.Zielinski_at_cl.cam.ac.uk&gt; wrote:
+<br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; I posted a similar question a couple of weeks ago but there were no
+</em><br />
+<em class="quotelev1">&gt; replies.  The manual says that a scheduled command X will be executed
+</em><br />
+<em class="quotelev1">&gt; in the same window context as &quot;Schedule 4234 X&quot;, but it's rather vague
+</em><br />
+<em class="quotelev1">&gt; on how this is implemented.  I can only _speculate_ that when the
+</em><br />
+<em class="quotelev1">&gt; pointer is about to leave a window, all scheduled commands for that
+</em><br />
+<em class="quotelev1">&gt; window are executed.  What happens to all Schedule commands issued by
+</em><br />
+<em class="quotelev1">&gt; these scheduled commands I don't know.  Sometimes they seem to
+</em><br />
+<em class="quotelev1">&gt; disappear.  Sometimes not.
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<br />Thanks Piotr, you gave me some ideas to think about :)
+<br />
+<br />This is what I'm using right now which seems to work quite well (and the 
+<br />
+overhead of running xwd every few seconds is not noticable at all), I've
+<br />
+had to use PassId instead of $[w.id] because it gets confused if a window
+<br />
+dies..
+<br />
+<br />I have it bound to my Menu key, like this:
+<br />
+<br />Key Menu    A   A   NoWindow FvwmExpose
+<br />
+<br />DestroyModuleConfig ExposeCache: *
+<br />
+*ExposeCache: PassId
+<br />
+*ExposeCache: add_window CacheWindow
+<br />
+*ExposeCache: raise_window CacheWindow
+<br />
+*ExposeCache: focus_change CacheWindow
+<br />
+*ExposeCache: dewindowshade CacheWindow
+<br />
+<br />DestroyFunc CacheWindow
+<br />
+AddToFunc CacheWindow 
+<br />
++ I Deschedule $0
+<br />
++ I Schedule 0 ThisWindow (Raised) Exec nice xwd -screen -silent -id $0
+<br />
+-out $[FVWM_USERDIR]/cache.$0.xwd
+<br />
++ I ThisWindow Schedule 5000 $0 CacheWindow $0
+<br />
++ I TestRc (NoMatch) Exec rm -f $[FVWM_USERDIR]/cache.$0.xwd
+<br />
+<br />AddToFunc ExitFunction I Test (!ToRestart) Exec rm -f
+<br />
+$[FVWM_USERDIR]/cache.*
+<br />
+AddToFunc StartFunction I Module FvwmEvent ExposeCache
+<br />
+<br />DestroyFunc FvwmExpose
+<br />
+AddToFunc FvwmExpose
+<br />
++ I AddToMenu FvwmExposeMenu &quot;.: e x p o s e :.&quot; Title
+<br />
++ I + DynamicPopDownAction DestroyMenu FvwmExposeMenu
+<br />
++ I All (CurrentDesk, AcceptsFocus, !CirculateHit) PipeRead &quot;convert -scale
+<br />
+128 -frame 1x1 -mattecolor black -quality 0 \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xwd:$[FVWM_USERDIR]/cache.$[w.id].xwd
+<br />
+png:$[FVWM_USERDIR]/icon.exp.$[w.id].png &amp;&amp; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo AddToMenu FvwmExposeMenu
+<br />
+%$[FVWM_USERDIR]/icon.exp.$[w.id].png%\\\'\&quot;$[w.name]\&quot;\\\' WindowID
+<br />
+$[w.id] WindowListFunc \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|| echo AddToMenu FvwmExposeMenu %$[w.miniiconfile]%\\\'\&quot;$[w.name]\&quot;\\\'
+<br />
+WindowID $[w.id] WindowListFunc; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo AddToMenu FvwmExposeMenu \\\&quot;\\\&quot; Nop&quot;
+<br />
++ I Popup FvwmExposeMenu
+<br />
++ I Exec exec rm -f $[FVWM_USERDIR]/icon.exp.*
+<br />
+<br /><pre>
+-- 
+-------------------------------------
+taviso_at_sdf.lonestar.org | finger me for my gpg key.
+-------------------------------------------------------
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue May 11 2004 - 15:35:52 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start12188">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="12189.html" title="Next message in the list">Xavier Maillard: "Re: FVWM: cycling/arranging/moving windows"</a></li>
+<li><dfn>Previous message</dfn>: <a href="12187.html" title="Previous message in the list">Phil Stracchino: "FVWM: MoveToPage and tabular menu"</a></li>
+<li><dfn>Maybe in reply to</dfn>: <a href="12182.html" title="Message to which this message replies">Tavis Ormandy: "FVWM: Using Schedule reliably"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg12188" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg12188" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg12188" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg12188" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:56 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,2644 @@
+<?xml version="1.0" encoding="iso-8859-7"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-7" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Compilation Problems from Chris Varelas on 1997-09-23 (fvwm-users)</title>
+<meta name="Author" content="Chris Varelas (cvar_at_math.auth.gr)" />
+<meta name="Subject" content="FVWM: Compilation Problems" />
+<meta name="Date" content="1997-09-23" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Compilation Problems</h1>
+<!-- received="Tue Sep 23 14:57:53 1997" -->
+<!-- isoreceived="19970923135753" -->
+<!-- sent="Tue, 23 Sep 1997 22:41:54 +0300" -->
+<!-- isosent="19970923194154" -->
+<!-- name="Chris Varelas" -->
+<!-- email="cvar_at_math.auth.gr" -->
+<!-- subject="FVWM: Compilation Problems" -->
+<!-- id="34281B82.55626DFB_at_thales.math.auth.gr" -->
+<!-- charset="iso-8859-7" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start21010" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="21011.html" accesskey="d" title="Dan Espen: &quot;Re: FVWM: Compilation Problems&quot;">Next message</a> ]
+[ <a href="21009.html" title="markcrim_at_umich.edu: &quot;FVWM: FOR ADOPTION: tkgoodstuff&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="21011.html" accesskey="t" title="Dan Espen: &quot;Re: FVWM: Compilation Problems&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21010" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21010" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21010" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21010" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Chris Varelas &lt;<a href="mailto:cvar_at_math.auth.gr?Subject=Re%3A%20FVWM%3A%20Compilation%20Problems">cvar_at_math.auth.gr</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 23 Sep 1997 22:41:54 +0300</span><br />
+</address>
+<br />
+Trying to compile the latest beta version (2.0.46) of FVWM, I read the
+<br />
+instructions, modified the
+<br />
+configure.h and Fvwm.tmpl files, run ./MakeMakefiles and then... when
+<br />
+issued &quot;make&quot;, the program replied to me with a nice core dump :-(((
+<br />
+<br />Is there anything I'm doing wrong? Please help me, I'm newbie!
+<br />
+<br />(I've attached the configure.h, Fvwm.tmpl, Imakefile and Makefile files
+<br />
+- I think this will help a lot)
+<br />
+<br /><br />
+/***************************************************************************
+<br />
+&nbsp;*                         fvwm/configure.h
+<br />
+&nbsp;* This and Fvwm.tmpl are the only files you should have to edit to build
+<br />
+&nbsp;* and install Fvwm2.
+<br />
+&nbsp;***************************************************************************/
+<br />
+<br />/*************************************************************************
+<br />
+&nbsp;* #define BROKEN_SUN_HEADERS          
+<br />
+&nbsp;*
+<br />
+&nbsp;* Really, no one but Rob should need this 
+<br />
+&nbsp;************************************************************************/
+<br />
+#if 0
+<br />
+#if defined __sun__ &amp;&amp; !defined SYSV
+<br />
+#define BROKEN_SUN_HEADERS          
+<br />
+#endif
+<br />
+#endif /* 0 */
+<br />
+<br />/***************************************************************************
+<br />
+&nbsp;*
+<br />
+&nbsp;* In theory, this stuff can be replaced with GNU Autoconf 
+<br />
+&nbsp;*
+<br />
+&nbsp;**************************************************************************/
+<br />
+<br />if defined _POSIX_SOURCE || defined SYSV || defined __sun__ || defined sgi
+<br />
+<br />define HAVE_WAITPID  1
+<br />
+define HAVE_SYSCONF 1
+<br />
+define HAVE_UNAME 1
+<br />
+undef HAVE_GETHOSTNAME
+<br />
+define HAVE_STRERROR 1
+<br />
+<br />else
+<br />
+<br />/**************************************************************************
+<br />
+&nbsp;*
+<br />
+&nbsp;* Do it yourself here if you don't like the above!
+<br />
+&nbsp;*
+<br />
+&nbsp;**************************************************************************/
+<br />
+/***************************************************************************
+<br />
+&nbsp;* Define if you have waitpid.  
+<br />
+&nbsp;**************************************************************************/
+<br />
+define HAVE_WAITPID  1
+<br />
+<br />/***************************************************************************
+<br />
+&nbsp;* Define if you have sysconf
+<br />
+&nbsp;**************************************************************************/
+<br />
+define HAVE_SYSCONF 1
+<br />
+<br />/***************************************************************************
+<br />
+&nbsp;* Define if you have uname. Otherwise, define gethostname
+<br />
+&nbsp;***************************************************************************/
+<br />
+define HAVE_UNAME 1
+<br />
+define HAVE_GETHOSTNAME 1
+<br />
+<br />/***************************************************************************
+<br />
+&nbsp;* Define if you have strerror (all but SunOS 4.1.x?)
+<br />
+&nbsp;**************************************************************************/
+<br />
+define HAVE_STRERROR 1
+<br />
+<br />endif
+<br />
+<br />if defined(__sun__) || defined(sun)
+<br />
+undef HAVE_STRERROR
+<br />
+endif
+<br />
+<br />/* End of do-it-yourself OS support section */
+<br />
+<br /><br />/***************************************************************************
+<br />
+&nbsp;* Please translate the strings into the language which you use for 
+<br />
+&nbsp;* your pop-up menus.
+<br />
+&nbsp;*
+<br />
+&nbsp;* Some decisions about where a function is prohibited (based on 
+<br />
+&nbsp;* mwm-function-hints) is based on a string comparison between the 
+<br />
+&nbsp;* menu item and the strings below.
+<br />
+&nbsp;***************************************************************************/
+<br />
+define MOVE_STRING &quot;move&quot;
+<br />
+define RESIZE_STRING1 &quot;size&quot;
+<br />
+define RESIZE_STRING2 &quot;resize&quot;
+<br />
+define MINIMIZE_STRING &quot;minimize&quot;
+<br />
+define MINIMIZE_STRING2 &quot;iconify&quot;
+<br />
+define MAXIMIZE_STRING &quot;maximize&quot;
+<br />
+define CLOSE_STRING1 &quot;close&quot;
+<br />
+define CLOSE_STRING2 &quot;delete&quot;
+<br />
+define CLOSE_STRING3 &quot;destroy&quot;
+<br />
+define CLOSE_STRING4 &quot;quit&quot;
+<br />
+<br />/* #ifdef __alpha */
+<br />
+#if defined(__alpha) &amp;&amp; !defined(linux)
+<br />
+#define NEEDS_ALPHA_HEADER
+<br />
+#undef BROKEN_SUN_HEADERS
+<br />
+#endif /* (__alpha) */
+<br />
+<br /><br />/* Allows gcc users to use inline. This doesn't cause problems for others. */
+<br />
+ifndef __GNUC__
+<br />
+define FVWM_INLINE /*nothing*/
+<br />
+else
+<br />
+if defined(__GNUC__) &amp;&amp; !defined(inline)
+<br />
+define FVWM_INLINE __inline__
+<br />
+else
+<br />
+define FVWM_INLINE inline
+<br />
+endif
+<br />
+endif
+<br />
+<br />/*
+<br />
+** if you would like to see lots of debug messages from fvwm, for debugging
+<br />
+** purposes, uncomment the next line
+<br />
+*/
+<br />
+/* #define FVWM_DEBUG_MSGS */
+<br />
+<br />ifdef FVWM_DEBUG_MSGS
+<br />
+define DBUG(x,y) fvwm_msg(DBG,x,y)
+<br />
+else
+<br />
+define DBUG(x,y) /* no messages */
+<br />
+endif
+<br />
+<br />/* end of configure.h */
+<br />
+<br /><br />
+/***************************************************************************
+<br />
+&nbsp;* Fvwm Imake template
+<br />
+&nbsp;*
+<br />
+&nbsp;* Edit this file to change compile time defaults and options
+<br />
+&nbsp;***************************************************************************/
+<br />
+<br />ifndef XCOMM
+<br />
+define XCOMM #
+<br />
+endif
+<br />
+<br />XCOMM Fvwm.tmpl
+<br />
+XCOMM Template file for Fvwm
+<br />
+<br />/***************************************************************************
+<br />
+&nbsp;* #define RenameFVWM2
+<br />
+&nbsp;*
+<br />
+&nbsp;* If you want to install both fvwm 1.xx and fvwm 2.xx concurently, specify
+<br />
+&nbsp;* #define RenameFVWM2. Otherwise, comment out the following line.
+<br />
+&nbsp;* This will affect the name of the &quot;fvwm&quot; binary, library, and manual.
+<br />
+&nbsp;*
+<br />
+&nbsp;* I HIGHLY RECOMMEND THAT YOU LEAVE THIS DEFINED, TO AVOID CONFUSION!!!!
+<br />
+&nbsp;***************************************************************************/
+<br />
+define RenameFVWM2
+<br />
+<br /><br />/***************************************************************************
+<br />
+&nbsp;* #define FvwmCompiler
+<br />
+&nbsp;* #define FvwmCompilerFlags
+<br />
+&nbsp;*
+<br />
+&nbsp;* To force a certain compiler and/or flags to be used to compile Fvwm.
+<br />
+&nbsp;* Commonly used to force gcc to be used instead of your normal compiler
+<br />
+&nbsp;* and/or flags that Imake would use.  If your Imake setup is ok, you
+<br />
+&nbsp;* shouldn't need to set these.
+<br />
+&nbsp;***************************************************************************/
+<br />
+#define FvwmCompiler gcc
+<br />
+#define FvwmCompilerFlags -g -Wall
+<br />
+<br /><br />/***************************************************************************
+<br />
+&nbsp;* Where to search for the fvwm icons.
+<br />
+&nbsp;*
+<br />
+&nbsp;* Define this if you want a different search path from the default which is
+<br />
+&nbsp;* the `bitmaps' and `pixmaps' directories beneath the X include directory.
+<br />
+&nbsp;*
+<br />
+&nbsp;* Note that you have to escape the ':' with a '\' otherwise make gets
+<br />
+&nbsp;* confused, and make sure you don't have any spaces in there.
+<br />
+&nbsp;***************************************************************************/
+<br />
+<br />define FvwmIconPath /usr/include/X11/pixmaps/\:/usr/X11R6/include/X11/pixmaps/\:/usr/X11R6/include/X11/3dpixmaps100/ 
+<br />
+<br /><br />/***************************************************************************
+<br />
+&nbsp;* #define HasXpm
+<br />
+&nbsp;*
+<br />
+&nbsp;* If you want color icons, define HasXpm as YES, and get libXpm from
+<br />
+&nbsp;* sunsite.unc.edu (precompiled for Linux), or the source from
+<br />
+&nbsp;* ftp.x.org.  If you want more color icons in addition to the ones
+<br />
+&nbsp;* included in the fvwm package, check out the ctwm distribution,
+<br />
+&nbsp;* which has lots of nice color icons.
+<br />
+&nbsp;*
+<br />
+&nbsp;* For monochrome, Xpm icons still work, but they're only better than regular
+<br />
+&nbsp;* bitmaps because they're shaped (if you specify #define SHAPE).
+<br />
+&nbsp;*
+<br />
+&nbsp;* If Xpm is not installed with the rest of your X, set XpmLibs and
+<br />
+&nbsp;* XpmIncs to the paths where the library and include files are located.
+<br />
+&nbsp;***************************************************************************/
+<br />
+define HasXpm  YES     /* NO */
+<br />
+define XpmLibs -L/usr/X11R6/lib
+<br />
+/* #define XpmIncs -I/usr/local/include */
+<br />
+<br />/***************************************************************************
+<br />
+&nbsp;* #define HasRPlay
+<br />
+&nbsp;*
+<br />
+&nbsp;* To add builtin support for the rplay library.  Also make sure that the 
+<br />
+&nbsp;* include and lib settings are correct for your rplay installation.
+<br />
+&nbsp;* This currently only effects the FvwmAudio module.
+<br />
+&nbsp;***************************************************************************/
+<br />
+define HasRPlay NO     /* YES */
+<br />
+#define AudioLibs -L/usr/local/lib
+<br />
+#define AudioIncs -I/usr/local/include
+<br />
+<br />/**************************************************************************
+<br />
+&nbsp;* InstallSample
+<br />
+&nbsp;*
+<br />
+&nbsp;* Set this to NO If you would not like sample.fvwmrc/system.fvwmrc to be
+<br />
+&nbsp;* installed.
+<br />
+&nbsp;* You probably want this if you have a modified FVWMDIR/FVWMRC. 
+<br />
+&nbsp;*************************************************************************/
+<br />
+define InstallSample YES
+<br />
+<br />/**************************************************************************
+<br />
+&nbsp;* InstallUtils
+<br />
+&nbsp;*
+<br />
+&nbsp;* Set this to YES if you would like the programs in the utils directory
+<br />
+&nbsp;* installed.
+<br />
+&nbsp;*************************************************************************/
+<br />
+define InstallUtils YES
+<br />
+<br />/**************************************************************************
+<br />
+&nbsp;* InstallLibs
+<br />
+&nbsp;*
+<br />
+&nbsp;* Set this to YES if you would like libfvwm2.a to be installed.
+<br />
+&nbsp;*************************************************************************/
+<br />
+define InstallLibs NO
+<br />
+<br />/**************************************************************************
+<br />
+&nbsp;*
+<br />
+&nbsp;* OPTION_DEFINES
+<br />
+&nbsp;*
+<br />
+&nbsp;* Pick and mix your desired options from this list and add them to
+<br />
+&nbsp;* OPTIONS_DEFINES below:
+<br />
+&nbsp;*
+<br />
+&nbsp;*
+<br />
+&nbsp;* -DMODALITY_IS_EVIL
+<br />
+&nbsp;*
+<br />
+&nbsp;* Totally disables motif applications ability to have modal dialogs.
+<br />
+&nbsp;* Use with care.
+<br />
+&nbsp;*
+<br />
+&nbsp;*
+<br />
+&nbsp;* -DNO_SAVEUNDERS 
+<br />
+&nbsp;*
+<br />
+&nbsp;* Tells the WM not to request save unders for pop-up
+<br />
+&nbsp;* menus. A quick test using monochrome X11 shows that save
+<br />
+&nbsp;* unders cost about 4Kbytes RAM, but saves a lot of
+<br />
+&nbsp;* window redraws if you have windows that take a while
+<br />
+&nbsp;* to refresh. For xcolor, I assume the cost is more like
+<br />
+&nbsp;* 4Kbytesx8 = 32kbytes (256 color).
+<br />
+&nbsp;*
+<br />
+&nbsp;*
+<br />
+&nbsp;* -DSHAPE
+<br />
+&nbsp;*
+<br />
+&nbsp;* If you want the Shaped window extensions.
+<br />
+&nbsp;* Shaped window extensions seem to increase the window managers RSS
+<br />
+&nbsp;* by about 60 Kbytes. They provide for leaving a title-bar on the window
+<br />
+&nbsp;* without a border.
+<br />
+&nbsp;* If you don't use shaped window extension, you can either make your 
+<br />
+&nbsp;* shaped windows undecorated, or live with a border and backdrop around
+<br />
+&nbsp;* all your shaped windows (oclock, xeyes)
+<br />
+&nbsp;*
+<br />
+&nbsp;* If you normally use a shaped window (xeyes or oclock), you might as
+<br />
+&nbsp;* well compile this extension in, since the memory cost is  minimal in
+<br />
+&nbsp;* this case (The shaped window shared libs will be loaded anyway). If you
+<br />
+&nbsp;* don't normally use a shaped window, you have to decide for yourself.
+<br />
+&nbsp;*
+<br />
+&nbsp;* Note: if it is compiled in, run time detection is used to make sure that
+<br />
+&nbsp;* the currently running X server supports it.
+<br />
+&nbsp;*
+<br />
+&nbsp;*
+<br />
+&nbsp;* -DACTIVEDOWN_BTNS
+<br />
+&nbsp;*
+<br />
+&nbsp;* Enables the ActiveDown button state.  This allows different button
+<br />
+&nbsp;* styles for pressed down buttons on active windows (also for the
+<br />
+&nbsp;* title-bar if EXTENDED_TITLESTYLE is enabled below).  The man page
+<br />
+&nbsp;* refers to this button state as &quot;ActiveDown.&quot;  If not defined, the
+<br />
+&nbsp;* &quot;ActiveUp&quot; state is used instead.  Disabling this reduces memory
+<br />
+&nbsp;* usage.
+<br />
+&nbsp;* 
+<br />
+&nbsp;*
+<br />
+&nbsp;* -DINACTIVE_BTNS
+<br />
+&nbsp;*
+<br />
+&nbsp;* Enables the Inactive button state.  This allows different button
+<br />
+&nbsp;* styles for inactive windows (also for the title-bar if
+<br />
+&nbsp;* EXTENDED_TITLESTYLE is enabled below).  The man page refers to this
+<br />
+&nbsp;* button state as &quot;Inactive.&quot;  If not defined, the &quot;ActiveUp&quot; state
+<br />
+&nbsp;* is used instead.  Disabling this reduces memory usage.
+<br />
+&nbsp;* 
+<br />
+&nbsp;*
+<br />
+&nbsp;* -DMINI_ICONS
+<br />
+&nbsp;*
+<br />
+&nbsp;* Enables the &quot;MiniIcon&quot; Style option to specify a small pixmap which
+<br />
+&nbsp;* can be used as one of the title-bar buttons, shown in window list,
+<br />
+&nbsp;* utilized by modules, etc.  Requires PIXMAP_BUTTONS to be defined
+<br />
+&nbsp;* (see below).
+<br />
+&nbsp;*
+<br />
+&nbsp;*
+<br />
+&nbsp;* -DVECTOR_BUTTONS
+<br />
+&nbsp;*
+<br />
+&nbsp;* Enables the vector button style.  This button type is considered
+<br />
+&nbsp;* &quot;standard,&quot; so it is recommended that you leave it in.
+<br />
+&nbsp;* 
+<br />
+&nbsp;* 
+<br />
+&nbsp;* -DPIXMAP_BUTTONS
+<br />
+&nbsp;*
+<br />
+&nbsp;* Enables the pixmap button style.  You must have Xpm support to use
+<br />
+&nbsp;* color pixmaps.  See the man page button style entries for &quot;Pixmap&quot;
+<br />
+&nbsp;* and &quot;TiledPixmap&quot; for usage information.
+<br />
+&nbsp;*
+<br />
+&nbsp;*
+<br />
+&nbsp;* -DGRADIENT_BUTTONS
+<br />
+&nbsp;*
+<br />
+&nbsp;* Enables the gradient button style.  See the man page button style
+<br />
+&nbsp;* entries for &quot;HGradient&quot; and &quot;VGradient&quot; for usage information.
+<br />
+&nbsp;*
+<br />
+&nbsp;*
+<br />
+&nbsp;* -DMULTISTYLE
+<br />
+&nbsp;*
+<br />
+&nbsp;* Enables stacked button styles (also for the title-bar if
+<br />
+&nbsp;* EXTENDED_TITLESTYLE is enabled below).  There is a slight memory
+<br />
+&nbsp;* penalty for each additional style. See the man page entries for
+<br />
+&nbsp;* AddButtonStyle and AddTitleStyle for usage information.
+<br />
+&nbsp;*
+<br />
+&nbsp;* 
+<br />
+&nbsp;* -DEXTENDED_TITLESTYLE
+<br />
+&nbsp;* 
+<br />
+&nbsp;* Enables styled title-bars (specified with the TitleStyle command in
+<br />
+&nbsp;* a similar fashion to the ButtonStyle command).  It also compiles in
+<br />
+&nbsp;* support to change the title-bar height.
+<br />
+&nbsp;*
+<br />
+&nbsp;*
+<br />
+&nbsp;* -DBORDERSTYLE
+<br />
+&nbsp;*
+<br />
+&nbsp;* Enables the BorderStyle command.  Not all button styles are
+<br />
+&nbsp;* available.  See the man page entry for BorderStyle for usage
+<br />
+&nbsp;* information.  If you are also using PIXMAP_BUTTONS, you can also
+<br />
+&nbsp;* texture your borders with tiled pixmaps.  The BorderStyle command
+<br />
+&nbsp;* has Active and Inactive states, regardless of the -DACTIVEDOWN_BTNS
+<br />
+&nbsp;* and -DINACTIVE_BTNS defines.
+<br />
+&nbsp;*
+<br />
+&nbsp;*
+<br />
+&nbsp;* -DUSEDECOR
+<br />
+&nbsp;*
+<br />
+&nbsp;* Enables tagged general decoration styles which can be assigned to
+<br />
+&nbsp;* windows using the UseDecor Style option, or dynamically updated
+<br />
+&nbsp;* with ChangeDecor.  To create and destroy &quot;decor&quot; definitions, see
+<br />
+&nbsp;* the man page entries for AddToDecor and DestroyDecor.  There is a
+<br />
+&nbsp;* slight memory penalty for each additionally defined decor.
+<br />
+&nbsp;* 
+<br />
+&nbsp;*
+<br />
+&nbsp;* -DWINDOWSHADE
+<br />
+&nbsp;*
+<br />
+&nbsp;* Enables the WindowShade function.  This function &quot;rolls&quot; the window
+<br />
+&nbsp;* up so only the title-bar remains.  See the man page entry for
+<br />
+&nbsp;* &quot;WindowShade&quot; for more information.
+<br />
+&nbsp;*
+<br />
+&nbsp;***************************************************************************/
+<br />
+<br />/* 
+<br />
+** note - not all build environments like the '+=' useage below, so if you
+<br />
+**        want to use it, change the following #if 0 to #if 1
+<br />
+*/
+<br />
+<br />if 0
+<br />
+<br />/* the works: */
+<br />
+OPTION_DEFINES  = -DSHAPE
+<br />
+OPTION_DEFINES += -DACTIVEDOWN_BTNS -DINACTIVE_BTNS -DMINI_ICONS
+<br />
+OPTION_DEFINES += -DVECTOR_BUTTONS -DPIXMAP_BUTTONS -DGRADIENT_BUTTONS
+<br />
+OPTION_DEFINES += -DMULTISTYLE -DEXTENDED_TITLESTYLE
+<br />
+OPTION_DEFINES += -DBORDERSTYLE -DUSEDECOR -DWINDOWSHADE
+<br />
+<br />else
+<br />
+<br />/* the works, not using '+=': */
+<br />
+OPTION_DEFINES  = -DSHAPE -DACTIVEDOWN_BTNS -DINACTIVE_BTNS -DMINI_ICONS -DVECTOR_BUTTONS -DPIXMAP_BUTTONS -DGRADIENT_BUTTONS -DMULTISTYLE -DEXTENDED_TITLESTYLE -DBORDERSTYLE -DUSEDECOR -DWINDOWSHADE
+<br />
+<br />endif
+<br />
+<br />/* Or if you prefer a more minimal setup, you could try something like: */
+<br />
+/* OPTION_DEFINES = -DSHAPE -DVECTOR_BUTTONS */
+<br />
+<br /><br />/***************************************************************************
+<br />
+&nbsp;* The following section only needs to be changed if you do not want
+<br />
+&nbsp;* Imake's default behaviour. 
+<br />
+&nbsp;* Uncomment and edit to suit your requirements.
+<br />
+&nbsp;***************************************************************************/
+<br />
+<br />/* Where do you want the fvwm binaries installed. */
+<br />
+define FvwmBinDir /usr/local/X11R6/bin 
+<br />
+<br />/* Where do you want the fvwm modules installed. */
+<br />
+define FvwmDir /usr/local/X11R6/lib/X11/fvwm2
+<br />
+<br />/* Where do you want the fvwm libraries installed. */
+<br />
+define FvwmLibDir /usr/local/X11R6/lib
+<br />
+<br />/* Where do you want the fvwm man pages installed. */
+<br />
+define FvwmManPath /usr/local/X11R6/man
+<br />
+define FvwmManSuffix 1
+<br />
+<br /><br />/***************************************************************************
+<br />
+&nbsp;***************************************************************************
+<br />
+&nbsp;***************************************************************************
+<br />
+&nbsp;&nbsp;&nbsp;End of user configuration items.  You shouldn't need to edit below here.
+<br />
+&nbsp;***************************************************************************
+<br />
+&nbsp;***************************************************************************
+<br />
+&nbsp;***************************************************************************/
+<br />
+<br />/*
+<br />
+** FvwmName is the name of the module
+<br />
+** FvwmRc is the name of the rc file to read by default
+<br />
+*/
+<br />
+<br />#ifdef RenameFVWM2
+<br />
+#define FvwmName fvwm2
+<br />
+#define FvwmRc .fvwm2rc
+<br />
+#else
+<br />
+#define FvwmName fvwm
+<br />
+#define FvwmRc .fvwmrc
+<br />
+#endif /* RenameFVWM2 */
+<br />
+<br />#ifndef HasXpm
+<br />
+#define HasXpm NO
+<br />
+#endif
+<br />
+#ifndef HasRPlay
+<br />
+#define HasRPlay NO
+<br />
+#endif
+<br />
+#ifndef InstallLibs
+<br />
+#define InstallLibs NO
+<br />
+#endif
+<br />
+#ifndef InstallUtils
+<br />
+#define InstallUtils NO
+<br />
+#endif
+<br />
+#ifndef InstallSample
+<br />
+#define InstallSample NO
+<br />
+#endif
+<br />
+#ifndef XpmIncs
+<br />
+#define XpmIncs /* as nothing */
+<br />
+#endif
+<br />
+#ifndef XpmLibs
+<br />
+#define XpmLibs /* as nothing */
+<br />
+#endif
+<br />
+#ifndef AudioIncs
+<br />
+#define AudioIncs /* as nothing */
+<br />
+#endif
+<br />
+#ifndef AudioLibs
+<br />
+#define AudioLibs /* as nothing */
+<br />
+#endif
+<br />
+<br />#if HasXpm
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;XPM_DEFINES = -DXPM
+<br />
+&nbsp;&nbsp;&nbsp;XPM_INCLUDES = XpmIncs
+<br />
+&nbsp;&nbsp;XPM_LIBRARIES = XpmLibs -lXpm
+<br />
+#endif
+<br />
+<br /><br />#if HasRPlay
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AUDIO_DEFINES = -DHAVE_RPLAY
+<br />
+&nbsp;&nbsp;&nbsp;AUDIO_INCLUDES = AudioIncs
+<br />
+&nbsp;&nbsp;AUDIO_LIBRARIES = AudioLibs -lrplay
+<br />
+#endif
+<br />
+<br />#ifdef FvwmCompiler
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CC = FvwmCompiler
+<br />
+#endif
+<br />
+#ifdef FvwmCompilerFlags
+<br />
+XCOMM   CFLAGS = FvwmCompilerFlags
+<br />
+XCOMM   CCOPTIONS = FvwmCompilerFlags /* should I have another var for this? */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CDEBUGFLAGS = FvwmCompilerFlags
+<br />
+#endif
+<br />
+<br />#ifdef FvwmBinDir
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FVWMBINDIR = FvwmBinDir
+<br />
+#else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FVWMBINDIR = $(BINDIR)
+<br />
+#endif
+<br />
+<br />#ifdef FvwmLibDir
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FVWMLIBDIR = FvwmLibDir
+<br />
+#else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FVWMLIBDIR = $(USRLIBDIR)
+<br />
+#endif
+<br />
+<br />#ifdef FvwmManPath
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MANPATH = FvwmManPath
+<br />
+#endif
+<br />
+<br />#ifdef FvwmManSuffix
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MANSUFFIX = FvwmManSuffix
+<br />
+#endif
+<br />
+<br />#ifdef FvwmDir
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FVWMDIR = FvwmDir
+<br />
+#else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FVWMDIR = $(LIBDIR)/FvwmName
+<br />
+#endif
+<br />
+<br />#ifndef FvwmIconPath
+<br />
+#define FvwmIconPath $(INCDIR)/bitmaps\:$(INCDIR)/pixmaps
+<br />
+#endif
+<br />
+<br />&nbsp;&nbsp;&nbsp;ICONPATH = FvwmIconPath
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FVWMRC = FvwmRc
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIB = FvwmName
+<br />
+<br />/* take care of libs not correctly added by Imake on some systems */
+<br />
+/* #ifdef AlphaArchitecture */
+<br />
+#if defined(AlphaArchitecture) &amp;&amp; !defined(linux)
+<br />
+KLUDGE_LIBS = -ldnet_stub
+<br />
+#else
+<br />
+#ifdef HPArchitecture
+<br />
+KLUDGE_LIBS = -lV3
+<br />
+#else
+<br />
+#ifdef i386SVR4Architecture
+<br />
+KLUDGE_LIBS = -lnsl -lsocket
+<br />
+#else /* all other systems shouldn't need anything */
+<br />
+KLUDGE_LIBS = 
+<br />
+#endif /* i386SVR4Architecture */
+<br />
+#endif /* HPArchitecture */
+<br />
+#endif /* AlphaArchitecture */
+<br />
+<br />XCOMM  FVWM_LIBS = -L$(FVWM_SRCDIR)/libs -l$(LIB) $(XPM_LIBRARIES) $(KLUDGE_LIBS)
+<br />
+&nbsp;&nbsp;FVWM_LIBS = $(FVWM_SRCDIR)/libs/lib$(LIB).a $(XPM_LIBRARIES) $(KLUDGE_LIBS)
+<br />
+FVWM_DEPLIB = $(FVWM_SRCDIR)/libs/lib$(LIB).a
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;DEFINES = $(OPTION_DEFINES) $(XPM_DEFINES) $(AUDIO_DEFINES)
+<br />
+&nbsp;&nbsp;&nbsp;INCLUDES = $(XPM_INCLUDES) $(AUDIO_INCLUDES) -I. -I$(FVWM_SRCDIR)/libs
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DEPLIBS = $(DEPXLIB) $(FVWM_DEPLIB)
+<br />
+<br />&nbsp;&nbsp;&nbsp;LINTLIBS = $(LINTXLIB)
+<br />
+<br /><br /><br />/***************************************************************************
+<br />
+&nbsp;* 
+<br />
+&nbsp;*      Special rules for Fvwm
+<br />
+&nbsp;* 
+<br />
+&nbsp;**************************************************************************/
+<br />
+<br />#ifndef InstallNamedNonExec
+<br />
+#define InstallNamedNonExec(what,as,where) InstallNonExec(what,where/as)
+<br />
+#endif /* InstallNamedNonExec() */
+<br />
+<br />#ifndef InstallNonExecFile
+<br />
+#define InstallNonExecFile(file,dest) InstallNonExec(file,dest)
+<br />
+#endif /* InstallNonExecFile() */
+<br />
+<br />#ifndef NullMake
+<br />
+#define NullMake()							_at_&#64;\
+<br />
+all::									_at_&#64;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_at_echo &quot;make in $(CURRENT_DIR) done&quot;
+<br />
+#endif /* NullMake */
+<br />
+<br />#ifndef InstallExecTarget
+<br />
+#define InstallExecTarget(file,destdir)					_at_&#64;\
+<br />
+install:: file								_at_&#64;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$(INSTALL) -c $(INSTBINFLAGS) file $(DESTDIR)destdir
+<br />
+#endif /* InstallExecTarget */
+<br />
+<br /><br /><br />/*
+<br />
+&nbsp;* FvwmModuleTarget - generate rules for compiling and linking the 
+<br />
+&nbsp;* program specified by $(OBJS) and $(SRCS), installing the program and its
+<br />
+&nbsp;* man page, and generating dependencies.  It should only be used in 
+<br />
+&nbsp;* Imakefiles that describe a single program.
+<br />
+&nbsp;*/
+<br />
+#ifndef FvwmModuleTarget
+<br />
+#define	FvwmModuleTarget(program)					_at_&#64;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PROGRAM = program						_at_&#64;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_at_&#64;\
+<br />
+AllTarget(program)							_at_&#64;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_at_&#64;\
+<br />
+program: $(OBJS) $(DEPLIBS)						_at_&#64;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RemoveTargetProgram($_at_)						&#64;&#64;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$(CC) -o $_at_ $(OBJS) $(LDOPTIONS) $(LOCAL_LIBRARIES) $(LDLIBS) $(EXTRA_LOAD_FLAGS) &#64;&#64;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_at_&#64;\
+<br />
+InstallProgram(program,$(FVWMDIR))					_at_&#64;\
+<br />
+InstallManPage(program,$(MANDIR))					_at_&#64;\
+<br />
+DependTarget()								_at_&#64;\
+<br />
+LintTarget()								_at_&#64;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_at_&#64;\
+<br />
+clean::									_at_&#64;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$(RM) $(PROGRAM)
+<br />
+#endif /* FvwmModuleTarget */
+<br />
+<br />/*
+<br />
+&nbsp;* FvwmProgramTarget - generate rules for compiling and linking the 
+<br />
+&nbsp;* program specified by $(OBJS) and $(SRCS), installing the program and its
+<br />
+&nbsp;* man page, and generating dependencies.  It should only be used in 
+<br />
+&nbsp;* Imakefiles that describe a single program.
+<br />
+&nbsp;*/
+<br />
+#ifndef FvwmProgramTarget
+<br />
+#define	FvwmProgramTarget(program)					_at_&#64;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PROGRAM = program						_at_&#64;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_at_&#64;\
+<br />
+AllTarget(program)							_at_&#64;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_at_&#64;\
+<br />
+program: $(OBJS) $(DEPLIBS)						_at_&#64;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RemoveTargetProgram($_at_)						&#64;&#64;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$(CC) -o $_at_ $(OBJS) $(LDOPTIONS) $(LOCAL_LIBRARIES) $(LDLIBS) $(EXTRA_LOAD_FLAGS) &#64;&#64;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_at_&#64;\
+<br />
+InstallProgram(program,$(FVWMBINDIR))					_at_&#64;\
+<br />
+InstallManPage(program,$(MANDIR))					_at_&#64;\
+<br />
+DependTarget()								_at_&#64;\
+<br />
+LintTarget()								_at_&#64;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_at_&#64;\
+<br />
+clean::									_at_&#64;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$(RM) $(PROGRAM)
+<br />
+#endif /* FvwmProgramTarget */
+<br />
+<br />#if ProjectX &gt; 5
+<br />
+<br />#ifndef FvwmCplusplusProgramTargetHelper
+<br />
+#if defined(i386BsdArchitecture) &amp;&amp; defined(i386Bsdi)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C++FLAGS = $(CXXFLAGS)
+<br />
+#endif
+<br />
+#define	FvwmCplusplusProgramTargetHelper(program,srcs,objs,deplib,locallib,syslib) _at_&#64;\
+<br />
+ProgramTargetName(program): $(objs) $(deplib)				_at_&#64;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RemoveTargetProgram($_at_)						&#64;&#64;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CplusplusLinkRule($_at_,$(CXXLDOPTIONS),$(objs),locallib $(LDLIBS) syslib) &#64;&#64;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_at_&#64;\
+<br />
+CenterProgramTarget(program,$(srcs),$(objs),locallib,syslib)		_at_&#64;\
+<br />
+SentinelCplusplusProgramTarget(program,$(objs) $(deplib),$(objs) locallib $(LDLIBS) syslib) _at_&#64;\
+<br />
+PurifyCplusplusProgramTarget(program,$(objs) $(deplib),$(objs) locallib $(LDLIBS) syslib) _at_&#64;\
+<br />
+ProofCplusplusProgramTarget(program,$(objs) $(deplib),$(objs) locallib $(LDLIBS) syslib) _at_&#64;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_at_&#64;\
+<br />
+InstallProgram(program,$(FVWMDIR))					_at_&#64;\
+<br />
+InstallManPage(program,$(MANDIR))
+<br />
+#endif /* FvwmCplusplusProgramTargetHelper */
+<br />
+<br />#ifndef FvwmComplexCplusplusProgramTarget
+<br />
+#define	FvwmComplexCplusplusProgramTarget(program)			_at_&#64;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PROGRAM = program						_at_&#64;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_at_&#64;\
+<br />
+AllTarget(program)							_at_&#64;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_at_&#64;\
+<br />
+FvwmCplusplusProgramTargetHelper(program,SRCS,OBJS,DEPLIBS,$(LOCAL_LIBRARIES),NullParameter) _at_&#64;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_at_&#64;\
+<br />
+DependTarget()								_at_&#64;\
+<br />
+LintTarget()								_at_&#64;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_at_&#64;\
+<br />
+clean::									_at_&#64;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RemoveFile(ProgramTargetName(program))
+<br />
+#endif /* FvwmComplexCplusplusProgramTarget */
+<br />
+<br />#endif /* ProjectX &gt; 5 */
+<br />
+<br />#if defined(AIXArchitecture)
+<br />
+/* to get around a little bug in the AIX 4.1 Imake.rules */
+<br />
+#undef NamedMakeSubdirs
+<br />
+#define NamedMakeSubdirs(name,dirs) \
+<br />
+NamedTargetSubdirs(name,dirs,&quot;Making&quot; name,PassCDebugFlags,all)
+<br />
+#endif /* AIXArchitecture */
+<br />
+<br /><br /><br />
+# Makefile generated by imake - do not edit!
+<br />
+# $TOG: imake.c /main/97 1997/06/20 20:23:51 kaleb $
+<br />
+<br /># ----------------------------------------------------------------------
+<br />
+# Makefile generated from &quot;Imake.tmpl&quot; and &lt;Imakefile&gt;
+<br />
+# $TOG: Imake.tmpl /main/245 1997/05/20 10:05:47 kaleb $
+<br />
+#
+<br />
+#
+<br />
+#
+<br />
+#
+<br />
+# $XFree86: xc/config/cf/Imake.tmpl,v 3.32.2.5 1997/07/06 07:27:59 dawes Exp $
+<br />
+# ----------------------------------------------------------------------
+<br />
+<br />all::
+<br />
+<br />.SUFFIXES: .i
+<br />
+<br /># $TOG: Imake.cf /main/28 1997/06/25 08:31:36 barstow $
+<br />
+# $XFree86: xc/config/cf/Imake.cf,v 3.34.2.3 1997/07/27 02:41:02 dawes Exp $
+<br />
+<br /># -----------------------------------------------------------------------
+<br />
+# site-specific configuration parameters that need to come before
+<br />
+# the platform-specific parameters - edit site.def to change
+<br />
+<br /># site:  $XConsortium: site.def /main/revisionist/4 1996/12/31 08:02:07 kaleb $
+<br />
+# site:  $XFree86: xc/config/cf/site.def,v 3.17.2.1 1997/06/22 10:32:21 dawes Exp $
+<br />
+<br /># $XFree86: xc/config/cf/xf86site.def,v 3.101.2.11 1997/06/22 10:32:22 dawes Exp $
+<br />
+<br /># ----------------------------------------------------------------------
+<br />
+# platform-specific configuration parameters - edit linux.cf to change
+<br />
+<br /># platform:  $TOG: linux.cf /main/36 1997/06/16 22:21:03 kaleb $
+<br />
+# platform:  $XFree86: xc/config/cf/linux.cf,v 3.57.2.10 1997/07/28 14:17:25 dawes Exp $
+<br />
+<br /># operating system:  Linux 2.0.30 i486 [ELF] (2.0.30)
+<br />
+# libc:	(5.3.12)
+<br />
+# binutils:	(27)
+<br />
+<br /># $XConsortium: lnxLib.rules /main/13 1996/09/28 16:11:01 rws $
+<br />
+# $XFree86: xc/config/cf/lnxLib.rules,v 3.28.2.3 1997/06/22 10:32:20 dawes Exp $
+<br />
+<br /># $XFree86: xc/config/cf/xfree86.cf,v 3.129.2.14 1997/07/06 07:28:00 dawes Exp $
+<br />
+<br /># $XConsortium: xfree86.cf /main/34 1996/12/06 11:45:18 rws $
+<br />
+<br />LINKKITDIR = $(USRLIBDIR)/Server
+<br />
+XF98LINKKITDIR = $(USRLIBDIR)/Server
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XF86SRC = $(SERVERSRC)/hw/xfree86
+<br />
+&nbsp;&nbsp;XF86ACCELSRC = $(XF86SRC)/accel
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;XF86COMSRC = $(XF86SRC)/common
+<br />
+&nbsp;XF86CONFIGSRC = $(XF86COMSRC)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XF86HWSRC = $(XF86SRC)/common_hw
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XF86OSSRC = $(XF86SRC)/os-support
+<br />
+&nbsp;&nbsp;VGADRIVERSRC = $(XF86SRC)/vga256/drivers
+<br />
+VGA16DRIVERSRC = $(XF86SRC)/vga16/drivers
+<br />
+&nbsp;VGA2DRIVERSRC = $(XF86SRC)/vga2/drivers
+<br />
+&nbsp;MONODRIVERSRC = $(XF86SRC)/mono/drivers
+<br />
+&nbsp;&nbsp;&nbsp;S3DRIVERSRC = $(XF86SRC)/accel/s3/drivers
+<br />
+&nbsp;&nbsp;S3VDRIVERSRC = $(XF86SRC)/accel/s3_virge/drivers
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XF68SRC = $(SERVERSRC)/hw/xfree68
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;XF68COMSRC = $(XF68SRC)/common
+<br />
+&nbsp;XF68CONFIGSRC = $(XF68COMSRC)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XF68OSSRC = $(XF68SRC)/os-support
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XF98SRC = $(SERVERSRC)/hw/xfree98
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XF98ACCELSRC = $(XF98SRC)/accel
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XF98COMSRC = $(XF98SRC)/common
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XF98CONFIGSRC = $(XF98COMSRC)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XF98HWSRC = $(XF98SRC)/common_hw/generic
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XF98HWNECSRC = $(XF98SRC)/common_hw/nec
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;XF98HWPWSKBSRC = $(XF98SRC)/common_hw/pwskb
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XF98HWPWLBSRC = $(XF98SRC)/common_hw/pwlb
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;XF98HWGA968SRC = $(XF98SRC)/common_hw/ga968
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XF98OSSRC = $(XF98SRC)/os-support
+<br />
+&nbsp;&nbsp;XF98VGADRIVERSRC = $(XF98SRC)/vga256/drivers
+<br />
+XF98VGA16DRIVERSRC = $(XF98SRC)/vga16/drivers
+<br />
+&nbsp;XF98VGA2DRIVERSRC = $(XF98SRC)/vga2/drivers
+<br />
+&nbsp;XF98MONODRIVERSRC = $(XF98SRC)/mono/drivers
+<br />
+XF98NECS3DRIVERSRC = $(XF98SRC)/accel/s3nec/drivers
+<br />
+XF98PWSKBDRIVERSRC = $(XF98SRC)/accel/s3pwskb/drivers
+<br />
+&nbsp;XF98PWLBDRIVERSRC = $(XF98SRC)/accel/s3pwlb/drivers
+<br />
+XF98GA968DRIVERSRC = $(XF98SRC)/accel/s3ga968/drivers
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XFREE86DOCDIR = $(LIBDIR)/doc
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XFREE86PSDOCDIR = $(XFREE86DOCDIR)/PostScript
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;XFREE86HTMLDOCDIR = $(XFREE86DOCDIR)/html
+<br />
+XFREE86JAPANESEDOCDIR = $(XFREE86DOCDIR)/Japanese
+<br />
+<br /># $XConsortium: xf86.rules /main/9 1996/10/31 14:54:26 kaleb $
+<br />
+# $XFree86: xc/config/cf/xf86.rules,v 3.16.2.1 1997/05/18 12:00:01 dawes Exp $
+<br />
+<br /># ----------------------------------------------------------------------
+<br />
+# site-specific configuration parameters that go after
+<br />
+# the platform-specific parameters - edit site.def to change
+<br />
+<br /># site:  $XConsortium: site.def /main/revisionist/4 1996/12/31 08:02:07 kaleb $
+<br />
+# site:  $XFree86: xc/config/cf/site.def,v 3.17.2.1 1997/06/22 10:32:21 dawes Exp $
+<br />
+<br /># ---------------------------------------------------------------------
+<br />
+# Imake rules for building libraries, programs, scripts, and data files
+<br />
+# rules:  $TOG: Imake.rules /main/222 1997/07/17 20:04:40 kaleb $
+<br />
+# rules:  $XFree86: xc/config/cf/Imake.rules,v 3.33.2.5 1997/07/19 04:59:07 dawes Exp $
+<br />
+<br />&nbsp;_NULLCMD_ = _at_ echo -n
+<br />
+<br />TKLIBNAME = tk4.2
+<br />
+<br />TKLIBDIR = /usr/local/lib
+<br />
+<br />TCLLIBNAME = tcl7.6
+<br />
+<br />TCLIBDIR = /usr/local/lib
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PATHSEP = /
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SHELL = /bin/sh
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TOP = .
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CURRENT_DIR = .
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMAKE = imake
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEPEND = gccmakedep
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MKDIRHIER = mkdir -p
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTLISTGEN =
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONFIGSRC = $(TOP)/config
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMAKESRC = $(CONFIGSRC)/imake
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEPENDSRC = $(CONFIGSRC)/util
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INCROOT = /usr/X11R6/include
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USRLIBDIR = /usr/X11R6/lib
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VARLIBDIR = /var/lib
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SHLIBDIR = /usr/X11R6/lib
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LINTLIBDIR = $(USRLIBDIR)/lint
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MANPATH = /usr/X11R6/man
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MANSOURCEPATH = $(MANPATH)/man
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MANDIR = $(MANSOURCEPATH)1
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIBMANDIR = $(MANSOURCEPATH)3
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FILEMANDIR = $(MANSOURCEPATH)5
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AR = ar clq
+<br />
+&nbsp;&nbsp;BOOTSTRAPCFLAGS =
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CC = gcc
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AS = as
+<br />
+<br />.SUFFIXES: .cc
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CXX = c++
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CXXFILT = c++filt
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CXXLIB =
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CXXDEBUGFLAGS = -O2 -fno-strength-reduce
+<br />
+CXXDEPENDINCLUDES =
+<br />
+&nbsp;CXXEXTRA_DEFINES =
+<br />
+CXXEXTRA_INCLUDES =
+<br />
+&nbsp;&nbsp;&nbsp;CXXSTD_DEFINES = -Dlinux -D__i386__ -D_POSIX_SOURCE -D_BSD_SOURCE -D_SVID_SOURCE -DX_LOCALE $(CXXPROJECT_DEFINES)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CXXOPTIONS =
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CXXINCLUDES = $(INCLUDES) $(TOP_INCLUDES) $(CXXEXTRA_INCLUDES)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CXXDEFINES = $(CXXINCLUDES) $(CXXSTD_DEFINES) $(THREADS_CXXDEFINES) $(CXXEXTRA_DEFINES) $(DEFINES)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CXXFLAGS = $(CXXDEBUGFLAGS) $(CXXOPTIONS) $(THREADS_CXXFLAGS) $(CXXDEFINES)
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;COMPRESS = compress
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GZIPCMD = gzip
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CPP = /lib/cpp $(STD_CPP_DEFINES)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PREPROCESSCMD = gcc -E $(STD_CPP_DEFINES)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INSTALL = install
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INSTALLFLAGS = -c
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LD = ld
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LEX = flex -l
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LEXLIB = -lfl
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;YACC = bison -y
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CCYACC = bison -y
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LINT = lint
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LINTLIBFLAG = -C
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LINTOPTS = -axz
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LN = ln -s
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MAKE = make
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MV = mv -f
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CP = cp
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RANLIB = ranlib
+<br />
+&nbsp;&nbsp;RANLIBINSTFLAGS =
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RM = rm -f
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MANSUFFIX = 1x
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIBMANSUFFIX = 3x
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FILEMANSUFFIX = 5x
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TROFF = psroff
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NROFF = nroff
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MSMACROS = -ms
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MANMACROS = -man
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TBL = tbl
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EQN = eqn
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NEQN = neqn
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;COL = col
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DVIPS = dvips
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LATEX = latex
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;STD_INCLUDES =
+<br />
+&nbsp;&nbsp;STD_CPP_DEFINES = -traditional -Dlinux -D__i386__ -D_POSIX_SOURCE -D_BSD_SOURCE -D_SVID_SOURCE -DX_LOCALE $(PROJECT_DEFINES)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;STD_DEFINES = -Dlinux -D__i386__ -D_POSIX_SOURCE -D_BSD_SOURCE -D_SVID_SOURCE -DX_LOCALE $(PROJECT_DEFINES)
+<br />
+&nbsp;EXTRA_LOAD_FLAGS =
+<br />
+&nbsp;&nbsp;EXTRA_LDOPTIONS =
+<br />
+&nbsp;&nbsp;EXTRA_LIBRARIES =
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TAGS = ctags
+<br />
+<br />&nbsp;&nbsp;&nbsp;PARALLELMFLAGS =
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;SHAREDCODEDEF =
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SHLIBDEF =
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SHLIBLDFLAGS = -shared
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PICFLAGS = -fPIC
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CXXPICFLAGS = -fPIC
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;PROTO_DEFINES = -DFUNCPROTO=15 -DNARROWPROTO
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INSTPGMFLAGS = -s
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INSTBINFLAGS = -m 0755
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INSTUIDFLAGS = -m 4711
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INSTLIBFLAGS = -m 0644
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INSTINCFLAGS = -m 0444
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INSTMANFLAGS = -m 0444
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INSTDATFLAGS = -m 0444
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INSTKMEMFLAGS = -m 4711
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PROJECTROOT = /usr/X11R6
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CDEBUGFLAGS = -O2 -fno-strength-reduce
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CCOPTIONS =
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ALLINCLUDES = $(INCLUDES) $(EXTRA_INCLUDES) $(TOP_INCLUDES) $(STD_INCLUDES)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ALLDEFINES = $(ALLINCLUDES) $(STD_DEFINES) $(EXTRA_DEFINES) $(PROTO_DEFINES) $(THREADS_DEFINES) $(DEFINES)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CFLAGS = $(CDEBUGFLAGS) $(CCOPTIONS) $(THREADS_CFLAGS) $(ALLDEFINES)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LINTFLAGS = $(LINTOPTS) -DLINT $(ALLDEFINES) $(DEPEND_DEFINES)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LDPRELIB = -L$(USRLIBDIR)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LDPOSTLIB =
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LDOPTIONS = $(CDEBUGFLAGS) $(CCOPTIONS)  $(EXTRA_LDOPTIONS) $(THREADS_LDFLAGS) $(LOCAL_LDFLAGS) $(LDPRELIBS)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CXXLDOPTIONS = $(CXXDEBUGFLAGS) $(CXXOPTIONS) $(EXTRA_LDOPTIONS) $(THREADS_CXXLDFLAGS) $(LOCAL_LDFLAGS) $(LDPRELIBS)
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LDLIBS = $(LDPOSTLIBS) $(THREADS_LIBS) $(SYS_LIBRARIES) $(EXTRA_LIBRARIES)
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CCLINK = $(CC)
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CXXLINK = $(CXX)
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LDSTRIPFLAGS = -x
+<br />
+&nbsp;&nbsp;&nbsp;LDCOMBINEFLAGS = -r
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEPENDFLAGS =
+<br />
+<br /># Not sure this belongs here
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TKLIBDIR = /usr/local/lib
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TKINCDIR = /usr/local/include
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TKLIBNAME = tk4.2
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TKLIBRARY = -L$(TKLIBDIR) -l$(TKLIBNAME)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TCLLIBDIR = /usr/local/lib
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TCLINCDIR = /usr/local/include
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TCLLIBNAME = tcl7.6
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TCLLIBRARY = -L$(TCLLIBDIR) -l$(TCLLIBNAME)
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MACROFILE = linux.cf
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RM_CMD = $(RM)
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;IMAKE_DEFINES =
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IRULESRC = $(CONFIGDIR)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMAKE_CMD = $(IMAKE) -DUseInstalled -I$(IRULESRC) $(IMAKE_DEFINES)
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ICONFIGFILES = $(IRULESRC)/Imake.tmpl $(IRULESRC)/X11.tmpl 			$(IRULESRC)/site.def $(IRULESRC)/$(MACROFILE) 			$(IRULESRC)/xfree86.cf $(IRULESRC)/xf86.rules $(IRULESRC)/xf86site.def $(IRULESRC)/host.def $(EXTRA_ICONFIGFILES)
+<br />
+<br /># $TOG: X11.rules /main/4 1997/04/30 15:23:24 kaleb $
+<br />
+<br /># ----------------------------------------------------------------------
+<br />
+# X Window System Build Parameters and Rules
+<br />
+# $TOG: X11.tmpl /main/292 1997/05/20 10:05:59 kaleb $
+<br />
+#
+<br />
+#
+<br />
+#
+<br />
+#
+<br />
+# $XFree86: xc/config/cf/X11.tmpl,v 1.8.2.3 1997/05/21 15:02:13 dawes Exp $
+<br />
+<br /># -----------------------------------------------------------------------
+<br />
+# X Window System make variables; these need to be coordinated with rules
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XTOP = $(TOP)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BINDIR = /usr/X11R6/bin
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BUILDINCROOT = $(TOP)/exports
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BUILDINCDIR = $(BUILDINCROOT)/include
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BUILDINCTOP = ../..
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BUILDLIBDIR = $(TOP)/exports/lib
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BUILDLIBTOP = ../..
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BUILDBINDIR = $(TOP)/exports/bin
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BUILDBINTOP = ../..
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;XBUILDINCROOT = $(XTOP)/exports
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XBUILDINCDIR = $(XBUILDINCROOT)/include/X11
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XBUILDINCTOP = ../../..
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XBUILDBINDIR = $(XBUILDINCROOT)/bin
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INCDIR = $(INCROOT)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ADMDIR = /usr/adm
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIBDIR = $(USRLIBDIR)/X11
+<br />
+&nbsp;&nbsp;&nbsp;TOP_X_INCLUDES = -I$(XPROJECTROOT)/include
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FONTDIR = $(LIBDIR)/fonts
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XINITDIR = $(LIBDIR)/xinit
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XDMDIR = $(LIBDIR)/xdm
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XDMVARDIR = $(VARLIBDIR)/xdm
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TWMDIR = $(LIBDIR)/twm
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XSMDIR = $(LIBDIR)/xsm
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NLSDIR = $(LIBDIR)/nls
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XLOCALEDIR = $(LIBDIR)/locale
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PEXAPIDIR = $(LIBDIR)/PEX
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LBXPROXYDIR = $(LIBDIR)/lbxproxy
+<br />
+&nbsp;&nbsp;PROXYMANAGERDIR = $(LIBDIR)/proxymngr
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XPRINTDIR = $(LIBDIR)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XAPPLOADDIR = $(LIBDIR)/app-defaults
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FONTCFLAGS = -t
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INSTAPPFLAGS = $(INSTDATFLAGS)
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RGB = rgb
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FONTC = bdftopcf
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MKFONTDIR = mkfontdir
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DOCUTILSRC = $(XTOP)/doc/util
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLIENTSRC = $(TOP)/clients
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEMOSRC = $(TOP)/demos
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XDOCMACROS = $(DOCUTILSRC)/macros.t
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XIDXMACROS = $(DOCUTILSRC)/indexmacros.t
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PROGRAMSRC = $(TOP)/programs
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIBSRC = $(XTOP)/lib
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FONTSRC = $(XTOP)/fonts
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INCLUDESRC = $(BUILDINCROOT)/include
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XINCLUDESRC = $(INCLUDESRC)/X11
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SERVERSRC = $(XTOP)/programs/Xserver
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTRIBSRC = $(XTOP)/../contrib
+<br />
+&nbsp;&nbsp;&nbsp;UNSUPPORTEDSRC = $(XTOP)/unsupported
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DOCSRC = $(XTOP)/doc
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RGBSRC = $(XTOP)/programs/rgb
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BDFTOPCFSRC = $(PROGRAMSRC)/bdftopcf
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MKFONTDIRSRC = $(PROGRAMSRC)/mkfontdir
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FONTSERVERSRC = $(PROGRAMSRC)/xfs
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FONTINCSRC = $(XTOP)/include/fonts
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXTINCSRC = $(XTOP)/include/extensions
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TRANSCOMMSRC = $(LIBSRC)/xtrans
+<br />
+&nbsp;&nbsp;&nbsp;TRANS_INCLUDES = -I$(TRANSCOMMSRC)
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XENVLIBDIR = $(USRLIBDIR)
+<br />
+&nbsp;&nbsp;&nbsp;CLIENTENVSETUP = LD_LIBRARY_PATH=$(XENVLIBDIR)
+<br />
+<br /># $XConsortium: lnxLib.tmpl,v 1.5 95/01/11 21:44:44 kaleb Exp $
+<br />
+# $XFree86: xc/config/cf/lnxLib.tmpl,v 3.9 1996/02/24 04:32:52 dawes Exp $
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XLIBSRC = $(LIBSRC)/X11
+<br />
+<br />SOXLIBREV = 6.1
+<br />
+DEPXONLYLIB =
+<br />
+XONLYLIB =  -lX11
+<br />
+<br />LINTXONLY = $(LINTLIBDIR)/llib-lX11.ln
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XLIBONLY = $(XONLYLIB)
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XEXTLIBSRC = $(LIBSRC)/Xext
+<br />
+<br />SOXEXTREV = 6.3
+<br />
+DEPEXTENSIONLIB =
+<br />
+EXTENSIONLIB =  -lXext
+<br />
+<br />LINTEXTENSION = $(LINTLIBDIR)/llib-lXext.ln
+<br />
+<br />LINTEXTENSIONLIB = $(LINTEXTENSION)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEPXLIB = $(DEPEXTENSIONLIB) $(DEPXONLYLIB)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XLIB = $(EXTENSIONLIB) $(XONLYLIB)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LINTXLIB = $(LINTXONLYLIB)
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;XSSLIBSRC = $(LIBSRC)/Xss
+<br />
+<br />DEPXSSLIB = $(USRLIBDIR)/libXss.a
+<br />
+XSSLIB =  -lXss
+<br />
+<br />LINTXSS = $(LINTLIBDIR)/llib-lXss.ln
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;XXF86MISCLIBSRC = $(LIBSRC)/Xxf86misc
+<br />
+<br />DEPXXF86MISCLIB = $(USRLIBDIR)/libXxf86misc.a
+<br />
+XXF86MISCLIB =  -lXxf86misc
+<br />
+<br />LINTXXF86MISC = $(LINTLIBDIR)/llib-lXxf86misc.ln
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;XXF86VMLIBSRC = $(LIBSRC)/Xxf86vm
+<br />
+<br />DEPXXF86VMLIB = $(USRLIBDIR)/libXxf86vm.a
+<br />
+XXF86VMLIB =  -lXxf86vm
+<br />
+<br />LINTXXF86VM = $(LINTLIBDIR)/llib-lXxf86vm.ln
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;XXF86DGALIBSRC = $(LIBSRC)/Xxf86dga
+<br />
+<br />DEPXXF86DGALIB = $(USRLIBDIR)/libXxf86dga.a
+<br />
+XXF86DGALIB =  -lXxf86dga
+<br />
+<br />LINTXXF86DGA = $(LINTLIBDIR)/llib-lXxf86dga.ln
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;XDPMSLIBSRC = $(LIBSRC)/Xdpms
+<br />
+<br />DEPXDPMSLIB = $(USRLIBDIR)/libXdpms.a
+<br />
+XDPMSLIB =  -lXdpms
+<br />
+<br />LINTXDPMS = $(LINTLIBDIR)/llib-lXdpms.ln
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XAUTHSRC = $(LIBSRC)/Xau
+<br />
+<br />DEPXAUTHLIB = $(USRLIBDIR)/libXau.a
+<br />
+XAUTHLIB =  -lXau
+<br />
+<br />LINTXAUTH = $(LINTLIBDIR)/llib-lXau.ln
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XDMCPLIBSRC = $(LIBSRC)/Xdmcp
+<br />
+<br />DEPXDMCPLIB = $(USRLIBDIR)/libXdmcp.a
+<br />
+XDMCPLIB =  -lXdmcp
+<br />
+<br />LINTXDMCP = $(LINTLIBDIR)/llib-lXdmcp.ln
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XMUSRC = $(LIBSRC)/Xmu
+<br />
+<br />SOXMUREV = 6.0
+<br />
+DEPXMULIB =
+<br />
+XMULIB =  -lXmu
+<br />
+<br />LINTXMU = $(LINTLIBDIR)/llib-lXmu.ln
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OLDXLIBSRC = $(LIBSRC)/oldX
+<br />
+<br />DEPOLDXLIB = $(USRLIBDIR)/liboldX.a
+<br />
+OLDXLIB =  -loldX
+<br />
+<br />LINTOLDX = $(LINTLIBDIR)/llib-loldX.ln
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XPLIBSRC = $(LIBSRC)/Xp
+<br />
+<br />SOXPREV = 6.2
+<br />
+DEPXPLIB =
+<br />
+XPLIB =  -lXp
+<br />
+<br />LINTXP = $(LINTLIBDIR)/llib-lXp.ln
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TOOLKITSRC = $(LIBSRC)/Xt
+<br />
+<br />SOXTREV = 6.0
+<br />
+DEPXTOOLONLYLIB =
+<br />
+XTOOLONLYLIB =  -lXt
+<br />
+<br />LINTXTOOLONLY = $(LINTLIBDIR)/llib-lXt.ln
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEPXTOOLLIB = $(DEPXTOOLONLYLIB) $(DEPSMLIB) $(DEPICELIB)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XTOOLLIB = $(XTOOLONLYLIB) $(SMLIB) $(ICELIB)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LINTXTOOLLIB = $(LINTXTOOLONLYLIB)
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XALIBSRC = $(LIBSRC)/Xa
+<br />
+<br />SOXAREV = 1.0
+<br />
+DEPXALIB =
+<br />
+XALIB =  -lXa
+<br />
+<br />LINTXA = $(LINTLIBDIR)/llib-lXa.ln
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AWIDGETSRC = $(LIBSRC)/Xaw
+<br />
+<br />SOXAWREV = 6.1
+<br />
+DEPXAWLIB =
+<br />
+XAWLIB =  -lXaw
+<br />
+<br />LINTXAW = $(LINTLIBDIR)/llib-lXaw.ln
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XILIBSRC = $(LIBSRC)/Xi
+<br />
+<br />SOXINPUTREV = 6.0
+<br />
+DEPXILIB =
+<br />
+XILIB =  -lXi
+<br />
+<br />LINTXI = $(LINTLIBDIR)/llib-lXi.ln
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XTESTLIBSRC = $(LIBSRC)/Xtst
+<br />
+<br />SOXTESTREV = 6.1
+<br />
+DEPXTESTLIB =
+<br />
+XTESTLIB =  -lXtst
+<br />
+<br />LINTXTEST = $(LINTLIBDIR)/llib-lXtst.ln
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PEXLIBSRC = $(LIBSRC)/PEX5
+<br />
+<br />SOPEXREV = 6.0
+<br />
+DEPPEXLIB =
+<br />
+PEXLIB =  -lPEX5
+<br />
+<br />LINTPEX = $(LINTLIBDIR)/llib-lPEX5.ln
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XIELIBSRC = $(LIBSRC)/XIE
+<br />
+<br />SOXIEREV = 6.0
+<br />
+DEPXIELIB =
+<br />
+XIELIB =  -lXIE
+<br />
+<br />LINTXIE = $(LINTLIBDIR)/llib-lXIE.ln
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PHIGSLIBSRC = $(LIBSRC)/PHIGS
+<br />
+<br />DEPPHIGSLIB = $(USRLIBDIR)/libphigs.a
+<br />
+PHIGSLIB =  -lphigs
+<br />
+<br />LINTPHIGS = $(LINTLIBDIR)/llib-lphigs.ln
+<br />
+<br />DEPXBSDLIB = $(USRLIBDIR)/libXbsd.a
+<br />
+XBSDLIB =  -lXbsd
+<br />
+<br />LINTXBSD = $(LINTLIBDIR)/llib-lXbsd.ln
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ICESRC = $(LIBSRC)/ICE
+<br />
+<br />SOICEREV = 6.3
+<br />
+DEPICELIB =
+<br />
+ICELIB =  -lICE
+<br />
+<br />LINTICE = $(LINTLIBDIR)/llib-lICE.ln
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SMSRC = $(LIBSRC)/SM
+<br />
+<br />SOSMREV = 6.0
+<br />
+DEPSMLIB =
+<br />
+SMLIB =  -lSM
+<br />
+<br />LINTSM = $(LINTLIBDIR)/llib-lSM.ln
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XKEYSRC = $(LIBSRC)/Xkey
+<br />
+<br />SOXKEYREV = 6.0
+<br />
+DEPXKEYLIB =
+<br />
+XKEYLIB =  -lXkey
+<br />
+<br />LINTXKEY = $(LINTLIBDIR)/llib-lXkey.ln
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FSLIBSRC = $(LIBSRC)/FS
+<br />
+<br />DEPFSLIB = $(USRLIBDIR)/libFS.a
+<br />
+FSLIB =  -lFS
+<br />
+<br />LINTFS = $(LINTLIBDIR)/llib-lFS.ln
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FONTLIBSRC = $(LIBSRC)/font
+<br />
+<br />DEPFONTLIB = $(USRLIBDIR)/libfont.a
+<br />
+FONTLIB =  -lfont
+<br />
+<br />LINTFONT = $(LINTLIBDIR)/llib-lfont.ln
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XPMLIBSRC = $(LIBSRC)/Xpm
+<br />
+<br />DEPXPMLIB = $(USRLIBDIR)/libXpm.a
+<br />
+XPMLIB =  -lXpm
+<br />
+<br />LINTXPM = $(LINTLIBDIR)/llib-lXpm.ln
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;XKBFILELIBSRC = $(LIBSRC)/xkbfile
+<br />
+<br />DEPXKBFILELIB = $(USRLIBDIR)/libxkbfile.a
+<br />
+XKBFILELIB =  -lxkbfile
+<br />
+<br />LINTXKBFILE = $(LINTLIBDIR)/llib-lxkbfile.ln
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XKBCOMPCMD = xkbcomp
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;XKBUILIBSRC = $(LIBSRC)/xkbui
+<br />
+<br />DEPXKBUILIB = $(USRLIBDIR)/libxkbui.a
+<br />
+XKBUILIB =  -lxkbui
+<br />
+<br />LINTXKBUI = $(LINTLIBDIR)/llib-lxkbui.ln
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEPLIBS = $(DEPXAWLIB) $(DEPXMULIB) $(DEPXTOOLLIB) $(DEPXLIB)
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEPLIBS1 = $(DEPLIBS)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEPLIBS2 = $(DEPLIBS)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEPLIBS3 = $(DEPLIBS)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEPLIBS4 = $(DEPLIBS)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEPLIBS5 = $(DEPLIBS)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEPLIBS6 = $(DEPLIBS)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEPLIBS7 = $(DEPLIBS)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEPLIBS8 = $(DEPLIBS)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEPLIBS9 = $(DEPLIBS)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEPLIBS10 = $(DEPLIBS)
+<br />
+<br />XMULIBONLY = -lXmu
+<br />
+XMULIB = $(XMULIBONLY) $(XTOOLLIB) $(XLIB)
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONFIGDIR = $(LIBDIR)/config
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;USRLIBDIRPATH = $(USRLIBDIR)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LDPRELIBS = -L$(USRLIBDIR)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LDPOSTLIBS =
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TOP_INCLUDES = -I$(INCROOT) $(TOP_X_INCLUDES)
+<br />
+&nbsp;&nbsp;PROJECT_DEFINES =
+<br />
+<br />CXXPROJECT_DEFINES =
+<br />
+<br /># ----------------------------------------------------------------------
+<br />
+# start of Imakefile
+<br />
+<br />FVWM_SRCDIR = .
+<br />
+<br />ifndef #
+<br />
+define # #
+<br />
+endif
+<br />
+<br /># Fvwm.tmpl
+<br />
+# Template file for Fvwm
+<br />
+<br />define RenameFVWM2
+<br />
+<br />define FvwmIconPath /usr/include/X11/pixmaps/\:/usr/X11R6/include/X11/pixmaps/\:/usr/X11R6/include/X11/3dpixmaps100/
+<br />
+<br />define HasXpm  1
+<br />
+define XpmLibs -L/usr/X11R6/lib
+<br />
+<br />define HasRPlay 0
+<br />
+<br />define InstallSample 1
+<br />
+<br />define InstallUtils 1
+<br />
+<br />define InstallLibs 0
+<br />
+<br />if 0
+<br />
+<br />OPTION_DEFINES  = -DSHAPE
+<br />
+OPTION_DEFINES += -DACTIVEDOWN_BTNS -DINACTIVE_BTNS -DMINI_ICONS
+<br />
+OPTION_DEFINES += -DVECTOR_BUTTONS -DPIXMAP_BUTTONS -DGRADIENT_BUTTONS
+<br />
+OPTION_DEFINES += -DMULTISTYLE -DEXTENDED_TITLESTYLE
+<br />
+OPTION_DEFINES += -DBORDERSTYLE -DUSEDECOR -DWINDOWSHADE
+<br />
+<br />else
+<br />
+<br />OPTION_DEFINES  = -DSHAPE -DACTIVEDOWN_BTNS -DINACTIVE_BTNS -DMINI_ICONS -DVECTOR_BUTTONS -DPIXMAP_BUTTONS -DGRADIENT_BUTTONS -DMULTISTYLE -DEXTENDED_TITLESTYLE -DBORDERSTYLE -DUSEDECOR -DWINDOWSHADE
+<br />
+<br />endif
+<br />
+<br />define FvwmBinDir /usr/local/X11R6/bin
+<br />
+<br />define FvwmDir /usr/local/X11R6/lib/X11/fvwm2
+<br />
+<br />define FvwmLibDir /usr/local/X11R6/lib
+<br />
+<br />define FvwmManPath /usr/local/X11R6/man
+<br />
+define FvwmManSuffix 1
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CC = gcc
+<br />
+<br />#   CFLAGS = -g -Wall
+<br />
+#   CCOPTIONS = -g -Wall
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CDEBUGFLAGS = -g -Wall
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FVWMBINDIR = $(BINDIR)
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FVWMLIBDIR = $(USRLIBDIR)
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FVWMDIR = $(LIBDIR)/fvwm
+<br />
+<br />&nbsp;&nbsp;&nbsp;ICONPATH = $(INCDIR)/bitmaps\:$(INCDIR)/pixmaps
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FVWMRC = .fvwmrc
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIB = fvwm
+<br />
+<br />KLUDGE_LIBS =
+<br />
+<br />#  FVWM_LIBS = -L$(FVWM_SRCDIR)/libs -l$(LIB) $(XPM_LIBRARIES) $(KLUDGE_LIBS)
+<br />
+&nbsp;&nbsp;FVWM_LIBS = $(FVWM_SRCDIR)/libs/lib$(LIB).a $(XPM_LIBRARIES) $(KLUDGE_LIBS)
+<br />
+FVWM_DEPLIB = $(FVWM_SRCDIR)/libs/lib$(LIB).a
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;DEFINES = $(OPTION_DEFINES) $(XPM_DEFINES) $(AUDIO_DEFINES)
+<br />
+&nbsp;&nbsp;&nbsp;INCLUDES = $(XPM_INCLUDES) $(AUDIO_INCLUDES) -I. -I$(FVWM_SRCDIR)/libs
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DEPLIBS = $(DEPXLIB) $(FVWM_DEPLIB)
+<br />
+<br />&nbsp;&nbsp;&nbsp;LINTLIBS = $(LINTXLIB)
+<br />
+<br />BUILDSUBDIRS = 	  libs   	  fvwm 	  modules/FvwmAudio           modules/FvwmAuto           modules/FvwmBacker           modules/FvwmButtons           modules/FvwmCascade           modules/FvwmCpp 	  modules/FvwmForm           modules/FvwmIconBox           modules/FvwmIconMan           modules/FvwmIdent           modules/FvwmM4           modules/FvwmPager           modules/FvwmSave           modules/FvwmSaveDesk           modules/FvwmScroll           modules/FvwmTalk           modules/FvwmTile           modules/FvwmWinList
+<br />
+<br />SAMPLESUBDIRS = 	  utils 	  sample.fvwmrc
+<br />
+<br />SUBDIRS = $(BUILDSUBDIRS) $(XPMSUBDIRS) $(SAMPLESUBDIRS)
+<br />
+<br />all::
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_at_for flag in ${MAKEFLAGS} ''; do \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case &quot;$$flag&quot; in *=*) ;; *[ik]*) set +e;; esac; done; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for i in $(SUBDIRS) ;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;do \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;making&quot; all &quot;in $(CURRENT_DIR)/$$i...&quot;; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$(MAKE) -C $$i $(MFLAGS) $(PARALLELMFLAGS) 'CDEBUGFLAGS=$(CDEBUGFLAGS)' all; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;done
+<br />
+<br />depend::
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_at_for flag in ${MAKEFLAGS} ''; do \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case &quot;$$flag&quot; in *=*) ;; *[ik]*) set +e;; esac; done; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for i in $(BUILDSUBDIRS) $(XPMSUBDIRS) ;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;do \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;depending&quot; &quot;in $(CURRENT_DIR)/$$i...&quot;; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$(MAKE) -C $$i $(MFLAGS) $(PARALLELMFLAGS)  depend; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;done
+<br />
+<br /># ----------------------------------------------------------------------
+<br />
+# common rules for all Makefiles - do not edit
+<br />
+<br />.c.i:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$(RM) $_at_
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$(CC) -E $(CFLAGS) $(_NOOP_) $*.c &gt; $_at_
+<br />
+<br />emptyrule::
+<br />
+<br />clean::
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$(RM) *.CKP *.ln *.BAK *.bak *.o core errs ,* *~ *.a .emacs_* tags TAGS make.log MakeOut  &quot;#&quot;*
+<br />
+<br />Makefile::
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-_at_if [ -f Makefile ]; then set -x; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$(RM) Makefile.bak; $(MV) Makefile Makefile.bak; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else exit 0; fi
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$(IMAKE_CMD) -DTOPDIR=$(TOP) -DCURDIR=$(CURRENT_DIR)
+<br />
+<br />tags::
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$(TAGS) -w *.[ch]
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$(TAGS) -xw *.[ch] &gt; TAGS
+<br />
+<br />man_keywords::
+<br />
+<br /># ----------------------------------------------------------------------
+<br />
+# rules for building in SUBDIRS - do not edit
+<br />
+<br />install::
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_at_for flag in ${MAKEFLAGS} ''; do \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case &quot;$$flag&quot; in *=*) ;; *[ik]*) set +e;; esac; done; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for i in $(SUBDIRS) ;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;do \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;installing&quot; &quot;in $(CURRENT_DIR)/$$i...&quot;; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$(MAKE) -C $$i $(MFLAGS) $(PARALLELMFLAGS) DESTDIR=$(DESTDIR) install; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;done
+<br />
+<br />install.man::
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_at_for flag in ${MAKEFLAGS} ''; do \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case &quot;$$flag&quot; in *=*) ;; *[ik]*) set +e;; esac; done; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for i in $(SUBDIRS) ;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;do \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;installing man pages&quot; &quot;in $(CURRENT_DIR)/$$i...&quot;; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$(MAKE) -C $$i $(MFLAGS) $(PARALLELMFLAGS) DESTDIR=$(DESTDIR) install.man; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;done
+<br />
+<br />install.linkkit::
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_at_for flag in ${MAKEFLAGS} ''; do \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case &quot;$$flag&quot; in *=*) ;; *[ik]*) set +e;; esac; done; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for i in $(SUBDIRS) ;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;do \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;installing link kit&quot; &quot;in $(CURRENT_DIR)/$$i...&quot;; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$(MAKE) -C $$i $(MFLAGS) $(PARALLELMFLAGS) DESTDIR='$(DESTDIR)' install.linkkit; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;done
+<br />
+<br />clean::
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_at_for flag in ${MAKEFLAGS} ''; do \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case &quot;$$flag&quot; in *=*) ;; *[ik]*) set +e;; esac; done; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for i in $(SUBDIRS) ;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;do \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;cleaning&quot; &quot;in $(CURRENT_DIR)/$$i...&quot;; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$(MAKE) -C $$i $(MFLAGS) $(PARALLELMFLAGS)  clean; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;done
+<br />
+<br />tags::
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_at_for flag in ${MAKEFLAGS} ''; do \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case &quot;$$flag&quot; in *=*) ;; *[ik]*) set +e;; esac; done; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for i in $(SUBDIRS) ;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;do \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;tagging&quot; &quot;in $(CURRENT_DIR)/$$i...&quot;; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$(MAKE) -C $$i $(MFLAGS) $(PARALLELMFLAGS) TAGS='$(TAGS)' tags; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;done
+<br />
+<br />$(ONESUBDIR)/Makefile:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_at_for flag in ${MAKEFLAGS} ''; do \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case &quot;$$flag&quot; in *=*) ;; *[n]*) executeit=&quot;no&quot;;; esac; done; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cd $(ONESUBDIR) &amp;&amp; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if [ &quot;$$executeit&quot; != &quot;no&quot; ]; then \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$(IMAKE_CMD) -DTOPDIR=$(IMAKETOP) -DCURDIR=$(ONECURDIR)$(ONESUBDIR); \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fi;
+<br />
+<br />Makefiles::
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-_at_for flag in ${MAKEFLAGS} ''; do \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case &quot;$$flag&quot; in *=*) ;; *[ik]*) set +e;; esac; done; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for flag in ${MAKEFLAGS} ''; do \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case &quot;$$flag&quot; in *=*) ;; *[n]*) executeit=&quot;no&quot;;; esac; done; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for i in $(SUBDIRS) ;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;do \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case &quot;$(CURRENT_DIR)&quot; in \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.) curdir= ;; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*) curdir=$(CURRENT_DIR)/ ;; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;esac; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;making Makefiles in $$curdir$$i...&quot;; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itmp=`echo $$i | sed -e 's;^\./;;g' -e 's;/\./;/;g'`; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;curtmp=&quot;$(CURRENT_DIR)&quot; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;toptmp=&quot;&quot;; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case &quot;$$itmp&quot; in \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;../?*) \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while echo &quot;$$itmp&quot; | grep '^\.\./' &gt; /dev/null;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;do \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;toptmp=&quot;/`basename $$curtmp`$$toptmp&quot;; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;curtmp=&quot;`dirname $$curtmp`&quot;; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itmp=&quot;`echo $$itmp | sed 's;\.\./;;'`&quot;; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;done \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;esac; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case &quot;$$itmp&quot; in \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/?*/?*/?*/?*)	newtop=../../../../..;; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/?*/?*/?*)	newtop=../../../..;; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/?*/?*)	newtop=../../..;; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/?*)		newtop=../..;; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*)		newtop=..;; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;esac; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;newtop=&quot;$$newtop$$toptmp&quot;; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case &quot;$(TOP)&quot; in \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/?*) imaketop=$(TOP) \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;imakeprefix= ;; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.) imaketop=$$newtop \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;imakeprefix=$$newtop/ ;; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*) imaketop=$$newtop/$(TOP) \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;imakeprefix=$$newtop/ ;; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;esac; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$(RM) $$i/Makefile.bak; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if [ -f $$i/Makefile ]; then \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;	$(MV) Makefile Makefile.bak&quot;; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if [ &quot;$$executeit&quot; != &quot;no&quot; ]; then \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$(MV) $$i/Makefile $$i/Makefile.bak; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fi; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fi; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$(MAKE) $(MFLAGS) $(MAKE_OPTS) ONESUBDIR=$$i ONECURDIR=$$curdir IMAKETOP=$$imaketop IMAKEPREFIX=$$imakeprefix $$i/Makefile; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if [ -d $$i ] ; then \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cd $$i; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$(MAKE) $(MFLAGS) Makefiles; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cd $$newtop; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit 1; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fi; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;done
+<br />
+<br />includes::
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_at_for flag in ${MAKEFLAGS} ''; do \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case &quot;$$flag&quot; in *=*) ;; *[ik]*) set +e;; esac; done; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for i in $(SUBDIRS) ;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;do \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo including &quot;in $(CURRENT_DIR)/$$i...&quot;; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$(MAKE) -C $$i $(MFLAGS) $(PARALLELMFLAGS)  includes; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;done
+<br />
+<br /># ----------------------------------------------------------------------
+<br />
+# dependencies generated by makedepend
+<br />
+<br /><br /><br />
+/*
+<br />
+&nbsp;* Imakefile for fvwm 2.0 -- Top
+<br />
+&nbsp;*
+<br />
+&nbsp;* The procedure is: xmkmf; make Makefiles; make all
+<br />
+&nbsp;*		make install; make install.man
+<br />
+&nbsp;*/
+<br />
+<br />FVWM_SRCDIR = .
+<br />
+#include &quot;Fvwm.tmpl&quot;
+<br />
+<br />#define IHaveSubdirs
+<br />
+<br />BUILDSUBDIRS = \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;libs \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fvwm \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modules/FvwmAudio \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modules/FvwmAuto \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modules/FvwmBacker \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modules/FvwmButtons \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modules/FvwmCascade \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modules/FvwmCpp \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modules/FvwmForm \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modules/FvwmIconBox \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modules/FvwmIconMan \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modules/FvwmIdent \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modules/FvwmM4 \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modules/FvwmPager \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modules/FvwmSave \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modules/FvwmSaveDesk \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modules/FvwmScroll \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modules/FvwmTalk \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modules/FvwmTile \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;modules/FvwmWinList
+<br />
+<br />SAMPLESUBDIRS = \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;utils \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sample.fvwmrc
+<br />
+<br />#if HasXpm
+<br />
+XPMSUBDIRS = xpmroot modules/FvwmBanner 
+<br />
+#endif
+<br />
+<br />SUBDIRS = $(BUILDSUBDIRS) $(XPMSUBDIRS) $(SAMPLESUBDIRS)
+<br />
+<br />/* 
+<br />
+&nbsp;* This allows you to override the value of CDEBUGFLAGS in the Makefiles
+<br />
+&nbsp;* in the tree. Then you can do &quot;make all CDEBUGFLAGS=-g&quot;, for example.
+<br />
+&nbsp;*/
+<br />
+#define PassCDebugFlags 'CDEBUGFLAGS=$(CDEBUGFLAGS)'
+<br />
+<br />MakeSubdirs($(SUBDIRS))
+<br />
+<br />DependSubdirs($(BUILDSUBDIRS) $(XPMSUBDIRS))
+<br />
+<br /><br /><br /><br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue Sep 23 1997 - 14:57:53 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start21010">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="21011.html" title="Next message in the list">Dan Espen: "Re: FVWM: Compilation Problems"</a></li>
+<li><dfn>Previous message</dfn>: <a href="21009.html" title="Previous message in the list">markcrim_at_umich.edu: "FVWM: FOR ADOPTION: tkgoodstuff"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="21011.html" title="Next message in this discussion thread">Dan Espen: "Re: FVWM: Compilation Problems"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Maybe reply</dfn>: <a href="21011.html" title="Message sent in reply to this message">Dan Espen: "Re: FVWM: Compilation Problems"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21010" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21010" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21010" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21010" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

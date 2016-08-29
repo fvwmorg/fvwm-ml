@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: page navigation from Julian Leyh on 2004-07-24 (fvwm-users)</title>
+<meta name="Author" content="Julian Leyh (oenone_at_oenone.de)" />
+<meta name="Subject" content="Re: FVWM: page navigation" />
+<meta name="Date" content="2004-07-24" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: page navigation</h1>
+<!-- received="Fri Jul 23 20:34:19 2004" -->
+<!-- isoreceived="20040723193419" -->
+<!-- sent="Sat, 24 Jul 2004 03:19:39 +0200" -->
+<!-- isosent="20040724011939" -->
+<!-- name="Julian Leyh" -->
+<!-- email="oenone_at_oenone.de" -->
+<!-- subject="Re: FVWM: page navigation" -->
+<!-- id="20040724031939.338acd94.oenone_at_oenone.de" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="20040723182702.0ce6811c.oenone_at_oenone.de" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start12907" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="12908.html" accesskey="d" title="Jay Hamilton: &quot;FVWM: What does it mean when....&quot;">Next message</a> ]
+[ <a href="12906.html" title="vladimir-fvwm_at_math.uic.edu: &quot;Re: FVWM: Window refresh problems.&quot;">Previous message</a> ]
+[ <a href="12893.html" title="Julian Leyh: &quot;FVWM: page navigation&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg12907" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg12907" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg12907" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg12907" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Julian Leyh &lt;<a href="mailto:oenone_at_oenone.de?Subject=Re%3A%20FVWM%3A%20page%20navigation">oenone_at_oenone.de</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sat, 24 Jul 2004 03:19:39 +0200</span><br />
+</address>
+<br />
+Thanks for the replies :)
+<br />
+<br />I now have configured it the way i like it..
+<br />
+<br />Here my solution for the archives and for everybody who is interested.
+<br />
+<br /><em class="quotelev1">&gt; That's very nice :) but i'd like to have it a little different.
+</em><br />
+<em class="quotelev1">&gt; if i'm in screen 3 and go right, i'd like to be sent to 4.. if i'm in
+</em><br />
+<em class="quotelev1">&gt; 6, send me to 7.. the same for the up/down movement. from page 7 to 2,
+</em><br />
+<em class="quotelev1">&gt; from page 8 to 3. the next step would be to send me from page 9 to 1
+</em><br />
+<em class="quotelev1">&gt; if i go right/down.. does anybody have info about how i could realize
+</em><br />
+<em class="quotelev1">&gt; this?
+</em><br />
+<br />I took Tavis' function (thanks alot) and modified it a bit, so that it
+<br />
+works for up/down and left/right and i added the wrapping from
+<br />
+page 9 to 1:
+<br />
+<br />DestroyFunc PageScroll
+<br />
+AddToFunc PageScroll I PipeRead 'case $0 in \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;up) test $[page.ny] -eq 0 -a $[page.nx] -gt 0 \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;&amp; echo GotoPage -1p -1 \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|| (test $[page.ny] -eq 0 \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;&amp; echo GotoPage -1 -1 \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|| echo GotoPage 0p -1p);; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;down) test $[page.ny] -eq $$(($[desk.pagesy]-1)) -a \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$[page.nx] -lt $(($[desk.pagesx]-1)) \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;&amp; echo GotoPage +1p 0 \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|| (test $[page.ny] -eq $$(($[desk.pagesy]-1)) \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;&amp; echo GotoPage 0 0 \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|| echo GotoPage 0p +1p);; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;left) test $[page.nx] -eq 0 -a $[page.ny] -gt 0 \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;&amp; echo GotoPage -1 -1p \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|| (test $[page.nx] -eq 0 \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;&amp; echo GotoPage -1 -1 \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|| echo GotoPage -1p 0p);; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;right) test $[page.nx] -eq $$(($[desk.pagesx]-1)) -a \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$[page.ny] -lt $$(($[desk.pagesy]-1)) \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;&amp; echo GotoPage 0 +1p \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|| (test $[page.nx] -eq $$(($[desk.pagesx]-1)) \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;&amp; echo GotoPage 0 0 \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|| echo GotoPage +1p 0p);; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;esac'
+<br />
+<br />Key Left  A 4  PageScroll left
+<br />
+Key Right A 4  PageScroll right
+<br />
+Key Up    A 4  PageScroll up
+<br />
+Key Down  A 4  PageScroll down
+<br />
+<br /><em class="quotelev1">&gt; Additionally it would be nice to have the focussed window from the
+</em><br />
+<em class="quotelev1">&gt; previous page lose the focus and one of the windows (probably the next
+</em><br />
+<em class="quotelev1">&gt; one to the mouse) in the new page be focussed (if there is none, no
+</em><br />
+<em class="quotelev1">&gt; window gets focus, but the old one should lose it anyway). this should
+</em><br />
+<em class="quotelev1">&gt; be always when i change the page.. using the obove keys, the FvwmPager
+</em><br />
+<em class="quotelev1">&gt; or some other function.
+</em><br />
+<em class="quotelev1">&gt; is there a simple way to make fvwm do this?
+</em><br />
+<br />followed Thomas' link
+<br />
+(<a href="http://www.fvwmwiki.org/cgi/moin.cgi/Tips_2fRememberFocus">http://www.fvwmwiki.org/cgi/moin.cgi/Tips_2fRememberFocus</a>) and it works
+<br />
+fine.. not perfect, but i'll have to have a closer look on this later.
+<br />
+<br /><em class="quotelev1">&gt; Next question is about the Translucency patch..
+</em><br />
+<em class="quotelev1">&gt; Is Translucency only for menus? i tried FvwmPager, but it doesn't seem
+</em><br />
+<em class="quotelev1">&gt; to be possible... FvwmPager has StaysOnTop, so it'd be nice to see
+</em><br />
+<em class="quotelev1">&gt; what's in the window under it.. but i think, for that i'll need real
+</em><br />
+<em class="quotelev1">&gt; translucency provided by the X server. am i right?
+</em><br />
+<br />not really possible with my X server, but Harsh's idea looks nice..
+<br />
+maybe something with autohide would be nice ;) will come back to this
+<br />
+later
+<br />
+<br />cu
+<br />
+JRL
+<br />
+<br /><pre>
+-- 
+visit my OpenBSD ports page: <a href="http://vgai.de/ports">http://vgai.de/ports</a>
+--
+If you don't remember something, it never existed...
+If you aren't remembered, you never existed...
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Jul 23 2004 - 20:34:19 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start12907">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="12908.html" title="Next message in the list">Jay Hamilton: "FVWM: What does it mean when...."</a></li>
+<li><dfn>Previous message</dfn>: <a href="12906.html" title="Previous message in the list">vladimir-fvwm_at_math.uic.edu: "Re: FVWM: Window refresh problems."</a></li>
+<li><dfn>In reply to</dfn>: <a href="12893.html" title="Message to which this message replies">Julian Leyh: "FVWM: page navigation"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg12907" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg12907" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg12907" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg12907" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:57 BST
+</em></small></p>
+</body>
+</html>

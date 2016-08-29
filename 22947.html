@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: TransientFor hint property problem from Randall S. Winchester on 1998-10-29 (fvwm-users)</title>
+<meta name="Author" content="Randall S. Winchester (rsw_at_Glue.umd.edu)" />
+<meta name="Subject" content="Re: FVWM: TransientFor hint property problem" />
+<meta name="Date" content="1998-10-29" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: TransientFor hint property problem</h1>
+<!-- received="Thu Oct 29 11:41:15 1998" -->
+<!-- isoreceived="19981029114115" -->
+<!-- sent="Thu, 29 Oct 1998 12:40:58 -0500 (EST)" -->
+<!-- isosent="19981029174058" -->
+<!-- name="Randall S. Winchester" -->
+<!-- email="rsw_at_Glue.umd.edu" -->
+<!-- subject="Re: FVWM: TransientFor hint property problem" -->
+<!-- id="Pine.GSO.4.02.9810291143370.23436-200000_at_atlantis.csc.umd.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="199810291538.JAA18459_at_dfw-ix2.ix.netcom.com" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start22947" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="22948.html" accesskey="d" title="Duane Guingrich: &quot;FVWM: Enhancment request to fix problem when modifying the TransientForHint&quot;">Next message</a> ]
+[ <a href="22946.html" title="Alan: &quot;FVWM: controlling the mouse with the keyboard&quot;">Previous message</a> ]
+[ <a href="22944.html" title="Duane Guingrich: &quot;FVWM: TransientFor hint property problem&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg22947" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg22947" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg22947" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg22947" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Randall S. Winchester &lt;<a href="mailto:rsw_at_Glue.umd.edu?Subject=Re%3A%20FVWM%3A%20TransientFor%20hint%20property%20problem">rsw_at_Glue.umd.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 29 Oct 1998 12:40:58 -0500 (EST)</span><br />
+</address>
+<br />
+We to have had a long standing problem with fvwm and applications compiled
+<br />
+against Motif libraries. The apps will not start! The current &quot;trick that
+<br />
+works&quot; is to start Netscape before you run a &quot;problem&quot; app, as it seems to
+<br />
+set things in a way that will allow apps following to run. This is of course
+<br />
+stupid. 
+<br />
+<br />I have attached a bug report on the issue, which mentions another &quot;trick
+<br />
+that sometimes works&quot;, but it a much smaller and faster trick then starting
+<br />
+Netscape, eating lots of memory, starting big app, eating rest of memory,
+<br />
+swap, swap, swap....
+<br />
+<br />I spent a number of hours last night looking at how Fvwm handles the Motif
+<br />
+Intrinsics, and wanted to gag. If you look at the AfterStep source and see
+<br />
+all the motif-isms that had to comment out you will quickly see that the
+<br />
+routines in decorations.c code is in need of some changes (SelectDecor(),
+<br />
+GetMwmHints(), GetOlHints(). If you look at the Enlightment source, you will
+<br />
+see a better handling of the MwmHints. Fixing this will help Fvwm better
+<br />
+manage and expand its lookand feel as well.
+<br />
+<br />Right now MWM and OLWM are in a twisted mess in the Fvwm code.
+<br />
+<br />After the next release (yes I agree with the soon), this code needs help.
+<br />
+<br />There should be either an FVWM_FLAGS or an fvwm_structure set, such that is 
+<br />
+the union of what other WM apps may present to it can be used in the code,
+<br />
+and not rely on MWM_FLAGS as is done now. The WM_app code should be kept in
+<br />
+their specific GetXXXHints() routines, and only the fvwm_structure should 
+<br />
+get out, as well as go through the rest.
+<br />
+<br />It look to me like it should (with lots of hand waving here);
+<br />
+<br />GetFvwmHints()     // What did the .fvwmrc+running_state give us. (WMHints)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// i.e. first load fvwm_structure with the look we want.
+<br />
+GetMwmHints()      // If this is a Motif app find our compromise
+<br />
+GetOlwmHints()     // If this is an Open Look app find our compromise
+<br />
+GetGnomeHints()    // If this is a Gnome app find our compromise
+<br />
+GetXyzHints()      // If this is an Xyz app find our compromise
+<br />
+SelectDecor()      // A much cleaner routine that takes the final
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// fvwm_structure and presents it to Fvwm_core.
+<br />
+<br />These routines are all called from AddWindow(), and could be put in their
+<br />
+own routine and .c file GetHints() and hints.c. I think this is central 
+<br />
+to the great &quot;style&quot; changes.
+<br />
+<br />The existing code was good from that standpoint that it was how twm was
+<br />
+given the mwm look and feel. There are now more looks and feels, and this
+<br />
+needs to be reorganized, so we do not end up with endless source or
+<br />
+CVS branches for every fvwm spinoff. A cleaner API would help various
+<br />
+factions to work together.
+<br />
+<br /><br />Randall
+<br />
+<br /><br />On Thu, 29 Oct 1998, Duane Guingrich wrote:
+<br />
+<br />:     I am having a problem with FVWM not behaving the same as
+<br />
+: mwm when I set the TransientFor hint property. What I am trying to
+<br />
+: do is make the window of a separate task behave like it is a dialog
+<br />
+: of my main task. I am doing the following steps:
+<br />
+: 
+<br />
+: 1) Run my program called 'MyTask'
+<br />
+: 2) MyTask spawns the standalone FontSel program using a pipe
+<br />
+:     to get the selected font from FontSel's standard output.
+<br />
+: 3) MyTask looks for the WindowID of FontSel based on its window
+<br />
+:     name using a timer and QueryTree().
+<br />
+: 4) When MyTask finds the WindowID of FontSel, it calls
+<br />
+:     XSetTransientForHint() using the WindowID of MyTask
+<br />
+:     as the parent window and the found WindowID of FontSel
+<br />
+:     as the dialog window.
+<br />
+: 
+<br />
+:     When I do this under mwm, the stacking order is maintained
+<br />
+: so that clicking on the window for MyTask will caused the window
+<br />
+: for FontSel to be raised as well. Under FVWM, the two windows
+<br />
+: continue to operate independently and clicking on the window for
+<br />
+: MyTask raises it in front of the window for FontSel.
+<br />
+: 
+<br />
+:     When I saw that this technique didn't work under FVWM,
+<br />
+: I tried setting the windowgroup for the FontSel window to the
+<br />
+: WindowID of MyTask, but this didn't work either.
+<br />
+: 
+<br />
+:      Duane
+<br />
+: 
+<br />
+: --
+<br />
+: Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+<br />
+: To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+<br />
+: message to majordomo_at_hpc.uh.edu.
+<br />
+: To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+<br />
+: 
+<br />
+<br /><br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<div>
+<ul>
+<li>TEXT/PLAIN attachment: <a href="att-22947/foo">Bug report for Fvwm with some Motif apps</a></li>
+</ul>
+<!-- attachment="foo" -->
+</div>
+<span id="received"><dfn>Received on</dfn> Thu Oct 29 1998 - 11:41:15 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start22947">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="22948.html" title="Next message in the list">Duane Guingrich: "FVWM: Enhancment request to fix problem when modifying the TransientForHint"</a></li>
+<li><dfn>Previous message</dfn>: <a href="22946.html" title="Previous message in the list">Alan: "FVWM: controlling the mouse with the keyboard"</a></li>
+<li><dfn>In reply to</dfn>: <a href="22944.html" title="Message to which this message replies">Duane Guingrich: "FVWM: TransientFor hint property problem"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg22947" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg22947" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg22947" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg22947" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

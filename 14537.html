@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Missing casts in pl37 from Martin Kraemer on 1995-10-13 (fvwm-users)</title>
+<meta name="Author" content="Martin Kraemer (Martin.Kraemer_at_mch.sni.de)" />
+<meta name="Subject" content="FVWM: Missing casts in pl37" />
+<meta name="Date" content="1995-10-13" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Missing casts in pl37</h1>
+<!-- received="Fri Oct 13 05:56:16 1995" -->
+<!-- isoreceived="19951013045616" -->
+<!-- sent="Fri, 13 Oct 1995 11:56:06 +0100 (MET)" -->
+<!-- isosent="19951013105606" -->
+<!-- name="Martin Kraemer" -->
+<!-- email="Martin.Kraemer_at_mch.sni.de" -->
+<!-- subject="FVWM: Missing casts in pl37" -->
+<!-- id="199510131056.AA03168_at_deejai.mch.sni.de" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start14537" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="14538.html" accesskey="d" title="libadm8_at_bns02.attmail.com: &quot;FVWM: problems compiling pl37 on SGI&quot;">Next message</a> ]
+[ <a href="14536.html" title="Carl A. Adams: &quot;Re: FVWM: Re: race condition or timing window in fvwm2 ??&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg14537" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg14537" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg14537" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg14537" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Martin Kraemer &lt;<a href="mailto:Martin.Kraemer_at_mch.sni.de?Subject=Re%3A%20FVWM%3A%20Missing%20casts%20in%20pl37">Martin.Kraemer_at_mch.sni.de</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 13 Oct 1995 11:56:06 +0100 (MET)</span><br />
+</address>
+<br />
+Hello,
+<br />
+<br />I guess my compiler is a bit _too_ strict. Not all the [warning]s in the
+<br />
+following output are important. But the [error]s point to missing (char*)
+<br />
+casts (or inconsistent prototypes).
+<br />
+<br />cc -kansi -O   -I/usr/include  -I. -I../../libs -Datt=att -DSYSV -DSVR4 -DSVR4_0 -Dsiemens -DXMVERSION=1100 -DSTREAMWRITEMAX=4096 -DSTRNET -DFUNCPROTO      -c FvwmIconBox.c -o FvwmIconBox.o
+<br />
+FvwmIconBox.c:
+<br />
+/usr/include/X11/Xlib.h   232: [warning]:   'class' is a C++ reserved word
+<br />
+/usr/include/X11/Xlib.h   918: [warning]:   'new' is a C++ reserved word
+<br />
+/usr/include/X11/Xproto.h  1385: [warning]:   'delete' is a C++ reserved word
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c0: errors: 0, warnings: 3
+<br />
+FvwmIconBox.c   191: [warning]:   '==' or '=' desired?
+<br />
+FvwmIconBox.c   221: [error]:     Argument type 'ptr to struct  of size 24' does not match parameter type 'ptr to char'
+<br />
+FvwmIconBox.c   229: [warning]:   set_mask_mesg never used
+<br />
+FvwmIconBox.c   247: [warning]:   Condition is always true
+<br />
+FvwmIconBox.c   459: [error]:     Argument type 'ptr to struct  of size 36' does not match parameter type 'ptr to char'
+<br />
+FvwmIconBox.c   580: [warning]:   newbutton never used
+<br />
+FvwmIconBox.c  1243: [warning]:   Condition is always true
+<br />
+FvwmIconBox.c  1436: [warning]:   nonsense never used
+<br />
+FvwmIconBox.c  1789: [warning]:   Argument type 'ptr to unsigned char' does not match parameter type 'ptr to char'
+<br />
+FvwmIconBox.c  1841: [warning]:   '==' or '=' desired?
+<br />
+FvwmIconBox.c  1848: [warning]:   cbody never used
+<br />
+FvwmIconBox.c  1848: [warning]:   total never used
+<br />
+FvwmIconBox.c  1848: [warning]:   count2 set but not used
+<br />
+FvwmIconBox.c  1848: [warning]:   count set but not used
+<br />
+FvwmIconBox.c  1848: [warning]:   body_length never used
+<br />
+FvwmIconBox.c  1867: [warning]:   Flow between cases
+<br />
+FvwmIconBox.c  2010: [warning]:   i set but not used
+<br />
+FvwmIconBox.c  2304: [error]:     Argument type 'ptr to struct  of size 36' does not match parameter type 'ptr to char'
+<br />
+FvwmIconBox.c  2389: [warning]:   ev set but not used
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c1: errors: 3, warnings: 16
+<br />
+[...]
+<br />
+cc -kansi -O   -I/usr/include  -I. -I../../libs -Datt=att -DSYSV -DSVR4 -DSVR4_0 -Dsiemens -DXMVERSION=1100 -DSTREAMWRITEMAX=4096 -DSTRNET -DFUNCPROTO      -c GrabWindow.c -o GrabWindow.o
+<br />
+GrabWindow.c:
+<br />
+/usr/include/X11/Xlib.h   232: [warning]:   'class' is a C++ reserved word
+<br />
+/usr/include/X11/Xlib.h   918: [warning]:   'new' is a C++ reserved word
+<br />
+/usr/include/X11/Xproto.h  1385: [warning]:   'delete' is a C++ reserved word
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c0: errors: 0, warnings: 3
+<br />
+GrabWindow.c   318: [warning]:   Condition is always true
+<br />
+GrabWindow.c   594: [error]:     Argument type 'ptr to struct  of size 36' does not match parameter type 'ptr to char'
+<br />
+GrabWindow.c   763: [warning]:   Argument type 'ptr to unsigned char' does not match parameter type 'ptr to char'
+<br />
+GrabWindow.c   781: [warning]:   Argument type 'ptr to unsigned char' does not match parameter type 'ptr to char'
+<br />
+GrabWindow.c   859: [error]:     Argument type 'ptr to struct  of size 36' does not match parameter type 'ptr to char'
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c1: errors: 2, warnings: 3
+<br />
+[...]
+<br />
+<br />And here, we should only try to strip binaries, not shell scripts...
+<br />
+<br />installing in ./utils...
+<br />
+/usr/ucb/install -c -m 0755 -s -o bin fvwmrc_convert &quot;/home/martin/fvwm-2&quot;
+<br />
+strip: /home/martin/fvwm-2/fvwmrc_convert: invalid file type
+<br />
+/usr/ucb/install -c -m 0755 -s -o bin quantize_pixmaps &quot;/home/martin/fvwm-2&quot;
+<br />
+strip: /home/martin/fvwm-2/quantize_pixmaps: invalid file type
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;Martin
+<br />
+<pre>
+-- 
+| S I E M E N S |   Martin.Kraemer_at_mch.sni.de   |       Siemens Nixdorf
+| ------------- |   Voice: +49-89-636-46021     |   Informationssysteme AG
+| N I X D O R F |   FAX:   +49-89-636-44994     |    81730 Munich, Germany
+~~~~~~~~~~~~~~~~  (My opinions only, of course; pgp key available on request)
+--
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Oct 13 1995 - 05:56:16 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start14537">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="14538.html" title="Next message in the list">libadm8_at_bns02.attmail.com: "FVWM: problems compiling pl37 on SGI"</a></li>
+<li><dfn>Previous message</dfn>: <a href="14536.html" title="Previous message in the list">Carl A. Adams: "Re: FVWM: Re: race condition or timing window in fvwm2 ??"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg14537" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg14537" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg14537" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg14537" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:57 BST
+</em></small></p>
+</body>
+</html>

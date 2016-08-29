@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: Icon Placement from Thomas Thyberg on 1997-01-23 (fvwm-users)</title>
+<meta name="Author" content="Thomas Thyberg (tt_at_bengt.algonet.se)" />
+<meta name="Subject" content="Re: FVWM: Icon Placement" />
+<meta name="Date" content="1997-01-23" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: Icon Placement</h1>
+<!-- received="Thu Jan 23 14:17:23 1997" -->
+<!-- isoreceived="19970123141723" -->
+<!-- sent="Thu, 23 Jan 1997 21:13:30 +0100" -->
+<!-- isosent="19970123201330" -->
+<!-- name="Thomas Thyberg" -->
+<!-- email="tt_at_bengt.algonet.se" -->
+<!-- subject="Re: FVWM: Icon Placement" -->
+<!-- id="199701232013.VAA19549_at_bengt" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="9701222116.AA28036_at_tiki" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start19045" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="19046.html" accesskey="d" title="Mark Borges: &quot;FVWM: Re: MWM title button hints (was: Style bug?)&quot;">Next message</a> ]
+[ <a href="19044.html" title="Andrew Veliath: &quot;FVWM: Re: MWM title button hints (was: Style bug?)&quot;">Previous message</a> ]
+[ <a href="19038.html" title="Michael Kirby: &quot;FVWM: Icon Placement&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19045" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19045" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19045" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19045" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Thomas Thyberg &lt;<a href="mailto:tt_at_bengt.algonet.se?Subject=Re%3A%20FVWM%3A%20Icon%20Placement">tt_at_bengt.algonet.se</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 23 Jan 1997 21:13:30 +0100</span><br />
+</address>
+<br />
+: From: &quot;Michael Kirby&quot; &lt;kirby_at_ess.mc.xerox.com&gt;
+<br />
+: 
+<br />
+: &gt;  Is there a way to change the icon placement.  Right now, When I 
+<br />
+: &gt; create a new window and iconify, it defaults to the left hand side. 
+<br />
+: &gt; I would like to be able to set it like an iconbox can be set, but I
+<br />
+: &gt; don't want an iconbox.
+<br />
+: 
+<br />
+: Never Mind,
+<br />
+: 
+<br />
+: The IconBox command on Style is not the same as the FvwmIconBox Module
+<br />
+: that also comes with the distribution.  An important semantic
+<br />
+: difference.
+<br />
+: 
+<br />
+: But now how do I get the icons to stick in the same place once I've
+<br />
+: iconified them?  
+<br />
+: 
+<br />
+: For example, open 3 windows.  Iconify 2, open the first one and
+<br />
+: iconify the third (the one that wasn't originally iconified), it goes
+<br />
+: into the slot of the window that was just opened.  
+<br />
+: 
+<br />
+: Is there a way for icon placement to be reserved for the life of the
+<br />
+: window, regardless of whether or not the window is currently
+<br />
+: iconified?
+<br />
+<br />Hi all!
+<br />
+<br />I don't know if there is a configurable option (.fvwm2rc) for this, 
+<br />
+but one way I just tried is to mark all new icons as ICON_MOVED, since
+<br />
+moved icons seems to stay put. I also wanted the spot where the icon
+<br />
+of a deiconfied window occupie to be to be left alone.
+<br />
+<br />The following patch implements this. I don't know if this is the right
+<br />
+way of doing this but it works for me. Maybe this should be configurable.
+<br />
+<br />I also wanted to have the icon title to raise when given focus so one 
+<br />
+can read the whole iconname without explicit raise of the icon. 
+<br />
+I usually end up with several emacs icons (~20) at the bottom of 
+<br />
+the screen and having the icontitle &quot;pop up&quot; makes it much easier
+<br />
+to find the correct one. 
+<br />
+<br />If it is possible to do all this in the .fvwm2rc file, please let me know.
+<br />
+<br />Sorry for the contextdiff, but the diff at work didn't have -n.
+<br />
+<br /><br />/TT -- tt_at_algonet.se
+<br />
+<br />--------------
+<br />
+This is for 2.0.44.
+<br />
+<br />*** focus.c.orig	Fri Dec 06 18:17:25 1996
+<br />
+--- focus.c	Fri Jan 17 14:20:41 1997
+<br />
+***************
+<br />
+*** 34,39 ****
+<br />
+--- 34,40 ----
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;void SetFocus(Window w, FvwmWindow *Fw, Bool FocusByMouse)
+<br />
+&nbsp;&nbsp;{
+<br />
++   int raise = FALSE;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int i;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;extern Time lastTimestamp;
+<br />
+&nbsp;&nbsp;
+<br />
+***************
+<br />
+*** 116,122 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Scr.Ungrabbed = Fw;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if((Fw)&amp;&amp;(Fw-&gt;flags &amp; ICONIFIED)&amp;&amp;(Fw-&gt;icon_w))
+<br />
+!     w= Fw-&gt;icon_w;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if((Fw)&amp;&amp;(Fw-&gt;flags &amp; Lenience))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+--- 117,126 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Scr.Ungrabbed = Fw;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if((Fw)&amp;&amp;(Fw-&gt;flags &amp; ICONIFIED)&amp;&amp;(Fw-&gt;icon_w))
+<br />
+!     {
+<br />
+!       w= Fw-&gt;icon_w;
+<br />
+!       raise = TRUE;
+<br />
+!     }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if((Fw)&amp;&amp;(Fw-&gt;flags &amp; Lenience))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+***************
+<br />
+*** 129,134 ****
+<br />
+--- 133,140 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* Window will accept input focus */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XSetInputFocus (dpy, w, RevertToParent, lastTimestamp);
+<br />
++       if (raise)
+<br />
++	XRaiseWindow(dpy, w);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Scr.Focus = Fw;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Scr.UnknownWinFocused = None;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+*** icons.c.orig	Mon Dec 23 23:07:47 1996
+<br />
+--- icons.c	Thu Jan 23 16:14:01 1997
+<br />
+***************
+<br />
+*** 438,445 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(test_window-&gt;Desk == t-&gt;Desk)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!			  if((test_window-&gt;flags&amp;ICONIFIED)&amp;&amp;
+<br />
+!                              (test_window-&gt;icon_w||test_window-&gt;icon_pixmap_w)&amp;&amp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(test_window != t))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tw=test_window-&gt;icon_p_width;
+<br />
+--- 438,444 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(test_window-&gt;Desk == t-&gt;Desk)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+!			  if((test_window-&gt;icon_w||test_window-&gt;icon_pixmap_w)&amp;&amp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(test_window != t))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tw=test_window-&gt;icon_p_width;
+<br />
+***************
+<br />
+*** 465,470 ****
+<br />
+--- 464,470 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t-&gt;icon_x_loc = real_x;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t-&gt;icon_y_loc = real_y;
+<br />
++       t-&gt;flags |= ICON_MOVED;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(t-&gt;icon_pixmap_w)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XMoveWindow(dpy,t-&gt;icon_pixmap_w,t-&gt;icon_x_loc, t-&gt;icon_y_loc);
+<br />
+<br /><br /><br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Jan 23 1997 - 14:17:23 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start19045">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="19046.html" title="Next message in the list">Mark Borges: "FVWM: Re: MWM title button hints (was: Style bug?)"</a></li>
+<li><dfn>Previous message</dfn>: <a href="19044.html" title="Previous message in the list">Andrew Veliath: "FVWM: Re: MWM title button hints (was: Style bug?)"</a></li>
+<li><dfn>In reply to</dfn>: <a href="19038.html" title="Message to which this message replies">Michael Kirby: "FVWM: Icon Placement"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19045" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19045" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19045" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19045" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

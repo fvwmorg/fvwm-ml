@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="iso-2022-jp"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-2022-jp" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: FvwmConsole patch for everybody(B from Toshi Isogai(B on 1996-05-09 (fvwm-users)</title>
+<meta name="Author" content="Toshi Isogai(B (toshi_isogai_at_Maxtor.com)" />
+<meta name="Subject" content="FVWM: FvwmConsole patch for everybody(B" />
+<meta name="Date" content="1996-05-09" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: FvwmConsole patch for everybody(B</h1>
+<!-- received="Thu May  9 15:31:20 1996" -->
+<!-- isoreceived="19960509143120" -->
+<!-- sent="Thu, 9 May 1996 14:24:00 -0600 (MDT)" -->
+<!-- isosent="19960509202400" -->
+<!-- name="Toshi Isogai(B" -->
+<!-- email="toshi_isogai_at_Maxtor.com" -->
+<!-- subject="FVWM: FvwmConsole patch for everybody(B" -->
+<!-- id="Pine.SUN.3.91.960509140157.9526J-100000_at_wolfcreek" -->
+<!-- charset="iso-2022-jp" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start16720" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="16721.html" accesskey="d" title="John Williams: &quot;FVWM: Patch to vertically center menu text&quot;">Next message</a> ]
+[ <a href="16719.html" title="Ed Carraway: &quot;FVWM: drag&#0038;drop across fvwm viewports&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="16721.html" accesskey="t" title="John Williams: &quot;FVWM: Patch to vertically center menu text&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16720" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16720" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16720" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16720" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Toshi Isogai(B &lt;<a href="mailto:toshi_isogai_at_Maxtor.com?Subject=Re%3A%20FVWM%3A%20FvwmConsole%20patch%20for%20everybody%1B(B">toshi_isogai_at_Maxtor.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 9 May 1996 14:24:00 -0600 (MDT)</span><br />
+</address>
+<br />
+FvwmConsole in 2.0.42 distribution has a bug (what a surprise). Even if it is
+<br />
+working currently for you, I suggest you apply this patch since the bug was
+<br />
+not allocating enough memory to variables. 
+<br />
+<br />This patch should also help some of machines you could not run FvwmConsole on
+<br />
+before. I confirmed it ran on SunOS 4.1.4 and Sparc Solaris 2.3. 
+<br />
+<br />I am currently working on a module FvwmCommand, which let user to issue fvwm
+<br />
+commands from shell or perl, or many other things. I have a prototype
+<br />
+working. It has the same code stem as in FvwmConsole, so any comments or
+<br />
+running confirmation will be appreciated. Although I can't answer anything
+<br />
+from 10th through 19th. 
+<br />
+<br />Happy fvwming.
+<br />
+<br />----------------patch begin----------------
+<br />
+diff FvwmConsole-dist/FvwmConsole.c FvwmConsole/FvwmConsole.c
+<br />
+60c60
+<br />
+&lt;   if( ( eargv =(char **)safemalloc((argc-2)*sizeof(char *)) ) == NULL ) 
+<br />
+{
+<br />
+<pre>
+---
+&gt;   if( ( eargv =(char **)safemalloc((argc+12)*sizeof(char *)) ) == NULL 
+) {
+---------------patch end-------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Toshi Isogai   $_at_0k3-MxL&#64;(J
+-- I am an ASIC engineer, not a sick engineer --
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu May 09 1996 - 15:31:20 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start16720">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="16721.html" title="Next message in the list">John Williams: "FVWM: Patch to vertically center menu text"</a></li>
+<li><dfn>Previous message</dfn>: <a href="16719.html" title="Previous message in the list">Ed Carraway: "FVWM: drag&#0038;drop across fvwm viewports"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="16721.html" title="Next message in this discussion thread">John Williams: "FVWM: Patch to vertically center menu text"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="16721.html" title="Message sent in reply to this message">John Williams: "FVWM: Patch to vertically center menu text"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16720" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16720" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16720" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16720" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

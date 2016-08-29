@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: FvwmPager window sizing bug + patch from Greg Klanderman on 1997-11-25 (fvwm-users)</title>
+<meta name="Author" content="Greg Klanderman (greg_at_erebus.alphatech.com)" />
+<meta name="Subject" content="FVWM: FvwmPager window sizing bug + patch" />
+<meta name="Date" content="1997-11-25" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: FvwmPager window sizing bug + patch</h1>
+<!-- received="Tue Nov 25 15:08:50 1997" -->
+<!-- isoreceived="19971125150850" -->
+<!-- sent="Tue, 25 Nov 1997 16:05:26 -0500" -->
+<!-- isosent="19971125210526" -->
+<!-- name="Greg Klanderman" -->
+<!-- email="greg_at_erebus.alphatech.com" -->
+<!-- subject="FVWM: FvwmPager window sizing bug + patch" -->
+<!-- id="199711252105.QAA10402_at_pochacco.alphatech.com" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start21399" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="21400.html" accesskey="d" title="Fabrice Eudes: &quot;FVWM: XFree86 Server XF86_SVGA&quot;">Next message</a> ]
+[ <a href="21398.html" title="A.J.vanWerven: &quot;Re: FVWM: title bar and Pager&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21399" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21399" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21399" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21399" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Greg Klanderman &lt;<a href="mailto:greg_at_erebus.alphatech.com?Subject=Re%3A%20FVWM%3A%20FvwmPager%20window%20sizing%20bug%20%2B%20patch">greg_at_erebus.alphatech.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 25 Nov 1997 16:05:26 -0500</span><br />
+</address>
+<br />
+Hi,
+<br />
+<br />I just recently switched to fvwm 2.0.46 after about 10 years with twm,
+<br />
+and I must say it's excellent.  One problem I had was that when using
+<br />
+FvwmPager, I had set the size spec via the option
+<br />
+*FvwmPagerDeskTopScale.  Using a DeskTopSize of 2x1 it is very
+<br />
+apparent that the pager window is not properly sized based on the
+<br />
+virtual desktop size.  After grovelling through the code, I found that
+<br />
+the variables Scr.V[xy]Max are basically hardcoded in the ParseOptions
+<br />
+function for a 3x3 desktop.  Then initialize_pager is run, which sets
+<br />
+the window size.  Later, as messages from fvwm arrive and are parsed,
+<br />
+these variables get set correctly.  But the window is not resized and
+<br />
+you end up with very non-proportionally spaced windows in the pager.
+<br />
+<br />Rather than delaying the creation of the pager window until after the
+<br />
+desktop sizes are known (the right solution, but this looked more
+<br />
+difficult), I fixed this bug by adding two additional (optional)
+<br />
+command line arguments, the desktop width and height.  Ie, in my case
+<br />
+you would pass &quot;2&quot; and &quot;1&quot;, the same as in DeskTopSize.  Without the
+<br />
+arguments, the old behavior remains.  I have appended a patch below.
+<br />
+<br />If you accept this patch I could send a manpage update.  Let me know.
+<br />
+<br />thank you,
+<br />
+Greg
+<br />
+<br />(I'm not on the list so please copy me on replies)
+<br />
+<br /><br />--- /local/mstar/.backups/!local!mstar!software!fvwm!fvwm-2.0.46!modules!FvwmPager!FvwmPager.c.~1~	Wed Aug  6 16:18:01 1997
+<br />
++++ FvwmPager.c	Tue Nov 25 15:45:09 1997
+<br />
+_at_&#64; -82,6 +82,7 &#64;&#64;
+<br />
+&nbsp;Pixel win_fore_pix = -1;
+<br />
+&nbsp;Pixel win_hi_back_pix = -1;
+<br />
+&nbsp;Pixel win_hi_fore_pix = -1;
+<br />
++int desktop_size_w=0, desktop_size_h=0;
+<br />
+&nbsp;/***********************************************************************
+<br />
+&nbsp;&nbsp;*
+<br />
+&nbsp;&nbsp;*  Procedure:
+<br />
+_at_&#64; -130,6 +131,16 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;desk1 = atoi(argv[6]);
+<br />
+&nbsp;&nbsp;&nbsp;desk2 = atoi(argv[7]);
+<br />
+&nbsp;
+<br />
++  desktop_size_w = 0;
+<br />
++  desktop_size_h = 0;
+<br />
++  if (argc &gt;= 10) {
+<br />
++    desktop_size_w = atoi(argv[8]);
+<br />
++    desktop_size_h = atoi(argv[9]);
+<br />
++  }
+<br />
++  if (desktop_size_w &lt;= 0  ||  desktop_size_h &lt;= 0) {
+<br />
++    desktop_size_w = desktop_size_h = 3;
+<br />
++  }
+<br />
++
+<br />
+&nbsp;&nbsp;&nbsp;if(desk2 &lt; desk1)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itemp = desk1;
+<br />
+_at_&#64; -859,8 +870,8 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;Scr.MyDisplayWidth = DisplayWidth(dpy, Scr.screen);
+<br />
+&nbsp;&nbsp;&nbsp;Scr.MyDisplayHeight = DisplayHeight(dpy, Scr.screen);
+<br />
+&nbsp;&nbsp;&nbsp;
+<br />
+-  Scr.VxMax = 3*Scr.MyDisplayWidth - Scr.MyDisplayWidth;
+<br />
+-  Scr.VyMax = 3*Scr.MyDisplayHeight - Scr.MyDisplayHeight;
+<br />
++  Scr.VxMax = desktop_size_w*Scr.MyDisplayWidth  - Scr.MyDisplayWidth;
+<br />
++  Scr.VyMax = desktop_size_h*Scr.MyDisplayHeight - Scr.MyDisplayHeight;
+<br />
+&nbsp;&nbsp;&nbsp;if(Scr.VxMax &lt;0)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Scr.VxMax = 0;
+<br />
+&nbsp;&nbsp;&nbsp;if(Scr.VyMax &lt;0)
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue Nov 25 1997 - 15:08:50 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start21399">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="21400.html" title="Next message in the list">Fabrice Eudes: "FVWM: XFree86 Server XF86_SVGA"</a></li>
+<li><dfn>Previous message</dfn>: <a href="21398.html" title="Previous message in the list">A.J.vanWerven: "Re: FVWM: title bar and Pager"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21399" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21399" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21399" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21399" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

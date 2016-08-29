@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: fvwm 2.0.43 has an event-handling lockup from Stig on 1997-01-05 (fvwm-users)</title>
+<meta name="Author" content="Stig (stig_at_hackvan.com)" />
+<meta name="Subject" content="FVWM: fvwm 2.0.43 has an event-handling lockup" />
+<meta name="Date" content="1997-01-05" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: fvwm 2.0.43 has an event-handling lockup</h1>
+<!-- received="Sun Jan  5 02:14:31 1997" -->
+<!-- isoreceived="19970105021431" -->
+<!-- sent="Sun, 5 Jan 97 00:12 PST" -->
+<!-- isosent="19970105081200" -->
+<!-- name="Stig" -->
+<!-- email="stig_at_hackvan.com" -->
+<!-- subject="FVWM: fvwm 2.0.43 has an event-handling lockup" -->
+<!-- id="m0vgngr-0006xKC_at_JATO.hackvan.com" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start18802" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="18803.html" accesskey="d" title="Andrew Veliath: &quot;FVWM: Status on BorderStyle Patch&quot;">Next message</a> ]
+[ <a href="18801.html" title="Xris Laas: &quot;FVWM: Wish list addition: enhanced StaysOnTop/StaysPut.&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18802" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18802" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18802" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18802" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Stig &lt;<a href="mailto:stig_at_hackvan.com?Subject=Re%3A%20FVWM%3A%20fvwm%202.0.43%20has%20an%20event-handling%20lockup">stig_at_hackvan.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sun, 5 Jan 97 00:12 PST</span><br />
+</address>
+<br />
+I just figured out a little bit more about a temporary lockup I've been
+<br />
+having with fvwm...
+<br />
+<br />There are several problems with iconifying windows with a keybinding:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;- suppose you're using sloppy focus...if the pointer is outside of the
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window with focus, you still expect that the window with focus will be
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the one to be iconified when you hit the iconify key.  After all, your
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;other keystrokes affect that window, don't they?
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;- If no window has focus and the pointer is in the root window, it
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;should be possible to tell fvwm to do nothing.  At the very least, it
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;should be possible to abort the &quot;iconify cursor&quot; by choosing another
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;action with the keyboard...say I want to hit the button that warps to
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;netscape... 
+<br />
+<br />BUT THE BIG BUG is this...
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;- When using sloppy/mouse focus, iconifying a window  does not always
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;throw focus to the underlying window.  Even if the mouse pointer is
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;within a new window after the iconify.  That window doesn't go active
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;until the pointer is moved into the titlebar of the window.
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To compound this, KEYSTROKES are no longer recognized.  This is to say
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;that the pointer is a normal pointer, but fvwm is no longer responding
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to the keyboard...you need to move the pointer into another window or
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the title bar of the currently unfocussed window beneath the pointer.
+<br />
+<br /><br />Is there a hack to fvwm that fixes Netscapes failure to do active focus for
+<br />
+dialog boxes?
+<br />
+<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;Thanks,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Stig
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sun Jan 05 1997 - 02:14:31 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start18802">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="18803.html" title="Next message in the list">Andrew Veliath: "FVWM: Status on BorderStyle Patch"</a></li>
+<li><dfn>Previous message</dfn>: <a href="18801.html" title="Previous message in the list">Xris Laas: "FVWM: Wish list addition: enhanced StaysOnTop/StaysPut."</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18802" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18802" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18802" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18802" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

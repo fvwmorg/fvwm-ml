@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Re: Focus Bug  in FvwmTabs (2.6) from xavier on 2004-02-22 (fvwm-users)</title>
+<meta name="Author" content="xavier (list.fvwm_at_natch.dyndns.org)" />
+<meta name="Subject" content="FVWM: Re: Focus Bug  in FvwmTabs (2.6)" />
+<meta name="Date" content="2004-02-22" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Re: Focus Bug  in FvwmTabs (2.6)</h1>
+<!-- received="Sun Feb 22 13:15:09 2004" -->
+<!-- isoreceived="20040222131509" -->
+<!-- sent="Sun, 22 Feb 2004 14:12:53 -0500" -->
+<!-- isosent="20040222191253" -->
+<!-- name="xavier" -->
+<!-- email="list.fvwm_at_natch.dyndns.org" -->
+<!-- subject="FVWM: Re: Focus Bug  in FvwmTabs (2.6)" -->
+<!-- id="20040222191253.GA26036_at_pecos.8d.com" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="20031127013437.67e4833c.medlor_at_web.de" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start11394" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="11395.html" accesskey="d" title="linux-sound_at_vger.rutgers.edu: &quot;FVWM: warning&quot;">Next message</a> ]
+[ <a href="11393.html" title="Irwin Williams: &quot;FVWM: Hello Fvwm-announce! egregious .&quot;">Previous message</a> ]
+[ <a href="10630.html" title="Tobias: &quot;Re: FVWM: Re: Bug also in FvwmTabs&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg11394" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg11394" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg11394" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg11394" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: xavier &lt;<a href="mailto:list.fvwm_at_natch.dyndns.org?Subject=Re%3A%20FVWM%3A%20Re%3A%20Focus%20Bug%20%20in%20FvwmTabs%20(2.6)">list.fvwm_at_natch.dyndns.org</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sun, 22 Feb 2004 14:12:53 -0500</span><br />
+</address>
+<br />
+On Thu, Nov 27, 2003 at 01:34:37AM +0100, Tobias wrote:
+<br />
+|
+<br />
+|Finaly i got time to briefly look into the code.
+<br />
+|I found the error at takeFocus():
+<br />
+|----------
+<br />
+|&lt;...&gt;
+<br />
+|    else
+<br />
+|    {
+<br />
+|        $winId = $tabWin{$tId}{tab}[$tabWin{$tId}{currentTab}]{winId};
+<br />
+|    }
+<br />
+|    # &quot;revert-to&quot; (2nd) arg can be 'Parent', 'PointerRoot' or 'None'.
+<br />
+|    $xServer-&gt;SetInputFocus($winId, 'Parent', $tabWin{$tId}{focusTimestamp}); 
+<br />
+|    # $fvwm-&gt;debug(&quot;takeFocus(end) winId=$winId&quot;);
+<br />
+|&lt;...&gt;
+<br />
+|----------
+<br />
+|
+<br />
+|Changing the SetInputFocus() to 
+<br />
+|&quot;$xServer-&gt;SetInputFocus($winId, 'Parent', 'CurrentTime');&quot;
+<br />
+|its all working flawless.
+<br />
+|
+<br />
+|The variables in $tabWin{$tId}{focusTimestamp} does look ok though, but
+<br />
+|i dont have any knowledge about the X11-Protocol. Perhaps you know
+<br />
+|what could be wrong.
+<br />
+|
+<br />
+<br /><br /><br /><br />Hi, I have the same problem with fvwmtabs 2.6,
+<br />
+and I patched the line you're talking about,
+<br />
+it works wonderfully.
+<br />
+<br />I have to test fvwmtabs 2.7 tough.
+<br />
+<br />thanks
+<br />
+<br /><br /><br />[ history mode ]
+<br />
+<br />|
+<br />
+|
+<br />
+|
+<br />
+|On Sat, 15 Nov 2003 12:14:24 +1100
+<br />
+|scott &lt;ss_at_aao.gov.au&gt; wrote:
+<br />
+|
+<br />
+|&gt; Hi Tobias,
+<br />
+|&gt; 
+<br />
+|&gt; : &gt; &gt; &gt; After switching between Desktops
+<br />
+|&gt; : &gt; &gt; &gt; i cannot get the focus back to the Tabmanager and
+<br />
+|&gt; : &gt; &gt; &gt; only can get it back by pushing mouse button on the
+<br />
+|&gt; : &gt; &gt; &gt; background (or moving the TabManager by shortcuts).
+<br />
+|&gt; : &gt; 
+<br />
+|&gt; : &gt; I can't reproduce this bug - what system are you using?
+<br />
+|&gt; : &gt; Does FvwmTabs output anything on stdout/stderr?
+<br />
+|&gt; :
+<br />
+|&gt; : &lt;snip&gt;
+<br />
+|&gt; :
+<br />
+|&gt; : I have put my .fvwm dir to download at 
+<br />
+|&gt; : <a href="http://www.ownz.de/medlor-fvwm.tar.gz">http://www.ownz.de/medlor-fvwm.tar.gz</a> . Perhaps this does help you.
+<br />
+|&gt; 
+<br />
+|&gt; Nice bg piccie! :)
+<br />
+|&gt; 
+<br />
+|&gt; Well I'm using your exact FVWM configuration on my system &amp; I can't
+<br />
+|&gt; reproduce this bug. (focusing works fine after switching desktops.)
+<br />
+|&gt; 
+<br />
+|&gt; I'm using:
+<br />
+|&gt; Redhat Linux 7.3
+<br />
+|&gt; fvwm 2.5.9 (from cvs) compiled on Nov 11 2003
+<br />
+|&gt; FvwmTabs v2.5
+<br />
+|&gt; Module FvwmTabs started with: X11::Protocol 0.52, Tk 800.024.
+<br />
+|&gt; 
+<br />
+|&gt; SCoTTie. :)
+<br />
+|--
+<br />
+|Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+<br />
+|To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+<br />
+|message to majordomo_at_fvwm.org.
+<br />
+|To report problems, send mail to fvwm-owner_at_fvwm.org.
+<br />
+|
+<br />
+<br /><pre>
+-- 
+xavier
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sun Feb 22 2004 - 13:15:09 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start11394">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="11395.html" title="Next message in the list">linux-sound_at_vger.rutgers.edu: "FVWM: warning"</a></li>
+<li><dfn>Previous message</dfn>: <a href="11393.html" title="Previous message in the list">Irwin Williams: "FVWM: Hello Fvwm-announce! egregious ."</a></li>
+<li><dfn>In reply to</dfn>: <a href="10630.html" title="Message to which this message replies">Tobias: "Re: FVWM: Re: Bug also in FvwmTabs"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg11394" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg11394" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg11394" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg11394" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:56 BST
+</em></small></p>
+</body>
+</html>

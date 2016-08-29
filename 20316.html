@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: Problem with *FvwmButtons(Title(side) CPU Swallow xload xload) from Thomas Honigmann on 1997-06-28 (fvwm-users)</title>
+<meta name="Author" content="Thomas Honigmann (honig_at_mathematik.hu-berlin.de)" />
+<meta name="Subject" content="Re: FVWM: Problem with *FvwmButtons(Title(side) CPU Swallow xload xload)" />
+<meta name="Date" content="1997-06-28" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: Problem with *FvwmButtons(Title(side) CPU Swallow xload xload)</h1>
+<!-- received="Sat Jun 28 15:05:33 1997" -->
+<!-- isoreceived="19970628140533" -->
+<!-- sent="Sat, 28 Jun 1997 22:05:10 +0200" -->
+<!-- isosent="19970628200510" -->
+<!-- name="Thomas Honigmann" -->
+<!-- email="honig_at_mathematik.hu-berlin.de" -->
+<!-- subject="Re: FVWM: Problem with *FvwmButtons(Title(side) CPU Swallow xload xload)" -->
+<!-- id="199706282005.WAA04341_at_kummer.mathematik.hu-berlin.de" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="FVWM: Problem with *FvwmButtons(Title(side) CPU Swallow xload xload)" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start20316" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="20317.html" accesskey="d" title="cron: &quot;FVWM: fvwm config&quot;">Next message</a> ]
+[ <a href="20315.html" title="Billy Mullins: &quot;FVWM: Hoping for some direction&quot;">Previous message</a> ]
+[ <a href="20290.html" title="Tim Phipps: &quot;FVWM: Problem with *FvwmButtons(Title(side) CPU Swallow xload xload)&quot;">Maybe in reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg20316" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg20316" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg20316" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg20316" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Thomas Honigmann &lt;<a href="mailto:honig_at_mathematik.hu-berlin.de?Subject=Re%3A%20FVWM%3A%20Problem%20with%20*FvwmButtons(Title(side)%20CPU%20Swallow%20xload%20xload)">honig_at_mathematik.hu-berlin.de</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sat, 28 Jun 1997 22:05:10 +0200</span><br />
+</address>
+<br />
+Tim Phipps &lt;timbo_at_computer.hpl.hp.com&gt; wrote:
+<br />
+<br /><em class="quotelev1">&gt; Fvwm2.0.45 : the man page for FvwmButtons states that the (side) option can be 
+</em><br />
+<em class="quotelev1">&gt; used for swallowed windows and pixmaps.  If I try:
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; *FvwmButtons(Title(side) CPU Swallow xload xload)
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; The label is drawn in the button until xload and then it is overwritten.  What 
+</em><br />
+<em class="quotelev1">&gt; am I doing wrong?
+</em><br />
+<br />It seems that the man page is not correct in this point. As far as I can
+<br />
+see the existing code deals with icons only. In the README it says that 
+<br />
+side option is just a hack which will be replaced by a more general solution.
+<br />
+For the time being the attached patch might be useful. It will reserve space
+<br />
+for the title up to half of the width of the button.
+<br />
+<br />Thomas
+<br />
+<br /><br /><br />&nbsp;
+<br />
+--- draw.c.orig	Sat Jun 28 13:40:46 1997
+<br />
++++ draw.c	Sat Jun 28 21:11:20 1997
+<br />
+_at_&#64; -140,9 +140,17 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit(2);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;
+<br />
+-      if(b-&gt;flags&amp;b_Title &amp;&amp; font &amp;&amp; !(buttonJustify(b)&amp;b_Horizontal))
+<br />
+-	ih -= font-&gt;ascent+font-&gt;descent;
+<br />
+-	
+<br />
++      if(b-&gt;flags&amp;b_Title &amp;&amp; font) 
+<br />
++	if (buttonJustify(b)&amp;b_Horizontal)
+<br />
++	  { 
+<br />
++	    int title_w;
+<br />
++	    if (2*(title_w=XTextWidth(font, b-&gt;title, strlen(b-&gt;title))) &gt; iw)
+<br />
++	      iw /= 2;
+<br />
++	    else
+<br />
++	      iw -= title_w;
+<br />
++	  }  
+<br />
++	else
+<br />
++	  ih -= font-&gt;ascent+font-&gt;descent;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b-&gt;icon_w=iw;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b-&gt;icon_h=ih;
+<br />
+&nbsp;
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sat Jun 28 1997 - 15:05:33 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start20316">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="20317.html" title="Next message in the list">cron: "FVWM: fvwm config"</a></li>
+<li><dfn>Previous message</dfn>: <a href="20315.html" title="Previous message in the list">Billy Mullins: "FVWM: Hoping for some direction"</a></li>
+<li><dfn>Maybe in reply to</dfn>: <a href="20290.html" title="Message to which this message replies">Tim Phipps: "FVWM: Problem with *FvwmButtons(Title(side) CPU Swallow xload xload)"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg20316" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg20316" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg20316" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg20316" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

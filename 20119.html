@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: fvwm 2.0.45 and Xcoral from Yehuda Bamnolker on 1997-05-30 (fvwm-users)</title>
+<meta name="Author" content="Yehuda Bamnolker (ybamnolk_at_cisco.com)" />
+<meta name="Subject" content="FVWM: fvwm 2.0.45 and Xcoral" />
+<meta name="Date" content="1997-05-30" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: fvwm 2.0.45 and Xcoral</h1>
+<!-- received="Fri May 30 15:16:47 1997" -->
+<!-- isoreceived="19970530141647" -->
+<!-- sent="Fri, 30 May 1997 13:14:24 -0700" -->
+<!-- isosent="19970530201424" -->
+<!-- name="Yehuda Bamnolker" -->
+<!-- email="ybamnolk_at_cisco.com" -->
+<!-- subject="FVWM: fvwm 2.0.45 and Xcoral" -->
+<!-- id="199705302014.NAA20634_at_vanzant.cisco.com" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start20119" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="20120.html" accesskey="d" title="diesell: &quot;FVWM: problem doing a make install.man in FvwmConsole...&quot;">Next message</a> ]
+[ <a href="20118.html" title="Jan Krupa: &quot;FVWM: installation problem, Makefile: missing &#0039;endef&#0039;&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg20119" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg20119" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg20119" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg20119" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Yehuda Bamnolker &lt;<a href="mailto:ybamnolk_at_cisco.com?Subject=Re%3A%20FVWM%3A%20fvwm%202.0.45%20and%20Xcoral">ybamnolk_at_cisco.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 30 May 1997 13:14:24 -0700</span><br />
+</address>
+<br />
+Hope I'm sending it to the right address this time.
+<br />
+Sorry about the noise,
+<br />
+Yehuda.
+<br />
+<br />----- Begin Included Message -----
+<br />
+<br />I'm re-sending since my mail had some problems last night and I couldn't
+<br />
+find the previous mail I sent in the archive.
+<br />
+<br />My apologies if you got it twice.
+<br />
+<br />Thanks,
+<br />
+Yehuda.
+<br />
+<br />P.S: I took a look at fvwm/module.c where it crashed:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;void SendName(int module, unsigned long event_type,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long data1,unsigned long data2,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long data3, char *name)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int l;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long *body;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;extern Time lastTimestamp;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(name == NULL)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l=(strlen(name))/(sizeof(unsigned long))+HEADER_SIZE+4;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The SendName function to check that name isn't NULL but looking at the
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stack trace from GDB it's 0xffffffff (name=0xffffffff &lt;Address 0xffffffff
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;out of bounds&gt;) at module.c:509) and strlen crashed while walking over
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this corrupted pointer.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+<br /><br />----- Begin Included Message -----
+<br />
+<br /><em class="quotelev1">&gt;From ybamnolk Thu May 29 15:25:19 1997
+</em><br />
+To: owner-fvwm_at_hpc.uh.edu
+<br />
+Subject: fvwm 2.0.45 and Xcoral
+<br />
+Cc: ybamnolk
+<br />
+Status: RO
+<br />
+<br /><br />Hi.
+<br />
+<br />I'm using Fvwm Version 2.0.45 for months now and I'm very happy. In fact
+<br />
+it's the best window manager I ever used.
+<br />
+<br />I compiled a new version of xcoral for the first time (xcoral-3.1, got
+<br />
+it from ftp.x.org (contrib/editors)).
+<br />
+<br />I compiled it on the same SUNOS 4.1.4 box I used to compile fvwm2 and
+<br />
+when I start xcoral, fvwm2 crashes :-(
+<br />
+<br />I tried to run the same application with olwm (SUN's Open Look Window
+<br />
+Manager) and it worked with no problem.
+<br />
+<br />Attached a stack trace from the core file.
+<br />
+<br />Any ideas?
+<br />
+<br />Thanks in advance,
+<br />
+Yehuda.
+<br />
+<br /><br /><br />15:15 vanzant:&gt; gdb fvwm2/bin/fvwm2 core
+<br />
+&nbsp;
+<br />
+GDB is free software and you are welcome to distribute copies of it
+<br />
+&nbsp;under certain conditions; type &quot;show copying&quot; to see the conditions.
+<br />
+There is absolutely no warranty for GDB; type &quot;show warranty&quot; for details.
+<br />
+GDB 4.14.1 (sparc-sun-sunos4.1.3), 
+<br />
+Copyright 1995 Free Software Foundation, Inc...
+<br />
+Core was generated by `fvwm2'.
+<br />
+Program terminated with signal 11, Segmentation fault.
+<br />
+Reading symbols from /usr/openwin/lib/libX11.so.4.3...done.
+<br />
+Reading symbols from /usr/lib/libc.so.1.9.1...done.
+<br />
+Reading symbols from /usr/lib/libdl.so.1.0...done.
+<br />
+#0  0xef73935c in strlen ()
+<br />
+(gdb) where
+<br />
+#0  0xef73935c in strlen ()
+<br />
+#1  0x2db2c in SendName (module=0, event_type=2048, data1=16777432, 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;data2=7340310, data3=362624, 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;name=0xffffffff &lt;Address 0xffffffff out of bounds&gt;) at module.c:509
+<br />
+#2  0x2dc80 in BroadcastName (event_type=2048, data1=16777432, data2=7340310, 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;data3=362624, name=0xffffffff &lt;Address 0xffffffff out of bounds&gt;)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;at module.c:533
+<br />
+#3  0x3e7c in AddWindow (w=16777432) at add_window.c:674
+<br />
+#4  0x1bd08 in HandleMapRequestKeepRaised (KeepRaised=0) at events.c:667
+<br />
+#5  0x1bc58 in HandleMapRequest () at events.c:647
+<br />
+#6  0x1a6a0 in DispatchEvent () at events.c:156
+<br />
+#7  0x1a6fc in HandleEvents () at events.c:177
+<br />
+#8  0x20420 in main (argc=1, argv=0xeffff864) at fvwm.c:464
+<br />
+(gdb) 
+<br />
+<br /><br /><br />----- End Included Message -----
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm-workers&quot; in the
+body of a message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-workers-owner_at_hpc.uh.edu.
+----- End Included Message -----
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri May 30 1997 - 15:16:47 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start20119">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="20120.html" title="Next message in the list">diesell: "FVWM: problem doing a make install.man in FvwmConsole..."</a></li>
+<li><dfn>Previous message</dfn>: <a href="20118.html" title="Previous message in the list">Jan Krupa: "FVWM: installation problem, Makefile: missing &#0039;endef&#0039;"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg20119" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg20119" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg20119" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg20119" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

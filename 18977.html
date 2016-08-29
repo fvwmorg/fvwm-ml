@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: faults in FVWM -- exits from Christopher Wolf on 1997-01-21 (fvwm-users)</title>
+<meta name="Author" content="Christopher Wolf (cwolf_at_micro.ti.com)" />
+<meta name="Subject" content="FVWM: faults in FVWM -- exits" />
+<meta name="Date" content="1997-01-21" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: faults in FVWM -- exits</h1>
+<!-- received="Mon Jan 20 18:35:18 1997" -->
+<!-- isoreceived="19970120183518" -->
+<!-- sent="Mon, 20 Jan 1997 18:33:56 -0600 (CST)" -->
+<!-- isosent="19970121003356" -->
+<!-- name="Christopher Wolf" -->
+<!-- email="cwolf_at_micro.ti.com" -->
+<!-- subject="FVWM: faults in FVWM &ndash;&ndash; exits" -->
+<!-- id="Pine.SUN.3.95.970120183001.18792A-100000_at_flamingo.micro.ti.com" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start18977" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="18978.html" accesskey="d" title="Joey Hess: &quot;Re: FVWM: Focus via FvwmIconMan; resizing windows at placement?&quot;">Next message</a> ]
+[ <a href="18976.html" title="Allen Brady Montz: &quot;Re: FVWM: Focus via FvwmIconMan; resizing windows at placement?&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="18979.html" accesskey="t" title="Andrew Veliath: &quot;Re: FVWM: faults in FVWM -- exits&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18977" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18977" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18977" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18977" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Christopher Wolf &lt;<a href="mailto:cwolf_at_micro.ti.com?Subject=Re%3A%20FVWM%3A%20faults%20in%20FVWM%20--%20exits">cwolf_at_micro.ti.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 20 Jan 1997 18:33:56 -0600 (CST)</span><br />
+</address>
+<br />
+All,
+<br />
+<br />While playing around with windowshade and decors, when I try to active
+<br />
+a windowshade setup, as below, FVWM faults and shuts down.  Anyone
+<br />
+know why?
+<br />
+<br />Mouse   0       5       A       DoWindowShade
+<br />
+&nbsp;
+<br />
+DestroyFunc DoWindowShade
+<br />
+AddToFunc   DoWindowShade
+<br />
++       &quot;I&quot;     DoWindowShadeUp
+<br />
+&nbsp;
+<br />
+DestroyFunc DoWindowShadeUp
+<br />
+AddToFunc   DoWindowShadeUp
+<br />
++       &quot;I&quot;     WindowShade 1
+<br />
++       &quot;I&quot;     ChangeDecor Up
+<br />
++       &quot;I&quot;     DestroyFunc DoWindowShade
+<br />
++       &quot;I&quot;     AddToFunc DoWindowShade &quot;I&quot; DoWindowShadeDown
+<br />
+&nbsp;
+<br />
+DestroyFunc DoWindowShadeDown
+<br />
+AddToFunc   DoWindowShadeDown
+<br />
++       &quot;I&quot;     WindowShade 2
+<br />
++       &quot;I&quot;     ChangeDecor Down
+<br />
++       &quot;I&quot;     DestroyFunc DoWindowShade
+<br />
++       &quot;I&quot;     AddToFunc DoWindowShade &quot;I&quot; DoWindowShadeUp
+<br />
+<br />DestroyDecor Up
+<br />
+AddToDecor   Up
+<br />
++       ButtonStyle 5 Vector 4 50x75_at_1 25x25_at_1 75x25_at_1 50x75_at_0
+<br />
++       ButtonStyle 2 Vector 5 45x45_at_1 55x45_at_1 55x55_at_0 45x55_at_0 45x45_at_1
+<br />
++       ButtonStyle 4 Vector 5 45x45_at_1 55x45_at_1 55x55_at_0 45x55_at_0 45x45_at_1
+<br />
++       ButtonStyle 6 Vector 5 45x45_at_1 55x45_at_1 55x55_at_0 45x55_at_0 45x45_at_1
+<br />
+&nbsp;
+<br />
+DestroyDecor Down
+<br />
+AddToDecor   Down
+<br />
++       ButtonStyle 5 Vector 4 50x75_at_1 25x25_at_1 75x25_at_1 50x75_at_0
+<br />
++       ButtonStyle 2 Vector 16 20x20_at_1 30x20_at_1 50x40_at_1 70x20_at_1 80x20_at_1 80x30_at_0 60x50_at_0 80x80_at_0 70x80_at_0 50x60_at_0 30x80_at_0 20x80_at_0 20x70_at_0 40x50_at_1 20x30_at_0 20x20_at_1
+<br />
++       ButtonStyle 4 Vector 12 50x10_at_1 25x35_at_1 40x35_at_1 40x60_at_1 25x60_at_1 50x85_at_1 75x60_at_0 60x60_at_0 60x35_at_0 75x35_at_0 50x10_at_0 50x10_at_1
+<br />
++       ButtonStyle 6 Vector 12 10x50_at_1 35x25_at_1 35x40_at_1 65x40_at_1 65x25_at_1 90x50_at_1 65x75_at_0 65x60_at_0 35x60_at_0 35x75_at_0 10x50_at_0 10x50_at_1
+<br />
+&nbsp;
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon Jan 20 1997 - 18:35:18 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start18977">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="18978.html" title="Next message in the list">Joey Hess: "Re: FVWM: Focus via FvwmIconMan; resizing windows at placement?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="18976.html" title="Previous message in the list">Allen Brady Montz: "Re: FVWM: Focus via FvwmIconMan; resizing windows at placement?"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="18979.html" title="Next message in this discussion thread">Andrew Veliath: "Re: FVWM: faults in FVWM -- exits"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="18979.html" title="Message sent in reply to this message">Andrew Veliath: "Re: FVWM: faults in FVWM -- exits"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18977" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18977" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18977" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18977" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,37 @@
+*** ../../fvwm-2.0.43/fvwm/focus.c	Tue Apr 30 14:00:28 1996
+--- focus.c	Tue Feb 25 11:36:06 1997
+***************
+*** 55,61 ****
+        Fw->prev = &Scr.FvwmRoot;
+      }                                 
+  
+!   if(Scr.NumberOfScreens > 1)
+      {
+        XQueryPointer(dpy, Scr.Root, &JunkRoot, &JunkChild,
+  		    &JunkX, &JunkY, &JunkX, &JunkY, &JunkMask);
+--- 55,61 ----
+        Fw->prev = &Scr.FvwmRoot;
+      }                                 
+  
+!   if(Scr.NumberOfScreens > 1 && Fw != NULL)
+      {
+        XQueryPointer(dpy, Scr.Root, &JunkRoot, &JunkChild,
+  		    &JunkX, &JunkY, &JunkX, &JunkY, &JunkMask);
+***************
+*** 132,138 ****
+        Scr.Focus = Fw;
+        Scr.UnknownWinFocused = None;
+      }
+!   else if ((Scr.Focus)&&(Scr.Focus->Desk == Scr.CurrentDesk))
+      {
+        /* Window doesn't want focus. Leave focus alone */
+        /* XSetInputFocus (dpy,Scr.Hilite->w , RevertToParent, lastTimestamp);*/
+--- 132,138 ----
+        Scr.Focus = Fw;
+        Scr.UnknownWinFocused = None;
+      }
+!   else if ((Scr.Focus)&&(Scr.Focus->Desk == Scr.CurrentDesk) && Fw != NULL)
+      {
+        /* Window doesn't want focus. Leave focus alone */
+        /* XSetInputFocus (dpy,Scr.Hilite->w , RevertToParent, lastTimestamp);*/
+

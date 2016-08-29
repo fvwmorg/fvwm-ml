@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="ISO-2022-JP"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-2022-JP" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: [Question] about Style/UseStyle: manual/code mismatch from まつしたまこと  on 1996-02-25 (fvwm-users)</title>
+<meta name="Author" content="まつしたまこと  (matusita_at_ics.es.osaka-u.ac.jp)" />
+<meta name="Subject" content="FVWM: [Question] about Style/UseStyle: manual/code mismatch" />
+<meta name="Date" content="1996-02-25" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: [Question] about Style/UseStyle: manual/code mismatch</h1>
+<!-- received="Sun Feb 25 06:57:00 1996" -->
+<!-- isoreceived="19960225065700" -->
+<!-- sent="Sun, 25 Feb 1996 21:56:50 +0900" -->
+<!-- isosent="19960225125650" -->
+<!-- name="まつしたまこと " -->
+<!-- email="matusita_at_ics.es.osaka-u.ac.jp" -->
+<!-- subject="FVWM: [Question] about Style/UseStyle: manual/code mismatch" -->
+<!-- id="199602251256.VAA15677_at_skylark.ics.es.osaka-u.ac.jp" -->
+<!-- charset="ISO-2022-JP" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start15613" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="15614.html" accesskey="d" title="Fabien Villard: &quot;FVWM: fvwm with VMS ?&quot;">Next message</a> ]
+[ <a href="15612.html" title="Alan Wild: &quot;FVWM: Not another TO-DO!&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="15937.html" accesskey="t" title="Todd Fries: &quot;Re: FVWM: [Question] about Style/UseStyle: manual/code mismatch&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15613" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15613" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15613" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15613" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: まつしたまこと  &lt;<a href="mailto:matusita_at_ics.es.osaka-u.ac.jp?Subject=Re%3A%20FVWM%3A%20%5BQuestion%5D%20about%20Style%2FUseStyle%3A%20manual%2Fcode%20mismatch%1B(B">matusita_at_ics.es.osaka-u.ac.jp</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sun, 25 Feb 1996 21:56:50 +0900</span><br />
+</address>
+<br />
+The manual of fvwm says:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UseStyle takes one arg, which is the name of another
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;style.  That way you can have unrelated window names
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;easily inherit similiar traits without retyping.  For
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;example: 'Style &quot;rxvt&quot; UseStyle &quot;XTerm&quot;'.
+<br />
+<br />And, fvwm/style.c says:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while(isspace(*restofline))restofline++;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tmp = restofline;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while( tmp &amp;&amp; *tmp &amp;&amp;(*tmp != ',')&amp;&amp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*tmp != '\n')&amp;&amp;(!isspace(*tmp)))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tmp++;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if((len = tmp - restofline) &gt; 0)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nptr = Scr.TheList;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while(nptr &amp;&amp; mystrncasecmp(restofline,nptr-&gt;name,len) )
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nptr = nptr-&gt;next;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (nptr&amp;&amp; !mystrncasecmp(restofline,nptr-&gt;name,len))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* ... processing ... */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+<br />Assume that following line is written in the configulation file.
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Style &quot;XTerm&quot; NoTitle
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Style &quot;rxvt&quot; UseStyle &quot;XTerm&quot;
+<br />
+<br />If we trust the manual, style of rxvt is the same of XTerm. But fvwm
+<br />
+complains about this description, i.e.,
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fvwm: UseStyle: &quot;XTerm&quot; style not found!
+<br />
+<br />It is natual when you see the code (see the condition of the while
+<br />
+loop). Second line should be:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Style &quot;rxvt&quot; UseStyle XTerm
+<br />
+<br />My question is simple: Which is the true, manual or code ?
+<br />
+<br />***
+<br />
+<br />And, here is a short patch to add newline to error message of 'UseStyle'
+<br />
+(I think).
+<br />
+<br />--- style.c.dist	Sun Feb 25 21:41:46 1996
+<br />
++++ style.c	Sun Feb 25 21:42:00 1996
+<br />
+_at_&#64; -571,7 +571,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tmp=safemalloc(500);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strcat(tmp,&quot;UseStyle: &quot;);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strncat(tmp,restofline-len,len);
+<br />
+-              strcat(tmp,&quot; style not found!&quot;);
+<br />
++              strcat(tmp,&quot; style not found!\n&quot;);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fvwm_err(tmp,NULL,NULL,NULL);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;free(tmp);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+<br /><br />- -
+<br />
+Makoto `MAR_kun' MATSUSHITA
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sun Feb 25 1996 - 06:57:00 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start15613">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="15614.html" title="Next message in the list">Fabien Villard: "FVWM: fvwm with VMS ?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="15612.html" title="Previous message in the list">Alan Wild: "FVWM: Not another TO-DO!"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="15937.html" title="Next message in this discussion thread">Todd Fries: "Re: FVWM: [Question] about Style/UseStyle: manual/code mismatch"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="15937.html" title="Message sent in reply to this message">Todd Fries: "Re: FVWM: [Question] about Style/UseStyle: manual/code mismatch"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15613" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15613" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15613" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15613" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

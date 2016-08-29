@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: netscape from Stephen Riehm on 1997-06-02 (fvwm-users)</title>
+<meta name="Author" content="Stephen Riehm (Stephen.Riehm_at_PC-Plus.DE)" />
+<meta name="Subject" content="Re: FVWM: netscape" />
+<meta name="Date" content="1997-06-02" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: netscape</h1>
+<!-- received="Mon Jun  2 09:19:02 1997" -->
+<!-- isoreceived="19970602081902" -->
+<!-- sent="Mon, 2 Jun 1997 16:14:24 +0200 (MEZ)" -->
+<!-- isosent="19970602141424" -->
+<!-- name="Stephen Riehm" -->
+<!-- email="Stephen.Riehm_at_PC-Plus.DE" -->
+<!-- subject="Re: FVWM: netscape" -->
+<!-- id="9706021414.AA110638_at_kreuzjoch.pc-plus.de" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="199706021347.JAA28948_at_murphy.giccs.georgetown.edu" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start20127" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="20128.html" accesskey="d" title="Paul Bennett: &quot;Re: FVWM:  AIX xmkmf error&quot;">Next message</a> ]
+[ <a href="20126.html" title="Larry Gensch: &quot;Re: FVWM: netscape&quot;">Previous message</a> ]
+[ <a href="20125.html" title="Richard Lister: &quot;Re: FVWM: netscape&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="20126.html" accesskey="t" title="Larry Gensch: &quot;Re: FVWM: netscape&quot;">Next in thread</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg20127" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg20127" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg20127" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg20127" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Stephen Riehm &lt;<a href="mailto:Stephen.Riehm_at_PC-Plus.DE?Subject=Re%3A%20FVWM%3A%20netscape">Stephen.Riehm_at_PC-Plus.DE</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 2 Jun 1997 16:14:24 +0200 (MEZ)</span><br />
+</address>
+<br />
+Hi Richard Lister,
+<br />
+<br /><em class="quotelev1">&gt; On Mon, 2 Jun 1997 14:01:11 +0100 (BST)
+</em><br />
+<em class="quotelev1">&gt; Graeme.McCaffery_at_astro.cf.ac.uk (Graeme McCaffery) 
+</em><br />
+<em class="quotelev1">&gt; wrote concerning 'FVWM: netscape':
+</em><br />
+<br /><em class="quotelev2">&gt; &gt; basically I thought I would use a function to send a message to an 
+</em><br />
+<em class="quotelev2">&gt; &gt; existing netscape or start up a new one with the hightlight text in question.
+</em><br />
+<br /><em class="quotelev1">&gt; Grab xcb from <a href="ftp://www.x.org/contrib/utilities/">ftp://www.x.org/contrib/utilities/</a> and use it in a
+</em><br />
+<em class="quotelev1">&gt; script like this:
+</em><br />
+<br />A slightly modified version of the script would be as follows, so that
+<br />
+netscape always gets tried with -remote first - otherwise if you tell
+<br />
+fvwm to start a new netscape, but you've got nothing selected, you'll
+<br />
+always get a new netscape, and netscape doesn't like sharing with
+<br />
+itself :-) (In my version of the script, I start netscape on a remote
+<br />
+machine, so I've got to pass the DISPLAY to the script aswell)
+<br />
+<br />#!/bin/sh
+<br />
+<br />DISPLAY=${1:-${DISPLAY}}
+<br />
+export DISPLAY
+<br />
+<br />url=`xcb -S 0 &amp;&amp; xcb -p 0`
+<br />
+<br />if [ -n &quot;$url&quot; ] 
+<br />
+then
+<br />
+&nbsp;&nbsp;netscape -remote openURL\(&quot;$url&quot;\) \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;|| exec netscape &quot;$url&quot; &amp;
+<br />
+else
+<br />
+&nbsp;&nbsp;exec netscape -remote \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;|| exec netscape &amp;
+<br />
+fi
+<br />
+<br />exit 0
+<br />
+<br />PS: Thanks to Graeme for the idea, I love it!
+<br />
+<br />Steve
+<br />
+_______________________________ ._ o  ________________________________
+<br />
+//   Stephen Riehm             /  //\.        Stephen.Riehm_at_pc-plus.de
+<br />
+\\\\ pc-plus                  '  \&gt;&gt; |         Phone: +49 89 45566 148
+<br />
+//// 81539 Munich, Germany        \\ `           Fax: +49 89 45566 113
+<br />
+&nbsp;&nbsp;\\
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon Jun 02 1997 - 09:19:02 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start20127">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="20128.html" title="Next message in the list">Paul Bennett: "Re: FVWM:  AIX xmkmf error"</a></li>
+<li><dfn>Previous message</dfn>: <a href="20126.html" title="Previous message in the list">Larry Gensch: "Re: FVWM: netscape"</a></li>
+<li><dfn>In reply to</dfn>: <a href="20125.html" title="Message to which this message replies">Richard Lister: "Re: FVWM: netscape"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="20126.html" title="Next message in this discussion thread">Larry Gensch: "Re: FVWM: netscape"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg20127" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg20127" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg20127" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg20127" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

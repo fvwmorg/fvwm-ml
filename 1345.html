@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: _Building_ fvwmrc from within startup-file, not in xinitrc from Matthias Intemann on 2000-08-28 (fvwm-users)</title>
+<meta name="Author" content="Matthias Intemann (intemann_at_informatik.uni-bremen.de)" />
+<meta name="Subject" content="FVWM: _Building_ fvwmrc from within startup-file, not in xinitrc" />
+<meta name="Date" content="2000-08-28" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: _Building_ fvwmrc from within startup-file, not in xinitrc</h1>
+<!-- received="Mon Aug 28 17:15:14 2000" -->
+<!-- isoreceived="20000828161514" -->
+<!-- sent="Tue, 29 Aug 2000 00:15:27 +0200" -->
+<!-- isosent="20000828221527" -->
+<!-- name="Matthias Intemann" -->
+<!-- email="intemann_at_informatik.uni-bremen.de" -->
+<!-- subject="FVWM: _Building_ fvwmrc from within startup-file, not in xinitrc" -->
+<!-- id="39AAE47F.81D53139_at_informatik.uni-bremen.de" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start1345" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="1346.html" accesskey="d" title="Frank Derichsweiler: &quot;Re: FVWM: RaiseLower&quot;">Next message</a> ]
+[ <a href="1344.html" title="greg shebert: &quot;FVWM: RaiseLower&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="1354.html" accesskey="t" title="Mikhael Goikhman: &quot;Re: FVWM: _Building_ fvwmrc from within startup-file, not in xinitrc&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg1345" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg1345" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg1345" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg1345" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Matthias Intemann &lt;<a href="mailto:intemann_at_informatik.uni-bremen.de?Subject=Re%3A%20FVWM%3A%20_Building_%20fvwmrc%20from%20within%20startup-file%2C%20not%20in%20xinitrc">intemann_at_informatik.uni-bremen.de</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 29 Aug 2000 00:15:27 +0200</span><br />
+</address>
+<br />
+Hi!
+<br />
+<br />There's a little problem I can't solve myself.
+<br />
+<br />When starting my FVWM-session (fvwm2), I'm generating my fvwmrc. As I
+<br />
+want to use the same configuration-files on different architectures
+<br />
+(Linux and Solaris mixed on Suns, PCs and IBM PowerPCs), I need to
+<br />
+generate them while starting my X. The graphics are completely mixed up,
+<br />
+so there's no way of guessing geometry or depth by CPU or OS. Builing a
+<br />
+list of all computers is no way of solving my problem, as there are too
+<br />
+many and new ones are often being baught.
+<br />
+<br />I need # of bitplanes, height, width, OS, CPU and name of the system.
+<br />
+<em class="quotelev1">&gt;From those, I build my rc. Offcourse, it's a nice thing on a fast
+</em><br />
+machine. But, as You may guess, on rather slow machines or lot's of
+<br />
+traffic on the nfs-server, FVWM is up before the rc has been finished.
+<br />
+Well, all modules, like FvwmM4, are being spawned.
+<br />
+<br />Writing a xinitrc would include writing X-Tools for reading the display.
+<br />
+I don't want that, because that would mean five different binaries. And
+<br />
+will it be easy? I don't know any X.
+<br />
+<br />What I'm doing at this time:
+<br />
+<br />my .fvwmrc starts FvwmM4 and reads the file, I generate.
+<br />
+<br />Generating a file means doing some nasty M4-things and reading my
+<br />
+definition-files. Out comes the main rc for this session.
+<br />
+<br />This way, there's no problem when restarting. BTW: That's what I need to
+<br />
+do to read the new rc, except I logged in on the same architecture
+<br />
+before.
+<br />
+<br />So. Can any cool reader help me? I know, it is not trivial. But there
+<br />
+has to be a way to solve it, has it?
+<br />
+<br /><br />Thanks in advance! Even if it's just a &quot;No ***** way, man!&quot;
+<br />
+<br /><pre>
+--
+ Matthias Intemann
+  intemann_at_tzi.de
+University of Bremen
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon Aug 28 2000 - 17:15:14 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start1345">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="1346.html" title="Next message in the list">Frank Derichsweiler: "Re: FVWM: RaiseLower"</a></li>
+<li><dfn>Previous message</dfn>: <a href="1344.html" title="Previous message in the list">greg shebert: "FVWM: RaiseLower"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="1354.html" title="Next message in this discussion thread">Mikhael Goikhman: "Re: FVWM: _Building_ fvwmrc from within startup-file, not in xinitrc"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="1354.html" title="Message sent in reply to this message">Mikhael Goikhman: "Re: FVWM: _Building_ fvwmrc from within startup-file, not in xinitrc"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg1345" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg1345" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg1345" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg1345" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:51 BST
+</em></small></p>
+</body>
+</html>

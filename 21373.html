@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: StartsOnPage patch from Bob Woodside on 1997-11-21 (fvwm-users)</title>
+<meta name="Author" content="Bob Woodside (proteus_at_pcnet.com)" />
+<meta name="Subject" content="FVWM: StartsOnPage patch" />
+<meta name="Date" content="1997-11-21" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: StartsOnPage patch</h1>
+<!-- received="Thu Nov 20 21:03:55 1997" -->
+<!-- isoreceived="19971120210355" -->
+<!-- sent="Thu, 20 Nov 1997 21:58:49 -0500 (EST)" -->
+<!-- isosent="19971121025849" -->
+<!-- name="Bob Woodside" -->
+<!-- email="proteus_at_pcnet.com" -->
+<!-- subject="FVWM: StartsOnPage patch" -->
+<!-- id="XFMail.971120215849.proteus_at_pcnet.com" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start21373" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="21374.html" accesskey="d" title="Joe: &quot;Re: FVWM: stuck on click-to-raise with fvwm2&quot;">Next message</a> ]
+[ <a href="21372.html" title="Bob Woodside: &quot;Re: FVWM: stuck on click-to-raise with fvwm2&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="21382.html" accesskey="t" title="Bob Woodside: &quot;Re: FVWM: StartsOnPage patch&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21373" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21373" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21373" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21373" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Bob Woodside &lt;<a href="mailto:proteus_at_pcnet.com?Subject=Re%3A%20FVWM%3A%20StartsOnPage%20patch">proteus_at_pcnet.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 20 Nov 1997 21:58:49 -0500 (EST)</span><br />
+</address>
+<br />
+&nbsp;&nbsp;Based on the feedback I've gotten, the StartsOnPage patch* seems
+<br />
+to have been given a pretty fair workout, and to qualify as Good 
+<br />
+Stuff. However, it does contain a couple of misfeatures that anyone
+<br />
+trying it ought to consider before applying it. No show stoppers, but
+<br />
+they could cause some confusion and annoyance.
+<br />
+<br />&nbsp;&nbsp;I'm not issuing an updated StartsOnPage patch at this point. One 
+<br />
+problem is corrected by another patch that I'm keeping separate, since
+<br />
+it will be useful to many people who don't want to bother with 
+<br />
+StartsOnPage. The other is easily worked around, and I don't want to 
+<br />
+mess with that part of the code till Chuck has a chance to evaluate 
+<br />
+the whole patch, and make his recommendations.
+<br />
+<br />The Problems:
+<br />
+<br />1. If you don't specify
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GlobalOpts StartsOnPageModifiesUSPosition
+<br />
+<br />the &quot;StartsOnDesk, SkipMapping&quot; combo is broken. I'm of opinion that
+<br />
+this option should always be specified anyway, and I hope to remove
+<br />
+the option *and* the problem. But we'll see what Chuck says.
+<br />
+<br />2. When a new ClickToFocus, SkipMapping window is created offscreen,
+<br />
+FVWM will take focus away from wherever you're currently focussed
+<br />
+and attempt to give it to the new window. Before StartsOnPage, FVWM
+<br />
+would recognize that the new window was offscreen, and not give it
+<br />
+focus. You'd lose focus, but wouldn't end up typing in the new,
+<br />
+invisible window. StartsOnPage breaks that -- you *will* have focus
+<br />
+given to the new window (if it's on the same desk, different page).
+<br />
+This is corrected by the DontFocusOffscreen patch*, which should
+<br />
+definitely be applied if you use StartsOnPage.
+<br />
+<br /><br />&nbsp;&nbsp;--------------------------------------------------------------
+<br />
+&nbsp;&nbsp;* The DontFocusOffscreen patch is on the FVWM ftp site in the
+<br />
+unofficial_patches directory:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="ftp://ftp.hpc.uh.edu/pub/fvwm/version-2/unofficial_patches">ftp://ftp.hpc.uh.edu/pub/fvwm/version-2/unofficial_patches</a>
+<br />
+<br />The StartsOnPage patch can currently be found on my Web site:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.pcnet.com/~proteus/Fvwm/patches">http://www.pcnet.com/~proteus/Fvwm/patches</a>
+<br />
+<br />I'll try to write up a brief README for it and upload it to the fvwm
+<br />
+site shortly.
+<br />
+<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Bob
+<br />
+&nbsp;
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Nov 20 1997 - 21:03:55 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start21373">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="21374.html" title="Next message in the list">Joe: "Re: FVWM: stuck on click-to-raise with fvwm2"</a></li>
+<li><dfn>Previous message</dfn>: <a href="21372.html" title="Previous message in the list">Bob Woodside: "Re: FVWM: stuck on click-to-raise with fvwm2"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="21382.html" title="Next message in this discussion thread">Bob Woodside: "Re: FVWM: StartsOnPage patch"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="21382.html" title="Message sent in reply to this message">Bob Woodside: "Re: FVWM: StartsOnPage patch"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21373" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21373" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21373" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21373" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

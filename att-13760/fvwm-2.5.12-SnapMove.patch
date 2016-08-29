@@ -1,0 +1,302 @@
+diff -Nurp fvwm-2.5.12/fvwm/commands.h fvwm-2.5.12-new/fvwm/commands.h
+--- fvwm-2.5.12/fvwm/commands.h	2004-09-30 19:47:16.000000000 +0200
++++ fvwm-2.5.12-new/fvwm/commands.h	2005-01-31 23:31:15.100199288 +0200
+@@ -178,6 +178,7 @@ enum
+ 	F_RESIZEMOVE_MAXIMIZE,
+ 	F_RESTACKTRANSIENTS,
+ 	F_SEND_STRING,
++	F_SNAPMOVE,
+ 	F_STATE,
+ 	F_STICK,
+ 	F_STICKACROSSDESKS,
+@@ -355,6 +356,7 @@ P(SetAnimation);
+ P(SetEnv);
+ P(SnapAttraction);
+ P(SnapGrid);
++P(SnapMove);
+ P(State);
+ P(Stick);
+ P(StickAcrossDesks);
+diff -Nurp fvwm-2.5.12/fvwm/functable.c fvwm-2.5.12-new/fvwm/functable.c
+--- fvwm-2.5.12/fvwm/functable.c	2004-09-30 19:47:16.000000000 +0200
++++ fvwm-2.5.12-new/fvwm/functable.c	2005-01-31 23:31:15.100199288 +0200
+@@ -553,6 +553,10 @@ const func_t func_table[] =
+ 	CMD_ENT("snapgrid", CMD_SnapGrid, F_SNAP_GRID, 0, 0),
+ 	/* - Control grid used with SnapAttraction */
+ 
++	CMD_ENT("snapmove", CMD_SnapMove, F_SNAPMOVE,
++		FUNC_NEEDS_WINDOW, CRS_MOVE),
++	/* - Move a window to snap to nearest neighbour */
++	
+ 	CMD_ENT("state", CMD_State, F_STATE,
+ 		FUNC_NEEDS_WINDOW, CRS_SELECT),
+ 	/* - Control user defined window states */
+diff -Nurp fvwm-2.5.12/fvwm/move_resize.c fvwm-2.5.12-new/fvwm/move_resize.c
+--- fvwm-2.5.12/fvwm/move_resize.c	2004-09-27 11:33:04.000000000 +0200
++++ fvwm-2.5.12-new/fvwm/move_resize.c	2005-01-31 23:44:03.382402640 +0200
+@@ -60,6 +60,7 @@
+ #include "colormaps.h"
+ #include "update.h"
+ #include "stack.h"
++#include "placement.h"
+ 
+ /* ----- move globals ----- */
+ 
+@@ -2670,6 +2671,256 @@ void CMD_SnapGrid(F_CMD_ARGS)
+ 	return;
+ }
+ 
++
++
++/*
++ * Move a window to the closest position that'll snap to the border of
++ * an intervening or adjacent window.  Picture setting SnapAttraction,
++ * then moving the window by hand in a direction (north, south, east or
++ * west).  The first place it snaps is where this function places the
++ * window.
++ *
++ * Syntax: SnapMove North | South | East | West
++ *
++ * This is a proof-of-concept implementation, so don't expect it to be
++ * pretty...
++ *
++ * TODO:
++ * - Handle Warp/Animate parameters instead of just setting 'em
++ * - See rant about __move_window()
++ * - Should I handle NorthEast, SouthWest etc?
++ * - Should I snap to SnapGrid as well?
++ * - If I do snap to SnapGrid, shouldn't I be checking snap behaviour?
++ *   I.e. snap only to SnapGrid if SnapAttraction is set to 0...
++ *        snap only to window borders if SnapGrid is set to 0...
++ * - If I do check snap behaviour, shouldn't there be a clearer
++ *   mechanism to state user preference (e.g. SnapBehaviour)
++ * - I think I might be doing something horribly wrong in the depths of
++ *   this function; it works well with my .fvwm2rc, but I don't use
++ *   icons.  It'll probably break with a different config.
++ * - Xinerama spanning, screen border handling (what about
++ *   EdgeResistance?)
++ * - ...
++ */
++void CMD_SnapMove(F_CMD_ARGS)
++{
++	/* Read parameters */
++	direction_t direction = gravity_parse_dir_argument(action, &action, DIR_NONE);
++	if (direction != DIR_N && direction != DIR_S && direction != DIR_E && direction != DIR_W)
++		return;
++
++	/* May we move it? */
++	FvwmWindow *fw = exc->w.fw;
++	if (!is_function_allowed(F_MOVE, NULL, fw, True, False))
++		return;
++
++	/* Extract current window geometry
++	 * Is there a better, fail-safe method to do this?  A more
++	 * arcane, voodoo-magic bit of code that I didn't notice?  What
++	 * I really want to know is, is get_..._geometry() sufficient
++	 * for snap checking?
++	 */
++	rectangle self;
++	if (!get_visible_window_or_icon_geometry(fw, &self))
++		return;
++
++	/* Compare with other window borders */
++	FvwmWindow *tmp;
++	rectangle other;
++
++	int new_x = self.x;
++	int new_y = self.y;
++
++	int min_dx = 99999;
++	int max_dx = -99999;
++	int min_dy = 99999;
++	int max_dy = -99999;
++
++	for (tmp = Scr.FvwmRoot.next; tmp; tmp = tmp->next) {
++		if (fw->Desk != tmp->Desk || fw == tmp)
++			continue;
++		if (!get_visible_window_or_icon_geometry(tmp, &other))
++			continue;
++
++		/* Placement penalty -- unabashedly ripped from placement.c */
++		int placement_penalty = 0;
++		if (IS_ICONIFIED(tmp))
++			placement_penalty = ICON_PLACEMENT_PENALTY(tmp);
++		else if (compare_window_layers(tmp, fw) > 0)
++			placement_penalty = ONTOP_PLACEMENT_PENALTY(tmp);
++		else if (compare_window_layers(tmp, fw) < 0)
++			placement_penalty = BELOW_PLACEMENT_PENALTY(tmp);
++		else if (IS_STICKY_ACROSS_PAGES(tmp) || IS_STICKY_ACROSS_DESKS(tmp))
++			placement_penalty = STICKY_PLACEMENT_PENALTY(tmp);
++		else
++			placement_penalty = NORMAL_PLACEMENT_PENALTY(tmp);
++		if (placement_penalty == 0) continue;
++
++		int tmp_x, tmp_dx;
++		int tmp_y, tmp_dy;
++
++		if (self.y >= other.y - self.height && self.y <= other.y + other.height) {
++			tmp_x = other.x + other.width;
++			tmp_dx = tmp_x - self.x;
++			if (tmp_x < 0)
++				tmp_x = 0;
++			if (tmp_x > Scr.MyDisplayWidth - self.width)
++				tmp_x = Scr.MyDisplayWidth - self.width;
++			if (direction == DIR_W && tmp_dx < 0 && tmp_dx > max_dx) {
++				new_x = tmp_x;
++				max_dx = tmp_dx;
++			}
++			if (direction == DIR_E && tmp_dx > 0 && tmp_dx < min_dx) {
++				new_x = tmp_x;
++				min_dx = tmp_dx;
++			}
++
++			tmp_x = other.x - self.width;
++			tmp_dx = tmp_x - self.x;
++			if (tmp_x < 0)
++				tmp_x = 0;
++			if (tmp_x > Scr.MyDisplayWidth - self.width)
++				tmp_x = Scr.MyDisplayWidth - self.width;
++			if (direction == DIR_W && tmp_dx < 0 && tmp_dx > max_dx) {
++				new_x = tmp_x;
++				max_dx = tmp_dx;
++			}
++			if (direction == DIR_E && tmp_dx > 0 && tmp_dx < min_dx) {
++				new_x = tmp_x;
++				min_dx = tmp_dx;
++			}
++		}
++
++		if (self.x >= other.x - self.width && self.x <= other.x + other.width) {
++			tmp_y = other.y + other.height;
++			tmp_dy = tmp_y - self.y;
++			if (tmp_y < 0)
++				tmp_y = 0;
++			if (tmp_y > Scr.MyDisplayHeight - self.height)
++				tmp_y = Scr.MyDisplayHeight - self.height;
++			if (direction == DIR_N && tmp_dy < 0 && tmp_dy > max_dy) {
++				new_y = tmp_y;
++				max_dy = tmp_dy;
++			}
++			if (direction == DIR_S && tmp_dy > 0 && tmp_dy < min_dy) {
++				new_y = tmp_y;
++				min_dy = tmp_dy;
++			}
++
++			tmp_y = other.y - self.height;
++			tmp_dy = tmp_y - self.y;
++			if (tmp_y < 0)
++				tmp_y = 0;
++			if (tmp_y > Scr.MyDisplayHeight - self.height)
++				tmp_y = Scr.MyDisplayHeight - self.height;
++			if (direction == DIR_N && tmp_dy < 0 && tmp_dy > max_dy) {
++				new_y = tmp_y;
++				max_dy = tmp_dy;
++			}
++			if (direction == DIR_S && tmp_dy > 0 && tmp_dy < min_dy) {
++				new_y = tmp_y;
++				min_dy = tmp_dy;
++			}
++		}
++	}
++
++	/* Compare with display borders */
++	if (self.x < 0)
++		new_x = 0;
++	if (self.x > Scr.MyDisplayWidth - self.width)
++		new_x = Scr.MyDisplayWidth - self.width;
++	if (self.y < 0)
++		new_y = 0;
++	if (self.y > Scr.MyDisplayHeight - self.height)
++		new_y = Scr.MyDisplayHeight - self.height;
++	if (new_x == self.x) {
++		if (direction == DIR_W)
++			new_x = 0;
++		if (direction == DIR_E)
++			new_x = Scr.MyDisplayWidth - self.width;
++	}
++
++	if (new_y == self.y) {
++		if (direction == DIR_N)
++			new_y = 0;
++		if (direction == DIR_S)
++			new_y = Scr.MyDisplayHeight - self.height;
++	}
++
++	/* Move the window -- this code unabashedly copied, pasted and
++	 * modified from __move_window().  It's ugly and hackish, but I
++	 * decided to use tried and tested code blindly instead of
++	 * painstakingly attempting to figure out exactly what it does,
++	 * and then duplicating it by hand.  Clever, no?
++	 *
++	 * <RANT>
++	 * Shouldn't this code block be abstracted to its own function?
++	 * It does almost exactly the same thing as __move_icon(), only
++	 * for client windows.  In my opinion __move_window() shouldn't
++	 * be parsing parameters, it should simply move windows.  I'm
++	 * biased, of course, since a pure movement function will make
++	 * my life a bit easier...
++	 * </RANT>
++	 */
++	Window w;
++
++	w = FW_W_FRAME(fw);
++	if (IS_ICONIFIED(fw))
++	{
++		if (FW_W_ICON_PIXMAP(fw) != None)
++		{
++			w = FW_W_ICON_PIXMAP(fw);
++			XUnmapWindow(dpy,FW_W_ICON_TITLE(fw));
++		}
++		else
++		{
++			w = FW_W_ICON_TITLE(fw);
++		}
++	}
++
++	Window JunkRoot;
++	int JunkWidth, JunkHeight, JunkBW, JunkDepth;
++	int old_x, old_y;
++	XGetGeometry(dpy, w, &JunkRoot, &old_x, &old_y, &JunkWidth, &JunkHeight, &JunkBW, &JunkDepth);
++
++	/* These two should probably be set through parameters */
++	Bool do_animate	= TRUE;		/* Li'l hack */
++	Bool fWarp	= TRUE;		/* Li'l hackity hack hack hack */
++
++	if (w == FW_W_FRAME(fw))
++	{
++		int dx = new_x - fw->frame_g.x;
++		int dy = new_y - fw->frame_g.y;
++		if (do_animate)
++			AnimatedMoveFvwmWindow(fw, w, -1, -1, new_x, new_y, fWarp, -1, NULL);
++		frame_setup_window( fw, new_x, new_y, fw->frame_g.width, fw->frame_g.height, True);
++		if (fWarp & !do_animate)
++			FWarpPointer(dpy, None, None, 0, 0, 0, 0, new_x - old_x, new_y - old_y);
++		if (IS_MAXIMIZED(fw))
++		{
++			fw->max_g.x += dx;
++			fw->max_g.y += dy;
++		}
++		else
++		{
++			fw->normal_g.x += dx;
++			fw->normal_g.y += dy;
++		}
++		update_absolute_geometry(fw);
++		maximize_adjust_offset(fw);
++		XFlush(dpy);
++		GNOME_SetWinArea(fw);
++	}
++	else /* icon window */
++	{
++		__move_icon(fw, new_x, new_y, old_x, old_y, do_animate, fWarp);
++		XFlush(dpy);
++	}
++
++	return;
++}
++
++
+ static Pixmap XorPixmap = None;
+ 
+ void CMD_XorValue(F_CMD_ARGS)
+

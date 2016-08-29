@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: Multiple configs for multi-head? from Grant McDorman on 2000-02-08 (fvwm-users)</title>
+<meta name="Author" content="Grant McDorman (grant.mcdorman_at_cedara.com)" />
+<meta name="Subject" content="Re: FVWM: Multiple configs for multi-head?" />
+<meta name="Date" content="2000-02-08" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: Multiple configs for multi-head?</h1>
+<!-- received="Tue Feb  8 15:41:31 2000" -->
+<!-- isoreceived="20000208154131" -->
+<!-- sent="Tue, 8 Feb 2000 16:38:48 -0500" -->
+<!-- isosent="20000208213848" -->
+<!-- name="Grant McDorman" -->
+<!-- email="grant.mcdorman_at_cedara.com" -->
+<!-- subject="Re: FVWM: Multiple configs for multi-head?" -->
+<!-- id="20000208163847.A13143_at_cedara.com" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="Pine.LNX.4.10.10002081155190.7490-100000_at_alpha.haygoods.org" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start292" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="0293.html" accesskey="d" title="Von Welch: &quot;FVWM: How to get xemacs frames to map to current desk?&quot;">Next message</a> ]
+[ <a href="0291.html" title="Hal Haygood: &quot;Re: FVWM: Multiple configs for multi-head?&quot;">Previous message</a> ]
+[ <a href="0291.html" title="Hal Haygood: &quot;Re: FVWM: Multiple configs for multi-head?&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg292" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg292" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg292" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg292" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Grant McDorman &lt;<a href="mailto:grant.mcdorman_at_cedara.com?Subject=Re%3A%20FVWM%3A%20Multiple%20configs%20for%20multi-head%3F">grant.mcdorman_at_cedara.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 8 Feb 2000 16:38:48 -0500</span><br />
+</address>
+<br />
+According to Hal Haygood:
+<br />
+<em class="quotelev1">&gt; On Tue, 8 Feb 2000, Dominik Vogt wrote:
+</em><br />
+<em class="quotelev2">&gt; &gt; On Mon, Feb 07, 2000 at 03:18:08PM -0500, hal_at_haygoods.org wrote:
+</em><br />
+<em class="quotelev3">&gt; &gt; &gt; 
+</em><br />
+<em class="quotelev3">&gt; &gt; &gt; I'd like to know the method for specifying configuration settings based on
+</em><br />
+<em class="quotelev3">&gt; &gt; &gt; the display.
+</em><br />
+<br />[cut]
+<br />
+<br />A better way, rather than starting one for each screen manually, is to use
+<br />
+M4 (or perhaps CPP) to preprocess the file. For your case, where you want to
+<br />
+do things based on colour depth, it works even better because you can
+<br />
+configure by depth rather than by screen number. The macro CLASS will be the
+<br />
+screen type (in your case, TrueColor or PseudoColor, depending on the
+<br />
+screen); the macro SCREEN will be the screen number; the macro COLOR will be
+<br />
+Yes or No, as appropriate, and the macro PLANES will be the depth (i.e. 8 or
+<br />
+24) - see the FvwmM4 manual page for a complete list. So, in M4, you can do
+<br />
+things like:
+<br />
+<br />&nbsp;&nbsp;ifelse(CLASS,'TrueColor','
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;x-your-root-loader -background pretty-24-bit-picture
+<br />
+&nbsp;&nbsp;','
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;xsetroot -solid blue4')
+<br />
+&nbsp;&nbsp;ifelse(SCREEN,'0','
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Module FvwmButtons-S0   # a symbolic link to FvwmButtons; use
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# *FvwmButtons-S0 to configure
+<br />
+&nbsp;&nbsp;','
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Module FvwmButtons-S1
+<br />
+&nbsp;&nbsp;')
+<br />
+<br />(Note, by the way, that you should supply -m4-squote and -m4-equote to the
+<br />
+fvwm invocation, since using the default quotes, as above, will probably not
+<br />
+work; I use curly braces {}.)
+<br />
+<br />For a somewhat more complicated example, here's a snippet of my .fvwm2rc for
+<br />
+M4:
+<br />
+<br /># TrueColor/Psuedo color configuration
+<br />
+ifelse(CLASS,{TrueColor},{
+<br />
+&nbsp;# - can use fancy, colour-intensive stuff
+<br />
+&nbsp;define({ACTIVE_PIXMAP},{Bluegrain.xpm})
+<br />
+&nbsp;define({INACTIVE_PIXMAP},{greenleather.xpm})
+<br />
+<br />&nbsp;define({TITLE_ACTIVE_PIXMAP},{MARBLE_SMOKE.xpm})
+<br />
+&nbsp;define({TITLE_INACTIVE_PIXMAP},{GreySlate.xpm})
+<br />
+<br />&nbsp;define({GRADIENT},{MenuFace DGradient 128 2 lightgrey 50 blue 50 white})
+<br />
+&nbsp;define({SIDEPIC},{SidePic side.fvwm2.xpm, SideColor Black })
+<br />
+<br />&nbsp;define({PICTURES},{/usr2/grant/Images/Paintings})
+<br />
+&nbsp;define({PICGLOB},{*.jpeg})
+<br />
+},{
+<br />
+&nbsp;# presumably pseudo-colour. Keep it down, keep it down.
+<br />
+&nbsp;define({ACTIVE_PIXMAP},{Bluegrain.xpm})
+<br />
+&nbsp;define({INACTIVE_PIXMAP},{greenleather.xpm})
+<br />
+<br />&nbsp;define({TITLE_ACTIVE_PIXMAP},{MARBLE_SMOKE.xpm})
+<br />
+&nbsp;define({TITLE_INACTIVE_PIXMAP},{GreySlate.xpm})
+<br />
+<br />&nbsp;define({GRADIENT},{})
+<br />
+&nbsp;define({SIDEPIC},{})
+<br />
+<br />&nbsp;define({PICTURES},{HOME/Patterns})
+<br />
+&nbsp;define({PICGLOB},{*})
+<br />
+})
+<br />
+<br />...snip...
+<br />
+<br />AddToDecor  Basic
+<br />
++           BorderStyle Active (TiledPixmap ACTIVE_PIXMAP)
+<br />
++           BorderStyle Inactive (TiledPixmap INACTIVE_PIXMAP)
+<br />
++           TitleStyle ActiveUp (TiledPixmap TITLE_ACTIVE_PIXMAP)
+<br />
++           TitleStyle ActiveDown (TiledPixmap TITLE_ACTIVE_PIXMAP)
+<br />
++           TitleStyle Inactive (TiledPixmap TITLE_INACTIVE_PIXMAP)
+<br />
+<br /><br /><em class="quotelev1">&gt; And here's a somewhat related question.  Currently, with the dual head, I
+</em><br />
+<em class="quotelev1">&gt; just have one fvwm2 specified as the WM.  When it runs, it spawns off two
+</em><br />
+<em class="quotelev1">&gt; fvwm2's, like so:
+</em><br />
+<br />[cut]
+<br />
+<br /><em class="quotelev1">&gt; Does FVWM have code that detects multiple-display systems, and
+</em><br />
+<em class="quotelev1">&gt; automatically spawns these off?
+</em><br />
+<br />Fvwm looks at the number of displays and spawns a new instance for each.
+<br />
+However, it does keep some track of each instance; specifically, if you do a
+<br />
+'quit' in this case, it will terminate all instances. Conversely, if you run
+<br />
+individual copies with -s for each screen, quitting one won't quit the other.
+<br />
+<br />You can force it to quit on one just screen when it automatically spawns -
+<br />
+look for the QuitScreen command (code I submitted way back for 2.0.46 or
+<br />
+thereabouts).
+<br />
+<br /><em class="quotelev1">&gt; Thanks again for your help.
+</em><br />
+<em class="quotelev1">&gt; 
+</em><br />
+<em class="quotelev1">&gt; --
+</em><br />
+<em class="quotelev1">&gt; Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+</em><br />
+<em class="quotelev1">&gt; To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+</em><br />
+<em class="quotelev1">&gt; message to majordomo_at_fvwm.org.
+</em><br />
+<em class="quotelev1">&gt; To report problems, send mail to fvwm-owner_at_fvwm.org.
+</em><br />
+<br /><pre>
+-- 
+Grant McDorman &lt;grant.mcdorman_at_cedara.com&gt;, Senior Software Developer
+Cedara Software Corp.  &lt;URL:<a href="http://www.cedara.com">http://www.cedara.com</a>&gt;
+  (formerly I.S.G. Technologies Inc.)
+Mississauga, Ontario, Canada
+
+</pre>
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<div>
+<ul>
+<li>application/pgp-signature attachment: <a href="att-0292/01-part">stored</a></li>
+</ul>
+<!-- attachment="01-part" -->
+</div>
+<span id="received"><dfn>Received on</dfn> Tue Feb 08 2000 - 15:41:31 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start292">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="0293.html" title="Next message in the list">Von Welch: "FVWM: How to get xemacs frames to map to current desk?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="0291.html" title="Previous message in the list">Hal Haygood: "Re: FVWM: Multiple configs for multi-head?"</a></li>
+<li><dfn>In reply to</dfn>: <a href="0291.html" title="Message to which this message replies">Hal Haygood: "Re: FVWM: Multiple configs for multi-head?"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg292" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg292" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg292" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg292" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:50 BST
+</em></small></p>
+</body>
+</html>

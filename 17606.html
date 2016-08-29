@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: processes from Albrecht Kadlec on 1996-08-13 (fvwm-users)</title>
+<meta name="Author" content="Albrecht Kadlec (albrecht_at_auto.tuwien.ac.at)" />
+<meta name="Subject" content="Re: FVWM: processes" />
+<meta name="Date" content="1996-08-13" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: processes</h1>
+<!-- received="Tue Aug 13 02:00:50 1996" -->
+<!-- isoreceived="19960813010050" -->
+<!-- sent="Tue, 13 Aug 96 08:57:56 +0200" -->
+<!-- isosent="19960813065756" -->
+<!-- name="Albrecht Kadlec" -->
+<!-- email="albrecht_at_auto.tuwien.ac.at" -->
+<!-- subject="Re: FVWM: processes" -->
+<!-- id="9608130657.AA01423_at_vta_host.auto.tuwien.ac.at" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="9608121046.ZM9080_at_eos.ncsu.edu" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start17606" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="17607.html" accesskey="d" title="Jason L Tibbitts III: &quot;FVWM: Re: Changes from .42 to .43 (WarpToWindow?!?)&quot;">Next message</a> ]
+[ <a href="17605.html" title="Albrecht Kadlec: &quot;Re: FVWM: Changes from .42 to .43 (WarpToWindow?!?)&quot;">Previous message</a> ]
+[ <a href="17601.html" title="John Dawkins: &quot;FVWM: processes&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17606" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17606" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17606" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17606" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Albrecht Kadlec &lt;<a href="mailto:albrecht_at_auto.tuwien.ac.at?Subject=Re%3A%20FVWM%3A%20processes">albrecht_at_auto.tuwien.ac.at</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 13 Aug 96 08:57:56 +0200</span><br />
+</address>
+<br />
+<em class="quotelev1">&gt;&gt;&gt;&gt;&gt; John Dawkins writes:
+</em><br />
+<br />J&gt; everytime i restart fvwm2, i keep getting another running copy of swallowed
+<br />
+J&gt; apps.  i am using the UseOld and NoClose options in my configuration file.
+<br />
+J&gt;  what am i doing wrong??  i forgot to include some info yesterday.  i'm using a
+<br />
+J&gt; Sun SparcStation 5.  i'm using fvwm2.0.43
+<br />
+<br />J&gt; *FvwmButtons(6x2, Swallow &quot;FvwmPager&quot; &quot;FvwmPager 0 3&quot;)
+<br />
+J&gt; *FvwmButtons(3x1, Swallow(UseOld,NoClose) &quot;xdaliclock&quot;  `Exec
+<br />
+J&gt; /afs/eos/project/goodies/bin/xdaliclock &amp;`)
+<br />
+J&gt; *FvwmButtons(3x1, Swallow(UseOld,NoClose) &quot;xload&quot; `Exec xload -fg white -bg
+<br />
+J&gt; gray55 -nolabel -scale 3 -update 5 &amp;`)
+<br />
+<br />try this:
+<br />
+<br />AddToFunc ExitFunction	&quot;I&quot;	KillModule FvwmButtons
+<br />
++			&quot;I&quot;	FvwmBanner
+<br />
++			&quot;I&quot;	Wait FvwmBanner
+<br />
+<br />this provides time to the FvwmButton module to unswallow the windows,
+<br />
+before the new one starts up.
+<br />
+<br />albrecht
+<br />
+<pre>
+-- 
+You say the hill's too steep to climb, Climb it!
+You say you'd like to see me try, Climb it!
+You pick the place and I'll choose the time
+And I'll climb the hill in my own way
+just wait a while, for the right day
+And as I rise above the treeline and the clouds
+I look down hear the sound of the things you said today	-- Pink Floyd
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue Aug 13 1996 - 02:00:50 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start17606">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="17607.html" title="Next message in the list">Jason L Tibbitts III: "FVWM: Re: Changes from .42 to .43 (WarpToWindow?!?)"</a></li>
+<li><dfn>Previous message</dfn>: <a href="17605.html" title="Previous message in the list">Albrecht Kadlec: "Re: FVWM: Changes from .42 to .43 (WarpToWindow?!?)"</a></li>
+<li><dfn>In reply to</dfn>: <a href="17601.html" title="Message to which this message replies">John Dawkins: "FVWM: processes"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17606" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17606" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17606" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17606" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

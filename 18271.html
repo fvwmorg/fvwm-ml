@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Newcomer to fvwm with some ideas, patches and questions from Mark Rawling on 1996-10-29 (fvwm-users)</title>
+<meta name="Author" content="Mark Rawling (Mark.Rawling_at_mel.dit.csiro.au)" />
+<meta name="Subject" content="FVWM: Newcomer to fvwm with some ideas, patches and questions" />
+<meta name="Date" content="1996-10-29" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Newcomer to fvwm with some ideas, patches and questions</h1>
+<!-- received="Mon Oct 28 20:18:59 1996" -->
+<!-- isoreceived="19961028201859" -->
+<!-- sent="Tue, 29 Oct 1996 13:19:25 +1100" -->
+<!-- isosent="19961029021925" -->
+<!-- name="Mark Rawling" -->
+<!-- email="Mark.Rawling_at_mel.dit.csiro.au" -->
+<!-- subject="FVWM: Newcomer to fvwm with some ideas, patches and questions" -->
+<!-- id="199610290218.AA15157_at_shark.mel.dit.csiro.au" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start18271" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="18272.html" accesskey="d" title="Markus Gutschke: &quot;Re: FVWM: FVWM2: shell resize after FVWM RESIZE, possible?&quot;">Next message</a> ]
+[ <a href="18270.html" title="Liu Xin: &quot;FVWM: question&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18271" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18271" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18271" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18271" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Mark Rawling &lt;<a href="mailto:Mark.Rawling_at_mel.dit.csiro.au?Subject=Re%3A%20FVWM%3A%20Newcomer%20to%20fvwm%20with%20some%20ideas%2C%20patches%20and%20questions">Mark.Rawling_at_mel.dit.csiro.au</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 29 Oct 1996 13:19:25 +1100</span><br />
+</address>
+<br />
+Hi fvwmrs,
+<br />
+As a newcomer, please forgive any naivety I show here about fvwm2.
+<br />
+<br />I've done a fair bit of hacking on tvtwm. I fixed a few bugs, added colored,
+<br />
+shaped icons, fixed up color map management problems, etc. Basically,\
+<br />
+I know my way around WMs fairly well.
+<br />
+<br />I never really liked fvwm(2). Thought the handles were ugly, can't stand the way it
+<br />
+treats icons (can't tell it where to place them, doesn't line them up properly,
+<br />
+truncates the names, hilites them in strange colors, etc)
+<br />
+<br />But I must have the audio!!! I love it. App based style are brilliant too. A great idea.
+<br />
+<br />So, I've done a couple of things....
+<br />
+<br />(A) I fixed a bug in FvwmAudio.c, so now it plays the right sounds at the right time
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;(I'm using the windows Utopia sound scheme - sounds fantastic - don't get me wrong,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;I detest PCs, but the idea of sound schemes is cool - cursor schemes too)
+<br />
+<br />(B) I changed the resize function so that it does opaque resizes. This is great, just like
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;opaquemove - when the window gets bigger than the opaque size limit it jumps into 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;rubber band mode, then drops back to opaque again if the window shrinks back down.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;It's fantastic - I highly recommend opaque resize under X.
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;As part of this I slightly improved the appearance of the rubber bands - a trivial thing,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;but I didn't like the thicker border on the middle third of each each XOR'd outline
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;edge. Have a close look people - it's weird (an artifact of the XOR drawing method used).
+<br />
+<br />(C) I did my own handle/border drawing code. I think it looks great. Nice and simple and very
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;functional. Similar to windows 95 (shudder), but better. Basically I eliminated the
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;internal shadows/relief drawn on the handles. Easier on the eyes. Less cluttered. Really
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;nice. But this is a religious argument of course, so I'm not forcing it on anyone. 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;However I would like to suggest this ... If it hasn't been done already I could remove
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;the limit on the number of styles. To facilitate all sorts of handles I would suggest
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;that instead of having Handles vs Borders, vs MWMBorders, etc, etc. We could have
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;a single handle style argument. Eg HandleStyle fvwm (default), HandleStyle simple (mine)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;HandleStyle MWM, etc. Ultimately, users could define their own handle style. We could let
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;them specify internal relief, external relief, etc, independently.
+<br />
+<br />(D) In my fvwm2rc file I have predefined 3 or 4 pixmap title buttons for my favorite apps. 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;So for xterm, button 1 is a mini xterm, etc. It looks fabulous, but I'm limited to
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;less than 5 (Button 9 is a catch all, for unspecified apps).
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;So I have Style &quot;*&quot; NoButton 1, NoButton 3, NoButton 5, NoButton 7
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;and then  Style &quot;xterm&quot; NoButton 9, Button 1 (to change the catch all into the mini-xterm)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;I think it would be good
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if buttons could be specified on a per application basis. If not their function, then 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;at least their appearance. If that's too much, then how about an optional TitleIcon - 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;just like a normal Icon, except it sits in the title bar, first button on the left.
+<br />
+<br /><br />Does anyone like any of these ideas??? If so, let me know. I can post the audio patch, the
+<br />
+opaque resize patch, and my simple borders patch if anyone's interested. But
+<br />
+note that the borders patch redefines MWMBorder to mean my simple borders, so it really
+<br />
+needs to be done in conjunction with extra style capability to be generally useful.
+<br />
+<br />BTW, if you're wondering, my weird? tastes come from using tvtwm (not MS Windows). And yes,
+<br />
+I think tvtwm is a great WM, but it doesn't have the audio. And no, my borders don't just
+<br />
+look like tvtwm - they look better - like a cross b/w tvtwm and fvwm (and yes, a bit similar
+<br />
+to Windows 95)
+<br />
+<br /><br />Mark
+<br />
+<br /><br /><br />Mark.Rawling_at_mel.dit.csiro.au             |  Distributed Computing Group
+<br />
+CSIRO Division of Information Technology  |   
+<br />
+723 Swanston Street                       |  tel: +61 3 9282 2634
+<br />
+Carlton, Victoria 3053, Australia         |  fax: +61 3 9282 2600
+<br />
+<br /><br /><br /><br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon Oct 28 1996 - 20:18:59 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start18271">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="18272.html" title="Next message in the list">Markus Gutschke: "Re: FVWM: FVWM2: shell resize after FVWM RESIZE, possible?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="18270.html" title="Previous message in the list">Liu Xin: "FVWM: question"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18271" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18271" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18271" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18271" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

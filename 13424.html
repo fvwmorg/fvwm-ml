@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: killing and restarting fvwm : unreachable windows / pager shift from xavier on 2004-10-29 (fvwm-users)</title>
+<meta name="Author" content="xavier (list.fvwm_at_natch.dyndns.org)" />
+<meta name="Subject" content="FVWM: killing and restarting fvwm : unreachable windows / pager shift" />
+<meta name="Date" content="2004-10-29" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: killing and restarting fvwm : unreachable windows / pager shift</h1>
+<!-- received="Fri Oct 29 10:58:34 2004" -->
+<!-- isoreceived="20041029095834" -->
+<!-- sent="Fri, 29 Oct 2004 11:58:05 -0400" -->
+<!-- isosent="20041029155805" -->
+<!-- name="xavier" -->
+<!-- email="list.fvwm_at_natch.dyndns.org" -->
+<!-- subject="FVWM: killing and restarting fvwm : unreachable windows / pager shift" -->
+<!-- id="20041029155805.GA25588_at_pecos.8d.com" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start13424" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="13425.html" accesskey="d" title="Michelle Konzack: &quot;FVWM: Re: your mail&quot;">Next message</a> ]
+[ <a href="13423.html" title="Tim: &quot;(no subject)&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="13436.html" accesskey="t" title="Dominik Vogt: &quot;Re: FVWM: killing and restarting fvwm : unreachable windows / pager shift&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg13424" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg13424" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg13424" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg13424" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: xavier &lt;<a href="mailto:list.fvwm_at_natch.dyndns.org?Subject=Re%3A%20FVWM%3A%20killing%20and%20restarting%20fvwm%20%3A%20unreachable%20windows%20%2F%20pager%20shift">list.fvwm_at_natch.dyndns.org</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 29 Oct 2004 11:58:05 -0400</span><br />
+</address>
+<br />
+Hi,
+<br />
+<br />sometimes i play too hard with fvwm and X,
+<br />
+and fvwm freeze/crash. (wont open root menu,
+<br />
+wont respond to fvwmcommand 'restart')
+<br />
+<br />i then have to kill it, and start it again.
+<br />
+(fvwm is not the last thing on my .xsession)
+<br />
+until there, no problem.
+<br />
+<br /><br />when i start fvwm this way, the new
+<br />
+reference point 0,0 for my pager is the 
+<br />
+current page (which might be 4,5).
+<br />
+<br />so i can't see the windows which are on pages lower than 4,5.
+<br />
+<br /><br />i made a small script to get back all my windows, but it's all clobbered in one page :
+<br />
+(i use piperead &quot;myscript.pl&quot; for that)
+<br />
+<br /><br />#!/usr/bin/perl -w
+<br />
+<br />use strict;
+<br />
+<br />my $xwininfo=`xwininfo -root -tree`;
+<br />
+<br /><br />my _at_xwininfo=split /\n/,$xwininfo;
+<br />
+<br />my _at_appwinid;
+<br />
+map { if (/\s+(0x\S+)\s\&quot;/){ push _at_appwinid,$1}} &#64;xwininfo;
+<br />
+<br />foreach (_at_appwinid){
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;print &quot;echo get back: $_\n&quot;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;print &quot;WindowId $_ Iconify off\n&quot;;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;print &quot;WindowId $_ movetopage 1 2\n&quot;;
+<br />
+}
+<br />
+<br /><br />any ideas  for moving the pager to -1 -1 or something else ?
+<br />
+<br />thanks
+<br />
+<br /><br /><br /><pre>
+-- 
+xavier
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Oct 29 2004 - 10:58:34 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start13424">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="13425.html" title="Next message in the list">Michelle Konzack: "FVWM: Re: your mail"</a></li>
+<li><dfn>Previous message</dfn>: <a href="13423.html" title="Previous message in the list">Tim: "(no subject)"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="13436.html" title="Next message in this discussion thread">Dominik Vogt: "Re: FVWM: killing and restarting fvwm : unreachable windows / pager shift"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="13436.html" title="Message sent in reply to this message">Dominik Vogt: "Re: FVWM: killing and restarting fvwm : unreachable windows / pager shift"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg13424" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg13424" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg13424" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg13424" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:57 BST
+</em></small></p>
+</body>
+</html>

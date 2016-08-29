@@ -1,0 +1,747 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: FvwmButtons &quot;Variable Relief&quot; patch from Gregory Lauckhart on 1996-02-21 (fvwm-users)</title>
+<meta name="Author" content="Gregory Lauckhart (gregl_at_cs.washington.edu)" />
+<meta name="Subject" content="FVWM: FvwmButtons &quot;Variable Relief&quot; patch" />
+<meta name="Date" content="1996-02-21" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: FvwmButtons &quot;Variable Relief&quot; patch</h1>
+<!-- received="Tue Feb 20 23:46:18 1996" -->
+<!-- isoreceived="19960220234618" -->
+<!-- sent="Tue, 20 Feb 1996 21:46:13 -0800 (PST)" -->
+<!-- isosent="19960221054613" -->
+<!-- name="Gregory Lauckhart" -->
+<!-- email="gregl_at_cs.washington.edu" -->
+<!-- subject="FVWM: FvwmButtons &quot;Variable Relief&quot; patch" -->
+<!-- id="Pine.ULT.3.91.960220212714.16831C-100000_at_lynx.cs.washington.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start15583" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="15584.html" accesskey="d" title="George Michaelson: &quot;FVWM: FAQ? cutbuffer contents in Exec instances&quot;">Next message</a> ]
+[ <a href="15582.html" title="Carlos Puchol: &quot;FVWM: dynamic winlist setting&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15583" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15583" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15583" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15583" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Gregory Lauckhart &lt;<a href="mailto:gregl_at_cs.washington.edu?Subject=Re%3A%20FVWM%3A%20FvwmButtons%20%22Variable%20Relief%22%20patch">gregl_at_cs.washington.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 20 Feb 1996 21:46:13 -0800 (PST)</span><br />
+</address>
+<br />
+Here's a patch that allows the user to specify the depth of the reliefs 
+<br />
+in FvwmButtons on a per-button basis.  The .fvwm2rc line
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*FvwmButtons(w x h) ...
+<br />
+<br />may now be written
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*FvwmButtons(w x h , r) ...
+<br />
+<br />where r specifies the new relief, from -5 (sunken 5 pixels) to 5 (raised 
+<br />
+five pixels).  The default is 2.
+<br />
+<br />Apply the patch in the &quot;modules&quot; subdirectory of a clean 2.0.41 
+<br />
+distribution.  I even updated the man page!  Let me know how it works.
+<br />
+<br />Greg
+<br />
+<br />---8&lt;----cut----8&lt;------------------------------------------------------
+<br />
+<br />diff -u fb-old/FvwmButtons.c FvwmButtons/FvwmButtons.c
+<br />
+--- fb-old/FvwmButtons.c	Wed Feb 14 13:02:05 1996
+<br />
++++ FvwmButtons/FvwmButtons.c	Tue Feb 20 20:49:01 1996
+<br />
+_at_&#64; -106,7 +106,6 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;if (s != NULL)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;temp = s + 1;
+<br />
+&nbsp;
+<br />
+-
+<br />
+&nbsp;&nbsp;&nbsp;MyName = safemalloc(strlen(temp)+1);
+<br />
+&nbsp;&nbsp;&nbsp;strcpy(MyName, temp);
+<br />
+&nbsp;
+<br />
+_at_&#64; -119,6 +118,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Buttons[i].icon_h = 0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Buttons[i].BWidth = 1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Buttons[i].BHeight = 1;
+<br />
++      Buttons[i].BRelief = 2;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Buttons[i].IconWin = None;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Buttons[i].icon_maskPixmap = None;	/* pixmap for the icon mask */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Buttons[i].iconPixmap = None;
+<br />
+_at_&#64; -167,12 +167,13 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;M_END_CONFIG_INFO| M_WINDOW_NAME);
+<br />
+&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;ParseOptions();
+<br />
++
+<br />
+&nbsp;&nbsp;&nbsp;if(num_buttons == 0)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(stderr,&quot;%s: No Buttons defined. Quitting\n&quot;, MyName);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit(0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+-
+<br />
++  
+<br />
+&nbsp;&nbsp;&nbsp;/* load the font, or none */
+<br />
+&nbsp;&nbsp;&nbsp;if (mystrncasecmp(font_string,&quot;none&quot;,4)==0)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+_at_&#64; -497,7 +498,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;***********************************************************************/
+<br />
+&nbsp;void RedrawWindow(int newbutton)
+<br />
+&nbsp;{
+<br />
+-  int i,j,w,yoff,button,len,yoff2,BW,BH;
+<br />
++  int i,j,w,yoff,button,len,yoff2,BW,BH,BR;
+<br />
+&nbsp;&nbsp;&nbsp;XEvent dummy;
+<br />
+&nbsp;&nbsp;&nbsp;int val1,val2;
+<br />
+&nbsp;
+<br />
+_at_&#64; -509,9 +510,10 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;for(i=0;i&lt;num_rows;i++)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for(j=0;j&lt;num_columns; j++)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+-	button = i*num_columns + j;
+<br />
+-	BW = ButtonWidth*Buttons[button].BWidth;
+<br />
+-	BH = ButtonHeight*Buttons[button].BHeight;
+<br />
++        button = i*num_columns + j;
+<br />
++        BW = ButtonWidth*Buttons[button].BWidth;
+<br />
++        BH = ButtonHeight*Buttons[button].BHeight;
+<br />
++        BR = Buttons[button].BRelief;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if((newbutton == -1)||(newbutton == button))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if((Buttons[button].swallow == 3)&amp;&amp;
+<br />
+_at_&#64; -554,27 +556,26 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sscanf(&amp;Buttons[button].action[4],&quot;%d %d&quot;,&amp;val1,&amp;val2);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if((val1 == 0)&amp;&amp;(val2 == new_desk))
+<br />
+-		      {
+<br />
+-			RelieveWindow(main_win,j*ButtonWidth, i*ButtonHeight,
+<br />
+-				      BW, BH, ShadowGC,ReliefGC);
+<br />
++                      {
+<br />
++                        RelieveWindow(main_win,j*ButtonWidth, i*ButtonHeight,
+<br />
++                        BW, BH, -BR,
+<br />
++                        ReliefGC, ShadowGC);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RelieveWindow(main_win,j*ButtonWidth, i*ButtonHeight,
+<br />
+-				    BW, BH,
+<br />
+-				    (CurrentButton==button)?ShadowGC:ReliefGC,
+<br />
+-				    (CurrentButton==button)?ReliefGC:ShadowGC);
+<br />
++				    BW, BH, (BR&lt;0)?BR:((CurrentButton==button)?-BR:BR),
+<br />
++				    ReliefGC, ShadowGC);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if(Buttons[button].up == 1)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RelieveWindow(main_win,j*ButtonWidth, i*ButtonHeight,
+<br />
+-				  BW, BH,
+<br />
+-				  (CurrentButton == button)?ShadowGC:ReliefGC,
+<br />
+-				  (CurrentButton == button)?ReliefGC:ShadowGC);
+<br />
++                  BW, BH, (BR&lt;0)?BR:((CurrentButton==button)?-BR:BR),
+<br />
++				  ReliefGC,ShadowGC);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RelieveWindow(main_win,j*ButtonWidth, i*ButtonHeight,
+<br />
+-				  BW, BH, ShadowGC,ReliefGC);
+<br />
++				  BW, BH, -BR, ReliefGC, ShadowGC);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+_at_&#64; -585,46 +586,50 &#64;&#64;
+<br />
+&nbsp;&nbsp;*
+<br />
+&nbsp;&nbsp;*  Draws the relief pattern around a window
+<br />
+&nbsp;&nbsp;*
+<br />
++ *  1/20/95 - Added support for user specified reliefs.  The bulk of the
+<br />
++ *            modifications were in this routine.  gregl_at_cs.washington.edu
+<br />
++ *
+<br />
+&nbsp;&nbsp;****************************************************************************/
+<br />
+-FVWM_INLINE void RelieveWindow(Window win,int x,int y,int w,int h,
+<br />
++FVWM_INLINE void RelieveWindow(Window win,int x,int y,int w,int h, int r,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GC rgc,GC sgc)
+<br />
+&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;XSegment seg[4];
+<br />
+-  int i;
+<br />
++  int i, j;
+<br />
+&nbsp;
+<br />
+-  i=0;
+<br />
+-  seg[i].x1 = x;        seg[i].y1   = y;
+<br />
+-  seg[i].x2 = w+x-1;    seg[i++].y2 = y;
+<br />
+-
+<br />
+-  seg[i].x1 = x;        seg[i].y1   = y;
+<br />
+-  seg[i].x2 = x;        seg[i++].y2 = h+y-1;
+<br />
+-
+<br />
+-  seg[i].x1 = x+1;      seg[i].y1   = y+1;
+<br />
+-  seg[i].x2 = x+w-2;    seg[i++].y2 = y+1;
+<br />
+-
+<br />
+-  seg[i].x1 = x+1;      seg[i].y1   = y+1;
+<br />
+-  seg[i].x2 = x+1;      seg[i++].y2 = y+h-2;
+<br />
+-  XDrawSegments(dpy, win, rgc, seg, i);
+<br />
+-
+<br />
+-  i=0;
+<br />
+-  seg[i].x1 = x;        seg[i].y1   = y+h-1;
+<br />
+-  seg[i].x2 = w+x-1;    seg[i++].y2 = y+h-1;
+<br />
+-
+<br />
+-  seg[i].x1 = x+w-1;    seg[i].y1   = y;
+<br />
+-  seg[i].x2 = x+w-1;    seg[i++].y2 = y+h-1;
+<br />
+-  if(d_depth&lt;2)
+<br />
+-    XDrawSegments(dpy, win, ShadowGC, seg, i);
+<br />
+-  else
+<br />
+-    XDrawSegments(dpy, win, sgc, seg, i);
+<br />
+-
+<br />
+-  i=0;
+<br />
+-  seg[i].x1 = x+1;      seg[i].y1   = y+h-2;
+<br />
+-  seg[i].x2 = x+w-2;    seg[i++].y2 = y+h-2;
+<br />
+-
+<br />
+-  seg[i].x1 = x+w-2;    seg[i].y1   = y+1;
+<br />
+-  seg[i].x2 = x+w-2;    seg[i++].y2 = y+h-2;
+<br />
+-
+<br />
+-  XDrawSegments(dpy, win, sgc, seg, i);
+<br />
++  GC gcAmono, gcA, gcBmono, gcB;
+<br />
++  if (r &lt; 0) {
+<br />
++    gcAmono = ShadowGC; gcA = sgc;
+<br />
++    gcBmono = rgc; gcB = rgc;
+<br />
++    r = -r;
+<br />
++  } else {
+<br />
++    gcAmono = rgc; gcA = rgc;
+<br />
++    gcBmono = ShadowGC; gcB = sgc;
+<br />
++  }
+<br />
++  
+<br />
++  for (j = 0; j &lt; r; j++) {
+<br />
++    i=0;
+<br />
++    seg[i].x1 = x+j;        seg[i].y1   = y+j;
+<br />
++    seg[i].x2 = w+x-1-j;    seg[i++].y2 = y+j;
+<br />
++
+<br />
++    seg[i].x1 = x+j;        seg[i].y1   = y+j;
+<br />
++    seg[i].x2 = x+j;        seg[i++].y2 = h+y-1-j;
+<br />
++
+<br />
++    if(d_depth&lt;2 &amp;&amp; !j)
+<br />
++      XDrawSegments(dpy, win, gcAmono, seg, i);
+<br />
++    else
+<br />
++      XDrawSegments(dpy, win, gcA, seg, i);
+<br />
++        
+<br />
++    i=0;
+<br />
++    seg[i].x1 = x+j;        seg[i].y1   = y+h-1-j;
+<br />
++    seg[i].x2 = w+x-1-j;    seg[i++].y2 = y+h-1-j;
+<br />
++
+<br />
++    seg[i].x1 = x+w-1-j;    seg[i].y1   = y+j;
+<br />
++    seg[i].x2 = x+w-1-j;    seg[i++].y2 = y+h-1-j;
+<br />
++    if(d_depth&lt;2 &amp;&amp; !j)
+<br />
++        XDrawSegments(dpy, win, gcBmono, seg, i);
+<br />
++    else
+<br />
++        XDrawSegments(dpy, win, gcB, seg, i);
+<br />
++  }
+<br />
+&nbsp;}
+<br />
+&nbsp;
+<br />
+&nbsp;/************************************************************************
+<br />
+_at_&#64; -732,7 +737,6 &#64;&#64;
+<br />
+&nbsp;&nbsp;/* That's why I used this full WHILE-Codelines                  */                            
+<br />
+&nbsp;&nbsp;/* tb := TARGET_BOTTON sb := SOURCE_BOTTON for shifting         */
+<br />
+&nbsp;&nbsp;/* palme_at_elphy.irz.hu-berlin.de                                 */
+<br />
+-   
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tb=first_avail_button;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sb=tb-1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while(sb&gt;=(i+j+k*num_columns))
+<br />
+_at_&#64; -759,6 +763,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Buttons[tb].icon_file         = Buttons[sb].icon_file;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Buttons[tb].BWidth            = Buttons[sb].BWidth;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Buttons[tb].BHeight           = Buttons[sb].BHeight;
+<br />
++                         Buttons[tb].BRelief           = Buttons[sb].BRelief;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Buttons[tb].icon_w            = Buttons[sb].icon_w;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Buttons[tb].icon_h            = Buttons[sb].icon_h;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Buttons[tb].iconPixmap        = Buttons[sb].iconPixmap;
+<br />
+_at_&#64; -788,10 +793,9 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;) tb--; /* ignore Targed_Botton if this is a freed one */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sb--;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}  
+<br />
+- 
+<br />
+&nbsp;&nbsp;/* No follows the Original Code which frees the current Botton */
+<br />
+- 		    
+<br />
+-/*			Buttons[first_avail_button].action = 
+<br />
++/* 		    
+<br />
++			Buttons[first_avail_button].action = 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Buttons[i+j+k*num_columns].action;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Buttons[first_avail_button].title = 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Buttons[i+j+k*num_columns].title;
+<br />
+_at_&#64; -801,6 +805,8 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Buttons[i+j+k*num_columns].BWidth;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Buttons[first_avail_button].BHeight = 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Buttons[i+j+k*num_columns].BHeight;
+<br />
++			Buttons[filst_avail_button].BRelief =
+<br />
++			  Buttons[i+j+k*num_columns].BRelief;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Buttons[first_avail_button].icon_w = 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Buttons[i+j+k*num_columns].icon_w;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Buttons[first_avail_button].icon_h = 
+<br />
+_at_&#64; -835,7 +841,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Buttons[i+j+k*num_columns].up = 1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Buttons[i+j+k*num_columns].BWidth = 0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Buttons[i+j+k*num_columns].BHeight = 0;
+<br />
+-
+<br />
++			Buttons[i+j+k*num_columns].BRelief = 2;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+_at_&#64; -1187,24 +1193,31 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tline++;
+<br />
+&nbsp;&nbsp;&nbsp;if( *tline == '(')
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+-      int thisw= 0,thish = 0;
+<br />
++      int thisw= 0,thish = 0, thisr = -6;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tline++;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sscanf((tline),&quot;%dx%d&quot;,&amp;thisw,&amp;thish);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while((*tline != ')')&amp;&amp;(*tline != '\n')&amp;&amp;(*tline != 0))
+<br />
+-	tline++;   
+<br />
++        {
+<br />
++          tline++;
+<br />
++          /* Get the relief, if any */
+<br />
++          if(*tline == ',')
+<br />
++            sscanf ((tline),&quot;,%d&quot;,&amp;thisr);
+<br />
++        }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tline++;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(thisw &gt; 0)
+<br />
+-	Buttons[num_buttons].BWidth = thisw;
+<br />
++        Buttons[num_buttons].BWidth = thisw;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(thish &gt; 0)
+<br />
+-	Buttons[num_buttons].BHeight = thish;
+<br />
++        Buttons[num_buttons].BHeight = thish;
+<br />
++      if(thisr &gt; -6 &amp;&amp; thisr &lt; 6) /* Max. height/depth is 5 */
+<br />
++        Buttons[num_buttons].BRelief = thisr;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;/* skip spaces */
+<br />
+&nbsp;&nbsp;&nbsp;while(isspace(*tline)&amp;&amp;(*tline != '\n')&amp;&amp;(*tline != 0))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tline++;
+<br />
+&nbsp;
+<br />
+-  /* read next word. Its the button label. Users can specify &quot;&quot; 
+<br />
++  /* read next word. Its the button label. Users can specify &quot;&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;* NoIcon, or whatever to skip the label */
+<br />
+&nbsp;&nbsp;&nbsp;/* read to next space */
+<br />
+&nbsp;&nbsp;&nbsp;start = tline;
+<br />
+diff -u fb-old/FvwmButtons.h FvwmButtons/FvwmButtons.h
+<br />
+--- fb-old/FvwmButtons.h	Fri Mar 10 12:04:32 1995
+<br />
++++ FvwmButtons/FvwmButtons.h	Tue Feb 20 18:28:07 1996
+<br />
+_at_&#64; -16,7 +16,7 &#64;&#64;
+<br />
+&nbsp;extern char   *safemalloc(int length);
+<br />
+&nbsp;extern void   change_window_name(char *str);
+<br />
+&nbsp;extern int    My_XNextEvent(Display *dpy, XEvent *event);
+<br />
+-extern FVWM_INLINE void RelieveWindow(Window win,int x,int y,int w,int h,GC rGC,GC sGC);
+<br />
++extern FVWM_INLINE void RelieveWindow(Window win,int x,int y,int w,int h, int r,GC rGC,GC sGC);
+<br />
+&nbsp;extern void   DeadPipe(int nonsense);
+<br />
+&nbsp;extern void   LoadIconFile(int button);
+<br />
+&nbsp;extern void   CreateIconWindow(int button);
+<br />
+_at_&#64; -48,6 +48,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;char *icon_file;
+<br />
+&nbsp;&nbsp;&nbsp;int BWidth;                   /* Width of this button in &quot;buttons&quot; */
+<br />
+&nbsp;&nbsp;&nbsp;int BHeight;
+<br />
++  int BRelief;
+<br />
+&nbsp;&nbsp;&nbsp;int icon_w;
+<br />
+&nbsp;&nbsp;&nbsp;int icon_h;
+<br />
+&nbsp;&nbsp;&nbsp;Pixmap iconPixmap;		/* pixmap for the icon */
+<br />
+diff -u fb-old/FvwmButtons.man FvwmButtons/FvwmButtons.man
+<br />
+--- fb-old/FvwmButtons.man	Sun Feb 18 19:07:06 1996
+<br />
++++ FvwmButtons/FvwmButtons.man	Tue Feb 20 20:59:01 1996
+<br />
+_at_&#64; -77,7 +77,7 &#64;&#64;
+<br />
+&nbsp;.IP &quot;*FvwmButtonsBack \fIcolor\fP&quot;
+<br />
+&nbsp;Specifies the color for the buttons.
+<br />
+&nbsp;
+<br />
+-.IP &quot;*FvwmButtons\fI[(w x h)]\fP \fIlabel icon command\fP&quot;
+<br />
++.IP &quot;*FvwmButtons\fI[(w x h [, r])]\fP \fIlabel icon command\fP&quot;
+<br />
+&nbsp;Specifies a window manager built-in command, as described in the fvwm
+<br />
+&nbsp;man page, which should be executed when a button is pressed.  The
+<br />
+&nbsp;label field is the text which will be written on the button.  The icon
+<br />
+_at_&#64; -86,8 +86,10 &#64;&#64;
+<br />
+&nbsp;the path specified in the fvwm IconPath or PixmapPath configuration
+<br />
+&nbsp;items to find the icon file.  If the optional \fI(w x h)\fP is
+<br />
+&nbsp;specified, then this button will be \fIw\fP times the normal button
+<br />
+-width and \fIh\fP times the normal button height.  If label is &quot;-&quot;
+<br />
+-then the button label will not be displayed.
+<br />
++width and \fIh\fP times the normal button height.  If the full 
+<br />
++\fI(w x h , r)\fP form is used, the \fIr\fP parameter specifies the
+<br />
++&quot;height&quot; of the relief.  Valid values for \fIr\fP are from -5 to 5.
+<br />
++If label is &quot;-&quot; then the button label will not be displayed.
+<br />
+&nbsp;
+<br />
+&nbsp;If \fIcommand\fP is an fvwm Exec command, then the button will remain
+<br />
+&nbsp;pushed in until a window whose name or class matches the qouted
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue Feb 20 1996 - 23:46:18 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start15583">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="15584.html" title="Next message in the list">George Michaelson: "FVWM: FAQ? cutbuffer contents in Exec instances"</a></li>
+<li><dfn>Previous message</dfn>: <a href="15582.html" title="Previous message in the list">Carlos Puchol: "FVWM: dynamic winlist setting"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg15583" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg15583" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg15583" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg15583" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

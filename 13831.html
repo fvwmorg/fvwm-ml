@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Script output into menu from Mikko Heiskanen on 2005-02-13 (fvwm-users)</title>
+<meta name="Author" content="Mikko Heiskanen (mikko_at_whitecortex.net)" />
+<meta name="Subject" content="FVWM: Script output into menu" />
+<meta name="Date" content="2005-02-13" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Script output into menu</h1>
+<!-- received="Sun Feb 13 17:25:42 2005" -->
+<!-- isoreceived="20050213172542" -->
+<!-- sent="Mon, 14 Feb 2005 01:25:00 +0200" -->
+<!-- isosent="20050213232500" -->
+<!-- name="Mikko Heiskanen" -->
+<!-- email="mikko_at_whitecortex.net" -->
+<!-- subject="FVWM: Script output into menu" -->
+<!-- id="1108337100.6442.11.camel_at_whitecortex.net" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start13831" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="13832.html" accesskey="d" title="Frank Gruellich: &quot;Re: FVWM: Script output into menu&quot;">Next message</a> ]
+[ <a href="13830.html" title="David Vilar: &quot;Re: FVWM: more virtual desktops&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="13832.html" accesskey="t" title="Frank Gruellich: &quot;Re: FVWM: Script output into menu&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg13831" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg13831" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg13831" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg13831" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Mikko Heiskanen &lt;<a href="mailto:mikko_at_whitecortex.net?Subject=Re%3A%20FVWM%3A%20Script%20output%20into%20menu">mikko_at_whitecortex.net</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 14 Feb 2005 01:25:00 +0200</span><br />
+</address>
+<br />
+Hi list,
+<br />
+I have a simple shellscript, which output I would like to have made into
+<br />
+a menu. Reading from the manpage, I understand this should be possible
+<br />
+to do.
+<br />
+the shellscript is as follows:
+<br />
+<br />#!/bin/sh
+<br />
+# fbsd-fvwm
+<br />
+echo &quot;AddToMenu $1 $1 title&quot;
+<br />
+for i in /usr/ports/$1/*; do
+<br />
+case $1 in
+<br />
+editors)
+<br />
+echo &quot;+ %mini.edit.xpm%\&quot;$(basename $i)\&quot; Exec exec $(basename $i)
+<br />
+;;
+<br />
+audio)
+<br />
+echo &quot;+ %mini.sound.xpm%\&quot;$(basename $i)\&quot; Exec exec $(basename $i)
+<br />
+;;
+<br />
+(and so on)
+<br />
+esac
+<br />
+done
+<br />
+<br />Now, I try to add it to fvwmrc like this:
+<br />
+addtofunc makemenu
+<br />
++ I Exec fbsd-fvwm $0
+<br />
+^^ taken from manpage for make-directory-menu or something similiar.
+<br />
+<br />And to menu:
+<br />
+addtomenu somemenu
+<br />
++ MissingSubmenuFunction makemenu
+<br />
++ &quot;editors&quot; Popup editors
+<br />
+<br />And I don't get any output, whilst running it on shell provides right
+<br />
+output. What am I missing?
+<br />
+<br />Thanks,
+<br />
+Mikko
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sun Feb 13 2005 - 17:25:42 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start13831">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="13832.html" title="Next message in the list">Frank Gruellich: "Re: FVWM: Script output into menu"</a></li>
+<li><dfn>Previous message</dfn>: <a href="13830.html" title="Previous message in the list">David Vilar: "Re: FVWM: more virtual desktops"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="13832.html" title="Next message in this discussion thread">Frank Gruellich: "Re: FVWM: Script output into menu"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="13832.html" title="Message sent in reply to this message">Frank Gruellich: "Re: FVWM: Script output into menu"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg13831" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg13831" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg13831" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg13831" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:57 BST
+</em></small></p>
+</body>
+</html>

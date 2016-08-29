@@ -1,0 +1,592 @@
+
+
+######################## Paths used by fvwm2 #################################
+
+ImagePath $HOME/.fvwm/images:/usr/share/fvwm/images/48x48-general/:/usr/share/icons/
+
+
+######################## Startup #############################################
+
+######################## Initialization Functions ############################
+AddToFunc InitFunction 	  "I" Module FvwmButtons
++			  "I" Module FvwmBacker
+
+AddToFunc RestartFunction "I" Module FvwmButtons
++			  "I" Module FvwmBacker
+
+
+####################### Functions ############################################
+
+AddToFunc SwitchWindow
++ I Focus
++ I Raise
+
+
+EdgeResistance 250 10
+EdgeScroll 100 100
+ClickTime 750
+
+# make sure these fonts exist on your system:
+WindowFont -adobe-helvetica-medium-r-*-*-18-*-*-*-*-*-*-*
+IconFont -adobe-helvetica-medium-r-*-*-12-*-*-*-*-*-*-*
+
+DeskTopSize 1x1
+
+MenuStyle * Mwm
+MenuStyle * Font -adobe-helvetica-bold-r-*-*-14-*-*-*-*-*-*-*
+#MenuStyle * Background rgb:ac/b2/c5
+PipeRead 'echo "MenuStyle \"*\" Background `$HOME/.fvwm/getcolor background`"'
+PipeRead 'echo "MenuStyle \"*\" Foreground `$HOME/.fvwm/getcolor foreground`"'
+
+#MenuStyle * Foreground black
+
+ColormapFocus FollowsMouse
+Emulate Mwm
+OpaqueMoveSize 100
+
+# default Styles:
+Style "*"           BorderWidth 7, HandleWidth 7
+Style "*"           Icon icon.xpm
+Style "*"           MWMButtons, MWMFunctions, MWMDecor, MWMBorder, HintOverride
+Style "*"           DecorateTransient, NoPPosition
+Style "*"           SloppyFocus
+Style "*"           RandomPlacement, SmartPlacement
+Style "*"           ResizeOpaque
+
+#set colors of border.
+PipeRead 'echo "Style \"*\" HiLightBack `$HOME/.fvwm/getcolor activeborder`"'
+PipeRead 'echo "Style \"*\" HiLightFore `$HOME/.fvwm/getcolor activetitle`"'
+PipeRead 'echo "Style \"*\" Color `$HOME/.fvwm/getcolor windowtitle`/`$HOME/.fvwm/getcolor windowborder`"'
+
+# Styles for various Fvwm modules:
+Style "Fvwm*"       BorderWidth 2
+
+Style "FvwmButtons" Icon toolbox.xpm, ClickToFocus, NoHandles, BorderWidth 7
+Style "FvwmButtons" IconBox 64x64+0-0
+Style "FvwmButtons" Font -adobe-helvetica-bold-r-*-*-8-*-*-*-*-*-*-*
+Style "FvwmButtons" NoButton 2, Sticky
+# hack to make Buttonbar titleless...
+#Style "FvwmButtons" HiLightFore #cd5c5c
+#Style "FvwmButtons" ForeColor dimgrey 
+#Style "FvwmButtons" WindowlistSkip, Sticky
+
+Style "FvwmIdent" NoTitle
+
+# Styles for your common terminal emulator programs:
+Style "XTerm"       Icon terminal.xpm
+Style "rxvt"        Icon terminal.xpm
+
+# Styles for various common programs:
+#Style "*lock"       NoTitle, NoHandles, Sticky, WindowListSkip, ClickToFocus
+Style "xcalc"       Icon xcalc.xpm
+Style "xman"	    Icon xman.xpm
+Style "xmag"	    Icon mag_glass.xpm
+Style "emacs"	    Icon gnu.xpm
+
+Style "*Licq ("	    Sticky
+
+
+# some simple default key bindings:
+Key Up		A	M     Next [CurrentPage !iconic] SwitchWindow
+Key Down	A	M     Prev [CurrentPage !iconic] SwitchWindow
+
+# Meta+Arrow => change desk (limit to desktop 0-3)
+Key Left	 A	 M	 GotoDesk -1 0 0 3
+Key Right	 A	 M	 GotoDesk 1 0 0 3
+
+Key F1		 A	 M	 Menu RootMenu
+
+# Alt-F4 closes window as in MWM
+Key F4		 A	 M	 Close
+# Alt-Space bring up window menu
+Key Space	 A	 M	 Menu Window-Ops2
+Key Escape	 A	 S	 Menu Window-Ops2
+
+Key Escape	A	M	Menu WindowList
+
+Key Select	A	N	Menu RootMenu	
+#Key Mode_switch	A	N	Menu Programs
+
+# some simple default mouse bindings:
+#   for the root window:
+Mouse 1	R   	A       Menu RootMenu Nop
+Mouse 2	R    	A      	Menu Programs Nop
+Mouse 3	R    	A      	WindowList
+
+#   for the title bar buttons:
+Mouse 0	1    	A      	Menu Window-Ops2 Close
+Mouse 0	2    	A     	Maximize
+Mouse 0	4    	A     	Iconify
+
+#   for other parts of the window/borders/icons:
+
+# the "L" bars
+Mouse 1	F	A	Resize-or-Raise
+# the title bar
+Mouse 1	T	A	Move-or-Raise
+# the rest of the frame
+Mouse 1 S	A	Resize-or-Raise
+
+Mouse 1	I	A	Move-or-Iconify
+Mouse 2	I	A	Iconify
+Mouse 3	FST	A	Menu Window-Ops2 Nop
+
+######################## Menus ###################
+AddToMenu RootMenu	"Root Menu"	Title
++			"Terminals"	Popup Terminals
++                       "Programs"      Popup Programs
++                       "Utilities"     Popup Utilities
++			""		Nop
++			"Fvwm Modules"	          Popup Module-Popup
++                       "Fvwm Window Ops"         Popup Window-Ops
++                       "Fvwm Simple Config Ops"  Popup Misc-Ops
++			""		Nop
++                       "Refresh"	Refresh
++                       "Recapture Screen" Recapture
++			""		Nop
++			"Restart..."	Restart fvwm2
++                       "Quit..."  Module FvwmForm QuitVerify
+
+AddToMenu Programs "Programs" Title
+PipeRead "wmconfig --output fvwm2 --rootmenu Programs"
+
+AddToMenu Terminals	"Terminals" Title
++			"Rxvt"		Exec exec rxvt
++			"Xterm"		Exec exec xterm
++			"Kterm (kanji)"	Exec exec kterm
+
+AddToMenu Utilities     "Utilities" Title
++			"Top"		Exec exec xterm -T Top -n Top -e top
++			"Calculator"	Exec exec xcalc
++			"Xman"		Exec exec xman
++			"Xmag"		Exec exec xmag
++                       "Editres"       Exec exec editres
++			""		Nop
++			"Emacs"	        Exec exec emacs
++                       "Mail"          MailFunction xmh "-font fixed"
++			""		Nop
++                       "XLock"         Exec exec xlock -mode random
++			""		Nop
++                       "Reset X defaults" Exec xrdb -load $HOME/.Xdefaults 
+
+AddToMenu Misc-Ops "Misc Config Opts" Title
++                  "Sloppy Focus"        ChangeDefaultFocus SloppyFocus
++                  "Click To Focus"      ChangeDefaultFocus ClickToFocus
++                  "Focus Follows Mouse" ChangeDefaultFocus FocusFollowsMouse
++                  "" Nop
++                  "Colormap Follows Mouse" ColormapFocus FollowsMouse
++                  "Colormap Follows Focus" ColormapFocus FollowsFocus
++                  "" Nop
++                  "Full Paging ON"         EdgeScroll 100 100
++                  "All Paging OFF"         EdgeScroll 0 0
++                  "Horizontal Paging Only" EdgeScroll 100 0
++                  "Vertical Paging Only"   EdgeScroll 0 100
++                  "Partial Paging"         EdgeScroll 50 50
++                  "Full Paging && Edge Wrap" EdgeScroll 100000 100000
+
+AddToMenu Window-Ops	"Window Ops"	Title		
++			"Move"		Move
++			"Size"	Reize
++			"Raise"		Raise
++			"Lower"		Lower 
++		 	"Minimize"	Iconify
++			"Maximize"	Maximize
++			"Stick"	Stick		
++			""		Nop
+#+			"Delete"	Delete
++			"Close"		Close
+#+			"Destroy"	Destroy
+#+			""		Nop
+#+			"Refresh Window" RefreshWindow
+
+AddToMenu Window-Ops2	"&Move"		Move
++			"&Size"		Resize
++			"R&aise"	Raise   	
++			"&Lower"	Lower   	
++			"M&inimize"	Iconify
++                       "Ma&ximize" Maximize	
++			"Stick"	Stick		
++			""		Nop     	
+#+			"&Delete"	Delete	
++			"&Close (Alt-F4)"	Close
+#+			"Destroy"	Destroy
+
+AddToMenu Module-Popup	"FvwmModules"	Title
++			"Identify"	Module	FvwmIdent
++			"Talk"  	Module	FvwmTalk
++			""		Nop
++			"Button-Bar"	Module	FvwmButtons
++			"Pager"		Module  FvwmPager 0 0
++			"Pager (2 desks)" Module  FvwmPager 0 1
++			"WinList"	Module  FvwmWinList
++			""		Nop
++			"Banner"	Module	FvwmBanner
++                       "ScrollBar"     Module  FvwmScroll 50 50
++			"Background"	Module  FvwmBacker
++                       "AutoRaise"     Module  FvwmAuto 200 Raise Nop
++                       "Stop AutoRaise" KillModule FvwmAuto
++			""		Nop
++			"IconBox"	Module	FvwmIconBox
++                       "IconMan"       Module  FvwmIconMan
++			""		Nop
++                       "Form - Rlogin"      Module FvwmForm Rlogin
++                       "Form - MyFvwmTalk"  Module FvwmForm MyFvwmTalk
++                       "Form - QuitVerify"  Module FvwmForm QuitVerify
+
+######################## Sample Functions ##########################
+
+AddToFunc MailFunction	   "I" Next [$0] Iconify -1
++		           "I" Next [$0] Focus
++			   "I" None [$0] Exec $0 $1
+
+AddToFunc Move-or-Raise		"I" Raise
++				"M" Move
++  				"D" Lower
+
+AddToFunc Move-or-Raise2	"M" Raise
++				"M" Move
++  				"D" Lower
+
+AddToFunc Maximize-Func		"M" Maximize	 0 100
++				"C" Maximize	 0 80
++				"D" Maximize	 100 100
+
+AddToFunc Move-or-Iconify	"I" Raise
++				"M" Move
++				"D" Iconify
+
+AddToFunc Resize-or-Raise	"I" Raise
++				"M" Resize
++				"D" Lower
+
+AddToFunc Resize-or-Raise2	"M" Raise
++				"M" Resize
++				"D" Lower
+
+AddToFunc PrintFunction		"I" Raise
++				"I" Exec xdpr -id $w
+
+AddToFunc PrintReverseFunction  "I" Raise
++                               "I" Exec xdpr 1/2 -h -rv -id $w
+
+AddToFunc Iconify-and-Raise     "I" Iconify
++                               "I" Raise
+
+# RLOGIN machine fg bg
+AddToFunc RLOGIN "I" Exec xterm -fg $1 -bg $2 -e rlogin $0 -8
+
+# TELNET machine fg bg
+AddToFunc TELNET "I" Exec xterm -fg $1 -bg $2 -e telnet $0
+
+AddToFunc FocusAndWarp "I" Focus
++                      "I" WarpToWindow 2p 2p
+
+AddToFunc DeiconifyFocusAndWarp "I" Iconify -1
++                               "I" FocusAndWarp
+
+AddToFunc ChangeDefaultFocus "I" Style "*" $0
++                            "I" Recapture
+
+
+################## FvwmBacker  background manager ########################
+
+*FvwmBacker: Command (Desk 0) Exec xv -root -quit -viewonly -rbg red +noresetroot $HOME/.fvwm/backdrops/0
+*FvwmBacker: Command (Desk 1) Exec xv -root -quit -viewonly -rbg red +noresetroot $HOME/.fvwm/backdrops/1
+*FvwmBacker: Command (Desk 2) Exec xv -root -quit -viewonly -rbg red +noresetroot $HOME/.fvwm/backdrops/2
+*FvwmBacker: Command (Desk 3) Exec xv -root -quit -viewonly -rbg red +noresetroot $HOME/.fvwm/backdrops/3
+
+
+
+################## FvwmButtons button-bar ################################
+*FvwmButtonsGeometry 768x128+320-0
+PipeRead 'echo "*FvwmButtonsBack `$HOME/.fvwm/getcolor background`"'
+
+*FvwmButtons(Frame 0 Padding 2 2 Container(Rows 2 Columns 6 Frame 1 \
+                                           Padding 0 0))
+
+*FvwmButtons(1x2 Frame 0 Container(Rows 2 Columns 2 Frame 0))
+*FvwmButtons(Frame 0 Icon home.xpm Action `Exec "" xplore &`)
+#*FvwmButtons(Frame 2 Swallow(UseOld,NoHints,Respawn) "asmail" `Exec exec asmail &`)
+*FvwmButtons(Frame 0 Icon terminal.xpm Action `Exec "" rxvt &`)
+*Fvwmbuttons(Frame 0 Icon bomb.xpm Action `Exec "" xkill &` )
+*FvwmButtons(End)
+
+*FvwmButtons(4x2 Frame 2 Swallow(UseOld) "FvwmPager" "Module FvwmPager 0 3")
+
+*FvwmButtons(1x2 Frame 0 Container(Rows 2 Columns 2 Frame 0))
+*FvwmButtons(Frame 0 Swallow(UseOld,NoHints,Respawn) "asclock" `Exec exec asclock`)
+*FvwmButtons(Frame 0 Icon lock.xpm Action `Exec "" xlock -mode random &`)
+*FvwmButtons(2x1 Frame 0 Swallow(UseOld,NoHints,Respawn) "xload" `Exec exec xload -bg \`$HOME/.fvwm/getcolor background\` -fg \`$HOME/.fvwm/getcolor foreground\` -update 5 -nolabel`)
+*FvwmButtons(End)
+
+*FvwmButtons(End)
+
+
+
+# CDE menu example.....
+
+*FvwmButton-CenterPanel: Rows 12
+*FvwmButton-CenterPanel: Columns 16
+*FvwmButton-CenterPanel: BoxSize fixed
+*FvwmButton-CenterPanel: (12x10+2+1, Frame 1, Swallow "FvwmPager-Single" "Module FvwmPager FvwmPager-Single * *")
+*FvwmButton-CenterPanel: (2x6+0+0, Frame 0, Icon module/large/panel-lock.xpm, Action FuncFvwmWmLock, Action (Mouse 2) FuncFvwm2WmLock, Action (Mouse 3) FuncFvwm3WmLock)
+*FvwmButton-CenterPanel: (2x6+0-0, Frame 0, Icon module/large/panel-arrow.xpm, Action Module FvwmPager -transient FvwmPager-Desker 0 3)
+*FvwmButton-CenterPanel: (2x6-0+0, Frame 0, Icon module/large/panel-lite.xpm, Action FuncFvwmWmRestart, Action (Mouse 2) FuncFvwm2WmRestart, Action (Mouse 3) FuncFvwm3WmRestart)
+*FvwmButton-CenterPanel: (2x6-0-0, Frame 0, Icon module/large/panel-exit.xpm, Action 'Menu MenuFvwmQuit rectangle $widthx$height+$left+$top o+50 -100m')
+
+
+DestroyModuleConfig FvwmButtons-Panel: *
+
+PipeRead 'echo "*FvwmButtons-Panel: Geometry 860x77+"`expr "(" $[vp.width] - 860 ")" / 2`"-0"'
+*FvwmButtons-Panel: Rows 9 
+*FvwmButtons-Panel: Columns 43
+*FvwmButtons-Panel: BoxSize fixed
+
+*FvwmButtons-Panel: (15x9+14+0, Frame 1, Swallow "FvwmButton-CenterPanel" "Module FvwmButtons-Panel FvwmButton-CenterPanel")
+*FvwmButtons-Panel: (1x2+13+0, Frame 1, Colorset 11)
+*FvwmButtons-Panel: (1x2+29+0, Frame 1, Colorset 11)
+*FvwmButtons-Panel: (1x2+0+0, Frame 1, Icon module/large/panel-menu.xpm, \
+	Padding 0 0, Colorset 11, Action 'Next (FvwmButtons-Panel, CirculateHit) Menu MenuFvwmWindowOps2 rectangle $widthx$height+$left+$top o+0 -100m')
+*FvwmButtons-Panel: (1x7+0+2, Frame 1, Icon module/large/panel-handle.xpm, \
+	Padding 0 0, Colorset 11, Action 'Next (FvwmButtons-Panel, CirculateHit) Move')
+*FvwmButtons-Panel: (1x2-0+0, Frame 1, Icon module/large/panel-iconify.xpm, \
+	Padding 0 0, Colorset 11, Action 'Next (FvwmButtons-Panel, CirculateHit) Iconify')
+*FvwmButtons-Panel: (1x7-0+2, Frame 1, Icon module/large/panel-handle.xpm, \
+	Padding 0 0, Colorset 11, Action 'Next (FvwmButtons-Panel, CirculateHit) Move')
+*FvwmButtons-Panel: (3x2+1+0, Frame 1, Colorset 11)
+*FvwmButtons-Panel: (3x7+1+2, Frame 0, Padding 0 0, Swallow xclock `Exec xclock -padding 5 -geometry +5000+5000 -bg $$[bg.cs10] -fg $$[fg.cs10] -hd $$[shadow.cs13] -hl $$[hilight.cs13]`)
+*FvwmButtons-Panel: (3x2+4+0, Frame 1, Colorset 11)
+*FvwmButtons-Panel: (3x7+4+2, Frame 0, Icon module/large/date.xpm, Padding 0 0)
+*FvwmButtons-Panel: (3x2+7+0, Frame 1, Icon module/large/panel-arrow.xpm, Padding 1 1, Colorset 11, Action 'Menu MenuFvwmShells rectangle $widthx$height+$left+$top o+50 -100m')
+*FvwmButtons-Panel: (3x7+7+2, Frame 0, Icon module/large/terminal.xpm, Padding 0 0, Action FuncFvwmTerminal, Action (Mouse 2) FuncFvwm2Terminal, Action (Mouse 3) FuncFvwm3Terminal)
+*FvwmButtons-Panel: (3x2+10+0, Frame 1, Icon module/large/panel-arrow.xpm, Padding 1 1, Colorset 11, Action 'Menu MenuFvwmPrograms rectangle $widthx$height+$left+$top o+50 -100m')
+*FvwmButtons-Panel: (3x7+10+2, Frame 0, Icon module/large/netscape.xpm, Padding 0 0, Action FuncFvwmWWW, Action (Mouse 2) FuncFvwm2WWW, Action (Mouse 3) FuncFvwm3WWW)
+*FvwmButtons-Panel: (3x2+30+0, Frame 1, Icon module/large/panel-arrow.xpm, Padding 1 1, Colorset 11, Action 'Menu MenuFvwmThemes rectangle $widthx$height+$left+$top o+50 -100m', Action (Mouse 2) 'Menu MenuFvwmConfiguration rectangle $widthx$height+$left+$top o+50 -100m')
+*FvwmButtons-Panel: (3x7+30+2, Frame 0, Icon module/large/configuration.xpm, Padding 0 0, Action FvwmScript FvwmScript-ThemesCenter)
+*FvwmButtons-Panel: (3x2+33+0, Frame 1, Icon module/large/panel-arrow.xpm, Padding 1 1, Colorset 11, Action 'Menu MenuFvwmSystem rectangle $widthx$height+$left+$top o+50 -100m')
+*FvwmButtons-Panel: (3x7+33+2, Frame 0, Icon module/large/folders.xpm, Padding 0 0, Action FuncFvwmFileManager, Action (Mouse 2) FuncFvwm2FileManager, Action (Mouse 3) FuncFvwm3FileManager)
+*FvwmButtons-Panel: (3x2+36+0, Frame 1, Colorset 11)
+*FvwmButtons-Panel: (3x7+36+2, Frame 0, Icon module/large/mail.xpm, Padding 0 0, Action FuncFvwmMail, Action (Mouse 2) FuncFvwm2Mail, Action (Mouse 3) FuncFvwm3Mail)
+*FvwmButtons-Panel: (3x2+39+0, Frame 1, Icon module/large/panel-arrow.xpm, Padding 1 1, Colorset 11, Action 'Menu MenuFvwmHelp rectangle $widthx$height+$left+$top o+50 -100m')
+*FvwmButtons-Panel: (3x7+39+2, Frame 0, Icon module/large/help.xpm, Padding 0 0, Action Exec xman)
+
+
+# /CDE menu example....
+
+
+########################## Icon Manager ####################################
+# this FvwmIconMan setup is for swallowing in above button bar example
+*FvwmIconMan*numManagers 1
+*FvwmIconMan*Resolution  page
+*FvwmIconMan*background  gray80
+*FvwmIconMan*foreground  black
+*FvwmIconMan*font        7x13bold
+*FvwmIconMan*format      "%t"
+*FvwmIconMan*action      Mouse   1 N sendcommand Focus, sendcommand "Iconify"
+*FvwmIconMan*action      Mouse   2 N sendcommand "Iconify 1"
+*FvwmIconMan*action      Mouse   3 N sendcommand "FvwmIdent"
+*FvwmIconMan*followfocus true
+*FvwmIconMan*sort        none
+*FvwmIconMan*plainbutton          up black bisque3
+*FvwmIconMan*selectbutton         down black bisque3
+*FvwmIconMan*focusbutton          up yellow firebrick
+*FvwmIconMan*focusandselectButton down yellow firebrick
+*FvwmIconMan*dontshow icon=Untitled
+#*FvwmIconMan*drawicons true
+*FvwmIconMan*buttongeometry  300x0
+*FvwmIconMan*managergeometry 1x5
+
+########################## Window-Identifier ###############################
+# Just choose colors and a fonts
+#*FvwmIdentBack MidnightBlue
+PipeRead 'echo "*FvwmIdentBack `$HOME/.fvwm/getcolor background`"'
+#*FvwmIdentFore Yellow
+PipeRead 'echo "*FvwmIdentFore `$HOME/.fvwm/getcolor foreground`"'
+*FvwmIdentFont -adobe-helvetica-medium-r-*-*-12-*-*-*-*-*-*-*
+
+########################### Pager #########################################
+
+*FvwmPagerFont -adobe-helvetica-bold-r-*-*-12-*-*-*-*-*-*-*
+
+PipeRead 'echo "*FvwmPagerBack `$HOME/.fvwm/getcolor shaded`"'
+PipeRead 'echo "*FvwmPagerHilight `$HOME/.fvwm/getcolor background`"'
+
+*FvwmPagerDeskPixmap 0 /home/marcus/.fvwm/backdrops/0
+*FvwmPagerDeskPixmap 1 /home/marcus/.fvwm/backdrops/1
+*FvwmPagerDeskPixmap 2 /home/marcus/.fvwm/backdrops/2
+*FvwmPagerDeskPixmap 3 /home/marcus/.fvwm/backdrops/3
+*FvwmPagerNoDeskHilight
+*FvwmPagerGeometry -1-1
+*FvwmPagerSmallFont 5x8
+
+
+
+##########################FvwmWinList##################################
+*FvwmWinListBack #908090
+*FvwmWinListFore Black
+*FvwmWinListFont -adobe-helvetica-bold-r-*-*-10-*-*-*-*-*-*-*
+*FvwmWinListAction Click1 Iconify -1,Focus
+*FvwmWinListAction Click2 Iconify
+*FvwmWinListAction Click3 Module "FvwmIdent" FvwmIdent
+*FvwmWinListUseSkipList
+*FvwmWinListGeometry +0-1
+                                      
+
+*FvwmScrollBack grey40
+*FvwmScrollFore green
+	
+############################################################
+############################################################
+# Note that icons are shown in the module
+#    only if NoIcon commnand is applied.
+#Style     "*"  NoIcon
+
+############################################################
+*FvwmIconBoxIconBack    #cfcfcf
+*FvwmIconBoxIconHiFore  black
+*FvwmIconBoxIconHiBack  LightSkyBlue
+*FvwmIconBoxBack        #5f9ea0
+#*FvwmIconBoxFore       blue
+*FvwmIconBoxGeometry    5x1+0+0
+*FvwmIconBoxMaxIconSize 64x38
+*FvwmIconBoxFont        -adobe-helvetica-medium-r-*-*-12-*-*-*-*-*-*-*
+*FvwmIconBoxSortIcons   IconName
+*FvwmIconBoxPadding     4
+*FvwmIconBoxLines       10
+*FvwmIconBoxSBWidth     11
+*FvwmIconBoxPlacement   Left Top
+*FvwmIconBoxPixmap      fvwm.xpm
+#*FvwmIconBoxHideSC Horizontal
+*FvwmIconBoxSetWMIconSize
+*FvwmIconBoxHilightFocusWin
+#*FvwmIconBoxResolution          Desk
+*FvwmIconBoxMouse       1       Click           RaiseLower
+*FvwmIconBoxMouse       1       DoubleClick     Iconify
+*FvwmIconBoxMouse       2       Click           Iconify -1, Focus
+*FvwmIconBoxMouse       3       Click           Module FvwmIdent
+*FvwmIconBoxKey         r       RaiseLower
+*FvwmIconBoxKey         space   Iconify
+*FvwmIconBoxKey         d       Close
+*FvwmIconBoxKey         n       Next
+*FvwmIconBoxKey         p       Prev
+*FvwmIconBoxKey         h       Left
+*FvwmIconBoxKey         j       Down
+*FvwmIconBoxKey         k       Up
+*FvwmIconBoxKey         l       Right
+#
+# Icon file specifications
+#
+# Mostly, you don't have to specify icon files, as FvwmIconBox now
+# reads icon files specified in Style commands.
+#
+*FvwmIconBox            "Fvwm*"         -
+
+# FvwmForm alias - rlogin or telnet to host via xterm
+*RloginWarpPointer
+*RloginFont         *helvetica*m*r*n*12*
+*RloginButtonFont   *helvetica*m*o*n*12*
+*RloginInputFont    *cour*m*r*n*12*
+*RloginFore         Black
+*RloginBack         Light Gray
+*RloginItemFore          Wheat
+*RloginItemBack          Gray50
+# begin items
+*RloginLine         center
+*RloginText         "Login to Remote Host"
+*RloginLine         center
+*RloginText         "Host:"
+*RloginInput        HostName  30   ""
+*RloginLine         center
+*RloginSelection    meth single
+*RloginChoice       TN TN off "telnet"
+*RloginChoice       RL RL on "rlogin"
+*RloginSelection    UserSel   single
+#*RloginChoice       Default   Default   on   "same user"
+#*RloginChoice       Custom    Custom    off  "user:"
+*RloginText         "(Userid:"
+*RloginInput        UserName  10   ""
+*RloginText         ")"
+*RloginLine         center
+*RloginText         "FG:"
+*RloginInput        FgColor 15 ""
+*RloginText         "BG:"
+*RloginInput        BgColor 15 ""
+*RloginLine         expand
+*RloginButton       quit "Login" ^M
+*RloginCommand Exec xterm  $(FgColor?-fg $(FgColor)) $(BgColor?-bg $(BgColor)) -T xterm@$(HostName) -e $(RL?rlogin) $(TN?telnet) $(HostName) $(RL?-8 $(UserName?-l $(UserName)))
+*RloginButton       restart   "Clear"
+*RloginCommand Beep
+*RloginButton       quit "Cancel"
+*RloginCommand Nop
+
+# FvwmForm alias - query exit ala mwm
+*QuitVerifyGrabServer
+*QuitVerifyWarpPointer
+*QuitVerifyFont          *helvetica*m*r*n*14*
+
+*QuitVerifyButtonFont    7x13bold
+#*QuitVerifyFore          Black
+PipeRead "echo *QuitVerifyFore\ `$HOME/.fvwm/getcolor foreground`"
+PipeRead "echo *QuitVerifyBack\ `$HOME/.fvwm/getcolor background`"
+#*QuitVerifyBack          rgb:ac/b2/c5
+
+PipeRead "echo *QuitVerifyItemFore\ `$HOME/.fvwm/getcolor foreground`"
+PipeRead "echo *QuitVerifyItemBack\ `$HOME/.fvwm/getcolor background`"
+
+#*QuitVerifyItemFore Black
+#*QuitVerifyItemBack rgb:ac/b2/c5
+
+# begin items
+*QuitVerifyLine          center
+*QuitVerifyText          "Do you really want to exit?"
+*QuitVerifyLine          expand
+*QuitVerifyButton   quit      " Exit "
+*QuitVerifyCommand  Quit
+*QuitVerifyButton   quit      "Cancel"
+*QuitVerifyCommand  Nop
+
+# MyTalk & MyFvwmTalk from Dave Goldberg
+# MyTalk Form - dissappears after use
+*MyTalkWarpPointer
+*MyTalkFont *helvetica*m*r*n*14*
+*MyTalkButtonFont *helvetica*m*o*n*14*
+*MyTalkInputFont *cour*m*r*n*14*
+*MyTalkFore Red
+*MyTalkBack Gray
+*MyTalkItemFore Blue
+*MyTalkItemBack Gray
+*MyTalkLine center
+*MyTalkText "Fvwm Function"
+*MyTalkInput Func 40 ""
+*MyTalkLine expand
+*MyTalkButton quit "Run" ^M
+*MyTalkCommand $(Func)
+*MyTalkButton restart "Clear" ^R
+*MyTalkButton quit "Cancel" ^C
+*MyTalkCommand Nop
+# MyFvwmTalk Form - sticks around
+*MyFvwmTalkWarpPointer
+*MyFvwmTalkFont *helvetica*m*r*n*14*
+*MyFvwmTalkButtonFont *helvetica*m*o*n*14*
+*MyFvwmTalkInputFont *cour*m*r*n*14*
+*MyFvwmTalkFore Red
+*MyFvwmTalkBack Gray
+*MyFvwmTalkItemFore Blue
+*MyFvwmTalkItemBack Gray
+*MyFvwmTalkLine center
+*MyFvwmTalkText "Fvwm Function"
+*MyFvwmTalkInput Func 40 ""
+*MyFvwmTalkLine expand
+*MyFvwmTalkButton restart "Run" ^M
+*MyFvwmTalkCommand $(Func)
+*MyFvwmTalkButton restart "Clear" ^R
+*MyFvwmTalkCommand Nop
+*MyFvwmTalkButton restart "Iconify" ^Z
+*MyFvwmTalkCommand Next [MyFvwmTalk] Iconify
+*MyFvwmTalkButton quit "Quit" ^C
+*MyFvwmTalkCommand Nop
+
+# to change banner pixmap
+#*FvwmBannerPixmap fvwm3.xpm
+#*FvwmBannerTimeout 2
+

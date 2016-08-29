@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: FvwmIconMan-0.9.7 from jmknoble_at_pobox.com on 1997-03-09 (fvwm-users)</title>
+<meta name="Author" content="jmknoble_at_pobox.com (jmknoble_at_pobox.com)" />
+<meta name="Subject" content="FVWM: FvwmIconMan-0.9.7" />
+<meta name="Date" content="1997-03-09" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: FvwmIconMan-0.9.7</h1>
+<!-- received="Sun Mar  9 03:41:17 1997" -->
+<!-- isoreceived="19970309034117" -->
+<!-- sent="Sun, 9 Mar 1997 04:04:17 -0500 (EST)" -->
+<!-- isosent="19970309090417" -->
+<!-- name="jmknoble_at_pobox.com" -->
+<!-- email="jmknoble_at_pobox.com" -->
+<!-- subject="FVWM: FvwmIconMan-0.9.7" -->
+<!-- id="Pine.LNX.3.95.970309035617.6875A-100000_at_quipu.earth" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start19484" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="19485.html" accesskey="d" title="jmknoble_at_pobox.com: &quot;Re: FVWM: FvwmIconMan 0.9.7 bug?&quot;">Next message</a> ]
+[ <a href="19483.html" title="jmknoble_at_pobox.com: &quot;FVWM: CursorConfig patch to fvwm2.man&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19484" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19484" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19484" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19484" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: &lt;<a href="mailto:jmknoble_at_pobox.com?Subject=Re%3A%20FVWM%3A%20FvwmIconMan-0.9.7">jmknoble_at_pobox.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sun, 9 Mar 1997 04:04:17 -0500 (EST)</span><br />
+</address>
+<br />
+FvwmIconMan-0.9.7 compiles under fvwm-2.0.45 on Linux (kernel 2.0.27,
+<br />
+gcc-2.7.2.1) with warnings that functions stripcpy() and GetNextToken()
+<br />
+in readconfig.c are declared static after being declared non-static. 
+<br />
+this is because stripcpy() in FvwmIconMan is the same function (only
+<br />
+static) as in fvwm-2.0.45/libs/Strings.c, and GetNextToken() conflicts
+<br />
+with a function of the same name in fvwm-2.0.45/libs/Parse.c.  the
+<br />
+patch below comments out the definition of stripcpy in
+<br />
+.../FvwmIconMan/readconfig.c and renames FvwmIconMan's version of
+<br />
+GetNextToken() to GetNextCommaToken().  compiles with no warnings.
+<br />
+<br />--jim
+<br />
+<br />##############  jim knoble  ######  jmknoble_at_pobox.com  ################
+<br />
+<br />--- fvwm-2.0.45/modules/FvwmIconMan/readconfig.c.orig	Tue Feb 11 23:08:21 1997
+<br />
++++ fvwm-2.0.45/modules/FvwmIconMan/readconfig.c	Sun Mar  9 03:53:41 1997
+<br />
+_at_&#64; -204,6 +204,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*p)++;
+<br />
+&nbsp;}
+<br />
+&nbsp;
+<br />
++#if 0
+<br />
+&nbsp;static char *stripcpy(char *source)
+<br />
+&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;char *tmp,*ptr;
+<br />
+_at_&#64; -226,6 +227,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;ptr[len]=0;
+<br />
+&nbsp;&nbsp;&nbsp;return ptr;
+<br />
+&nbsp;}
+<br />
++#endif /* 0 */
+<br />
+&nbsp;
+<br />
+&nbsp;static void add_to_binding (Binding **list, Binding *binding)
+<br />
+&nbsp;{
+<br />
+_at_&#64; -285,7 +287,7 &#64;&#64;
+<br />
+&nbsp;
+<br />
+&nbsp;/* I modified this from the fvwm version to stop at commas */
+<br />
+&nbsp;
+<br />
+-static char *GetNextToken(char *indata,char **token)
+<br />
++static char *GetNextCommaToken(char *indata,char **token)
+<br />
+&nbsp;{ 
+<br />
+&nbsp;&nbsp;&nbsp;char *t,*start, *end, *text;
+<br />
+&nbsp;
+<br />
+_at_&#64; -438,7 +440,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;bv-&gt;offset = 0;
+<br />
+&nbsp;&nbsp;&nbsp;bv-&gt;base = AbsoluteButton;
+<br />
+&nbsp;
+<br />
+-  rest = GetNextToken (string, &amp;token);
+<br />
++  rest = GetNextCommaToken (string, &amp;token);
+<br />
+&nbsp;&nbsp;&nbsp;if (token == NULL || !strcmp (token, &quot;,&quot;)) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bv-&gt;base = NoButton;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*flag = 0;
+<br />
+_at_&#64; -509,7 +511,7 &#64;&#64;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;ConsoleDebug (CONFIG, &quot;in parse_function\n&quot;);
+<br />
+&nbsp;
+<br />
+-  ptr = GetNextToken (*line, &amp;name);
+<br />
++  ptr = GetNextCommaToken (*line, &amp;name);
+<br />
+&nbsp;&nbsp;&nbsp;if (name == NULL || name[0] == '\0') {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*line = NULL;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Free (name);
+<br />
+_at_&#64; -527,7 +529,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ftype-&gt;args[j].type = builtin_functions[i].args[j];
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;switch (builtin_functions[i].args[j]) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case IntArg:
+<br />
+-	  ptr = GetNextToken (ptr, &amp;tok);
+<br />
++	  ptr = GetNextCommaToken (ptr, &amp;tok);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (!tok) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ConsoleMessage (&quot;%s: too few arguments\n&quot;,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;builtin_functions[i].name);
+<br />
+_at_&#64; -545,7 +547,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case StringArg:
+<br />
+-	  ptr = GetNextToken (ptr, &amp;ftype-&gt;args[j].value.string_value);
+<br />
++	  ptr = GetNextCommaToken (ptr, &amp;ftype-&gt;args[j].value.string_value);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (!ftype-&gt;args[j].value.string_value || 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;!strcmp (ftype-&gt;args[j].value.string_value, &quot;,&quot;)) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ConsoleMessage (&quot;%s: too few arguments\n&quot;,
+<br />
+_at_&#64; -607,7 +609,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ret = f;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tail = f;
+<br />
+-    p = GetNextToken (line, &amp;token);
+<br />
++    p = GetNextCommaToken (line, &amp;token);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (token &amp;&amp; token[0] &amp;&amp; strcmp (token, &quot;,&quot;) != 0) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ConsoleMessage (&quot;Bad function list, comma expected\n&quot;);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Free (token);
+<br />
+_at_&#64; -633,13 +635,13 &#64;&#64;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;/* tline points after the key word &quot;key&quot; */
+<br />
+&nbsp;&nbsp;&nbsp;ptr = tline;
+<br />
+-  ptr = GetNextToken(ptr,&amp;token);  
+<br />
++  ptr = GetNextCommaToken(ptr,&amp;token);  
+<br />
+&nbsp;&nbsp;&nbsp;if(token != NULL) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;n1 = sscanf(token,&quot;%d&quot;,&amp;button);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Free(token);
+<br />
+&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;
+<br />
+-  action = GetNextToken(ptr,&amp;token); 
+<br />
++  action = GetNextCommaToken(ptr,&amp;token); 
+<br />
+&nbsp;&nbsp;&nbsp;if(token != NULL) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;n2 = sscanf(token,&quot;%19s&quot;,modifiers);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Free(token);
+<br />
+_at_&#64; -688,13 +690,13 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;/* tline points after the key word &quot;key&quot; */
+<br />
+&nbsp;&nbsp;&nbsp;ptr = tline;
+<br />
+&nbsp;
+<br />
+-  ptr = GetNextToken(ptr,&amp;token);  
+<br />
++  ptr = GetNextCommaToken(ptr,&amp;token);  
+<br />
+&nbsp;&nbsp;&nbsp;if(token != NULL) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;n1 = sscanf(token,&quot;%19s&quot;,key);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Free(token);
+<br />
+&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;
+<br />
+-  action = GetNextToken(ptr,&amp;token);  
+<br />
++  action = GetNextCommaToken(ptr,&amp;token);  
+<br />
+&nbsp;&nbsp;&nbsp;if(token != NULL) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;n2 = sscanf(token,&quot;%19s&quot;,modifiers);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Free(token);
+<br />
+_at_&#64; -1308,7 +1310,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ConsoleMessage (&quot;Bad line: %s\n&quot;, current_line);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;continue;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+-	GetNextToken (p, &amp;token);
+<br />
++	GetNextCommaToken (p, &amp;token);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SET_MANAGER (manager, formatstring,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;copy_string (&amp;globals.managers[id].formatstring, token));
+<br />
+_at_&#64; -1327,7 +1329,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ConsoleMessage (&quot;Bad line: %s\n&quot;, current_line);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;continue;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+-	GetNextToken (p, &amp;token);
+<br />
++	GetNextCommaToken (p, &amp;token);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SET_MANAGER (manager, iconname,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;copy_string (&amp;globals.managers[id].iconname, token));
+<br />
+_at_&#64; -1441,7 +1443,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ConsoleMessage (&quot;Bad line: %s\n&quot;, current_line);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;continue;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+-	GetNextToken (p, &amp;token);
+<br />
++	GetNextCommaToken (p, &amp;token);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ConsoleDebug (CONFIG, &quot;flag 4\n&quot;);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SET_MANAGER (manager, titlename,
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sun Mar 09 1997 - 03:41:17 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start19484">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="19485.html" title="Next message in the list">jmknoble_at_pobox.com: "Re: FVWM: FvwmIconMan 0.9.7 bug?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="19483.html" title="Previous message in the list">jmknoble_at_pobox.com: "FVWM: CursorConfig patch to fvwm2.man"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19484" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19484" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19484" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19484" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

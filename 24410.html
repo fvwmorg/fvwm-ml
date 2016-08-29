@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: VNC from John Carol Langford on 1999-06-17 (fvwm-users)</title>
+<meta name="Author" content="John Carol Langford (jcl_at_gs176.sp.cs.cmu.edu)" />
+<meta name="Subject" content="FVWM: VNC" />
+<meta name="Date" content="1999-06-17" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: VNC</h1>
+<!-- received="Wed Jun 16 18:39:56 1999" -->
+<!-- isoreceived="19990616173956" -->
+<!-- sent="Wed, 16 Jun 1999 19:38:50 -0400" -->
+<!-- isosent="19990616233850" -->
+<!-- name="John Carol Langford" -->
+<!-- email="jcl_at_gs176.sp.cs.cmu.edu" -->
+<!-- subject="FVWM: VNC" -->
+<!-- id="199906162338.TAA04476_at_gs176.sp.cs.cmu.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start24410" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="24411.html" accesskey="d" title="Brad Giaccio: &quot;Re: FVWM: VNC&quot;">Next message</a> ]
+[ <a href="24409.html" title="Jason White: &quot;FVWM: Problem with virtual window switching with mouse under 2.2.2&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="24411.html" accesskey="t" title="Brad Giaccio: &quot;Re: FVWM: VNC&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg24410" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg24410" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg24410" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg24410" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: John Carol Langford &lt;<a href="mailto:jcl_at_gs176.sp.cs.cmu.edu?Subject=Re%3A%20FVWM%3A%20VNC">jcl_at_gs176.sp.cs.cmu.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 16 Jun 1999 19:38:50 -0400</span><br />
+</address>
+<br />
+I've been playing with VNC (<a href="http://www.uk.research.att.com/vnc/">http://www.uk.research.att.com/vnc/</a>)
+<br />
+lately and ran into a context switching problem.
+<br />
+<br />The basic problem is that fvwm captures key events that you would like
+<br />
+to pass to VNC and the fvwm running for the Xvnc server.  For example,
+<br />
+if you have:
+<br />
+<br />Key F4          A       M       Destroy
+<br />
+<br />and do an alt-F4 over the vnc window, you will destroy the vnc window.
+<br />
+Instead, I'd like to have the alt-F4 passed into the VNC window where
+<br />
+the fvwm running on the Xvnc server can be commanded to destroy a
+<br />
+window.
+<br />
+<br />Does anyone have a good solution to this?
+<br />
+<br />I'd like to not arrange to have different command sets for the
+<br />
+internal and external fvwms - it becomes too confusing.
+<br />
+<br />I messed with the code of void HandleKeyPress() to make it pass
+<br />
+events to the vnc window directly like so:
+<br />
+<br />&nbsp;&nbsp;if (Tmp_win &amp;&amp; Tmp_win-&gt;frame_width == 1284 ) 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*my quick little hack to test if the window is a vnc window*/;
+<br />
+&nbsp;&nbsp;else 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;for (key = Scr.AllBindings; key != NULL; key = key-&gt;NextBinding)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ((key-&gt;Button_Key == Event.xkey.keycode) &amp;&amp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((key-&gt;Modifier == (modifier&amp;(~LockMask)))||
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(key-&gt;Modifier == AnyModifier)) &amp;&amp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(key-&gt;Context &amp; Context)&amp;&amp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(key-&gt;IsMouse == 0))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ExecuteFunction(key-&gt;Action,Tmp_win, &amp;Event,Context,-1);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;/* if we get here, no function key was bound to the key.  Send it
+<br />
+&nbsp;&nbsp;&nbsp;* to the client if it was in a window we know about.
+<br />
+&nbsp;&nbsp;&nbsp;*/
+<br />
+<br />This doesn't quite work.  It appears to pass an 'Alt' fine but not an
+<br />
+'Alt+F4'.  I suspect I don't fully understand the fvwm event model.
+<br />
+Any ideas?
+<br />
+<br />-John
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Jun 16 1999 - 18:39:56 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start24410">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="24411.html" title="Next message in the list">Brad Giaccio: "Re: FVWM: VNC"</a></li>
+<li><dfn>Previous message</dfn>: <a href="24409.html" title="Previous message in the list">Jason White: "FVWM: Problem with virtual window switching with mouse under 2.2.2"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="24411.html" title="Next message in this discussion thread">Brad Giaccio: "Re: FVWM: VNC"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="24411.html" title="Message sent in reply to this message">Brad Giaccio: "Re: FVWM: VNC"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="24412.html" title="Message sent in reply to this message">John Carol Langford: "Re: FVWM: VNC"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg24410" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg24410" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg24410" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg24410" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:02 BST
+</em></small></p>
+</body>
+</html>

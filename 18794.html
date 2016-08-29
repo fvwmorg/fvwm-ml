@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: ARGH! from Peter Seebach on 1996-12-31 (fvwm-users)</title>
+<meta name="Author" content="Peter Seebach (seebs_at_intran.xerox.com)" />
+<meta name="Subject" content="FVWM: ARGH!" />
+<meta name="Date" content="1996-12-31" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: ARGH!</h1>
+<!-- received="Tue Dec 31 14:00:54 1996" -->
+<!-- isoreceived="19961231140054" -->
+<!-- sent="Tue, 31 Dec 1996 12:04:22 PST" -->
+<!-- isosent="19961231200422" -->
+<!-- name="Peter Seebach" -->
+<!-- email="seebs_at_intran.xerox.com" -->
+<!-- subject="FVWM: ARGH!" -->
+<!-- id="9612312004.AA02608_at_moose.intran.xerox.com" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start18794" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="18795.html" accesskey="d" title="Markus Gutschke: &quot;Re: FVWM: different mouse clicks on fvwmbuttons buttons&quot;">Next message</a> ]
+[ <a href="18793.html" title="Laurent Duperval: &quot;Re: FVWM: I can&#0039;t get XPM icons to work&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18794" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18794" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18794" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18794" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Peter Seebach &lt;<a href="mailto:seebs_at_intran.xerox.com?Subject=Re%3A%20FVWM%3A%20ARGH!">seebs_at_intran.xerox.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 31 Dec 1996 12:04:22 PST</span><br />
+</address>
+<br />
+No offense folks, but this is utterly insane:
+<br />
+<br /><em class="quotelev1">&gt;int mystrcasecmp(char *s1,char *s2)
+</em><br />
+<em class="quotelev1">&gt;{
+</em><br />
+<em class="quotelev1">&gt;  int c1,c2;
+</em><br />
+<em class="quotelev1">&gt;  int n,n2;
+</em><br />
+<em class="quotelev1">&gt;
+</em><br />
+<em class="quotelev1">&gt;  n=strlen(s1);
+</em><br />
+<em class="quotelev1">&gt;  n2=strlen(s2);
+</em><br />
+<em class="quotelev1">&gt;  if(n!=n2)
+</em><br />
+<em class="quotelev1">&gt;    return 1;
+</em><br />
+<br />Oh, I see, so we don't preserve the &gt;=&lt; --&gt; -1,0,1 semantics of strcmp,
+<br />
+we just return 0/non-zero.
+<br />
+<br /><em class="quotelev1">&gt;  for (;;)
+</em><br />
+<em class="quotelev1">&gt;    {
+</em><br />
+<em class="quotelev1">&gt;      c1 = *s1; 
+</em><br />
+<em class="quotelev1">&gt;      c2 = *s2;
+</em><br />
+<em class="quotelev1">&gt;      if (!c1 || !c2) 
+</em><br />
+<em class="quotelev1">&gt;	return(c1 - c2);
+</em><br />
+<em class="quotelev1">&gt;      if (isupper(c1)) 
+</em><br />
+<em class="quotelev1">&gt;	c1 = 'a' - 1 + (c1 &amp; 31);
+</em><br />
+<br />What nonsense is this?
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c1 = tolower(c1);
+<br />
+is almost certainly faster, and certainly less ASCII-dependant, and more
+<br />
+readable.
+<br />
+<br /><em class="quotelev1">&gt;      if (isupper(c2)) 
+</em><br />
+<em class="quotelev1">&gt;	c2 = 'a' - 1 + (c2 &amp; 31);
+</em><br />
+<em class="quotelev1">&gt;      if (c1 != c2) 
+</em><br />
+<em class="quotelev1">&gt;	return(c1 - c2);
+</em><br />
+<em class="quotelev1">&gt;      n--,s1++,s2++;
+</em><br />
+<br />Why bother?  This is absolutely no different from
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--n;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;++s1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;++s2;
+<br />
+<br />and, given the context, why on earth aren't these the body of the for loop?
+<br />
+<br />Perhaps something more like
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (*s1 &amp;&amp; tolower(*s1) == tolower(*s2)) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;++s1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;++s2;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (*tolower(s1) &lt; *tolower(s2))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return -1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (*tolower(s2) &gt; *tolower(s2))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 0;
+<br />
+<br />would have worked?
+<br />
+<br />I'm sorry, I'm just easily offended by gratuitous cruft, and I seem to
+<br />
+recall that this function turned out not to work with some set of compiler
+<br />
+options last time I tried to build fvwm-2.x.
+<br />
+<br />As a general rule, you may safely assume that the &lt;ctype.h&gt; macros and
+<br />
+functions will be using fast lookup tables, and you will not be able
+<br />
+to outperform them without significant effort; unless the usage is inside
+<br />
+a *very* time-critical, heavily-used, routine, it is pretty much guaranteed
+<br />
+you cannot justify the time spent trying to beat them, least of all using
+<br />
+strange macros based on ASCII values.
+<br />
+<br />Among other things, the '&amp;31' is completely superfluous if you've already
+<br />
+guaranteed that the letter is uppercase; you can just use &quot;c1 - 'A' + 'a'&quot;
+<br />
+on ASCII machines, and gee, it's *still* slower than tolower.
+<br />
+<br />While I'm griping, fvwm.c declares main incorrectly; main has returned an
+<br />
+int in C since 1972, and I can assure you, we on the committee have no
+<br />
+intent of changing this.  Compilers are free to reject declarations of
+<br />
+main with any other return type, and are encouraged to do so.
+<br />
+<br />(It is a very nice window manager, I just don't think the code is as clean
+<br />
+as it should be.)
+<br />
+<br />-s
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue Dec 31 1996 - 14:00:54 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start18794">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="18795.html" title="Next message in the list">Markus Gutschke: "Re: FVWM: different mouse clicks on fvwmbuttons buttons"</a></li>
+<li><dfn>Previous message</dfn>: <a href="18793.html" title="Previous message in the list">Laurent Duperval: "Re: FVWM: I can&#0039;t get XPM icons to work"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18794" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18794" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18794" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18794" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

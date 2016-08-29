@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: I might have a bug fix. from Paul Koshevoy on 2001-06-26 (fvwm-users)</title>
+<meta name="Author" content="Paul Koshevoy (paul_at_bart.aragog.com)" />
+<meta name="Subject" content="FVWM: I might have a bug fix." />
+<meta name="Date" content="2001-06-26" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: I might have a bug fix.</h1>
+<!-- received="Mon Jun 25 22:20:39 2001" -->
+<!-- isoreceived="20010625212039" -->
+<!-- sent="Mon, 25 Jun 2001 21:22:01 -0600 (MDT)" -->
+<!-- isosent="20010626032201" -->
+<!-- name="Paul Koshevoy" -->
+<!-- email="paul_at_bart.aragog.com" -->
+<!-- subject="FVWM: I might have a bug fix." -->
+<!-- id="Pine.LNX.4.33.0106252058000.16751-100000_at_bart.aragog.com" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start2752" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="2753.html" accesskey="d" title="Paul Koshevoy: &quot;Re: FVWM: I might have a bug fix.&quot;">Next message</a> ]
+[ <a href="2751.html" title="Paul D. Smith: &quot;Re: FVWM: Dynamic content in FvwmForm&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="2753.html" accesskey="t" title="Paul Koshevoy: &quot;Re: FVWM: I might have a bug fix.&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg2752" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg2752" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg2752" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg2752" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Paul Koshevoy &lt;<a href="mailto:paul_at_bart.aragog.com?Subject=Re%3A%20FVWM%3A%20I%20might%20have%20a%20bug%20fix.">paul_at_bart.aragog.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 25 Jun 2001 21:22:01 -0600 (MDT)</span><br />
+</address>
+<br />
+Hi,
+<br />
+<br />I've looked through HandleConfigureRequest() in fvwm-2.2.5/fvwm/events.c,
+<br />
+and I found some code that I believe to be in error.
+<br />
+<br />At line 1450, the code reads:
+<br />
+&nbsp;&nbsp;if (cre-&gt;value_mask &amp; CWX)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;x = cre-&gt;x - Tmp_win-&gt;boundary_width - Tmp_win-&gt;bw;
+<br />
+&nbsp;&nbsp;if (cre-&gt;value_mask &amp; CWY)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;y = cre-&gt;y - Tmp_win-&gt;boundary_width - Tmp_win-&gt;title_height - Tmp_win-&gt;bw;
+<br />
+&nbsp;&nbsp;if (cre-&gt;value_mask &amp; CWWidth)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;width = cre-&gt;width + 2*Tmp_win-&gt;boundary_width;
+<br />
+&nbsp;&nbsp;if (cre-&gt;value_mask &amp; CWHeight)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;height = cre-&gt;height+Tmp_win-&gt;title_height+2*Tmp_win-&gt;boundary_width;
+<br />
+<br />I beleve it should read:
+<br />
+&nbsp;&nbsp;if (cre-&gt;value_mask &amp; CWX)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;x = cre-&gt;x;
+<br />
+&nbsp;&nbsp;if (cre-&gt;value_mask &amp; CWY)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;y = cre-&gt;y;
+<br />
+&nbsp;&nbsp;if (cre-&gt;value_mask &amp; CWWidth)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;width = cre-&gt;width;
+<br />
+&nbsp;&nbsp;if (cre-&gt;value_mask &amp; CWHeight)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;height = cre-&gt;height;
+<br />
+<br />I believe that the code is trying to account for the size of frame decorations.
+<br />
+However, the event sender is supposed to include all the right information in
+<br />
+the event already. Here is a comment from the code:
+<br />
+<br />&nbsp;&nbsp;/*
+<br />
+&nbsp;&nbsp;&nbsp;* SetupWindow (x,y) are the location of the upper-left outer corner and
+<br />
+&nbsp;&nbsp;&nbsp;* are passed directly to XMoveResizeWindow (frame).  The (width,height)
+<br />
+&nbsp;&nbsp;&nbsp;* are the inner size of the frame.  The inner width is the same as the
+<br />
+&nbsp;&nbsp;&nbsp;* requested client window width; the inner height is the same as the
+<br />
+&nbsp;&nbsp;&nbsp;* requested client window height plus any title bar slop.
+<br />
+&nbsp;&nbsp;&nbsp;*/
+<br />
+<br />I am working on a small project where correct window placement is desireable.
+<br />
+It's written using the Qt toolkit. The program behaves as expected under kwin,
+<br />
+but misbehaves under FVWM2. When I tell the pogram to move itself to
+<br />
+coordinates 0,0, fvwm2 puts it at -2,-18 (the size of the window
+<br />
+decoration at that location).
+<br />
+<br />So, I have a fix in my local copy of fvwm2-2.2.5, but I would strongly prefer
+<br />
+to see it in the official code. Actually, last night I was ready to fix
+<br />
+every major window manager that did not agree with my program ;-), but I started
+<br />
+with fvwm2 because I use it the most. Here is the reason why I think that in
+<br />
+this fvwm2 is in error and not my program:
+<br />
+<br /><a href="http://doc.trolltech.com/geometry.html">http://doc.trolltech.com/geometry.html</a>
+<br />
+<br />If you want, I can send you the source to my program to remove any doubts.
+<br />
+It needs Qt 2.3.x to compile (RH 7.1 has 2.3.0, but I tested it under 2.3.1
+<br />
+as well).
+<br />
+<br />Thank you,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Paul.
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon Jun 25 2001 - 22:20:39 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start2752">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="2753.html" title="Next message in the list">Paul Koshevoy: "Re: FVWM: I might have a bug fix."</a></li>
+<li><dfn>Previous message</dfn>: <a href="2751.html" title="Previous message in the list">Paul D. Smith: "Re: FVWM: Dynamic content in FvwmForm"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="2753.html" title="Next message in this discussion thread">Paul Koshevoy: "Re: FVWM: I might have a bug fix."</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="2753.html" title="Message sent in reply to this message">Paul Koshevoy: "Re: FVWM: I might have a bug fix."</a></li>
+<li><dfn>Reply</dfn>: <a href="2758.html" title="Message sent in reply to this message">Dominik Vogt: "Re: FVWM: I might have a bug fix."</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg2752" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg2752" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg2752" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg2752" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:51 BST
+</em></small></p>
+</body>
+</html>

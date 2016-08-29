@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: SetTitleFormat from Tavis Ormandy on 2005-02-22 (fvwm-users)</title>
+<meta name="Author" content="Tavis Ormandy (taviso_at_sdf.lonestar.org)" />
+<meta name="Subject" content="FVWM: SetTitleFormat" />
+<meta name="Date" content="2005-02-22" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: SetTitleFormat</h1>
+<!-- received="Tue Feb 22 18:00:34 2005" -->
+<!-- isoreceived="20050222180034" -->
+<!-- sent="Tue, 22 Feb 2005 23:59:27 +0000" -->
+<!-- isosent="20050222235927" -->
+<!-- name="Tavis Ormandy" -->
+<!-- email="taviso_at_sdf.lonestar.org" -->
+<!-- subject="FVWM: SetTitleFormat" -->
+<!-- id="20050222235927.GA4886_at_sdf.lonestar.org" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start13869" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="13870.html" accesskey="d" title="Perry Hutchison: &quot;FVWM: prompting for password&quot;">Next message</a> ]
+[ <a href="13868.html" title="jpkotta: &quot;Re: FVWM: dynamically updating icons&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg13869" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg13869" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg13869" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg13869" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Tavis Ormandy &lt;<a href="mailto:taviso_at_sdf.lonestar.org?Subject=Re%3A%20FVWM%3A%20SetTitleFormat">taviso_at_sdf.lonestar.org</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 22 Feb 2005 23:59:27 +0000</span><br />
+</address>
+<br />
+I've been interested in changing the titles of some windows that don't
+<br />
+set a useful name, I thought some other users might find it
+<br />
+interesting...
+<br />
+<br />It probably won't work on all windows, but it at least the fixed the
+<br />
+ones I needed to change :)
+<br />
+<br />AddToFunc StartFunction I FvwmEvent FvwmEvent-Title
+<br />
+<br />*FvwmEvent-Title: add_window SetTitleFunc
+<br />
+*FvwmEvent-Title: property_change SetTitleFunc
+<br />
+<br />DestroyFunc SetTitleFormat
+<br />
+AddToFunc SetTitleFormat I AddToFunc SetTitleFunc I ThisWindow ($0) PipeRead \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;'echo &quot;Exec xprop -id $[w.id] -set WM_NAME \'$1\'&quot; | sed \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-e &quot;s#%t#$[w.name]#g&quot; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-e &quot;s#%i#$[w.iconname]#g&quot; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-e &quot;s#%I#$[w.id]#g&quot; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-e &quot;s#%c#$[w.class]#g&quot; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-e &quot;s#%w#$[w.width]#g&quot; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-e &quot;s#%h#$[w.height]#g&quot;'
+<br />
+<br />SetTitleFormat XTerm &quot;This is an %c, it is %wx%h, id: %I&quot;
+<br />
+SetTitleFormat XCalc &quot;1+1=2&quot;
+<br />
+<br />Which set's the title on xterm's to something like 
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;This is an XTerm, it is 644x340, id: 0x3400003&quot;
+<br />
+<br />It could easily be adopted to set iconname on iconify or similar if 
+<br />
+required :)
+<br />
+<br /><pre>
+-- 
+-------------------------------------
+taviso_at_sdf.lonestar.org | finger me for my gpg key.
+-------------------------------------------------------
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue Feb 22 2005 - 18:00:34 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start13869">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="13870.html" title="Next message in the list">Perry Hutchison: "FVWM: prompting for password"</a></li>
+<li><dfn>Previous message</dfn>: <a href="13868.html" title="Previous message in the list">jpkotta: "Re: FVWM: dynamically updating icons"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg13869" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg13869" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg13869" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg13869" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:57 BST
+</em></small></p>
+</body>
+</html>

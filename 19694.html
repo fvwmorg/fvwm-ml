@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: M_MINI_ICON packets from Randy J. Ray on 1997-03-28 (fvwm-users)</title>
+<meta name="Author" content="Randy J. Ray (rjray_at_uswest.com)" />
+<meta name="Subject" content="FVWM: M_MINI_ICON packets" />
+<meta name="Date" content="1997-03-28" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: M_MINI_ICON packets</h1>
+<!-- received="Fri Mar 28 15:29:25 1997" -->
+<!-- isoreceived="19970328152925" -->
+<!-- sent="Fri, 28 Mar 1997 14:29:01 -0700" -->
+<!-- isosent="19970328212901" -->
+<!-- name="Randy J. Ray" -->
+<!-- email="rjray_at_uswest.com" -->
+<!-- subject="FVWM: M_MINI_ICON packets" -->
+<!-- id="rjray-9702282129.AA00047705_at_snakepit.ecte.uswc.uswest.com" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start19694" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="19695.html" accesskey="d" title="Randy J. Ray: &quot;FVWM: X11::Fvwm 0.2 uploaded to PAUSE&quot;">Next message</a> ]
+[ <a href="19693.html" title="Jim Knoble: &quot;Re: FVWM: ButtonStyle ignored&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="19698.html" accesskey="t" title="Brady Montz: &quot;Re: FVWM: M_MINI_ICON packets&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19694" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19694" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19694" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19694" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Randy J. Ray &lt;<a href="mailto:rjray_at_uswest.com?Subject=Re%3A%20FVWM%3A%20M_MINI_ICON%20packets">rjray_at_uswest.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 28 Mar 1997 14:29:01 -0700</span><br />
+</address>
+<br />
+Ahhhh... the last packet to be documented and grokked by my interface... :-)
+<br />
+<br />The packet M_MINI_ICON sends six word/integer values to the recepient:
+<br />
+<br />word	meaning
+<br />
+<br />0	X Window ID
+<br />
+1	X Pixmap ID of the picture
+<br />
+2	X Pixmap ID of the mask
+<br />
+3	Width
+<br />
+4	Height
+<br />
+5	Depth
+<br />
+<br />The problems that jump out at me:
+<br />
+<br />* As with the window-shade packets I pointed to earlier this week, the standard
+<br />
+&nbsp;&nbsp;3 args are missing from the start of this packet.
+<br />
+<br />* I don't think that either of the X Pixmap IDs (not to be confused with XPMs
+<br />
+&nbsp;&nbsp;themselves, these can identify either a pixmap *or* a bitmap) are at all
+<br />
+&nbsp;&nbsp;useful to a module. I don't know how easy it is for an application to get a
+<br />
+&nbsp;&nbsp;pixmap using only this value. Under a widget library like Tk, I don't know if
+<br />
+&nbsp;&nbsp;it is even possible. Perhaps for the C-based modules, this can be used. I
+<br />
+&nbsp;&nbsp;would prefer to see a string, though.
+<br />
+<br />I would propose that the packet look more like:
+<br />
+<br />word	meaning
+<br />
+<br />0	X Win ID
+<br />
+1	Frame X Win ID
+<br />
+2	Fvwm ID
+<br />
+3	Width
+<br />
+4	Height
+<br />
+5	Depth
+<br />
+6+	File name
+<br />
+<br />of course, if the Pixmap ID values are of use, they can be added back in
+<br />
+before the file name.
+<br />
+<br />A quick check shows that the only module using M_MINI_ICON currently is the
+<br />
+FvwmIconMan that comes with Fvwm (I assume the more current version of
+<br />
+FvwmIconMan also uses it).
+<br />
+<br />Randy
+<br />
+<pre>
+--
+===============================================================================
+Randy J. Ray -- U S WEST Technologies IAD/CSS/DPDS         Phone: (303)595-2869
+                Denver, CO                                     rjray_at_uswest.com
+&quot;It's not denial. I'm just very selective about the reality I accept.&quot; --Calvin
+===============================================================================
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Mar 28 1997 - 15:29:25 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start19694">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="19695.html" title="Next message in the list">Randy J. Ray: "FVWM: X11::Fvwm 0.2 uploaded to PAUSE"</a></li>
+<li><dfn>Previous message</dfn>: <a href="19693.html" title="Previous message in the list">Jim Knoble: "Re: FVWM: ButtonStyle ignored"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="19698.html" title="Next message in this discussion thread">Brady Montz: "Re: FVWM: M_MINI_ICON packets"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="19698.html" title="Message sent in reply to this message">Brady Montz: "Re: FVWM: M_MINI_ICON packets"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="19702.html" title="Message sent in reply to this message">markcrim_at_umich.edu: "Re: FVWM: M_MINI_ICON packets"</a></li>
+<li><dfn>Reply</dfn>: <a href="19835.html" title="Message sent in reply to this message">Jose M. Pereira: "Re: FVWM: M_MINI_ICON packets"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="19839.html" title="Message sent in reply to this message">markcrim_at_umich.edu: "Re: FVWM: M_MINI_ICON packets"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="19854.html" title="Message sent in reply to this message">Dan Espen: "Re: FVWM: M_MINI_ICON packets"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="19862.html" title="Message sent in reply to this message">Peter S Galbraith: "Re: FVWM: M_MINI_ICON packets"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg19694" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg19694" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg19694" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg19694" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,693 @@
+<?xml version="1.0" encoding="ISO-2022-JP"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-2022-JP" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: fix-2.0.42 patch collection from まつしたまこと  on 1996-04-28 (fvwm-users)</title>
+<meta name="Author" content="まつしたまこと  (matusita_at_ics.es.osaka-u.ac.jp)" />
+<meta name="Subject" content="FVWM: fix-2.0.42 patch collection" />
+<meta name="Date" content="1996-04-28" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: fix-2.0.42 patch collection</h1>
+<!-- received="Sun Apr 28 13:26:07 1996" -->
+<!-- isoreceived="19960428122607" -->
+<!-- sent="Mon, 29 Apr 1996 03:28:47 +0900" -->
+<!-- isosent="19960428182847" -->
+<!-- name="まつしたまこと " -->
+<!-- email="matusita_at_ics.es.osaka-u.ac.jp" -->
+<!-- subject="FVWM: fix-2.0.42 patch collection" -->
+<!-- id="199604281828.DAA13278_at_skylark.ics.es.osaka-u.ac.jp" -->
+<!-- charset="ISO-2022-JP" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start16509" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="16510.html" accesskey="d" title="Kevin Hilman: &quot;FVWM: Screen Saver&quot;">Next message</a> ]
+[ <a href="16508.html" title="Sergios: &quot;Re: FVWM: Re: Here&#0039;s a patch for WarpTowindow and FocusOnly functions&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16509" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16509" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16509" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16509" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: まつしたまこと  &lt;<a href="mailto:matusita_at_ics.es.osaka-u.ac.jp?Subject=Re%3A%20FVWM%3A%20fix-2.0.42%20patch%20collection%1B(B">matusita_at_ics.es.osaka-u.ac.jp</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 29 Apr 1996 03:28:47 +0900</span><br />
+</address>
+<br />
+This is a (revised :-) patch collection, to fix probrems in 2.0.42 (no
+<br />
+feature enhancement is included). This patch fixes:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* some fixes to imake environment.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* avoid to use installed fvwm library.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* compilation problems which related to BSD/OS 2.x.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* avoid to use strerror() when SunOS 4.x.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* trouble of 'no configfile exists'.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* some manual typos.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* mapping probrem when deiconify.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* portability/compilation fix to FvwmForm.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* FvwmIconMan should use GetFdWidth() instead of sysconf().
+<br />
+<br />All of points are already reported to this list, or found by me. I
+<br />
+hope this patch helps people in trouble..
+<br />
+<br />BTW, anybody have been verified the problem of &quot;FvwmPager dies when
+<br />
+moving a window on a non-current desk to the current desk&quot;, reported
+<br />
+and fixed (?) by Mr. Nobutaka Suzuki ?
+<br />
+<br />- -
+<br />
+Makoto `MAR_kun' MATSUSHITA
+<br />
+<br /><br />--- Fvwm.tmpl.dist	Mon Apr  8 23:59:50 1996
+<br />
++++ Fvwm.tmpl	Mon Apr 29 01:17:06 1996
+<br />
+_at_&#64; -249,7 +249,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CC = FvwmCompiler
+<br />
+&nbsp;#endif
+<br />
+&nbsp;#ifdef FvwmCompilerFlags
+<br />
+-        CFLAGS = FvwmCompilerFlags
+<br />
++        CDEBUGFLAGS = FvwmCompilerFlags
+<br />
+&nbsp;#endif
+<br />
+&nbsp;
+<br />
+&nbsp;#ifdef FvwmBinDir
+<br />
+_at_&#64; -301,7 +301,7 &#64;&#64;
+<br />
+&nbsp;#endif /* HPArchitecture */
+<br />
+&nbsp;#endif /* AlphaArchitecture */
+<br />
+&nbsp;
+<br />
+-  FVWM_LIBS = -L$(FVWM_SRCDIR)/libs -l$(LIB) $(XPM_LIBRARIES) $(KLUDGE_LIBS)
+<br />
++  FVWM_LIBS = $(FVWM_SRCDIR)/libs/lib$(LIB).a $(XPM_LIBRARIES) $(KLUDGE_LIBS)
+<br />
+&nbsp;FVWM_DEPLIB = $(FVWM_SRCDIR)/libs/lib$(LIB).a
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEFINES = $(OPTION_DEFINES) $(XPM_DEFINES) $(AUDIO_DEFINES)
+<br />
+_at_&#64; -389,6 +389,9 &#64;&#64;
+<br />
+&nbsp;#if ProjectX &gt; 5
+<br />
+&nbsp;
+<br />
+&nbsp;#ifndef FvwmCplusplusProgramTargetHelper
+<br />
++#if defined(i386BsdArchitecture) &amp;&amp; defined(i386Bsdi)
+<br />
++        C++FLAGS = $(CXXFLAGS)
+<br />
++#endif
+<br />
+&nbsp;#define	FvwmCplusplusProgramTargetHelper(program,srcs,objs,deplib,locallib,syslib) _at_&#64;\
+<br />
+&nbsp;ProgramTargetName(program): $(objs) $(deplib)				_at_&#64;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RemoveTargetProgram($_at_)						&#64;&#64;\
+<br />
+--- fvwm/builtins.c.dist	Thu Apr 11 02:38:25 1996
+<br />
++++ fvwm/builtins.c	Mon Apr 29 01:15:02 1996
+<br />
+_at_&#64; -663,7 +663,15 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (execl(exec_shell_name, exec_shell_name, &quot;-c&quot;, cmd, NULL)==-1)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
++#if defined(sun) &amp;&amp; !defined(SVR4)
+<br />
++      /* XXX: dirty hack for SunOS 4.x */
+<br />
++      extern char *sys_errlist[];
+<br />
++
+<br />
++      /* no strerror() function, see sys_errlist[] instead */
+<br />
++      fvwm_msg(ERR,&quot;exec_function&quot;,&quot;execl failed (%s)&quot;,sys_errlist[errno]);
+<br />
++#else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fvwm_msg(ERR,&quot;exec_function&quot;,&quot;execl failed (%s)&quot;,strerror(errno));
+<br />
++#endif
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit(100);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;}
+<br />
+--- fvwm/fvwm.c.dist	Thu Apr 11 23:52:19 1996
+<br />
++++ fvwm/fvwm.c	Mon Apr 29 01:17:44 1996
+<br />
+_at_&#64; -124,6 +124,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;char message[255];
+<br />
+&nbsp;&nbsp;&nbsp;Bool single = False;
+<br />
+&nbsp;&nbsp;&nbsp;Bool option_error = FALSE;
+<br />
++  MenuRoot *mr;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;g_argv = argv;
+<br />
+&nbsp;&nbsp;&nbsp;g_argc = argc;
+<br />
+_at_&#64; -355,6 +356,22 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;DBUG(&quot;main&quot;,&quot;Running config_command...&quot;);
+<br />
+&nbsp;&nbsp;&nbsp;ExecuteFunction(config_command, NULL,&amp;Event,C_ROOT,-1);
+<br />
+&nbsp;&nbsp;&nbsp;DBUG(&quot;main&quot;,&quot;Done running config_command&quot;);
+<br />
++
+<br />
++  CaptureAllWindows();
+<br />
++  MakeMenus();
+<br />
++
+<br />
++  if(Restarting)
+<br />
++  {
+<br />
++    mr = FindPopup(&quot;RestartFunction&quot;);
+<br />
++    if(mr != NULL)
+<br />
++      ExecuteFunction(&quot;Function RestartFunction&quot;,NULL,&amp;Event,C_ROOT,-1);
+<br />
++  }
+<br />
++  else
+<br />
++  {
+<br />
++    mr = FindPopup(&quot;InitFunction&quot;);
+<br />
++    if(mr != NULL)
+<br />
++      ExecuteFunction(&quot;Function InitFunction&quot;,NULL,&amp;Event,C_ROOT,-1);
+<br />
++  }
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;if(Scr.d_depth&lt;2)
+<br />
+&nbsp;&nbsp;&nbsp;{
+<br />
+--- fvwm/fvwm2.man.dist	Sat Apr 13 03:05:15 1996
+<br />
++++ fvwm/fvwm2.man	Mon Apr 29 01:15:02 1996
+<br />
+_at_&#64; -621,7 +621,7 &#64;&#64;
+<br />
+&nbsp;
+<br />
+&nbsp;.IP &quot;Exec \fIcommand\fP&quot;
+<br />
+&nbsp;Executes \fIcommand\fP.  Exec doesn't require an additional 'exec' or
+<br />
+-'&amp;' in the command.
+<br />
++\'&amp;' in the command.
+<br />
+&nbsp;
+<br />
+&nbsp;The following example binds function key F1 in the root window, with
+<br />
+&nbsp;no modifiers, to the exec function.  The program rxvt will be started
+<br />
+--- fvwm/misc.c.dist	Tue Mar 12 03:27:35 1996
+<br />
++++ fvwm/misc.c	Mon Apr 29 01:16:03 1996
+<br />
+_at_&#64; -686,8 +686,10 &#64;&#64;
+<br />
+&nbsp;#endif
+<br />
+&nbsp;&nbsp;&nbsp;if ((t-&gt;flags &amp; ICONIFIED)&amp;&amp;(!(t-&gt;flags &amp; SUPPRESSICON)))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+-      if(!(t-&gt;flags &amp; NOICON_TITLE))wins[i++] = t-&gt;icon_w;
+<br />
+-      wins[i++] = t-&gt;icon_pixmap_w;
+<br />
++      if(!(t-&gt;flags &amp; NOICON_TITLE)) 
+<br />
++	wins[i++] = t-&gt;icon_w;
+<br />
++      if (t-&gt;icon_pixmap_w)
+<br />
++	wins[i++] = t-&gt;icon_pixmap_w;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;if(!(t-&gt;flags &amp; ONTOP))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wins[i++] = t-&gt;frame;
+<br />
+--- fvwm/read.c.dist	Sat Mar 23 05:33:21 1996
+<br />
++++ fvwm/read.c	Mon Apr 29 01:19:05 1996
+<br />
+_at_&#64; -42,7 +42,6 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;FILE *fd;
+<br />
+&nbsp;&nbsp;&nbsp;int thisfileno;
+<br />
+&nbsp;&nbsp;&nbsp;extern Bool Restarting;
+<br />
+-  MenuRoot *mr;
+<br />
+&nbsp;&nbsp;&nbsp;extern XEvent Event;
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;thisfileno = numfilesread;
+<br />
+_at_&#64; -123,24 +122,6 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tline = fgets(line,(sizeof line)-1,fd);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}              
+<br />
+&nbsp;&nbsp;&nbsp;fclose(fd);
+<br />
+-  if(thisfileno == 0)
+<br />
+-    {
+<br />
+-      CaptureAllWindows();
+<br />
+-      MakeMenus();
+<br />
+-      
+<br />
+-      if(Restarting)
+<br />
+-	{
+<br />
+-	  mr = FindPopup(&quot;RestartFunction&quot;);
+<br />
+-	  if(mr != NULL)
+<br />
+-	    ExecuteFunction(&quot;Function RestartFunction&quot;,NULL,&amp;Event,C_ROOT,-1);
+<br />
+-	}
+<br />
+-      else
+<br />
+-	{
+<br />
+-	  mr = FindPopup(&quot;InitFunction&quot;);
+<br />
+-	  if(mr != NULL)
+<br />
+-	    ExecuteFunction(&quot;Function InitFunction&quot;,NULL,&amp;Event,C_ROOT,-1);
+<br />
+-	}
+<br />
+-    }
+<br />
+&nbsp;}
+<br />
+&nbsp;
+<br />
+&nbsp;
+<br />
+--- modules/FvwmConfig/Imakefile.dist	Sat Feb 17 13:47:42 1996
+<br />
++++ modules/FvwmConfig/Imakefile	Mon Apr 29 01:15:02 1996
+<br />
+_at_&#64; -14,6 +14,8 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WinText.o WinRadioButton.o WinInput.o WinSlider.o \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WinColorSelector.o
+<br />
+&nbsp;
+<br />
++LOCAL_LIBRARIES = $(FVWM_LIBS) $(XLIB)
+<br />
++
+<br />
+&nbsp;#if ProjectX &gt; 5
+<br />
+&nbsp;FvwmComplexCplusplusProgramTarget(FvwmConfig)
+<br />
+&nbsp;#else
+<br />
+--- modules/FvwmForm/FvwmForm.c.dist	Fri Feb 16 22:59:47 1996
+<br />
++++ modules/FvwmForm/FvwmForm.c	Mon Apr 29 01:15:03 1996
+<br />
+_at_&#64; -6,6 +6,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;* given, provided that this copyright is kept intact.
+<br />
+&nbsp;&nbsp;*/
+<br />
+&nbsp;#include &quot;../../configure.h&quot;
+<br />
++#include &quot;../../libs/fvwmlib.h&quot;
+<br />
+&nbsp;
+<br />
+&nbsp;#include &lt;stdio.h&gt;
+<br />
+&nbsp;#include &lt;stdlib.h&gt;
+<br />
+_at_&#64; -16,7 +17,9 &#64;&#64;
+<br />
+&nbsp;#include &lt;X11/cursorfont.h&gt;
+<br />
+&nbsp;#define XK_MISCELLANY
+<br />
+&nbsp;#include &lt;X11/keysymdef.h&gt;
+<br />
++#ifndef	__bsdi__
+<br />
+&nbsp;#include &lt;malloc.h&gt;
+<br />
++#endif
+<br />
+&nbsp;#include &lt;string.h&gt;
+<br />
+&nbsp;#include &lt;sys/types.h&gt;
+<br />
+&nbsp;#include &lt;sys/time.h&gt;
+<br />
+_at_&#64; -181,7 +184,7 &#64;&#64;
+<br />
+&nbsp;static int N = 8;
+<br />
+&nbsp;
+<br />
+&nbsp;/* copy a string until '\0', or up to n chars, and delete trailing spaces */
+<br />
+-char *CopyString (char *cp, int n)
+<br />
++char *CopyNString (char *cp, int n)
+<br />
+&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;char *dp, *bp;
+<br />
+&nbsp;&nbsp;&nbsp;if (n == 0)
+<br />
+_at_&#64; -310,31 +313,31 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if (strncmp(cp, &quot;Fore&quot;, 4) == 0) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cp += 4;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (isspace(*cp)) cp++;
+<br />
+-      color_names[c_fore] = CopyString(cp, 0);
+<br />
++      color_names[c_fore] = CopyNString(cp, 0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(fp_err, &quot;ColorFore: %s\n&quot;, color_names[c_fore]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;continue;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else if (strncmp(cp, &quot;Back&quot;, 4) == 0) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cp += 4;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (isspace(*cp)) cp++;
+<br />
+-      color_names[c_back] = CopyString(cp, 0);
+<br />
++      color_names[c_back] = CopyNString(cp, 0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(fp_err, &quot;ColorBack: %s\n&quot;, color_names[c_back]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;continue;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else if (strncmp(cp, &quot;ItemFore&quot;, 8) == 0) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cp += 8;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (isspace(*cp)) cp++;
+<br />
+-      color_names[c_itemfore] = CopyString(cp, 0);
+<br />
++      color_names[c_itemfore] = CopyNString(cp, 0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(fp_err, &quot;ColorItemFore: %s\n&quot;, color_names[c_itemfore]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;continue;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else if (strncmp(cp, &quot;ItemBack&quot;, 8) == 0) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cp += 8;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (isspace(*cp)) cp++;
+<br />
+-      color_names[c_itemback] = CopyString(cp, 0);
+<br />
++      color_names[c_itemback] = CopyNString(cp, 0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(fp_err, &quot;ColorItemBack: %s\n&quot;, color_names[c_itemback]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;continue;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else if (strncmp(cp, &quot;Font&quot;, 4) == 0) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cp += 4;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (isspace(*cp)) cp++;
+<br />
+-      font_names[f_text] = CopyString(cp, 0);
+<br />
++      font_names[f_text] = CopyNString(cp, 0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(fp_err, &quot;Font: %s\n&quot;, font_names[f_text]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xfs[f_text] = GetFontOrFixed(dpy, font_names[f_text]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fonts[f_text] = xfs[f_text]-&gt;fid;
+<br />
+_at_&#64; -342,7 +345,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else if (strncmp(cp, &quot;ButtonFont&quot;, 10) == 0) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cp += 10;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (isspace(*cp)) cp++;
+<br />
+-      font_names[f_button] = CopyString(cp, 0);
+<br />
++      font_names[f_button] = CopyNString(cp, 0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(fp_err, &quot;ButtonFont: %s\n&quot;, font_names[f_button]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xfs[f_button] = GetFontOrFixed(dpy, font_names[f_button]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fonts[f_button] = xfs[f_button]-&gt;fid;
+<br />
+_at_&#64; -350,7 +353,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else if (strncmp(cp, &quot;InputFont&quot;, 9) == 0) {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cp += 9;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (isspace(*cp)) cp++;
+<br />
+-      font_names[f_input] = CopyString(cp, 0);
+<br />
++      font_names[f_input] = CopyNString(cp, 0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(fp_err, &quot;InputFont: %s\n&quot;, font_names[f_input]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xfs[f_input] = GetFontOrFixed(dpy, font_names[f_input]);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fonts[f_input] = xfs[f_input]-&gt;fid;
+<br />
+_at_&#64; -510,7 +513,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cp += 7;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while (isspace(*cp)) cp++;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cur_button-&gt;button.commands[cur_button-&gt;button.n++] =
+<br />
+-	CopyString(cp, 0);
+<br />
++	CopyNString(cp, 0);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;}  /* end of switch() */
+<br />
+&nbsp;&nbsp;&nbsp;/* get the geometry right */
+<br />
+--- modules/FvwmForm/FvwmForm.man.dist	Wed Sep 27 03:14:57 1995
+<br />
++++ modules/FvwmForm/FvwmForm.man	Mon Apr 29 01:15:03 1996
+<br />
+_at_&#64; -145,7 +145,7 &#64;&#64;
+<br />
+&nbsp;.B \fImultiple\fP
+<br />
+&nbsp;This is a multiple-choice selection.
+<br />
+&nbsp;.TP 4
+<br />
+-.B *FvwmFormChoice \fIname\fP \fIvalue\fP on | off &quot;\fIstring\fP&quot;
+<br />
++.B *FvwmFormChoice \fIname\fP \fIvalue\fP &quot;on | off&quot; &quot;\fIstring\fP&quot;
+<br />
+&nbsp;Specifies a choice for a selection.
+<br />
+&nbsp;The choice item has a \fIname\fP and a \fIvalue\fP.
+<br />
+&nbsp;The \fIstring\fP will be displayed to the right of the choice button
+<br />
+--- modules/FvwmIconMan/FvwmIconMan.c.dist	Wed Apr  3 03:32:41 1996
+<br />
++++ modules/FvwmIconMan/FvwmIconMan.c	Mon Apr 29 01:23:47 1996
+<br />
+_at_&#64; -1,5 +1,6 &#64;&#64;
+<br />
+&nbsp;#include &quot;FvwmIconMan.h&quot;
+<br />
+&nbsp;#include &quot;../../fvwm/module.h&quot;
+<br />
++#include &quot;../../libs/fvwmlib.h&quot;
+<br />
+&nbsp;
+<br />
+&nbsp;static int fd_width;
+<br />
+&nbsp;static FILE *console = NULL;
+<br />
+_at_&#64; -690,7 +691,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;read_in_resources (argv[3]);
+<br />
+&nbsp;&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;assert (globals.managers);
+<br />
+-  fd_width = sysconf(_SC_OPEN_MAX);
+<br />
++  fd_width = GetFdWidth();
+<br />
+&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;SetMessageMask(Fvwm_fd,M_CONFIGURE_WINDOW | M_RES_CLASS | M_RES_NAME |
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;M_ADD_WINDOW | M_DESTROY_WINDOW | M_ICON_NAME |
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sun Apr 28 1996 - 13:26:07 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start16509">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="16510.html" title="Next message in the list">Kevin Hilman: "FVWM: Screen Saver"</a></li>
+<li><dfn>Previous message</dfn>: <a href="16508.html" title="Previous message in the list">Sergios: "Re: FVWM: Re: Here&#0039;s a patch for WarpTowindow and FocusOnly functions"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16509" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16509" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16509" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16509" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Re DestroyMenu from Toshi Isogai on 1997-08-22 (fvwm-users)</title>
+<meta name="Author" content="Toshi Isogai (isogai_at_kentek.com)" />
+<meta name="Subject" content="FVWM: Re DestroyMenu" />
+<meta name="Date" content="1997-08-22" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Re DestroyMenu</h1>
+<!-- received="Fri Aug 22 16:47:55 1997" -->
+<!-- isoreceived="19970822154755" -->
+<!-- sent="Fri, 22 Aug 1997 15:55:33 -0600 (MDT)" -->
+<!-- isosent="19970822215533" -->
+<!-- name="Toshi Isogai" -->
+<!-- email="isogai_at_kentek.com" -->
+<!-- subject="FVWM: Re DestroyMenu" -->
+<!-- id="Pine.HPP.3.94.970822155126.20167C-100000_at_porphyry.kentek.com" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start20741" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="20742.html" accesskey="d" title="Patrick K.: &quot;Re: FVWM: icons&quot;">Next message</a> ]
+[ <a href="20740.html" title="Eric Brandwine: &quot;Re: FVWM: Switch pages..&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg20741" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg20741" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg20741" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg20741" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Toshi Isogai &lt;<a href="mailto:isogai_at_kentek.com?Subject=Re%3A%20FVWM%3A%20Re%20DestroyMenu">isogai_at_kentek.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 22 Aug 1997 15:55:33 -0600 (MDT)</span><br />
+</address>
+<br />
+I lost the mail but somebody said something about wildcard
+<br />
+on DestroyMenu command. This patch works for me.
+<br />
+<br />------------------------
+<br />
+diff fvwm.dist/builtins.c fvwm/builtins.c
+<br />
+572,575c572,581
+<br />
+&lt;   mr = FindPopup(token);
+<br />
+&lt;   if(mr == NULL)
+<br />
+&lt;     return;
+<br />
+&lt;   DestroyMenu(mr);
+<br />
+<pre>
+---
+&gt;   mr = Scr.AllMenus;
+&gt;   while(mr != NULL)
+&gt;   {
+&gt;     if(mr-&gt;name != NULL)
+&gt;       if( matchWildcards(token, mr-&gt;name) )
+&gt;       {
+&gt;                 DestroyMenu(mr);
+&gt;       }
+&gt;     mr = mr-&gt;next;
+&gt;   }
+-----------------------------------------------------
+Toshi Isogai    ∞Î≥≠Õ¯Ã¿
+KENTEK Information Systems
+isogai_at_kentek.com
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Aug 22 1997 - 16:47:55 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start20741">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="20742.html" title="Next message in the list">Patrick K.: "Re: FVWM: icons"</a></li>
+<li><dfn>Previous message</dfn>: <a href="20740.html" title="Previous message in the list">Eric Brandwine: "Re: FVWM: Switch pages.."</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg20741" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg20741" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg20741" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg20741" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

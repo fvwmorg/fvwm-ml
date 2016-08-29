@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Changing exported variables in an active fvwm2 session? from Glen Lee Edwards on 2001-12-14 (fvwm-users)</title>
+<meta name="Author" content="Glen Lee Edwards (Glen_at_fcwm.org)" />
+<meta name="Subject" content="FVWM: Changing exported variables in an active fvwm2 session?" />
+<meta name="Date" content="2001-12-14" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Changing exported variables in an active fvwm2 session?</h1>
+<!-- received="Fri Dec 14 10:18:52 2001" -->
+<!-- isoreceived="20011214101852" -->
+<!-- sent="Fri, 14 Dec 2001 10:19:29 -0600" -->
+<!-- isosent="20011214161929" -->
+<!-- name="Glen Lee Edwards" -->
+<!-- email="Glen_at_fcwm.org" -->
+<!-- subject="FVWM: Changing exported variables in an active fvwm2 session?" -->
+<!-- id="15386.9873.684344.330923_at_members.fcwm.org" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start3844" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="3845.html" accesskey="d" title="Dan Espen: &quot;Re: FVWM: Changing exported variables in an active fvwm2 session?&quot;">Next message</a> ]
+[ <a href="3843.html" title="Dan Espen: &quot;Re: FVWM: 2.2.4-4 -&#0062; 2.4.3-1 (ramble, errors, etc.)&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="3845.html" accesskey="t" title="Dan Espen: &quot;Re: FVWM: Changing exported variables in an active fvwm2 session?&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg3844" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg3844" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg3844" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg3844" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Glen Lee Edwards &lt;<a href="mailto:Glen_at_fcwm.org?Subject=Re%3A%20FVWM%3A%20Changing%20exported%20variables%20in%20an%20active%20fvwm2%20session%3F">Glen_at_fcwm.org</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 14 Dec 2001 10:19:29 -0600</span><br />
+</address>
+<br />
+I use the following perl script, which reads from a directory and creates fvwm
+<br />
+buttons for each file name:
+<br />
+<br />#!/usr/bin/perl
+<br />
+# Fvwm files
+<br />
+<br />$file = qq(/home/glenlee/.fvwm);
+<br />
+$name = qq(FVWM2);
+<br />
+<br />_at_list = `ls -a $file`;
+<br />
+<br />for (_at_list) {
+<br />
+chomp();
+<br />
+&nbsp;&nbsp;&nbsp;next if (/(\~$|\#$|^\.{1,2}$)/);
+<br />
+&nbsp;&nbsp;&nbsp;(/[^\/]*$/);
+<br />
+&nbsp;&nbsp;&nbsp;print qq(*$name(Frame 4, Title $_, Action \`Exec \$EDITOR $file/$_\`)\n);
+<br />
+}
+<br />
+<br />exit;
+<br />
+<br />The &quot;$EDITOR&quot; variable is a system variable defined in ~/.bash_profile that I'd
+<br />
+like to be able to change on the fly so I can from an xterm define which text
+<br />
+editor is used to edit the files in the respective directory.  Currently the
+<br />
+only way I've been able to accomplish this is to quit the fvwm2 session and
+<br />
+redefine $EDITOR from console.  Is there a way I can do this while still in the
+<br />
+fvwm2 session?  Doing a restart would be acceptable, but it would be nice to be
+<br />
+able to just type in an xterm &quot;$ &quot;EDITOR=emacs&quot; and have the change recognized
+<br />
+by fvwm.
+<br />
+<br />Thanks,
+<br />
+<br />Glen
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Dec 14 2001 - 10:18:52 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start3844">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="3845.html" title="Next message in the list">Dan Espen: "Re: FVWM: Changing exported variables in an active fvwm2 session?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="3843.html" title="Previous message in the list">Dan Espen: "Re: FVWM: 2.2.4-4 -&#0062; 2.4.3-1 (ramble, errors, etc.)"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="3845.html" title="Next message in this discussion thread">Dan Espen: "Re: FVWM: Changing exported variables in an active fvwm2 session?"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Maybe reply</dfn>: <a href="3845.html" title="Message sent in reply to this message">Dan Espen: "Re: FVWM: Changing exported variables in an active fvwm2 session?"</a></li>
+<li><dfn>Maybe reply</dfn>: <a href="3851.html" title="Message sent in reply to this message">Glen Lee Edwards: "Re: FVWM: Changing exported variables in an active fvwm2 session?"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg3844" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg3844" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg3844" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg3844" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:52 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Progress on building fvwm2 on Linux from Andy Pearce on 1996-10-08 (fvwm-users)</title>
+<meta name="Author" content="Andy Pearce (ajp_at_pwd.hp.com)" />
+<meta name="Subject" content="FVWM: Progress on building fvwm2 on Linux" />
+<meta name="Date" content="1996-10-08" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Progress on building fvwm2 on Linux</h1>
+<!-- received="Tue Oct  8 14:51:22 1996" -->
+<!-- isoreceived="19961008135122" -->
+<!-- sent="Tue, 08 Oct 1996 20:49:36 BST" -->
+<!-- isosent="19961008194936" -->
+<!-- name="Andy Pearce" -->
+<!-- email="ajp_at_pwd.hp.com" -->
+<!-- subject="FVWM: Progress on building fvwm2 on Linux" -->
+<!-- id="199610081950.AA167994250_at_hp.com" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start18086" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="18087.html" accesskey="d" title="31howk_at_wmich.edu: &quot;Re: FVWM: per window autoraise?&quot;">Next message</a> ]
+[ <a href="18085.html" title="Dan Espen: &quot;Re: FVWM: FVWM bug: window not autoraising&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18086" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18086" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18086" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18086" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Andy Pearce &lt;<a href="mailto:ajp_at_pwd.hp.com?Subject=Re%3A%20FVWM%3A%20Progress%20on%20building%20fvwm2%20on%20Linux">ajp_at_pwd.hp.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 08 Oct 1996 20:49:36 BST</span><br />
+</address>
+<br />
+Hello again, 
+<br />
+<br />Just to let you all know I'm not giving up on building fvwm2 on linux 
+<br />
+2.0.2 just yet ... Thanks to those who responded to my earlier message.
+<br />
+<br />I think the problems are with my Linux configuration and not with fvwm, 
+<br />
+but here's what I found out ...
+<br />
+<br />First off, use 'xmkmf -a' to make Makefiles and compile dependencies 
+<br />
+in one step.  My version of make was not looking for Makefile for some 
+<br />
+reason (renaming to makefile worked) -- don't know if this was a problem 
+<br />
+with GNU make 3.74 or some variable that make uses?-- I upgraded to 3.75 
+<br />
+and that finds Makefiles fine.
+<br />
+<br />fvwm2 still does not build completely due to an undeclared reference to 
+<br />
+__FDSET_INTS.  /usr/include/linux/posix_types.h does not declare this, 
+<br />
+even though it is used in the FD_ZERO macro (asm/posix_types.h) which 
+<br />
+fvwm seems to use quite a lot.  I'm not sure what to do about this, as 
+<br />
+I don't want to end up with a hack.  Any suggestions welcome! 
+<br />
+<br />Regards 
+<br />
+&nbsp;Andy Pearce    ajp_at_hpopd.pwd.hp.com
+<br />
+<br />------------
+<br />
+<br />eg; fvwm/event.c
+<br />
+&nbsp;&nbsp;FD_ZERO(&amp;out_fdset);
+<br />
+<br />/usr/include/asm/posix_types.h:
+<br />
+#define __FD_ZERO(fdsetp) \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;__asm__ __volatile__(&quot;cld ; rep ; stosl&quot; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&quot;=m&quot; (*(__kernel_fd_set *) (fdsetp)) \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&quot;a&quot; (0), &quot;c&quot; (__FDSET_INTS), \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;D&quot; ((__kernel_fd_set *) (fdsetp)) :&quot;cx&quot;,&quot;di&quot;)
+<br />
+<br />/usr/include/linux/posix_types.h:
+<br />
+#undef __FDSET_LONGS
+<br />
+#define __FDSET_LONGS   (__FD_SETSIZE/__NFDBITS)
+<br />
+<br /><br />Eg, from the build output:
+<br />
+<br />making all in ./fvwm...
+<br />
+make[1]: Entering directory `/usr/local/src/fvwm-2.0.43/fvwm'
+<br />
+gcc -O2 -m486 -ansi    -I. -I../libs  -I/usr/X11R6/include  -Dlinux -D__i386__ -D_POSIX_SOURCE -D_BSD_SOURCE -D_GNU_SOURCE -DX_LOCALE  -DFUNCPROTO=15 -DNARROWPROTO  -DSHAPE -DPIXMAP_BUTTONS -DXPM    -c events.c -o events.o
+<br />
+events.c: In function `My_XNextEvent':
+<br />
+events.c:1397: `__FDSET_INTS' undeclared (first use this function)
+<br />
+events.c:1397: (Each undeclared identifier is reported only once
+<br />
+events.c:1397: for each function it appears in.)
+<br />
+make[1]: *** [events.o] Error 1
+<br />
+make[1]: Leaving directory `/usr/local/src/fvwm-2.0.43/fvwm'
+<br />
+etc...
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue Oct 08 1996 - 14:51:22 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start18086">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="18087.html" title="Next message in the list">31howk_at_wmich.edu: "Re: FVWM: per window autoraise?"</a></li>
+<li><dfn>Previous message</dfn>: <a href="18085.html" title="Previous message in the list">Dan Espen: "Re: FVWM: FVWM bug: window not autoraising"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18086" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18086" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18086" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18086" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

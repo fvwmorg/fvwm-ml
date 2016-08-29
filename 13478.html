@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Xinerama, StartsOnPage, StartsOnScreen, and lost transients from Louis LeBlanc on 2004-11-14 (fvwm-users)</title>
+<meta name="Author" content="Louis LeBlanc (fvwm_at_keyslapper.org)" />
+<meta name="Subject" content="FVWM: Xinerama, StartsOnPage, StartsOnScreen, and lost transients" />
+<meta name="Date" content="2004-11-14" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Xinerama, StartsOnPage, StartsOnScreen, and lost transients</h1>
+<!-- received="Sun Nov 14 10:15:19 2004" -->
+<!-- isoreceived="20041114101519" -->
+<!-- sent="Sun, 14 Nov 2004 11:14:44 -0500" -->
+<!-- isosent="20041114161444" -->
+<!-- name="Louis LeBlanc" -->
+<!-- email="fvwm_at_keyslapper.org" -->
+<!-- subject="FVWM: Xinerama, StartsOnPage, StartsOnScreen, and lost transients" -->
+<!-- id="20041114161443.GC98021_at_keyslapper.org" -->
+<!-- charset="iso-8859-1" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start13478" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="13479.html" accesskey="d" title="Xue Ruini: &quot;FVWM: press_fvwmbuttons&quot;">Next message</a> ]
+[ <a href="13477.html" title="Vincent Bernat: &quot;FVWM: Balloons for FvwmIconMan&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg13478" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg13478" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg13478" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg13478" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Louis LeBlanc &lt;<a href="mailto:fvwm_at_keyslapper.org?Subject=Re%3A%20FVWM%3A%20Xinerama%2C%20StartsOnPage%2C%20StartsOnScreen%2C%20and%20lost%20transients">fvwm_at_keyslapper.org</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sun, 14 Nov 2004 11:14:44 -0500</span><br />
+</address>
+<br />
+Hey everyone.  Long time since I've been on this list, but I've not
+<br />
+needed to change my Fvwm2 config for a few years now.
+<br />
+<br />Now something's changed.  I got a fancy new system with an Nvidia
+<br />
+TwinView card and two monitors.
+<br />
+<br />I managed to get Xorg (6.7.0) booting with the native FreeBSD (5.3
+<br />
+RELEASE) NVIDIA driver, running both monitors with fvwm-2.4.19.
+<br />
+<br />The split is done with the Nvidia drivers TwinView option, because I
+<br />
+couldn't quite get it done with the native nv drivers in xorg.  The
+<br />
+Fvwm config uses the XineramaSls features to get fvwm2 to split.
+<br />
+<br />Everything works awesome.  Except one thing.  Firefox can't seem to
+<br />
+get transient windows (particularly javascript application popups) on
+<br />
+the right screen.
+<br />
+<br />I have Firefox start in the bottom rightmost pane of the desktop, in
+<br />
+the right screen.  From the windowlist, after having turned NoGeometry
+<br />
+off, I found that it is being &quot;placed&quot; off the desktop to the right.
+<br />
+<br />I'm not much at ASCII art, but this is what my 3x2 desktop looks like:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/    0    \  /    1    \  /     2    \
+<br />
+&nbsp;&nbsp;&nbsp;==========================================
+<br />
+&nbsp;&nbsp;/#      |      #     |      #      |      #
+<br />
+&nbsp;0 #      |      #     |      #      |      #
+<br />
+&nbsp;&nbsp;\#      |      #     |      #      |      #
+<br />
+&nbsp;&nbsp;&nbsp;========================================== - - -
+<br />
+&nbsp;&nbsp;/#      |      #     |      #      |      #      |
+<br />
+&nbsp;1 #      |      #     |      #  Y   |  F   #  X   |
+<br />
+&nbsp;&nbsp;\#      |      #     |      #      |      #      |
+<br />
+&nbsp;&nbsp;&nbsp;========================================== - - -
+<br />
+<br />&quot;F&quot; is where Firefox starts.
+<br />
+&quot;X&quot; is where it keeps trying to put that javascript popup.
+<br />
+<br />Checking the windowlist in either of the 2x1 screens shows the window
+<br />
+as [Javascript Application] with geometry 517x112+2899+410.  Each
+<br />
+screen is 1280X1024, so that's clearly too far to the right - even for
+<br />
+me.
+<br />
+<br />When I pull the window over and get an ID on it, the name is
+<br />
+[Javascript Application] (with the brackets) as is the icon name.  The
+<br />
+class is Firefox-bin, Resource is firefox-bin, and transient is set to
+<br />
+yes.  Gravity is set to NortWest, though I'm convinced it's not
+<br />
+sticking to that corner.
+<br />
+<br />My firefox styles are as follows:
+<br />
+Style &quot;Firefox*&quot;    StartsOnPage 2 1, SkipMapping, StartsOnScreen 1
+<br />
+Style &quot;Firefox*&quot;    ManualPlacementHonorsStartsOnPage
+<br />
+<br />My fvwm config has the following to say about transients:
+<br />
+Style *  DecorateTransient, UsePPosition, RaiseTransient
+<br />
+<br />I've tried NoPPosition, UsePPosition, UseTransientPosition, and
+<br />
+StartsOnPageIncludesTransients.
+<br />
+<br />That last one helps a great deal by placing the transient at &quot;Y&quot;.
+<br />
+What I'd like is to get it right on top of Firefox at &quot;X&quot;.
+<br />
+<br />I searched the manpage for a StartsOnScreenIncludesTransients style
+<br />
+config, but there doesn't appear to be one.
+<br />
+<br />Any ideas?
+<br />
+<br />TIA
+<br />
+Lou
+<br />
+<pre>
+-- 
+Louis LeBlanc               leblanc_at_keyslapper.org
+Fully Funded Hobbyist, KeySlapper Extrordinaire :)
+<a href="http://www.keyslapper.org">http://www.keyslapper.org</a>                     ԿԬ
+idiot box, n.:
+  The part of the envelope that tells a person where to place the
+  stamp when they can't quite figure it out for themselves.
+    -- Rich Hall, &quot;Sniglets&quot;
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sun Nov 14 2004 - 10:15:19 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start13478">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="13479.html" title="Next message in the list">Xue Ruini: "FVWM: press_fvwmbuttons"</a></li>
+<li><dfn>Previous message</dfn>: <a href="13477.html" title="Previous message in the list">Vincent Bernat: "FVWM: Balloons for FvwmIconMan"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg13478" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg13478" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg13478" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg13478" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:57 BST
+</em></small></p>
+</body>
+</html>

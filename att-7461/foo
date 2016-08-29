@@ -1,0 +1,21 @@
+AddToFunc SetBackground
++ I Exec test -r $HOME/.fvwm/background && xv -root +noresetroot -quit -viewonly $HOME/.fvwm/backgrounds/`cat $HOME/.fvwm/background|tr -d "\n"`
+
+AddToFunc SetDefaultBackground
++ I Exec echo -e $$0 > $HOME/.fvwm/background
++ I Function SetBackground
+
+AddToMenu BackgroundMenu DynamicPopupAction Function MakeBackgroundMenu
+
+AddToFunc MakeBackgroundMenu
++ I DestroyMenu recreate BackgroundMenu
++ I Piperead 'echo AddToMenu BackgroundMenu Backgrounds Title'
++ I Piperead 'echo AddToMenu BackgroundMenu \\\"reset to [\`cat $HOME/.fvwm/background | sed -e s/\.bg\..\*$//g -e s:.\*/::g\`]\\\" SetBackground'
++ I + "" Nop
++ I AddToMenu BackgroundMenu
++ I PipeRead 'cd $HOME/.fvwm/backgrounds; /bin/ls *.bg.* | sed -e \"s:\\(.*\\)\\(\\.bg\\..*\\):+ \\\\&\\1%$HOME/.fvwm/backgrounds/\\1.thumb.xpm% Function SetDefaultBackground \\1\\2:\"'
+
+AddToFunc StartFunction
++ I Function SetBackground
+
+

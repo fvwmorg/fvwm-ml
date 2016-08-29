@@ -1,0 +1,704 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Window attraction patch update from AJ Weber on 1998-10-16 (fvwm-users)</title>
+<meta name="Author" content="AJ Weber (aj_at_stt3.com)" />
+<meta name="Subject" content="FVWM: Window attraction patch update" />
+<meta name="Date" content="1998-10-16" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Window attraction patch update</h1>
+<!-- received="Fri Oct 16 13:45:44 1998" -->
+<!-- isoreceived="19981016124544" -->
+<!-- sent="Fri, 16 Oct 1998 11:44:40 -0700" -->
+<!-- isosent="19981016184440" -->
+<!-- name="AJ Weber" -->
+<!-- email="aj_at_stt3.com" -->
+<!-- subject="FVWM: Window attraction patch update" -->
+<!-- id="19981016114440.26505_at_frack.stt3.com" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start22909" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="22910.html" accesskey="d" title="Steven Howe: &quot;FVWM: CDE Look alikes&quot;">Next message</a> ]
+[ <a href="22908.html" title="Richard Lister: &quot;Re: FVWM: WFI (World Financial Infonet)  &#12398;&#12372;&#26696;&#20869; 3&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="22921.html" accesskey="t" title="Tim Phipps: &quot;Re: FVWM: Window attraction patch update&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg22909" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg22909" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg22909" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg22909" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: AJ Weber &lt;<a href="mailto:aj_at_stt3.com?Subject=Re%3A%20FVWM%3A%20Window%20attraction%20patch%20update">aj_at_stt3.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 16 Oct 1998 11:44:40 -0700</span><br />
+</address>
+<br />
+This patch is a slight update to the previous window attraction patch.
+<br />
+It fixes a bug where windows in different desks affected each other.
+<br />
+<br /><br /><br /><br />diff -c -r ./fvwm/builtins.c ../fvwm_snap/fvwm/builtins.c
+<br />
+*** ./fvwm/builtins.c	Tue Aug 19 16:41:27 1997
+<br />
+--- ../fvwm_snap/fvwm/builtins.c	Wed Oct 14 11:39:38 1998
+<br />
+***************
+<br />
+*** 1253,1258 ****
+<br />
+--- 1253,1274 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Scr.ClickTime = val1;
+<br />
+&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;
+<br />
++ void SetSnapAttraction(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
++               unsigned long context, char *action,int* Module)
+<br />
++ {
+<br />
++   int val1;
+<br />
++   int val1_unit,n;
+<br />
++ 
+<br />
++   n = GetOneArgument(action, &amp;val1, &amp;val1_unit);
+<br />
++   if(n != 1)
+<br />
++   {
+<br />
++     fvwm_msg(ERR,&quot;SetSnapAttraction&quot;,&quot;SnapAttraction requires 1 argument&quot;);
+<br />
++     return;
+<br />
++   }
+<br />
++ 
+<br />
++   Scr.SnapAttraction = val1;
+<br />
++ }
+<br />
++ 
+<br />
+&nbsp;&nbsp;void SetXOR(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long context, char *action,int* Module)
+<br />
+&nbsp;&nbsp;{
+<br />
+diff -c -r ./fvwm/functions.c ../fvwm_snap/fvwm/functions.c
+<br />
+*** ./fvwm/functions.c	Mon Aug 11 13:09:29 1997
+<br />
+--- ../fvwm_snap/fvwm/functions.c	Wed Oct 14 11:58:13 1998
+<br />
+***************
+<br />
+*** 126,131 ****
+<br />
+--- 126,132 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{&quot;Send_WindowList&quot;,send_list_func, F_SEND_WINDOW_LIST,    FUNC_NO_WINDOW},
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{&quot;SendToModule&quot;, SendStrToModule,  F_SEND_STRING,         FUNC_NO_WINDOW},
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{&quot;set_mask&quot;,     set_mask_function,F_SET_MASK,            FUNC_NO_WINDOW},
+<br />
++   {&quot;SnapAttraction&quot;,SetSnapAttraction,F_SNAP_ATT,           FUNC_NO_WINDOW},
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{&quot;Stick&quot;,        stick_function,   F_STICK,               FUNC_NEEDS_WINDOW},
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{&quot;Style&quot;,        ProcessNewStyle,  F_STYLE,               FUNC_NO_WINDOW},
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{&quot;Title&quot;,        Nop_func,         F_TITLE,               FUNC_TITLE},
+<br />
+diff -c -r ./fvwm/fvwm.c ../fvwm_snap/fvwm/fvwm.c
+<br />
+*** ./fvwm/fvwm.c	Mon Aug  4 13:53:32 1997
+<br />
+--- ../fvwm_snap/fvwm/fvwm.c	Wed Oct 14 11:44:09 1998
+<br />
+***************
+<br />
+*** 1223,1228 ****
+<br />
+--- 1223,1229 ----
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Scr.EdgeScrollX = Scr.EdgeScrollY = 100;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Scr.ScrollResistance = Scr.MoveResistance = 0;
+<br />
++   Scr.SnapAttraction = 0;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Scr.OpaqueSize = 5;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Scr.ClickTime = 150;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Scr.ColormapFocus = COLORMAP_FOLLOWS_MOUSE;
+<br />
+diff -c -r ./fvwm/misc.h ../fvwm_snap/fvwm/misc.h
+<br />
+*** ./fvwm/misc.h	Mon Aug 11 13:10:19 1997
+<br />
+--- ../fvwm_snap/fvwm/misc.h	Wed Oct 14 11:42:30 1998
+<br />
+***************
+<br />
+*** 516,521 ****
+<br />
+--- 516,523 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long context, char *action,int* Module);
+<br />
+&nbsp;&nbsp;void SetClick(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long context, char *action,int* Module);
+<br />
++ void SetSnapAttraction(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
++ 	       unsigned long context, char *action,int* Module);
+<br />
+&nbsp;&nbsp;void NextFunc(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long context, char *action,int* Module);
+<br />
+&nbsp;&nbsp;void PrevFunc(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
+diff -c -r ./fvwm/move.c ../fvwm_snap/fvwm/move.c
+<br />
+*** ./fvwm/move.c	Mon Aug 11 13:53:16 1997
+<br />
+--- ../fvwm_snap/fvwm/move.c	Fri Oct 16 11:22:43 1998
+<br />
+***************
+<br />
+*** 109,114 ****
+<br />
+--- 109,119 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int Height, int *FinalX, int *FinalY,Bool opaque_move,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bool AddWindow)
+<br />
+&nbsp;&nbsp;{
+<br />
++ 	Window root, parent, *children;
+<br />
++ 	FvwmWindow *tmp;
+<br />
++ 	unsigned int nchildren;
+<br />
++ 	int i,j;
+<br />
++ 	int nyt,nxl,dist,closestLeft,closestRight,closestBottom,closestTop;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Bool finished = False;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Bool done;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int xl,yt,delta_x,delta_y,paged;
+<br />
+***************
+<br />
+*** 180,185 ****
+<br />
+--- 185,267 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xl = Event.xmotion.x_root + XOffset;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yt = Event.xmotion.y_root + YOffset;
+<br />
+&nbsp;&nbsp;
+<br />
++ 	/* resist based on window edges */
+<br />
++ 	tmp = Scr.FvwmRoot.next;
+<br />
++ 	closestTop = Scr.SnapAttraction;
+<br />
++ 	closestBottom = Scr.SnapAttraction;
+<br />
++ 	closestRight = Scr.SnapAttraction;
+<br />
++ 	closestLeft = Scr.SnapAttraction;
+<br />
++ 	nxl = xl;
+<br />
++ 	nyt = yt;
+<br />
++ 	while(tmp)
+<br />
++ 	{
+<br />
++ 		if (tmp_win != tmp &amp;&amp; (tmp_win-&gt;Desk == tmp-&gt;Desk))
+<br />
++ 		{
+<br />
++ 			if(!(	(tmp-&gt;frame_y + tmp-&gt;frame_height) &lt; (yt) ||
+<br />
++ 					(tmp-&gt;frame_y) &gt; (yt + Height) ))
+<br />
++ 			{
+<br />
++ 				dist = abs(tmp-&gt;frame_x - (xl + Width)); 
+<br />
++ 				if(dist &lt; closestRight)
+<br />
++ 				{
+<br />
++ 					closestRight = dist;
+<br />
++ 					if(((xl + Width) &gt;= tmp-&gt;frame_x)&amp;&amp;
+<br />
++ 						((xl + Width) &lt; tmp-&gt;frame_x+Scr.SnapAttraction))
+<br />
++ 						nxl = tmp-&gt;frame_x - Width - tmp_win-&gt;bw;
+<br />
++ 					if(((xl + Width) &gt;= tmp-&gt;frame_x-Scr.SnapAttraction)&amp;&amp;
+<br />
++ 						((xl + Width) &lt; tmp-&gt;frame_x))
+<br />
++ 						nxl = tmp-&gt;frame_x - Width - tmp_win-&gt;bw;
+<br />
++ 				}
+<br />
++ 				dist = abs(tmp-&gt;frame_x + tmp-&gt;frame_width - xl);
+<br />
++ 				if(dist &lt; closestLeft)
+<br />
++ 				{
+<br />
++ 					closestLeft = dist;
+<br />
++ 					if((xl &lt;= tmp-&gt;frame_x + tmp-&gt;frame_width)&amp;&amp;
+<br />
++ 						(xl &gt; tmp-&gt;frame_x + tmp-&gt;frame_width-Scr.SnapAttraction))
+<br />
++ 						nxl = tmp-&gt;frame_x + tmp-&gt;frame_width;
+<br />
++ 					if((xl &lt;= tmp-&gt;frame_x + tmp-&gt;frame_width+Scr.SnapAttraction)&amp;&amp;
+<br />
++ 						(xl &gt; tmp-&gt;frame_x + tmp-&gt;frame_width))
+<br />
++ 						nxl = tmp-&gt;frame_x + tmp-&gt;frame_width;
+<br />
++ 				}
+<br />
++ 			}
+<br />
++ 			if(!(	(tmp-&gt;frame_x + tmp-&gt;frame_width) &lt; (xl) ||
+<br />
++ 					(tmp-&gt;frame_x) &gt; (xl + Width) ))
+<br />
++ 			{
+<br />
++ 				dist = abs(tmp-&gt;frame_y - (yt + Height)); 
+<br />
++ 				if(dist &lt; closestBottom)
+<br />
++ 				{
+<br />
++ 					closestBottom = dist;
+<br />
++ 					if(((yt + Height) &gt;= tmp-&gt;frame_y)&amp;&amp;
+<br />
++ 						((yt + Height) &lt; tmp-&gt;frame_y+Scr.SnapAttraction))
+<br />
++ 						nyt = tmp-&gt;frame_y - Height - tmp_win-&gt;bw;
+<br />
++ 					if(((yt + Height) &gt;= tmp-&gt;frame_y-Scr.SnapAttraction)&amp;&amp;
+<br />
++ 						((yt + Height) &lt; tmp-&gt;frame_y))
+<br />
++ 						nyt = tmp-&gt;frame_y - Height - tmp_win-&gt;bw;
+<br />
++ 				}
+<br />
++ 				dist = abs(tmp-&gt;frame_y + tmp-&gt;frame_height - yt);
+<br />
++ 				if(dist &lt; closestTop)
+<br />
++ 				{
+<br />
++ 					closestTop = dist;
+<br />
++ 					if((yt &lt;= tmp-&gt;frame_y + tmp-&gt;frame_height)&amp;&amp;
+<br />
++ 						(yt &gt; tmp-&gt;frame_y + tmp-&gt;frame_height-Scr.SnapAttraction))
+<br />
++ 						nyt = tmp-&gt;frame_y + tmp-&gt;frame_height;
+<br />
++ 					if((yt &lt;= tmp-&gt;frame_y + tmp-&gt;frame_height+Scr.SnapAttraction)&amp;&amp;
+<br />
++ 						(yt &gt; tmp-&gt;frame_y + tmp-&gt;frame_height))
+<br />
++ 						nyt = tmp-&gt;frame_y + tmp-&gt;frame_height;
+<br />
++ 				}
+<br />
++ 			}
+<br />
++ #if 0
+<br />
++ 			if(((yt + Height) &gt;= Scr.MyDisplayHeight)&amp;&amp;
+<br />
++ 				((yt + Height) &lt; Scr.MyDisplayHeight+Scr.MoveResistance))
+<br />
++ 				yt = Scr.MyDisplayHeight - Height - tmp_win-&gt;bw;
+<br />
++ 			if((yt &lt;= 0)&amp;&amp;(yt &gt; -Scr.MoveResistance))
+<br />
++ 				yt = 0;
+<br />
++ #endif
+<br />
++ 		}
+<br />
++ 		tmp = tmp-&gt;next;
+<br />
++ 	}
+<br />
++ 	xl = nxl;
+<br />
++ 	yt = nyt;
+<br />
++ 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* Resist moving windows over the edge of the screen! */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(((xl + Width) &gt;= Scr.MyDisplayWidth)&amp;&amp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((xl + Width) &lt; Scr.MyDisplayWidth+Scr.MoveResistance))
+<br />
+***************
+<br />
+*** 208,213 ****
+<br />
+--- 290,372 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xl += XOffset;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yt += YOffset;
+<br />
+&nbsp;&nbsp;
+<br />
++ 	/* resist based on window edges */
+<br />
++ 	tmp = Scr.FvwmRoot.next;
+<br />
++ 	closestTop = Scr.SnapAttraction;
+<br />
++ 	closestBottom = Scr.SnapAttraction;
+<br />
++ 	closestRight = Scr.SnapAttraction;
+<br />
++ 	closestLeft = Scr.SnapAttraction;
+<br />
++ 	nxl = xl;
+<br />
++ 	nyt = yt;
+<br />
++ 	while(tmp)
+<br />
++ 	{
+<br />
++ 		if (tmp_win != tmp &amp;&amp; (tmp_win-&gt;Desk == tmp-&gt;Desk))
+<br />
++ 		{
+<br />
++ 			if(!(	(tmp-&gt;frame_y + tmp-&gt;frame_height) &lt; (yt) ||
+<br />
++ 					(tmp-&gt;frame_y) &gt; (yt + Height) ))
+<br />
++ 			{
+<br />
++ 				dist = abs(tmp-&gt;frame_x - (xl + Width)); 
+<br />
++ 				if(dist &lt; closestRight)
+<br />
++ 				{
+<br />
++ 					closestRight = dist;
+<br />
++ 					if(((xl + Width) &gt;= tmp-&gt;frame_x)&amp;&amp;
+<br />
++ 						((xl + Width) &lt; tmp-&gt;frame_x+Scr.SnapAttraction))
+<br />
++ 						nxl = tmp-&gt;frame_x - Width - tmp_win-&gt;bw;
+<br />
++ 					if(((xl + Width) &gt;= tmp-&gt;frame_x-Scr.SnapAttraction)&amp;&amp;
+<br />
++ 						((xl + Width) &lt; tmp-&gt;frame_x))
+<br />
++ 						nxl = tmp-&gt;frame_x - Width - tmp_win-&gt;bw;
+<br />
++ 				}
+<br />
++ 				dist = abs(tmp-&gt;frame_x + tmp-&gt;frame_width - xl);
+<br />
++ 				if(dist &lt; closestLeft)
+<br />
++ 				{
+<br />
++ 					closestLeft = dist;
+<br />
++ 					if((xl &lt;= tmp-&gt;frame_x + tmp-&gt;frame_width)&amp;&amp;
+<br />
++ 						(xl &gt; tmp-&gt;frame_x + tmp-&gt;frame_width-Scr.SnapAttraction))
+<br />
++ 						nxl = tmp-&gt;frame_x + tmp-&gt;frame_width;
+<br />
++ 					if((xl &lt;= tmp-&gt;frame_x + tmp-&gt;frame_width+Scr.SnapAttraction)&amp;&amp;
+<br />
++ 						(xl &gt; tmp-&gt;frame_x + tmp-&gt;frame_width))
+<br />
++ 						nxl = tmp-&gt;frame_x + tmp-&gt;frame_width;
+<br />
++ 				}
+<br />
++ 			}
+<br />
++ 			if(!(	(tmp-&gt;frame_x + tmp-&gt;frame_width) &lt; (xl) ||
+<br />
++ 					(tmp-&gt;frame_x) &gt; (xl + Width) ))
+<br />
++ 			{
+<br />
++ 				dist = abs(tmp-&gt;frame_y - (yt + Height)); 
+<br />
++ 				if(dist &lt; closestBottom)
+<br />
++ 				{
+<br />
++ 					closestBottom = dist;
+<br />
++ 					if(((yt + Height) &gt;= tmp-&gt;frame_y)&amp;&amp;
+<br />
++ 						((yt + Height) &lt; tmp-&gt;frame_y+Scr.SnapAttraction))
+<br />
++ 						nyt = tmp-&gt;frame_y - Height - tmp_win-&gt;bw;
+<br />
++ 					if(((yt + Height) &gt;= tmp-&gt;frame_y-Scr.SnapAttraction)&amp;&amp;
+<br />
++ 						((yt + Height) &lt; tmp-&gt;frame_y))
+<br />
++ 						nyt = tmp-&gt;frame_y - Height - tmp_win-&gt;bw;
+<br />
++ 				}
+<br />
++ 				dist = abs(tmp-&gt;frame_y + tmp-&gt;frame_height - yt);
+<br />
++ 				if(dist &lt; closestTop)
+<br />
++ 				{
+<br />
++ 					closestTop = dist;
+<br />
++ 					if((yt &lt;= tmp-&gt;frame_y + tmp-&gt;frame_height)&amp;&amp;
+<br />
++ 						(yt &gt; tmp-&gt;frame_y + tmp-&gt;frame_height-Scr.SnapAttraction))
+<br />
++ 						nyt = tmp-&gt;frame_y + tmp-&gt;frame_height;
+<br />
++ 					if((yt &lt;= tmp-&gt;frame_y + tmp-&gt;frame_height+Scr.SnapAttraction)&amp;&amp;
+<br />
++ 						(yt &gt; tmp-&gt;frame_y + tmp-&gt;frame_height))
+<br />
++ 						nyt = tmp-&gt;frame_y + tmp-&gt;frame_height;
+<br />
++ 				}
+<br />
++ 			}
+<br />
++ #if 0
+<br />
++ 			if(((yt + Height) &gt;= Scr.MyDisplayHeight)&amp;&amp;
+<br />
++ 				((yt + Height) &lt; Scr.MyDisplayHeight+Scr.MoveResistance))
+<br />
++ 				yt = Scr.MyDisplayHeight - Height - tmp_win-&gt;bw;
+<br />
++ 			if((yt &lt;= 0)&amp;&amp;(yt &gt; -Scr.MoveResistance))
+<br />
++ 				yt = 0;
+<br />
++ #endif
+<br />
++ 		}
+<br />
++ 		tmp = tmp-&gt;next;
+<br />
++ 	}
+<br />
++ 	xl = nxl;
+<br />
++ 	yt = nyt;
+<br />
++ 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* Resist moving windows over the edge of the screen! */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(((xl + Width) &gt;= Scr.MyDisplayWidth)&amp;&amp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((xl + Width) &lt; Scr.MyDisplayWidth+Scr.MoveResistance))
+<br />
+***************
+<br />
+*** 219,225 ****
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yt = Scr.MyDisplayHeight - Height - tmp_win-&gt;bw;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if((yt &lt;= 0)&amp;&amp;(yt &gt; -Scr.MoveResistance))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yt = 0;
+<br />
+- 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* check Paging request once and only once after outline redrawn */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* redraw after paging if needed - mab */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;paged=0;
+<br />
+--- 378,383 ----
+<br />
+diff -c -r ./fvwm/parse.h ../fvwm_snap/fvwm/parse.h
+<br />
+*** ./fvwm/parse.h	Mon Aug 11 13:10:39 1997
+<br />
+--- ../fvwm_snap/fvwm/parse.h	Wed Oct 14 11:41:16 1998
+<br />
+***************
+<br />
+*** 75,80 ****
+<br />
+--- 75,81 ----
+<br />
+&nbsp;&nbsp;#define F_EXEC_SETUP            57
+<br />
+&nbsp;&nbsp;#define F_CURSOR_STYLE          58
+<br />
+&nbsp;&nbsp;#define F_CURRENT               59
+<br />
++ #define F_SNAP_ATT              60
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;/* Functions which require a target window */
+<br />
+&nbsp;&nbsp;#define F_RESIZE		100
+<br />
+diff -c -r ./fvwm/screen.h ../fvwm_snap/fvwm/screen.h
+<br />
+*** ./fvwm/screen.h	Mon Aug  4 13:55:30 1997
+<br />
+--- ../fvwm_snap/fvwm/screen.h	Wed Oct 14 11:48:25 1998
+<br />
+***************
+<br />
+*** 311,316 ****
+<br />
+--- 311,317 ----
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int ClickTime;               /*Max button-click delay for Function built-in*/
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int ScrollResistance;        /* resistance to scrolling in desktop */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int MoveResistance;          /* res to moving windows over viewport edge */
+<br />
++   int SnapAttraction;          /* attractiveness of window edges */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int OpaqueSize;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int CurrentDesk;             /* The current desktop number */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;int ColormapFocus;           /* colormap focus style */
+<br />
+Only in .: patch_fvwm-2.0.46_snapatt_b
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Oct 16 1998 - 13:45:44 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start22909">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="22910.html" title="Next message in the list">Steven Howe: "FVWM: CDE Look alikes"</a></li>
+<li><dfn>Previous message</dfn>: <a href="22908.html" title="Previous message in the list">Richard Lister: "Re: FVWM: WFI (World Financial Infonet)  &#12398;&#12372;&#26696;&#20869; 3"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="22921.html" title="Next message in this discussion thread">Tim Phipps: "Re: FVWM: Window attraction patch update"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="22921.html" title="Message sent in reply to this message">Tim Phipps: "Re: FVWM: Window attraction patch update"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg22909" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg22909" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg22909" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg22909" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

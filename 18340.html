@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: problems with FvwmAuto from Trent Piepho on 1996-11-05 (fvwm-users)</title>
+<meta name="Author" content="Trent Piepho (xyzzy_at_u.washington.edu)" />
+<meta name="Subject" content="FVWM: problems with FvwmAuto" />
+<meta name="Date" content="1996-11-05" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: problems with FvwmAuto</h1>
+<!-- received="Tue Nov  5 10:45:04 1996" -->
+<!-- isoreceived="19961105104504" -->
+<!-- sent="Tue, 5 Nov 1996 08:44:39 -0800 (PST)" -->
+<!-- isosent="19961105164439" -->
+<!-- name="Trent Piepho" -->
+<!-- email="xyzzy_at_u.washington.edu" -->
+<!-- subject="FVWM: problems with FvwmAuto" -->
+<!-- id="Pine.LNX.3.91.961105075433.3561A-100000_at_s5-171-9.student.washington.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start18340" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="18341.html" accesskey="d" title="Ashutosh Singh: &quot;FVWM: Module not found&quot;">Next message</a> ]
+[ <a href="18339.html" title="Jim Nicholson: &quot;FVWM: HP/UX 9.0x binaries?&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18340" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18340" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18340" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18340" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Trent Piepho &lt;<a href="mailto:xyzzy_at_u.washington.edu?Subject=Re%3A%20FVWM%3A%20problems%20with%20FvwmAuto">xyzzy_at_u.washington.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Tue, 5 Nov 1996 08:44:39 -0800 (PST)</span><br />
+</address>
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I've been annoyed with windows autoraising over their pop-ups for
+<br />
+some time now, and I finally looked at the FvwmAuto module.  It was really
+<br />
+screwed up, I must say.  So I mostly rewrote it, my much cleaner version is
+<br />
+at <a href="ftp://s5-171-9.student.washington.edu/pub/fvwm/FvwmAuto.c">ftp://s5-171-9.student.washington.edu/pub/fvwm/FvwmAuto.c</a>
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;There doesn't seem to be anyway to find out if a window is unobscured. 
+<br />
+What FvwmAuto was doing was listen to all raise events, and assuming that the
+<br />
+last raised window was the one and only unobscured window.  This didn't work
+<br />
+because after a window gets raised, a whole bunch of other windows get raised
+<br />
+as well.  Some of them are StaysOnTop windows, and some I can't find.  Maybe
+<br />
+they are window borders?  Anyway, what FvwmAuto was doing to keep track of 
+<br />
+unobscured window didn't work at all, so I took it out.
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Is their anyway to find out if a window is obscured?  Say have
+<br />
+FvwmAuto sent a copy of any VisibilityPartiallyObscured events that come
+<br />
+along?  Seems like maybe fvwm should keep track though.  It is raising
+<br />
+StaysOnTop windows eveytime a window is raised, even if they aren't obscured.
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Of course this still doesn't solve the real problem, raising a window
+<br />
+raises it above its popups as well.  This isn't a problem with FvwmAuto, but
+<br />
+with Fvwm.
+<br />
+<br />|Gazing up to the breeze of the heavens \ on a quest, meaning, reason  |
+<br />
+|came to be, how it begun \ all alone in the family of the sun         |
+<br />
+|curiosity teasing everyone \ on our home, third stone from the sun.   |
+<br />
+|Trent Piepho (xyzzy_at_u.washington.edu)                   -- Metallica  |
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Tue Nov 05 1996 - 10:45:04 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start18340">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="18341.html" title="Next message in the list">Ashutosh Singh: "FVWM: Module not found"</a></li>
+<li><dfn>Previous message</dfn>: <a href="18339.html" title="Previous message in the list">Jim Nicholson: "FVWM: HP/UX 9.0x binaries?"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18340" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18340" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18340" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18340" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

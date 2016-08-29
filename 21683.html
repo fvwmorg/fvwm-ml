@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: FvwmButtons burns CPU [was: FVWM Buttons X3 at 28.5 % CPU] from D. Hugh Redelmeier on 1998-01-26 (fvwm-users)</title>
+<meta name="Author" content="D. Hugh Redelmeier (hugh_at_mimosa.com)" />
+<meta name="Subject" content="FVWM: FvwmButtons burns CPU [was: FVWM Buttons X3 at 28.5 % CPU]" />
+<meta name="Date" content="1998-01-26" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: FvwmButtons burns CPU [was: FVWM Buttons X3 at 28.5 % CPU]</h1>
+<!-- received="Mon Jan 26 14:22:41 1998" -->
+<!-- isoreceived="19980126142241" -->
+<!-- sent="Mon, 26 Jan 1998 15:19:44 -0500" -->
+<!-- isosent="19980126201944" -->
+<!-- name="D. Hugh Redelmeier" -->
+<!-- email="hugh_at_mimosa.com" -->
+<!-- subject="FVWM: FvwmButtons burns CPU [was: FVWM Buttons X3 at 28.5 % CPU]" -->
+<!-- id="199801262019.PAA04282_at_mimosa.com" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start21683" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="21684.html" accesskey="d" title="Dan Espen: &quot;Re: FVWM: Icon change&quot;">Next message</a> ]
+[ <a href="21682.html" title="Kendrick Vargas: &quot;Re: FVWM: fvwm question&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="21685.html" accesskey="t" title="Charles Hines: &quot;Re: FVWM: FvwmButtons burns CPU [was: FVWM Buttons X3 at 28.5 % CPU]&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21683" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21683" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21683" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21683" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: D. Hugh Redelmeier &lt;<a href="mailto:hugh_at_mimosa.com?Subject=Re%3A%20FVWM%3A%20FvwmButtons%20burns%20CPU%20%5Bwas%3A%20FVWM%20Buttons%20X3%20at%2028.5%20%25%20CPU%5D">hugh_at_mimosa.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 26 Jan 1998 15:19:44 -0500</span><br />
+</address>
+<br />
+This bug was reported by Douglas F. Elznic &lt;delznic_at_acm.org&gt; to the
+<br />
+redhat-list.  See also the reply by Eze Ogwuma &lt;typhoon_at_dircon.co.uk&gt;.
+<br />
+My report has more details.
+<br />
+<br />[I'm running Red Hat 5.0, but I had a previously unexplained
+<br />
+phenomenon under RH4.2 for which this could account.  I'm running
+<br />
+fvwm2 (2.0.46), the default window manager.  I don't know how to tell
+<br />
+the version of FvwmButtons.  I have done little customization except
+<br />
+that I am running a newer X server (from SuSE, blessed by XFree86.org)
+<br />
+to support my video card.  I don't think that is relevant.]
+<br />
+<br />When I shut down my X server using control-alt-backspace, FvwmButtons
+<br />
+does not terminate.  Worse, it burns all the CPU time that it can get.
+<br />
+When I first noticed this, I had a half dozen of the things splitting
+<br />
+the CPU between them.
+<br />
+<br />Observations:
+<br />
+- C-A-BS shutdown leaves FvwmButtons burning cpu
+<br />
+- loging out doesn't stop it
+<br />
+- using strace on the FvwmButtons process after it has gotten into this
+<br />
+&nbsp;&nbsp;state shows that *no* system calls are being made
+<br />
+- using strace on the FvwmButtons process from before C-A-BS results
+<br />
+&nbsp;&nbsp;in FvwmButtons exiting properly!!!
+<br />
+- shutting down from the Start menu correctly terminates FvwmButtons
+<br />
+<br />The fact that strace changes the result suggests that there is some
+<br />
+race condition involved.
+<br />
+<br />When I examine the process using GDB, it seems to be endlessly
+<br />
+repeating the following sequence of instructions:
+<br />
+<br />&nbsp;0x40054ba4 &lt;_XFlushInt+44&gt;:	movl   0x4c4(%edi),%eax
+<br />
+&nbsp;0x40054baa &lt;_XFlushInt+50&gt;:	testl  %eax,%eax
+<br />
+&nbsp;0x40054bac &lt;_XFlushInt+52&gt;:    je     0x40054bbb &lt;_XFlushInt+67&gt;
+<br />
+<br />&nbsp;0x40054bbb &lt;_XFlushInt+67&gt;:	testb  $0x40,0x94(%edi)
+<br />
+&nbsp;0x40054bc2 &lt;_XFlushInt+74&gt;:    jne    0x40054ba4 &lt;_XFlushInt+44&gt;
+<br />
+<br />Every time it looks at the 32-bit quantity at 0x4c4(%edi), it seems to
+<br />
+find it zero.  Every time it checks the 0x40 bit in the byte at
+<br />
+0x94(%edi), it finds it on.  Nothing in this loop will change these
+<br />
+memory locations; I suspect that there is no longer an asynchronous
+<br />
+event to change them.
+<br />
+<br />A &quot;where&quot; GDB command yields:
+<br />
+#0  0x40054bac in _XFlushInt ()
+<br />
+#1  0x40054b72 in _XFlush ()
+<br />
+#2  0x4005205e in XSync ()
+<br />
+#3  0x804989f in _start ()
+<br />
+#4  0xbfffefb4 in ?? ()
+<br />
+#5  0x40054b72 in _XFlush ()
+<br />
+#6  0x4005205e in XSync ()
+<br />
+#7  0x804989f in _start ()
+<br />
+#8  0xbffff13c in ?? ()
+<br />
+#9  0x4006ddbd in _X11TransWrite ()
+<br />
+#10 0x40054c34 in _XFlushInt ()
+<br />
+#11 0x40054b72 in _XFlush ()
+<br />
+#12 0x40054d08 in _XEventsQueued ()
+<br />
+#13 0x4004a5d0 in XPending ()
+<br />
+#14 0x804b725 in _start ()
+<br />
+#15 0x804a31f in _start ()
+<br />
+#16 0x804a2fb in _start ()
+<br />
+<br />- Frame 0 is an invocation of _XFlushInt, apparently an internal-to-xlib
+<br />
+&nbsp;&nbsp;function.
+<br />
+- It was called by _XFlush() which was called by XSync (XSync is a
+<br />
+&nbsp;&nbsp;public xlib function).
+<br />
+- I don't know what Frame's 8 and 9 are about; perhaps signal handling
+<br />
+&nbsp;&nbsp;is going on (that might mess up a stack frame)
+<br />
+- OOPS: _XFlushInt() and _XFlush() appear in 10 and 11.  Are they
+<br />
+&nbsp;&nbsp;really meant to be re-entrant?
+<br />
+<br />My *guess* is that something is being done in a signal handler that
+<br />
+isn't safe.  Note that almost nothing is safe in a signal handler
+<br />
+(according to the ANSI/ISO standard for C).
+<br />
+<br />Hugh Redelmeier
+<br />
+hugh_at_mimosa.com
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon Jan 26 1998 - 14:22:41 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start21683">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="21684.html" title="Next message in the list">Dan Espen: "Re: FVWM: Icon change"</a></li>
+<li><dfn>Previous message</dfn>: <a href="21682.html" title="Previous message in the list">Kendrick Vargas: "Re: FVWM: fvwm question"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="21685.html" title="Next message in this discussion thread">Charles Hines: "Re: FVWM: FvwmButtons burns CPU [was: FVWM Buttons X3 at 28.5 % CPU]"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="21685.html" title="Message sent in reply to this message">Charles Hines: "Re: FVWM: FvwmButtons burns CPU [was: FVWM Buttons X3 at 28.5 % CPU]"</a></li>
+<li><dfn>Reply</dfn>: <a href="21708.html" title="Message sent in reply to this message">Fire Dragon: "FVWM: Re: FvwmButtons burns CPU [was: FVWM Buttons X3 at 28.5 % CPU]"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21683" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21683" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21683" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21683" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

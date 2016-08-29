@@ -1,0 +1,138 @@
+*** ./FvwmButtons.c.orig	Thu Jun 26 17:32:31 1997
+--- ./FvwmButtons.c	Fri Sep 19 09:45:10 1997
+***************
+*** 27,32 ****
+--- 27,33 ----
+  #include <string.h>
+  #include <sys/wait.h>
+  #include <sys/time.h>
++ #include <sys/stat.h>
+  #if defined ___AIX || defined _AIX || defined __QNX__ || defined ___AIXV3 || defined AIXV3 || defined _SEQUENT_
+  #include <sys/select.h>
+  #endif
+***************
+*** 78,83 ****
+--- 79,85 ----
+  /* ------------------------------ prototypes ------------------------------- */
+  
+  void DeadPipe(int nonsense);
++ void CleanUp(void);
+  void SetButtonSize(button_info*,int,int);
+  /* main */
+  void Loop(void);
+***************
+*** 126,131 ****
+--- 128,135 ----
+  GC  NormalGC;
+  int Width,Height;
+  
++ int running = 1;
++ 
+  int x= -30000,y= -30000,w= -1,h= -1,gravity = NorthWestGravity;
+  int new_desk = 0;
+  int ready = 0;
+***************
+*** 173,185 ****
+  **/
+  void DeadPipe(int whatever)
+  {
+    button_info *b,*ub=UberButton;
+    int button=-1;
+  
+-   signal(SIGPIPE, SIG_IGN);/* Xsync may cause SIGPIPE */
+- 
+    XSync(Dpy,0); /* Wait for thing to settle down a bit */
+    XGrabServer(Dpy); /* We don't want interference right now */
+    while(NextButton(&ub,&b,&button,0))
+      {
+        /* delete swallowed windows */
+--- 177,220 ----
+  **/
+  void DeadPipe(int whatever)
+  {
++   struct stat buf;
++     
++   /*
++    * If a SIGPIPE arrives during this operation, just exit.
++    *  - the signal will probably because the server is shutting
++    *    down. Attempting to do any further processing is useless
++    *    and may in fact, on some platforms, put the process into
++    *    a tight loop (if SIGPIPE is ignored).
++    * 22 July 1996 GRM.
++    * 
++    * Further investigation: XSync may loop *without* causing a SIGPIPE.
++    * This may be because the connection is dead, or because of the
++    * fact that X operations in signal handlers are discouraged.
++    * 
++    * In order to cover all the bases, then, this function will now
++    * set a global flag which will cause the main loop to stop.
++    *
++    * SIGPIPE is reset to DeadPipe, as well.
++    */
++   signal(SIGPIPE, DeadPipe);
++ 
++   /*
++    * Try to check status of X connection.
++    */
++   if (fstat(XConnectionNumber(Dpy), &buf) == -1)
++       exit(0);
++   
++   running = 0;
++ }
++ 
++ void CleanUp(void)
++ {
+    button_info *b,*ub=UberButton;
+    int button=-1;
+  
+    XSync(Dpy,0); /* Wait for thing to settle down a bit */
+    XGrabServer(Dpy); /* We don't want interference right now */
++ 
+    while(NextButton(&ub,&b,&button,0))
+      {
+        /* delete swallowed windows */
+***************
+*** 587,593 ****
+    int ex=10000,ey=10000,ex2=0,ey2=0;
+  #endif
+  
+!   while(1)
+      {
+        if(My_XNextEvent(Dpy,&Event))
+  	{
+--- 622,628 ----
+    int ex=10000,ey=10000,ex2=0,ey2=0;
+  #endif
+  
+!   while(running)
+      {
+        if(My_XNextEvent(Dpy,&Event))
+  	{
+***************
+*** 814,819 ****
+--- 849,855 ----
+  	  }
+        }
+      }
++     CleanUp();
+  }
+  
+  /**
+*** ./parse.c.orig	Thu Jun 26 17:32:33 1997
+--- ./parse.c	Fri Sep 19 09:45:10 1997
+***************
+*** 670,675 ****
+--- 670,682 ----
+  	  exit(1);
+  	}
+        s+=7;
++       /*
++        * Swallow old 'swallowmodule' command
++        */
++       if (mystrncasecmp(s,"module",6)==0)
++       {
++           s+=6;
++       }
+        b->hangon=seekright(&s);
+        b->flags|=(b_Swallow|b_Hangon);
+        b->swallow|=1;

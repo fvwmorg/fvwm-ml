@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Threading. from Rusty Phillips on 2004-07-07 (fvwm-users)</title>
+<meta name="Author" content="Rusty Phillips (rustyp_at_freeshell.org)" />
+<meta name="Subject" content="FVWM: Threading." />
+<meta name="Date" content="2004-07-07" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Threading.</h1>
+<!-- received="Wed Jul  7 10:06:35 2004" -->
+<!-- isoreceived="20040707090635" -->
+<!-- sent="Wed, 07 Jul 2004 10:18:41 -0500" -->
+<!-- isosent="20040707151841" -->
+<!-- name="Rusty Phillips" -->
+<!-- email="rustyp_at_freeshell.org" -->
+<!-- subject="FVWM: Threading." -->
+<!-- id="1089213521.22249.90.camel_at_rustyp.hn.org" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start12723" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="12724.html" accesskey="d" title="Mikhael Goikhman: &quot;FVWM: FvwmPerl&#0039;s problem with detach() behaviour&quot;">Next message</a> ]
+[ <a href="12722.html" title="Harald Dunkel: &quot;FVWM: Re: problem with FvwmPager on amd64&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="12724.html" accesskey="t" title="Mikhael Goikhman: &quot;FVWM: FvwmPerl&#0039;s problem with detach() behaviour&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg12723" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg12723" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg12723" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg12723" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Rusty Phillips &lt;<a href="mailto:rustyp_at_freeshell.org?Subject=Re%3A%20FVWM%3A%20Threading.">rustyp_at_freeshell.org</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 07 Jul 2004 10:18:41 -0500</span><br />
+</address>
+<br />
+I don't think detach works the way it should for me.  Any time you
+<br />
+execute &quot;exit&quot; anywhere in any thread (when forking - whether I fork or
+<br />
+FvwmPerl does), all threads exit in FvwmPerl.  This isn't what we want,
+<br />
+is it?
+<br />
+<br />So far I have two solutions to this:
+<br />
+1)  Have the process kill itself when it finishes.
+<br />
+2)  Use perlthreads (using either the &quot;threads&quot; package or the &quot;forks&quot;
+<br />
+package) and detach the process
+<br />
+<br />In the interest of not using extra Perl packages when I wasn't using a
+<br />
+module, I implemented solution #1. 
+<br />
+I had a bit of trouble actually getting the PID of the child process
+<br />
+from itself.  For some reason, $$ maps to fvwm rather than the child
+<br />
+process.
+<br />
+I had to either use Linux::Pid, or make a shell call.
+<br />
+<br />Of course, a better solution to all this would be to figure out whats
+<br />
+wrong with FvwmPerl's exit and fix it so that detach works (I'm testing
+<br />
+with FvwmPerl from CVS from June 30, btw).
+<br />
+<br />I put a lock on xwd usage.  A lot of this is an ugly hack.  But the
+<br />
+beauty is that it works, and I didn't have to implement another module.
+<br />
+<br />So...here you go.
+<br />
+<br />DestroyFunc CaptureIcon
+<br />
+AddToFunc CaptureIcon
+<br />
++ I raise
+<br />
++ I eval \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;$g=1 if(!$g=~/0|1/); \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;while($g==0) {  } \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;$g=0;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;$e{$[w.id]} =`xwd -silent -id $[w.id] 2&gt;&amp;1`; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;$g=1;\
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;if(substr($e{$[w.id]},0,10)=~/Error/) { \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;for(my $i=0; $i&lt;8; $i++)  \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{ \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$e{$[w.id]} = `xwd -silent -id $[w.id]`; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;last if(!(substr($e{$[w.id]},0,10)=~/Error/)); \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;} } \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;$f{$[w.id]}=1;
+<br />
+<br />DestroyFunc UseCaptured
+<br />
+AddToFunc UseCaptured
+<br />
++ I eval my $pid; $SIG{'CHLD'}='IGNORE'; if(!($pid=fork)) { \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$pid=`echo $$$$$$$$`; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;setpriority 0,0,19; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;while (!exists($f{$[w.id]}))  { }; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;open(TEMP12, &quot;|convert -scale $[fvwm_icon_size] -frame 1x1 \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;-mattecolor black -quality 0 xwd:- \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;png:$[HOME]/.fvwm/icon.tmp.$[w.id].png&quot;); \
+<br />
+print TEMP12 $e{$[w.id]}; close(TEMP12); \
+<br />
+cmd(&quot;WindowId $[w.id] WindowStyle IconOverride, \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Icon $[HOME]/.fvwm/icon.tmp.$[w.id].png, StaysOnBottom&quot;); \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;delete $e{$[w.id]}; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;delete $f{$[w.id]}; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kill 9,$pid; \ 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;};
+<br />
+<br />DestroyFunc FastThumb
+<br />
+AddToFunc FastThumb
+<br />
++ I CaptureIcon
+<br />
++ I Iconify
+<br />
++ I UseCaptured
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Jul 07 2004 - 10:06:35 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start12723">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="12724.html" title="Next message in the list">Mikhael Goikhman: "FVWM: FvwmPerl&#0039;s problem with detach() behaviour"</a></li>
+<li><dfn>Previous message</dfn>: <a href="12722.html" title="Previous message in the list">Harald Dunkel: "FVWM: Re: problem with FvwmPager on amd64"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="12724.html" title="Next message in this discussion thread">Mikhael Goikhman: "FVWM: FvwmPerl&#0039;s problem with detach() behaviour"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="12724.html" title="Message sent in reply to this message">Mikhael Goikhman: "FVWM: FvwmPerl&#0039;s problem with detach() behaviour"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg12723" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg12723" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg12723" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg12723" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:56 BST
+</em></small></p>
+</body>
+</html>

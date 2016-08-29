@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: FvwmCascade from Rui Monteiro on 1997-11-17 (fvwm-users)</title>
+<meta name="Author" content="Rui Monteiro (ruimt_at_mail.telepac.pt)" />
+<meta name="Subject" content="FVWM: FvwmCascade" />
+<meta name="Date" content="1997-11-17" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: FvwmCascade</h1>
+<!-- received="Mon Nov 17 08:14:50 1997" -->
+<!-- isoreceived="19971117081450" -->
+<!-- sent="Mon, 17 Nov 1997 14:10:26 +0000" -->
+<!-- isosent="19971117141026" -->
+<!-- name="Rui Monteiro" -->
+<!-- email="ruimt_at_mail.telepac.pt" -->
+<!-- subject="FVWM: FvwmCascade" -->
+<!-- id="34705052.DB6AE839_at_mail.telepac.pt" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start21329" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="21330.html" accesskey="d" title="Jerry Ingerman: &quot;FVWM: mouse causes desktop to switch&quot;">Next message</a> ]
+[ <a href="21328.html" title="A.J.vanWerven: &quot;FVWM: Key mapping&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21329" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21329" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21329" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21329" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Rui Monteiro &lt;<a href="mailto:ruimt_at_mail.telepac.pt?Subject=Re%3A%20FVWM%3A%20FvwmCascade">ruimt_at_mail.telepac.pt</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 17 Nov 1997 14:10:26 +0000</span><br />
+</address>
+<br />
+I've made a simple enhancement to FvwmCascade.
+<br />
+The idea is to have the windows constraints to the screen
+<br />
+without resizing them. So if the window slip out of the screen just
+<br />
+begin again in the top or the left (never tryed with flag -desk).
+<br />
+This should be usefull if you have many (&gt;15) windows in one screen.
+<br />
+<br />we now have two more options:
+<br />
+&nbsp;-mcols : multiple columns
+<br />
+&nbsp;-mlins : multiple lines
+<br />
+<br />(maybe the name of the options can be changed)
+<br />
+<br />Hope it's usefull. Hope this is the wright way to do these things.
+<br />
+<br /><pre>
+-- 
+Rui Monteiro
+####################################################################
+--- FvwmCascade.c.orig  Mon Nov 17 13:20:13 1997
++++ FvwmCascade.c       Mon Nov 17 13:25:37 1997
+_at_&#64; -58,6 +58,7 &#64;&#64;
+ int resize = 0, nostretch = 0, sticky = 0;
+ int flatx = 0, flaty = 0;
+ int incx = 0, incy = 0;
++int mlins = 0, mcols = 0;
+ 
+ void insert_window_list(window_list *wl, window_item *i)
+ {
+_at_&#64; -200,12 +201,23 &#64;&#64;
+ {
+     char msg[128];
+     int cur_x = ofsx, cur_y = ofsy;
++       int maxx = (maxw ? maxw : dwidth);
++       int maxy = (maxh ? maxh : dheight);
+     window_item *w = reversed ? wins_tail : wins;
+     while (w)
+     {
+        unsigned long nw = 0, nh = 0;
+        if (raise_window)
+-           SendInfo(fd,&quot;Raise&quot;,w-&gt;frame);
++               SendInfo(fd,&quot;Raise&quot;,w-&gt;frame);
++       if( mcols &amp;&amp; 
++               ((cur_y+w-&gt;height)&gt;maxy) )
++         {
++               cur_y = ofsy;
++         }
++       if( mlins &amp;&amp; ((cur_x+w-&gt;width)&gt;maxx) )
++         {
++               cur_x = ofsx;
++         }
+        sprintf(msg, &quot;Move %up %up&quot;, cur_x, cur_y);
+        SendInfo(fd,msg,w-&gt;frame);
+        if (resize) {
+_at_&#64; -246,6 +258,12 &#64;&#64;
+     {
+        if (!strcmp(argv[argi],&quot;-u&quot;)) {
+            untitled = 1;
++       }
++       else if (!strcmp(argv[argi],&quot;-mlins&quot;)) {
++           mlins = 1;
++       }
++       else if (!strcmp(argv[argi],&quot;-mcols&quot;)) {
++           mcols = 1;
+        }
+        else if (!strcmp(argv[argi],&quot;-t&quot;)) {
+            transients = 1;
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon Nov 17 1997 - 08:14:50 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start21329">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="21330.html" title="Next message in the list">Jerry Ingerman: "FVWM: mouse causes desktop to switch"</a></li>
+<li><dfn>Previous message</dfn>: <a href="21328.html" title="Previous message in the list">A.J.vanWerven: "FVWM: Key mapping"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg21329" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg21329" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg21329" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg21329" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:01 BST
+</em></small></p>
+</body>
+</html>

@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: Focus and GoToPage from Ruslan Kosolapov on 2004-07-05 (fvwm-users)</title>
+<meta name="Author" content="Ruslan Kosolapov (rkosolapov_at_sw-soft.com)" />
+<meta name="Subject" content="Re: FVWM: Focus and GoToPage" />
+<meta name="Date" content="2004-07-05" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: Focus and GoToPage</h1>
+<!-- received="Mon Jul  5 11:50:32 2004" -->
+<!-- isoreceived="20040705105032" -->
+<!-- sent="Mon, 05 Jul 2004 23:47:46 +0700" -->
+<!-- isosent="20040705164746" -->
+<!-- name="Ruslan Kosolapov" -->
+<!-- email="rkosolapov_at_sw-soft.com" -->
+<!-- subject="Re: FVWM: Focus and GoToPage" -->
+<!-- id="873c469z9p.fsf_at_joemast.plesk.ru" -->
+<!-- charset="us-ascii" -->
+<!-- inreplyto="20040705101520.GA19633_at_sdf.lonestar.org" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start12694" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="12695.html" accesskey="d" title="Tavis Ormandy: &quot;Re: FVWM: Memory usage&quot;">Next message</a> ]
+[ <a href="12693.html" title="liushidai_at_mails.tsinghua.edu.cn: &quot;Re: FVWM: HoverIcon for FvwmButtons (Was: animated FvwmButtons)&quot;">Previous message</a> ]
+[ <a href="12682.html" title="Tavis Ormandy: &quot;Re: FVWM: Focus and GoToPage&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg12694" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg12694" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg12694" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg12694" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Ruslan Kosolapov &lt;<a href="mailto:rkosolapov_at_sw-soft.com?Subject=Re%3A%20FVWM%3A%20Focus%20and%20GoToPage">rkosolapov_at_sw-soft.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Mon, 05 Jul 2004 23:47:46 +0700</span><br />
+</address>
+<br />
+<em class="quotelev2"> &gt;&gt; A most important thing in this metaphor is &quot;focused window should be
+</em><br />
+<em class="quotelev2"> &gt;&gt; in attention locus, i.e. as far as possible in center of a viewport&quot;
+</em><br />
+&nbsp;TO&gt; I'm not sure what you mean by &quot;attention locus&quot;, but if you mean
+<br />
+&nbsp;TO&gt; you want to centre the viewport on a window how about this:
+<br />
+<br />&nbsp;TO&gt; DestroyFunc CenterViewportOnWindow
+<br />
+&nbsp;TO&gt; AddToFunc CenterViewportOnWindow
+<br />
+&nbsp;TO&gt; + I FlipFocus
+<br />
+&nbsp;TO&gt; + I WarpToWindow 50 50
+<br />
+&nbsp;TO&gt; + I PipeRead &quot;echo Scroll $$((((-$[vp.width]/2)+$[pointer.x])))p $$(((-($[vp.height]/2)+$[pointer.y])))p
+<br />
+<br />&nbsp;TO&gt; Then, for example, bind something to Next CenterViewportOnWindow
+<br />
+<br />&nbsp;&nbsp;:)  Thanks.   I use FvwmTcl module by Victor Wagner for it:
+<br />
+<br />DestroyFunc CenterViewPortAndFocus
+<br />
+AddToFunc   CenterViewPortAndFocus
+<br />
++ I Module $[bindir]/CenterViewPort.tcl $[w.x] $[w.y] $[w.width] $[w.height] $[vp.width] $[vp.height]
+<br />
+<br />#!/bin/sh
+<br />
+# for sh this is a two lines. for wish - whis is one line \
+<br />
+exec tclsh &quot;$0&quot; &quot;$_at_&quot;
+<br />
+<br />#parameter's assigns skipped
+<br />
+<br />set command &quot;Scroll [expr $winX - $scrWidth / 2 + $winWidth / 2]p [expr $winY - $scrHeight / 2  + $winHeight / 2]p&quot;
+<br />
+<br />::fvwm::send &quot;WindowID $winID Raise&quot;
+<br />
+::fvwm::send &quot;WindowID $winID Iconify Off&quot;
+<br />
+<br />::fvwm::send $command
+<br />
+#::fvwm::send &quot;WindowID $winID WarpToWindow 1p 1p&quot;
+<br />
+<br />exit 0
+<br />
+<br /><br /><em class="quotelev2"> &gt;&gt; I asked here about placement windows on whole multipaged desk, not
+</em><br />
+<em class="quotelev2"> &gt;&gt; on current page only.  OK, now I can't do it by fvwm.
+</em><br />
+&nbsp;TO&gt; Well you can, the StartsOnPage/SkipMapping solution sounded okay to
+<br />
+&nbsp;TO&gt; me?
+<br />
+<br />&nbsp;&nbsp;No, StartsOnPage is not enough.  But it is not a problem - I will use
+<br />
+&nbsp;&nbsp;FvwmEvent for moving window to need place.
+<br />
+<br /><em class="quotelev2"> &gt;&gt; Question number two: I report a bug (in my opinion it is a bug)
+</em><br />
+<em class="quotelev2"> &gt;&gt; about wrong behavior of WarpToWindow function.  Shortly: this
+</em><br />
+<em class="quotelev2"> &gt;&gt; function resets a viewport like GoToPage do it.  Can I to do
+</em><br />
+<em class="quotelev2"> &gt;&gt; something with it?  Is there a workaround?  I can't find a simple
+</em><br />
+<em class="quotelev2"> &gt;&gt; solution (I plan to use CursorMove or something like it, but it is
+</em><br />
+<em class="quotelev2"> &gt;&gt; not a good solution).
+</em><br />
+&nbsp;TO&gt; I Think using CursorMove is a good solution, you could add some
+<br />
+&nbsp;TO&gt; CursorMove to the function above to get pretty close to this
+<br />
+&nbsp;TO&gt; behaviour!
+<br />
+<br />&nbsp;&nbsp;Move viewport for centering window is not a good usability really.
+<br />
+&nbsp;&nbsp;More comfortable behavior is move viewport by next rules:
+<br />
+&nbsp;&nbsp;&nbsp;- focused window should be fully visible
+<br />
+&nbsp;&nbsp;&nbsp;- other windows should be maximally visible
+<br />
+&nbsp;&nbsp;&nbsp;- viewport moving should be not chaotic (i.e. window shouldn't moving
+<br />
+&nbsp;&nbsp;accross a whole screen and so on).
+<br />
+<br />&nbsp;&nbsp;Use CursorMove in such circumstances could be not simple, so, it is a
+<br />
+&nbsp;&nbsp;not a good solution.  But seems like it is a single way.
+<br />
+<br /><pre>
+-- 
+Ruslan Kosolapov
+Plesk QA Department Second Manager
+SWsoft, Inc.
+E-mail: rkosolapov_at_sw-soft.com
+Web Site: www.sw-soft.com
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Mon Jul 05 2004 - 11:50:32 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start12694">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="12695.html" title="Next message in the list">Tavis Ormandy: "Re: FVWM: Memory usage"</a></li>
+<li><dfn>Previous message</dfn>: <a href="12693.html" title="Previous message in the list">liushidai_at_mails.tsinghua.edu.cn: "Re: FVWM: HoverIcon for FvwmButtons (Was: animated FvwmButtons)"</a></li>
+<li><dfn>In reply to</dfn>: <a href="12682.html" title="Message to which this message replies">Tavis Ormandy: "Re: FVWM: Focus and GoToPage"</a></li>
+<!-- lnextthread="start" -->
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg12694" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg12694" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg12694" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg12694" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:56 BST
+</em></small></p>
+</body>
+</html>

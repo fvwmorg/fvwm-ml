@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: Installation - configure error from Michael C Meholensky on 2003-03-06 (fvwm-users)</title>
+<meta name="Author" content="Michael C Meholensky (mcmehole_at_us.ibm.com)" />
+<meta name="Subject" content="Re: FVWM: Installation - configure error" />
+<meta name="Date" content="2003-03-06" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: Installation - configure error</h1>
+<!-- received="Thu Mar  6 12:28:07 2003" -->
+<!-- isoreceived="20030306122807" -->
+<!-- sent="Thu, 6 Mar 2003 12:26:14 -0600" -->
+<!-- isosent="20030306182614" -->
+<!-- name="Michael C Meholensky" -->
+<!-- email="mcmehole_at_us.ibm.com" -->
+<!-- subject="Re: FVWM: Installation - configure error" -->
+<!-- id="OFA5C64FA5.32D86A91-ON87256CE1.0064DDEA_at_us.ibm.com" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="FVWM: Installation - configure error" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start8168" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="8169.html" accesskey="d" title="Dan Espen: &quot;Re: FVWM: Installation - configure error&quot;">Next message</a> ]
+[ <a href="8167.html" title="Dominik Vogt: &quot;Re: FVWM: Installation - configure error&quot;">Previous message</a> ]
+[ <a href="8166.html" title="Michael C Meholensky: &quot;FVWM: Installation - configure error&quot;">Maybe in reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="8169.html" accesskey="t" title="Dan Espen: &quot;Re: FVWM: Installation - configure error&quot;">Next in thread</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg8168" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg8168" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg8168" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg8168" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Michael C Meholensky &lt;<a href="mailto:mcmehole_at_us.ibm.com?Subject=Re%3A%20FVWM%3A%20Installation%20-%20configure%20error">mcmehole_at_us.ibm.com</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 6 Mar 2003 12:26:14 -0600</span><br />
+</address>
+<br />
+I've checked the config.log file and found that the problem is in the file
+<br />
+'vm_types.h'
+<br />
+the problem is in this section (of vm_types.h):
+<br />
+<br />#ifdef __64BIT__
+<br />
+typedef signed long     rpn64_t;
+<br />
+#else /* ILP32 */
+<br />
+#ifdef _LONG_LONG
+<br />
+typedef signed long long   rpn64_t;
+<br />
+#else /* no long long */
+<br />
+#ifdef _ALL_SOURCE
+<br />
+typedef quad    rpn64_t;
+<br />
+#endif /* _ALL_SOURCE */
+<br />
+#endif /* _LONG_LONG */
+<br />
+#endif /* __64BIT__ */
+<br />
+<br /><br /><br />the 'typedef quad rpn64_t' fails.
+<br />
+I'm not a system admin and I don't know what this file is all about.
+<br />
+I get he same error for verions: 2.4.14, and 2.4.0
+<br />
+<br /><br /><br /><br /><br />~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<br />
+Michael C. Meholensky
+<br />
+mcmehole_at_us.ibm.com
+<br />
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<br />
+Beer. Now there's a temporary solution.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--Homer J. Simpson
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Mar 06 2003 - 12:28:07 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start8168">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="8169.html" title="Next message in the list">Dan Espen: "Re: FVWM: Installation - configure error"</a></li>
+<li><dfn>Previous message</dfn>: <a href="8167.html" title="Previous message in the list">Dominik Vogt: "Re: FVWM: Installation - configure error"</a></li>
+<li><dfn>Maybe in reply to</dfn>: <a href="8166.html" title="Message to which this message replies">Michael C Meholensky: "FVWM: Installation - configure error"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="8169.html" title="Next message in this discussion thread">Dan Espen: "Re: FVWM: Installation - configure error"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg8168" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg8168" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg8168" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg8168" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:54 BST
+</em></small></p>
+</body>
+</html>

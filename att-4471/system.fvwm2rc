@@ -1,0 +1,497 @@
+# For the benefit of emacs users: -*- shell-script -*-
+# Configuration file for FVWM 2.xx originally by Lars Wirzenius
+# modifications by Julian Gilbey <jdg@debian.org>, copyright March 1999
+# adopeted for fvwm 2.4 by Alexander Kotelnikov <sacha@debian.org> August 2001
+#
+#
+# This file can be used both as the system.fvwmrc and the per-user 
+# ~/.fvwm/.fvwm2rc
+# It uses certain `hooks' (files stored in /etc/X11/fvwm or ~/.fvwm) to allow
+# the system administrator and user to modify menus, colors, and so on without
+# having to change this file.
+#
+# The defaults that this file sets up follow my own taste.  They attempt to set
+# up a nice, easy, comfortable environment for the "ordinary" user.  However,
+# using the hooks, it should be possible to change anything.
+#
+# Please read /usr/share/doc/fvwm/README.sysrc.gz for more information.
+#
+# Hopefully, you will never have to modify this file.
+#
+
+#
+# Section: pre.hook
+#
+# Use pre.hook for things that need to be done before anything else.
+# For example, various paths (IconPath, PixmapPath, ModulePath) might
+# be defined here.
+#
+
+ImagePath /usr/local/share/icons:/usr/share/icons:/usr/share/pixmaps:/usr/include/X11/pixmaps:/usr/local/share/icons:/usr/share/icons:/usr/include/X11/bitmaps:/usr/X11R6/include/bitmaps
+Read /etc/X11/fvwm/pre.hook Quiet
+Read pre.hook Quiet
+
+
+#
+# Section: Various global settings
+#
+# These settings are personal.
+# If you need to modify them, do so in post.hook.
+#
+
+#
+# DeskTopSize sets the size of the desktop in units of physical screen
+# `pages'.  I prefer to use a single desktop with multiple pages,
+# but many people like having multiple desktops.  I thinks its confusing.
+#
+
+DeskTopSize 3x3
+
+#
+# I like to be able to move between pages or desks simply by moving
+# the mouse against the screen border.  I find it very useful.  The
+# following command enables this behaviour.  To disable it, the
+# command EdgeScroll 0 0 could be placed in the post.hook.
+#
+
+EdgeScroll 100 100
+
+#
+# When moving a window against the edge of the screen, it is
+# nice to have a small resistance before the window is moved outside
+# the screen.  This makes it easier to line windows against the
+# edges.  I have also added some resistance to scrolling at the edges
+# of the screen
+#
+
+EdgeResistance 250 100
+
+
+#
+# Section: Styles, colors, fonts, and related things
+#
+# This section defines the looks, behavior, and other attributes of windows.
+# These are also quite personal.  Modify them in post.hook.
+#
+
+#
+# The following sets window colors.  This is highly personal,
+# of course, and I (jdg) have changed it to something I like!!  Feel
+# free to destroy my choices in your post.hook!!
+#
+
+# Put the defaults in a separate decor so decor users can ignore them
+
+Style "default-style" Font -adobe-helvetica-bold-r-*-*-12-*
+Style "default-style" HilightFore white
+Style "default-style" HilightBack steelblue
+
+# We have four buttons in the default style: on the left, we can pull
+# down a menu of window options; on the right, we can close, maximise
+# and iconify.
+
+DestroyDecor default-decor
+AddToDecor default-decor
++ ButtonStyle Reset
++ ButtonStyle 2 Vector 17 20x20@1 30x20@1 50x40@1 70x20@1 80x20@1 80x30@0 \
+                           60x50@0 80x70@0 80x80@0 70x80@0 50x60@0 30x80@0 \
+                           20x80@0 20x70@1 40x50@1 20x30@0 20x20@1
+
++ ButtonStyle 4 Vector 5 25x75@0 75x75@0 75x25@0 25x25@1 25x75@1
++ ButtonStyle 6 Vector 4 50x75@1 25x25@1 75x25@1 50x75@0
+
+#
+# The following sets the window decorations: the window title, borders,
+# and the handles in the corners.
+#
+
+# make the default decor the default:
+Style "default-style" UseDecor default-decor, Color Black/DarkGrey
+
+#
+# Section: default-style.hook
+#
+# Use default-style.hook for general style changes which should happen
+# as part of the default style, before the Style "*" UseStyle default-style
+# command.  This is because a later Style "*" UseStyle foo command will lose
+# all of the information below.
+#
+
+Read /etc/X11/fvwm/default-style.hook Quiet
+#Read default-style.hook Quiet
+Read ~/.fvwm/default-style.hook Quiet
+
+Style "*" UseStyle default-style
+
+
+# I have commented out the RandomPlacement and the SmartPlacement styles,
+# replacing them by ActivePlacement (which should be the default anyway).
+# Also, NoPPostion completes this, although this may occasionally cause
+# problems.  (Please let me know if this be the case!)
+# I think it can be annoying for windows to suddenly appear without the
+# user having an initial choice of where they do so.  This is, of course,
+# completely changeable within the user's post.hook.
+Style "*" BorderWidth 6
+Style "*" HandleWidth 6
+Style "*" MWMFunctions
+Style "*" MWMBorder
+Style "*" MWMDecor
+Style "*" DecorateTransient
+# Style "*" SmartPlacement
+# Style "*" RandomPlacement
+Style "*" ActivePlacement
+Style "*" NoPPosition
+Style "*" IconBox 0 0 50 -1
+
+Style "Fvwm*" NoTitle
+Style "Fvwm*" WindowListSkip
+Style "Fvwm*" CirculateSkip
+
+Style "FvwmButtons" Sticky
+Style "FvwmIconMan" Sticky
+Style "FvwmPager"   Sticky, StaysOnTop, Handles, HandleWidth 5
+
+Style "FvwmIdent" Title
+Style "FvwmIdent" WindowListHit
+Style "FvwmIdent" CirculateHit
+
+
+# Add icons to some common programs
+Style "Emacs"       Icon gnu-animal.xpm, MiniIcon mini.emacs.xpm
+Style "XTerm"       Icon xterm-linux.xpm, MiniIcon mini.xterm.xpm
+Style "Ghostview"   Icon gv.xpm
+Style "Gnuplot"     Icon graphs.xpm
+Style "Xcalc"       Icon xcalc.xpm, MiniIcon mini-calc.xpm
+Style "XBff"       Icon mail1.xpm, MiniIcon mini-mail.xpm
+Style "Xman"        Icon xman.xpm, MiniIcon mini-manual.xpm
+Style "Xmag"        Icon mag_glass.xpm, MiniIcon mini.xmag.xpm
+Style "Mosaic"      Icon Mosaic.xpm
+Style "Netscape"    Icon nscape.xpm, MiniIcon mini-nscape.xpm
+Style "Xpaint"      Icon xpaint.xpm, MiniIcon mini.xpaint.xpm
+Style "Manual Page" Icon xman.xpm, MiniIcon mini-manual.xpm
+Style "Xedit"       Icon textedit.xpm, MiniIcon mini-edit.xpm
+Style "*"           Icon default.xbm
+
+
+#
+# Section: Init and restart functions
+#
+# This section defines the functions InitFunction and RestartFunction.
+# InitFunction is executed automatically when fvwm first starts.
+# RestartFunction is executed automatically when fvwm restarts itself.
+# They share a common hook, init-restart.hook, and two specific hooks,
+# init.hook and restart.hook.
+#
+# init-restart.hook should be used for starting fvwm modules, such as the
+# button bar.  init-hook should be used to start other applications; they
+# should not be started again, when fvwm is restarted, since they don't
+# die like fvwm modules do.  restart.hook exists mostly for completeness;
+# tell me if you find any use for it.
+#
+# InitFunction runs the script setup-background, which looks in
+# ~/.fvwm to see if the user wants some specific background color or
+# image.
+#
+# The init.hook, init-restart.hook and restart.hook files should
+# contain continuation lines, eg:
+#   + "I" Exec xterm
+#
+
+DestroyFunc StartFunction
+AddToFunc StartFunction
+Read /etc/X11/fvwm/init-restart.hook Quiet
+Read init-restart.hook Quiet
+
+DestroyFunc InitFunction
+AddToFunc InitFunction
+Read /etc/X11/fvwm/init.hook Quiet
+Read init.hook Quiet
+#Exec exec setup-background
+
+DestroyFunc RestartFunction
+AddToFunc RestartFunction
+Read /etc/X11/fvwm/restart.hook Quiet
+Read restart.hook Quiet
+
+
+#
+# Section: Menus
+#
+# This section defines a small menu structure.  The main menu contains
+# some typical entries, and uses a hook (main-menu.hook) to allow the
+# user to add new entries.  Most of the default entries are submenus,
+# which are also defined here.
+#
+
+#
+# MWM style menus are easier to use and better for Windows refugees.
+#
+
+MenuStyle "*" mwm, Foreground black, Background grey, Greyed white, \
+  Font -adobe-helvetica-bold-r-*-*-12-*
+
+#
+# Read in system and user menu definitions.
+#
+
+# Read system and user menu prefixes
+# The title of the main menu will be provided by the menu-methods script
+# which creates an AddToMenu /Debian "Main Menu" Title Top command in
+# menudefs.hook.  We also add an xterm entry just in case the user has
+# no menudefs and the menu package is not installed -- it could be quite
+# embarrassing.  An example without this can be found in the examples
+# directory.
+#
+DestroyMenu /Debian
+AddToMenu /Debian
++  "Xterm"       Exec exec xterm
++  ""            Nop
+Read /etc/X11/fvwm/main-menu-pre.hook Quiet
+Read main-menu-pre.hook Quiet
+
+# Read the auto-generated menus
+Read /etc/X11/fvwm/menudefs.hook Quiet
+Read menudefs.hook Quiet
+
+# Add in user additions
+Read /etc/X11/fvwm/main-menu.hook Quiet
+Read main-menu.hook Quiet
+
+# Tack a quit entry on to the end; this version uses a pop-up menu to ask
+# the user to confirm, MWM-style (?).  The second line may be changed as
+# indicated to use a popup form instead.  (The QuitVerify form is defined
+# in system.warnings, read in later.)
+AddToMenu /Debian
++  ""            Nop
++  "Exit Fvwm"   Popup Quit-Verify
+# or:
+# +  "Exit Fvwm"   Module FvwmForm QuitVerify
+
+#
+# The Window-Ops menu is for manipulating windows.  It is invoked either
+# from the main menu, or directly from the root window.
+#
+
+DestroyMenu Window-Ops
+AddToMenu Window-Ops "Alt-F1: Window Ops" Title
++ "Alt-F2:  Main Menu"                   Popup /Debian
++ "Alt-F3:  Lower"                       Lower
++ "Alt-F4:  Window List"                 WindowList
++ "Alt-F5:  Previous"                    Prev
++ "Alt-F6:  Next"                        Next
++ "Alt-F7:  Move"                        Move
++ "Alt-F8:  Resize"                      Resize
++ "Alt-F9:  (De)Iconify"                 Iconify
++ "Alt-F10: (Un)Maximize to screen"      Maximize 100 100
++ "Alt-F11: Raise"                       Raise
++ "Alt-F12: (Un)Stick"                   Stick        
++ "         (Un)Maximize vertical"       Maximize 0 100
++ "         (Un)Maximize horizontal"     Maximize 100 0
++ "         (Un)Shade"                   WindowShade
++ ""                                     Nop
++ "         ScrollBar"                   Module FvwmScroll 2 2
++ ""                                     Nop
++ "         Destroy"                     Destroy
++ "         Close"                       Close
+
+
+#
+# The Quit-Verify menu checks that the user really wants to exit.
+#
+
+DestroyMenu Quit-Verify
+AddToMenu Quit-Verify "Really quit FVWM?" Title
++ "No, restart Fvwm"   Restart
++ ""                   Nop
++ "Yes, really quit"   Quit
+
+
+#
+# Section: Mouse bindings
+#
+# This section defines the mouse bindings, that is, all the things that
+# can be done with the mouse.
+#
+
+#
+# Each button gives a different menu from the background (root window).
+#
+
+Mouse 1   R  A  Menu /Debian
+Mouse 2   R  A  Menu Window-Ops
+Mouse 3   R  A  WindowList
+
+#
+# Moving and resizing, depending on which part of the window
+# you grab (T=title bar, S=side/top/bottom, F=corner).
+#
+
+Mouse 0 T A move-and-raise-or-raiselower
+#This caused problems with emacs selection (Bug #17668).
+#Mouse 0 W M move-and-raise-or-raiselower
+Mouse 0 W M   -
+Mouse 0 F A resize-or-raiselower
+Mouse 0 S A resize-or-raiselower
+
+#
+# Move or de-iconify an icon.
+#
+
+Mouse 0 I A move-or-winmenu-or-deiconify
+
+#
+# Buttons on the title bar (1,3,5,7,9 are on the left, 0,8,6,4,2 on
+# the right side of the title bar).  Note that the bindings here
+# make more sense if the ButtonStyle's defined earlier are retained.
+#
+
+Mouse 0 1 A Popup Window-Ops
+
+Mouse 0 2 A Close
+Mouse 1 4 A Maximize 0 100
+Mouse 2 4 A Maximize 100 100
+Mouse 3 4 A Maximize 100 0
+Mouse 0 6 A Iconify
+
+
+#
+# Section: Key bindings
+#
+# This section binds some actions to keys.  The bindings have been inspired
+# by MWM, Windows, and nightmares.  Everything that these key bindings do,
+# can be done without them.  Therefore they should not be too much of a
+# burden on new users, but it definitely _can_ be confusing to press a
+# key by accident and have it do something completely unexpected.
+#
+
+Key Tab   A    M    Next [CurrentPage !iconic] focus-and-raise
+Key Tab   A    MS   Prev [CurrentPage !iconic] focus-and-raise
+Key Tab   A    CM   Next [CurrentPage] deiconify-and-focus
+Key Tab   A    CMS  Prev [CurrentPage] deiconify-and-focus
+Key Left  A    M    Scroll -100 +0
+Key Up    A    M    Scroll +0 -100
+Key Right A    M    Scroll +100 +0
+Key Down  A    M    Scroll +0 +100
+Key F1    A    M    Popup Window-Ops
+Key F2    A    M    Popup /Debian
+Key F3    A    M    Lower
+Key F4    A    M    WindowList
+Key F5    A    M    Prev
+Key F6    A    M    Next
+Key F7    A    M    Move
+Key F8    A    M    Resize
+Key F9    A    M    Iconify
+Key F10   A    M    Maximize 100 100
+Key F11   A    M    Raise
+Key F12   A    M    Stick
+
+
+#
+# Section: Functions
+#
+# This section defines various functions.  Not all of these are used by
+# the default bindings, but they can be useful for a user who wants to
+# customize things.
+#
+#
+# The following functions operate on a window or menu.  The
+# names are systematic: foo means "do foo"; foo-or-bar means
+# "do foo, if mouse is moving, bar if click"; and foo-or-bar-or-baz
+# adds "baz, if double-clicked".
+#
+
+DestroyFunc move-or-winmenu-or-deiconify
+AddToFunc   move-or-winmenu-or-deiconify
++ "M" Move
++ "C" Popup Window-Ops
++ "D" Iconify
+
+DestroyFunc deiconify-and-focus
+AddToFunc   deiconify-and-focus
++ "I" Iconify -1
++ "I" Focus
+
+DestroyFunc deiconify-and-raise
+AddToFunc   deiconify-and-raise
++ "I" Iconify -1
++ "I" Raise
+
+DestroyFunc focus-and-raise
+AddToFunc   focus-and-raise
++ "I" Focus
++ "I" Raise
+
+DestroyFunc move-or-raiselower
+AddToFunc   move-or-raiselower
++ "M" Move
++ "C" RaiseLower
+
+DestroyFunc move-and-raise-or-raiselower
+AddToFunc   move-and-raise-or-raiselower
++ "M" Move
++ "M" Raise
++ "C" RaiseLower
+
+DestroyFunc move-or-raiselower-or-maximize-vertical
+AddToFunc   move-or-raiselower-or-maximize-vertical
++ "M" Move
++ "C" RaiseLower
++ "D" Maximize 0 100
+
+DestroyFunc resize-or-raiselower
+AddToFunc   resize-or-raiselower
++ "M" Resize
++ "C" RaiseLower
+
+
+#
+# Configure a FvwmButtons module for the modules menu, but make sure
+# user can easily override it with their own - so name it DebianFvwmButtons.
+# To use this config, you need to invoke it as:
+#   "Module FvwmButtons DebianFvwmButtons"
+#
+*DebianFvwmButtonsFore White
+*DebianFvwmButtonsBack DarkSlateGrey
+*DebianFvwmButtonsGeometry 430x100-0-0
+*DebianFvwmButtonsRows 1
+*DebianFvwmButtons(Title Help, Icon xman.xpm, Action 'Exec exec xman &')
+*DebianFvwmButtons(Title xterm, Icon xterm.xpm, Action 'Exec exec xterm &')
+*DebianFvwmButtons(Title emacs, Icon gnu-animal.xpm, Action 'Exec exec emacs &')
+*DebianFvwmButtons(2x1, Swallow(UseOld,NoKill) "FvwmPager")
+
+
+#
+# Configure the FvwmPager module
+#
+*FvwmPagerBack SlateGrey
+*FvwmPagerFore Black
+*FvwmPagerFont none
+*FvwmPagerHilight SlateBlue4
+*FvwmPagerGeometry -0-0
+*FvwmPagerSmallFont -*-times-medium-r-*-*-*-80-*-*-*-*-*-*
+*FvwmPagerDeskTopScale 32
+
+# We start the pager in the InitFunction and RestartFunction, so that the
+# user has control over whether it starts or not.  We do this by placing
+# it in the system init-restart.hook, so that either the administrator
+# can remove it or infividual users can kill it or set it up differently
+# by placing something like the following in their personal
+# init-restart.hook:
+#    + "I" Wait FvwmPager
+#    + "I" KillModule FvwmPager
+#    + "I" Module FvwmPager 0 3
+
+# This reads in various warning styles and checks for the presence or
+# not of ~/.fvwm and ~/.fvwm2.
+# Read /etc/X11/fvwm/system.warnings
+
+#
+# Section: post.hook
+#
+# Use post.hook to force things that may have been changed earlier, for
+# example, key bindings.
+#
+
+Read /etc/X11/fvwm/post.hook Quiet
+Read post.hook Quiet
+

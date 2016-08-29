@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: (un)shade windows with BorderWidth 0 from Frank Gruellich on 2004-11-06 (fvwm-users)</title>
+<meta name="Author" content="Frank Gruellich (frank_at_der-frank.org)" />
+<meta name="Subject" content="FVWM: (un)shade windows with BorderWidth 0" />
+<meta name="Date" content="2004-11-06" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: (un)shade windows with BorderWidth 0</h1>
+<!-- received="Sat Nov  6 14:05:33 2004" -->
+<!-- isoreceived="20041106140533" -->
+<!-- sent="Sat, 6 Nov 2004 21:05:11 +0100" -->
+<!-- isosent="20041106200511" -->
+<!-- name="Frank Gruellich" -->
+<!-- email="frank_at_der-frank.org" -->
+<!-- subject="FVWM: (un)shade windows with BorderWidth 0" -->
+<!-- id="20041106200511.GV29776_at_der-frank.org" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start13459" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="13460.html" accesskey="d" title="Pete: &quot;FVWM: Date: Sat, 6 Nov 2004 15:50:06 -0500&quot;">Next message</a> ]
+[ <a href="13458.html" title="Mikhael Goikhman: &quot;Re: FVWM: Turn on title on WindowShade&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="13461.html" accesskey="t" title="Scott Smedley: &quot;Re: FVWM: (un)shade windows with BorderWidth 0&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg13459" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg13459" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg13459" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg13459" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Frank Gruellich &lt;<a href="mailto:frank_at_der-frank.org?Subject=Re%3A%20FVWM%3A%20(un)shade%20windows%20with%20BorderWidth%200">frank_at_der-frank.org</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sat, 6 Nov 2004 21:05:11 +0100</span><br />
+</address>
+<br />
+Hello again
+<br />
+<br />thanks to Scott and Mikhael for helping with this Title thing.
+<br />
+<br />There occures another strange effect then a windows style is BorderWidth
+<br />
+0 and it's unshaded.  This is my setup for now:
+<br />
+<br />&nbsp;&nbsp;Style * NoTitle, NoHandles, BorderWidth 0, WindowShadeSteps 25
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;DestroyFunc	ToggleShade
+<br />
+&nbsp;&nbsp;AddToFunc	ToggleShade
+<br />
+&nbsp;&nbsp;+ I ThisWindow (Shaded) WindowStyle NoTitle
+<br />
+&nbsp;&nbsp;+ I ThisWindow (Shaded) UpdateStyles
+<br />
+&nbsp;&nbsp;+ I ThisWindow (Shaded) WindowShade false
+<br />
+&nbsp;&nbsp;+ I TestRc (1) Break
+<br />
+&nbsp;&nbsp;+ I WindowStyle TitleAt$0
+<br />
+&nbsp;&nbsp;+ I UpdateStyles
+<br />
+&nbsp;&nbsp;+ I WindowShade
+<br />
+&nbsp;&nbsp;+ I WindowStyle Title
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;DestroyFunc	StartFunction
+<br />
+&nbsp;&nbsp;AddToFunc	StartFunction
+<br />
+&nbsp;&nbsp;+ I exec fvwm-root -r $HOME/.fvwm/backgrounds/background.png
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;DestroyFunc	InitFunction
+<br />
+&nbsp;&nbsp;AddToFunc	InitFunction
+<br />
+&nbsp;&nbsp;+ I Exec xterm +sb -g 128x48+120+75
+<br />
+&nbsp;&nbsp;
+<br />
+&nbsp;&nbsp;Key Left	TFISW CS ToggleShade Left
+<br />
+&nbsp;&nbsp;Key Down	TFISW CS ToggleShade Bottom
+<br />
+&nbsp;&nbsp;Key Up	TFISW CS ToggleShade Top
+<br />
+&nbsp;&nbsp;Key Right	TFISW CS ToggleShade Right
+<br />
+<br />I can shade, the title appears like a charm, but when I unshade the
+<br />
+window its content isn't refreshed anymore.  I made some screenshots:
+<br />
+&lt;URL:<a href="http://www.der-frank.org/tmp/fvwm-shade.html">http://www.der-frank.org/tmp/fvwm-shade.html</a>&gt;.  It happens with any
+<br />
+window I've tried (xterm, aterm, xcalc, FvwmConsole, mozilla).  The
+<br />
+application stayes alive, eg. if it's a shell, I can send commands to it
+<br />
+and close it, too.  Neither this, 'Refresh', 'RefreshWindow',
+<br />
+'UpdateStyle' nor 'UpdateDecor' make the window to redraw itself.  I can
+<br />
+issue a 'WindowStyle BorderWidth 0' again to the window to work around
+<br />
+this.  It doesn't happen with BorderWidth 1.
+<br />
+<br />According to the manpage zero is a valid value for BorderWidth.  I am
+<br />
+using CVS from some hours ago.  What did I wrong?
+<br />
+<br />Thanks in advance,
+<br />
+&nbsp;regards, Frank.
+<br />
+<pre>
+-- 
+Sigmentation fault
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sat Nov 06 2004 - 14:05:33 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start13459">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="13460.html" title="Next message in the list">Pete: "FVWM: Date: Sat, 6 Nov 2004 15:50:06 -0500"</a></li>
+<li><dfn>Previous message</dfn>: <a href="13458.html" title="Previous message in the list">Mikhael Goikhman: "Re: FVWM: Turn on title on WindowShade"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="13461.html" title="Next message in this discussion thread">Scott Smedley: "Re: FVWM: (un)shade windows with BorderWidth 0"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="13461.html" title="Message sent in reply to this message">Scott Smedley: "Re: FVWM: (un)shade windows with BorderWidth 0"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg13459" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg13459" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg13459" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg13459" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:57 BST
+</em></small></p>
+</body>
+</html>

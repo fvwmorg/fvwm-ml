@@ -1,0 +1,1348 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: (long) startup timing bug patch to test from Charles Hines on 1996-07-25 (fvwm-users)</title>
+<meta name="Author" content="Charles Hines (chuck_hines_at_VNET.IBM.COM)" />
+<meta name="Subject" content="FVWM: (long) startup timing bug patch to test" />
+<meta name="Date" content="1996-07-25" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: (long) startup timing bug patch to test</h1>
+<!-- received="Thu Jul 25 13:08:14 1996" -->
+<!-- isoreceived="19960725120814" -->
+<!-- sent="Thu, 25 Jul 1996 14:06:35 -0400" -->
+<!-- isosent="19960725180635" -->
+<!-- name="Charles Hines" -->
+<!-- email="chuck_hines_at_VNET.IBM.COM" -->
+<!-- subject="FVWM: (long) startup timing bug patch to test" -->
+<!-- id="9607251806.AA47041_at_cold.fishkill.ibm.com" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start17475" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="17476.html" accesskey="d" title="Manoj Kasichainula: &quot;Re: FVWM: (long) startup timing bug patch to test&quot;">Next message</a> ]
+[ <a href="17474.html" title="Emilio Lopes: &quot;Re: FVWM: Running fvwm2.0.43&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="17476.html" accesskey="t" title="Manoj Kasichainula: &quot;Re: FVWM: (long) startup timing bug patch to test&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17475" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17475" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17475" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17475" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Charles Hines &lt;<a href="mailto:chuck_hines_at_VNET.IBM.COM?Subject=Re%3A%20FVWM%3A%20(long)%20startup%20timing%20bug%20patch%20to%20test">chuck_hines_at_VNET.IBM.COM</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Thu, 25 Jul 1996 14:06:35 -0400</span><br />
+</address>
+<br />
+Howdy all.
+<br />
+<br />Could those of you who are experiencing the troubles with windows
+<br />
+started before fvwm in your .xinitrc not getting style attributes set
+<br />
+correctly please try the enclosed patch and let me know how well it
+<br />
+works for you?
+<br />
+<br />There is miscellaneous other stuff in there too that will be in 2.1.0
+<br />
+as well, but just ignore that for now.
+<br />
+<br />Thanks,
+<br />
+Chuck
+<br />
+<br />---------------&gt;8 '2.0.43-startup-timing-bug-patch' cut here 8&lt;---------------
+<br />
+diff -N -u -r fvwm/add_window.c fvwm/add_window.c
+<br />
+--- fvwm/add_window.c.orig      Thu Apr 11 11:25:58 1996
+<br />
++++ fvwm/add_window.c   Thu Jul 25 13:11:07 1996
+<br />
+_at_&#64; -237,13 +237,13 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;* reparented, so we'll get a DestroyNotify for it.  We won't have
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;* gotten one for anything up to here, however.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;*/
+<br />
+-  XGrabServer(dpy);
+<br />
++  MyXGrabServer(dpy);
+<br />
+&nbsp;&nbsp;&nbsp;if(XGetGeometry(dpy, w, &amp;JunkRoot, &amp;JunkX, &amp;JunkY,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;JunkWidth, &amp;JunkHeight,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;JunkBW,  &amp;JunkDepth) == 0)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;free((char *)tmp_win);
+<br />
+-      XUngrabServer(dpy);
+<br />
++      MyXUngrabServer(dpy);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return(NULL);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+<br />_at_&#64; -484,7 +484,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;RaiseWindow(tmp_win);
+<br />
+&nbsp;&nbsp;&nbsp;KeepOnTop();
+<br />
+-  XUngrabServer(dpy);
+<br />
++  MyXUngrabServer(dpy);
+<br />
+<br />&nbsp;&nbsp;&nbsp;XGetGeometry(dpy, tmp_win-&gt;w, &amp;JunkRoot, &amp;JunkX, &amp;JunkY,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;JunkWidth, &amp;JunkHeight, &amp;JunkBW, &amp;JunkDepth);
+<br />
+diff -N -u -r fvwm/builtins.c fvwm/builtins.c
+<br />
+--- fvwm/builtins.c.orig        Thu Jun 27 10:34:19 1996
+<br />
++++ fvwm/builtins.c     Thu Jul 25 13:11:08 1996
+<br />
+_at_&#64; -766,9 +766,16 &#64;&#64;
+<br />
+&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;XSetWindowAttributes attributes;
+<br />
+&nbsp;&nbsp;&nbsp;unsigned long valuemask;
+<br />
+-
+<br />
++
+<br />
++#if 0
+<br />
+&nbsp;&nbsp;&nbsp;valuemask = (CWBackPixel);
+<br />
+&nbsp;&nbsp;&nbsp;attributes.background_pixel = 0;
+<br />
++#else /* CKH - i'd like to try this a little differently (clear window)*/
+<br />
++  valuemask = CWOverrideRedirect | CWBackingStore | CWSaveUnder | CWBackPixmap;
+<br />
++  attributes.override_redirect = True;
+<br />
++  attributes.save_under = False;
+<br />
++  attributes.background_pixmap = None;
+<br />
++#endif
+<br />
+&nbsp;&nbsp;&nbsp;attributes.backing_store = NotUseful;
+<br />
+&nbsp;&nbsp;&nbsp;w = XCreateWindow (dpy, Scr.Root, 0, 0,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(unsigned int) Scr.MyDisplayWidth,
+<br />
+_at_&#64; -847,6 +854,38 &#64;&#64;
+<br />
+&nbsp;}
+<br />
+<br /><br />+void flip_focus_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
++               unsigned long context, char *action, int *Module)
+<br />
++{
+<br />
++
+<br />
++  FvwmWindow *scratch;
+<br />
++
+<br />
++  if (DeferExecution(eventp,&amp;w,&amp;tmp_win,&amp;context,SELECT,ButtonRelease))
+<br />
++    return;
+<br />
++
+<br />
++  /* Reorder the window list */
+<br />
++  if( Scr.Focus ){
+<br />
++    if( Scr.Focus-&gt;next ) Scr.Focus-&gt;next-&gt;prev = Scr.Focus-&gt;prev;
+<br />
++    if( Scr.Focus-&gt;prev ) Scr.Focus-&gt;prev-&gt;next = Scr.Focus-&gt;next;
+<br />
++    Scr.Focus-&gt;next = Scr.FvwmRoot.next;
+<br />
++    Scr.Focus-&gt;prev = &amp;Scr.FvwmRoot;
+<br />
++    if(Scr.FvwmRoot.next)Scr.FvwmRoot.next-&gt;prev = Scr.Focus;
+<br />
++    Scr.FvwmRoot.next = Scr.Focus;
+<br />
++  }
+<br />
++  if( tmp_win != Scr.Focus ){
+<br />
++    if( tmp_win-&gt;next ) tmp_win-&gt;next-&gt;prev = tmp_win-&gt;prev;
+<br />
++    if( tmp_win-&gt;prev ) tmp_win-&gt;prev-&gt;next = tmp_win-&gt;next;
+<br />
++    tmp_win-&gt;next = Scr.FvwmRoot.next;
+<br />
++    tmp_win-&gt;prev = &amp;Scr.FvwmRoot;
+<br />
++    if(Scr.FvwmRoot.next)Scr.FvwmRoot.next-&gt;prev = tmp_win;
+<br />
++    Scr.FvwmRoot.next = tmp_win;
+<br />
++  }
+<br />
++
+<br />
++  FocusOn(tmp_win,0);
+<br />
++
+<br />
++}
+<br />
++
+<br />
++
+<br />
+&nbsp;void focus_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long context, char *action, int *Module)
+<br />
+&nbsp;{
+<br />
+_at_&#64; -1762,7 +1801,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;Bool needsIconic = 0;
+<br />
+&nbsp;&nbsp;&nbsp;Bool needsNormal = 0;
+<br />
+&nbsp;&nbsp;&nbsp;Bool needsCurrentDesk = 0;
+<br />
+-  Bool needsCurrentScreen = 0;
+<br />
++  Bool needsCurrentPage = 0;
+<br />
+&nbsp;&nbsp;&nbsp;Bool needsVisible = 0;
+<br />
+&nbsp;&nbsp;&nbsp;Bool needsInvisible = 0;
+<br />
+&nbsp;&nbsp;&nbsp;char *AnyWindow = &quot;*&quot;;
+<br />
+_at_&#64; -1807,12 +1846,18 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;needsNormal = 1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if(mystrcasecmp(condition,&quot;CurrentDesk&quot;)==0)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;needsCurrentDesk = 1;
+<br />
++      else if(mystrcasecmp(condition,&quot;CurrentPage&quot;)==0)
+<br />
++      {
+<br />
++        needsCurrentDesk = 1;
+<br />
++        needsCurrentPage = 1;
+<br />
++      }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if(mystrcasecmp(condition,&quot;Visible&quot;)==0)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;needsVisible = 1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if(mystrcasecmp(condition,&quot;!Visible&quot;)==0)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;needsInvisible = 1;
+<br />
+-      else if(mystrcasecmp(condition,&quot;CurrentScreen&quot;)==0)
+<br />
+-        needsCurrentScreen = 1;
+<br />
++      else if(mystrcasecmp(condition,&quot;CurrentPageAnyDesk&quot;)==0 ||
+<br />
++              mystrcasecmp(condition,&quot;CurrentScreen&quot;)==0)
+<br />
++        needsCurrentPage = 1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if(mystrcasecmp(condition,&quot;CirculateHit&quot;)==0)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;useCirculateHit = 1;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if(mystrcasecmp(condition,&quot;CirculateHitIcon&quot;)==0)
+<br />
+_at_&#64; -1866,10 +1911,10 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((!needsCurrentDesk)||(fw-&gt;Desk == Scr.CurrentDesk))&amp;&amp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((!needsVisible)||(fw-&gt;flags &amp; VISIBLE))&amp;&amp;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;((!needsInvisible)||(!(fw-&gt;flags &amp; VISIBLE)))&amp;&amp;
+<br />
+-           ((!needsCurrentScreen)||((fw-&gt;frame_x &lt; Scr.MyDisplayWidth)&amp;&amp;
+<br />
+-                                    (fw-&gt;frame_y &lt; Scr.MyDisplayHeight)&amp;&amp;
+<br />
+-                                    (fw-&gt;frame_x+fw-&gt;frame_width &gt; 0)&amp;&amp;
+<br />
+-                                    (fw-&gt;frame_y+fw-&gt;frame_height &gt; 0)))))
+<br />
++           ((!needsCurrentPage)||((fw-&gt;frame_x &lt; Scr.MyDisplayWidth)&amp;&amp;
+<br />
++                                  (fw-&gt;frame_y &lt; Scr.MyDisplayHeight)&amp;&amp;
+<br />
++                                  (fw-&gt;frame_x+fw-&gt;frame_width &gt; 0)&amp;&amp;
+<br />
++                                  (fw-&gt;frame_y+fw-&gt;frame_height &gt; 0)))))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;found = fw;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+_at_&#64; -1986,7 +2031,7 &#64;&#64;
+<br />
+<br />&nbsp;&nbsp;&nbsp;PPosOverride = True;
+<br />
+&nbsp;&nbsp;&nbsp;/* put a border back around all windows */
+<br />
+-  XGrabServer (dpy);
+<br />
++  MyXGrabServer(dpy);
+<br />
+&nbsp;&nbsp;&nbsp;tmp = Scr.FvwmRoot.next;
+<br />
+&nbsp;&nbsp;&nbsp;for(i=0;i&lt;nchildren;i++)
+<br />
+&nbsp;&nbsp;&nbsp;{
+<br />
+_at_&#64; -2027,7 +2072,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XFree((char *)children);
+<br />
+&nbsp;&nbsp;&nbsp;PPosOverride = False;
+<br />
+&nbsp;&nbsp;&nbsp;KeepOnTop();
+<br />
+-  XUngrabServer (dpy);
+<br />
++  MyXUngrabServer(dpy);
+<br />
+&nbsp;&nbsp;&nbsp;XSync(dpy,0);
+<br />
+<br />&nbsp;}
+<br />
+diff -N -u -r fvwm/events.c fvwm/events.c
+<br />
+--- fvwm/events.c.orig  Mon May 27 15:33:26 1996
+<br />
++++ fvwm/events.c       Thu Jul 25 13:11:09 1996
+<br />
+_at_&#64; -745,7 +745,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(isIconicState != DontCareState)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;state = isIconicState;
+<br />
+<br />-      XGrabServer (dpy);
+<br />
++      MyXGrabServer(dpy);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;switch (state)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case DontCareState:
+<br />
+_at_&#64; -772,12 +772,19 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case IconicState:
+<br />
+-         Iconify(Tmp_win, 0, 0);
+<br />
++         if (Tmp_win-&gt;wmhints)
+<br />
++           {
+<br />
++             Iconify(Tmp_win, Tmp_win-&gt;wmhints-&gt;icon_x, Tmp_win-&gt;wmhints-&gt;icon_y);
+<br />
++           }
+<br />
++         else
+<br />
++           {
+<br />
++             Iconify(Tmp_win, 0, 0);
+<br />
++           }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(!PPosOverride)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XSync(dpy,0);
+<br />
+-      XUngrabServer(dpy);
+<br />
++      MyXUngrabServer(dpy);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;/* If no hints, or currently an icon, just &quot;deiconify&quot; */
+<br />
+&nbsp;&nbsp;&nbsp;else
+<br />
+_at_&#64; -819,7 +826,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;* the client would think that the window has a chance of being viewable
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;* when it really isn't.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;*/
+<br />
+-  XGrabServer (dpy);
+<br />
++  MyXGrabServer (dpy);
+<br />
+&nbsp;&nbsp;&nbsp;if (Tmp_win-&gt;icon_w)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XUnmapWindow(dpy, Tmp_win-&gt;icon_w);
+<br />
+&nbsp;&nbsp;&nbsp;if(Tmp_win-&gt;icon_pixmap_w != None)
+<br />
+_at_&#64; -850,7 +857,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SetBorder(Tmp_win,False,True,True,Tmp_win-&gt;frame);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;XSync(dpy,0);
+<br />
+-  XUngrabServer (dpy);
+<br />
++  MyXUngrabServer (dpy);
+<br />
+&nbsp;&nbsp;&nbsp;XFlush (dpy);
+<br />
+&nbsp;&nbsp;&nbsp;Tmp_win-&gt;flags |= MAPPED;
+<br />
+&nbsp;&nbsp;&nbsp;Tmp_win-&gt;flags &amp;= ~MAP_PENDING;
+<br />
+_at_&#64; -924,12 +931,12 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+<br />-  XGrabServer(dpy);
+<br />
++  MyXGrabServer(dpy);
+<br />
+<br />&nbsp;&nbsp;&nbsp;if(XCheckTypedWindowEvent (dpy, Event.xunmap.window, DestroyNotify,&amp;dummy))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Destroy(Tmp_win);
+<br />
+-      XUngrabServer (dpy);
+<br />
++      MyXUngrabServer (dpy);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+<br />_at_&#64; -975,7 +982,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EnterWindowMask | LeaveWindowMask, &amp;dummy));
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} /* else window no longer exists and we'll get a destroy notify */
+<br />
+-  XUngrabServer (dpy);
+<br />
++  MyXUngrabServer(dpy);
+<br />
+<br />&nbsp;&nbsp;&nbsp;XFlush (dpy);
+<br />
+&nbsp;}
+<br />
+diff -N -u -r fvwm/functions.c fvwm/functions.c
+<br />
+--- fvwm/functions.c.orig       Wed Jun 19 20:01:56 1996
+<br />
++++ fvwm/functions.c    Thu Jul 25 13:11:09 1996
+<br />
+_at_&#64; -55,6 +55,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;{&quot;EdgeResistance&quot;,SetEdgeResistance,F_EDGE_RES,           FUNC_NO_WINDOW},
+<br />
+&nbsp;&nbsp;&nbsp;{&quot;Exec&quot;,         exec_function,    F_EXEC,                FUNC_NO_WINDOW},
+<br />
+&nbsp;&nbsp;&nbsp;{&quot;ExecUseSHELL&quot;, exec_setup,       F_EXEC_SETUP,          FUNC_NO_WINDOW},
+<br />
++  {&quot;FlipFocus&quot;,    flip_focus_func,  F_FLIP_FOCUS,          FUNC_NEEDS_WINDOW},
+<br />
+&nbsp;&nbsp;&nbsp;{&quot;Focus&quot;,        focus_func,       F_FOCUS,               FUNC_NEEDS_WINDOW},
+<br />
+&nbsp;&nbsp;&nbsp;{&quot;Function&quot;,     ComplexFunction,  F_FUNCTION,            FUNC_NO_WINDOW},
+<br />
+&nbsp;&nbsp;&nbsp;{&quot;GotoPage&quot;,     goto_page_func,   F_GOTO_PAGE,           FUNC_NO_WINDOW},
+<br />
+diff -N -u -r fvwm/fvwm.c fvwm/fvwm.c
+<br />
+--- fvwm/fvwm.c.orig    Thu Jun 27 10:08:08 1996
+<br />
++++ fvwm/fvwm.c Thu Jul 25 13:11:09 1996
+<br />
+_at_&#64; -227,31 +227,31 &#64;&#64;
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strcpy(message, XDisplayString(dpy));
+<br />
+<br />-    XCloseDisplay(dpy);
+<br />
+-
+<br />
+-    for(i=1;i&lt;Scr.NumberOfScreens;i++)
+<br />
++    for(i=0;i&lt;Scr.NumberOfScreens;i++)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+-      if (fork() == 0)
+<br />
++      if (i != Scr.screen &amp;&amp; fork() == 0)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;myscreen = i;
+<br />
++
+<br />
++        /*
+<br />
++         * Truncate the string 'whatever:n.n' to 'whatever:n',
+<br />
++         * and then append the screen number.
+<br />
++         */
+<br />
++        cp = strchr(message, ':');
+<br />
++        if (cp != NULL)
+<br />
++        {
+<br />
++          cp = strchr(cp, '.');
+<br />
++          if (cp != NULL)
+<br />
++            *cp = '\0';                /* truncate at display part */
+<br />
++        }
+<br />
++        sprintf(message + strlen(message), &quot;.%d&quot;, myscreen);
+<br />
++        dpy = XOpenDisplay(message);
+<br />
++        Scr.screen = myscreen;
+<br />
++        Scr.NumberOfScreens = ScreenCount(dpy);
+<br />
++
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+-    /*
+<br />
+-     * Truncate the string 'whatever:n.n' to 'whatever:n',
+<br />
+-     * and then append the screen number.
+<br />
+-     */
+<br />
+-    cp = strchr(message, ':');
+<br />
+-    if (cp != NULL)
+<br />
+-    {
+<br />
+-      cp = strchr(cp, '.');
+<br />
+-      if (cp != NULL)
+<br />
+-        *cp = '\0';            /* truncate at display part */
+<br />
+-    }
+<br />
+-    sprintf(message + strlen(message), &quot;.%d&quot;, myscreen);
+<br />
+-    dpy = XOpenDisplay(message);
+<br />
+-    Scr.screen = myscreen;
+<br />
+-    Scr.NumberOfScreens = ScreenCount(dpy);
+<br />
+&nbsp;&nbsp;&nbsp;}
+<br />
+<br />&nbsp;&nbsp;&nbsp;x_fd = XConnectionNumber(dpy);
+<br />
+_at_&#64; -330,6 +330,8 &#64;&#64;
+<br />
+<br />&nbsp;&nbsp;&nbsp;XSetErrorHandler((XErrorHandler)FvwmErrorHandler);
+<br />
+<br />+  MyXGrabServer(dpy);
+<br />
++
+<br />
+&nbsp;&nbsp;&nbsp;BlackoutScreen();
+<br />
+<br />&nbsp;&nbsp;&nbsp;CreateCursors();
+<br />
+_at_&#64; -436,12 +438,10 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;initPanFrames();
+<br />
+&nbsp;#endif
+<br />
+<br />-  XGrabServer(dpy);
+<br />
+-
+<br />
+&nbsp;#ifndef NON_VIRTUAL
+<br />
+&nbsp;&nbsp;&nbsp;checkPanFrames();
+<br />
+&nbsp;#endif
+<br />
+-  XUngrabServer(dpy);
+<br />
++  MyXUngrabServer(dpy);
+<br />
+&nbsp;&nbsp;&nbsp;UnBlackoutScreen();
+<br />
+&nbsp;&nbsp;&nbsp;DBUG(&quot;main&quot;,&quot;Entering HandleEvents loop...&quot;);
+<br />
+&nbsp;&nbsp;&nbsp;HandleEvents();
+<br />
+_at_&#64; -1034,7 +1034,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;FvwmWindow *tmp;                     /* temp fvwm window structure */
+<br />
+<br />&nbsp;&nbsp;&nbsp;/* put a border back around all windows */
+<br />
+-  XGrabServer (dpy);
+<br />
++  MyXGrabServer (dpy);
+<br />
+<br />&nbsp;&nbsp;&nbsp;InstallWindowColormaps (&amp;Scr.FvwmRoot);      /* force reinstall */
+<br />
+&nbsp;&nbsp;&nbsp;for (tmp = Scr.FvwmRoot.next; tmp != NULL; tmp = tmp-&gt;next)
+<br />
+_at_&#64; -1044,7 +1044,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XDestroyWindow(dpy,tmp-&gt;frame);
+<br />
+&nbsp;&nbsp;&nbsp;}
+<br />
+<br />-  XUngrabServer (dpy);
+<br />
++  MyXUngrabServer (dpy);
+<br />
+&nbsp;&nbsp;&nbsp;XSetInputFocus (dpy, PointerRoot, RevertToPointerRoot,CurrentTime);
+<br />
+&nbsp;&nbsp;&nbsp;XSync(dpy,0);
+<br />
+<br />diff -N -u -r fvwm/misc.h fvwm/misc.h
+<br />
+--- fvwm/misc.h.orig    Wed Jun 19 21:31:15 1996
+<br />
++++ fvwm/misc.h Thu Jul 25 13:11:10 1996
+<br />
+_at_&#64; -384,6 +384,8 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long context,char *action, int *Module);
+<br />
+&nbsp;void raise_it_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long context, char *action, int *Module);
+<br />
++void flip_focus_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
++               unsigned long context, char *action, int *Module);
+<br />
+&nbsp;void focus_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long context, char *action, int *Module);
+<br />
+&nbsp;void warp_func(XEvent *eventp,Window w,FvwmWindow *tmp_win,
+<br />
+diff -N -u -r fvwm/move.c fvwm/move.c
+<br />
+--- fvwm/move.c.orig    Fri Jun 30 11:06:01 1995
+<br />
++++ fvwm/move.c Thu Jul 25 13:11:10 1996
+<br />
+_at_&#64; -111,7 +111,7 &#64;&#64;
+<br />
+&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;Bool finished = False;
+<br />
+&nbsp;&nbsp;&nbsp;Bool done;
+<br />
+-  int xl,yt,delta_x,delta_y;
+<br />
++  int xl,yt,delta_x,delta_y,paged;
+<br />
+<br />&nbsp;&nbsp;&nbsp;XQueryPointer(dpy, Scr.Root, &amp;JunkRoot, &amp;JunkChild,&amp;xl, &amp;yt,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;JunkX, &amp;JunkY, &amp;JunkMask);
+<br />
+_at_&#64; -202,8 +202,8 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case MotionNotify:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xl = Event.xmotion.x_root;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yt = Event.xmotion.y_root;
+<br />
+-         HandlePaging(Scr.MyDisplayWidth,Scr.MyDisplayHeight,&amp;xl,&amp;yt,
+<br />
+-                      &amp;delta_x,&amp;delta_y,False);
+<br />
++/*       HandlePaging(Scr.MyDisplayWidth,Scr.MyDisplayHeight,&amp;xl,&amp;yt,
+<br />
++                      &amp;delta_x,&amp;delta_y,False);  mab */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* redraw the rubberband */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xl += XOffset;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yt += YOffset;
+<br />
+_at_&#64; -220,6 +220,11 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if((yt &lt;= 0)&amp;&amp;(yt &gt; -Scr.MoveResistance))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yt = 0;
+<br />
+<br />+       /* check Paging request once and only once after outline redrawn */
+<br />
++       /* redraw after paging if needed - mab */
+<br />
++       paged=0;
+<br />
++       while(paged&lt;=1)
+<br />
++        {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(!opaque_move)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MoveOutline(Scr.Root, xl, yt, Width,Height);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+_at_&#64; -242,6 +247,21 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XMoveWindow(dpy,tmp_win-&gt;frame,xl,yt);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DisplayPosition(tmp_win,xl+Scr.Vx,yt+Scr.Vy,False);
+<br />
++
+<br />
++/* prevent window from lagging behind mouse when paging - mab */
+<br />
++         if(paged==0)
+<br />
++           {
+<br />
++           xl = Event.xmotion.x_root;
+<br />
++           yt = Event.xmotion.y_root;
+<br />
++           HandlePaging(Scr.MyDisplayWidth,Scr.MyDisplayHeight,&amp;xl,&amp;yt,
+<br />
++                      &amp;delta_x,&amp;delta_y,False);
+<br />
++           xl += XOffset;
+<br />
++           yt += YOffset;
+<br />
++           if ( (delta_x==0) &amp;&amp; (delta_y==0)) break; /* break from while paged */
+<br />
++           }
+<br />
++         paged++;
+<br />
++        }  /* end while paged */
+<br />
++
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;done = TRUE;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
+<br />_at_&#64; -420,7 +440,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Scr.OpaqueSize*Scr.MyDisplayWidth*Scr.MyDisplayHeight)/100)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;opaque_move = True;
+<br />
+&nbsp;&nbsp;&nbsp;else
+<br />
+-    XGrabServer(dpy);
+<br />
++    MyXGrabServer(dpy);
+<br />
+<br />&nbsp;&nbsp;&nbsp;if((!opaque_move)&amp;&amp;(tmp_win-&gt;flags &amp; ICONIFIED))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XUnmapWindow(dpy,w);
+<br />
+_at_&#64; -437,7 +457,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;UninstallRootColormap();
+<br />
+<br />&nbsp;&nbsp;&nbsp;if(!opaque_move)
+<br />
+-    XUngrabServer(dpy);
+<br />
++    MyXUngrabServer(dpy);
+<br />
+&nbsp;&nbsp;&nbsp;UngrabEm();
+<br />
+<br />&nbsp;}
+<br />
+diff -N -u -r fvwm/parse.h fvwm/parse.h
+<br />
+--- fvwm/parse.h.orig   Thu May 30 14:03:10 1996
+<br />
++++ fvwm/parse.h        Thu Jul 25 13:11:10 1996
+<br />
+_at_&#64; -89,6 +89,7 &#64;&#64;
+<br />
+&nbsp;#define F_SEND_STRING           112
+<br />
+&nbsp;#define F_ADD_MOD               113
+<br />
+&nbsp;#define F_DESTROY_MOD           114
+<br />
++#define F_FLIP_FOCUS            115
+<br />
+<br />&nbsp;/* Functions for use by modules only! */
+<br />
+&nbsp;#define F_SEND_WINDOW_LIST     1000
+<br />
+diff -N -u -r fvwm/placement.c fvwm/placement.c
+<br />
+--- fvwm/placement.c.orig       Mon Apr 24 14:14:08 1995
+<br />
++++ fvwm/placement.c    Thu Jul 25 13:11:11 1996
+<br />
+_at_&#64; -230,14 +230,14 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(GrabEm(POSITION))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* Grabbed the pointer - continue */
+<br />
+-                 XGrabServer(dpy);
+<br />
++                 MyXGrabServer(dpy);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(XGetGeometry(dpy, tmp_win-&gt;w, &amp;JunkRoot, &amp;JunkX, &amp;JunkY,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(unsigned int *)&amp;DragWidth,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(unsigned int *)&amp;DragHeight,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;JunkBW,  &amp;JunkDepth) == 0)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;free((char *)tmp_win);
+<br />
+-                     XUngrabServer(dpy);
+<br />
++                     MyXUngrabServer(dpy);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return False;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DragWidth = tmp_win-&gt;frame_width;
+<br />
+_at_&#64; -247,7 +247,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;moveLoop(tmp_win,0,0,DragWidth,DragHeight,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;xl,&amp;yt,False,True);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XUnmapWindow(dpy,Scr.SizeWindow);
+<br />
+-                 XUngrabServer(dpy);
+<br />
++                 MyXUngrabServer(dpy);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UngrabEm();
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+<br />
+diff -N -u -r fvwm/resize.c fvwm/resize.c
+<br />
+--- fvwm/resize.c.orig  Fri Jun 30 11:07:23 1995
+<br />
++++ fvwm/resize.c       Thu Jul 25 13:11:11 1996
+<br />
+_at_&#64; -108,7 +108,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+<br />-  XGrabServer(dpy);
+<br />
++  MyXGrabServer(dpy);
+<br />
+<br /><br />&nbsp;&nbsp;&nbsp;/* handle problems with edge-wrapping while resizing */
+<br />
+_at_&#64; -214,15 +214,21 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case MotionNotify:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x = Event.xmotion.x_root;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y = Event.xmotion.y_root;
+<br />
++         /* resize before paging request to prevent resize from lagging mouse - mab */
+<br />
++         DoResize(x, y, tmp_win);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* need to move the viewport */
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HandlePaging(Scr.EdgeScrollX,Scr.EdgeScrollY,&amp;x,&amp;y,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;delta_x,&amp;delta_y,False);
+<br />
++       /* redraw outline if we paged - mab */
+<br />
++       if ( (delta_x != 0) || (delta_y != 0) )
+<br />
++         {
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;origx -= delta_x;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;origy -= delta_y;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dragx -= delta_x;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dragy -= delta_y;
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DoResize(x, y, tmp_win);
+<br />
++         }
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;done = TRUE;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default:
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;
+<br />
+_at_&#64; -253,7 +259,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;UninstallRootColormap();
+<br />
+&nbsp;&nbsp;&nbsp;ResizeWindow = None;
+<br />
+-  XUngrabServer(dpy);
+<br />
++  MyXUngrabServer(dpy);
+<br />
+&nbsp;&nbsp;&nbsp;UngrabEm();
+<br />
+&nbsp;&nbsp;&nbsp;xmotion = 0;
+<br />
+&nbsp;&nbsp;&nbsp;ymotion = 0;
+<br />
+diff -N -u -r fvwm/virtual.c fvwm/virtual.c
+<br />
+--- fvwm/virtual.c.orig Wed Apr 24 11:45:27 1996
+<br />
++++ fvwm/virtual.c      Thu Jul 25 13:11:12 1996
+<br />
+_at_&#64; -42,6 +42,10 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sleep_a_little(10000);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;total+=10;
+<br />
++
+<br />
++  XQueryPointer(dpy, Scr.Root, &amp;JunkRoot, &amp;JunkChild,
+<br />
++               &amp;x, &amp;y, &amp;JunkX, &amp;JunkY, &amp;JunkMask);
+<br />
++
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(XCheckWindowEvent(dpy,Scr.PanFrameTop.win,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LeaveWindowMask,&amp;Event))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+_at_&#64; -66,6 +70,11 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;StashEventTime(&amp;Event);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
++      /* check actual pointer location since PanFrames can get buried under
+<br />
++         a window being moved or resized - mab */
+<br />
++      if(( x &gt;= SCROLL_REGION )&amp;&amp;( x &lt; Scr.MyDisplayWidth-SCROLL_REGION )&amp;&amp;
+<br />
++         ( y &gt;= SCROLL_REGION )&amp;&amp;( y &lt; Scr.MyDisplayHeight-SCROLL_REGION ))
+<br />
++           return ;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+<br />&nbsp;&nbsp;&nbsp;XQueryPointer(dpy, Scr.Root, &amp;JunkRoot, &amp;JunkChild,
+<br />
+_at_&#64; -162,13 +171,13 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;if((*delta_x != 0)||(*delta_y!=0))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(Grab)
+<br />
+-       XGrabServer(dpy);
+<br />
++       MyXGrabServer(dpy);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XWarpPointer(dpy,None,Scr.Root,0,0,0,0,*xl,*yt);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MoveViewport(Scr.Vx + *delta_x,Scr.Vy + *delta_y,False);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XQueryPointer(dpy, Scr.Root, &amp;JunkRoot, &amp;JunkChild,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xl, yt, &amp;JunkX, &amp;JunkY, &amp;JunkMask);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(Grab)
+<br />
+-       XUngrabServer(dpy);
+<br />
++       MyXUngrabServer(dpy);
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;}
+<br />
+<br />_at_&#64; -344,7 +353,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;int deltax,deltay;
+<br />
+<br />&nbsp;&nbsp;&nbsp;if(grab)
+<br />
+-    XGrabServer(dpy);
+<br />
++    MyXGrabServer(dpy);
+<br />
+<br /><br />&nbsp;&nbsp;&nbsp;if(newx &gt; Scr.VxMax)
+<br />
+_at_&#64; -412,7 +421,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;while(XCheckTypedEvent(dpy,MotionNotify,&amp;Event))
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;StashEventTime(&amp;Event);
+<br />
+&nbsp;&nbsp;&nbsp;if(grab)
+<br />
+-    XUngrabServer(dpy);
+<br />
++    MyXUngrabServer(dpy);
+<br />
+&nbsp;}
+<br />
+<br /><br />_at_&#64; -452,7 +461,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;Broadcast(M_NEW_DESK,1,Scr.CurrentDesk,0,0,0,0,0,0);
+<br />
+&nbsp;&nbsp;&nbsp;/* Scan the window list, mapping windows on the new Desk,
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;* unmapping windows on the old Desk */
+<br />
+-  XGrabServer(dpy);
+<br />
++  MyXGrabServer(dpy);
+<br />
+&nbsp;&nbsp;&nbsp;for (t = Scr.FvwmRoot.next; t != NULL; t = t-&gt;next)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* Only change mapping for non-sticky windows */
+<br />
+_at_&#64; -487,7 +496,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<br />
+-  XUngrabServer(dpy);
+<br />
++  MyXUngrabServer(dpy);
+<br />
+&nbsp;&nbsp;&nbsp;for (t = Scr.FvwmRoot.next; t != NULL; t = t-&gt;next)
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* If its an icon, and its sticking, autoplace it so
+<br />
+diff -N -u -r libs/Grab.c libs/Grab.c
+<br />
+--- libs/Grab.c.orig    Wed Dec 31 19:00:00 1969
+<br />
++++ libs/Grab.c Thu Jul 25 13:13:21 1996
+<br />
+_at_&#64; -0,0 +1,30 &#64;&#64;
+<br />
++/*
+<br />
++** MyXGrabServer &amp; MyXUngrabServer - to handle nested grab server calls
+<br />
++*/
+<br />
++
+<br />
++#include &lt;X11/Xlib.h&gt;
+<br />
++
+<br />
++static int xgrabcount = 0;
+<br />
++
+<br />
++void MyXGrabServer(Display *disp)
+<br />
++{
+<br />
++  if (xgrabcount == 0)
+<br />
++  {
+<br />
++    XGrabServer(disp);
+<br />
++  }
+<br />
++  ++xgrabcount;
+<br />
++}
+<br />
++
+<br />
++void MyXUngrabServer(Display *disp)
+<br />
++{
+<br />
++  if (--xgrabcount &lt; 0) /* should never happen */
+<br />
++  {
+<br />
++    /* fvwm_msg(ERR,&quot;MyXUngrabServer&quot;,&quot;too many ungrabs!\n&quot;); */
+<br />
++    xgrabcount = 0;
+<br />
++  }
+<br />
++  if (xgrabcount == 0)
+<br />
++  {
+<br />
++    XUngrabServer(disp);
+<br />
++  }
+<br />
++}
+<br />
++
+<br />
+diff -N -u -r libs/Imakefile libs/Imakefile
+<br />
+--- libs/Imakefile.orig Fri Feb 16 20:17:27 1996
+<br />
++++ libs/Imakefile      Thu Jul 25 13:11:56 1996
+<br />
+_at_&#64; -10,6 +10,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GetFdWidth.c \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GetFont.c \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GetLine.c \
+<br />
++       Grab.c \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Picture.c \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ReadPacket.c \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SendInfo.c \
+<br />
+_at_&#64; -31,6 +32,7 &#64;&#64;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GetFdWidth.o \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GetFont.o \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GetLine.o \
+<br />
++       Grab.o \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Picture.o \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ReadPacket.o \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SendInfo.o \
+<br />
+diff -N -u -r libs/fvwmlib.h libs/fvwmlib.h
+<br />
+--- libs/fvwmlib.h.orig Fri Mar 22 15:32:33 1996
+<br />
++++ libs/fvwmlib.h      Thu Jul 25 13:11:24 1996
+<br />
+_at_&#64; -39,4 +39,7 &#64;&#64;
+<br />
+<br />&nbsp;XFontStruct *GetFontOrFixed(Display *disp, char *fontname);
+<br />
+<br />+void MyXGrabServer(Display *disp);
+<br />
++void MyXUngrabServer(Display *disp);
+<br />
++
+<br />
+&nbsp;#endif
+<br />
+diff -N -u -r version.h version.h
+<br />
+--- version.h.orig      Tue Apr 16 16:11:51 1996
+<br />
++++ version.h   Thu Jul 25 13:17:42 1996
+<br />
+_at_&#64; -1,2 +1,2 &#64;&#64;
+<br />
+-#define VERSION &quot;2.0.43&quot;
+<br />
++#define VERSION &quot;2.0.43a&quot;
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Thu Jul 25 1996 - 13:08:14 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start17475">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="17476.html" title="Next message in the list">Manoj Kasichainula: "Re: FVWM: (long) startup timing bug patch to test"</a></li>
+<li><dfn>Previous message</dfn>: <a href="17474.html" title="Previous message in the list">Emilio Lopes: "Re: FVWM: Running fvwm2.0.43"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="17476.html" title="Next message in this discussion thread">Manoj Kasichainula: "Re: FVWM: (long) startup timing bug patch to test"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="17476.html" title="Message sent in reply to this message">Manoj Kasichainula: "Re: FVWM: (long) startup timing bug patch to test"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg17475" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg17475" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg17475" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg17475" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:59 BST
+</em></small></p>
+</body>
+</html>

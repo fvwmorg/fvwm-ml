@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>Re: FVWM: FvwmButton bug ???? from Trent Piepho on 1997-01-18 (fvwm-users)</title>
+<meta name="Author" content="Trent Piepho (xyzzy_at_u.washington.edu)" />
+<meta name="Subject" content="Re: FVWM: FvwmButton bug ????" />
+<meta name="Date" content="1997-01-18" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>Re: FVWM: FvwmButton bug ????</h1>
+<!-- received="Fri Jan 17 18:16:39 1997" -->
+<!-- isoreceived="19970117181639" -->
+<!-- sent="Fri, 17 Jan 1997 16:16:25 -0800 (PST)" -->
+<!-- isosent="19970118001625" -->
+<!-- name="Trent Piepho" -->
+<!-- email="xyzzy_at_u.washington.edu" -->
+<!-- subject="Re: FVWM: FvwmButton bug ????" -->
+<!-- id="Pine.LNX.3.91.970117160555.6750B-100000_at_s5-171-9.student.washington.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- inreplyto="9701172343.AA20885_at_einstein.auto.tuwien.ac.at" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start18947" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="18948.html" accesskey="d" title="Albrecht Kadlec: &quot;Re: FVWM: Re: FVWM Decor FAQ&quot;">Next message</a> ]
+[ <a href="18946.html" title="Eddy J. Gurney: &quot;Re: FVWM: FvwmButton bug ????&quot;">Previous message</a> ]
+[ <a href="18945.html" title="Albrecht Kadlec: &quot;Re: FVWM: FvwmButton bug ????&quot;">In reply to</a> ]
+<!-- unextthread="start" -->
+[ <a href="18950.html" accesskey="t" title="Albrecht Kadlec: &quot;Re: FVWM: FvwmButton bug ????&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18947" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18947" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18947" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18947" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Trent Piepho &lt;<a href="mailto:xyzzy_at_u.washington.edu?Subject=Re%3A%20FVWM%3A%20FvwmButton%20bug%20%3F%3F%3F%3F">xyzzy_at_u.washington.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Fri, 17 Jan 1997 16:16:25 -0800 (PST)</span><br />
+</address>
+<br />
+On Sat, 18 Jan 1997, Albrecht Kadlec wrote:
+<br />
+<em class="quotelev1">&gt; not reported 'till now.
+</em><br />
+<em class="quotelev1">&gt; On a quick look (it's 0:26) my FvwmAuto doesn't do that. 
+</em><br />
+<br />This is what you need to do:
+<br />
+<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1
+<br />
+<br />&nbsp;---------------
+<br />
+&nbsp;|             |
+<br />
+&nbsp;|      2      |
+<br />
+&nbsp;|             |
+<br />
+&nbsp;|             |
+<br />
+&nbsp;---------------
+<br />
+<br /><br />Put the mouse in 1 (which is probably the root window), make sure window 2
+<br />
+doesn't have focus, move the mouse to window 2, make a pop-up menu appear
+<br />
+BEFORE the autorase timeout.  Window 2 will raise above the pop-up.  I know
+<br />
+where the bug is in fvwm, it's not FvwmAuto's fault.  When FvwmAuto tells fvwm
+<br />
+to raise window 2, like it should, fvwm alters the stacking order something
+<br />
+like:
+<br />
+<br />Bottom
+<br />
+1.  window 2
+<br />
+2.  window 2's transients  (netscape open URL window, _not_ a menu)
+<br />
+3.  StatysOnTop windows
+<br />
+Top
+<br />
+<br />All other windows, which includes pop-menu windows, will be moved below window
+<br />
+2.  Somenow fvwm needs to know:
+<br />
+<br />a) that the pop-up window is part of window 2, and that it should always be
+<br />
+&nbsp;&nbsp;&nbsp;above window 2. 
+<br />
+b) that window 2 and it's children shouldn't change their relative stacking
+<br />
+&nbsp;&nbsp;&nbsp;order.
+<br />
+c) that pop-up windows should always go on the very top
+<br />
+<br />I would like c, as sometimes a pop-up appears under FvwmButtons or xload and I
+<br />
+can't see it.  However I don't know how to tell if a window is a pop-up, or
+<br />
+how to get fvwm to know about all those pop-up windows.  It seems that pop-up's
+<br />
+aren't reparented to the window manager like other top-level windows.
+<br />
+<br />|Gazing up to the breeze of the heavens \ on a quest, meaning, reason  |
+<br />
+|came to be, how it begun \ all alone in the family of the sun         |
+<br />
+|curiosity teasing everyone \ on our home, third stone from the sun.   |
+<br />
+|Trent Piepho (xyzzy_at_u.washington.edu)                   -- Metallica  |
+<br />
+<pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Fri Jan 17 1997 - 18:16:39 GMT</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start18947">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="18948.html" title="Next message in the list">Albrecht Kadlec: "Re: FVWM: Re: FVWM Decor FAQ"</a></li>
+<li><dfn>Previous message</dfn>: <a href="18946.html" title="Previous message in the list">Eddy J. Gurney: "Re: FVWM: FvwmButton bug ????"</a></li>
+<li><dfn>In reply to</dfn>: <a href="18945.html" title="Message to which this message replies">Albrecht Kadlec: "Re: FVWM: FvwmButton bug ????"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="18950.html" title="Next message in this discussion thread">Albrecht Kadlec: "Re: FVWM: FvwmButton bug ????"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="18950.html" title="Message sent in reply to this message">Albrecht Kadlec: "Re: FVWM: FvwmButton bug ????"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg18947" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg18947" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg18947" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg18947" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:38:00 BST
+</em></small></p>
+</body>
+</html>

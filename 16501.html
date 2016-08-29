@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Improved tbpixmap hack from Seth Burgess on 1996-04-27 (fvwm-users)</title>
+<meta name="Author" content="Seth Burgess (root_at_cate0-44.reshall.uoknor.edu)" />
+<meta name="Subject" content="FVWM: Improved tbpixmap hack" />
+<meta name="Date" content="1996-04-27" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Improved tbpixmap hack</h1>
+<!-- received="Sat Apr 27 10:51:53 1996" -->
+<!-- isoreceived="19960427095153" -->
+<!-- sent="Sat, 27 Apr 1996 11:02:29 -0500 (CDT)" -->
+<!-- isosent="19960427160229" -->
+<!-- name="Seth Burgess" -->
+<!-- email="root_at_cate0-44.reshall.uoknor.edu" -->
+<!-- subject="FVWM: Improved tbpixmap hack" -->
+<!-- id="199604271602.LAA01704_at_cate0-44.reshall.uoknor.edu" -->
+<!-- charset="US-ASCII" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start16501" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="16502.html" accesskey="d" title="Dan Niles: &quot;Re: FVWM: Re: Here&#0039;s a patch for WarpTowindow and FocusOnly functions&quot;">Next message</a> ]
+[ <a href="16500.html" title="John Henders: &quot;FVWM: Rclock broken with new FvwmButtons module.&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="16505.html" accesskey="t" title="Andrew Veliath: &quot;FVWM: Improved tbpixmap hack&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16501" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16501" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16501" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16501" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Seth Burgess &lt;<a href="mailto:root_at_cate0-44.reshall.uoknor.edu?Subject=Re%3A%20FVWM%3A%20Improved%20tbpixmap%20hack">root_at_cate0-44.reshall.uoknor.edu</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Sat, 27 Apr 1996 11:02:29 -0500 (CDT)</span><br />
+</address>
+<br />
+I went ahead and delved into the sources, and got the following into Andrews
+<br />
+cool patch:
+<br />
+<br />1) New Directive - PixmapJustify
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;It takes &quot;Left&quot;, &quot;Right&quot;, or &quot;Center&quot; 
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(someone requested this and it wasn't difficult)
+<br />
+<br />2) New Directive - PixmapTile
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;It doesn't take any arguements - by specifying it
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;you are saying &quot;yes&quot;.  The code responsible for the
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;manipulations is the same as my previous patch.  This
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;overrides PixmapJustify.
+<br />
+<br />The documentation on these new ones is missing, so save this e-mail!
+<br />
+<br />So your .fvwm2rc will have a line (or three) resembling this:
+<br />
+<br />TitleStyle flat leftjustified ActivePixmapUp denim.xpm ActivePixmapDown smiley.x
+<br />
+pm
+<br />
+TitleStyle InactivePixmap cool_blocks.xpm PixmapJustify Center
+<br />
+<br />or 
+<br />
+<br />TitleStyle flat leftjustified ActivePixmapUp denim.xpm ActivePixmapDown smiley.x
+<br />
+pm
+<br />
+TitleStyle InactivePixmap cool_blocks.xpm PixmapTile
+<br />
+<br /><br />The patch itself is uuencoded, gziped, in context diff form (my thanks to
+<br />
+Lars Wirzenius for helping me figure diff out).  It includes everything
+<br />
+that Andrew's did, except the changes in documentation and a couple of
+<br />
+very small changes in the flow.
+<br />
+<br />If imitation is the most sincere form of flattery, then Andrew should 
+<br />
+consider himself sincerely flattered =]  Thank you a LOT, because without
+<br />
+your patch I'd have never started.
+<br />
+<br />Any other suggestions?  Would people be intrested in a pixmap tiled around
+<br />
+the border?  It'd be a lot of work, but I'm learning tons by doing these.
+<br />
+<br />Anyway, lemme know what you think! 
+<br />
+<br />Seth Burgess
+<br />
+root_at_cate0-44.reshall.uoknor.edu
+<br />
+<br /><br />begin 664 fvwm-2.0.42.pixmap_tb.hackII.gz
+<br />
+M'XL(&quot;-TV_at_C$``V9V=VTM,BXP+C0R+G!I&gt;&amp;UA&lt;%]T8BYH86-K,BYP871C:`#M
+<br />
+M6NMSXC_at_2_TS^BEZV;HZ'(=&#64;$DL`R59D\9K(UR5`)4Y&#46;<!--nospam-->KJZN4,2)XQ]&#64;N6P2H
+<br />
+M+/_[=4M^R#R3F&gt;3FRZD(V%*WU(^?6BTII5()JOO#Q^FX8E1KU0-#/._W)[;#
+<br />
+M;3&gt;L6E4OL!]RW]_at_`3OP`]!KH1JM^U#(:H!\?-_&lt;JE&lt;IV_MQ%8`M6HPGZ8&lt;LP
+<br />
+M6HT#R5K*%GH'O6XT-;U&gt;-T!4_at_2A/T2_`K154&gt;S9WV&quot;V?.ZQJ^CXS`].U&amp;'2&#64;
+<br />
+M=]G[?'Y_]&gt;VJ'9$O]GZ#Z-&amp;TN.VY2/21\6LVXSWO.W,+LE9[YYO!N&quot;BY%OB]
+<br />
+M_at_/T2W#*&gt;#_at_2E?:&amp;HE&#46;<!--nospam-->Y`UP'?*C\OW&gt;_V&lt;,&quot;&amp;&lt;-&gt;]2E^ZEW=7)]U[0?_AY.86
+<br />
+M6Z_at_P)V1&#64;#Z$PGH&lt;\&lt;&quot;TS9-;8+Y#H6OX$%7ED77LV-OVO?AY%+'8ZM6+$^A3]
+<br />
+M/M,,,3$-1AKYHMM[3HI533'2_&lt;2GSG,`9PRE\&gt;9=V^*3_at_!4&amp;_ES;PM-&amp;CJ3_
+<br />
+MS70HX*EIC9C:*PTG&quot;K'=&gt;!Y/:RXMS^V:?)362$MDZUZD'70Z&lt;/WU\^=B0O\D
+<br />
+M]25PWX_#A\+YS8T&amp;^0Q*\G(P),Z?&gt;A-GX/Z3_at_^.9`Y#=`G8KANF;`&lt;AAX1]A
+<br />
+M7H.8:TG&quot;1?2T&gt;&quot;D&quot;SKRIBQAHOC$&amp;!CC,RU$_at_N-H[04!D6V$_at_6;-``%B%`L`Z
+<br />
+M,*P8&gt;Y&gt;B;P((T?&amp;;0&gt;+2-150O&amp;50L-T?&quot;0LJU_;`H%#^&lt;DQD9'E-3,0=OQT_at_
+<br />
+MI-)_3D)N#^&gt;(A_HR'G(O_at_&#64;)L'&#46;<!--nospam-->&#64;S&amp;_*\EL`MIYAFG7MY__XO*12&#46;<!--nospam-->7-'5$53=
+<br />
+M=NIWRES._at_KR6&quot;7QQ&gt;5IZWR%&amp;;44*!:`[Y+BQ'T:H?^.']!?J&quot;\)%;GG`994R
+<br />
+M.%MV;TJ,V,Y?837T&amp;9!K-)&quot;6TL`+(*(7*)-30;HYAT+D&lt;IM&lt;D3P\`W`]FU&quot;O
+<br />
+MUS)&gt;$&gt;98G5PA$0]B,T!BAM^9.\!1,&quot;];3H\H-5/;,9&gt;B*LG[&quot;FE?:4-^[`4#
+<br />
+M%B3I&lt;6\TD&gt;FQCAERRSAL49Z\+3V.V=7LF%+CXQ:FOANSX\;AH=8XBG)CZIHJ
+<br />
+MFL&gt;U-!U=[,5&gt;$0]/L%=6L\SRQBRS'+D8;3`(S&amp;D4?$+$S-`+,&quot;BA]&lt;_at_&lt;,=D3
+<br />
+M/HDX*L(PE/PV5LBZ.&amp;Q^LAV;LTZ'%Z.&amp;B(&lt;*T70#%H9L\`TI*N^%_^^G12*A
+<br />
+M2(P^V[8&lt;M].NA*Z[N29^Q+.(I(GY9&quot;]K6958WR;#3!EXKC.'D8EA.HG77[NJ
+<br />
+M85(;^/!;O#Y(]7.*_BX'$X=,-!\Q&quot;AI0`4.#OMHPM0=\1/7M++&gt;L[X!?&gt;2\&gt;
+<br />
+M-8BZ$%7R&gt;8EEIL&amp;\G0_at_:%Q)U=9E38Q)&amp;PR*\&gt;P&lt;KK%%9LTC&amp;\YA8BRM\3ZM=
+<br />
+MY68H&gt;*&amp;/B_at_IMBK`/!I0I#*P.2F&amp;R8&quot;*IU#)#&amp;ZF;(ZUF\`?H19B)&lt;`)+C7/9
+<br />
+M&amp;(7&lt;;)NT[?L.](N)G4FTU5XBFR.I64P=8`K:9$+(&lt;G?JX&amp;[P)&amp;&quot;F2%H4#VN_at_
+<br />
+MBX\80I/&lt;&amp;ER8&quot;-&quot;B*II`.&lt;(P9!PX[BM##&amp;#,M&gt;8P-L/O$H,QZ1W&amp;L5/']J^P
+<br />
+M10Y'/OHPX=QSJ&gt;[CJ48P(&lt;;,$#'?%PQJMKN)DX`4LRG,&lt;&gt;C_at_(P8NFT)?,,'0
+<br />
+MM-B2=*&gt;&gt;/T\M_at_8+X,HYDK;(RL#!`KJ8!?C*_at_SXI$9;&amp;&quot;FV2EV_at_7VBAZC/?$=
+<br />
+MY'9A?!713RNX38M09!9#;QV^US9LQZ;H]!F_at_W%S0_at_9_/+WKPY]?;WN7%O]!I
+<br />
+M_T?PZR-XR&gt;C;X9PMB^RR]RPX&quot;S3+F?,#_at_5J!QLWEQT\9;&amp;Q&lt;$&quot;0]]$9VB'M&lt;
+<br />
+M%M(&gt;!VWEX-(I/(_6#00JQU[(MR$2.[&amp;\P&amp;4!F&quot;J;-Q0OR4:ILJ,/&amp;Q=;9VK.
+<br />
+M0PBY&amp;?`0AH$W%ETXF`['W&gt;WH1-JMBOO)(83&gt;F'DN`\M$&lt;-_at_/E`'Q$8KH3?C.
+<br />
+M;G`.A30P:L__at_N^M-MS*_at_E3-SD-9Q]*\W'*(EV^L&amp;&gt;YL&#64;\8-S/S&#46;<!--nospam-->[9I$4&lt;4JS
+<br />
+M,?BE:WLB&lt;]3%_R_at_JK)0WF?HT\^'94W_5UTD(V#:M&lt;?HKTBLI^(;E9SDA4IB?
+<br />
+MG1J]*#/ZJ55E[=RA6,5\%H4,GP5\'I^EX/3QL&quot;/?Y+C_=3,Q?3I&quot;DQ4*LW*4
+<br />
+M_at_/Y!*CYE%P_at_I\(]A,,/[_-4I97W#I&amp;E-(7C,,*L6+*IS1685VTQ!P(S&lt;`XK4
+<br />
+M+[53MOS4C/T)6VTJSS?_at_0N0YRGOR1D_;3S+*FTXR[&amp;$!)7=-7#-P5UFP1KCL
+<br />
+ME8IR=YEH?8:YRRT/;/&lt;!5N82Z8I_)K=&amp;'T_KVL_at_+:!&amp;1-OAFN[BIOO!&lt;7IV7
+<br />
+M&lt;8KMP;H2C:_A(AHXS(WE*:(!UM[D&amp;8:AX5&lt;SO&lt;FCPPFI'QVW[%5`?,2]6KTF
+<br />
+M;_W$0&lt;:&amp;,Q?Z6G/_at_4CMN-8R6?KSUP$7R9NXBFZV#&gt;DMO;#YM.6[HVG&amp;CF9ZV
+<br />
+MB(IF(SYM251)'A(G/__$9?-Y18&gt;\V]Y!1H&lt;AVPF50XP=A'+1Z-0V4J2)I22*
+<br />
+M]&quot;ZK!B`?BP=$\+6G9FV^0VGTT`NPS_at_X11B,Z_Y8G*GW*I1Q:LCRZ+J7\:CIB
+<br />
+MF%95JUL.X4(K8,RMCK*0_at_`/0CUKX,&gt;I;(1%S9T#1:-5KK=JV&quot;^H:HKIVF()&quot;
+<br />
+M5.B'Z1%&lt;&lt;B8V\34HR=,JB_at_KR-%3&amp;FS.3F^T4.678BA,^]QDUX&lt;2;6)0P/PD/
+<br />
+M)0,E#M:2Y_B03*%23[-$&quot;^62D=/3BM3';&gt;G$BHX!WA''QC5\LL31,1O_at_RHQO
+<br />
+MTK,B&lt;,4*]J*L7*I87C-+Z+/6M(VZIC&gt;.TWAQ-:&gt;8)&quot;YPZ*$M)QC*1&quot;&quot;RL18&lt;
+<br />
+MLX]94!PF:9#--^H?OO9Z7ZYO!&gt;7'4U`#?SL;Z7`$),!,06Q+H]1![_at_6CL9:5
+<br />
+M$D!HHOC-XQ0(KR`^X)OMLD$AJT,1_OY[N2D!3/%--%SG,*/&gt;T(R#6CH7C`.L
+<br />
+M:!PD`7*C_6GY4P&gt;%`:(EML/R1(GDNY&gt;D_]9K_\D&amp;GRWQ-1U'1+`*[1;CH&lt;K)
+<br />
+M4&quot;ID08UX[;51?DTXNJ#EA8]]1X:B*]1(A*(CL3KA9^-U0,*Y%(:,&gt;JM6VQ*&amp;
+<br />
+MFKA_at_-H^2N5(&quot;&amp;2\IW`[M(.0P&quot;5D(M$F-O$N_at_ZWN8KN$&gt;F&amp;&#46;<!--nospam-->3Z0X$=&lt;&#64;0B0/9
+<br />
+M1\)#Q,RT(F(HR&quot;YQ.Y^?^/EB55*+[]&lt;KY'Q$_9=N[_++]?W9^&lt;7E]?DMW0B&gt;
+<br />
+MW7XZZ9[C;Q9($(42B'((LLB1D4R_7V*1,GTG_at_F:P6)*-)X[C34/J-SYWZ$8W
+<br />
+M+8_at_9`D.*5*+&quot;7$[R$:5R,V5YXS'*6XU.63Q?7'31$RVGDN71=.P!;&lt;;N_#&amp;$
+<br />
+M$]_W`B$Q\OIB&gt;VB[4`_at_9`[/O/3+407&quot;=8JO)[3[=WLPQX47[T-&#64;&gt;+M4BXMAB
+<br />
+M)#3'V!2]^0$+6?!(*X+L0&amp;RD:&quot;T)O,'$HF14N,`CQ&gt;E-LK84FRAZ9?^3&quot;;A^
+<br />
+MGRQ:U1FJL?Q_+JL4*UUF_P^&quot;&amp;.*5D._at_5,5Z*%S0#$4?70%.11,N&gt;LDB&quot;T&amp;&gt;6
+<br />
+_at_/;0)8FI?1)'&lt;(HD^(Q?\ZHFU!L#)5/LO4.5D-C`H``#7
+<br />
+`
+<br />
+end
+<br />
+<br /><pre>
+--
+Visit the official FVWM web page at &lt;URL:<a href="http://www.hpc.uh.edu/fvwm/">http://www.hpc.uh.edu/fvwm/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_hpc.uh.edu.
+To report problems, send mail to fvwm-owner_at_hpc.uh.edu.
+</pre>
+<span id="received"><dfn>Received on</dfn> Sat Apr 27 1996 - 10:51:53 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start16501">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="16502.html" title="Next message in the list">Dan Niles: "Re: FVWM: Re: Here&#0039;s a patch for WarpTowindow and FocusOnly functions"</a></li>
+<li><dfn>Previous message</dfn>: <a href="16500.html" title="Previous message in the list">John Henders: "FVWM: Rclock broken with new FvwmButtons module."</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="16505.html" title="Next message in this discussion thread">Andrew Veliath: "FVWM: Improved tbpixmap hack"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="16505.html" title="Message sent in reply to this message">Andrew Veliath: "FVWM: Improved tbpixmap hack"</a></li>
+<li><dfn>Reply</dfn>: <a href="16805.html" title="Message sent in reply to this message">Kim Lassila: "Re: FVWM: Improved tbpixmap hack"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg16501" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg16501" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg16501" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg16501" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:58 BST
+</em></small></p>
+</body>
+</html>

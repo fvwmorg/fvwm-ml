@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="generator" content="hypermail 2.3.0, see http://www.hypermail-project.org/" />
+<title>FVWM: Focus for FvwmPager from Rafal Bisingier on 2004-09-29 (fvwm-users)</title>
+<meta name="Author" content="Rafal Bisingier (ravbc_at_man.poznan.pl)" />
+<meta name="Subject" content="FVWM: Focus for FvwmPager" />
+<meta name="Date" content="2004-09-29" />
+<style type="text/css">
+/*<![CDATA[*/
+/* To be incorporated in the main stylesheet, don't code it in hypermail! */
+body {color: black; background: #ffffff}
+dfn {font-weight: bold;}
+pre { background-color:inherit;}
+.head { border-bottom:1px solid black;}
+.foot { border-top:1px solid black;}
+th {font-style:italic;}
+table { margin-left:2em;}map ul {list-style:none;}
+#mid { font-size:0.9em;}
+#received { float:right;}
+address { font-style:inherit ;}
+/*]]>*/
+.quotelev1 {color : #990099}
+.quotelev2 {color : #ff7700}
+.quotelev3 {color : #007799}
+.quotelev4 {color : #95c500}
+.period {font-weight: bold}
+</style>
+</head>
+<body>
+<div class="head">
+<h1>FVWM: Focus for FvwmPager</h1>
+<!-- received="Wed Sep 29 05:54:54 2004" -->
+<!-- isoreceived="20040929045454" -->
+<!-- sent="Wed, 29 Sep 2004 12:54:36 +0200" -->
+<!-- isosent="20040929105436" -->
+<!-- name="Rafal Bisingier" -->
+<!-- email="ravbc_at_man.poznan.pl" -->
+<!-- subject="FVWM: Focus for FvwmPager" -->
+<!-- id="20040929105436.GB20554_at_localhost" -->
+<!-- charset="us-ascii" -->
+<!-- expires="-1" -->
+<map id="navbar" name="navbar">
+<ul class="links">
+<li>
+<dfn>This message</dfn>:
+[ <a href="#start13307" name="options1" id="options1" tabindex="1">Message body</a> ]
+ [ More options (<a href="#options2">top</a>, <a href="#options3">bottom</a>) ]
+</li>
+<li>
+<dfn>Related messages</dfn>:
+<!-- unext="start" -->
+[ <a href="13308.html" accesskey="d" title="Subbiah: &quot;FVWM: Taskbar flickering contineouly&quot;">Next message</a> ]
+[ <a href="13306.html" title="Rafal Bisingier: &quot;FVWM: Stubborn Psi&quot;">Previous message</a> ]
+<!-- unextthread="start" -->
+[ <a href="13309.html" accesskey="t" title="Dominik Vogt: &quot;Re: FVWM: Focus for FvwmPager&quot;">Next in thread</a> ]
+ [ <a href="#replies">Replies</a> ]
+<!-- ureply="end" -->
+</li>
+</ul>
+</map>
+<ul class="links">
+<li><a name="options2" id="options2"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg13307" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg13307" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg13307" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg13307" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</div>
+<!-- body="start" -->
+<div class="mail">
+<address class="headers">
+<span id="from">
+<dfn>From</dfn>: Rafal Bisingier &lt;<a href="mailto:ravbc_at_man.poznan.pl?Subject=Re%3A%20FVWM%3A%20Focus%20for%20FvwmPager">ravbc_at_man.poznan.pl</a>&gt;
+</span><br />
+<span id="date"><dfn>Date</dfn>: Wed, 29 Sep 2004 12:54:36 +0200</span><br />
+</address>
+<br />
+Hi everyone,
+<br />
+<br />Am I missing something or there is no possibility to focus FvwmPager?
+<br />
+The only workaround I found is to swallow FvwmPager into FvwmButtons.
+<br />
+Am I right?
+<br />
+<br />I need it for my panel raising functions on edge hitting.
+<br />
+Here is a (lengthy) sample:
+<br />
+<br />EdgeCommand Top ShowTopPanel
+<br />
+EdgeLeaveCommand Top FocusTopPanel
+<br />
+Module FvwmAuto 100 &quot;Silent TopPanelFunction&quot; &quot;Silent TopPanelLowerFunction&quot;
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br />
+DestroyFunc TopPanelFunction
+<br />
+AddToFunc TopPanelFunction
+<br />
++ I All (Layer 6, !Focused, ApplicationPanel) Lower
+<br />
++ I All (Layer 6, !Focused, FvwmPager) Lower
+<br />
++ I All (Layer 6, !Focused, ApplicationPanel) Layer 0 0
+<br />
++ I All (Layer 6, !Focused, FvwmPager) Layer 0 0
+<br />
++ I Current (Layer 0, ApplicationPanel) Raise
+<br />
++ I Current (Layer 0, FvwmPager) Raise
+<br />
++ I Current (Layer 0, ApplicationPanel) Layer 0 6
+<br />
++ I Current (Layer 0, FvwmPager) Layer 0 6
+<br />
+<br />DestroyFunc TopPanelLowerFunction
+<br />
+AddToFunc TopPanelLowerFunction
+<br />
++ I All (Layer 6, !Focused, ApplicationPanel) Lower
+<br />
++ I All (Layer 6, !Focused, FvwmPager) Lower
+<br />
++ I All (Layer 6, !Focused, ApplicationPanel) Layer 0 0
+<br />
++ I All (Layer 6, !Focused, FvwmPager) Layer 0 0
+<br />
+<br />DestroyFunc ShowTopPanel
+<br />
+AddToFunc ShowTopPanel
+<br />
++ I All (ApplicationPanel) Raise
+<br />
++ I All (ApplicationPanel) Layer 0 6
+<br />
++ I All (FvwmPager) Raise
+<br />
++ I All (FvwmPager) Layer 0 6
+<br />
+<br />DestroyFunc HideTopPanel
+<br />
+AddToFunc HideTopPanel
+<br />
++ I All (ApplicationPanel) Lower
+<br />
++ I All (ApplicationPanel) Layer 0 0
+<br />
++ I All (FvwmPager) Lower
+<br />
++ I All (FvwmPager) Layer 0 0
+<br />
+<br />DestroyFunc ShowAndFocusPanel
+<br />
+AddToFunc ShowAndFocusPanel
+<br />
++ I All ($0) Layer 0 6
+<br />
++ I All ($0) Raise
+<br />
++ I All ($0) Focus
+<br />
++ I All (Layer 6, !Focused, ApplicationPanel) Lower
+<br />
++ I All (Layer 6, !Focused, FvwmPager) Lower
+<br />
++ I All (Layer 6, !Focused, ApplicationPanel) Layer 0 0
+<br />
++ I All (Layer 6, !Focused, FvwmPager) Layer 0 0
+<br />
+<br />DestroyFunc SetPanelCoordinants
+<br />
+AddToFunc SetPanelCoordinants
+<br />
++ I PipeRead 'echo SetEnv $0Left $1'
+<br />
++ I PipeRead 'echo SetEnv $0Right $(( $1 + $2 ))'
+<br />
+<br />DestroyFunc FocusTopPanel
+<br />
+AddToFunc FocusTopPanel
+<br />
++ I Next (ApplicationPanel) SetPanelCoordinants Apps $[w.x] $[w.width]
+<br />
++ I Next (FvwmPager) SetPanelCoordinants Pager $[w.x] $[w.width]
+<br />
++ I PipeRead ` if (( ( $[pointer.x] &gt; $[AppsLeft] ) &amp;&amp; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;( $[pointer.x] &lt; $[AppsRight] ) )); \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;then echo ShowAndFocusPanel ApplicationPanel; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;elif (( ( $[pointer.x] &gt; $[PagerLeft] ) &amp;&amp; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;( $[pointer.x] &lt; $[PagerRight] ) )); \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;then echo ShowAndFocusPanel FvwmPager; \
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else echo HideTopPanel; fi `
+<br />
+<br />This works exactly as I want with ApplicationPanel (FvwmButtons panel)
+<br />
+but not with FvwmPager, because it cannot be focused.
+<br />
+<br />As you can see on top of this way-too-long exapmle I use here my update
+<br />
+for fvwm adding EdgeLeaveCommand, working exactly like EdgeCommand, but
+<br />
+is activated by LeaveEvent
+<br />
+<br />But back to the point: do I have to swallow FvwmPager into FvwmButtons,
+<br />
+or there's some simpler way to do what I want?
+<br />
+<br />PS. If any one interested: patch adding EdgeLeaveCommand was send
+<br />
+sometime ago to fvwm-workers list, and I still have it in my private
+<br />
+repository. ;-)
+<br />
+<br /><pre>
+-- 
+Rafal Bisingier
+--
+Visit the official FVWM web page at &lt;URL: <a href="http://www.fvwm.org/">http://www.fvwm.org/</a>&gt;.
+To unsubscribe from the list, send &quot;unsubscribe fvwm&quot; in the body of a
+message to majordomo_at_fvwm.org.
+To report problems, send mail to fvwm-owner_at_fvwm.org.
+</pre>
+<span id="received"><dfn>Received on</dfn> Wed Sep 29 2004 - 05:54:54 BST</span>
+</div>
+<!-- body="end" -->
+<div class="foot">
+<map id="navbarfoot" name="navbarfoot" title="Related messages">
+<ul class="links">
+<li><dfn>This message</dfn>: [ <a href="#start13307">Message body</a> ]</li>
+<!-- lnext="start" -->
+<li><dfn>Next message</dfn>: <a href="13308.html" title="Next message in the list">Subbiah: "FVWM: Taskbar flickering contineouly"</a></li>
+<li><dfn>Previous message</dfn>: <a href="13306.html" title="Previous message in the list">Rafal Bisingier: "FVWM: Stubborn Psi"</a></li>
+<!-- lnextthread="start" -->
+<li><dfn>Next in thread</dfn>: <a href="13309.html" title="Next message in this discussion thread">Dominik Vogt: "Re: FVWM: Focus for FvwmPager"</a></li>
+<li><a name="replies" id="replies"></a>
+<dfn>Reply</dfn>: <a href="13309.html" title="Message sent in reply to this message">Dominik Vogt: "Re: FVWM: Focus for FvwmPager"</a></li>
+<!-- lreply="end" -->
+</ul>
+<ul class="links">
+<li><a name="options3" id="options3"></a><dfn>Contemporary messages sorted</dfn>: [ <a href="date.html#msg13307" title="Contemporary messages by date">by date</a> ] [ <a href="index.html#msg13307" title="Contemporary discussion threads">by thread</a> ] [ <a href="subject.html#msg13307" title="Contemporary messages by subject">by subject</a> ] [ <a href="author.html#msg13307" title="Contemporary messages by author">by author</a> ] [ <a href="attachment.html" title="Contemporary messages by attachment">by messages with attachments</a> ]</li>
+</ul>
+</map>
+</div>
+<!-- trailer="footer" -->
+<p><small><em>
+This archive was generated by <a href="http://www.hypermail-project.org/">hypermail 2.3.0</a>
+: Mon Aug 29 2016 - 19:37:57 BST
+</em></small></p>
+</body>
+</html>
